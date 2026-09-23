@@ -7,9 +7,9 @@ namespace LINGYUN.Abp.Sms.Aliyun;
 
 public class AliyunSmsResponse
 {
-    public string Code { get; set; }
-    public string Message { get; set; }
-    public string RequestId { get; set; }
+    public string Code { get; set; } = default!;
+    public string Message { get; set; } = default!;
+    public string RequestId { get; set; } = default!;
 
     public bool IsSuccess()
     {

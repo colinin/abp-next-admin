@@ -14,7 +14,7 @@ public class RoomMember
     [NotNull]
     [JsonProperty("memberid")]
     [JsonPropertyName("memberid")]
-    public string MemberId { get; set; }
+    public string MemberId { get; set; } = default!;
     /// <summary>
     /// roomid群成员的入群时间
     /// </summary>

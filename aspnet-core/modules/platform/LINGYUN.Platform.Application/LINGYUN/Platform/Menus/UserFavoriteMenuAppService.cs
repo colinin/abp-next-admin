@@ -49,7 +49,7 @@ public class UserFavoriteMenuAppService : PlatformApplicationServiceBase, IUserF
 
         userFavoriteMenu = await UserFavoriteMenuRepository.InsertAsync(userFavoriteMenu);
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
 
         return ObjectMapper.Map<UserFavoriteMenu, UserFavoriteMenuDto>(userFavoriteMenu);
     }
@@ -79,7 +79,7 @@ public class UserFavoriteMenuAppService : PlatformApplicationServiceBase, IUserF
 
         userFavoriteMenu = await UserFavoriteMenuRepository.InsertAsync(userFavoriteMenu);
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
 
         return ObjectMapper.Map<UserFavoriteMenu, UserFavoriteMenuDto>(userFavoriteMenu);
     }
@@ -127,7 +127,7 @@ public class UserFavoriteMenuAppService : PlatformApplicationServiceBase, IUserF
 
         userFavoriteMenu = await UserFavoriteMenuRepository.UpdateAsync(userFavoriteMenu);
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
 
         return ObjectMapper.Map<UserFavoriteMenu, UserFavoriteMenuDto>(userFavoriteMenu);
     }
@@ -140,7 +140,7 @@ public class UserFavoriteMenuAppService : PlatformApplicationServiceBase, IUserF
 
         userFavoriteMenu = await UserFavoriteMenuRepository.UpdateAsync(userFavoriteMenu);
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
 
         return ObjectMapper.Map<UserFavoriteMenu, UserFavoriteMenuDto>(userFavoriteMenu);
     }

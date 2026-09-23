@@ -26,7 +26,7 @@ public interface IUserGroupStore
     /// <param name="groupId"></param>
     /// <param name="userId"></param>
     /// <returns></returns>
-    Task<GroupUserCard> GetUserGroupCardAsync(
+    Task<GroupUserCard?> GetUserGroupCardAsync(
         Guid? tenantId,
         long groupId,
         Guid userId,
@@ -73,7 +73,7 @@ public interface IUserGroupStore
     Task<List<GroupUserCard>> GetMembersAsync(
         Guid? tenantId,
         long groupId,
-        string sorting = nameof(GroupUserCard.UserId),
+        string? sorting = nameof(GroupUserCard.UserId),
         int skipCount = 0,
         int maxResultCount = 10,
         CancellationToken cancellationToken = default);

@@ -11,7 +11,7 @@ public class NotificationSendInfo
     public NotificationInfo NotificationInfo { get; }
     public IEnumerable<UserIdentifier> Users { get; }
     public NotificationSendState State { get; private set; }
-    public string Reason { get; private set; }
+    public string? Reason { get; private set; }
     public NotificationSendInfo(
         [NotNull] string provider,
         DateTime sendTime, 
@@ -41,7 +41,7 @@ public class NotificationSendInfo
         State = NotificationSendState.Disabled;
     }
 
-    public void Sent(Exception exception = null)
+    public void Sent(Exception? exception = null)
     {
         State = exception != null ? NotificationSendState.Failed : NotificationSendState.Sent;
         Reason = exception?.Message;

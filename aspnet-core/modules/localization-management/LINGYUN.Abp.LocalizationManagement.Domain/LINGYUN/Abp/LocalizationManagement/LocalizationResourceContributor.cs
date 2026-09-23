@@ -10,9 +10,9 @@ namespace LINGYUN.Abp.LocalizationManagement;
 public class LocalizationResourceContributor : ILocalizationResourceContributor
 {
     public bool IsDynamic => true;
-    protected LocalizationResourceBase Resource { get; private set; }
-    protected ILocalizationTextStoreCache LocalizationTextStoreCache { get; private set; }
-    protected ILocalizationLanguageStoreCache LocalizationLanguageStoreCache { get; private set; }
+    protected LocalizationResourceBase Resource { get; private set; } = default!;
+    protected ILocalizationTextStoreCache LocalizationTextStoreCache { get; private set; } = default!;
+    protected ILocalizationLanguageStoreCache LocalizationLanguageStoreCache { get; private set; } = default!;
 
     public virtual void Fill(string cultureName, Dictionary<string, LocalizedString> dictionary)
     {
@@ -24,7 +24,7 @@ public class LocalizationResourceContributor : ILocalizationResourceContributor
         await LocalizationTextStoreCache.FillAsync(Resource, cultureName, dictionary);
     }
 
-    public virtual LocalizedString GetOrNull(string cultureName, string name)
+    public virtual LocalizedString? GetOrNull(string cultureName, string name)
     {
         return LocalizationTextStoreCache.GetOrNull(Resource, cultureName, name);
     }

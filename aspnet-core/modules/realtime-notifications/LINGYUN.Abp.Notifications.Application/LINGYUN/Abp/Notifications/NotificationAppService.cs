@@ -110,7 +110,7 @@ public class NotificationAppService : AbpNotificationsApplicationServiceBase, IN
                     Name = notification.Name,
                     Culture = CultureInfo.CurrentCulture.Name,
                     Title = notification.DisplayName.Localize(StringLocalizerFactory),
-                    Description = notification.Description?.Localize(StringLocalizerFactory),
+                    Description = notification.Description?.Localize(StringLocalizerFactory)?.Value,
                 });
         }
 

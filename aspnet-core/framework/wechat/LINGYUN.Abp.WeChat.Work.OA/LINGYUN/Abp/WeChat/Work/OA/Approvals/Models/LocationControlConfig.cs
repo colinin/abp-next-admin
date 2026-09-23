@@ -14,7 +14,7 @@ public class LocationControlConfig : ControlConfig
     [NotNull]
     [JsonProperty("location")]
     [JsonPropertyName("location")]
-    public LocationConfig Location { get; set; }
+    public LocationConfig Location { get; set; } = default!;
     public LocationControlConfig()
     {
 

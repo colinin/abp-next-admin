@@ -5,14 +5,14 @@ public class ProjectConfigDto
     public int PermissionCacheType { get; set; } = 1;
     public bool ShowSettingButton { get; set; } = true;
     public bool ShowDarkModeToggle { get; set; } = true;
-    public string SettingButtonPosition { get; set; } = "auto";
-    public string PermissionMode { get; set; } = "BACK";
+    public string? SettingButtonPosition { get; set; } = "auto";
+    public string? PermissionMode { get; set; } = "BACK";
     public int SessionTimeoutProcessing { get; set; } = 0;
     public bool GrayMode { get; set; }
     public bool ColorWeak { get; set; }
-    public string ThemeColor { get; set; } = "#0960bd";
+    public string? ThemeColor { get; set; } = "#0960bd";
     public bool FullContent { get; set; }
-    public string ContentMode { get; set; } = "full";
+    public string? ContentMode { get; set; } = "full";
     public bool ShowLogo { get; set; } = true;
     public bool ShowFooter { get; set; }
     public HeaderSettingDto HeaderSetting { get; set; } = new HeaderSettingDto();

@@ -39,7 +39,7 @@ public class ApiScopeAppService : AbpIdentityServerAppServiceBase, IApiScopeAppS
 
         await UpdateApiScopeByInputAsync(apiScope, input);
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
 
         apiScope = await ApiScopeRepository.InsertAsync(apiScope);
 
@@ -53,7 +53,7 @@ public class ApiScopeAppService : AbpIdentityServerAppServiceBase, IApiScopeAppS
 
         await ApiScopeRepository.DeleteAsync(apiScope);
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
     }
 
     public async virtual Task<ApiScopeDto> GetAsync(Guid id)
@@ -86,7 +86,7 @@ public class ApiScopeAppService : AbpIdentityServerAppServiceBase, IApiScopeAppS
         await UpdateApiScopeByInputAsync(apiScope, input);
         apiScope = await ApiScopeRepository.UpdateAsync(apiScope);
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
 
         return ObjectMapper.Map<ApiScope, ApiScopeDto>(apiScope);
     }

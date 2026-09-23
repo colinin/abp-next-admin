@@ -41,5 +41,8 @@ public class WebhookTextMessage
     public WebhookTextMessage(string content)
     {
         Content = Check.NotNullOrWhiteSpace(content, nameof(content), 2048);
+
+        MentionedList = new List<string>();
+        MentionedMobileList = new List<string>();
     }
 }

@@ -13,7 +13,7 @@ public class LinkUserDto
     /// <summary>
     /// 关联用户名
     /// </summary>
-    public string LinkUserName { get; set; }
+    public string LinkUserName { get; set; } = default!;
     /// <summary>
     /// 关联租户Id
     /// </summary>
@@ -21,7 +21,7 @@ public class LinkUserDto
     /// <summary>
     /// 关联租户名
     /// </summary>
-    public string LinkTenantName { get; set; }
+    public string? LinkTenantName { get; set; }
     /// <summary>
     /// 直接关联
     /// </summary>

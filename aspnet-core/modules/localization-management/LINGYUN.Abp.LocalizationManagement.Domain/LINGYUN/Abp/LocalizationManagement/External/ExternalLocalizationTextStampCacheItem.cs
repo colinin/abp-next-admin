@@ -10,7 +10,7 @@ namespace LINGYUN.Abp.LocalizationManagement.External;
 public class ExternalLocalizationTextStampCacheItem
 {
     private const string CacheKeyFormat = "r:{0},c:{1}";
-    public string Stamp { get; set; }
+    public string Stamp { get; set; } = default!;
 
     public ExternalLocalizationTextStampCacheItem()
     {

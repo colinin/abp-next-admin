@@ -93,7 +93,7 @@ public class ProtectedEntitiesSaver : IProtectedEntitiesSaver, ITransientDepende
                         GuidGenerator.Create(),
                         entityType.Name,
                         typeDisplayName ?? entityType.Name,
-                        entityType.FullName,
+                        entityType.FullName!,
                         isDataAudited);
 
                     var globalIgnoreProperties = Options.GlobalIgnoreProperties.Except(Options.AuditedObjectProperties);
@@ -116,7 +116,7 @@ public class ProtectedEntitiesSaver : IProtectedEntitiesSaver, ITransientDepende
                             GuidGenerator,
                             typeProperty.Name,
                             propDisplayName ?? typeProperty.Name,
-                            typeProperty.PropertyType.FullName,
+                            typeProperty.PropertyType.FullName!,
                             javaScriptTypeResult.Type);
 
                         if (typeProperty.PropertyType.IsEnum)
@@ -139,7 +139,7 @@ public class ProtectedEntitiesSaver : IProtectedEntitiesSaver, ITransientDepende
                                 propertyInfo.AddEnum(
                                     GuidGenerator,
                                     enumName,
-                                    enumDisplayName,
+                                    enumDisplayName!,
                                     enumValue.ToString());
                             }
                         }
@@ -173,7 +173,7 @@ public class ProtectedEntitiesSaver : IProtectedEntitiesSaver, ITransientDepende
                             GuidGenerator,
                             typeProperty.Name,
                             propDisplayName ?? typeProperty.Name,
-                            typeProperty.PropertyType.FullName,
+                            typeProperty.PropertyType.FullName!,
                             javaScriptTypeResult.Type);
 
                             if (typeProperty.PropertyType.IsEnum)
@@ -196,7 +196,7 @@ public class ProtectedEntitiesSaver : IProtectedEntitiesSaver, ITransientDepende
                                     propertyInfo.AddEnum(
                                         GuidGenerator,
                                         enumName,
-                                        enumDisplayName,
+                                        enumDisplayName!,
                                         enumValue.ToString());
                                 }
                             }

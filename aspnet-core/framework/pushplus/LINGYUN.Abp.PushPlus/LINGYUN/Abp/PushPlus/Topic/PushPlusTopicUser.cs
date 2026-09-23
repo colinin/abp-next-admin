@@ -14,17 +14,17 @@ public class PushPlusTopicUser
     /// 昵称
     /// </summary>
     [JsonProperty("nickName")]
-    public string NickName { get; set; }
+    public string? NickName { get; set; }
     /// <summary>
     /// 用户微信openId
     /// </summary>
     [JsonProperty("openId")]
-    public string OpenId { get; set; }
+    public string? OpenId { get; set; }
     /// <summary>
     /// 头像url地址
     /// </summary>
     [JsonProperty("headImgUrl")]
-    public string HeadImgUrl { get; set; }
+    public string? HeadImgUrl { get; set; }
     /// <summary>
     /// 头像url地址
     /// </summary>

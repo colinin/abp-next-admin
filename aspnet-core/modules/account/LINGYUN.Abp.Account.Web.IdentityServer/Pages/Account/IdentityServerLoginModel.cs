@@ -2,15 +2,12 @@
 using IdentityServer4.Models;
 using IdentityServer4.Services;
 using IdentityServer4.Stores;
-using LINGYUN.Abp.Account.Web.ExternalProviders;
+using LINGYUN.Abp.Account.Web.Captcha;
 using LINGYUN.Abp.Account.Web.Models;
 using LINGYUN.Abp.Account.Web.Pages.Account;
-using LINGYUN.Abp.Identity.QrCode;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
 using System.Diagnostics;
@@ -18,7 +15,6 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Volo.Abp.Account.Settings;
-using Volo.Abp.Account.Web;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Identity;
 using Volo.Abp.IdentityServer.AspNetIdentity;
@@ -41,15 +37,9 @@ namespace LINGYUN.Abp.Account.Web.IdentityServer.Pages.Account
         protected IEventService IdentityServerEvents { get; }
         protected IClientStore ClientStore { get; }
         public IdentityServerLoginModel(
-            IExternalProviderService externalProviderService,
-            IAuthenticationSchemeProvider schemeProvider, 
-            IOptions<AbpAccountOptions> accountOptions, 
-            IOptions<IdentityOptions> identityOptions,
-            IdentityDynamicClaimsPrincipalContributorCache identityDynamicClaimsPrincipalContributorCache,
             IIdentityServerInteractionService interaction,
             IEventService identityServerEvents,
-            IClientStore clientStore) 
-            : base(externalProviderService, schemeProvider, accountOptions, identityOptions, identityDynamicClaimsPrincipalContributorCache)
+            IClientStore clientStore)
         {
             Interaction = interaction;
             ClientStore = clientStore;
@@ -58,7 +48,7 @@ namespace LINGYUN.Abp.Account.Web.IdentityServer.Pages.Account
 
         public override async Task<IActionResult> OnGetAsync()
         {
-            PasswordLoginInput = new PasswordLoginInputModel();
+            Input = new PasswordLoginInputModel();
 
             var context = await Interaction.GetAuthorizationContextAsync(ReturnUrl);
 
@@ -67,7 +57,7 @@ namespace LINGYUN.Abp.Account.Web.IdentityServer.Pages.Account
                 // TODO: Find a proper cancel way.
                 // ShowCancelButton = true;
 
-                PasswordLoginInput.UserNameOrEmailAddress = context.LoginHint;
+                Input.UserNameOrEmailAddress = context.LoginHint;
 
                 //TODO: Reference AspNetCore MultiTenancy module and use options to get the tenant key!
                 var tenant = context.Parameters[TenantResolverConsts.DefaultTenantKey];
@@ -80,7 +70,7 @@ namespace LINGYUN.Abp.Account.Web.IdentityServer.Pages.Account
 
             if (context?.IdP != null)
             {
-                PasswordLoginInput.UserNameOrEmailAddress = context.LoginHint;
+                Input.UserNameOrEmailAddress = context.LoginHint;
                 ExternalProviders = new[] { new ExternalLoginProviderModel { AuthenticationScheme = context.IdP } };
                 return Page();
             }
@@ -112,7 +102,7 @@ namespace LINGYUN.Abp.Account.Web.IdentityServer.Pages.Account
             return Page();
         }
 
-        public override async Task<IActionResult> OnPostPasswordLogin(string action)
+        public override async Task<IActionResult> OnPostAsync(string action)
         {
             var context = await Interaction.GetAuthorizationContextAsync(ReturnUrl);
             if (action == "Cancel")
@@ -120,29 +110,39 @@ namespace LINGYUN.Abp.Account.Web.IdentityServer.Pages.Account
                 return await OnCancelLogin(context);
             }
 
-            LoginType = LoginType.Password;
+            ValidateModel();
+            await IdentityOptions.SetAsync();
 
             await CheckLocalLoginAsync();
-
+            await InitCaptchaComponent();
             ExternalProviders = await GetExternalProviders();
-
             EnableLocalLogin = await SettingProvider.IsTrueAsync(AccountSettingNames.EnableLocalLogin);
 
-            ModelState.RemoveModelErrors(nameof(PhoneLoginInput));
-            ModelState.RemoveModelErrors(nameof(QrCodeLoginInput));
-            if (!TryValidateModel(PasswordLoginInput, nameof(PasswordLoginInput)))
+            if (EnableCaptcha)
             {
-                return Page();
+                var isValid = await CaptchaComponent.ValidateAsync(
+                    new CaptchaValidatorContext(
+                        LazyServiceProvider,
+                        Input.CaptchaCode!,
+                        Input.UserNameOrEmailAddress)
+                );
+                if (!isValid)
+                {
+                    Alerts.Danger(L["InvalidVerifyCode"]);
+                    return Page();
+                }
             }
 
             await ReplaceEmailToUsernameOfInputIfNeeds();
 
             await IdentityOptions.SetAsync();
 
+            IsLinkLogin = await VerifyLinkTokenAsync();
+
             var result = await SignInManager.PasswordSignInAsync(
-                PasswordLoginInput.UserNameOrEmailAddress,
-                PasswordLoginInput.Password,
-                PasswordLoginInput.RememberMe,
+                Input.UserNameOrEmailAddress,
+                Input.Password,
+                Input.RememberMe,
                 true
             );
 
@@ -150,7 +150,7 @@ namespace LINGYUN.Abp.Account.Web.IdentityServer.Pages.Account
             {
                 Identity = IdentitySecurityLogIdentityConsts.Identity,
                 Action = result.ToIdentitySecurityLogAction(),
-                UserName = PasswordLoginInput.UserNameOrEmailAddress
+                UserName = Input.UserNameOrEmailAddress
             });
 
             if (result.RequiresTwoFactor)
@@ -174,139 +174,21 @@ namespace LINGYUN.Abp.Account.Web.IdentityServer.Pages.Account
             }
 
             //TODO: Find a way of getting user's id from the logged in user and do not query it again like that!
-            var user = await GetIdentityUserAsync(PasswordLoginInput.UserNameOrEmailAddress);
+            var user = await GetIdentityUserAsync(Input.UserNameOrEmailAddress);
 
             Debug.Assert(user != null, nameof(user) + " != null");
-            await IdentityServerEvents.RaiseAsync(new UserLoginSuccessEvent(user.UserName, user.Id.ToString(), user.UserName)); //TODO: Use user's name once implemented
 
-            // Clear the dynamic claims cache.
-            await IdentityDynamicClaimsPrincipalContributorCache.ClearAsync(user.Id, user.TenantId);
-
-            return await RedirectSafelyAsync(PasswordLoginInput.ReturnUrl, PasswordLoginInput.ReturnUrlHash);
-        }
-
-        public override async Task<IActionResult> OnPostPhoneNumberLogin(string action)
-        {
-            var context = await Interaction.GetAuthorizationContextAsync(ReturnUrl);
-            if (action == "Cancel")
+            if (IsLinkLogin)
             {
-                return await OnCancelLogin(context);
+                return await HandleLinkUserLogin(user);
             }
-
-            LoginType = LoginType.PhoneNumber;
-
-            await CheckLocalLoginAsync();
-
-            ExternalProviders = await GetExternalProviders();
-
-            EnableLocalLogin = await SettingProvider.IsTrueAsync(AccountSettingNames.EnableLocalLogin);
-
-            ModelState.RemoveModelErrors(nameof(QrCodeLoginInput));
-            ModelState.RemoveModelErrors(nameof(PasswordLoginInput));
-            if (!TryValidateModel(PhoneLoginInput, nameof(PhoneLoginInput)))
-            {
-                return Page();
-            }
-
-            var user = await UserRepository.FindByPhoneNumberAsync(PhoneLoginInput.PhoneNumber);
-            if (user == null)
-            {
-                Logger.LogInformation("the user phone number is not registed!");
-                Alerts.Danger(L["InvalidPhoneNumber"]);
-                return Page();
-            }
-
-            var result = await UserManager.VerifyTwoFactorTokenAsync(user, TokenOptions.DefaultPhoneProvider, PhoneLoginInput.Code);
-            if (!result)
-            {
-                Alerts.Danger(L["InvalidVerifyCode"]);
-                return Page();
-            }
-
-            await SignInManager.SignInAsync(user, PhoneLoginInput.RememberMe);
-
-            await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext()
-            {
-                Identity = IdentitySecurityLogIdentityConsts.IdentityTwoFactor,
-                Action = IdentitySecurityLogActionConsts.LoginSucceeded,
-                UserName = user.UserName
-            });
 
             await IdentityServerEvents.RaiseAsync(new UserLoginSuccessEvent(user.UserName, user.Id.ToString(), user.UserName)); //TODO: Use user's name once implemented
 
             // Clear the dynamic claims cache.
             await IdentityDynamicClaimsPrincipalContributorCache.ClearAsync(user.Id, user.TenantId);
 
-            return await RedirectSafelyAsync(PhoneLoginInput.ReturnUrl, PhoneLoginInput.ReturnUrlHash);
-        }
-
-        public override async Task<IActionResult> OnPostQrCodeLogin(string action)
-        {
-            var context = await Interaction.GetAuthorizationContextAsync(ReturnUrl);
-            if (action == "Cancel")
-            {
-                return await OnCancelLogin(context);
-            }
-
-            LoginType = LoginType.QrCode;
-
-            await CheckLocalLoginAsync();
-
-            ExternalProviders = await GetExternalProviders();
-
-            EnableLocalLogin = await SettingProvider.IsTrueAsync(AccountSettingNames.EnableLocalLogin);
-
-            ModelState.RemoveModelErrors(nameof(PhoneLoginInput));
-            ModelState.RemoveModelErrors(nameof(PasswordLoginInput));
-            if (!TryValidateModel(QrCodeLoginInput, nameof(QrCodeLoginInput)))
-            {
-                return Page();
-            }
-
-            var qrCodeInfo = await QrCodeLoginProvider.GetCodeAsync(QrCodeLoginInput.Key);
-            // 二维码扫描后用户Id不为空
-            if (qrCodeInfo == null || qrCodeInfo.Token.IsNullOrWhiteSpace() == true)
-            {
-                Alerts.Danger(L["QrCode:Invalid"]);
-                return Page();
-            }
-
-            SetTenantCookies(qrCodeInfo.TenantId);
-            using (CurrentTenant.Change(qrCodeInfo.TenantId))
-            {
-                var user = await UserManager.FindByIdAsync(qrCodeInfo.UserId);
-                if (user == null)
-                {
-                    // TODO: 用户验证无效?
-                    Alerts.Danger(L["QrCode:Invalid"]);
-                    return Page();
-                }
-
-                if (!await UserManager.VerifyUserTokenAsync(user, QrCodeLoginProviderConsts.Name, QrCodeLoginProviderConsts.Purpose, qrCodeInfo.Token))
-                {
-                    Alerts.Danger(L["QrCode:Invalid"]);
-                    return Page();
-                }
-
-                // TODO: 记住登录
-                await SignInManager.SignInAsync(user, true);
-
-                await QrCodeLoginProvider.RemoveAsync(QrCodeLoginInput.Key);
-
-                await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext()
-                {
-                    Identity = QrCodeLoginProviderConsts.Purpose,
-                    Action = IdentitySecurityLogActionConsts.LoginSucceeded,
-                    UserName = user.UserName
-                });
-
-                await IdentityServerEvents.RaiseAsync(new UserLoginSuccessEvent(user.UserName, user.Id.ToString(), user.UserName)); //TODO: Use user's name once implemented
-
-                // Clear the dynamic claims cache.
-                await IdentityDynamicClaimsPrincipalContributorCache.ClearAsync(user.Id, user.TenantId);
-
-                return await RedirectSafelyAsync(QrCodeLoginInput.ReturnUrl, QrCodeLoginInput.ReturnUrlHash);
-            }
+            return await RedirectSafelyAsync(ReturnUrl!, ReturnUrlHash);
         }
 
         public override async Task<IActionResult> OnPostExternalLogin(string provider)
@@ -331,7 +213,7 @@ namespace LINGYUN.Abp.Account.Web.IdentityServer.Pages.Account
                 Error = AuthorizationError.AccessDenied
             });
 
-            return Redirect(ReturnUrl);
+            return Redirect(ReturnUrl!);
         }
 
         protected virtual async Task<IActionResult> ProcessWindowsLoginAsync()
@@ -351,12 +233,12 @@ namespace LINGYUN.Abp.Account.Web.IdentityServer.Pages.Account
                 };
 
                 var id = new ClaimsIdentity(AccountOptions.WindowsAuthenticationSchemeName);
-                id.AddClaim(new Claim(ClaimTypes.NameIdentifier, result.Principal.FindFirstValue(ClaimTypes.PrimarySid)));
-                id.AddClaim(new Claim(ClaimTypes.Name, result.Principal.FindFirstValue(ClaimTypes.Name)));
+                id.AddClaim(new Claim(ClaimTypes.NameIdentifier, result.Principal.FindFirstValue(ClaimTypes.PrimarySid)!));
+                id.AddClaim(new Claim(ClaimTypes.Name, result.Principal.FindFirstValue(ClaimTypes.Name)!));
 
                 await HttpContext.SignInAsync(IdentityConstants.ExternalScheme, new ClaimsPrincipal(id), props);
 
-                return Redirect(props.RedirectUri);
+                return Redirect(props.RedirectUri!);
             }
 
             return Challenge(AccountOptions.WindowsAuthenticationSchemeName);

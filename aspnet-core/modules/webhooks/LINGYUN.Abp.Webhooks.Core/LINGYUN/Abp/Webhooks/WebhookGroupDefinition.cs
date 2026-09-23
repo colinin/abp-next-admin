@@ -10,11 +10,11 @@ namespace LINGYUN.Abp.Webhooks;
 public class WebhookGroupDefinition
 {
     [NotNull]
-    public string Name { get; set; }
-    public Dictionary<string, object> Properties { get; }
+    public string Name { get; set; } = default!;
+    public Dictionary<string, object?> Properties { get; }
 
-    private ILocalizableString _displayName;
-    public ILocalizableString DisplayName 
+    private ILocalizableString? _displayName;
+    public ILocalizableString? DisplayName 
     {
         get {
             return _displayName;
@@ -26,26 +26,26 @@ public class WebhookGroupDefinition
 
     public IReadOnlyList<WebhookDefinition> Webhooks => _webhooks.ToImmutableList();
     private readonly List<WebhookDefinition> _webhooks;
-    public object this[string name] {
+    public object? this[string name] {
         get => Properties.GetOrDefault(name);
         set => Properties[name] = value;
     }
 
     protected internal WebhookGroupDefinition(
         string name,
-        ILocalizableString displayName = null)
+        ILocalizableString? displayName = null)
     {
         Name = name;
         DisplayName = displayName ?? new FixedLocalizableString(Name);
 
-        Properties = new Dictionary<string, object>();
+        Properties = new Dictionary<string, object?>();
         _webhooks = new List<WebhookDefinition>();
     }
 
     public virtual WebhookDefinition AddWebhook(
         string name, 
-        ILocalizableString displayName = null, 
-        ILocalizableString description = null)
+        ILocalizableString? displayName = null, 
+        ILocalizableString? description = null)
     {
         if (Webhooks.Any(hook => hook.Name.Equals(name)))
         {
@@ -84,7 +84,7 @@ public class WebhookGroupDefinition
 
 
     [CanBeNull]
-    public WebhookDefinition GetWebhookOrNull([NotNull] string name)
+    public WebhookDefinition? GetWebhookOrNull([NotNull] string name)
     {
         Check.NotNull(name, nameof(name));
 
@@ -97,6 +97,12 @@ public class WebhookGroupDefinition
         }
 
         return null;
+    }
+
+    public WebhookGroupDefinition WithProperty(string key, object? value)
+    {
+        Properties[key] = value;
+        return this;
     }
 
     public override string ToString()

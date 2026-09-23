@@ -2,5 +2,5 @@
 
 public class ApiResourceScopeDto
 {
-    public string Scope { get; set; }
+    public string? Scope { get; set; }
 }

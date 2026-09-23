@@ -5,15 +5,15 @@ public class AppDescriptor
     /// <summary>
     /// 应用名称
     /// </summary>
-    public string AppName { get; set; }
+    public string AppName { get; set; } = default!;
     /// <summary>
     /// 应用标识
     /// </summary>
-    public string AppKey { get; set; }
+    public string AppKey { get; set; } = default!;
     /// <summary>
     /// 应用密钥
     /// </summary>
-    public string AppSecret { get; set; }
+    public string AppSecret { get; set; } = default!;
     /// <summary>
     /// 应用token
     /// </summary>

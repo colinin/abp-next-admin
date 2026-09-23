@@ -90,7 +90,7 @@ public interface INotificationSubscriptionManager
     Task<List<NotificationSubscriptionInfo>> GetUsersSubscriptionsAsync(
         Guid? tenantId, 
         string notificationName, 
-        IEnumerable<UserIdentifier> identifiers = null,
+        IEnumerable<UserIdentifier>? identifiers = null,
         CancellationToken cancellationToken = default);
     /// <summary>
     /// 获取用户订阅列表

@@ -1,7 +1,12 @@
-﻿using LINGYUN.Abp.Account.Web.OpenIddict.Pages.Account;
+﻿using LINGYUN.Abp.Account.Web.OpenIddict.Handlers;
+using LINGYUN.Abp.Account.Web.OpenIddict.Pages.Account;
+using LINGYUN.Abp.Account.Web.OpenIddict.Services;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using OpenIddict.Validation;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.AspNetCore.Mvc.UI.Bundling;
 using Volo.Abp.Localization;
@@ -27,6 +32,13 @@ public class AbpAccountWebOpenIddictModule : AbpModule
         PreConfigure<IMvcBuilder>(mvcBuilder =>
         {
             mvcBuilder.AddApplicationPartIfNotExists(typeof(AbpAccountWebOpenIddictModule).Assembly);
+        });
+
+        PreConfigure<OpenIddictServerBuilder>(builder =>
+        {
+            builder.AddEventHandler(ProcessSignOutIdentitySession.Descriptor);
+            builder.AddEventHandler(RevocationIdentitySession.Descriptor);
+            builder.AddEventHandler(ServerValidationTokenCheckIdentitySession.Descriptor);
         });
     }
 
@@ -58,15 +70,25 @@ public class AbpAccountWebOpenIddictModule : AbpModule
         Configure<AbpBundlingOptions>(options =>
         {
             options.ScriptBundles
-                .Add(typeof(SelectAccountModel).FullName, bundle =>
+                .Add(typeof(SelectAccountModel).FullName!, bundle =>
                 {
                     bundle.AddFiles("/Pages/Account/SelectAccount.js");
                 });
             options.StyleBundles
-                .Add(typeof(SelectAccountModel).FullName, bundle =>
+                .Add(typeof(SelectAccountModel).FullName!, bundle =>
                 {
                     bundle.AddFiles("/css/select-account.css");
                 });
         });
+
+        context.Services.Add(ValidationTokenCheckIdentitySession.Descriptor.ServiceDescriptor);
+
+        Configure<OpenIddictValidationOptions>(options =>
+        {
+            options.Handlers.Add(ValidationTokenCheckIdentitySession.Descriptor);
+        });
+
+        context.Services.Replace(
+            ServiceDescriptor.Transient<IAuthenticationService, OpenIddictSessionAuthenticationService>());
     }
 }

@@ -28,12 +28,12 @@ public class NotificationDefinition
         get => _displayName;
         set => _displayName = Check.NotNull(value, nameof(value));
     }
-    private ILocalizableString _displayName;
+    private ILocalizableString _displayName = default!;
     /// <summary>
     /// 通知说明
     /// </summary>
     [CanBeNull]
-    public ILocalizableString Description { get; set; }
+    public ILocalizableString? Description { get; set; }
     /// <summary>
     /// 允许客户端显示订阅
     /// </summary>
@@ -57,22 +57,22 @@ public class NotificationDefinition
     /// <summary>
     /// 通知模板
     /// </summary>
-    public TemplateDefinition Template { get; private set; }
+    public TemplateDefinition? Template { get; private set; }
     /// <summary>
     /// 额外属性
     /// </summary>
     [NotNull]
-    public Dictionary<string, object> Properties { get; }
+    public Dictionary<string, object?> Properties { get; }
 
-    public object this[string name] {
+    public object? this[string name] {
         get => Properties.GetOrDefault(name);
         set => Properties[name] = value;
     }
 
     public NotificationDefinition(
        string name,
-       ILocalizableString displayName = null,
-       ILocalizableString description = null,
+       ILocalizableString? displayName = null,
+       ILocalizableString? description = null,
        NotificationType notificationType = NotificationType.Application,
        NotificationLifetime lifetime = NotificationLifetime.Persistent,
        NotificationContentType contentType = NotificationContentType.Text,
@@ -87,7 +87,7 @@ public class NotificationDefinition
         AllowSubscriptionToClients = allowSubscriptionToClients;
 
         Providers = new List<string>();
-        Properties = new Dictionary<string, object>();
+        Properties = new Dictionary<string, object?>();
     }
 
     public virtual NotificationDefinition WithProviders(params string[] providers)
@@ -101,10 +101,10 @@ public class NotificationDefinition
     }
 
     public virtual NotificationDefinition WithTemplate(
-        Type localizationResource = null, 
+        Type localizationResource, 
         bool isLayout = false, 
-        string layout = null, 
-        string defaultCultureName = null)
+        string? layout = null, 
+        string? defaultCultureName = null)
     {
         Template = new TemplateDefinition(
             Name,
@@ -134,7 +134,7 @@ public class NotificationDefinition
         return this;
     }
 
-    public virtual NotificationDefinition WithTemplate(TemplateDefinition template)
+    public virtual NotificationDefinition WithTemplate(TemplateDefinition? template)
     {
         Template = template;
 

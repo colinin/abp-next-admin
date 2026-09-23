@@ -10,5 +10,5 @@ public class RoleEntityRuleInput : EntityRuleCreateOrUpdateDto
 
     [Required]
     [DynamicStringLength(typeof(RoleEntityRuleConsts), nameof(RoleEntityRuleConsts.MaxRuletNameLength))]
-    public string RoleName { get; set; }
+    public string RoleName { get; set; } = default!;
 }

@@ -18,5 +18,5 @@ public class WeChatWorkCreateCropTagResponse : WeChatWorkResponse
     [NotNull]
     [JsonProperty("tag_group")]
     [JsonPropertyName("tag_group")]
-    public CropTagGroup TagGroup { get; set; }
+    public CropTagGroup TagGroup { get; set; } = default!;
 }

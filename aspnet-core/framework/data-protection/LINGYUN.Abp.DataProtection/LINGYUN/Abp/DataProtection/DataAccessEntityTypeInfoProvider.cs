@@ -29,7 +29,7 @@ public class DataAccessEntityTypeInfoProvider : IDataAccessEntityTypeInfoProvide
         };
 
         var subjectContext = new DataAccessSubjectContributorContext(
-            context.EntityType.FullName,
+            context.EntityType.FullName!,
             context.Operation,
             context.ServiceProvider);
 
@@ -63,7 +63,7 @@ public class DataAccessEntityTypeInfoProvider : IDataAccessEntityTypeInfoProvide
             var entityPropertyInfo = new EntityPropertyInfoModel
             {
                 Name = propertyInfo.Name,
-                TypeFullName = propertyInfo.PropertyType.FullName,
+                TypeFullName = propertyInfo.PropertyType.FullName!,
                 DisplayName = localizedProp.Value ?? propertyInfo.Name,
                 JavaScriptType = propertyInfoResult.Type,
                 JavaScriptName = propertyInfo.Name.ToCamelCase(),
@@ -86,11 +86,9 @@ public class DataAccessEntityTypeInfoProvider : IDataAccessEntityTypeInfoProvide
                     var enumName = enumNames[index];
                     var localizerEnumKey = $"{propertyInfo.Name}:{enumName}";
                     var localizerEnumName = stringLozalizer[localizerEnumKey];
-                    paramterOptions[index] = new EntityEnumInfoModel
-                    {
-                        Key = localizerEnumName.ResourceNotFound ? enumName : localizerEnumName.Value,
-                        Value = enumValues.GetValue(index),
-                    };
+                    paramterOptions[index] = new EntityEnumInfoModel(
+                        localizerEnumName.ResourceNotFound ? enumName : localizerEnumName.Value, 
+                        enumValues.GetValue(index));
                 }
                 entityPropertyInfo.Enums = paramterOptions;
             }

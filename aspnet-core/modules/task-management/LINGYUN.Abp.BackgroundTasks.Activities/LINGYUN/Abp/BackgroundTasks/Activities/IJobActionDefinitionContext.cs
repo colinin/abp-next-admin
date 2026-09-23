@@ -4,7 +4,7 @@ namespace LINGYUN.Abp.BackgroundTasks.Activities;
 
 public interface IJobActionDefinitionContext
 {
-    JobActionDefinition GetOrNull(string name);
+    JobActionDefinition? GetOrNull(string name);
 
     IReadOnlyList<JobActionDefinition> GetAll();
 

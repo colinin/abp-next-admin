@@ -7,5 +7,5 @@ public class TextTemplateDefinitionCreateDto : TextTemplateDefinitionCreateOrUpd
 {
     [Required]
     [DynamicStringLength(typeof(TextTemplateDefinitionConsts), nameof(TextTemplateDefinitionConsts.MaxNameLength))]
-    public string Name { get; set; }
+    public string Name { get; set; } = default!;
 }

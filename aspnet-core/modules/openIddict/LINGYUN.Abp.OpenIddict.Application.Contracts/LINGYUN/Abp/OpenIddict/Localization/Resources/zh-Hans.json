@@ -16,6 +16,8 @@
     "DisplayName:ClientId": "客户端标识",
     "DisplayName:ClientSecret": "客户端密钥",
     "Description:ClientSecret": "请在保存之前复制密钥信息,数据提交后将只能重置密钥.",
+    "DisplayName:JsonWebKeySet": "JSON Web 密钥集",
+    "Description:JsonWebKeySet": "粘贴包含 RSA 或 ECDSA 公钥的 JSON Web 密钥集(JWKS),用于 private_key_jwt 客户端认证。留空则使用客户端密钥(clientSecret)认证.",
     "DisplayName:ClientType": "客户端类型",
     "DisplayName:ApplicationType": "应用类型",
     "DisplayName:ConsentType": "同意类型",

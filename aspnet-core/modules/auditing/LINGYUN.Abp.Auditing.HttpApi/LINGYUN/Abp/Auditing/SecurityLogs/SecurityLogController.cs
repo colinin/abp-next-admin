@@ -42,7 +42,7 @@ public class SecurityLogController : AbpControllerBase, ISecurityLogAppService
 
     [HttpGet]
     [Route("{id}")]
-    public async virtual Task<SecurityLogDto> GetAsync(Guid id)
+    public async virtual Task<SecurityLogDto?> GetAsync(Guid id)
     {
         return await SecurityLogAppService.GetAsync(id);
     }

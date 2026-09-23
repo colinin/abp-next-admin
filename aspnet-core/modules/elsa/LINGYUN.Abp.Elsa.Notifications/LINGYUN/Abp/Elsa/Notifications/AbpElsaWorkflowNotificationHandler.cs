@@ -53,7 +53,7 @@ public class AbpElsaWorkflowNotificationHandler :
     }
 
     private async Task SendNotifierIfExistsAsync(
-        string notificationName,
+        string? notificationName,
         WorkflowExecutionContext executionContext,
         NotificationSeverity severity = NotificationSeverity.Info,
         CancellationToken cancellationToken = default)
@@ -72,7 +72,7 @@ public class AbpElsaWorkflowNotificationHandler :
             var currentTenant = serviceProvider.GetRequiredService<ICurrentTenant>();
             var notificationSender = serviceProvider.GetRequiredService<INotificationSender>();
 
-            var notificationData = new Dictionary<string, object>
+            var notificationData = new Dictionary<string, object?>
             {
                 { nameof(IActivityBlueprint.Id),  workflowBlueprint.Id },
                 { nameof(WorkflowExecutionContext.Status), executionContext.Status },

@@ -21,7 +21,7 @@ public class EfCoreRoleMenuRepository : EfCoreRepository<IPlatformDbContext, Rol
 
     public async virtual Task<List<RoleMenu>> GetListByRoleNameAsync(
         string roleName,
-        string framework = null,
+        string? framework = null,
         CancellationToken cancellationToken = default)
     {
         var dbContext = await GetDbContextAsync();
@@ -62,9 +62,9 @@ public class EfCoreRoleMenuRepository : EfCoreRepository<IPlatformDbContext, Rol
                 GetCancellationToken(cancellationToken));
     }
 
-    public async virtual Task<Menu> FindStartupMenuAsync(
+    public async virtual Task<Menu?> FindStartupMenuAsync(
         IEnumerable<string> roleNames,
-        string framework = null,
+        string? framework = null,
         CancellationToken cancellationToken = default)
     {
         var dbContext = await GetDbContextAsync();

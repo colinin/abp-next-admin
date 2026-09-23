@@ -8,9 +8,9 @@ public static class ICacheManagerExtensions
 {
     public static Task<CackeKeysResponse> GetKeysAsync(
         this ICacheManager cacheManager,
-        string prefix = null,
-        string filter = null,
-        string marker = null,
+        string? prefix = null,
+        string? filter = null,
+        string? marker = null,
         CancellationToken cancellationToken = default)
     {
         return cacheManager.GetKeysAsync(

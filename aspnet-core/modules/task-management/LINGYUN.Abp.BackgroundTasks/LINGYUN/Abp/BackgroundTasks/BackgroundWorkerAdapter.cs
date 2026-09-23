@@ -12,8 +12,8 @@ namespace LINGYUN.Abp.BackgroundTasks;
 public class BackgroundWorkerAdapter<TWorker> : BackgroundWorkerBase, IBackgroundWorkerRunnable
     where TWorker : IBackgroundWorker
 {
-    private readonly MethodInfo _doWorkAsyncMethod;
-    private readonly MethodInfo _doWorkMethod;
+    private readonly MethodInfo? _doWorkAsyncMethod;
+    private readonly MethodInfo? _doWorkMethod;
 
     public BackgroundWorkerAdapter()
     {
@@ -21,7 +21,6 @@ public class BackgroundWorkerAdapter<TWorker> : BackgroundWorkerBase, IBackgroun
         _doWorkMethod = typeof(TWorker).GetMethod("DoWork", BindingFlags.Instance | BindingFlags.NonPublic);
     }
 
-#nullable enable
     public JobInfo? BuildWorker(IBackgroundWorker worker)
     {
         int? period;
@@ -65,8 +64,8 @@ public class BackgroundWorkerAdapter<TWorker> : BackgroundWorkerBase, IBackgroun
         };
         return new JobInfo
         {
-            Id = workerType.FullName,
-            Name = workerType.FullName,
+            Id = workerType.FullName!,
+            Name = workerType.FullName!,
             Group = "BackgroundWorkers",
             Priority = JobPriority.Normal,
             Source = JobSource.System,
@@ -78,14 +77,13 @@ public class BackgroundWorkerAdapter<TWorker> : BackgroundWorkerBase, IBackgroun
             MaxTryCount = 10,
             // 确保不会被轮询入队
             Status = JobStatus.None,
-            Type = typeof(BackgroundWorkerAdapter<TWorker>).AssemblyQualifiedName,
+            Type = typeof(BackgroundWorkerAdapter<TWorker>).AssemblyQualifiedName!,
         };
     }
-#nullable disable
 
     public async Task ExecuteAsync(JobRunnableContext context)
     {
-        var worker = (IBackgroundWorker)context.GetService(typeof(TWorker));
+        var worker = context.GetService(typeof(TWorker)) as IBackgroundWorker;
         var workerContext = new PeriodicBackgroundWorkerContext(context.ServiceProvider, context.CancellationToken);
 
         switch (worker)
@@ -94,7 +92,7 @@ public class BackgroundWorkerAdapter<TWorker> : BackgroundWorkerBase, IBackgroun
                 {
                     if (_doWorkAsyncMethod != null)
                     {
-                        await(Task)_doWorkAsyncMethod.Invoke(asyncWorker, new object[] { workerContext });
+                        await(Task)_doWorkAsyncMethod.Invoke(asyncWorker, new object[] { workerContext })!;
                     }
 
                     break;

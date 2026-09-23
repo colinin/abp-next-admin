@@ -6,5 +6,5 @@ namespace LINGYUN.Abp.OpenIddict.Scopes;
 [Serializable]
 public class OpenIddictScopeGetListInput : PagedAndSortedResultRequestDto
 {
-    public string Filter { get; set; }
+    public string? Filter { get; set; }
 }

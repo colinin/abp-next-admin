@@ -1,4 +1,5 @@
 using LINGYUN.Abp.Account.Dto;
+using LINGYUN.Abp.Account.Web.Captcha;
 using LINGYUN.Abp.Account.Web.ExternalProviders;
 using LINGYUN.Abp.Account.Web.Models;
 using Microsoft.AspNetCore.Authentication;
@@ -19,12 +20,14 @@ using Volo.Abp.Account.Web;
 using Volo.Abp.Account.Web.Pages.Account;
 using Volo.Abp.Auditing;
 using Volo.Abp.Identity;
+using Volo.Abp.Identity.Settings;
 using Volo.Abp.Reflection;
 using Volo.Abp.Security.Claims;
 using Volo.Abp.Settings;
 using Volo.Abp.Validation;
 using IAbpAccountAppService = Volo.Abp.Account.IAccountAppService;
 using IdentityUser = Volo.Abp.Identity.IdentityUser;
+using ILAbpAccountAppService = LINGYUN.Abp.Account.IAccountAppService;
 
 namespace LINGYUN.Abp.Account.Web.Pages.Account;
 
@@ -32,20 +35,24 @@ public class RegisterModel : AccountPageModel
 {
     [HiddenInput]
     [BindProperty(SupportsGet = true)]
-    public string ReturnUrl { get; set; }
+    public string? ReturnUrl { get; set; }
 
     [HiddenInput]
     [BindProperty(SupportsGet = true)]
-    public string ReturnUrlHash { get; set; }
+    public string? ReturnUrlHash { get; set; }
+
+    [HiddenInput]
+    [BindProperty(SupportsGet = true)]
+    public int SendEmailVerifyCodeInternal { get; set; }
 
     [BindProperty]
-    public PostInput Input { get; set; }
+    public PostInput Input { get; set; } = default!;
 
     [BindProperty(SupportsGet = true)]
     public bool IsExternalLogin { get; set; }
 
     [BindProperty(SupportsGet = true)]
-    public string ExternalLoginAuthSchema { get; set; }
+    public string? ExternalLoginAuthSchema { get; set; }
 
     #region LinkUser
     [HiddenInput]
@@ -58,7 +65,11 @@ public class RegisterModel : AccountPageModel
 
     [HiddenInput]
     [BindProperty(SupportsGet = true)]
-    public string LinkToken { get; set; }
+    public string? LinkToken { get; set; }
+
+    public bool EnableCaptcha { get; set; }
+    public CaptchaComponent CaptchaComponent { get; private set; } = default!;
+    public ICaptchaComponentProvider CaptchaComponentProvider => LazyServiceProvider.LazyGetRequiredService<ICaptchaComponentProvider>();
 
     protected ICurrentPrincipalAccessor CurrentPrincipalAccessor => LazyServiceProvider.LazyGetRequiredService<ICurrentPrincipalAccessor>();
 
@@ -66,21 +77,24 @@ public class RegisterModel : AccountPageModel
 
     #endregion
 
-    public IEnumerable<ExternalLoginProviderModel> ExternalProviders { get; set; }
+    public IEnumerable<ExternalLoginProviderModel> ExternalProviders { get; set; } = default!;
     public IEnumerable<ExternalLoginProviderModel> VisibleExternalProviders => ExternalProviders.Where(x => !string.IsNullOrWhiteSpace(x.DisplayName));
     public bool EnableLocalRegister { get; set; }
+    public bool RequireEmailVerificationToRegister { get; set; }
     public bool IsExternalLoginOnly => EnableLocalRegister == false && ExternalProviders?.Count() == 1;
-    public string ExternalLoginScheme => IsExternalLoginOnly ? ExternalProviders?.SingleOrDefault()?.AuthenticationScheme : null;
+    public string? ExternalLoginScheme => IsExternalLoginOnly ? ExternalProviders?.SingleOrDefault()?.AuthenticationScheme : null;
 
     protected IExternalProviderService ExternalProviderService { get; }
     protected IAuthenticationSchemeProvider SchemeProvider { get; }
+    protected ILAbpAccountAppService LAbpAccountAppService { get; }
 
     protected AbpAccountOptions AccountOptions { get; }
     protected IdentityDynamicClaimsPrincipalContributorCache IdentityDynamicClaimsPrincipalContributorCache { get; }
 
     public RegisterModel(
         IExternalProviderService externalProviderService,
-        IAbpAccountAppService accountAppService,
+        IAbpAccountAppService abpAccountAppService,
+        ILAbpAccountAppService lAbpAccountAppService,
         IAuthenticationSchemeProvider schemeProvider,
         IOptions<AbpAccountOptions> accountOptions,
         IdentityDynamicClaimsPrincipalContributorCache identityDynamicClaimsPrincipalContributorCache)
@@ -88,19 +102,32 @@ public class RegisterModel : AccountPageModel
         ExternalProviderService = externalProviderService;
         SchemeProvider = schemeProvider;
         IdentityDynamicClaimsPrincipalContributorCache = identityDynamicClaimsPrincipalContributorCache;
-        AccountAppService = accountAppService;
+        AccountAppService = abpAccountAppService;
+        LAbpAccountAppService = lAbpAccountAppService;
         AccountOptions = accountOptions.Value;
+    }
+
+    protected async virtual Task InitCaptchaComponent()
+    {
+        EnableCaptcha = await CaptchaComponentProvider.IsCaptchaEnabledAsync();
+        CaptchaComponent = await CaptchaComponentProvider.GetComponentOrDefaultAsync();
     }
 
     public virtual async Task<IActionResult> OnGetAsync()
     {
+        await InitCaptchaComponent();
         ExternalProviders = await GetExternalProviders();
+        RequireEmailVerificationToRegister = await SettingProvider.IsTrueAsync(IdentitySettingNames.SignIn.RequireEmailVerificationToRegister);
+        if (RequireEmailVerificationToRegister)
+        {
+            SendEmailVerifyCodeInternal = await SettingProvider.GetAsync(Identity.Settings.IdentitySettingNames.User.EmailRegisterRepetInterval, 1);
+        }
 
         if (!await CheckSelfRegistrationAsync())
         {
             if (IsExternalLoginOnly)
             {
-                return await OnPostExternalLogin(ExternalLoginScheme);
+                return await OnPostExternalLogin(ExternalLoginScheme!);
             }
 
             Alerts.Warning(L["SelfRegistrationDisabledMessage"]);
@@ -143,6 +170,7 @@ public class RegisterModel : AccountPageModel
     {
         try
         {
+            await InitCaptchaComponent();
             ExternalProviders = await GetExternalProviders();
 
             if (!await CheckSelfRegistrationAsync())
@@ -166,11 +194,90 @@ public class RegisterModel : AccountPageModel
             }
             else
             {
+                if (EnableCaptcha)
+                {
+                    var isValid = await CaptchaComponent.ValidateAsync(
+                        new CaptchaValidatorContext(
+                            LazyServiceProvider,
+                            Input.CaptchaCode!,
+                            Input.UserName)
+                    );
+                    if (!isValid)
+                    {
+                        Alerts.Danger(L["InvalidVerifyCode"]);
+                        return Page();
+                    }
+                }
+
+                RequireEmailVerificationToRegister = await SettingProvider.IsTrueAsync(IdentitySettingNames.SignIn.RequireEmailVerificationToRegister);
+
+                if (RequireEmailVerificationToRegister)
+                {
+                    if (Input.VerifyCode.IsNullOrWhiteSpace())
+                    {
+                        Alerts.Danger(L["EmailVerifyCodeIsRequired"]);
+                        return Page();
+                    }
+                    var isVerifyCodeValid = await LAbpAccountAppService.VerifyEmailRegisterCodeAsync(new VerifyEmailRegisterCodeInput
+                    {
+                        EmailAddress = Input.EmailAddress,
+                        VerifyCode = Input.VerifyCode,
+                    });
+                    if (!isVerifyCodeValid)
+                    {
+                        Alerts.Danger(L["InvalidVerifyCode"]);
+                        return Page();
+                    }
+                }
+
                 var user = await RegisterLocalUserAsync();
+
+                if (RequireEmailVerificationToRegister)
+                {
+                    var emailConfirmationToken = await UserManager.GenerateEmailConfirmationTokenAsync(user);
+                    await UserManager.ConfirmEmailAsync(user, emailConfirmationToken);
+                }
 
                 if (await VerifyLinkTokenAsync())
                 {
                     await HandleLinkUserLogin(user);
+                }
+
+                if (await UserManager.GetTwoFactorEnabledAsync(user))
+                {
+                    var result = await SignInManager.PasswordSignInAsync(
+                        Input.UserName,
+                        Input.Password,
+                        false,
+                        true
+                    );
+
+                    if (result.Succeeded)
+                    {
+                        await IdentityDynamicClaimsPrincipalContributorCache.ClearAsync(user.Id, user.TenantId);
+                        return Redirect(ReturnUrl ?? "~/");
+                    }
+
+                    if (result.RequiresTwoFactor)
+                    {
+                        return RedirectToPage("SendCode", new
+                        {
+                            returnUrl = ReturnUrl,
+                            returnUrlHash = ReturnUrlHash,
+                            linkUserId = LinkUserId,
+                            linkTenantId = LinkTenantId,
+                            linkToken = LinkToken,
+                        });
+                    }
+
+                    return RedirectToPage("Login", new
+                    {
+                        returnUrl = ReturnUrl,
+                        returnUrlHash = ReturnUrlHash,
+                        linkUserId = LinkUserId,
+                        linkTenantId = LinkTenantId,
+                        linkToken = LinkToken,
+                    });
                 }
 
                 await SignInManager.SignInAsync(user, isPersistent: true);
@@ -179,7 +286,7 @@ public class RegisterModel : AccountPageModel
                 await IdentityDynamicClaimsPrincipalContributorCache.ClearAsync(user.Id, user.TenantId);
             }
 
-            return Redirect(ReturnUrl ?? "~/"); //TODO: How to ensure safety? IdentityServer requires it however it should be checked somehow!
+            return Redirect(ReturnUrl ?? "~/");
         }
         catch (BusinessException e)
         {
@@ -265,7 +372,7 @@ public class RegisterModel : AccountPageModel
             {
                 externalProviderModels.Add(new ExternalLoginProviderModel
                 {
-                    Name = externalLoginProvider.Name,
+                    Name = externalLoginProvider!.Name,
                     AuthenticationScheme = scheme.Name,
                     DisplayName = externalLoginProvider.DisplayName,
                     ComponentType = externalLoginProvider.ComponentType,
@@ -276,7 +383,7 @@ public class RegisterModel : AccountPageModel
         return externalProviderModels;
     }
 
-    protected virtual bool TryGetExternalLoginProvider(AuthenticationScheme scheme, List<ExternalLoginProviderModel> externalProviders, out ExternalLoginProviderModel externalLoginProvider)
+    protected virtual bool TryGetExternalLoginProvider(AuthenticationScheme scheme, List<ExternalLoginProviderModel> externalProviders, out ExternalLoginProviderModel? externalLoginProvider)
     {
         if (ReflectionHelper.IsAssignableToGenericType(scheme.HandlerType, typeof(RemoteAuthenticationHandler<>)))
         {
@@ -304,9 +411,9 @@ public class RegisterModel : AccountPageModel
         {
             await IdentityLinkUserAppService.LinkAsync(new LinkUserInput
             {
-                UserId = LinkUserId.Value,
+                UserId = LinkUserId!.Value,
                 TenantId = LinkTenantId,
-                Token = LinkToken
+                Token = LinkToken!
             });
 
             await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext()
@@ -358,18 +465,23 @@ public class RegisterModel : AccountPageModel
     {
         [Required]
         [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxUserNameLength))]
-        public string UserName { get; set; }
+        public string UserName { get; set; } = default!;
 
         [Required]
         [EmailAddress]
         [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxEmailLength))]
-        public string EmailAddress { get; set; }
+        public string EmailAddress { get; set; } = default!;
+
+        [StringLength(10)]
+        public string? VerifyCode { get; set; }
+
+        public string? CaptchaCode { get; set; }
 
         [Required]
         [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxPasswordLength))]
         [DataType(DataType.Password)]
         [DisableAuditing]
-        public string Password { get; set; }
+        public string Password { get; set; } = default!;
     }
 }
 

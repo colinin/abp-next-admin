@@ -126,8 +126,8 @@ public class AbpExceptionHandlingWrapperMiddleware : IMiddleware, ITransientDepe
         httpContext.Response.Headers.Append("Content-Type", "application/json");
 
         var wrapResult = new WrapResult(
-            exceptionWrapContext.ErrorInfo.Code,
-            exceptionWrapContext.ErrorInfo.Message,
+            exceptionWrapContext.ErrorInfo.Code!,
+            exceptionWrapContext.ErrorInfo.Message!,
             exceptionWrapContext.ErrorInfo.Details);
         await httpContext.Response.WriteAsync(jsonSerializer.Serialize(wrapResult));
     }

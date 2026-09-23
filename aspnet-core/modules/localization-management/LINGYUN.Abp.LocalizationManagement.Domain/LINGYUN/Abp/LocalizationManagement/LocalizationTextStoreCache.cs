@@ -45,7 +45,7 @@ public class LocalizationTextStoreCache : ILocalizationTextStoreCache, ISingleto
         }
     }
 
-    public virtual LocalizedString GetOrNull(LocalizationResourceBase resource, string cultureName, string name)
+    public virtual LocalizedString? GetOrNull(LocalizationResourceBase resource, string cultureName, string name)
     {
         if (_staticCache.TryGetValue(resource.ResourceName, out var cultureLocalCache) &&
             cultureLocalCache.TryGetValue(cultureName, out var textLocalCache))
@@ -79,7 +79,7 @@ public class LocalizationTextStoreCache : ILocalizationTextStoreCache, ISingleto
         }
     }
 
-    protected async virtual Task<LocalizationTextCacheItem> GetCacheItemAsync(string resourceName, string cultureName)
+    protected async virtual Task<LocalizationTextCacheItem?> GetCacheItemAsync(string resourceName, string cultureName)
     {
         var cacheKey = LocalizationTextCacheItem.CalculateCacheKey(resourceName, cultureName);
         return await LocalizationTextCache.GetAsync(cacheKey);

@@ -480,7 +480,8 @@ public class OpenIddictDataSeeder : OpenIddictDataSeedContributorBase, ITransien
                 OpenIddictConstants.GrantTypes.Password,
                 OpenIddictConstants.GrantTypes.RefreshToken,
                 // TODO: 引用项目?
-                "link_user"],
+                "link_user",
+                "impersonation"],
                 [OpenIddictConstants.Scopes.OpenId,
                 OpenIddictConstants.Scopes.Email,
                 OpenIddictConstants.Scopes.Roles,
@@ -544,7 +545,8 @@ public class OpenIddictDataSeeder : OpenIddictDataSeedContributorBase, ITransien
                 [OpenIddictConstants.GrantTypes.AuthorizationCode,
                  OpenIddictConstants.GrantTypes.RefreshToken,
                 // TODO: 引用项目?
-                "link_user"],
+                "link_user",
+                "impersonation"],
                 [OpenIddictConstants.Scopes.OpenId,
                 OpenIddictConstants.Scopes.Email,
                 OpenIddictConstants.Scopes.Roles,

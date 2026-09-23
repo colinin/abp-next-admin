@@ -59,7 +59,7 @@ public class WeChatTokenProvider : IWeChatTokenProvider, ISingletonDependency
 
         var request = new WeChatTokenRequest
         {
-            BaseUrl = client.BaseAddress.AbsoluteUri,
+            BaseUrl = client.BaseAddress!.AbsoluteUri,
             AppSecret = appSecret,
             AppId = appId,
             GrantType = "client_credential"
@@ -68,7 +68,7 @@ public class WeChatTokenProvider : IWeChatTokenProvider, ISingletonDependency
         var response = await client.RequestWeChatCodeTokenAsync(request, cancellationToken);
         var responseContent = await response.Content.ReadAsStringAsync();
         // 改为直接引用 Newtownsoft.Json
-        var weChatTokenResponse = JsonConvert.DeserializeObject<WeChatTokenResponse>(responseContent);
+        var weChatTokenResponse = JsonConvert.DeserializeObject<WeChatTokenResponse>(responseContent)!;
         var weChatToken = weChatTokenResponse.ToWeChatToken();
         cacheItem = new WeChatTokenCacheItem(appId, weChatToken);
 

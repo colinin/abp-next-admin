@@ -14,7 +14,7 @@ public class ExternalWebAttribute : ExternalAttribute
     [NotNull]
     [JsonProperty("web")]
     [JsonPropertyName("web")]
-    public ExternalWebModel Web { get; set; }
+    public ExternalWebModel Web { get; set; } = default!;
 }
 
 public class ExternalWebModel
@@ -25,12 +25,12 @@ public class ExternalWebModel
     [NotNull]
     [JsonProperty("url")]
     [JsonPropertyName("url")]
-    public string Url { get; set; }
+    public string Url { get; set; } = default!;
     /// <summary>
     /// 网页的展示标题，长度限制12个UTF8字符
     /// </summary>
     [NotNull]
     [JsonProperty("title")]
     [JsonPropertyName("title")]
-    public string Title { get; set; }
+    public string Title { get; set; } = default!;
 }

@@ -1,8 +1,3 @@
-using LINGYUN.Abp.BlobManagement.MimeCheck;
-using LINGYUN.Abp.Exporter.MiniSoftware;
-using LINGYUN.Abp.Identity.Jobs;
-using LINGYUN.Abp.Notifications.Calendar;
-
 namespace LY.MicroService.Applications.Single;
 
 [DependsOn(
@@ -14,10 +9,8 @@ namespace LY.MicroService.Applications.Single;
     typeof(AbpSerilogEnrichersUniqueIdModule),
     // Serilog模块
     typeof(AbpAspNetCoreSerilogModule),
-    // 身份认证模块 会话管理集成
-    typeof(AbpIdentityAspNetCoreSessionModule),
-    // 身份认证模块 会话中间件
-    typeof(AbpIdentitySessionAspNetCoreModule),
+    // 身份认证模块 扩展UserToken验证
+    typeof(AbpIdentityAspNetCoreModule),
     // 身份认证模块 通知集成
     typeof(AbpIdentityNotificationsModule),
     // 身份认证模块 组织机构集成
@@ -45,6 +38,12 @@ namespace LY.MicroService.Applications.Single;
     typeof(AbpAccountWebOpenIddictModule),
     // 账户模块 OAuth集成
     typeof(AbpAccountWebOAuthModule),
+    // 使用 LazyCaptcha 验证码组件
+    typeof(AbpAccountWebLazyCaptchaModule),
+    // 使用 腾讯云验证码组件, 需配置好腾讯云相关参数
+    typeof(AbpAccountWebTencentCaptchaModule),
+    // 使用 阿里云验证码组件, 需配置好阿里云相关参数
+    typeof(AbpAccountWebAliyunCaptchaModule),
 
     // Gdpr 身份认证提供者模块
     typeof(AbpGdprDomainIdentityModule),
@@ -105,8 +104,6 @@ namespace LY.MicroService.Applications.Single;
     // 通知模块 实体框架
     typeof(AbpNotificationsEntityFrameworkCoreModule),
 
-    // OpenIddict扩展模块 会话
-    typeof(AbpOpenIddictAspNetCoreSessionModule),
     // OpenIddict扩展模块 应用服务
     typeof(AbpOpenIddictApplicationModule),
     // OpenIddict扩展模块 控制器
@@ -158,9 +155,9 @@ namespace LY.MicroService.Applications.Single;
     // 平台模块 实体框架
     typeof(PlatformEntityFrameworkCoreModule),
     // 平台模块 VueVbenAdmin设置
-    typeof(PlatformSettingsVueVbenAdminModule),
+    // typeof(PlatformSettingsVueVbenAdminModule),
     // 平台模块 VueVbenAdmin主题
-    typeof(PlatformThemeVueVbenAdminModule),
+    // typeof(PlatformThemeVueVbenAdminModule),
     // 平台模块 Vben2路由
     // typeof(AbpUINavigationVueVbenAdminModule),
     // 平台模块 Vben5路由
@@ -272,6 +269,8 @@ namespace LY.MicroService.Applications.Single;
     typeof(AbpBackgroundTasksQuartzModule),
     // 后台任务模块 身份认证模块作业
     typeof(AbpIdentityJobsModule),
+    // 后台任务模块 平台管理模块作业
+    typeof(PlatformJobsModule),
 
     // 数据审计模块 应用服务
     typeof(AbpDataProtectionManagementApplicationModule),
@@ -300,8 +299,6 @@ namespace LY.MicroService.Applications.Single;
     typeof(AbpFeaturesValidationRedisClientModule),
     // 功能管理模块 Mvc视图
     typeof(AbpFeatureManagementWebModule),
-    // 多语言模块
-    typeof(AbpAspNetCoreMvcLocalizationModule),
     // 多语言模块 语言映射
     typeof(AbpLocalizationCultureMapModule),
 
@@ -396,11 +393,17 @@ namespace LY.MicroService.Applications.Single;
 
     // 虚拟文件浏览器 Mvc视图
     typeof(AbpVirtualFileExplorerWebModule),
+    typeof(AbpLoggingSerilogElasticsearchModule),
     typeof(AbpHttpClientWrapperModule),
     typeof(AbpAspNetCoreMvcWrapperModule),
+    typeof(AbpAspNetCoreSessionModule),
     typeof(AbpAspNetCoreMvcIdempotentWrapperModule),
     typeof(AbpAspNetCoreHttpOverridesModule),
     typeof(AbpHttpClientIdentityModelWebModule),
+    typeof(AbpAspNetCoreMultiTenancyModule),
+    typeof(AbpAspNetCoreMvcUiMultiTenancyModule),
+    typeof(AbpDynamicDefinitionsModule),
+    typeof(AbpClaimsMappingModule),
     typeof(AbpSwashbuckleModule),
     typeof(AbpMailKitModule),
     typeof(AbpAutofacModule),

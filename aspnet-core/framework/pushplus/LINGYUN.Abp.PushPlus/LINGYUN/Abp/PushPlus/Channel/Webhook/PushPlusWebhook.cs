@@ -16,12 +16,12 @@ public class PushPlusWebhook
     /// webhook编码
     /// </summary>
     [JsonProperty("webhookCode")]
-    public string WebhookCode { get; set; }
+    public string WebhookCode { get; set; } = default!;
     /// <summary>
     /// webhook名称
     /// </summary>
     [JsonProperty("webhookName")]
-    public string WebhookName { get; set; }
+    public string WebhookName { get; set; } = default!;
     /// <summary>
     /// webhook类型；
     /// 1-企业微信，
@@ -35,7 +35,7 @@ public class PushPlusWebhook
     /// 调用的url地址
     /// </summary>
     [JsonProperty("webhookUrl")]
-    public string WebhookUrl { get; set; }
+    public string WebhookUrl { get; set; } = default!;
     /// <summary>
     /// 创建日期
     /// </summary>

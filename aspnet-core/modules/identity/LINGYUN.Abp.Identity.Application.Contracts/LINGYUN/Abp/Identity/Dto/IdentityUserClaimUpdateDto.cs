@@ -1,10 +1,12 @@
-﻿using Volo.Abp.Identity;
+﻿using System.ComponentModel.DataAnnotations;
+using Volo.Abp.Identity;
 using Volo.Abp.Validation;
 
 namespace LINGYUN.Abp.Identity;
 
 public class IdentityUserClaimUpdateDto : IdentityUserClaimCreateOrUpdateDto
 {
+    [Required]
     [DynamicMaxLength(typeof(IdentityUserClaimConsts), nameof(IdentityUserClaimConsts.MaxClaimValueLength))]
-    public string NewClaimValue { get; set; }
+    public string NewClaimValue { get; set; } = default!;
 }

@@ -36,5 +36,5 @@ public class ApprovalProcessNode
     [CanBeNull]
     [JsonProperty("sub_node_list")]
     [JsonPropertyName("sub_node_list")]
-    public List<ApprovalProcessSubNode> SubNodes { get; set; }
+    public List<ApprovalProcessSubNode>? SubNodes { get; set; }
 }

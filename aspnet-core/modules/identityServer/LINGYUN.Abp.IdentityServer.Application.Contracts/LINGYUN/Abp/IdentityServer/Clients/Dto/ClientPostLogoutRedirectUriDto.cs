@@ -2,5 +2,5 @@
 
 public class ClientPostLogoutRedirectUriDto
 {
-    public string PostLogoutRedirectUri { get; set; }
+    public string PostLogoutRedirectUri { get; set; } = default!;
 }

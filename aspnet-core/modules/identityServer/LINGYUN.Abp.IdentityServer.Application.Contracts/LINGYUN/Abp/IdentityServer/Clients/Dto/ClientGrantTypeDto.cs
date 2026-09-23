@@ -2,5 +2,5 @@
 
 public class ClientGrantTypeDto
 {
-    public string GrantType { get; set; }
+    public string GrantType { get; set; } = default!;
 }

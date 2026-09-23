@@ -21,7 +21,7 @@ const viewerRef = ref<HTMLDivElement>();
 const vditorPreviewRef = ref<VditorPreview>();
 
 const skinName = computed(() => {
-  return preferences.theme.mode === 'light' ? 'light' : 'dark';
+  return preferences.theme.mode === 'dark' ? 'dark' : 'light';
 });
 
 function init() {
@@ -35,6 +35,9 @@ function init() {
     theme: {
       current: isDark ? 'dark' : 'light',
     },
+    transform: (html) => {
+      return html.replaceAll(/<a\s+/gi, '<a class="text-blue-600" target="_blank" rel="noopener noreferrer" ');
+    }
   });
 }
 

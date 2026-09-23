@@ -17,6 +17,14 @@ public static class SettingDefinitionExtensions
     private const string RequiredFeaturesKey = "RequiredFeatures";
     private const string RequiredPermissionsKey = "RequiredPermissions";
 
+    public static SettingDefinition Replace(
+        this SettingDefinition definition,
+        Action<SettingDefinition> configure)
+    {
+        configure.Invoke(definition);
+        return definition;
+    }
+
     public static SettingDefinition RequiredFeatures(
         this SettingDefinition definition,
         IEnumerable<string> requiredFeatures)

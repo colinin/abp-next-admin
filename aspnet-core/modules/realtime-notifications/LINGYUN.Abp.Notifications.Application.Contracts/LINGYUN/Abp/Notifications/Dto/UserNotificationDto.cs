@@ -4,9 +4,9 @@ namespace LINGYUN.Abp.Notifications;
 
 public class UserNotificationDto
 {
-    public string Name { get; set; }
-    public string Id { get; set; }
-    public NotificationData Data { get; set; }
+    public string Name { get; set; } = default!;
+    public string Id { get; set; } = default!;
+    public NotificationData Data { get; set; } = default!;
     public DateTime CreationTime { get; set; }
     public NotificationType Type { get; set; }
     public NotificationLifetime Lifetime { get; set; }

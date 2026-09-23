@@ -8,5 +8,5 @@ public interface IDataProtectedStrategyStateCache
 
     Task RemoveAsync(DataAccessStrategyState state);
 
-    Task<DataAccessStrategyStateCacheItem> GetAsync(string subjectName, string subjectId);
+    Task<DataAccessStrategyStateCacheItem?> GetAsync(string subjectName, string subjectId);
 }

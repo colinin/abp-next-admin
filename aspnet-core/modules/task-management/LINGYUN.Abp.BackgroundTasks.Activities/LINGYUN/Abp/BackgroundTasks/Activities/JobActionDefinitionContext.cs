@@ -12,7 +12,7 @@ public class JobActionDefinitionContext : IJobActionDefinitionContext
         Actions = actions;
     }
 
-    public virtual JobActionDefinition GetOrNull(string name)
+    public virtual JobActionDefinition? GetOrNull(string name)
     {
         return Actions.GetOrDefault(name);
     }

@@ -40,8 +40,14 @@ public class SmsNotificationSender : ISmsNotificationSender, ITransientDependenc
 
         // TODO: 后期增强功能,增加短信模板、通知模板功能
         message.Properties.Add("TemplateCode", templateCode);
-        message.Properties.Add("SignName", notification.Data.TryGetData("SignName"));
-        message.Properties.AddIfNotContains(notification.Data.ExtraProperties);
+        message.Properties.Add("SignName", notification.Data.TryGetData("SignName")!);
+        foreach (var prop in notification.Data.ExtraProperties)
+        {
+            if (prop.Value != null)
+            {
+                message.Properties[prop.Key] = prop.Value;
+            }
+        }
 
         await SmsSender.SendAsync(message);
     }

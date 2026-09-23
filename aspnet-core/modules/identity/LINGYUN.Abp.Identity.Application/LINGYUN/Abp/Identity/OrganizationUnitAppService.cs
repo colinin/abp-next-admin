@@ -46,7 +46,7 @@ public class OrganizationUnitAppService : IdentityAppServiceBase, IOrganizationU
         input.MapExtraPropertiesTo(origanizationUnit);
 
         await OrganizationUnitManager.CreateAsync(origanizationUnit);
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
 
         return ObjectMapper.Map<OrganizationUnit, OrganizationUnitDto>(origanizationUnit);
     }
@@ -80,7 +80,7 @@ public class OrganizationUnitAppService : IdentityAppServiceBase, IOrganizationU
 
     public async virtual Task<OrganizationUnitDto> GetAsync(Guid id)
     {
-        var origanizationUnit = await OrganizationUnitRepository.FindAsync(id);
+        var origanizationUnit = await OrganizationUnitRepository.GetAsync(id);
 
         return ObjectMapper.Map<OrganizationUnit, OrganizationUnitDto>(origanizationUnit);
     }
@@ -195,7 +195,7 @@ public class OrganizationUnitAppService : IdentityAppServiceBase, IOrganizationU
         input.MapExtraPropertiesTo(origanizationUnit);
 
         await OrganizationUnitManager.UpdateAsync(origanizationUnit);
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
 
         return ObjectMapper.Map<OrganizationUnit, OrganizationUnitDto>(origanizationUnit);
     }
@@ -212,7 +212,7 @@ public class OrganizationUnitAppService : IdentityAppServiceBase, IOrganizationU
             await UserManager.AddToOrganizationUnitAsync(user, origanizationUnit);
         }
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
     }
 
     [Authorize(IdentityPermissions.OrganizationUnits.ManageRoles)]
@@ -227,6 +227,6 @@ public class OrganizationUnitAppService : IdentityAppServiceBase, IOrganizationU
             await OrganizationUnitManager.AddRoleToOrganizationUnitAsync(role, origanizationUnit);
         }
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
     }
 }

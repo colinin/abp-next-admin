@@ -22,69 +22,59 @@ public class EfCoreUserSubscribeRepository : EfCoreRepository<INotificationsDbCo
 
     public async virtual Task<List<UserSubscribe>> GetUserSubscribesAsync(
         string notificationName,
-        IEnumerable<Guid> userIds = null,
+        IEnumerable<Guid>? userIds = null,
         CancellationToken cancellationToken = default)
     {
-        var userSubscribes = await (await GetDbSetAsync())
+        return await (await GetDbSetAsync())
             .Distinct()
             .Where(x => x.NotificationName.Equals(notificationName))
-            .WhereIf(userIds?.Any() == true, x => userIds.Contains(x.UserId))
+            .WhereIf(userIds?.Count() > 0, x => userIds!.Contains(x.UserId))
             .AsNoTracking()
             .ToListAsync(GetCancellationToken(cancellationToken));
-
-        return userSubscribes;
     }
 
-    public async virtual Task<UserSubscribe> GetUserSubscribeAsync(
+    public async virtual Task<UserSubscribe?> GetUserSubscribeAsync(
         string notificationName,
         Guid userId,
         CancellationToken cancellationToken = default)
     {
-        var userSubscribe = await (await GetDbSetAsync())
+        return await (await GetDbSetAsync())
             .Where(x => x.UserId.Equals(userId) && x.NotificationName.Equals(notificationName))
             .AsNoTracking()
             .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
-
-        return userSubscribe;
     }
 
     public async virtual Task<List<string>> GetUserSubscribesAsync(
         Guid userId,
         CancellationToken cancellationToken = default)
     {
-        var userSubscribeNames = await (await GetDbSetAsync())
+        return await (await GetDbSetAsync())
             .Distinct()
             .Where(x => x.UserId.Equals(userId))
             .Select(x => x.NotificationName)
             .ToListAsync(GetCancellationToken(cancellationToken));
-
-        return userSubscribeNames;
     }
 
     public async virtual Task<List<UserSubscribe>> GetUserSubscribesByNameAsync(
         string userName,
         CancellationToken cancellationToken = default)
     {
-        var userSubscribeNames = await (await GetDbSetAsync())
+        return await (await GetDbSetAsync())
             .Distinct()
             .Where(x => x.UserName.Equals(userName))
             .AsNoTracking()
             .ToListAsync(GetCancellationToken(cancellationToken));
-
-        return userSubscribeNames;
     }
 
     public async virtual Task<List<Guid>> GetUserSubscribesAsync(
         string notificationName,
         CancellationToken cancellationToken = default)
     {
-        var subscribeUsers = await (await GetDbSetAsync())
+        return await (await GetDbSetAsync())
             .Distinct()
             .Where(x => x.NotificationName.Equals(notificationName))
             .Select(x => x.UserId)
             .ToListAsync(GetCancellationToken(cancellationToken));
-
-        return subscribeUsers;
     }
 
     public async virtual Task InsertUserSubscriptionAsync(
@@ -132,7 +122,7 @@ public class EfCoreUserSubscribeRepository : EfCoreRepository<INotificationsDbCo
 
     public async virtual Task<List<UserSubscribe>> GetUserSubscribesAsync(
         Guid userId,
-        string sorting = "Id",
+        string? sorting = nameof(UserSubscribe.Id),
         int skipCount = 1,
         int maxResultCount = 10,
         CancellationToken cancellationToken = default)
@@ -141,26 +131,22 @@ public class EfCoreUserSubscribeRepository : EfCoreRepository<INotificationsDbCo
         {
             sorting = nameof(UserSubscribe.Id);
         }
-        var userSubscribes = await (await GetDbSetAsync())
+        return await (await GetDbSetAsync())
              .Distinct()
              .Where(x => x.UserId.Equals(userId))
              .OrderBy(sorting)
              .Page(skipCount, maxResultCount)
              .AsNoTracking()
              .ToListAsync(GetCancellationToken(cancellationToken));
-
-        return userSubscribes;
     }
 
     public async virtual Task<long> GetCountAsync(
         Guid userId,
         CancellationToken cancellationToken = default)
     {
-        var userSubscribedCount = await (await GetDbSetAsync())
+        return await (await GetDbSetAsync())
              .Distinct()
              .Where(x => x.UserId.Equals(userId))
              .LongCountAsync(GetCancellationToken(cancellationToken));
-
-        return userSubscribedCount;
     }
 }

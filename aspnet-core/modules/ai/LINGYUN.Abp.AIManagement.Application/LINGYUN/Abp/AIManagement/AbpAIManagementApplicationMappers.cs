@@ -6,6 +6,7 @@ using LINGYUN.Abp.AIManagement.Workspaces;
 using LINGYUN.Abp.AIManagement.Workspaces.Dtos;
 using Riok.Mapperly.Abstractions;
 using System;
+using Volo.Abp.Data;
 using Volo.Abp.Mapperly;
 using Volo.Abp.ObjectExtending;
 
@@ -16,15 +17,22 @@ namespace LINGYUN.Abp.AIManagement;
 public partial class WorkspaceDefinitionRecordToWorkspaceDefinitionRecordDtoMapper : MapperBase<WorkspaceDefinitionRecord, WorkspaceDefinitionRecordDto>
 {
     [MapPropertyFromSource(nameof(WorkspaceDefinitionRecordDto.Tools), Use = nameof(ConvertTools))]
+    [MapperIgnoreTarget(nameof(WorkspaceDefinitionRecordDto.IsStatic))]
     public override partial WorkspaceDefinitionRecordDto Map(WorkspaceDefinitionRecord source);
 
     [MapPropertyFromSource(nameof(WorkspaceDefinitionRecordDto.Tools), Use = nameof(ConvertTools))]
+    [MapperIgnoreTarget(nameof(WorkspaceDefinitionRecordDto.IsStatic))]
     public override partial void Map(WorkspaceDefinitionRecord source, WorkspaceDefinitionRecordDto destination);
 
     [UserMapping(Default = false)]
     private static string[] ConvertTools(WorkspaceDefinitionRecord record)
     {
         return !record.Tools.IsNullOrWhiteSpace() ? record.Tools.Split(",") : [];
+    }
+
+    public override void AfterMap(WorkspaceDefinitionRecord source, WorkspaceDefinitionRecordDto destination)
+    {
+        destination.IsStatic = source.GetProperty(nameof(WorkspaceDefinitionRecordDto.IsStatic), true);
     }
 }
 
@@ -49,6 +57,14 @@ public partial class TextChatMessageRecordToTextChatMessageDtoMapper : MapperBas
 [MapExtraProperties(DefinitionChecks = MappingPropertyDefinitionChecks.None)]
 public partial class AIToolDefinitionRecordToAIToolDefinitionRecordDtoMapper : MapperBase<AIToolDefinitionRecord, AIToolDefinitionRecordDto>
 {
+    [MapperIgnoreTarget(nameof(AIToolDefinitionRecordDto.IsStatic))]
     public override partial AIToolDefinitionRecordDto Map(AIToolDefinitionRecord source);
+
+    [MapperIgnoreTarget(nameof(AIToolDefinitionRecordDto.IsStatic))]
     public override partial void Map(AIToolDefinitionRecord source, AIToolDefinitionRecordDto destination);
+
+    public override void AfterMap(AIToolDefinitionRecord source, AIToolDefinitionRecordDto destination)
+    {
+        destination.IsStatic = source.GetProperty(nameof(AIToolDefinitionRecordDto.IsStatic), true);
+    }
 }

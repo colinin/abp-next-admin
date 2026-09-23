@@ -37,7 +37,7 @@ public class EfCoreBackgroundJobInfoRepository :
                 GetCancellationToken(cancellationToken));
     }
 
-    public async virtual Task<JobInfo> FindJobAsync(
+    public async virtual Task<JobInfo?> FindJobAsync(
         string id,
         bool includeDetails = true,
         CancellationToken cancellationToken = default)
@@ -51,7 +51,7 @@ public class EfCoreBackgroundJobInfoRepository :
     public async virtual Task<List<BackgroundJobInfo>> GetExpiredJobsAsync(
         int maxResultCount,
         TimeSpan jobExpiratime,
-        string nodeName = null,
+        string? nodeName = null,
         CancellationToken cancellationToken = default)
     {
         var expiratime = Clock.Now.Subtract(jobExpiratime);
@@ -80,7 +80,12 @@ public class EfCoreBackgroundJobInfoRepository :
             .CountAsync(GetCancellationToken(cancellationToken));
     }
 
-    public async virtual Task<List<BackgroundJobInfo>> GetListAsync(ISpecification<BackgroundJobInfo> specification, string sorting = "Name", int maxResultCount = 10, int skipCount = 0, CancellationToken cancellationToken = default)
+    public async virtual Task<List<BackgroundJobInfo>> GetListAsync(
+        ISpecification<BackgroundJobInfo> specification,
+        string? sorting = $"{nameof(BackgroundJobInfo.CreationTime)} DESC",
+        int maxResultCount = 10, 
+        int skipCount = 0, 
+        CancellationToken cancellationToken = default)
     {
         if (sorting.IsNullOrWhiteSpace())
         {

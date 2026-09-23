@@ -6,6 +6,8 @@ using System.Security.Cryptography;
 using System.IO;
 using System.Net;
 
+#nullable disable
+
 namespace LINGYUN.Abp.WeChat.Common.Utils;
 
 public class Cryptography
@@ -242,3 +244,4 @@ public class Cryptography
         return res;
     }
 }
+#nullable enable

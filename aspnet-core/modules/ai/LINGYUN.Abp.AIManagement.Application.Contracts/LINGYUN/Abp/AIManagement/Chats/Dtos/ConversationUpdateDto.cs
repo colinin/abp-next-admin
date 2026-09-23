@@ -6,5 +6,5 @@ public class ConversationUpdateDto
 {
     [Required]
     [DynamicStringLength(typeof(ConversationRecordConsts), nameof(ConversationRecordConsts.MaxNameLength))]
-    public string Name { get; set; }
+    public string Name { get; set; } = default!;
 }

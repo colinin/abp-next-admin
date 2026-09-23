@@ -34,7 +34,7 @@ public interface IEntityChangeStore
         bool includeDetails = false,
         CancellationToken cancellationToken = default);
 
-    Task<EntityChangeWithUsername> GetWithUsernameAsync(
+    Task<EntityChangeWithUsername?> GetWithUsernameAsync(
         Guid entityChangeId,
         CancellationToken cancellationToken = default);
 

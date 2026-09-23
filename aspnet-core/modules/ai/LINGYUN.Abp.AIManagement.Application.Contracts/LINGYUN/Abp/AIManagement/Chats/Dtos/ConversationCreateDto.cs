@@ -10,6 +10,6 @@ public class ConversationCreateDto
 
     [Required]
     [DynamicStringLength(typeof(WorkspaceDefinitionRecordConsts), nameof(WorkspaceDefinitionRecordConsts.MaxNameLength))]
-    public string Workspace { get; set; }
+    public string Workspace { get; set; } = default!;
 
 }

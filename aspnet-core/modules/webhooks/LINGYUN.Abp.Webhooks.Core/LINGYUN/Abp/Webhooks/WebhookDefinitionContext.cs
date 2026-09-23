@@ -16,7 +16,7 @@ public class WebhookDefinitionContext : IWebhookDefinitionContext
 
     public WebhookGroupDefinition AddGroup(
         [NotNull] string name,
-        ILocalizableString displayName = null)
+        ILocalizableString? displayName = null)
     {
         Check.NotNull(name, nameof(name));
 
@@ -28,7 +28,7 @@ public class WebhookDefinitionContext : IWebhookDefinitionContext
         return Groups[name] = new WebhookGroupDefinition(name, displayName);
     }
 
-    public WebhookGroupDefinition GetGroupOrNull([NotNull] string name)
+    public WebhookGroupDefinition? GetGroupOrNull([NotNull] string name)
     {
         Check.NotNull(name, nameof(name));
 

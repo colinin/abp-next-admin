@@ -17,7 +17,7 @@ public abstract class BlobFileCreateBaseDto
     /// </summary>
     [Required]
     [DynamicStringLength(typeof(BlobConsts), nameof(BlobConsts.MaxNameLength))]
-    public string Name { get; set; }
+    public string Name { get; set; } = default!;
     /// <summary>
     /// 所属BlobId
     /// </summary>
@@ -27,5 +27,5 @@ public abstract class BlobFileCreateBaseDto
     /// </summary>
     [DisableAuditing]
     [DisableValidation]
-    public IRemoteStreamContent File { get; set; }
+    public IRemoteStreamContent File { get; set; } = default!;
 }

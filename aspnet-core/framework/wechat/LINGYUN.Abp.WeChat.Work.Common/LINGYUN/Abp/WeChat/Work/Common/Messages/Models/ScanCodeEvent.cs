@@ -10,12 +10,12 @@ public abstract class ScanCodeEvent : WeChatWorkEventMessage
     /// 事件KEY值
     /// </summary>
     [XmlElement("EventKey")]
-    public string EventKey { get; set; }
+    public string EventKey { get; set; } = default!;
     /// <summary>
     /// 扫描信息
     /// </summary>
     [XmlElement("ScanCodeInfo")]
-    public ScanCodeInfo ScanCodeInfo { get; set; }
+    public ScanCodeInfo ScanCodeInfo { get; set; } = default!;
 }
 
 public class ScanCodeInfo
@@ -24,10 +24,10 @@ public class ScanCodeInfo
     /// 扫描类型，一般是qrcode
     /// </summary>
     [XmlElement("ScanType")]
-    public string ScanType { get; set; }
+    public string ScanType { get; set; } = default!;
     /// <summary>
     /// 扫描结果，即二维码对应的字符串信息
     /// </summary>
     [XmlElement("ScanResult")]
-    public string ScanResult { get; set; }
+    public string ScanResult { get; set; } = default!;
 }

@@ -26,6 +26,8 @@
     "DisplayName:Providers": "权限提供者",
     "Description:Providers": "允许提供程序获取/设置此权限值的列表。空列表表示允许所有提供程序.",
     "DisplayName:StateCheckers": "状态检查",
+    "DisplayName:PermissionGranted": "已授权对象",
+    "DisplayName:PermissionProvider": "权限提供者",
     "MultiTenancySides:Tenant": "租户",
     "MultiTenancySides:Host": "主机",
     "MultiTenancySides:Both": "两者",
@@ -43,6 +45,11 @@
     "PermissionProviders:C": "客户端",
     "PermissionProviders:R": "角色",
     "PermissionProviders:U": "用户",
-    "PermissionProviders:O": "组织机构"
+    "PermissionProviders:O": "组织机构",
+    "AllPermissions": "所有权限",
+    "SearchPermission": "搜索权限",
+    "PermissionGranted": "已授权对象",
+    "RejectPermission": "取消授权",
+    "RejectPermissionWarningMessage": "将取消'{0}'的'{1}'权限授权!"
   }
 }

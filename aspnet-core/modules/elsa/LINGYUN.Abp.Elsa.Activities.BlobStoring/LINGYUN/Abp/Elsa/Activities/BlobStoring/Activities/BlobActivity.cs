@@ -6,7 +6,7 @@ namespace LINGYUN.Abp.Elsa.Activities.BlobStoring;
 public abstract class BlobActivity : AbpActivity
 {
     [ActivityInput(Hint = "Path of the blob.")]
-    public string Path { get; set; }
+    public string Path { get; set; } = default!;
 
     protected IBlobContainer<ElsaBlobContainer> BlobContainer;
 

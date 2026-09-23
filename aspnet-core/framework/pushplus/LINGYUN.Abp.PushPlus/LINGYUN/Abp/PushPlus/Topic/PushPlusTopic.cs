@@ -16,12 +16,12 @@ public class PushPlusTopic
     /// 群组编码
     /// </summary>
     [JsonProperty("topicCode")]
-    public string TopicCode { get; set; }
+    public string TopicCode { get; set; } = default!;
     /// <summary>
     /// 群组名称
     /// </summary>
     [JsonProperty("topicName")]
-    public string TopicName { get; set; }
+    public string TopicName { get; set; } = default!;
     /// <summary>
     /// 创建时间
     /// </summary>

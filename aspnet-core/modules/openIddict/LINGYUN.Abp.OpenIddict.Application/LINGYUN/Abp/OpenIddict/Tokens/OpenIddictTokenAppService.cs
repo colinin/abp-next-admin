@@ -34,14 +34,14 @@ public class OpenIddictTokenAppService : OpenIddictApplicationServiceBase, IOpen
     {
         var token = await _tokenManager.FindByIdAsync(_identifierConverter.ToString(id));
 
-        await _tokenManager.DeleteAsync(token);
+        await _tokenManager.DeleteAsync(token!);
     }
 
     public async virtual Task<OpenIddictTokenDto> GetAsync(Guid id)
     {
         var token = await _tokenRepository.GetAsync(id);
 
-        return token.ToDto();
+        return token.ToDto(JsonSerializer)!;
     }
 
     public async virtual Task<PagedResultDto<OpenIddictTokenDto>> GetListAsync(OpenIddictTokenGetListInput input)
@@ -88,7 +88,7 @@ public class OpenIddictTokenAppService : OpenIddictApplicationServiceBase, IOpen
             queryable = queryable.Where(x => x.Subject.Contains(input.Filter) ||
                 x.Status.Contains(input.Filter) || x.Type.Contains(input.Filter) ||
                 x.Payload.Contains(input.Filter) || x.Properties.Contains(input.Filter) ||
-                x.ReferenceId.Contains(input.ReferenceId));
+                x.ReferenceId.Contains(input.Filter));
         }
 
         var totalCount = await AsyncExecuter.CountAsync(queryable);
@@ -105,6 +105,6 @@ public class OpenIddictTokenAppService : OpenIddictApplicationServiceBase, IOpen
         var entites = await AsyncExecuter.ToListAsync(queryable);
 
         return new PagedResultDto<OpenIddictTokenDto>(totalCount,
-            entites.Select(entity => entity.ToDto()).ToList());
+            entites.Select(entity => entity.ToDto(JsonSerializer)!).ToList());
     }
 }

@@ -1,4 +1,5 @@
 ﻿using LINGYUN.Abp.SettingManagement;
+using LINGYUN.Abp.Tencent.Captcha.Settings;
 using LINGYUN.Abp.Tencent.Features;
 using LINGYUN.Abp.Tencent.Localization;
 using LINGYUN.Abp.Tencent.QQ.Settings;
@@ -42,7 +43,7 @@ public class TencentCloudSettingAppService : ApplicationService, ITencentCloudSe
         return await GetAllForProviderAsync(GlobalSettingValueProvider.ProviderName, null);
     }
 
-    protected async virtual Task<SettingGroupResult> GetAllForProviderAsync(string providerName, string providerKey)
+    protected async virtual Task<SettingGroupResult> GetAllForProviderAsync(string providerName, string? providerKey = null)
     {
         var settingGroups = new SettingGroupResult();
 
@@ -61,7 +62,7 @@ public class TencentCloudSettingAppService : ApplicationService, ITencentCloudSe
                 await SettingManager.GetOrNullAsync(TencentCloudSettingNames.EndPoint, providerName, providerKey),
                 ValueType.Option,
                 providerName)
-                .AddOptions(GetAvailableRegionOptions());
+                ?.AddOptions(GetAvailableRegionOptions());
             basicSetting.AddDetail(
                 await SettingDefinitionManager.GetAsync(TencentCloudSettingNames.SecretId),
                 StringLocalizerFactory,
@@ -94,8 +95,8 @@ public class TencentCloudSettingAppService : ApplicationService, ITencentCloudSe
                 await SettingManager.GetOrNullAsync(TencentCloudSettingNames.Connection.HttpMethod, providerName, providerKey),
                 ValueType.Option,
                 providerName)
-                .AddOption("POST", "POST")
-                .AddOption("GET", "GET");
+                ?.AddOption("POST", "POST")
+                ?.AddOption("GET", "GET");
             connectionSetting.AddDetail(
                 await SettingDefinitionManager.GetAsync(TencentCloudSettingNames.Connection.Timeout),
                 StringLocalizerFactory,
@@ -163,6 +164,38 @@ public class TencentCloudSettingAppService : ApplicationService, ITencentCloudSe
                 StringLocalizerFactory,
                 await SettingManager.GetOrNullAsync(TencentQQSettingNames.QQConnect.IsMobile, providerName, providerKey),
                 ValueType.Boolean,
+                providerName);
+
+            #endregion
+
+            #region 验证码
+
+            var captchaSetting = settingGroup.AddSetting(
+                L["Settings:TenantCloud.Captcha"], L["Settings:TenantCloud.Captcha"]);
+
+            captchaSetting.AddDetail(
+                await SettingDefinitionManager.GetAsync(TencentCaptchaSettingNames.CaptchaAppId),
+                StringLocalizerFactory,
+                await SettingManager.GetOrNullAsync(TencentCaptchaSettingNames.CaptchaAppId, providerName, providerKey),
+                ValueType.String,
+                providerName);
+            captchaSetting.AddDetail(
+                await SettingDefinitionManager.GetAsync(TencentCaptchaSettingNames.AppSecretKey),
+                StringLocalizerFactory,
+                await SettingManager.GetOrNullAsync(TencentCaptchaSettingNames.AppSecretKey, providerName, providerKey),
+                ValueType.String,
+                providerName);
+            captchaSetting.AddDetail(
+                await SettingDefinitionManager.GetAsync(TencentCaptchaSettingNames.CaptchaAppIdEncryptedType),
+                StringLocalizerFactory,
+                await SettingManager.GetOrNullAsync(TencentCaptchaSettingNames.CaptchaAppIdEncryptedType, providerName, providerKey),
+                ValueType.String,
+                providerName);
+            captchaSetting.AddDetail(
+                await SettingDefinitionManager.GetAsync(TencentCaptchaSettingNames.CaptchaAppIdEncryptedExpireTime),
+                StringLocalizerFactory,
+                await SettingManager.GetOrNullAsync(TencentCaptchaSettingNames.CaptchaAppIdEncryptedExpireTime, providerName, providerKey),
+                ValueType.Number,
                 providerName);
 
             #endregion

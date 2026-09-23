@@ -57,7 +57,7 @@ public class SystemInfoController : AbpControllerBase
             new ComponentKeyModel("sys_app_start_time", "启动时间"),
         };
 
-        var systemDetails = new Dictionary<string, object>
+        var systemDetails = new Dictionary<string, object?>
         {
             { "sys_machine_name", Environment.MachineName },
             { "sys_environment", env?.EnvironmentName ?? Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") },
@@ -115,7 +115,7 @@ public class SystemInfoController : AbpControllerBase
                 new ComponentKeyModel("perf_active_threads", "进程总线程数"),
                 new ComponentKeyModel("perf_thread_pool_thread_count", "线程池活动线程数"),
             },
-            new Dictionary<string, object>
+            new Dictionary<string, object?>
             {
                 { "perf_total_memory", memoryMetrics.TotalMemory },
                 { "perf_working_set", memoryMetrics.WorkingSet },
@@ -149,7 +149,7 @@ public class SystemInfoController : AbpControllerBase
             new ComponentKeyModel("cap_storage", "持久化"),
             new ComponentKeyModel("cap_transport", "传输"),
         };
-        var capDetails = new Dictionary<string, object>
+        var capDetails = new Dictionary<string, object?>
         {
             { "cap_status", cap != null ? "正常" : "未启用" },
             { "cap_version", cap != null ? cap.Version.Substring(0, 5) : "N/A" },
@@ -171,7 +171,7 @@ public class SystemInfoController : AbpControllerBase
                 {
                     new ComponentKeyModel("redis_status", "状态")
                 },
-                new Dictionary<string, object>
+                new Dictionary<string, object?>
                 {
                     { "redis_status", "未注册" },
                 });
@@ -200,7 +200,7 @@ public class SystemInfoController : AbpControllerBase
                 {
                     new ComponentKeyModel("redis_status", "状态")
                 },
-                new Dictionary<string, object>
+                new Dictionary<string, object?>
                 {
                     { "redis_status", "连接异常" },
                 });
@@ -242,7 +242,7 @@ public class SystemInfoController : AbpControllerBase
             new ComponentKeyModel("redis_evicted_keys", "被驱逐键数量"),
             new ComponentKeyModel("redis_avg_ttl_seconds", "平均TTL(秒)"),
         };
-        var redisDetails = new Dictionary<string, object>()
+        var redisDetails = new Dictionary<string, object?>()
         {
             { "redis_version", redisInfo.GetValueOrDefault("redis_version", "unknown") },
             { "redis_mode", redisInfo.GetValueOrDefault("redis_mode", "unknown") },

@@ -22,7 +22,7 @@ public class SendNotification : AbpActivity
     private readonly INotificationSender _notificationSender;
 
     [ActivityInput(Hint = "The name of the registered notification.", SupportedSyntaxes = new[] { SyntaxNames.JavaScript, SyntaxNames.Liquid })]
-    public string NotificationName { get; set; }
+    public string NotificationName { get; set; } = default!;
 
     [ActivityInput(
             Hint = "Notifications pass data or template content.",
@@ -30,7 +30,7 @@ public class SendNotification : AbpActivity
             SupportedSyntaxes = new[] { SyntaxNames.JavaScript, SyntaxNames.Liquid },
             DefaultWorkflowStorageProvider = TransientWorkflowStorageProvider.ProviderName
         )]
-    public object NotificationData { get; set; }
+    public object NotificationData { get; set; } = default!;
 
     [ActivityInput(
         Hint = "The recipients user id list.", 

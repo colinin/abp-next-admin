@@ -15,7 +15,7 @@ public class ApprovalApplyProcess
     [NotNull]
     [JsonProperty("node_list")]
     [JsonPropertyName("node_list")]
-    public List<ApprovalApplyProcessNode> Nodes { get; set; }
+    public List<ApprovalApplyProcessNode> Nodes { get; set; } = default!;
     public ApprovalApplyProcess()
     {
 

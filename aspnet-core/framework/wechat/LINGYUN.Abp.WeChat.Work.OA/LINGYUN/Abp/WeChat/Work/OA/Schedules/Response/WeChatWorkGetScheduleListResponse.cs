@@ -18,5 +18,5 @@ public class WeChatWorkGetScheduleListResponse : WeChatWorkResponse
     [NotNull]
     [JsonProperty("schedule_list")]
     [JsonPropertyName("schedule_list")]
-    public ScheduleInfo[] ScheduleList { get; set; }
+    public ScheduleInfo[] ScheduleList { get; set; } = default!;
 }

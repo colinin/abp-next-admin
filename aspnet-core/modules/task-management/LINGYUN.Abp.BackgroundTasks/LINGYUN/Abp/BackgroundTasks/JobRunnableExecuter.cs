@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Volo.Abp;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.MultiTenancy;
 
@@ -22,13 +23,13 @@ public class JobRunnableExecuter : IJobRunnableExecuter, ITransientDependency
         }
     }
 
-    private async Task InternalExecuteAsync(JobRunnableContext context)
+    private async static Task InternalExecuteAsync(JobRunnableContext context)
     {
-        var jobRunnable = context.ServiceProvider.GetService(context.JobType);
-        if (jobRunnable == null)
-        {
-            jobRunnable = Activator.CreateInstance(context.JobType);
-        }
+        var jobRunnable = context.ServiceProvider.GetService(context.JobType)
+            ?? Activator.CreateInstance(context.JobType);
+
+        Check.NotNull(jobRunnable, nameof(jobRunnable));
+
         await ((IJobRunnable)jobRunnable).ExecuteAsync(context);
     }
 }

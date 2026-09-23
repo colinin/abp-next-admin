@@ -10,11 +10,11 @@ public class LocalizableStringInfo
     /// <summary>
     /// Resource name
     /// </summary>
-    public string ResourceName { get; set; }
+    public string ResourceName { get; set; } = default!;
     /// <summary>
     /// Properties
     /// </summary>
-    public string Name { get; set; }
+    public string Name { get; set; } = default!;
     /// <summary>
     /// Formatted data
     /// </summary>
@@ -35,7 +35,7 @@ public class LocalizableStringInfo
     public LocalizableStringInfo(
         string resourceName, 
         string name,
-        Dictionary<object, object> values = null)
+        Dictionary<object, object>? values = null)
     {
         ResourceName = resourceName;
         Name = name;

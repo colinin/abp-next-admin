@@ -10,26 +10,26 @@ public class GetScanQrCodeResult
     public int AppId { get; set; }
 
     [JsonProperty("appKey")]
-    public string AppKey { get; set; }
+    public string AppKey { get; set; } = default!;
 
     [JsonProperty("appName")]
-    public string AppName { get; set; }
+    public string AppName { get; set; } = default!;
 
     [JsonProperty("extra")]
-    public string Extra { get; set; }
+    public string? Extra { get; set; }
 
     [JsonProperty("source")]
-    public string Source { get; set; }
+    public string? Source { get; set; }
 
     [JsonProperty("time")]
     public long Time { get; set; }
 
     [JsonProperty("uid")]
-    public string Uid { get; set; }
+    public string? Uid { get; set; }
 
     [JsonProperty("userHeadImg")]
-    public string UserHeadImg { get; set; }
+    public string? UserHeadImg { get; set; }
 
     [JsonProperty("userName")]
-    public string UserName { get; set; }
+    public string? UserName { get; set; }
 }

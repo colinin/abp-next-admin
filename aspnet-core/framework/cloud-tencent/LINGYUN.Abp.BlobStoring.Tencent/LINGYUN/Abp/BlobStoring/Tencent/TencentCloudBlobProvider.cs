@@ -58,7 +58,7 @@ public class TencentCloudBlobProvider : BlobProviderBase, ITransientDependency
         return await BlobExistsAsync(ossClient, args, blobName);
     }
 
-    public override async Task<Stream> GetOrNullAsync(BlobProviderGetArgs args)
+    public override async Task<Stream?> GetOrNullAsync(BlobProviderGetArgs args)
     {
         var ossClient = await GetOssClientAsync(args);
         var blobName = TencentBlobNameCalculator.Calculate(args);
@@ -129,7 +129,7 @@ public class TencentCloudBlobProvider : BlobProviderBase, ITransientDependency
         return ossClient;
     }
 
-    protected async virtual Task CreateBucketIfNotExists(CosXml cos, BlobProviderArgs args, IList<string> refererList = null)
+    protected async virtual Task CreateBucketIfNotExists(CosXml cos, BlobProviderArgs args, IList<string>? refererList = null)
     {
         if (!await BucketExistsAsync(cos, args))
         {

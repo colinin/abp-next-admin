@@ -24,10 +24,10 @@ public class LoggerAuditLogWriter : IAuditLogWriter, ISingletonDependency
         }
     }
 
-    public virtual Task WriteAsync(AuditLogInfo auditLogInfo, CancellationToken cancellationToken = default)
+    public virtual Task<string> WriteAsync(AuditLogInfo auditLogInfo, CancellationToken cancellationToken = default)
     {
         _logger.LogInformation(auditLogInfo.ToString());
 
-        return Task.CompletedTask;
+        return Task.FromResult("");
     }
 }

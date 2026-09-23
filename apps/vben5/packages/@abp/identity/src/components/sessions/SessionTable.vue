@@ -87,6 +87,19 @@ const gridOptions: VxeGridProps<IdentitySessionDto> = {
     },
     {
       align: 'left',
+      field: 'userId',
+      formatter: ({ row }) => {
+        if (row.extraProperties?.UserName) {
+          return `${row.extraProperties.UserName} (${row.userId})`;
+        }
+        return row.userId;
+      },
+      minWidth: 150,
+      sortable: true,
+      title: $t('AbpIdentity.DisplayName:UserId'),
+    },
+    {
+      align: 'left',
       field: 'device',
       minWidth: 120,
       slots: { default: 'device' },
@@ -98,7 +111,7 @@ const gridOptions: VxeGridProps<IdentitySessionDto> = {
       field: 'deviceInfo',
       sortable: true,
       title: $t('AbpIdentity.DisplayName:DeviceInfo'),
-      width: 'auto',
+      minWidth: 200,
     },
     {
       align: 'left',

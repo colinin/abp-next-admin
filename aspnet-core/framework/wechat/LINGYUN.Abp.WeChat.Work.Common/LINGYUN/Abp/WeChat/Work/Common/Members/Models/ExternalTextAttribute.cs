@@ -14,7 +14,7 @@ public class ExternalTextAttribute : ExternalAttribute
     [NotNull]
     [JsonProperty("text")]
     [JsonPropertyName("text")]
-    public ExternalTextModel Text { get; set; }
+    public ExternalTextModel Text { get; set; } = default!;
 }
 
 public class ExternalTextModel
@@ -25,5 +25,5 @@ public class ExternalTextModel
     [NotNull]
     [JsonProperty("value")]
     [JsonPropertyName("value")]
-    public string Value { get; set; }
+    public string Value { get; set; } = default!;
 }

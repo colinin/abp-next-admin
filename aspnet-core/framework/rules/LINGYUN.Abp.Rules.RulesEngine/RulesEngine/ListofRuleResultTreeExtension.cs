@@ -28,7 +28,7 @@ public static class ListofRuleResultTreeExtension
 
         foreach (var failedResult in failedResults)
         {
-            string member = null;
+            string? member = null;
             var errorBuilder = new StringBuilder(36);
             if (!failedResult.ExceptionMessage.IsNullOrWhiteSpace())
             {
@@ -49,13 +49,13 @@ public static class ListofRuleResultTreeExtension
 
 
 
-    private static string GetErrorMessage(this IEnumerable<RuleResultTree> ruleResultTrees, out string member)
+    private static string GetErrorMessage(this IEnumerable<RuleResultTree> ruleResultTrees, out string? member)
     {
         member = null;
         var errorBuilder = new StringBuilder(36);
         var failedResults = ruleResultTrees.Where(rule => !rule.IsSuccess).ToArray();
 
-        for (int index = 0; index < failedResults.Length; index++)
+        for (var index = 0; index < failedResults.Length; index++)
         {
             member = failedResults[index].Rule?.Properties?.GetOrDefault("Property")?.ToString();
 

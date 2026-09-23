@@ -1,0 +1,19 @@
+﻿{
+  "culture": "en",
+  "texts": {
+    "InvalidAccessToken": "Invalid access token, token validation failed",
+    "NestedImpersonationNotAllowed": "Nested impersonation is not allowed. You are currently in impersonation mode. Please revert to your original identity first",
+    "InvalidImpersonationRequest": "Invalid impersonation request. Please provide valid impersonation target parameters (User ID, Tenant ID, or Delegation ID)",
+    "CannotImpersonateYourself": "You cannot impersonate yourself. Please select a different user to impersonate",
+    "InsufficientImpersonationPermission": "Insufficient permission to perform user impersonation",
+    "TargetUserNotFound": "Target user not found: {0}",
+    "RequirePermissionToImpersonateUser": "Authorization is required to simulate users/tenants!",
+    "TenantAdminUserNameNotSpecified": "Tenant admin user name is not specified. Tenant impersonation requires an admin user name",
+    "TenantAdminUserNotFound": "Tenant admin user not found: {0}. Please verify the admin user name is correct",
+    "InvalidUserDelegation": "Invalid user delegation. The delegation record does not exist or has expired",
+    "NotAuthorizedForDelegation": "Delegation authorization failed. Current user is not the target of this delegation",
+    "DelegationSourceUserNotFound": "Delegation source user not found. Unable to complete delegated impersonation",
+    "NoImpersonationContext": "No impersonation context found. Unable to revert to original user identity",
+    "OriginalUserNotFound": "Original user not found. The impersonator's user record may have been deleted"
+  }
+}

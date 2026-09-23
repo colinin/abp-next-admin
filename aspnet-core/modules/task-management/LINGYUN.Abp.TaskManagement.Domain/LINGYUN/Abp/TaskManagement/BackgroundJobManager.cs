@@ -39,7 +39,7 @@ public class BackgroundJobManager : DomainService
 
         if (!jobInfo.IsEnabled || resetJob)
         {
-            UnitOfWorkManager.Current.OnCompleted(async () =>
+            UnitOfWorkManager.Current!.OnCompleted(async () =>
             {
                 await EventBus.PublishAsync(
                     new JobStopEventData
@@ -53,7 +53,7 @@ public class BackgroundJobManager : DomainService
 
         if (resetJob && jobInfo.JobType == JobType.Period)
         {
-            UnitOfWorkManager.Current.OnCompleted(async () =>
+            UnitOfWorkManager.Current!.OnCompleted(async () =>
             {
                 await EventBus.PublishAsync(
                     new JobStartEventData
@@ -72,7 +72,7 @@ public class BackgroundJobManager : DomainService
     {
         await BackgroundJobInfoRepository.DeleteAsync(jobInfo);
 
-        UnitOfWorkManager.Current.OnCompleted(async () =>
+        UnitOfWorkManager.Current!.OnCompleted(async () =>
         {
             await EventBus.PublishAsync(
                 new JobDeleteEventData
@@ -88,7 +88,7 @@ public class BackgroundJobManager : DomainService
     {
         await BackgroundJobInfoRepository.DeleteManyAsync(jobInfos);
 
-        UnitOfWorkManager.Current.OnCompleted(async () =>
+        UnitOfWorkManager.Current!.OnCompleted(async () =>
         {
             await EventBus.PublishAsync(
                 new JobDeleteEventData
@@ -157,7 +157,7 @@ public class BackgroundJobManager : DomainService
 
         await BackgroundJobInfoRepository.UpdateAsync(jobInfo);
 
-        UnitOfWorkManager.Current.OnCompleted(async () =>
+        UnitOfWorkManager.Current!.OnCompleted(async () =>
         {
             await EventBus.PublishAsync(
                 new JobPauseEventData
@@ -179,7 +179,7 @@ public class BackgroundJobManager : DomainService
 
         await BackgroundJobInfoRepository.UpdateManyAsync(jobInfos);
 
-        UnitOfWorkManager.Current.OnCompleted(async () =>
+        UnitOfWorkManager.Current!.OnCompleted(async () =>
         {
             await EventBus.PublishAsync(
                 new JobPauseEventData
@@ -199,7 +199,7 @@ public class BackgroundJobManager : DomainService
 
         await BackgroundJobInfoRepository.UpdateAsync(jobInfo);
 
-        UnitOfWorkManager.Current.OnCompleted(async () =>
+        UnitOfWorkManager.Current!.OnCompleted(async () =>
         {
             await EventBus.PublishAsync(
                 new JobResumeEventData
@@ -222,7 +222,7 @@ public class BackgroundJobManager : DomainService
 
         await BackgroundJobInfoRepository.UpdateManyAsync(jobInfos);
 
-        UnitOfWorkManager.Current.OnCompleted(async () =>
+        UnitOfWorkManager.Current!.OnCompleted(async () =>
         {
             await EventBus.PublishAsync(
                 new JobResumeEventData
@@ -241,7 +241,7 @@ public class BackgroundJobManager : DomainService
 
         await BackgroundJobInfoRepository.UpdateAsync(jobInfo);
 
-        UnitOfWorkManager.Current.OnCompleted(async () =>
+        UnitOfWorkManager.Current!.OnCompleted(async () =>
         {
             await EventBus.PublishAsync(
                 new JobStopEventData
@@ -263,7 +263,7 @@ public class BackgroundJobManager : DomainService
 
         await BackgroundJobInfoRepository.UpdateManyAsync(jobInfos);
 
-        UnitOfWorkManager.Current.OnCompleted(async () =>
+        UnitOfWorkManager.Current!.OnCompleted(async () =>
         {
             await EventBus.PublishAsync(
                 new JobStopEventData

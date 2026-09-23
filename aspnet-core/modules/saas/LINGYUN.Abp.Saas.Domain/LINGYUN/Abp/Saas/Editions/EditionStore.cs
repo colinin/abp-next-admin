@@ -28,7 +28,7 @@ public class EditionStore : IEditionStore, ITransientDependency
         Cache = cache;
     }
 
-    public async virtual Task<EditionInfo> FindByTenantAsync(Guid tenantId)
+    public async virtual Task<EditionInfo?> FindByTenantAsync(Guid tenantId)
     {
         return (await GetCacheItemAsync(tenantId)).Value;
     }
@@ -50,7 +50,7 @@ public class EditionStore : IEditionStore, ITransientDependency
         }
     }
 
-    protected async virtual Task<EditionCacheItem> SetCacheAsync(string cacheKey, [CanBeNull] Edition edition)
+    protected async virtual Task<EditionCacheItem> SetCacheAsync(string cacheKey, [CanBeNull] Edition? edition)
     {
         var editionInfo = edition != null ? ObjectMapper.Map<Edition, EditionInfo>(edition) : null;
         var cacheItem = new EditionCacheItem(editionInfo);

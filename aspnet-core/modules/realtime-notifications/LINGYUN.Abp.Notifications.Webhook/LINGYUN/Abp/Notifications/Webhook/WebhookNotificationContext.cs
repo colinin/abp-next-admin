@@ -5,7 +5,7 @@ public class WebhookNotificationContext : IWebhookNotificationContext
 {
     public IServiceProvider ServiceProvider { get; }
     public NotificationInfo Notification { get; }
-    public WebhookNotificationData Webhook { get; set; }
+    public WebhookNotificationData? Webhook { get; set; }
     public bool Handled { get; set; }
     public WebhookNotificationContext(IServiceProvider serviceProvider, NotificationInfo notification)
     {

@@ -42,6 +42,7 @@
     "Permission:Delete": "删除",
     "Permission:ManageConnectionStrings": "管理连接字符串",
     "Permission:ManageFeatures": "管理功能",
+    "Permission:Impersonation": "模拟租户",
     "DisplayName:AdminEmailAddress": "管理员电子邮件地址",
     "DisplayName:AdminPassword": "管理员密码",
     "Features:RecycleStrategy": "资源回收策略",
@@ -54,6 +55,7 @@
     "RecycleStrategy:Reserve": "保留",
     "RecycleStrategy:Recycle": "回收",
     "ManageFeatures": "管理功能",
-    "IfUseCustomDataBaseDefaultConnectionStringIsRequiredMessage": "如果使用自定义数据库,默认连接字符串必须输入!"
+    "IfUseCustomDataBaseDefaultConnectionStringIsRequiredMessage": "如果使用自定义数据库,默认连接字符串必须输入!",
+    "ImpersonationTenant": "模拟租户"
   }
 }

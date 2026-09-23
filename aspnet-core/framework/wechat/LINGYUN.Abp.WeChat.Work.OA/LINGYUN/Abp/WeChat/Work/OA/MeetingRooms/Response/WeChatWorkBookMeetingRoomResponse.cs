@@ -17,12 +17,12 @@ public class WeChatWorkBookMeetingRoomResponse : WeChatWorkResponse
     [NotNull]
     [JsonProperty("booking_id")]
     [JsonPropertyName("booking_id")]
-    public string BookingId { get; set; }
+    public string BookingId { get; set; } = default!;
     /// <summary>
     /// 会议关联日程的id
     /// </summary>
     [NotNull]
     [JsonProperty("schedule_id")]
     [JsonPropertyName("schedule_id")]
-    public string ScheduleId { get; set; }
+    public string ScheduleId { get; set; } = default!;
 }

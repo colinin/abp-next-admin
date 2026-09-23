@@ -51,7 +51,7 @@ public class ClientAppService : AbpIdentityServerAppServiceBase, IClientAppServi
 
         client = await ClientRepository.InsertAsync(client);
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
 
         return ObjectMapper.Map<Client, ClientDto>(client);
     }
@@ -62,7 +62,7 @@ public class ClientAppService : AbpIdentityServerAppServiceBase, IClientAppServi
         var client = await ClientRepository.GetAsync(id);
         await ClientRepository.DeleteAsync(client);
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
     }
 
     public async virtual Task<ClientDto> GetAsync(Guid id)
@@ -317,7 +317,7 @@ public class ClientAppService : AbpIdentityServerAppServiceBase, IClientAppServi
 
         client = await ClientRepository.UpdateAsync(client);
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
 
         return ObjectMapper.Map<Client, ClientDto>(client);
     }
@@ -450,7 +450,7 @@ public class ClientAppService : AbpIdentityServerAppServiceBase, IClientAppServi
         }
         client = await ClientRepository.InsertAsync(client);
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
 
         return ObjectMapper.Map<Client, ClientDto>(client);
     }

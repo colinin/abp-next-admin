@@ -11,10 +11,10 @@ public abstract class ExternalTagChangeEvent : WeChatWorkEventMessage
     /// 变更类型
     /// </summary>
     [XmlElement("ChangeType")]
-    public string ChangeType { get; set; }
+    public string ChangeType { get; set; } = default!;
     /// <summary>
     /// 标签或标签组所属的规则组id，只回调给“客户联系”应用
     /// </summary>
     [XmlElement("StrategyId")]
-    public string StrategyId { get; set; }
+    public string StrategyId { get; set; } = default!;
 }

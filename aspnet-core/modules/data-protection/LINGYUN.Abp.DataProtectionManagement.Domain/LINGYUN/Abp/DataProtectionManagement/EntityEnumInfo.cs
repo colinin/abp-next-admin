@@ -9,19 +9,19 @@ public class EntityEnumInfo : Entity<Guid>
     /// <summary>
     /// 名称
     /// </summary>
-    public virtual string Name { get; protected set; }
+    public virtual string Name { get; protected set; } = default!;
     /// <summary>
     /// 显示名称
     /// </summary>
-    public virtual string DisplayName { get; protected set; }
+    public virtual string DisplayName { get; protected set; } = default!;
     /// <summary>
     /// 枚举值
     /// </summary>
-    public virtual string Value { get; protected set; }
+    public virtual string Value { get; protected set; } = default!;
     /// <summary>
     /// 所属属性
     /// </summary>
-    public virtual EntityPropertyInfo PropertyInfo { get; protected set; }
+    public virtual EntityPropertyInfo PropertyInfo { get; protected set; } = default!;
     /// <summary>
     /// 所属属性标识
     /// </summary>

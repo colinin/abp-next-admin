@@ -14,30 +14,30 @@ public class WebhookDefinition
     // <summary>
     /// Group name of the webhook.
     /// </summary>
-    public string GroupName { get; internal set; }
+    public string GroupName { get; internal set; } = default!;
 
     /// <summary>
     /// Display name of the webhook.
     /// Optional.
     /// </summary>
-    public ILocalizableString DisplayName { get; set; }
+    public ILocalizableString? DisplayName { get; set; }
 
     /// <summary>
     /// Description for the webhook.
     /// Optional.
     /// </summary>
-    public ILocalizableString Description { get; set; }
+    public ILocalizableString? Description { get; set; }
 
     public List<string> RequiredFeatures { get; set; }
 
-    public Dictionary<string, object> Properties { get; }
+    public Dictionary<string, object?> Properties { get; }
 
-    public object this[string name] {
+    public object? this[string name] {
         get => Properties.GetOrDefault(name);
         set => Properties[name] = value;
     }
 
-    public WebhookDefinition(string name, ILocalizableString displayName = null, ILocalizableString description = null)
+    public WebhookDefinition(string name, ILocalizableString? displayName = null, ILocalizableString? description = null)
     {
         if (name.IsNullOrWhiteSpace())
         {
@@ -49,7 +49,7 @@ public class WebhookDefinition
         Description = description;
 
         RequiredFeatures = new List<string>();
-        Properties = new Dictionary<string, object>();
+        Properties = new Dictionary<string, object?>();
     }
 
     public WebhookDefinition WithFeature(params string[] features)
@@ -62,7 +62,7 @@ public class WebhookDefinition
         return this;
     }
 
-    public WebhookDefinition WithProperty(string key, object value)
+    public WebhookDefinition WithProperty(string key, object? value)
     {
         Properties[key] = value;
         return this;

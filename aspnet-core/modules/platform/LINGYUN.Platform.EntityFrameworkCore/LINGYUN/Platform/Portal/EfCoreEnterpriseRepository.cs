@@ -17,7 +17,7 @@ public class EfCoreEnterpriseRepository : EfCoreRepository<IPlatformDbContext, E
     {
     }
 
-    public async virtual Task<Enterprise> FindByNameAsync(
+    public async virtual Task<Enterprise?> FindByNameAsync(
         string name,
         CancellationToken cancellationToken = default)
     {

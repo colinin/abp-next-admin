@@ -7,7 +7,7 @@ public class AbpNotificationsModelBuilderConfigurationOptions : AbpModelBuilderC
 {
     public AbpNotificationsModelBuilderConfigurationOptions(
         [NotNull] string tablePrefix = AbpNotificationsDbProperties.DefaultTablePrefix,
-        [CanBeNull] string schema = AbpNotificationsDbProperties.DefaultSchema)
+        [CanBeNull] string? schema = AbpNotificationsDbProperties.DefaultSchema)
         : base(
             tablePrefix,
             schema)

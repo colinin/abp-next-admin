@@ -6,15 +6,15 @@ namespace LINGYUN.Abp.Sonatype.Nexus.Components;
 public class NexusRawBlobUploadArgs : NexusComponentUploadArgs
 {
     public Asset Asset1 { get; }
-    public Asset Asset2 { get; }
-    public Asset Asset3 { get; }
+    public Asset? Asset2 { get; }
+    public Asset? Asset3 { get; }
 
     public NexusRawBlobUploadArgs(
         string repository,
         string directory,
         Asset asset1,
-        Asset asset2 = null,
-        Asset asset3 = null)
+        Asset? asset2 = null,
+        Asset? asset3 = null)
         : base(repository, directory)
     {
         Asset1 = asset1;
@@ -61,12 +61,12 @@ public class NexusRawBlobUploadArgs : NexusComponentUploadArgs
 
         if (Asset3 != null)
         {
-            var rawAsset3 = new ByteArrayContent(Asset2.FileBytes);
+            var rawAsset3 = new ByteArrayContent(Asset3.FileBytes);
             rawAsset3.Headers.ContentDisposition = ContentDispositionHeaderValue.Parse($"form-data; name=raw.asset3");
             rawAsset3.Headers.ContentType = MediaTypeHeaderValue.Parse("application/octet-stream");
-            rawAsset3.Headers.ContentLength = Asset2.FileBytes.Length;
+            rawAsset3.Headers.ContentLength = Asset3.FileBytes.Length;
 
-            var rawAsset3FileName = new StringContent(Asset2.FileName);
+            var rawAsset3FileName = new StringContent(Asset3.FileName);
             rawAsset3FileName.Headers.ContentDisposition = ContentDispositionHeaderValue.Parse($"form-data; name=raw.asset3.filename");
 
             formDataContent.Add(rawAsset3);

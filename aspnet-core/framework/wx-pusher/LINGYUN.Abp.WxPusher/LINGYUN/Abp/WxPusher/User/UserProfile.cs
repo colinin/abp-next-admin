@@ -10,7 +10,7 @@ public class UserProfile
     /// 用户uid
     /// </summary>
     [JsonProperty("uid")]
-    public string Uid { get; set; }
+    public string Uid { get; set; } = default!;
     /// <summary>
     /// 用户关注的应用或者主题id，根据type来区分
     /// </summary>
@@ -20,7 +20,7 @@ public class UserProfile
     /// 新用户微信不再返回 ，强制返回空
     /// </summary>
     [JsonProperty("headImg")]
-    public string HeadImg { get; set; }
+    public string? HeadImg { get; set; }
     /// <summary>
     /// 创建时间
     /// </summary>
@@ -30,7 +30,7 @@ public class UserProfile
     /// 新用户微信不再返回 ，强制返回空
     /// </summary>
     [JsonProperty("nickName")]
-    public string NickName { get; set; }
+    public string? NickName { get; set; }
     /// <summary>
     /// 是否拉黑
     /// </summary>
@@ -52,7 +52,7 @@ public class UserProfile
     /// 关注的应用或者主题名字
     /// </summary>
     [JsonProperty("target")]
-    public string Target { get; set; }
+    public string? Target { get; set; }
     /// <summary>
     /// 0表示用户不是付费用户，大于0表示用户付费订阅到期时间，毫秒级时间戳
     /// </summary>

@@ -19,21 +19,21 @@ public class WeChatWorkGetMemberResponse : WeChatWorkResponse
     [NotNull]
     [JsonProperty("open_userid")]
     [JsonPropertyName("open_userid")]
-    public string OpenUserId { get; set; }
+    public string OpenUserId { get; set; } = default!;
     /// <summary>
     /// 成员UserID
     /// </summary>
     [NotNull]
     [JsonProperty("userid")]
     [JsonPropertyName("userid")]
-    public string UserId { get; set; }
+    public string UserId { get; set; } = default!;
     /// <summary>
     /// 成员名称
     /// </summary>
     [NotNull]
     [JsonProperty("name")]
     [JsonPropertyName("name")]
-    public string Name { get; set; }
+    public string Name { get; set; } = default!;
     /// <summary>
     /// 手机号码
     /// </summary>
@@ -47,7 +47,7 @@ public class WeChatWorkGetMemberResponse : WeChatWorkResponse
     [NotNull]
     [JsonProperty("department")]
     [JsonPropertyName("department")]
-    public int[] Department { get; set; }
+    public int[] Department { get; set; } = default!;
     /// <summary>
     /// 主部门
     /// </summary>

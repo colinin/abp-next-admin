@@ -9,5 +9,5 @@ public class SendEmailSigninCodeDto
     [EmailAddress]
     [Display(Name = "EmailAddress")]
     [DynamicStringLength(typeof(IdentityUserConsts), nameof(IdentityUserConsts.MaxEmailLength))]
-    public string EmailAddress { get; set; }
+    public string EmailAddress { get; set; } = default!;
 }

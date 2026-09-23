@@ -85,7 +85,7 @@ public class JobExecutedFailedProvider : JobExecutedProvider, ITransientDependen
             var template = context.Action.Paramters.GetOrDefault(PropertyTemplate)?.ToString() ?? "";
             var subject = context.Action.Paramters.GetOrDefault(PropertySubject)?.ToString() ?? "From job execute exception";
             var from = context.Action.Paramters.GetOrDefault(PropertyFrom)?.ToString() ?? "";
-            var errorMessage = context.Event.EventData.Exception.GetBaseException().Message;
+            var errorMessage = context.Event.EventData.Exception?.GetBaseException().Message;
 
             if (template.IsNullOrWhiteSpace())
             {
@@ -106,7 +106,7 @@ public class JobExecutedFailedProvider : JobExecutedProvider, ITransientDependen
                 Type = context.Event.EventData.Args.GetOrDefault(nameof(JobInfo.Type)) ?? context.Event.EventData.Type.Name,
                 Triggertime = context.Event.EventData.RunTime.ToString("yyyy-MM-dd HH:mm:ss"),
                 Message = errorMessage,
-                Tenantname = context.Event.EventData.Args.GetOrDefault(nameof(IMultiTenant.TenantId)),
+                Tenantname = context.Event.EventData.Args?.GetOrDefault(nameof(IMultiTenant.TenantId)),
                 Footer = footer,
             };
 

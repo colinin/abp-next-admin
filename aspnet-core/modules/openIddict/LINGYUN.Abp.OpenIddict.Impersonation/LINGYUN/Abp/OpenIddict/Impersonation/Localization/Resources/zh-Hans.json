@@ -1,0 +1,19 @@
+﻿{
+  "culture": "zh-Hans",
+  "texts": {
+    "InvalidAccessToken": "无效的访问令牌,令牌验证失败!",
+    "NestedImpersonationNotAllowed": "不允许嵌套模拟,当前已处于模拟登录状态,请先返回原始用户身份!",
+    "InvalidImpersonationRequest": "无效的模拟请求,请提供正确的模拟目标参数（用户ID、租户ID或委托ID）!",
+    "CannotImpersonateYourself": "不能模拟自己,请选择其他用户进行模拟!",
+    "InsufficientImpersonationPermission": "模拟权限不足,您没有执行用户模拟操作的权限!",
+    "TargetUserNotFound": "目标用户不存在：{0}!",
+    "RequirePermissionToImpersonateUser": "需要授权才能模拟用户/租户!",
+    "TenantAdminUserNameNotSpecified": "未指定租户管理员用户名,租户模拟需要提供管理员用户名!",
+    "TenantAdminUserNotFound": "未找到租户管理员用户：{0},请确认管理员用户名是否正确!",
+    "InvalidUserDelegation": "无效的用户委托,委托记录不存在或已失效!",
+    "NotAuthorizedForDelegation": "委托授权失败,当前用户不是该委托的目标用户!",
+    "DelegationSourceUserNotFound": "委托源用户不存在,无法完成委托模拟!",
+    "NoImpersonationContext": "未找到模拟上下文,无法返回原始用户身份!",
+    "OriginalUserNotFound": "原始用户不存在,模拟者的用户记录可能已被删除!"
+  }
+}

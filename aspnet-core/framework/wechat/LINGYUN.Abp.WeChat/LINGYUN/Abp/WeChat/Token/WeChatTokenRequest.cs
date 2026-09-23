@@ -2,8 +2,8 @@
 
 public class WeChatTokenRequest
 {
-    public string BaseUrl { get; set; }
-    public string GrantType { get; set; }
-    public string AppId { get; set; }
-    public string AppSecret { get; set; }
+    public string BaseUrl { get; set; } = default!;
+    public string GrantType { get; set; } = default!;
+    public string AppId { get; set; } = default!;
+    public string AppSecret { get; set; } = default!;
 }

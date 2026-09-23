@@ -10,17 +10,17 @@ public abstract class SettingDefinitionCreateOrUpdateDto : IHasExtraProperties
 {
     [Required]
     [DynamicStringLength(typeof(SettingDefinitionRecordConsts), nameof(SettingDefinitionRecordConsts.MaxDisplayNameLength))]
-    public string DisplayName { get; set; }
+    public string DisplayName { get; set; } = default!;
 
     [DynamicStringLength(typeof(SettingDefinitionRecordConsts), nameof(SettingDefinitionRecordConsts.MaxDescriptionLength))]
-    public string Description { get; set; }
+    public string? Description { get; set; }
 
     [DynamicStringLength(typeof(SettingDefinitionRecordConsts), nameof(SettingDefinitionRecordConsts.MaxDefaultValueLength))]
-    public string DefaultValue { get; set; }
+    public string? DefaultValue { get; set; }
 
     public bool IsVisibleToClients { get; set; }
 
-    public List<string> Providers { get; set; }
+    public List<string>? Providers { get; set; }
 
     public bool IsInherited { get; set; }
 

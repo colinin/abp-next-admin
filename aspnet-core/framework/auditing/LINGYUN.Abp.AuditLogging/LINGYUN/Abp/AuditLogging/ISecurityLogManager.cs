@@ -7,7 +7,7 @@ namespace LINGYUN.Abp.AuditLogging;
 
 public interface ISecurityLogManager
 {
-    Task<SecurityLog> GetAsync(
+    Task<SecurityLog?> GetAsync(
         Guid id,
         bool includeDetails = false,
         CancellationToken cancellationToken = default);

@@ -10,7 +10,7 @@ public class MemberExtendAttribute
     /// 扩展属性
     /// </summary>
     [XmlElement("Item")]
-    public List<MemberExtend> Items { get;set; }
+    public List<MemberExtend>? Items { get;set; }
 }
 
 public class MemberExtend
@@ -24,17 +24,17 @@ public class MemberExtend
     /// 扩展属性名称
     /// </summary>
     [XmlElement("Name")]
-    public string Name { get; set; }
+    public string Name { get; set; } = default!;
     /// <summary>
     /// 文本属性内容
     /// </summary>
     [XmlElement("Text", IsNullable = true)]
-    public MemberTextExtend Text { get; set; }
+    public MemberTextExtend? Text { get; set; }
     /// <summary>
     /// Web属性内容
     /// </summary>
     [XmlElement("Web", IsNullable = true)]
-    public MemberWebExtend Web { get; set; }
+    public MemberWebExtend? Web { get; set; }
 }
 
 /// <summary>
@@ -47,7 +47,7 @@ public class MemberTextExtend
     /// 文本属性内容
     /// </summary>
     [XmlElement("Value")]
-    public string Value { get; set;}
+    public string Value { get; set; } = default!;
 }
 /// <summary>
 /// 网页类型属性，扩展属性类型为1时填写
@@ -59,10 +59,10 @@ public class MemberWebExtend
     /// 网页的展示标题
     /// </summary>
     [XmlElement("Title")]
-    public string Title { get; set; }
+    public string Title { get; set; } = default!;
     /// <summary>
     /// 网页的url
     /// </summary>
     [XmlElement("Url")]
-    public string Url { get; set; }
+    public string Url { get; set; } = default!;
 }

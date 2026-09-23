@@ -1,5 +1,7 @@
 ﻿using LINGYUN.Abp.Account.Security;
 using LINGYUN.Abp.Account.Web.Bundling;
+using LINGYUN.Abp.Account.Web.Captcha;
+using LINGYUN.Abp.Account.Web.Pages.Account.Components.Captcha;
 using LINGYUN.Abp.Account.Web.ProfileManagement;
 using LINGYUN.Abp.Identity;
 using LINGYUN.Abp.Identity.AspNetCore.QrCode;
@@ -50,12 +52,28 @@ public class AbpAccountWebModule : AbpModule
             options.FileSets.AddEmbedded<AbpAccountWebModule>();
         });
 
+        Configure<AbpAccountCaptchaOptions>(options =>
+        {
+            options.CaptchaComponents.Default = new CaptchaComponent(
+                typeof(NullCaptchaViewComponent),
+                new DefaultCaptchaValidator());
+        });
+
         ConfigureProfileManagementPage();
 
         context.Services.AddMapperlyObjectMapper<AbpAccountWebModule>();
 
         context.Services
             .AddAuthentication()
+            .AddCookie(AbpAccountAuthenticationTypes.ConfirmUserScheme, options =>
+            {
+                options.LoginPath = new PathString("/Account/Login");
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(5.0);
+                options.Events = new CookieAuthenticationEvents
+                {
+                    OnValidatePrincipal = SecurityStampValidator.ValidatePrincipalAsync
+                };
+            })
             .AddCookie(AbpAccountAuthenticationTypes.ShouldChangePassword, options =>
             {
                 options.LoginPath = new PathString("/Account/Login");
@@ -83,7 +101,7 @@ public class AbpAccountWebModule : AbpModule
                 });
 
             options.ScriptBundles
-                .Configure(typeof(ManageModel).FullName,
+                .Configure(typeof(ManageModel).FullName!,
                     bundle =>
                     {
                         // Client Proxies
@@ -110,11 +128,13 @@ public class AbpAccountWebModule : AbpModule
                     bundle.AddContributors(typeof(ChangePasswordScriptContributor));
                 });
             options.ScriptBundles
-                .Configure(typeof(Pages.Account.LoginModel).FullName, bundle =>
+                .Configure(typeof(Pages.Account.TwoFactorAuthModel).FullName!, bundle =>
                 {
-                    bundle.AddFiles("/client-proxies/account-proxy.js");
-                    bundle.AddFiles("/client-proxies/qrcode-proxy.js");
-                    bundle.AddFiles("/Pages/Account/Login.js");
+                    bundle.AddContributors(typeof(QRCodeScriptContributor));
+                });
+            options.ScriptBundles
+                .Configure(typeof(Pages.Account.ScanQrCodeLoginModel).FullName!, bundle =>
+                {
                     bundle.AddContributors(typeof(QRCodeScriptContributor));
                 });
         });

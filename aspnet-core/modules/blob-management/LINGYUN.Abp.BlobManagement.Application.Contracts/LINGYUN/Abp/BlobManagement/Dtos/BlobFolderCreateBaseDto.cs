@@ -11,7 +11,7 @@ public abstract class BlobFolderCreateBaseDto
     /// </summary>
     [Required]
     [DynamicStringLength(typeof(BlobConsts), nameof(BlobConsts.MaxNameLength))]
-    public string Name { get; set; }
+    public string Name { get; set; } = default!;
     /// <summary>
     /// 所属BlobId
     /// </summary>

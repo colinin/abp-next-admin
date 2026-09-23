@@ -7,12 +7,12 @@ namespace LINGYUN.Abp.Notifications;
 public interface INotificationDefinitionSerializer
 {
     Task<(NotificationDefinitionGroupRecord[], NotificationDefinitionRecord[])>
-        SerializeAsync(IEnumerable<NotificationGroupDefinition> NotificationGroups);
+        SerializeAsync(IEnumerable<NotificationGroupDefinition> notificationGroups);
 
     Task<NotificationDefinitionGroupRecord> SerializeAsync(
-        NotificationGroupDefinition NotificationGroup);
+        NotificationGroupDefinition notificationGroup);
 
     Task<NotificationDefinitionRecord> SerializeAsync(
-        NotificationDefinition Notification,
-        [CanBeNull] NotificationGroupDefinition NotificationGroup);
+        NotificationDefinition notification,
+        NotificationGroupDefinition notificationGroup);
 }

@@ -14,20 +14,20 @@ public class WebhookTemplateCardMainTitle
     [CanBeNull]
     [JsonProperty("title")]
     [JsonPropertyName("title")]
-    public string Title { get; set; }
+    public string? Title { get; set; }
     /// <summary>
     /// 标题辅助信息，建议不超过30个字
     /// </summary>
     [CanBeNull]
     [JsonProperty("desc")]
     [JsonPropertyName("desc")]
-    public string Description { get; set; }
+    public string? Description { get; set; }
     /// <summary>
     /// 创建一个模版卡片的主要内容
     /// </summary>
     /// <param name="title">一级标题</param>
     /// <param name="description">标题辅助信息</param>
-    public WebhookTemplateCardMainTitle(string title, string description = null)
+    public WebhookTemplateCardMainTitle(string title, string? description = null)
     {
         Title = title;
         Description = description;

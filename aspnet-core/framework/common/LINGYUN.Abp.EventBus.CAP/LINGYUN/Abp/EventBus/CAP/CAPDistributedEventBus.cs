@@ -196,7 +196,7 @@ public class CAPDistributedEventBus : DistributedEventBusBase, IDistributedEvent
         return handlerFactoryList.ToArray();
     }
 
-    protected override Type GetEventTypeByEventName(string eventName)
+    protected override Type? GetEventTypeByEventName(string eventName)
     {
         return EventTypes.GetOrDefault(eventName);
     }
@@ -265,15 +265,15 @@ public class CAPDistributedEventBus : DistributedEventBusBase, IDistributedEvent
         }
     }
 
-    protected virtual async Task PublishToCapAsync(Type eventType, object eventData, Guid? messageId, string correlationId = null)
+    protected virtual async Task PublishToCapAsync(Type eventType, object eventData, Guid? messageId, string? correlationId = null)
     {
         var (eventName, resolvedData) = ResolveEventForPublishing(eventType, eventData);
         await PublishToCapAsync(eventName, resolvedData, null, correlationId);
     }
 
-    protected virtual async Task PublishToCapAsync(string eventName, object eventData, Guid? messageId, string correlationId = null)
+    protected virtual async Task PublishToCapAsync(string eventName, object eventData, Guid? messageId, string? correlationId = null)
     {
-        var headers = new Dictionary<string, string>();
+        var headers = new Dictionary<string, string?>();
         if (messageId.HasValue)
         {
             headers.TryAdd(AbpCAPHeaders.MessageId, messageId.ToString());

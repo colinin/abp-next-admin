@@ -39,7 +39,7 @@ public class TencentLocationHttpClient : ITransientDependency
 
     public async virtual Task<IPGecodeLocation> IPGeocodeAsync(string ipAddress)
     {
-        var requestParamters = new Dictionary<string, string>
+        var requestParamters = new Dictionary<string, string?>
         {
             { "callback", Options.Callback },
             { "ip", ipAddress },
@@ -74,9 +74,9 @@ public class TencentLocationHttpClient : ITransientDependency
         return location;
     }
 
-    public async virtual Task<GecodeLocation> GeocodeAsync(string address, string city = null)
+    public async virtual Task<GecodeLocation> GeocodeAsync(string address, string? city = null)
     {
-        var requestParamters = new Dictionary<string, string>
+        var requestParamters = new Dictionary<string, string?>
         {
             { "address", address },
             { "callback", Options.Callback },
@@ -109,7 +109,7 @@ public class TencentLocationHttpClient : ITransientDependency
 
     public async virtual Task<ReGeocodeLocation> ReGeocodeAsync(double lat, double lng, int radius = 1000)
     {
-        var requestParamters = new Dictionary<string, string>
+        var requestParamters = new Dictionary<string, string?>
         {
             { "callback", Options.Callback },
             { "get_poi", Options.GetPoi },
@@ -157,8 +157,8 @@ public class TencentLocationHttpClient : ITransientDependency
             location.Pois.Any())
         {
             var nearPoi = location.Pois.OrderBy(x => x.Distance).FirstOrDefault();
-            location.Address = nearPoi.Address;
-            location.FormattedAddress = nearPoi.Name;
+            location.Address = nearPoi?.Address;
+            location.FormattedAddress = nearPoi?.Name;
         }
         location.AddAdditional("TencentLocation", tencentLocationResponse.Result);
 
@@ -185,12 +185,12 @@ public class TencentLocationHttpClient : ITransientDependency
         return CancellationTokenProvider.Token;
     }
 
-    protected async virtual Task<TResponse> GetTencentMapResponseAsync<TResponse>(string url, string path, IDictionary<string, string> paramters)
+    protected async virtual Task<TResponse> GetTencentMapResponseAsync<TResponse>(string url, string path, IDictionary<string, string?> paramters)
         where TResponse : TencentLocationResponse
     {
         var requestUrl = BuildRequestUrl(url, path, paramters);
         var responseContent = await MakeRequestAndGetResultAsync(requestUrl);
-        var tencentLocationResponse = JsonConvert.DeserializeObject<TResponse>(responseContent);
+        var tencentLocationResponse = JsonConvert.DeserializeObject<TResponse>(responseContent)!;
         if (!tencentLocationResponse.IsSuccessed)
         {
             if (Options.VisableErrorToClient)
@@ -206,7 +206,7 @@ public class TencentLocationHttpClient : ITransientDependency
         return tencentLocationResponse;
     }
 
-    protected virtual string BuildRequestUrl(string uri, string path, IDictionary<string, string> paramters)
+    protected virtual string BuildRequestUrl(string uri, string path, IDictionary<string, string?> paramters)
     {
         var requestUrlBuilder = new StringBuilder(128);
         requestUrlBuilder.Append(uri);

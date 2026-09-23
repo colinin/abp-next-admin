@@ -145,7 +145,7 @@ public class InactiveIdentityUserCleanupJob : IJobRunnable
             async (inactiveUser, ctx) =>
             {
                 var inactivityDays = (int)(clock.Now - (inactiveUser.LastSignInTime ?? inactiveUser.CreationTime)).TotalDays;
-                var notificationTemplateData = new Dictionary<string, object>
+                var notificationTemplateData = new Dictionary<string, object?>
                 {
                     { "now", clock.Now },
                     { "name", inactiveUser.Name },

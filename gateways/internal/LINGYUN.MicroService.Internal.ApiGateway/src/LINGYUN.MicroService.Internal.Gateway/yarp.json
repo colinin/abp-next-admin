@@ -293,6 +293,21 @@
           }
         ]
       },
+      "setting-management-v2-route": {
+        "ClusterId": "admin-service-cluster",
+        "Match": {
+          "Path": "/api/v2/setting-management/{**everything}"
+        },
+        "Transforms": [
+          {
+            "HeaderPrefix": "X-Forwarded-",
+            "X-Forwarded": "Append"
+          },
+          {
+            "ResponseHeadersAllowed": "_AbpWrapResult;_AbpDontWrapResult;_AbpErrorFormat"
+          }
+        ]
+      },
       "localization-management-route": {
         "ClusterId": "localization-service-cluster",
         "Match": {

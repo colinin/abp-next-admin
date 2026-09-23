@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.Auditing;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Specifications;
 
 namespace LINGYUN.Abp.AuditLogging;
 
@@ -76,7 +77,7 @@ public class DefaultAuditLogManager : IAuditLogManager, ISingletonDependency
         return Task.FromResult("");
     }
 
-    public virtual Task<AuditLog> GetAsync(
+    public virtual Task<AuditLog?> GetAsync(
         Guid id, 
         bool includeDetails = false, 
         CancellationToken cancellationToken = default)
@@ -84,7 +85,7 @@ public class DefaultAuditLogManager : IAuditLogManager, ISingletonDependency
         Logger.LogDebug("No audit log manager is available!");
 
         AuditLog? auditLog = null;
-        return Task.FromResult(auditLog!);
+        return Task.FromResult(auditLog);
     }
 
     public virtual Task DeleteAsync(Guid id, CancellationToken cancellationToken = default)
@@ -97,5 +98,25 @@ public class DefaultAuditLogManager : IAuditLogManager, ISingletonDependency
     {
         Logger.LogDebug("No audit log manager is available!");
         return Task.CompletedTask;
+    }
+
+    public virtual Task<long> GetCountAsync(
+        ISpecification<AuditLog> specification,
+        CancellationToken cancellationToken = default)
+    {
+        Logger.LogDebug("No audit log manager is available!");
+        return Task.FromResult(0L);
+    }
+
+    public Task<List<AuditLog>> GetListAsync(
+        ISpecification<AuditLog> specification,
+        string? sorting = null,
+        int maxResultCount = 50, 
+        int skipCount = 0, 
+        bool includeDetails = false,
+        CancellationToken cancellationToken = default)
+    {
+        Logger.LogDebug("No audit log manager is available!");
+        return Task.FromResult(new List<AuditLog>());
     }
 }

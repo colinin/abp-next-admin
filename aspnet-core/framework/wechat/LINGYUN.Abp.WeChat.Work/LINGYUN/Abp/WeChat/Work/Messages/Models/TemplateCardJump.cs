@@ -44,19 +44,19 @@ public class TemplateCardJump
     [CanBeNull]
     [JsonProperty("url")]
     [JsonPropertyName("url")]
-    public string Url { get; set; }
+    public string? Url { get; set; }
     /// <summary>
     /// 跳转链接的小程序的appid，必须是与当前应用关联的小程序，jump_list.type是2时必填
     /// </summary>
     [CanBeNull]
     [JsonProperty("appid")]
     [JsonPropertyName("appid")]
-    public string AppId { get; set; }
+    public string? AppId { get; set; }
     /// <summary>
     /// 跳转链接的小程序的pagepath，jump_list.type是2时选填
     /// </summary>
     [CanBeNull]
     [JsonProperty("pagepath")]
     [JsonPropertyName("pagepath")]
-    public string PagePath { get; set; }
+    public string? PagePath { get; set; }
 }

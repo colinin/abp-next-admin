@@ -5,7 +5,7 @@ namespace LINGYUN.Abp.WeChat.OpenId;
 
 public interface IUserWeChatOpenIdFinder
 {
-    Task<string> FindByUserIdAsync(Guid userId, string provider);
+    Task<string?> FindByUserIdAsync(Guid userId, string provider);
 
-    Task<string> FindByUserNameAsync(string userName, string provider);
+    Task<string?> FindByUserNameAsync(string userName, string provider);
 }

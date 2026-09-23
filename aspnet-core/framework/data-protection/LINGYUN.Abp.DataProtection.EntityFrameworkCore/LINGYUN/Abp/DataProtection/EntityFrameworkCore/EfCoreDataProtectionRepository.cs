@@ -29,7 +29,7 @@ public abstract class EfCoreDataProtectionRepository<TDbContext, TEntity, TKey, 
     private readonly IEntityPropertyResultBuilder _entityPropertyResultBuilder;
 
     protected ICurrentUser CurrentUser => LazyServiceProvider.GetRequiredService<ICurrentUser>();
-    protected IDataAccessStrategyFilterBuilder StrategyFilterBuilder => LazyServiceProvider.GetService<IDataAccessStrategyFilterBuilder>();
+    protected IDataAccessStrategyFilterBuilder? StrategyFilterBuilder => LazyServiceProvider.GetService<IDataAccessStrategyFilterBuilder>();
 
     protected EfCoreDataProtectionRepository(
         [NotNull] IDbContextProvider<TDbContext> dbContextProvider,
@@ -49,11 +49,20 @@ public abstract class EfCoreDataProtectionRepository<TDbContext, TEntity, TKey, 
         var dbSet = dbContext.Set<TEntity>();
         var queryable = dbSet.AsQueryable().AsNoTrackingIf(!ShouldTrackingEntityChange());
 
-        var strategyFilterResult = await StrategyFilterBuilder?.Build<TEntity, TKey, TEntityAuth>(queryable, dbContext.Set<TEntityAuth>());
-        if (strategyFilterResult != null && strategyFilterResult.Strategy != DataAccessStrategy.Custom)
+        if (StrategyFilterBuilder != null)
         {
-            // 根据配置的用户数据权限策略进行过滤
-            queryable = strategyFilterResult.Queryable;
+            var strategyFilterResult = await StrategyFilterBuilder.Build<TEntity, TKey, TEntityAuth>(queryable, dbContext.Set<TEntityAuth>());
+            if (strategyFilterResult != null && strategyFilterResult.Strategy != DataAccessStrategy.Custom)
+            {
+                // 根据配置的用户数据权限策略进行过滤
+                queryable = strategyFilterResult.Queryable;
+            }
+            else
+            {
+                // 根据配置的用户实体数据权限规则过滤
+                var dataAccessFilterExp = await _entityTypeFilterBuilder.Build<TEntity>(DataAccessOperation.Read);
+                queryable = queryable.Where(dataAccessFilterExp);
+            }
         }
         else
         {
@@ -174,10 +183,10 @@ public abstract class EfCoreDataProtectionRepository<TDbContext, TEntity, TKey, 
     /// <param name="entity"></param>
     /// <param name="role"></param>
     /// <returns></returns>
-    protected virtual TEntityAuth CreateEntityRoleAuth(TEntity entity, string role)
+    protected virtual TEntityAuth? CreateEntityRoleAuth(TEntity entity, string role)
     {
         var entityAuth = Activator.CreateInstance(typeof(TEntityAuth),
-            new object[] { entity.Id, role, null, CurrentTenant.Id });
+            new object?[] { entity.Id, role, null, CurrentTenant.Id });
 
         return entityAuth as TEntityAuth;
     }
@@ -187,10 +196,10 @@ public abstract class EfCoreDataProtectionRepository<TDbContext, TEntity, TKey, 
     /// <param name="entity"></param>
     /// <param name="ouCode"></param>
     /// <returns></returns>
-    protected virtual TEntityAuth CreateEntityOrganizationUnitAuth(TEntity entity, string ouCode)
+    protected virtual TEntityAuth? CreateEntityOrganizationUnitAuth(TEntity entity, string ouCode)
     {
         var entityAuth = Activator.CreateInstance(typeof(TEntityAuth),
-            new object[] { entity.Id, null, ouCode, CurrentTenant.Id });
+            new object?[] { entity.Id, null, ouCode, CurrentTenant.Id });
 
         return entityAuth as TEntityAuth;
     }
@@ -211,7 +220,7 @@ public abstract class EfCoreDataProtectionRepository<TDbContext, TEntity, TKey, 
         var entityOuAuths = CurrentUser.FindOrganizationUnits()
             .Select((ouCode) => CreateEntityOrganizationUnitAuth(entity, ouCode));
 
-        await entityAuth.AddRangeAsync(entityRoleAuths.Union(entityOuAuths), GetCancellationToken(cancellationToken));
+        await entityAuth.AddRangeAsync(entityRoleAuths.Union(entityOuAuths)!, GetCancellationToken(cancellationToken));
     }
     /// <summary>
     /// 持久化实体数据权限
@@ -234,7 +243,7 @@ public abstract class EfCoreDataProtectionRepository<TDbContext, TEntity, TKey, 
             var entityOuAuths = CurrentUser.FindOrganizationUnits()
                 .Select((ouCode) => CreateEntityOrganizationUnitAuth(entity, ouCode));
 
-            entityAuths.AddRange(entityRoleAuths.Union(entityOuAuths));
+            entityAuths.AddRange(entityRoleAuths.Union(entityOuAuths)!);
         }
 
         await entityAuth.AddRangeAsync(entityAuths, GetCancellationToken(cancellationToken));

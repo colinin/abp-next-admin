@@ -390,7 +390,7 @@ public class VueVbenAdminSettingDefinitionProvider : SettingDefinitionProvider
         string name,
         ILocalizableString displayName,
         ILocalizableString description,
-        string defaultValue = null,
+        string? defaultValue = null,
         bool isVisibleToClients = false,
         bool isInherited = true,
         bool isEncrypted = false)

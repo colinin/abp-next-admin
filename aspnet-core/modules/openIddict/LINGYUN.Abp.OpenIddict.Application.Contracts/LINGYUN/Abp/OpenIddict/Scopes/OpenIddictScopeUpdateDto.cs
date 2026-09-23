@@ -6,5 +6,5 @@ namespace LINGYUN.Abp.OpenIddict.Scopes;
 [Serializable]
 public class OpenIddictScopeUpdateDto : OpenIddictScopeCreateOrUpdateDto, IHasConcurrencyStamp
 {
-    public string ConcurrencyStamp { get; set; }
+    public string ConcurrencyStamp { get; set; } = default!;
 }

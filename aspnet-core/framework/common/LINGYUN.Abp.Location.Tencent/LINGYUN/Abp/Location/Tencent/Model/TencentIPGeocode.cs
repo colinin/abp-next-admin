@@ -11,7 +11,7 @@ public class TencentIPGeocode
     /// 用于定位的IP地址
     /// </summary>
     [JsonProperty("ip")]
-    public string IpAddress { get; set; }
+    public string IpAddress { get; set; } = default!;
     /// <summary>
     /// 定位坐标
     /// </summary>

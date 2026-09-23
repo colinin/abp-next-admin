@@ -10,7 +10,7 @@ public class HttpResponseWrapperContext
     public HttpResponseWrapperContext(
         HttpContext httpContext, 
         int httpStatusCode,
-        IDictionary<string, string> httpHeaders = null)
+        IDictionary<string, string>? httpHeaders = null)
     {
         HttpContext = httpContext;
         HttpStatusCode = httpStatusCode;

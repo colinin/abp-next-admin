@@ -62,10 +62,10 @@ public class TenantAppService : AbpSaasAppServiceBase, ITenantAppService
     {
         var count = await TenantRepository.GetCountAsync(input.Filter);
         var list = await TenantRepository.GetListAsync(
+            input.Filter,
             input.Sorting,
             input.MaxResultCount,
-            input.SkipCount,
-            input.Filter
+            input.SkipCount
         );
 
         return new PagedResultDto<TenantDto>(
@@ -86,7 +86,7 @@ public class TenantAppService : AbpSaasAppServiceBase, ITenantAppService
 
         if (!input.UseSharedDatabase)
         {
-            tenant.SetDefaultConnectionString(input.DefaultConnectionString);
+            tenant.SetDefaultConnectionString(input.DefaultConnectionString!);
 
             if (input.ConnectionStrings.Any())
             {
@@ -99,7 +99,7 @@ public class TenantAppService : AbpSaasAppServiceBase, ITenantAppService
 
         await TenantRepository.InsertAsync(tenant);
 
-        CurrentUnitOfWork.OnCompleted(async () =>
+        CurrentUnitOfWork!.OnCompleted(async () =>
         {
             var eto = new TenantCreatedEto
             {
@@ -149,7 +149,7 @@ public class TenantAppService : AbpSaasAppServiceBase, ITenantAppService
         input.MapExtraPropertiesTo(tenant);
         await TenantRepository.UpdateAsync(tenant);
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
 
         return ObjectMapper.Map<Tenant, TenantDto>(tenant);
     }
@@ -178,7 +178,7 @@ public class TenantAppService : AbpSaasAppServiceBase, ITenantAppService
             EntityVersion = tenant.EntityVersion,
             DefaultConnectionString = tenant.FindDefaultConnectionString(),
         };
-        CurrentUnitOfWork.OnCompleted(async () =>
+        CurrentUnitOfWork!.OnCompleted(async () =>
         {
             await EventBus.PublishAsync(eto);
         });
@@ -218,7 +218,7 @@ public class TenantAppService : AbpSaasAppServiceBase, ITenantAppService
 
         var oldConnectionString = tenant.FindConnectionString(input.Name);
 
-        CurrentUnitOfWork.OnCompleted(async () =>
+        CurrentUnitOfWork!.OnCompleted(async () =>
         {
             var eto = new TenantConnectionStringUpdatedEto
             {
@@ -254,7 +254,7 @@ public class TenantAppService : AbpSaasAppServiceBase, ITenantAppService
 
         tenant.RemoveConnectionString(name);
 
-        CurrentUnitOfWork.OnCompleted(async () =>
+        CurrentUnitOfWork!.OnCompleted(async () =>
         {
             var eto = new TenantConnectionStringUpdatedEto
             {

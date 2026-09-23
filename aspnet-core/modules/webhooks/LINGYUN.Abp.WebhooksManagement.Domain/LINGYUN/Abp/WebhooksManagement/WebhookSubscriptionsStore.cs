@@ -54,7 +54,7 @@ public class WebhookSubscriptionsStore : DomainService, IWebhookSubscriptionsSto
             queryable = queryable.Where(x =>
                     x.TenantId == tenantId &&
                     x.IsActive &&
-                    x.Webhooks.Contains("\"" + webhookName + "\""));
+                    x.Webhooks!.Contains("\"" + webhookName + "\""));
 
             var subscriptions = await AsyncExecuter.ToListAsync(queryable);
 
@@ -85,7 +85,7 @@ public class WebhookSubscriptionsStore : DomainService, IWebhookSubscriptionsSto
             queryable = queryable.Where(x =>
                     x.IsActive &&
                     tenantIds.Contains(x.TenantId) &&
-                    x.Webhooks.Contains("\"" + webhookName + "\""));
+                    x.Webhooks!.Contains("\"" + webhookName + "\""));
 
             var subscriptions = await AsyncExecuter.ToListAsync(queryable);
 
@@ -131,7 +131,7 @@ public class WebhookSubscriptionsStore : DomainService, IWebhookSubscriptionsSto
             queryable = queryable.Where(x =>
                     x.TenantId == tenantId &&
                     x.IsActive &&
-                    x.Webhooks.Contains("\"" + webhookName + "\""));
+                    x.Webhooks!.Contains("\"" + webhookName + "\""));
 
             return await AsyncExecuter.AnyAsync(queryable);
         }

@@ -11,22 +11,22 @@ public class Poi
     /// 地点唯一标识
     /// </summary>
     [JsonProperty("id")]
-    public string Id { get; set; }
+    public string Id { get; set; } = default!;
     /// <summary>
     /// 名称/标题
     /// </summary>
     [JsonProperty("title")]
-    public string Title { get; set; }
+    public string Title { get; set; } = default!;
     /// <summary>
     /// 地址
     /// </summary>
     [JsonProperty("address")]
-    public string Address { get; set; }
+    public string Address { get; set; } = default!;
     /// <summary>
     /// POI分类
     /// </summary>
     [JsonProperty("category")]
-    public string CateGory { get; set; }
+    public string CateGory { get; set; } = default!;
     /// <summary>
     /// 坐标
     /// </summary>

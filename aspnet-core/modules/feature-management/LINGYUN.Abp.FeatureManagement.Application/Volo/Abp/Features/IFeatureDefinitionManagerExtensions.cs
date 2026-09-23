@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 namespace Volo.Abp.Features;
 public static class IPermissionDefinitionManagerExtensions
 {
-    public async static Task<FeatureGroupDefinition> GetGroupOrNullAsync(
+    public async static Task<FeatureGroupDefinition?> GetGroupOrNullAsync(
         this IFeatureDefinitionManager featureDefinitionManager,
         string name
         )

@@ -8,7 +8,7 @@ public class BackgroundJobActionDefinitionDto
     /// <summary>
     /// 名称
     /// </summary>
-    public string Name { get; set; }
+    public string Name { get; set; } = default!;
     /// <summary>
     /// 类型
     /// </summary>
@@ -16,13 +16,13 @@ public class BackgroundJobActionDefinitionDto
     /// <summary>
     /// 显示名称
     /// </summary>
-    public string DisplayName { get; set; }
+    public string? DisplayName { get; set; }
     /// <summary>
     /// 描述
     /// </summary>
-    public string Description { get; set; }
+    public string? Description { get; set; }
     /// <summary>
     /// 参数列表
     /// </summary>
-    public IList<BackgroundJobActionParamterDto> Paramters { get; set; }
+    public IList<BackgroundJobActionParamterDto> Paramters { get; set; } = new List<BackgroundJobActionParamterDto>();
 }

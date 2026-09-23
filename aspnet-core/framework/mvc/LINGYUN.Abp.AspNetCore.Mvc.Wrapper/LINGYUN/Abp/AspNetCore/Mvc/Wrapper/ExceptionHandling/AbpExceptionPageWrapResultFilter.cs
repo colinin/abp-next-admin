@@ -37,24 +37,24 @@ public class AbpExceptionPageWrapResultFilter: AbpExceptionPageFilter, ITransien
         var wrapOptions = context.GetRequiredService<IOptions<AbpWrapperOptions>>().Value;
         var exceptionHandlingOptions = context.GetRequiredService<IOptions<AbpExceptionHandlingOptions>>().Value;
         var exceptionToErrorInfoConverter = context.GetRequiredService<IExceptionToErrorInfoConverter>();
-        var remoteServiceErrorInfo = exceptionToErrorInfoConverter.Convert(context.Exception, options =>
+        var remoteServiceErrorInfo = exceptionToErrorInfoConverter.Convert(context.Exception!, options =>
         {
             options.SendExceptionsDetailsToClients = exceptionHandlingOptions.SendExceptionsDetailsToClients;
             options.SendStackTraceToClients = exceptionHandlingOptions.SendStackTraceToClients;
         });
 
-        var logLevel = context.Exception.GetLogLevel();
+        var logLevel = context.Exception!.GetLogLevel();
 
         var remoteServiceErrorInfoBuilder = new StringBuilder();
         remoteServiceErrorInfoBuilder.AppendLine($"---------- {nameof(RemoteServiceErrorInfo)} ----------");
         remoteServiceErrorInfoBuilder.AppendLine(context.GetRequiredService<IJsonSerializer>().Serialize(remoteServiceErrorInfo, indented: true));
 
         var logger = context.GetService<ILogger<AbpExceptionPageWrapResultFilter>>(NullLogger<AbpExceptionPageWrapResultFilter>.Instance);
-        logger.LogWithLevel(logLevel, remoteServiceErrorInfoBuilder.ToString());
+        logger?.LogWithLevel(logLevel, remoteServiceErrorInfoBuilder.ToString());
 
-        logger.LogException(context.Exception, logLevel);
+        logger?.LogException(context.Exception!, logLevel);
 
-        await context.GetRequiredService<IExceptionNotifier>().NotifyAsync(new ExceptionNotificationContext(context.Exception));
+        await context.GetRequiredService<IExceptionNotifier>().NotifyAsync(new ExceptionNotificationContext(context.Exception!));
 
         var isAuthenticated = context.HttpContext.User?.Identity?.IsAuthenticated ?? false;
 
@@ -85,10 +85,10 @@ public class AbpExceptionPageWrapResultFilter: AbpExceptionPageFilter, ITransien
         var statusCodFinder = context.GetRequiredService<IHttpExceptionStatusCodeFinder>();
         var exceptionWrapHandler = context.GetRequiredService<IExceptionWrapHandlerFactory>();
         var exceptionWrapContext = new ExceptionWrapContext(
-            context.Exception,
+            context.Exception!,
             remoteServiceErrorInfo,
             context.HttpContext.RequestServices,
-            statusCodFinder.GetStatusCode(context.HttpContext, context.Exception));
+            statusCodFinder.GetStatusCode(context.HttpContext, context.Exception!));
         exceptionWrapHandler.CreateFor(exceptionWrapContext).Wrap(exceptionWrapContext);
 
         var wrapperHeaders = new Dictionary<string, string>()
@@ -103,8 +103,8 @@ public class AbpExceptionPageWrapResultFilter: AbpExceptionPageFilter, ITransien
         httpResponseWrapper.Wrap(responseWrapperContext);
 
         context.Result = new ObjectResult(new WrapResult(
-            exceptionWrapContext.ErrorInfo.Code,
-            exceptionWrapContext.ErrorInfo.Message,
+            exceptionWrapContext.ErrorInfo.Code!,
+            exceptionWrapContext.ErrorInfo.Message!,
             exceptionWrapContext.ErrorInfo.Details));
 
         context.Exception = null; //Handled!

@@ -14,5 +14,5 @@ public class NoneDeviceInfoProvider : IDeviceInfoProvider
         return Task.FromResult(DeviceInfo);
     }
 
-    public string ClientIpAddress => "::1";
+    public string? ClientIpAddress => "::1";
 }

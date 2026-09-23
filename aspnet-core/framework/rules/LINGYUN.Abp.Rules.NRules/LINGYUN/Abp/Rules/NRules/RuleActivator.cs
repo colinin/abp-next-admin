@@ -29,6 +29,6 @@ public class RuleActivator : IRuleActivator
 
     private static IEnumerable<Rule> ActivateDefault(Type type)
     {
-        yield return (Rule)Activator.CreateInstance(type);
+        yield return (Rule)Activator.CreateInstance(type)!;
     }
 }

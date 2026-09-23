@@ -10,7 +10,7 @@ public interface IDataDictionaryDataSeeder
         string name,
         string code,
         string displayName,
-        string description = "",
+        string? description = null,
         Guid? parentId = null,
         Guid? tenantId = null,
         bool isStatic = false,

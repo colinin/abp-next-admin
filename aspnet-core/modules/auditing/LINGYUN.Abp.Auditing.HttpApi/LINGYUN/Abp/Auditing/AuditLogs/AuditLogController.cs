@@ -42,7 +42,7 @@ public class AuditLogController : AbpControllerBase, IAuditLogAppService
 
     [HttpGet]
     [Route("{id}")]
-    public async virtual Task<AuditLogDto> GetAsync(Guid id)
+    public async virtual Task<AuditLogDto?> GetAsync(Guid id)
     {
         return await AuditLogAppService.GetAsync(id);
     }

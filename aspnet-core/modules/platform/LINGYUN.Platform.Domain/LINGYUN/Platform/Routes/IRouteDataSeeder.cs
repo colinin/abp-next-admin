@@ -15,8 +15,8 @@ public interface IRouteDataSeeder
         string displayName,
         Guid dataId,
         string framework,
-        string redirect = "",
-        string description = "",
+        string? redirect = null,
+        string? description = null,
         Guid? tenantId = null,
         CancellationToken cancellationToken = default);
 
@@ -27,12 +27,12 @@ public interface IRouteDataSeeder
         string code,
         string component,
         string displayName,
-        string redirect = "",
-        string description = "",
+        string? redirect = null,
+        string? description = null,
         Guid? parentId = null,
         Guid? tenantId = null,
         bool isPublic = false,
-        IDictionary<string, object> meta = null,
+        IDictionary<string, object?>? meta = null,
         CancellationToken cancellationToken = default);
 
     Task SeedUserMenuAsync(

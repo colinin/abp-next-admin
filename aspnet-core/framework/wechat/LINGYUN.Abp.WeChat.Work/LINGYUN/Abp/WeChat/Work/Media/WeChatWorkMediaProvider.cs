@@ -41,8 +41,8 @@ public class WeChatWorkMediaProvider : IWeChatWorkMediaProvider, ISingletonDepen
         }
 
         var mediaStream = await response.Content.ReadAsStreamAsync();
-        string fileName = null;
-        string contentType = null;
+        string? fileName = null;
+        string? contentType = null;
 
         if (response.Headers.TryGetValues("Content-Disposition", out var contentDispositions))
         {

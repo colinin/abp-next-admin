@@ -28,7 +28,7 @@ public class MyFriendAppService : ApplicationService, IMyFriendAppService
 
     public async virtual Task<UserFriend> GetAsync(Guid friendId)
     {
-        return await FriendStore.GetMemberAsync(CurrentTenant.Id, CurrentUser.GetId(), friendId);
+        return (await FriendStore.GetMemberAsync(CurrentTenant.Id, CurrentUser.GetId(), friendId))!;
     }
 
     public async virtual Task CreateAsync(MyFriendCreateDto input)

@@ -14,7 +14,7 @@ internal class NumberToStringConverter : JsonConverter<string>
         }
         if (reader.TokenType == JsonTokenType.String)
         {
-            return reader.GetString();
+            return reader.GetString()!;
         }
         throw new JsonException("Unexpected token type");
     }

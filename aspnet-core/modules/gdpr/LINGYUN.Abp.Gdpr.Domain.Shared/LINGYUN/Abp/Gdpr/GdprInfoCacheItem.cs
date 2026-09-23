@@ -2,8 +2,8 @@
 
 public class GdprInfoCacheItem
 {
-    public string Data { get; set; }
-    public string Provider { get; set; }
+    public string Data { get; set; } = default!;
+    public string Provider { get; set; } = default!;
     public GdprInfoCacheItem()
     {
 

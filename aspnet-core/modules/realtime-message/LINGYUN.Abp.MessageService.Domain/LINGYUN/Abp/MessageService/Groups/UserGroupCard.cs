@@ -21,7 +21,7 @@ public class UserGroupCard : AuditedAggregateRoot<long>, IMultiTenant
     /// <summary>
     /// 昵称
     /// </summary>
-    public virtual string NickName { get; set; }
+    public virtual string? NickName { get; set; }
     /// <summary>
     /// 是否管理员
     /// </summary>

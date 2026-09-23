@@ -1,7 +1,7 @@
 import type { IHasConcurrencyStamp, IHasExtraProperties } from '@abp/core';
 
 interface FeatureDefinitionDto extends IHasExtraProperties {
-  allowedProviders: string[];
+  allowedProviders?: string[];
   defaultValue?: string;
   description?: string;
   displayName: string;
@@ -20,7 +20,7 @@ interface FeatureDefinitionGetListInput {
 }
 
 interface FeatureDefinitionCreateOrUpdateDto extends IHasExtraProperties {
-  allowedProviders: string[];
+  allowedProviders?: string[];
   defaultValue?: string;
   description?: string;
   displayName: string;

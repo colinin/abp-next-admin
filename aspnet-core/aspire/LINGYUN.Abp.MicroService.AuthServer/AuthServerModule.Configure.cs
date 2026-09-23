@@ -1,15 +1,11 @@
 ﻿using DotNetCore.CAP;
 using LINGYUN.Abp.AspNetCore.MultiTenancy;
+using LINGYUN.Abp.Identity;
 using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.LocalizationManagement;
 using LINGYUN.Abp.MicroService.AuthServer.Ui.Branding;
-using LINGYUN.Abp.OpenIddict.AspNetCore.Session;
-using LINGYUN.Abp.OpenIddict.LinkUser;
-using LINGYUN.Abp.OpenIddict.Portal;
-using LINGYUN.Abp.OpenIddict.Sms;
-using LINGYUN.Abp.OpenIddict.WeChat;
+using LINGYUN.Abp.OpenIddict.Impersonation;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
-using LINGYUN.Abp.WeChat.Work;
 using LINGYUN.Abp.Wrapper;
 using Medallion.Threading;
 using Medallion.Threading.Redis;
@@ -108,13 +104,17 @@ public partial class AuthServerModule
         });
     }
 
-    private void PreConfigureAuthServer()
+    private void PreConfigureAuthServer(IConfiguration configuration)
     {
         PreConfigure<OpenIddictBuilder>(builder =>
         {
             builder.AddValidation(options =>
             {
-                //options.AddAudiences("lingyun-abp-application");
+                var validAudiences = configuration.GetSection("AuthServer:ValidAudiences").Get<string[]>();
+                if (validAudiences?.Length > 0)
+                {
+                    options.AddAudiences(validAudiences);
+                }
 
                 options.UseLocalServer();
 
@@ -193,6 +193,7 @@ public partial class AuthServerModule
     {
         Configure<FeatureManagementOptions>(options =>
         {
+            options.SaveStaticFeaturesToDatabase = false;
             options.IsDynamicFeatureStoreEnabled = true;
         });
     }
@@ -202,6 +203,7 @@ public partial class AuthServerModule
         Configure<PermissionManagementOptions>(options =>
         {
             options.SaveStaticPermissionsToDatabase = false;
+            options.IsDynamicPermissionStoreEnabled = true;
         });
     }
 
@@ -209,6 +211,7 @@ public partial class AuthServerModule
     {
         Configure<SettingManagementOptions>(options =>
         {
+            options.SaveStaticSettingsToDatabase = false;
             options.IsDynamicSettingStoreEnabled = true;
         });
     }
@@ -281,16 +284,6 @@ public partial class AuthServerModule
         {
             options.IsDynamicClaimsEnabled = true;
             options.IsRemoteRefreshEnabled = false;
-        });
-
-        Configure<AbpOpenIddictAspNetCoreSessionOptions>(options =>
-        {
-            options.PersistentSessionGrantTypes.Add(SmsTokenExtensionGrantConsts.GrantType);
-            options.PersistentSessionGrantTypes.Add(PortalTokenExtensionGrantConsts.GrantType);
-            options.PersistentSessionGrantTypes.Add(LinkUserTokenExtensionGrantConsts.GrantType);
-            options.PersistentSessionGrantTypes.Add(WeChatTokenExtensionGrantConsts.OfficialGrantType);
-            options.PersistentSessionGrantTypes.Add(WeChatTokenExtensionGrantConsts.MiniProgramGrantType);
-            options.PersistentSessionGrantTypes.Add(AbpWeChatWorkGlobalConsts.GrantType);
         });
     }
     private void ConfigureVirtualFileSystem()
@@ -386,6 +379,13 @@ public partial class AuthServerModule
             options.RefreshTokenReuseLeeway = lifetime.GetValue("RefreshTokenReuseLeeway", options.RefreshTokenReuseLeeway);
             options.UserCodeLifetime = lifetime.GetValue("UserCode", options.UserCodeLifetime);
         });
+
+        Configure<OpenIddictImpersonationOptions>(options =>
+        {
+            // 模拟用户权限委派
+            options.ImpersonationPermission = IdentityPermissions.Users.Impersonation;
+            options.ImpersonationTenantPermission = "AbpSaas.Tenants.Impersonation";
+        });
     }
     private void ConfigureSecurity(IServiceCollection services, IConfiguration configuration, bool isDevelopment = false)
     {
@@ -406,6 +406,11 @@ public partial class AuthServerModule
                 {
                     options.TokenValidationParameters.ValidIssuers = validIssuers;
                     options.TokenValidationParameters.IssuerValidator = TokenWildcardIssuerValidator.IssuerValidator;
+                }
+                var validAudiences = configuration.GetSection("AuthServer:ValidAudiences").Get<List<string>>();
+                if (validAudiences?.Count > 0)
+                {
+                    options.TokenValidationParameters.ValidAudiences = validAudiences;
                 }
             });
 

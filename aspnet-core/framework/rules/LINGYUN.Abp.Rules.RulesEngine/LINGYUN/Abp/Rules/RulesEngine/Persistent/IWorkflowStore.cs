@@ -13,5 +13,5 @@ public interface IWorkflowStore
 {
     Task<IEnumerable<Workflow>> GetWorkflowsAsync(Type inputType, CancellationToken cancellationToken = default);
 
-    Task<Workflow> GetWorkflowAsync(string workflowName, CancellationToken cancellationToken = default);
+    Task<Workflow?> GetWorkflowAsync(string workflowName, CancellationToken cancellationToken = default);
 }

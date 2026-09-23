@@ -18,7 +18,7 @@ public class EfCoreDataRepository : EfCoreRepository<IPlatformDbContext, Data, G
     {
     }
 
-    public async virtual Task<Data> FindByNameAsync(
+    public async virtual Task<Data?> FindByNameAsync(
         string name, 
         bool includeDetails = true, 
         CancellationToken cancellationToken = default)
@@ -43,20 +43,20 @@ public class EfCoreDataRepository : EfCoreRepository<IPlatformDbContext, Data, G
     }
 
     public async virtual Task<int> GetCountAsync(
-        string filter = "", 
+        string? filter = null,
         CancellationToken cancellationToken = default)
     {
         var dbSet = await GetDbSetAsync();
         return await dbSet
             .WhereIf(!filter.IsNullOrWhiteSpace(), x =>
-                x.Code.Contains(filter) || x.Description.Contains(filter) ||
-                x.DisplayName.Contains(filter) || x.Name.Contains(filter))
+                x.Code.Contains(filter!) || x.Description!.Contains(filter!) ||
+                x.DisplayName.Contains(filter!) || x.Name.Contains(filter!))
             .CountAsync(GetCancellationToken(cancellationToken));
     }
 
     public async virtual Task<List<Data>> GetPagedListAsync(
-        string filter = "", 
-        string sorting = "Code", 
+        string? filter = null,
+        string? sorting = nameof(Data.Code),
         bool includeDetails = false, 
         int skipCount = 0,
         int maxResultCount = 10, 
@@ -71,8 +71,8 @@ public class EfCoreDataRepository : EfCoreRepository<IPlatformDbContext, Data, G
         return await dbSet
             .IncludeDetails(includeDetails)
             .WhereIf(!filter.IsNullOrWhiteSpace(), x =>
-                  x.Code.Contains(filter) || x.Description.Contains(filter) ||
-                  x.DisplayName.Contains(filter) || x.Name.Contains(filter))
+                  x.Code.Contains(filter!) || x.Description!.Contains(filter!) ||
+                  x.DisplayName.Contains(filter!) || x.Name.Contains(filter!))
             .OrderBy(sorting)
             .PageBy(skipCount, maxResultCount)
             .ToListAsync(GetCancellationToken(cancellationToken));

@@ -21,7 +21,7 @@ public partial class TenantToTenantDtoMapper : MapperBase<Tenant, TenantDto>
     [MapPropertyFromSource(nameof(TenantDto.EditionName), Use = nameof(TryGetEditionName))]
     public override partial void Map(Tenant source, TenantDto destination);
 
-    private static string TryGetEditionName(Tenant source)
+    private static string? TryGetEditionName(Tenant source)
     {
         return source?.Edition?.DisplayName;
     }

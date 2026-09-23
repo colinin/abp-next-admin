@@ -11,7 +11,7 @@ namespace Microsoft.AspNetCore.Identity;
 
 public class PasswordHistoryPasswordValidator : IPasswordValidator<IdentityUser>
 {
-    public async virtual Task<IdentityResult> ValidateAsync(UserManager<IdentityUser> manager, IdentityUser user, string password)
+    public async virtual Task<IdentityResult> ValidateAsync(UserManager<IdentityUser> manager, IdentityUser user, string? password)
     {
         var settingProvider = manager.ServiceProvider.GetRequiredService<ISettingProvider>();
         if (await settingProvider.IsTrueAsync(IdentitySettingNames.Password.EnablePreventPasswordReuse))

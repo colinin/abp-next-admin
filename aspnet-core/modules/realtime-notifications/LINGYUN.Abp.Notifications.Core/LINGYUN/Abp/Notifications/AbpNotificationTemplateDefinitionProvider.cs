@@ -19,7 +19,7 @@ public class AbpNotificationTemplateDefinitionProvider : TemplateDefinitionProvi
 
         foreach (var notification in notifications.Where(n => n.Template != null))
         {
-            if (context.GetOrNull(notification.Template.Name) == null)
+            if (context.GetOrNull(notification.Template!.Name) == null)
             {
                 context.Add(notification.Template);
             }

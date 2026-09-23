@@ -14,7 +14,7 @@ public class GroupChatTransferFailed
     [NotNull]
     [JsonProperty("chat_id")]
     [JsonPropertyName("chat_id")]
-    public string ChatId { get; set; }
+    public string ChatId { get; set; } = default!;
     /// <summary>
     /// 没能成功继承的群，错误码
     /// </summary>
@@ -28,5 +28,5 @@ public class GroupChatTransferFailed
     [NotNull]
     [JsonProperty("errmsg")]
     [JsonPropertyName("errmsg")]
-    public string ErrMsg { get; set; }
+    public string ErrMsg { get; set; } = default!;
 }

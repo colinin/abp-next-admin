@@ -81,7 +81,7 @@ public class NexusComponentManager : INexusComponentManager, ISingletonDependenc
         return nexusComponent;
     }
 
-    public async virtual Task<NexusComponentListResult> ListAsync([NotNull] string repository, string continuationToken = null, CancellationToken cancellationToken = default)
+    public async virtual Task<NexusComponentListResult> ListAsync([NotNull] string repository, string? continuationToken = null, CancellationToken cancellationToken = default)
     {
         var client = HttpClientFactory.CreateClient(SonatypeNexusConsts.ApiClient);
 

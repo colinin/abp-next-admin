@@ -49,14 +49,14 @@ public class EmailMessageManager : DomainService, IEmailMessageManager
         return message;
     }
 
-    public async virtual Task<string> TrySendAsync(IEmailSender emailSender, EmailMessage message)
+    public async virtual Task<string?> TrySendAsync(IEmailSender emailSender, EmailMessage message)
     {
         try
         {
             MailAddress from;
             if (message.From.IsNullOrWhiteSpace())
             {
-                var defaultFrom = await SettingProvider.GetOrNullAsync(EmailSettingNames.DefaultFromAddress);
+                var defaultFrom = await SettingProvider.GetOrNullAsync(EmailSettingNames.DefaultFromAddress) ?? "noreply@abp.io";
                 var defaultFromDisplayName = await SettingProvider.GetOrNullAsync(EmailSettingNames.DefaultFromDisplayName);
                 from = new MailAddress(defaultFrom, defaultFromDisplayName);
 

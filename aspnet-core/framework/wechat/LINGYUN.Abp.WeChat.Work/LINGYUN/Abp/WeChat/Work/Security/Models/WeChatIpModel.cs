@@ -34,5 +34,5 @@ public class WeChatIpModel
     /// </summary>
     [JsonProperty("description")]
     [JsonPropertyName("description")]
-    public string Description { get; set; }
+    public string? Description { get; set; }
 }

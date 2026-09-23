@@ -2,16 +2,16 @@
 using Microsoft.AspNetCore.Authorization;
 using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Linq;
 using System.Linq.Dynamic.Core;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Authorization.Permissions;
 using Volo.Abp.Data;
 using Volo.Abp.Domain.Repositories;
-using Volo.Abp.Localization;
+using Volo.Abp.EventBus.Local;
 using Volo.Abp.PermissionManagement;
 
 namespace LINGYUN.Abp.PermissionManagement.Definitions;
@@ -19,25 +19,16 @@ namespace LINGYUN.Abp.PermissionManagement.Definitions;
 [Authorize(PermissionManagementPermissionNames.GroupDefinition.Default)]
 public class PermissionGroupDefinitionAppService : PermissionManagementAppServiceBase, IPermissionGroupDefinitionAppService
 {
-    private readonly ILocalizableStringSerializer _localizableStringSerializer;
-    private readonly IPermissionDefinitionManager _permissionDefinitionManager;
-    private readonly IStaticPermissionDefinitionStore _staticPermissionDefinitionStore;
-    private readonly IDynamicPermissionDefinitionStore _dynamicPermissionDefinitionStore;
+    private readonly ILocalEventBus _eventBus;
     private readonly IPermissionGroupDefinitionRecordRepository _groupDefinitionRepository;
     private readonly IRepository<PermissionGroupDefinitionRecord, Guid> _groupDefinitionBasicRepository;
 
     public PermissionGroupDefinitionAppService(
-        ILocalizableStringSerializer localizableStringSerializer, 
-        IPermissionDefinitionManager permissionDefinitionManager, 
-        IStaticPermissionDefinitionStore staticPermissionDefinitionStore,
-        IDynamicPermissionDefinitionStore dynamicPermissionDefinitionStore,
+        ILocalEventBus eventBus,
         IPermissionGroupDefinitionRecordRepository groupDefinitionRepository, 
         IRepository<PermissionGroupDefinitionRecord, Guid> groupDefinitionBasicRepository)
     {
-        _localizableStringSerializer = localizableStringSerializer;
-        _permissionDefinitionManager = permissionDefinitionManager;
-        _staticPermissionDefinitionStore = staticPermissionDefinitionStore;
-        _dynamicPermissionDefinitionStore = dynamicPermissionDefinitionStore;
+        _eventBus = eventBus;
         _groupDefinitionRepository = groupDefinitionRepository;
         _groupDefinitionBasicRepository = groupDefinitionBasicRepository;
     }
@@ -45,12 +36,6 @@ public class PermissionGroupDefinitionAppService : PermissionManagementAppServic
     [Authorize(PermissionManagementPermissionNames.GroupDefinition.Create)]
     public async virtual Task<PermissionGroupDefinitionDto> CreateAsync(PermissionGroupDefinitionCreateDto input)
     {
-        if (await _permissionDefinitionManager.GetGroupOrNullAsync(input.Name) != null)
-        {
-            throw new BusinessException(PermissionManagementErrorCodes.GroupDefinition.AlreayNameExists)
-                .WithData(nameof(PermissionGroupDefinitionRecord.Name), input.Name);
-        }
-
         var groupDefinitionRecord = await _groupDefinitionBasicRepository.FindAsync(x => x.Name == input.Name);
         if (groupDefinitionRecord != null)
         {
@@ -67,10 +52,13 @@ public class PermissionGroupDefinitionAppService : PermissionManagementAppServic
         {
             groupDefinitionRecord.SetProperty(property.Key, property.Value);
         }
+        groupDefinitionRecord.SetProperty(nameof(PermissionGroupDefinitionDto.IsStatic), false);
 
         groupDefinitionRecord = await _groupDefinitionRepository.InsertAsync(groupDefinitionRecord);
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
+
+        await _eventBus.PublishAsync(new StaticPermissionDefinitionChangedEvent());
 
         return DefinitionRecordToDto(groupDefinitionRecord);
     }
@@ -78,100 +66,64 @@ public class PermissionGroupDefinitionAppService : PermissionManagementAppServic
     [Authorize(PermissionManagementPermissionNames.GroupDefinition.Delete)]
     public async virtual Task DeleteAsync(string name)
     {
-        var staticGroups = await _staticPermissionDefinitionStore.GetGroupsAsync();
-        if (staticGroups.Any(g => g.Name == name))
-        {
-            throw new BusinessException(PermissionManagementErrorCodes.GroupDefinition.StaticGroupNotAllowedChanged)
-              .WithData("Name", name);
-        }
+        var groupDefinitionRecord = await FindByNameAsync(name) ??
+            throw new BusinessException(PermissionManagementErrorCodes.GroupDefinition.NameNotFount)
+                .WithData(nameof(PermissionGroupDefinitionRecord.Name), name);
 
-        var groupDefinitionRecord = await FindByNameAsync(name);
+        CheckIsStaticDefinitionRecord(groupDefinitionRecord);
 
-        if (groupDefinitionRecord != null)
-        {
-            await _groupDefinitionRepository.DeleteAsync(groupDefinitionRecord);
+        await _groupDefinitionRepository.DeleteAsync(groupDefinitionRecord);
 
-            await CurrentUnitOfWork.SaveChangesAsync();
-        }
+        await CurrentUnitOfWork!.SaveChangesAsync();
+
+        await _eventBus.PublishAsync(new StaticPermissionDefinitionChangedEvent());
     }
 
     public async virtual Task<PermissionGroupDefinitionDto> GetAsync(string name)
     {
-        var staticGroups = await _staticPermissionDefinitionStore.GetGroupsAsync();
-        var groupDefinition = staticGroups.FirstOrDefault(x => x.Name == name);
-        if (groupDefinition != null)
-        {
-            return DefinitionToDto(groupDefinition, true);
-        }
-
-        var dynamicGroups = await _dynamicPermissionDefinitionStore.GetGroupsAsync();
-
-        groupDefinition = dynamicGroups.FirstOrDefault(x => x.Name == name);
-        if (groupDefinition == null)
-        {
+        var groupDefinitionRecord = await FindByNameAsync(name) ??
             throw new BusinessException(PermissionManagementErrorCodes.GroupDefinition.NameNotFount)
                 .WithData(nameof(PermissionGroupDefinitionRecord.Name), name);
-        }
 
-        return DefinitionToDto(groupDefinition);
+        return DefinitionRecordToDto(groupDefinitionRecord);
     }
 
     public async virtual Task<ListResultDto<PermissionGroupDefinitionDto>> GetListAsync(PermissionGroupDefinitionGetListInput input)
     {
         var groupDtoList = new List<PermissionGroupDefinitionDto>();
 
-        var staticGroups = await _staticPermissionDefinitionStore.GetGroupsAsync();
-        var staticGroupsNames = staticGroups
-           .Select(p => p.Name)
-           .ToImmutableHashSet();
-        groupDtoList.AddRange(staticGroups.Select(d => DefinitionToDto(d, true)));
+        Expression<Func<PermissionGroupDefinitionRecord, bool>> predicate = _ => true;
+        if (!input.Filter.IsNullOrWhiteSpace())
+        {
+            predicate = predicate.And(x => x.Name.Contains(input.Filter));
+        }
+        var permissionGroupDefinitions = await _groupDefinitionBasicRepository.GetListAsync(predicate);
 
-        var dynamicGroups = await _dynamicPermissionDefinitionStore.GetGroupsAsync();
-        groupDtoList.AddRange(dynamicGroups
-           .Where(d => !staticGroupsNames.Contains(d.Name))
-           .Select(d => DefinitionToDto(d)));
+        groupDtoList.AddRange(permissionGroupDefinitions.Select(DefinitionRecordToDto));
 
-        return new ListResultDto<PermissionGroupDefinitionDto>(
-            groupDtoList
-                .WhereIf(!input.Filter.IsNullOrWhiteSpace(), x => x.Name.Contains(input.Filter))
-                .ToList());
+        return new ListResultDto<PermissionGroupDefinitionDto>(groupDtoList);
     }
 
     [Authorize(PermissionManagementPermissionNames.GroupDefinition.Update)]
     public async virtual Task<PermissionGroupDefinitionDto> UpdateAsync(string name, PermissionGroupDefinitionUpdateDto input)
     {
-        var staticGroups = await _staticPermissionDefinitionStore.GetGroupsAsync();
-        if (staticGroups.Any(g => g.Name == name))
-        {
-            throw new BusinessException(PermissionManagementErrorCodes.GroupDefinition.StaticGroupNotAllowedChanged)
-              .WithData("Name", name);
-        }
+        var groupDefinitionRecord = await FindByNameAsync(name) ??
+            throw new BusinessException(PermissionManagementErrorCodes.GroupDefinition.NameNotFount)
+                .WithData(nameof(PermissionGroupDefinitionRecord.Name), name);
 
-        var groupDefinitionRecord = await FindByNameAsync(name);
+        CheckIsStaticDefinitionRecord(groupDefinitionRecord);
+        UpdateByInput(groupDefinitionRecord, input);
 
-        if (groupDefinitionRecord == null)
-        {
-            groupDefinitionRecord = new PermissionGroupDefinitionRecord(
-                GuidGenerator.Create(),
-                name,
-                input.DisplayName);
-            UpdateByInput(groupDefinitionRecord, input);
+        groupDefinitionRecord = await _groupDefinitionBasicRepository.UpdateAsync(groupDefinitionRecord);
 
-            groupDefinitionRecord = await _groupDefinitionBasicRepository.InsertAsync(groupDefinitionRecord);
-        }
-        else
-        {
-            UpdateByInput(groupDefinitionRecord, input);
+        await CurrentUnitOfWork!.SaveChangesAsync();
 
-            groupDefinitionRecord = await _groupDefinitionBasicRepository.UpdateAsync(groupDefinitionRecord);
-        }
-
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await _eventBus.PublishAsync(new StaticPermissionDefinitionChangedEvent());
 
         return DefinitionRecordToDto(groupDefinitionRecord);
     }
 
-    protected async virtual Task<PermissionGroupDefinitionRecord> FindByNameAsync(string name)
+    protected async virtual Task<PermissionGroupDefinitionRecord?> FindByNameAsync(string name)
     {
         var groupDefinitionFilter = await _groupDefinitionBasicRepository.GetQueryableAsync();
 
@@ -181,12 +133,29 @@ public class PermissionGroupDefinitionAppService : PermissionManagementAppServic
         return groupDefinitionRecord;
     }
 
+    protected virtual void CheckIsStaticDefinitionRecord(PermissionGroupDefinitionRecord record)
+    {
+        if (record.GetProperty(nameof(PermissionGroupDefinitionDto.IsStatic), true))
+        {
+            throw new BusinessException(PermissionManagementErrorCodes.GroupDefinition.StaticGroupNotAllowedChanged)
+              .WithData("Name", record.Name);
+        }
+    }
+
     protected virtual void UpdateByInput(PermissionGroupDefinitionRecord record, PermissionGroupDefinitionCreateOrUpdateDto input)
     {
-        record.ExtraProperties.Clear();
-        foreach (var property in input.ExtraProperties)
+        if (!record.HasSameExtraProperties(input))
         {
-            record.SetProperty(property.Key, property.Value);
+            var isStatic = record.GetProperty(nameof(PermissionGroupDefinitionDto.IsStatic), true);
+
+            record.ExtraProperties.Clear();
+
+            foreach (var property in input.ExtraProperties)
+            {
+                record.ExtraProperties.Add(property.Key, property.Value);
+            }
+
+            record.SetProperty(nameof(PermissionGroupDefinitionDto.IsStatic), isStatic);
         }
         if (!string.Equals(record.DisplayName, input.DisplayName, StringComparison.InvariantCultureIgnoreCase))
         {
@@ -198,31 +167,13 @@ public class PermissionGroupDefinitionAppService : PermissionManagementAppServic
     {
         var groupDto = new PermissionGroupDefinitionDto
         {
-            IsStatic = false,
+            IsStatic = groupDefinitionRecord.GetProperty(nameof(PermissionGroupDefinitionDto.IsStatic), true),
             Name = groupDefinitionRecord.Name,
             DisplayName = groupDefinitionRecord.DisplayName,
             ExtraProperties = new ExtraPropertyDictionary(),
         };
 
         foreach (var property in groupDefinitionRecord.ExtraProperties)
-        {
-            groupDto.SetProperty(property.Key, property.Value);
-        }
-
-        return groupDto;
-    }
-
-    protected virtual PermissionGroupDefinitionDto DefinitionToDto(PermissionGroupDefinition groupDefinition, bool isStatic = false)
-    {
-        var groupDto = new PermissionGroupDefinitionDto
-        {
-            IsStatic = isStatic,
-            Name = groupDefinition.Name,
-            DisplayName = _localizableStringSerializer.Serialize(groupDefinition.DisplayName),
-            ExtraProperties = new ExtraPropertyDictionary(),
-        };
-
-        foreach (var property in groupDefinition.Properties)
         {
             groupDto.SetProperty(property.Key, property.Value);
         }

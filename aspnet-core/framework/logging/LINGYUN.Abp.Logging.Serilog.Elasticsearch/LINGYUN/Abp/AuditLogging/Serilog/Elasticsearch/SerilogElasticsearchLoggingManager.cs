@@ -1,21 +1,23 @@
 ﻿using Elastic.Clients.Elasticsearch;
-using Elastic.Clients.Elasticsearch.QueryDsl;
+using Elastic.Transport.Diagnostics.Auditing;
 using LINGYUN.Abp.Elasticsearch;
-using LINGYUN.Abp.Serilog.Enrichers.Application;
-using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
+using LINGYUN.Linq.Dynamic.Queryable;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Serilog.Events;
+using Serilog.Formatting.Elasticsearch;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.ObjectMapping;
+using Volo.Abp.Specifications;
 using Volo.Abp.Timing;
 
 namespace LINGYUN.Abp.Logging.Serilog.Elasticsearch;
@@ -23,12 +25,20 @@ namespace LINGYUN.Abp.Logging.Serilog.Elasticsearch;
 [Dependency(ReplaceServices = true)]
 public class SerilogElasticsearchLoggingManager : ILoggingManager, ISingletonDependency
 {
-    private readonly static Regex IndexFormatRegex = new Regex(@"^(.*)(?:\{0\:.+\})(.*)$");
+    private readonly static Regex _indexFormatRegex = new Regex(@"^(.*)(?:\{0\:.+\})(.*)$");
+    private readonly static Dictionary<Type, Type> _defaultTypeMap = new Dictionary<Type, Type>
+    {
+        [typeof(LogInfo)] = typeof(SerilogInfo),
+        [typeof(LogLevel)] = typeof(string),
+        [typeof(LogField)] = typeof(SerilogField),
+        [typeof(LogException)] = typeof(SerilogException),
+    };
 
     private readonly IClock _clock;
     private readonly ICurrentTenant _currentTenant;
     private readonly AbpLoggingSerilogElasticsearchOptions _options;
     private readonly IElasticsearchClientFactory _clientFactory;
+    private readonly IExpressionQueryService _expressionQueryService;
     private readonly IObjectMapper<AbpLoggingSerilogElasticsearchModule> _objectMapper;
 
     public ILogger<SerilogElasticsearchLoggingManager> Logger { protected get; set; }
@@ -38,15 +48,62 @@ public class SerilogElasticsearchLoggingManager : ILoggingManager, ISingletonDep
         ICurrentTenant currentTenant,
         IOptions<AbpLoggingSerilogElasticsearchOptions> options,
         IElasticsearchClientFactory clientFactory,
+        IExpressionQueryService expressionQueryService,
         IObjectMapper<AbpLoggingSerilogElasticsearchModule> objectMapper)
     {
         _clock = clock;
         _objectMapper = objectMapper;
         _currentTenant = currentTenant;
         _clientFactory = clientFactory;
+        _expressionQueryService = expressionQueryService;
         _options = options.Value;
 
         Logger = NullLogger<SerilogElasticsearchLoggingManager>.Instance;
+    }
+
+    public async virtual Task<long> GetCountAsync(
+        ISpecification<LogInfo> specification,
+        CancellationToken cancellationToken = default)
+    {
+        var converter = new ExpressionQueryConverter<LogInfo, SerilogInfo>(_defaultTypeMap);
+        var expression = converter.Convert(specification.ToExpression());
+
+        return await _expressionQueryService.GetCountAsync(
+            CreateIndex(), 
+            expression,
+            cancellationToken);
+    }
+
+    public async virtual Task<List<LogInfo>> GetListAsync(
+        ISpecification<LogInfo> specification,
+        string? sorting = null,
+        int maxResultCount = 50,
+        int skipCount = 0,
+        bool includeDetails = false,
+        CancellationToken cancellationToken = default)
+    {
+        var converter = new ExpressionQueryConverter<LogInfo, SerilogInfo>(_defaultTypeMap);
+        var expression = converter.Convert(specification.ToExpression());
+        if (sorting.IsNullOrWhiteSpace())
+        {
+            sorting = ElasticsearchJsonFormatter.TimestampPropertyName;
+        }
+
+        var serilogLogs = await _expressionQueryService.GetListAsync(
+            CreateIndex(),
+            expression,
+            sorting,
+            maxResultCount,
+            skipCount,
+            sourceExcludes: includeDetails == false
+                ? Fields.FromFields(
+                [
+                    new Field("exceptions"),
+                ])
+                : null,
+            cancellationToken: cancellationToken);
+
+        return _objectMapper.Map<List<SerilogInfo>, List<LogInfo>>(serilogLogs);
     }
 
     /// <summary>
@@ -55,94 +112,35 @@ public class SerilogElasticsearchLoggingManager : ILoggingManager, ISingletonDep
     /// <param name="id">时间类型或者转换为timestamp都可以查询</param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    public async virtual Task<LogInfo> GetAsync(
+    public async virtual Task<LogInfo?> GetAsync(
         string id,
         CancellationToken cancellationToken = default)
     {
         var client = _clientFactory.Create();
+        Expression<Func<SerilogInfo, bool>> expression = x => x.Fields.UniqueId == long.Parse(id);
+        expression = expression.AndIf(_currentTenant.IsAvailable, x => x.Fields.TenantId == _currentTenant.Id);
 
-        SearchResponse<SerilogInfo> response;
+        var serilogs = await _expressionQueryService.GetListAsync<SerilogInfo>(
+            CreateIndex(),
+            x => x.Fields.UniqueId == long.Parse(id),
+            sorting: $"{ElasticsearchJsonFormatter.TimestampPropertyName} DESC",
+            maxResultCount: 1,
+            cancellationToken: cancellationToken);
 
-        if (_currentTenant.IsAvailable)
-        {
-            /*
-            "query": {
-                "bool": {
-                    "must": [
-                        {
-                            "term": {
-                                "fields.TenantId.keyword": {
-                                    "value": _currentTenant.GetId()
-                                }
-                            }
-                        },
-                        {
-                            "term": {
-                                "fields.UniqueId": {
-                                    "value": "1474021081433481216"
-                                }
-                            }
-                        }
-                    ]
-                }
-            }
-            */
-            response = await client.SearchAsync<SerilogInfo>(
-                dsl =>
-                    dsl.Indices(CreateIndex())
-                       .Query(
-                            (q) => q.Bool(
-                                (b) => b.Must(
-                                    (s) => s.Term(
-                                        (t) => t.Field(GetField(nameof(SerilogInfo.Fields.UniqueId))).Value(id)),
-                                    (s) => s.Term(
-                                        (t) => t.Field(GetField(nameof(SerilogInfo.Fields.TenantId))).Value(_currentTenant.GetId().ToString())))))
-                       .Size(1),
-                cancellationToken);
-        }
-        else
-        {
-            /*
-            "query": {
-                "bool": {
-                    "must": [
-                        {
-                            "term": {
-                                "fields.UniqueId": {
-                                    "value": "1474021081433481216"
-                                }
-                            }
-                        }
-                    ]
-                }
-            }
-            */
-            response = await client.SearchAsync<SerilogInfo>(
-                dsl =>
-                    dsl.Indices(CreateIndex())
-                       .Query(
-                            (q) => q.Bool(
-                                (b) => b.Must(
-                                    (s) => s.Term(
-                                        (t) => t.Field(GetField(nameof(SerilogInfo.Fields.UniqueId))).Value(id)))))
-                       .Size(1),
-                cancellationToken);
-        }
-
-        return _objectMapper.Map<SerilogInfo, LogInfo>(response.Documents.FirstOrDefault());
+        return _objectMapper.Map<SerilogInfo?, LogInfo?>(serilogs.FirstOrDefault());
     }
 
     public async virtual Task<long> GetCountAsync(
         DateTime? startTime = null,
         DateTime? endTime = null,
         LogLevel? level = null,
-        string machineName = null,
-        string environment = null,
-        string application = null,
-        string context = null,
-        string requestId = null,
-        string requestPath = null,
-        string correlationId = null,
+        string? machineName = null,
+        string? environment = null,
+        string? application = null,
+        string? context = null,
+        string? requestId = null,
+        string? requestPath = null,
+        string? correlationId = null,
         int? processId = null,
         int? threadId = null,
         bool? hasException = null,
@@ -150,27 +148,28 @@ public class SerilogElasticsearchLoggingManager : ILoggingManager, ISingletonDep
     {
         var client = _clientFactory.Create();
 
-        var querys = BuildQueryDescriptor(
-            startTime,
-            endTime,
-            level,
-            machineName,
-            environment,
-            application,
-            context,
-            requestId,
-            requestPath,
-            correlationId,
-            processId,
-            threadId,
-            hasException);
+        Expression<Func<SerilogInfo, bool>> expression = _ => true;
 
-        var response = await client.CountAsync<SerilogInfo>((dsl) =>
-            dsl.Indices(CreateIndex())
-               .Query(log => log.Bool(b => b.Must(querys.ToArray()))),
+        expression = expression
+            .AndIf(startTime.HasValue, x => x.TimeStamp >= _clock.Normalize(startTime!.Value))
+            .AndIf(endTime.HasValue, x => x.TimeStamp <= _clock.Normalize(endTime!.Value))
+            .AndIf(level.HasValue, x => x.Level == GetLogEventLevel(level!.Value))
+            .AndIf(!machineName.IsNullOrWhiteSpace(), x => x.Fields.MachineName!.Contains(machineName!))
+            .AndIf(!environment.IsNullOrWhiteSpace(), x => x.Fields.Environment!.Contains(environment!))
+            .AndIf(!application.IsNullOrWhiteSpace(), x => x.Fields.Application!.Contains(application!))
+            .AndIf(!context.IsNullOrWhiteSpace(), x => x.Fields.Context == context)
+            .AndIf(!requestId.IsNullOrWhiteSpace(), x => x.Fields.RequestId == requestId)
+            .AndIf(!requestPath.IsNullOrWhiteSpace(), x => x.Fields.RequestPath!.StartsWith(requestPath!))
+            .AndIf(!correlationId.IsNullOrWhiteSpace(), x => x.Fields.CorrelationId!.Contains(correlationId!))
+            .AndIf(processId.HasValue, x => x.Fields.ProcessId == processId)
+            .AndIf(threadId.HasValue, x => x.Fields.ThreadId == threadId)
+            .AndIf(hasException == true, x => x.Exceptions != null)
+            .AndIf(hasException == false, x => x.Exceptions == null);
+
+        return await _expressionQueryService.GetCountAsync(
+            CreateIndex(),
+            expression,
             cancellationToken);
-
-        return response.Count;
     }
 
     /// <summary>
@@ -196,19 +195,19 @@ public class SerilogElasticsearchLoggingManager : ILoggingManager, ISingletonDep
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     public async virtual Task<List<LogInfo>> GetListAsync(
-        string sorting = null,
+        string? sorting = null,
         int maxResultCount = 50,
         int skipCount = 0,
         DateTime? startTime = null,
         DateTime? endTime = null,
         LogLevel? level = null,
-        string machineName = null,
-        string environment = null,
-        string application = null,
-        string context = null,
-        string requestId = null,
-        string requestPath = null,
-        string correlationId = null,
+        string? machineName = null,
+        string? environment = null,
+        string? application = null,
+        string? context = null,
+        string? requestId = null,
+        string? requestPath = null,
+        string? correlationId = null,
         int? processId = null,
         int? threadId = null,
         bool? hasException = null,
@@ -216,178 +215,58 @@ public class SerilogElasticsearchLoggingManager : ILoggingManager, ISingletonDep
         CancellationToken cancellationToken = default)
     {
         var client = _clientFactory.Create();
-
-        var sortOrder = !sorting.IsNullOrWhiteSpace() && sorting.EndsWith("asc", StringComparison.InvariantCultureIgnoreCase)
-            ? SortOrder.Asc : SortOrder.Desc;
-        sorting = !sorting.IsNullOrWhiteSpace()
-            ? sorting.Split()[0]
-            : nameof(SerilogInfo.TimeStamp);
-
-        var querys = BuildQueryDescriptor(
-            startTime,
-            endTime,
-            level,
-            machineName,
-            environment,
-            application,
-            context,
-            requestId,
-            requestPath,
-            correlationId,
-            processId,
-            threadId,
-            hasException);
-
-        var response = await client.SearchAsync<SerilogInfo>((dsl) =>
-            dsl.Indices(CreateIndex())
-               .Query(log =>
-                    log.Bool(b =>
-                        b.Must(querys.ToArray())))
-               .SourceExcludes(se => se.Exceptions)
-               .Sort(log => log.Field(GetField(sorting), sortOrder))
-               .From(skipCount)
-               .Size(maxResultCount),
-            cancellationToken);
-
-        return _objectMapper.Map<List<SerilogInfo>, List<LogInfo>>(response.Documents.ToList());
-    }
-
-    protected virtual List<Query> BuildQueryDescriptor(
-        DateTime? startTime = null,
-        DateTime? endTime = null,
-        LogLevel? level = null,
-        string machineName = null,
-        string environment = null,
-        string application = null,
-        string context = null,
-        string requestId = null,
-        string requestPath = null,
-        string correlationId = null,
-        int? processId = null,
-        int? threadId = null,
-        bool? hasException = null)
-    {
-        var queries = new List<Query>();
-
-        if (_currentTenant.IsAvailable)
+        if (sorting.IsNullOrWhiteSpace())
         {
-            queries.Add(new TermQuery(GetField(nameof(SerilogInfo.Fields.TenantId)), _currentTenant.GetId().ToString()));
+            sorting = $"{ElasticsearchJsonFormatter.TimestampPropertyName} DESC";
         }
-        if (startTime.HasValue)
+        // 额外处理一下timestamp字段
+        else if (sorting.Contains("timestamp", StringComparison.CurrentCultureIgnoreCase))
         {
-            queries.Add(new DateRangeQuery(GetField(nameof(SerilogInfo.TimeStamp)))
-            {
-                Gte = _clock.Normalize(startTime.Value),
-            });
-        }
-        if (endTime.HasValue)
-        {
-            queries.Add(new DateRangeQuery(GetField(nameof(SerilogInfo.TimeStamp)))
-            {
-                Lte = _clock.Normalize(endTime.Value),
-            });
-        }
-        if (level.HasValue)
-        {
-            queries.Add(new TermQuery(GetField(nameof(SerilogInfo.Level)), GetLogEventLevel(level.Value).ToString()));
-        }
-        if (!machineName.IsNullOrWhiteSpace())
-        {
-            // 模糊匹配
-            queries.Add(new WildcardQuery(GetField(nameof(SerilogInfo.Fields.MachineName)))
-            {
-                Value = $"*{machineName}*"
-            });
-        }
-        if (!environment.IsNullOrWhiteSpace())
-        {
-            // 模糊匹配
-            queries.Add(new WildcardQuery(GetField(nameof(SerilogInfo.Fields.Environment)))
-            {
-                Value = $"*{environment}*"
-            });
-        }
-        if (!application.IsNullOrWhiteSpace())
-        {
-            // 模糊匹配
-            queries.Add(new WildcardQuery(GetField(nameof(SerilogInfo.Fields.Application)))
-            {
-                Value = $"*{application}*"
-            });
-        }
-        if (!context.IsNullOrWhiteSpace())
-        {
-            queries.Add(new TermQuery(GetField(nameof(SerilogInfo.Fields.Context)), context));
-        }
-        if (!requestId.IsNullOrWhiteSpace())
-        {
-            queries.Add(new TermQuery(GetField(nameof(SerilogInfo.Fields.RequestId)), requestId));
-        }
-        if (!requestPath.IsNullOrWhiteSpace())
-        {
-            // 前缀匹配
-            queries.Add(new MatchPhrasePrefixQuery(GetField(nameof(SerilogInfo.Fields.RequestPath)), requestPath));
-        }
-        if (!correlationId.IsNullOrWhiteSpace())
-        {
-            // 模糊匹配
-            queries.Add(new WildcardQuery(GetField(nameof(SerilogInfo.Fields.CorrelationId)))
-            {
-                Value = $"*{correlationId}*"
-            });
-        }
-        if (processId.HasValue)
-        {
-            queries.Add(new TermQuery(GetField(nameof(SerilogInfo.Fields.ProcessId)), FieldValue.FromValue(processId.Value)));
-        }
-        if (threadId.HasValue)
-        {
-            queries.Add(new TermQuery(GetField(nameof(SerilogInfo.Fields.ThreadId)), FieldValue.FromValue(threadId.Value)));
+            sorting = sorting
+                .Replace("timestamp", ElasticsearchJsonFormatter.TimestampPropertyName, StringComparison.CurrentCultureIgnoreCase)
+                .Replace("@@", "@");
         }
 
-        if (hasException.HasValue)
-        {
-            if (hasException.Value)
-            {
-                /*  存在exceptions字段则就是有异常信息
-                 * "exists": {
-                        "field": "exceptions"
-                    }
-                 */
-                queries.Add(new ExistsQuery(GetField("Exceptions")));
-            }
-            else
-            {
-                // 不存在 exceptions字段就是没有异常信息的消息
-                /*
-                 * "bool": {
-                        "must_not": [
-                            {
-                                "exists": {
-                                    "field": "exceptions"
-                                }
-                            }
-                        ]
-                    }
-                 */
-                queries.Add(new BoolQuery
-                {
-                    MustNot = new List<Query>
-                    {
-                        new ExistsQuery(GetField("Exceptions"))
-                    }
-                });
-            }
-        }
+        Expression<Func<SerilogInfo, bool>> expression = _ => true;
 
-        return queries;
+        expression = expression
+            .AndIf(startTime.HasValue, x => x.TimeStamp >= _clock.Normalize(startTime!.Value))
+            .AndIf(endTime.HasValue, x => x.TimeStamp <= _clock.Normalize(endTime!.Value))
+            .AndIf(level.HasValue, x => x.Level == GetLogEventLevel(level!.Value))
+            .AndIf(!machineName.IsNullOrWhiteSpace(), x => x.Fields.MachineName!.Contains(machineName!))
+            .AndIf(!environment.IsNullOrWhiteSpace(), x => x.Fields.Environment!.Contains(environment!))
+            .AndIf(!application.IsNullOrWhiteSpace(), x => x.Fields.Application!.Contains(application!))
+            .AndIf(!context.IsNullOrWhiteSpace(), x => x.Fields.Context == context)
+            .AndIf(!requestId.IsNullOrWhiteSpace(), x => x.Fields.RequestId == requestId)
+            .AndIf(!requestPath.IsNullOrWhiteSpace(), x => x.Fields.RequestPath!.StartsWith(requestPath!))
+            .AndIf(!correlationId.IsNullOrWhiteSpace(), x => x.Fields.CorrelationId!.Contains(correlationId!))
+            .AndIf(processId.HasValue, x => x.Fields.ProcessId == processId)
+            .AndIf(threadId.HasValue, x => x.Fields.ThreadId == threadId)
+            .AndIf(hasException == true, x => x.Exceptions != null)
+            .AndIf(hasException == false, x => x.Exceptions == null);
+
+        var serilogLogs = await _expressionQueryService.GetListAsync(
+            CreateIndex(),
+            expression,
+            sorting: sorting,
+            maxResultCount: maxResultCount,
+            skipCount: skipCount,
+            sourceExcludes: includeDetails == false
+                ? Fields.FromFields(
+                [
+                    new Field("exceptions"),
+                ])
+                : null,
+            cancellationToken: cancellationToken);
+
+        return _objectMapper.Map<List<SerilogInfo>, List<LogInfo>>(serilogLogs);
     }
 
     protected virtual string CreateIndex(DateTimeOffset? offset = null)
     {
         if (!offset.HasValue)
         {
-            return IndexFormatRegex.Replace(_options.IndexFormat, @"$1*$2");
+            return _indexFormatRegex.Replace(_options.IndexFormat, @"$1*$2");
         }
         return string.Format(_options.IndexFormat, offset.Value).ToLowerInvariant();
     }
@@ -403,39 +282,5 @@ public class SerilogElasticsearchLoggingManager : ILoggingManager, ISingletonDep
             LogLevel.Debug => LogEventLevel.Debug,
             _ => LogEventLevel.Verbose,
         };
-    }
-
-    private readonly static IDictionary<string, string> _fieldMaps = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase)
-    {
-        { "timestamp", "@timestamp" },
-        { "level", "level.keyword" },
-        { "machinename", $"fields.{AbpLoggingEnricherPropertyNames.MachineName}.keyword" },
-        { "environment", $"fields.{AbpLoggingEnricherPropertyNames.EnvironmentName}.keyword" },
-        { "application", $"fields.{AbpSerilogEnrichersConsts.ApplicationNamePropertyName}.keyword" },
-        { "context", "fields.SourceContext.keyword" },
-        { "actionid", "fields.ActionId.keyword" },
-        { "actionname", "fields.ActionName.keyword" },
-        { "requestid", "fields.RequestId.keyword" },
-        { "requestpath", "fields.RequestPath" },
-        { "connectionid", "fields.ConnectionId" },
-        { "correlationid", "fields.CorrelationId.keyword" },
-        { "clientid", "fields.ClientId.keyword" },
-        { "userid", "fields.UserId.keyword" },
-        { "processid", "fields.ProcessId" },
-        { "threadid", "fields.ThreadId" },
-        { "id", $"fields.{AbpSerilogUniqueIdConsts.UniqueIdPropertyName}" },
-        { "uniqueid", $"fields.{AbpSerilogUniqueIdConsts.UniqueIdPropertyName}" },
-    };
-    protected virtual string GetField(string field)
-    {
-        foreach (var fieldMap in _fieldMaps)
-        {
-            if (field.ToLowerInvariant().Contains(fieldMap.Key))
-            {
-                return fieldMap.Value;
-            }
-        }
-
-        return field;
     }
 }

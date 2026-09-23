@@ -148,16 +148,42 @@ async function onGet(id: string) {
             <DescriptionsItem :label="$t('AbpAuditLogging.UserName')">
               {{ auditLogModel.userName }}
             </DescriptionsItem>
-            <DescriptionsItem :label="$t('AbpAuditLogging.HttpMethod')">
-              <Tag :color="getHttpMethodColor(auditLogModel.httpMethod)">
-                {{ auditLogModel.httpMethod }}
-              </Tag>
+            <DescriptionsItem :label="$t('AbpAuditLogging.TenantName')">
+              <span v-if="auditLogModel.tenantId">
+                {{ auditLogModel.tenantId }}/{{ auditLogModel.tenantName }}
+              </span>
             </DescriptionsItem>
+            <template v-if="auditLogModel.impersonatorUserName">
+              <DescriptionsItem
+                :label="$t('AbpAuditLogging.ImpersonatorTenantId')"
+              >
+                <span v-if="auditLogModel.impersonatorTenantId">
+                  {{ auditLogModel.impersonatorTenantId }}/{{
+                    auditLogModel.impersonatorTenantName
+                  }}
+                </span>
+              </DescriptionsItem>
+              <DescriptionsItem
+                :label="$t('AbpAuditLogging.ImpersonatorUserId')"
+              >
+                {{ auditLogModel.impersonatorUserId }}/{{
+                  auditLogModel.impersonatorUserName
+                }}
+              </DescriptionsItem>
+            </template>
             <DescriptionsItem
               :label="$t('AbpAuditLogging.RequestUrl')"
               :span="2"
             >
               {{ auditLogModel.url }}
+            </DescriptionsItem>
+            <DescriptionsItem
+              :label="$t('AbpAuditLogging.HttpMethod')"
+              :span="2"
+            >
+              <Tag :color="getHttpMethodColor(auditLogModel.httpMethod)">
+                {{ auditLogModel.httpMethod }}
+              </Tag>
             </DescriptionsItem>
             <DescriptionsItem :label="$t('AbpAuditLogging.HttpStatusCode')">
               <Tag

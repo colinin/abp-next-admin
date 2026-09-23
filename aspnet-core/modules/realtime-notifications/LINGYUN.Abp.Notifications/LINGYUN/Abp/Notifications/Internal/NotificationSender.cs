@@ -59,10 +59,10 @@ public class NotificationSender : INotificationSender, ITransientDependency
     public async virtual Task<string> SendNofiterAsync(
         string name, 
         NotificationData data,
-        IEnumerable<UserIdentifier> users = null,
+        IEnumerable<UserIdentifier>? users = null,
         Guid? tenantId = null, 
         NotificationSeverity severity = NotificationSeverity.Info,
-        IEnumerable<string> useProviders = null)
+        IEnumerable<string>? useProviders = null)
     {
         return await PublishNofiterAsync(name, data, users, tenantId, severity, useProviders);
     }
@@ -70,10 +70,10 @@ public class NotificationSender : INotificationSender, ITransientDependency
     public async virtual Task<string> SendNofiterAsync(
         string name,
         NotificationTemplate template,
-        IEnumerable<UserIdentifier> users = null, 
+        IEnumerable<UserIdentifier>? users = null, 
         Guid? tenantId = null, 
         NotificationSeverity severity = NotificationSeverity.Info,
-        IEnumerable<string> useProviders = null)
+        IEnumerable<string>? useProviders = null)
     {
         return await PublishNofiterAsync(name, template, users, tenantId, severity, useProviders);
     }
@@ -81,10 +81,10 @@ public class NotificationSender : INotificationSender, ITransientDependency
     protected async virtual Task<string> PublishNofiterAsync<TData>(
         string name,
         TData data,
-        IEnumerable<UserIdentifier> users = null,
+        IEnumerable<UserIdentifier>? users = null,
         Guid? tenantId = null,
         NotificationSeverity severity = NotificationSeverity.Info,
-        IEnumerable<string> useProviders = null)
+        IEnumerable<string>? useProviders = null)
     {
         var eto = new NotificationEto<TData>(data)
         {

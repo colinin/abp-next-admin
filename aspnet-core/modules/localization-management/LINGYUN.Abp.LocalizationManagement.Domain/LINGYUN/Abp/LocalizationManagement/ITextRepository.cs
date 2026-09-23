@@ -14,7 +14,7 @@ namespace LINGYUN.Abp.LocalizationManagement
             IEnumerable<string> keys,
             CancellationToken cancellationToken = default);
 
-        Task<Text> GetByCultureKeyAsync(
+        Task<Text?> GetByCultureKeyAsync(
             string resourceName,
             string cultureName,
             string key,
@@ -23,12 +23,12 @@ namespace LINGYUN.Abp.LocalizationManagement
 
         [Obsolete("Use GetListAsync")]
         List<Text> GetList(
-            string resourceName = null,
-            string cultureName = null);
+            string? resourceName = null,
+            string? cultureName = null);
 
         Task<List<Text>> GetListAsync(
-            string resourceName = null,
-            string cultureName = null,
+            string? resourceName = null,
+            string? cultureName = null,
             CancellationToken cancellationToken = default);
     }
 }

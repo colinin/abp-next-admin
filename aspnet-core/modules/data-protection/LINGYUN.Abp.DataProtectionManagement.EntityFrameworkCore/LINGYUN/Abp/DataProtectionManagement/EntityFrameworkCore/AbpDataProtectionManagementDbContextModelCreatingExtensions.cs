@@ -11,7 +11,7 @@ namespace LINGYUN.Abp.DataProtectionManagement.EntityFrameworkCore
     {
         public static void ConfigureDataProtectionManagement(
             this ModelBuilder builder,
-            Action<AbpDataProtectionManagementModelBuilderConfigurationOptions> optionsAction = null)
+            Action<AbpDataProtectionManagementModelBuilderConfigurationOptions>? optionsAction = null)
         {
             Check.NotNull(builder, nameof(builder));
 
@@ -115,7 +115,7 @@ namespace LINGYUN.Abp.DataProtectionManagement.EntityFrameworkCore
 
                 b.Property(p => p.FilterGroup)
                  .HasColumnName(nameof(RoleEntityRule.FilterGroup))
-                 .HasConversion(new AbpJsonValueConverter<DataAccessFilterGroup>());
+                 .HasConversion(new AbpJsonValueConverter<DataAccessFilterGroup?>());
 
                 b.HasOne(p => p.EntityTypeInfo)
                  .WithMany()
@@ -139,7 +139,7 @@ namespace LINGYUN.Abp.DataProtectionManagement.EntityFrameworkCore
 
                 b.Property(p => p.FilterGroup)
                  .HasColumnName(nameof(RoleEntityRule.FilterGroup))
-                 .HasConversion(new AbpJsonValueConverter<DataAccessFilterGroup>());
+                 .HasConversion(new AbpJsonValueConverter<DataAccessFilterGroup?>());
 
                 b.HasOne(p => p.EntityTypeInfo)
                  .WithMany()

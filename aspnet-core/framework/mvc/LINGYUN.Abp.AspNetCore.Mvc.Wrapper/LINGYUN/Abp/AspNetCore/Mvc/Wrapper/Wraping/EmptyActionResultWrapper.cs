@@ -21,7 +21,7 @@ public class EmptyActionResultWrapper : IActionResultWrapper
                     resultExecutingContext.Result = new ObjectResult(new WrapResult(code, message));
                     return;
                 }
-                resultExecutingContext.Result = new ObjectResult(new WrapResult(options.CodeWithSuccess, result: null));
+                resultExecutingContext.Result = new ObjectResult(new WrapResult<object?>(options.CodeWithSuccess, result: null));
                 return;
 
             case PageHandlerExecutedContext pageHandlerExecutedContext:
@@ -32,7 +32,7 @@ public class EmptyActionResultWrapper : IActionResultWrapper
                     pageHandlerExecutedContext.Result = new ObjectResult(new WrapResult(code, message));
                     return;
                 }
-                pageHandlerExecutedContext.Result = new ObjectResult(new WrapResult(options.CodeWithSuccess, result: null));
+                pageHandlerExecutedContext.Result = new ObjectResult(new WrapResult<object?>(options.CodeWithSuccess, result: null));
                 return;
         }
     }

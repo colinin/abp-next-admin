@@ -2,6 +2,7 @@
 using Quartz;
 using System.Collections.Immutable;
 using System.Threading.Tasks;
+using Volo.Abp;
 using Volo.Abp.Timing;
 
 namespace LINGYUN.Abp.BackgroundTasks.Quartz;
@@ -22,6 +23,9 @@ public class QuartzJobSearchJobAdapter : IJob
     public async virtual Task Execute(IJobExecutionContext context)
     {
         var jobType = context.MergedJobDataMap.GetString(nameof(JobInfo.Type));
+
+        Check.NotNull(jobType, nameof(jobType));
+
         var jobDefinition = JobDefinitionManager.Get(jobType);
 
         using var scope = ServiceScopeFactory.CreateScope();

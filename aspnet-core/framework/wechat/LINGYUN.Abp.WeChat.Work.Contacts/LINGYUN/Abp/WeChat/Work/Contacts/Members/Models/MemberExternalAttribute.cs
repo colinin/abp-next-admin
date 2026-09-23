@@ -14,5 +14,5 @@ public class MemberExternalAttribute
     [NotNull]
     [JsonProperty("attrs")]
     [JsonPropertyName("attrs")]
-    public MemberAttribute[] Attributes { get; set; }
+    public MemberAttribute[] Attributes { get; set; } = default!;
 }

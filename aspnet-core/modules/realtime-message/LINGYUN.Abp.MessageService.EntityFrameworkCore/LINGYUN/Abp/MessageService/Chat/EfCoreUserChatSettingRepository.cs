@@ -19,7 +19,7 @@ public class EfCoreUserChatSettingRepository : EfCoreRepository<IMessageServiceD
     {
     }
 
-    public async Task<UserChatSetting> FindByUserIdAsync(Guid userId, CancellationToken cancellationToken = default)
+    public async Task<UserChatSetting?> FindByUserIdAsync(Guid userId, CancellationToken cancellationToken = default)
     {
         return await (await GetDbSetAsync()).Where(x => x.UserId.Equals(userId))
             .AsNoTracking()

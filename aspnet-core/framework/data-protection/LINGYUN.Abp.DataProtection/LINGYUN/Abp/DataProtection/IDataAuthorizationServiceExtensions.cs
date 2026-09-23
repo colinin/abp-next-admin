@@ -11,7 +11,7 @@ public static class IDataAuthorizationServiceExtensions
         var result = await dataAuthorizationService.AuthorizeAsync(operation, entities);
         if (!result.Succeeded)
         {
-            var entityKeys = entities.Select(x => x.ToString()).JoinAsString(";");
+            var entityKeys = entities.Select(x => x!.ToString()!).JoinAsString(";");
             throw new AbpDataAccessDeniedException(
                 $"The {operation} operation with entity type {typeof(Entity)} identified as {entityKeys} is not allowed!");
         }

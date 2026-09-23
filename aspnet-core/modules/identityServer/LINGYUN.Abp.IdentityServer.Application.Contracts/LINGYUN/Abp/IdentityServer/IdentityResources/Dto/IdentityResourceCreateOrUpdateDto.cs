@@ -9,13 +9,13 @@ public class IdentityResourceCreateOrUpdateDto
 {
     [Required]
     [DynamicStringLength(typeof(IdentityResourceConsts), nameof(IdentityResourceConsts.NameMaxLength))]
-    public string Name { get; set; }
+    public string Name { get; set; } = default!;
 
     [DynamicStringLength(typeof(IdentityResourceConsts), nameof(IdentityResourceConsts.DisplayNameMaxLength))]
-    public string DisplayName { get; set; }
+    public string? DisplayName { get; set; }
 
     [DynamicStringLength(typeof(IdentityResourceConsts), nameof(IdentityResourceConsts.DescriptionMaxLength))]
-    public string Description { get; set; }
+    public string? Description { get; set; }
 
     public bool Enabled { get; set; }
 

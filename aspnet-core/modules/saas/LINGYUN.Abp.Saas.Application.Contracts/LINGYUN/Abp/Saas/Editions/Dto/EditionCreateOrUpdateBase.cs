@@ -9,5 +9,5 @@ public abstract class EditionCreateOrUpdateBase : ExtensibleObject
     [Required]
     [DynamicStringLength(typeof(EditionConsts), nameof(EditionConsts.MaxDisplayNameLength))]
     [Display(Name = "EditionName")]
-    public string DisplayName { get; set; }
+    public string DisplayName { get; set; } = default!;
 }

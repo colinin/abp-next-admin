@@ -18,5 +18,5 @@ public class WeChatWorkTagListResponse : WeChatWorkResponse
     [NotNull]
     [JsonProperty("taglist")]
     [JsonPropertyName("taglist")]
-    public TagInfo[] Tags { get; set; }
+    public TagInfo[] Tags { get; set; } = default!;
 }

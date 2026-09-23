@@ -8,50 +8,50 @@ namespace LINGYUN.Abp.Logging.Serilog.Elasticsearch;
 public class SerilogField
 {
     [JsonPropertyName(AbpSerilogUniqueIdConsts.UniqueIdPropertyName)]
-    public long UniqueId { get; set; }
+    public long? UniqueId { get; set; }
 
     [JsonPropertyName(AbpLoggingEnricherPropertyNames.MachineName)]
-    public string MachineName { get; set; }
+    public string? MachineName { get; set; }
 
     [JsonPropertyName(AbpLoggingEnricherPropertyNames.EnvironmentName)]
-    public string Environment { get; set; }
+    public string? Environment { get; set; }
 
     [JsonPropertyName(AbpSerilogEnrichersConsts.ApplicationNamePropertyName)]
-    public string Application { get; set; }
+    public string? Application { get; set; }
 
     [JsonPropertyName("SourceContext")]
-    public string Context { get; set; }
+    public string? Context { get; set; }
 
     [JsonPropertyName("ActionId")]
-    public string ActionId { get; set; }
+    public string? ActionId { get; set; }
 
     [JsonPropertyName("ActionName")]
-    public string ActionName { get; set; }
+    public string? ActionName { get; set; }
 
     [JsonPropertyName("RequestId")]
-    public string RequestId { get; set; }
+    public string? RequestId { get; set; }
 
     [JsonPropertyName("RequestPath")]
-    public string RequestPath { get; set; }
+    public string? RequestPath { get; set; }
 
     [JsonPropertyName("ConnectionId")]
-    public string ConnectionId { get; set; }
+    public string? ConnectionId { get; set; }
 
     [JsonPropertyName("CorrelationId")]
-    public string CorrelationId { get; set; }
+    public string? CorrelationId { get; set; }
 
     [JsonPropertyName("ClientId")]
-    public string ClientId { get; set; }
+    public string? ClientId { get; set; }
 
     [JsonPropertyName("UserId")]
-    public string UserId { get; set; }
+    public string? UserId { get; set; }
 
     [JsonPropertyName("TenantId")]
     public Guid? TenantId { get; set; }
 
     [JsonPropertyName("ProcessId")]
-    public int ProcessId { get; set; }
+    public int? ProcessId { get; set; }
 
     [JsonPropertyName("ThreadId")]
-    public int ThreadId { get; set; }
+    public int? ThreadId { get; set; }
 }

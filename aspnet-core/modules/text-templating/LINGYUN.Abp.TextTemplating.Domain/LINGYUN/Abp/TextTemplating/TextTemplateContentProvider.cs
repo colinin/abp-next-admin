@@ -24,9 +24,9 @@ public class TextTemplateContentProvider : TemplateContentProvider, ITransientDe
         TemplateDefinitionStore = templateDefinitionStore;
     }
 
-    public async override Task<string> GetContentOrNullAsync(
+    public async override Task<string?> GetContentOrNullAsync(
         string templateName, 
-        string cultureName = null, 
+        string? cultureName = null, 
         bool tryDefaults = true, 
         bool useCurrentCultureIfCultureNameIsNull = true)
     {

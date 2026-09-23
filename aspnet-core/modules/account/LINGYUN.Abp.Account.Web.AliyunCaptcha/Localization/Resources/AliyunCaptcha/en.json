@@ -1,0 +1,6 @@
+﻿{
+  "culture": "en",
+  "texts": {
+    "CaptchaInitFailed": "The captcha component initialization error!"
+  }
+}

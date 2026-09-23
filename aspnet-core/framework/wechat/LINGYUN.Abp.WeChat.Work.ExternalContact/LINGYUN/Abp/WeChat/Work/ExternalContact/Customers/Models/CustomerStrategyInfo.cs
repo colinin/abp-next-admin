@@ -21,7 +21,7 @@ public class CustomerStrategyInfo : CustomerStrategy
     [NotNull]
     [JsonProperty("strategy_name")]
     [JsonPropertyName("strategy_name")]
-    public string StrategyName { get; set; }
+    public string StrategyName { get; set; } = default!;
     /// <summary>
     /// 规则组创建时间戳
     /// </summary>
@@ -35,12 +35,12 @@ public class CustomerStrategyInfo : CustomerStrategy
     [NotNull]
     [JsonProperty("admin_list")]
     [JsonPropertyName("admin_list")]
-    public string[] AdminList { get; set; }
+    public string[] AdminList { get; set; } = default!;
     /// <summary>
     /// 规则组权限
     /// </summary>
     [NotNull]
     [JsonProperty("privilege")]
     [JsonPropertyName("privilege")]
-    public CustomerStrategyPrivilege Privilege { get; set; }
+    public CustomerStrategyPrivilege Privilege { get; set; } = default!;
 }

@@ -8,5 +8,5 @@ public class ChangePictureInput
 {
     [Required]
     [DisableAuditing]
-    public IRemoteStreamContent File { get; set; }
+    public IRemoteStreamContent File { get; set; } = default!;
 }

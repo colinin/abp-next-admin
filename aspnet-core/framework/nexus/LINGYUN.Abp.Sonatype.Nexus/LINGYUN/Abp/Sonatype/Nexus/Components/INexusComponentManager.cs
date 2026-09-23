@@ -8,7 +8,7 @@ public interface INexusComponentManager
 {
     Task<NexusComponentListResult> ListAsync(
        [NotNull] string repository,
-       string continuationToken = null,
+       string? continuationToken = null,
        CancellationToken cancellationToken = default);
 
     Task<NexusComponent> GetAsync(

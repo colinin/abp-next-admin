@@ -11,14 +11,14 @@ public abstract class Tag
     [NotNull]
     [JsonProperty("id")]
     [JsonPropertyName("id")]
-    public string Id { get; set; }
+    public string Id { get; set; } = default!;
     /// <summary>
     /// 标签名称
     /// </summary>
     [NotNull]
     [JsonProperty("name")]
     [JsonPropertyName("name")]
-    public string Name { get; set; }
+    public string Name { get; set; } = default!;
     /// <summary>
     /// 标签创建时间
     /// </summary>

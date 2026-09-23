@@ -61,7 +61,7 @@ public class ExpiredIndicesCleanupJob : IJobRunnable
         {
             indexResponse.TryGetOriginalException(out var originalException);
             indexResponse.TryGetElasticsearchServerError(out var elasticsearchServerError);
-            throw new AbpJobExecutionException(GetType(), elasticsearchServerError?.ToString(), originalException);
+            throw new AbpJobExecutionException(GetType(), elasticsearchServerError!.ToString(), originalException);
         }
 
         foreach (var index in indexResponse.Indices)
@@ -85,7 +85,7 @@ public class ExpiredIndicesCleanupJob : IJobRunnable
             {
                 delResponse.TryGetOriginalException(out var originalException);
                 delResponse.TryGetElasticsearchServerError(out var elasticsearchServerError);
-                throw new AbpJobExecutionException(GetType(), elasticsearchServerError?.ToString(), originalException);
+                throw new AbpJobExecutionException(GetType(), elasticsearchServerError!.ToString(), originalException);
             }
         }
 

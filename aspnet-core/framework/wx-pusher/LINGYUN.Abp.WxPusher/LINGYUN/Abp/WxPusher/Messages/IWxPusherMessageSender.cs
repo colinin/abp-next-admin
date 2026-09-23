@@ -8,10 +8,10 @@ public interface IWxPusherMessageSender
 {
     Task<List<SendMessageResult>> SendAsync(
         string content,
-        string summary = "",
+        string? summary = null,
         MessageContentType contentType = MessageContentType.Text,
-        List<int> topicIds = null,
-        List<string> uids = null,
-        string url = "",
+        List<int>? topicIds = null,
+        List<string>? uids = null,
+        string? url = null,
         CancellationToken cancellationToken = default);
 }

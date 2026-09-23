@@ -21,5 +21,5 @@ public class UserChatFriendGroup : CreationAuditedEntity<long>, IMultiTenant
     /// <summary>
     /// 显示名称
     /// </summary>
-    public virtual string DisplayName { get; protected set; }
+    public virtual string? DisplayName { get; protected set; }
 }

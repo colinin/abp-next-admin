@@ -46,7 +46,7 @@ public class TencentCloudClientFactory<TClient> : AbstractTencentCloudClientFact
 
             // 通过反射创建客户端实例
             // TODO: 如果影响到性能需要调整到通过Options手动创建实例
-            return (TClient)clientCtr.Invoke(new object[] { cred, cloudCache.EndPoint, clientProfile });
+            return (TClient)clientCtr.Invoke(new object?[] { cred, cloudCache.EndPoint, clientProfile });
         }
 
         throw new AbpException($"Failed to specify initialization Type for client {typeof(TClient).FullName}. Client instance could not be created");

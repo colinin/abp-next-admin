@@ -16,7 +16,7 @@ public class EfCoreWorkflowRecordRepository : EfCoreRepository<IRulesEngineManag
     {
     }
 
-    public async virtual Task<WorkflowRecord> FindByNameAsync(string name, CancellationToken cancellationToken = default)
+    public async virtual Task<WorkflowRecord?> FindByNameAsync(string name, CancellationToken cancellationToken = default)
     {
         return await (await GetDbSetAsync())
             .Where(x => x.Name == name)

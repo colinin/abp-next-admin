@@ -7,7 +7,7 @@ namespace LINGYUN.Abp.WeChat.Work.Common.Messages;
 public class WeChatWorkGeneralMessageEto<TMessage> : WeChatMessageEto
     where TMessage : WeChatWorkGeneralMessage
 {
-    public TMessage Message { get; set; }
+    public TMessage Message { get; set; } = default!;
     public WeChatWorkGeneralMessageEto()
     {
 

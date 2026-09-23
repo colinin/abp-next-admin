@@ -8,7 +8,7 @@ public class WeChatWorkToken
     /// <summary>
     /// 访问令牌
     /// </summary>
-    public string AccessToken { get; set; }
+    public string AccessToken { get; set; } = default!;
     /// <summary>
     /// 过期时间,单位(s)
     /// </summary>

@@ -8,13 +8,13 @@ namespace LINGYUN.Abp.LocalizationManagement.External;
 [CacheName("AbpExternalLocalizationResource")]
 public class LocalizationResourceCacheItem
 {
-    public virtual string Name { get; set; }
+    public virtual string Name { get; set; } = default!;
 
-    public virtual string DefaultCulture { get; set; }
+    public virtual string? DefaultCulture { get; set; }
 
-    public virtual string[] BaseResources { get; set; }
+    public virtual string[]? BaseResources { get; set; }
 
-    public virtual string[] SupportedCultures { get; set; }
+    public virtual string[]? SupportedCultures { get; set; }
 
     public bool IsEnabled { get; set; }
 
@@ -25,9 +25,9 @@ public class LocalizationResourceCacheItem
 
     public LocalizationResourceCacheItem(
         string name, 
-        string defaultCulture = null,
-        string[] baseResources = null, 
-        string[] supportedCultures = null)
+        string? defaultCulture = null,
+        string[]? baseResources = null, 
+        string[]? supportedCultures = null)
     {
         Name = name;
         DefaultCulture = defaultCulture;

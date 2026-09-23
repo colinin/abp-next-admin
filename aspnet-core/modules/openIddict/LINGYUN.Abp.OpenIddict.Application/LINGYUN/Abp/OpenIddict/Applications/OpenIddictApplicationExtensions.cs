@@ -27,6 +27,7 @@ internal static class OpenIddictApplicationExtensions
         entity.ClientType = dto.ClientType;
         entity.LogoUri = dto.LogoUri;
         entity.FrontChannelLogoutUri = dto.FrontChannelLogoutUri;
+        //entity.JsonWebKeySet = dto.JsonWebKeySet;
 
         TrySetSettings(jsonSerializer, dto, entity);
         TrySetRequirements(jsonSerializer, dto, entity);
@@ -79,7 +80,7 @@ internal static class OpenIddictApplicationExtensions
         return entity;
     }
 
-    public static OpenIddictApplicationDto ToDto(this OpenIddictApplication entity, IJsonSerializer jsonSerializer)
+    public static OpenIddictApplicationDto? ToDto(this OpenIddictApplication entity, IJsonSerializer jsonSerializer)
     {
         if (entity == null)
         {

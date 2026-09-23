@@ -4,7 +4,7 @@ namespace LINGYUN.Abp.BackgroundTasks;
 
 public interface IJobDefinitionContext
 {
-    JobDefinition GetOrNull(string name);
+    JobDefinition? GetOrNull(string name);
 
     IReadOnlyList<JobDefinition> GetAll();
 

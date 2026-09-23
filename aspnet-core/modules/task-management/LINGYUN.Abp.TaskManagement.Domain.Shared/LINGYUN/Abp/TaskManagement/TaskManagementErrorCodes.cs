@@ -15,5 +15,9 @@
         /// 仅允许删除已停止作业
         /// </summary>
         public const string OnlyDeletionOfStopJobsIsAllowed = Namespace + ":01002";
+        /// <summary>
+        /// 无效的CRON表达式: {Cron}!
+        /// </summary>
+        public const string InvalidCronExpression = Namespace + ":01003";
     }
 }

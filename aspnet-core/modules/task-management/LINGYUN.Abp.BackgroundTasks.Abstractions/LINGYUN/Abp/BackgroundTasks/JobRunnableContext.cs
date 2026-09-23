@@ -9,16 +9,16 @@ public class JobRunnableContext
     public Type JobType { get; }
     public IServiceProvider ServiceProvider { get; }
     public IReadOnlyDictionary<string, object> JobData { get; }
-    public object Result { get; private set; }
-    private Func<object, object> GetCacheData { get; set; }
-    private Action<object, object> SetCacheData { get; set; }
+    public object? Result { get; private set; }
+    private Func<object, object?>? GetCacheData { get; set; }
+    private Action<object, object>? SetCacheData { get; set; }
     public CancellationToken CancellationToken { get; }
     public JobRunnableContext(
         Type jobType,
         IServiceProvider serviceProvider,
         IReadOnlyDictionary<string, object> jobData,
-        Func<object, object> getCache = null,
-        Action<object, object> setCache = null,
+        Func<object, object?>? getCache = null,
+        Action<object, object>? setCache = null,
         CancellationToken cancellationToken = default)
     {
         JobType = jobType;
@@ -45,7 +45,6 @@ public class JobRunnableContext
         SetCacheData?.Invoke(key, value);
     }
 
-#nullable enable
     /// <summary>
     /// 获取缓存数据
     /// </summary>
@@ -59,5 +58,4 @@ public class JobRunnableContext
         }
         return null;
     }
-#nullable disable
 }

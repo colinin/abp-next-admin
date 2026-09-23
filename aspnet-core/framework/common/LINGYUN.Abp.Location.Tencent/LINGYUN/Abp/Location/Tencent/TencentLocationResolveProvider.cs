@@ -25,7 +25,7 @@ public class TencentLocationResolveProvider : ILocationResolveProvider
         return await TencentLocationHttpClient.ReGeocodeAsync(lat, lng, radius);
     }
 
-    public async virtual Task<GecodeLocation> GeocodeAsync(string address, string city = null)
+    public async virtual Task<GecodeLocation> GeocodeAsync(string address, string? city = null)
     {
         return await TencentLocationHttpClient.GeocodeAsync(address, city);
     }

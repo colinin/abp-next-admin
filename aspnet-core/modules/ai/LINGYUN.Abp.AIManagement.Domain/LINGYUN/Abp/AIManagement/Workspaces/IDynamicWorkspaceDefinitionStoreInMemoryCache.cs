@@ -8,7 +8,7 @@ namespace LINGYUN.Abp.AIManagement.Workspaces;
 
 public interface IDynamicWorkspaceDefinitionStoreInMemoryCache
 {
-    string CacheStamp { get; set; }
+    string? CacheStamp { get; set; }
 
     SemaphoreSlim SyncSemaphore { get; }
 

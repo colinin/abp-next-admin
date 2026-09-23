@@ -30,17 +30,17 @@ public class MessageProcessor : IMessageProcessor, ITransientDependency
     {
         if (!message.GroupId.IsNullOrWhiteSpace())
         {
-            long messageId = long.Parse(message.MessageId);
+            var messageId = long.Parse(message.MessageId);
             var groupMessage = await _repository.GetGroupMessageAsync(messageId);
-            groupMessage.ChangeSendState(MessageState.Read);
+            groupMessage!.ChangeSendState(MessageState.Read);
 
             await _repository.UpdateGroupMessageAsync(groupMessage);
         }
         else
         {
-            long messageId = long.Parse(message.MessageId);
+            var messageId = long.Parse(message.MessageId);
             var userMessage = await _repository.GetUserMessageAsync(messageId);
-            userMessage.ChangeSendState(MessageState.Read);
+            userMessage!.ChangeSendState(MessageState.Read);
 
             await _repository.UpdateUserMessageAsync(userMessage);
         }
@@ -56,15 +56,15 @@ public class MessageProcessor : IMessageProcessor, ITransientDependency
 
         if (!message.GroupId.IsNullOrWhiteSpace())
         {
-            long messageId = long.Parse(message.MessageId);
+            var messageId = long.Parse(message.MessageId);
             var groupMessage = await _repository.GetGroupMessageAsync(messageId);
-            if (hasExpiredMessage(groupMessage))
+            if (hasExpiredMessage(groupMessage!))
             {
                 throw new BusinessException(MessageServiceErrorCodes.ExpiredMessageCannotBeReCall)
                     .WithData("Time", expiration);
             }
 
-            groupMessage.ChangeSendState(MessageState.ReCall);
+            groupMessage!.ChangeSendState(MessageState.ReCall);
 
             await _repository.UpdateGroupMessageAsync(groupMessage);
         }
@@ -72,13 +72,13 @@ public class MessageProcessor : IMessageProcessor, ITransientDependency
         {
             long messageId = long.Parse(message.MessageId);
             var userMessage = await _repository.GetUserMessageAsync(messageId);
-            if (hasExpiredMessage(userMessage))
+            if (hasExpiredMessage(userMessage!))
             {
                 throw new BusinessException(MessageServiceErrorCodes.ExpiredMessageCannotBeReCall)
                     .WithData("Time", expiration);
             }
 
-            userMessage.ChangeSendState(MessageState.ReCall);
+            userMessage!.ChangeSendState(MessageState.ReCall);
 
             await _repository.UpdateUserMessageAsync(userMessage);
         }

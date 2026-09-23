@@ -1,26 +1,27 @@
 ﻿using System;
+using Volo.Abp.Domain.Entities.Events.Distributed;
 using Volo.Abp.MultiTenancy;
 
 namespace LINGYUN.Abp.Identity;
 
 [Serializable]
-public class IdentitySessionEto : IMultiTenant
+public class IdentitySessionEto : EtoBase, IMultiTenant
 {
     public Guid Id { get; set; }
 
     public Guid? TenantId { get; set; }
 
-    public string SessionId { get; set; }
+    public string SessionId { get; set; } = default!;
 
-    public string Device { get; set; }
+    public string Device { get; set; } = default!;
 
-    public string DeviceInfo { get; set; }
+    public string? DeviceInfo { get; set; }
 
     public Guid UserId { get; set; }
 
-    public string ClientId { get; set; }
+    public string? ClientId { get; set; }
 
-    public string IpAddresses { get; set; }
+    public string? IpAddresses { get; set; }
 
     public DateTime SignedIn { get; set; }
 
@@ -30,14 +31,14 @@ public class IdentitySessionEto : IMultiTenant
 
     }
     public IdentitySessionEto(
-        Guid id, 
+        Guid id,
         string sessionId,
-        string device, 
-        string deviceInfo,
-        Guid userId, 
-        string clientId,
-        string ipAddresses, 
-        DateTime signedIn, 
+        string device,
+        string? deviceInfo,
+        Guid userId,
+        string? clientId,
+        string? ipAddresses,
+        DateTime signedIn,
         DateTime? lastAccessed,
         Guid? tenantId = null)
     {

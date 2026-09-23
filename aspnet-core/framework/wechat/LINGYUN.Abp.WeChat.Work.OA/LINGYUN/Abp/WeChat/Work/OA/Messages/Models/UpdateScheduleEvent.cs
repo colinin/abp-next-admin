@@ -22,7 +22,7 @@ public class UpdateScheduleEvent : WeChatWorkEventMessage
     /// 日程ID
     /// </summary>
     [XmlElement("ScheduleId")]
-    public string ScheduleId { get; set; }
+    public string ScheduleId { get; set; } = default!;
 
     public override WeChatMessageEto ToEto()
     {

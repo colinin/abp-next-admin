@@ -14,10 +14,6 @@
   <Folder Name="/framework/elasticsearch/">
     <Project Path="../../../aspnet-core/framework/elasticsearch/LINGYUN.Abp.Elasticsearch/LINGYUN.Abp.Elasticsearch.csproj" />
   </Folder>
-  <Folder Name="/framework/identity/">
-    <Project Path="../../../aspnet-core/modules/identity/LINGYUN.Abp.Identity.Session.AspNetCore/LINGYUN.Abp.Identity.Session.AspNetCore.csproj" />
-    <Project Path="../../../aspnet-core/modules/identity/LINGYUN.Abp.Identity.Session/LINGYUN.Abp.Identity.Session.csproj" />
-  </Folder>
   <Folder Name="/framework/localization/">
     <Project Path="../../../aspnet-core/framework/localization/LINGYUN.Abp.Localization.CultureMap/LINGYUN.Abp.Localization.CultureMap.csproj" />
   </Folder>
@@ -31,6 +27,10 @@
     <Project Path="../../../aspnet-core/framework/open-api/LINGYUN.Abp.OpenApi.Authorization/LINGYUN.Abp.OpenApi.Authorization.csproj" />
     <Project Path="../../../aspnet-core/framework/open-api/LINGYUN.Abp.OpenApi/LINGYUN.Abp.OpenApi.csproj" />
     <Project Path="../../../aspnet-core/framework/open-api/OpenApi.Sdk/OpenApi.Sdk.csproj" />
+  </Folder>
+  <Folder Name="/framework/session/">
+    <Project Path="../../../aspnet-core/framework/common/LINGYUN.Abp.AspNetCore.Session/LINGYUN.Abp.AspNetCore.Session.csproj" />
+    <Project Path="../../../aspnet-core/modules/identity/LINGYUN.Abp.Identity.Session/LINGYUN.Abp.Identity.Session.csproj" />
   </Folder>
   <Folder Name="/Solution Items/">
     <File Path="../../../common.props" />

@@ -18,7 +18,7 @@ public class WeChatWorkGetTransferResultResponse : WeChatWorkResponse
     [NotNull]
     [JsonProperty("customer")]
     [JsonPropertyName("customer")]
-    public TransferCustomerResult[] Customer { get; set; }
+    public TransferCustomerResult[] Customer { get; set; } = default!;
     /// <summary>
     /// 下个分页的起始cursor
     /// </summary>

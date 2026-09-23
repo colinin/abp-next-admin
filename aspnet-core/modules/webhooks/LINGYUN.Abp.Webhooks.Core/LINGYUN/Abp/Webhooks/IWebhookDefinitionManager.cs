@@ -11,7 +11,7 @@ public interface IWebhookDefinitionManager
     /// Gets a webhook definition by name.
     /// Returns null if there is no webhook definition with given name.
     /// </summary>
-    Task<WebhookDefinition> GetOrNullAsync(string name);
+    Task<WebhookDefinition?> GetOrNullAsync(string name);
 
     /// <summary>
     /// Gets a webhook definition by name.
@@ -29,7 +29,7 @@ public interface IWebhookDefinitionManager
     /// Gets a webhook group definition by name.
     /// Returns null if there is no webhook group definition with given name.
     /// </summary>
-    Task<WebhookGroupDefinition> GetGroupOrNullAsync(string name);
+    Task<WebhookGroupDefinition?> GetGroupOrNullAsync(string name);
 
     /// <summary>
     /// Gets a webhook definition by name.

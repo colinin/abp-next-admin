@@ -37,15 +37,15 @@ public class JobEventData
     /// <summary>
     /// 错误明细
     /// </summary>
-    public Exception Exception { get; }
+    public Exception? Exception { get; }
     /// <summary>
     /// 任务描述
     /// </summary>
-    public string Description { get; set; }
+    public string? Description { get; set; }
     /// <summary>
     /// 返回参数
     /// </summary>
-    public string Result { get; set; }
+    public string? Result { get; set; }
     /// <summary>
     /// 触发次数
     /// </summary>
@@ -80,7 +80,7 @@ public class JobEventData
         string group, 
         string name,
         IReadOnlyDictionary<string, object> args,
-        Exception exception = null,
+        Exception? exception = null,
         CancellationToken cancellationToken = default)
     {
         Key = key;

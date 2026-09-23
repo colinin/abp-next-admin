@@ -11,7 +11,7 @@ public class WorkflowsResolveContext : IWorkflowsResolveContext
 {
     public Type Type { get; }
     public IServiceProvider ServiceProvider { get; }
-    public IEnumerable<Workflow> Workflows { get; set; }
+    public IEnumerable<Workflow>? Workflows { get; set; }
     public bool Handled { get; set; }
 
     public bool HasResolved()

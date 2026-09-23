@@ -4,5 +4,5 @@ namespace LINGYUN.Abp.Identity;
 
 public class OrganizationUnitGetByPagedDto : PagedAndSortedResultRequestDto
 {
-    public string Filter { get; set; }
+    public string? Filter { get; set; }
 }

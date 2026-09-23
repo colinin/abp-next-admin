@@ -27,7 +27,7 @@ public class ExternalContactInfo
     [NotNull]
     [JsonProperty("tmp_openid")]
     [JsonPropertyName("tmp_openid")]
-    public string TmpOpenId { get; set; }
+    public string TmpOpenId { get; set; } = default!;
     /// <summary>
     /// 外部联系人的externaluserid（如果是客户才返回）
     /// </summary>

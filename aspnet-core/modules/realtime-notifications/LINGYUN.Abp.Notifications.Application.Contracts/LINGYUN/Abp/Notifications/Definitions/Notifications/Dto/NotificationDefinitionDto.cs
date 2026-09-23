@@ -5,15 +5,15 @@ namespace LINGYUN.Abp.Notifications.Definitions.Notifications;
 
 public class NotificationDefinitionDto : ExtensibleObject
 {
-    public string Name { get; set; }
+    public string Name { get; set; } = default!;
 
     public bool IsStatic { get; set; }
 
-    public string GroupName { get; set; }
+    public string GroupName { get; set; } = default!;
 
-    public string DisplayName { get; set; }
+    public string? DisplayName { get; set; }
 
-    public string Description { get; set; }
+    public string? Description { get; set; }
 
     public bool AllowSubscriptionToClients { get; set; }
 
@@ -25,5 +25,5 @@ public class NotificationDefinitionDto : ExtensibleObject
 
     public List<string> Providers { get; set; } = new List<string>();
 
-    public string Template { get; set; }
+    public string? Template { get; set; }
 }

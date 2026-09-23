@@ -9,11 +9,11 @@ namespace LINGYUN.Abp.TaskManagement;
 [EventName("abp.tkm.background-job")]
 public class BackgroundJobEto : IMultiTenant
 {
-    public string Id { get; set; }
+    public string Id { get; set; } = default!;
     public Guid? TenantId { get; set; }
     public bool IsEnabled { get; set; }
-    public string Name { get; set; }
-    public string Group { get; set; }
-    public string NodeName { get; set; }
+    public string Name { get; set; } = default!;
+    public string Group { get; set; } = default!;
+    public string? NodeName { get; set; }
     public JobStatus Status { get; set; }
 }

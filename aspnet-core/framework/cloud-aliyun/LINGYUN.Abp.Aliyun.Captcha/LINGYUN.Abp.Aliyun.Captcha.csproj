@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<Import Project="..\..\..\..\configureawait.props" />
+	<Import Project="..\..\..\..\common.props" />
+
+	<PropertyGroup>
+		<TargetFrameworks>net8.0;net9.0;net10.0</TargetFrameworks>
+		<AssemblyName>LINGYUN.Abp.Captcha.Aliyun</AssemblyName>
+		<PackageId>LINGYUN.Abp.Captcha.Aliyun</PackageId>
+		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+		<RootNamespace />
+		<Description>阿里云验证码服务Abp集成</Description>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <Content Remove="LINGYUN\Abp\Aliyun\Captcha\Localization\**\*.json" />
+	  <EmbeddedResource Include="LINGYUN\Abp\Aliyun\Captcha\Localization\**\*.json" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="AlibabaCloud.SDK.Captcha20230305" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\cloud-aliyun\LINGYUN.Abp.Aliyun\LINGYUN.Abp.Aliyun.csproj" />
+	</ItemGroup>
+
+</Project>

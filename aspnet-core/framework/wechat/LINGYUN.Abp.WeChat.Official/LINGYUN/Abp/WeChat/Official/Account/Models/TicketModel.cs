@@ -9,7 +9,7 @@ public class TicketModel
     /// </summary>
     [JsonProperty("ticket")]
     [JsonPropertyName("ticket")]
-    public string Ticket { get; set; }
+    public string Ticket { get; set; } = default!;
     /// <summary>
     /// 该二维码有效时间，以秒为单位。 最大不超过2592000（即30天）。
     /// </summary>
@@ -21,5 +21,5 @@ public class TicketModel
     /// </summary>
     [JsonProperty("url")]
     [JsonPropertyName("url")]
-    public string Url { get; set; }
+    public string Url { get; set; } = default!;
 }

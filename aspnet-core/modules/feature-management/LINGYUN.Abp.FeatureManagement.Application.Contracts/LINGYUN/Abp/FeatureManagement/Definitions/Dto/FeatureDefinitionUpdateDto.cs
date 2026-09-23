@@ -5,5 +5,5 @@ namespace LINGYUN.Abp.FeatureManagement.Definitions;
 public class FeatureDefinitionUpdateDto : FeatureDefinitionCreateOrUpdateDto, IHasConcurrencyStamp
 {
     [StringLength(40)]
-    public string ConcurrencyStamp { get; set; }
+    public string ConcurrencyStamp { get; set; } = default!;
 }

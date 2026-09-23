@@ -5,18 +5,18 @@ namespace Quartz;
 
 public static class IJobExecutionContextExtensions
 {
-    public static TValue GetData<TValue>(this IJobExecutionContext context, string key)
+    public static TValue? GetData<TValue>(this IJobExecutionContext context, string key)
     {
         var value = context.MergedJobDataMap.GetString(key);
 
-        return (TValue)Convert.ChangeType(value, typeof(TValue));
+        return (TValue)Convert.ChangeType(value!, typeof(TValue));
     }
 
     public static string GetString(this IJobExecutionContext context, string key)
     {
         var value = context.MergedJobDataMap.Get(key);
 
-        return value != null ? value.ToString() : "";
+        return value != null ? value.ToString()! : "";
     }
 
     public static int GetInt(this IJobExecutionContext context, string key)
@@ -43,7 +43,7 @@ public static class IJobExecutionContextExtensions
         return false;
     }
 
-    public static bool TryGetCache(this IJobExecutionContext context, string key, out object value)
+    public static bool TryGetCache(this IJobExecutionContext context, string key, out object? value)
     {
         value = context.Get(key);
 

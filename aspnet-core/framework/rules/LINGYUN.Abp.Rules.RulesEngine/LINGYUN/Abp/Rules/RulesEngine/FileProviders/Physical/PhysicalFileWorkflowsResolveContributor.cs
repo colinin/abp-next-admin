@@ -11,9 +11,9 @@ public class PhysicalFileWorkflowsResolveContributor : FileProviderWorkflowsReso
 {
     public override string Name => "PhysicalFile";
 
-    private RuleIdGenerator _ruleIdGenerator;
-    private AbpRulesEngineOptions _rulesEngineOptions;
-    private AbpRulesEnginePhysicalFileResolveOptions _fileResolveOptions;
+    private RuleIdGenerator _ruleIdGenerator = default!;
+    private AbpRulesEngineOptions _rulesEngineOptions = default!;
+    private AbpRulesEnginePhysicalFileResolveOptions _fileResolveOptions = default!;
 
     public PhysicalFileWorkflowsResolveContributor()
     {
@@ -26,7 +26,7 @@ public class PhysicalFileWorkflowsResolveContributor : FileProviderWorkflowsReso
         _fileResolveOptions = serviceProvider.GetRequiredService<IOptions<AbpRulesEnginePhysicalFileResolveOptions>>().Value;
     }
 
-    protected override IFileProvider BuildFileProvider(RulesInitializationContext context)
+    protected override IFileProvider? BuildFileProvider(RulesInitializationContext context)
     {
         // 未指定路径不启用
         if (!_fileResolveOptions.PhysicalPath.IsNullOrWhiteSpace() &&

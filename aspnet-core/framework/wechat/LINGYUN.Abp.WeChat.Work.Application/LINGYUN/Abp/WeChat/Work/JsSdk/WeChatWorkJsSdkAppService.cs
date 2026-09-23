@@ -4,6 +4,7 @@ using LINGYUN.Abp.WeChat.Work.Settings;
 using Microsoft.AspNetCore.Authorization;
 using System.Threading.Tasks;
 using System.Web;
+using Volo.Abp;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Features;
 
@@ -25,11 +26,7 @@ public class WeChatWorkJsSdkAppService : ApplicationService, IWeChatWorkJsSdkApp
         var corpId = await SettingProvider.GetOrNullAsync(WeChatWorkSettingNames.Connection.CorpId);
         var agentId = await SettingProvider.GetOrNullAsync(WeChatWorkSettingNames.Connection.AgentId);
 
-        return new AgentConfigDto
-        {
-            CorpId = corpId,
-            AgentId = agentId,
-        };
+        return new AgentConfigDto(corpId ?? "", agentId ?? "");
     }
 
     public async virtual Task<JsApiSignatureDto> GetAgentSignatureAsync(string url)

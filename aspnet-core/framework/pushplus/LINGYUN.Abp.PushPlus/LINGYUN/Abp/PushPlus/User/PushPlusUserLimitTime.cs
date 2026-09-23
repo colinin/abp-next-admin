@@ -16,5 +16,5 @@ public class PushPlusUserLimitTime
     /// 解封时间
     /// </summary>
     [JsonProperty("userLimitTime")]
-    public string UserLimitTime { get; set; }
+    public string? UserLimitTime { get; set; }
 }

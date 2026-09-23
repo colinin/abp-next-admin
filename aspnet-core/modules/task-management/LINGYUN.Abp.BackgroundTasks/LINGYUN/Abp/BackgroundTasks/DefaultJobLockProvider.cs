@@ -25,11 +25,7 @@ public class DefaultJobLockProvider : IJobLockProvider, ISingletonDependency
             return Task.FromResult(true);
         }
 
-        jobLock = new JobLock
-        {
-            ExpirationTime = DateTime.UtcNow.AddSeconds(lockSeconds),
-            Semaphore = new SemaphoreSlim(1, 1)
-        };
+        jobLock = new JobLock(DateTime.UtcNow.AddSeconds(lockSeconds), new SemaphoreSlim(1, 1));
 
         return Task.FromResult(_localSyncObjects.TryAdd(jobKey, jobLock));
     }
@@ -52,5 +48,10 @@ public class DefaultJobLockProvider : IJobLockProvider, ISingletonDependency
     {
         public DateTime ExpirationTime { get; set; }
         public SemaphoreSlim Semaphore { get; set; }
+        public JobLock(DateTime expirationTime, SemaphoreSlim semaphore)
+        {
+            ExpirationTime = expirationTime;
+            Semaphore = semaphore;
+        }
     }
 }

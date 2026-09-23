@@ -27,10 +27,10 @@ public static class XmlLocalizationDictionaryBuilder
         XmlLocalizationFile xmlFile;
         try
         {
-            XmlSerializer serializer = new XmlSerializer(typeof(XmlLocalizationFile));
-            using (StringReader reader = new StringReader(xmlString))
+            var serializer = new XmlSerializer(typeof(XmlLocalizationFile));
+            using (var reader = new StringReader(xmlString))
             {
-                xmlFile = (XmlLocalizationFile)serializer.Deserialize(reader);
+                xmlFile = (XmlLocalizationFile)serializer.Deserialize(reader)!;
             }
         }
         catch (Exception ex)

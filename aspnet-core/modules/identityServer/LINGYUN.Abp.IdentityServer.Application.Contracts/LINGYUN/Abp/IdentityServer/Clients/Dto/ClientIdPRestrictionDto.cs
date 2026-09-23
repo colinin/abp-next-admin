@@ -2,5 +2,5 @@
 
 public class ClientIdPRestrictionDto
 {
-    public string Provider { get; set; }
+    public string Provider { get; set; } = default!;
 }

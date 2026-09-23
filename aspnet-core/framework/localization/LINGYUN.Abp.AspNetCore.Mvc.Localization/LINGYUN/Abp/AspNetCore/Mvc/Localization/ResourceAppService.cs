@@ -29,11 +29,11 @@ public class ResourceAppService : ApplicationService, IResourceAppService
     public virtual async Task<ListResultDto<ResourceDto>> GetListAsync(GetResourceWithFilterDto input)
     {
         var externalResources = (await _externalLocalizationStore.GetResourcesAsync())
-            .WhereIf(!input.Filter.IsNullOrWhiteSpace(), x => x.ResourceName.Contains(input.Filter, StringComparison.OrdinalIgnoreCase));
+            .WhereIf(!input.Filter.IsNullOrWhiteSpace(), x => x.ResourceName.Contains(input.Filter!, StringComparison.OrdinalIgnoreCase));
 
         var resources = _localizationOptions
             .Resources
-            .WhereIf(!input.Filter.IsNullOrWhiteSpace(), x => x.Value.ResourceName.Contains(input.Filter, StringComparison.OrdinalIgnoreCase))
+            .WhereIf(!input.Filter.IsNullOrWhiteSpace(), x => x.Value.ResourceName.Contains(input.Filter!, StringComparison.OrdinalIgnoreCase))
             .Select(x => new ResourceDto
             {
                 Name = x.Value.ResourceName,

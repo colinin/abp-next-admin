@@ -201,8 +201,11 @@ public class NotificationStore : INotificationStore
         {
             var userSubscribe = await _userSubscribeRepository
                 .GetUserSubscribeAsync(notificationName, userId, cancellationToken);
-            await _userSubscribeRepository
-                .DeleteAsync(userSubscribe.Id, cancellationToken: cancellationToken);
+            if (userSubscribe != null)
+            {
+                await _userSubscribeRepository
+                    .DeleteAsync(userSubscribe.Id, cancellationToken: cancellationToken);
+            }
 
             await unitOfWork.CompleteAsync(cancellationToken);
         }
@@ -241,7 +244,7 @@ public class NotificationStore : INotificationStore
     public async virtual Task<List<NotificationSubscriptionInfo>> GetUserSubscriptionsAsync(
         Guid? tenantId,
         string notificationName,
-        IEnumerable<UserIdentifier> identifiers = null,
+        IEnumerable<UserIdentifier>? identifiers = null,
         CancellationToken cancellationToken = default)
     {
         using (_currentTenant.Change(tenantId))
@@ -361,7 +364,7 @@ public class NotificationStore : INotificationStore
             var notify = new Notification(
                 notification.GetId(),
                 notification.Name,
-                notification.Data.GetType().AssemblyQualifiedName,
+                notification.Data.GetType().AssemblyQualifiedName!,
                 notification.Data,
                 notification.Severity,
                 notification.TenantId)

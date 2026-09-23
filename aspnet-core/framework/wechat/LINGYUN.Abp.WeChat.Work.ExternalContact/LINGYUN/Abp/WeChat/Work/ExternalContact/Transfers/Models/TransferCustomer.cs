@@ -11,7 +11,7 @@ public class TransferCustomer
     [NotNull]
     [JsonProperty("external_userid")]
     [JsonPropertyName("external_userid")]
-    public string ExternalUserid { get; set; }
+    public string ExternalUserid { get; set; } = default!;
     /// <summary>
     /// 对此客户进行分配的结果, 具体可参考全局错误码, 0表示成功发起接替,待24小时后自动接替,并不代表最终接替成功
     /// </summary>

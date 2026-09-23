@@ -97,12 +97,12 @@ public static class NotificationDefinitionExtensions
     /// <returns>
     /// 通知定义的群组编码,未定义返回null
     /// </returns>
-    public static string GetTopicOrNull(
+    public static string? GetTopicOrNull(
         this NotificationDefinition notification)
     {
         if (notification.Properties.TryGetValue(TopicKey, out var topicDefine) == true)
         {
-            return topicDefine.ToString();
+            return topicDefine?.ToString();
         }
 
         return null;

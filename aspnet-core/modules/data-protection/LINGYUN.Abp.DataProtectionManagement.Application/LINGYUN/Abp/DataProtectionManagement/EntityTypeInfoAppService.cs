@@ -57,8 +57,8 @@ public class EntityTypeInfoAppService : DataProtectionManagementApplicationServi
 
             return expression
                 .AndIf(Input.IsAuditEnabled.HasValue, x => x.IsAuditEnabled == Input.IsAuditEnabled)
-                .AndIf(!Input.Filter.IsNullOrWhiteSpace(), x => x.Name.Contains(Input.Filter) ||
-                    x.DisplayName.Contains(Input.Filter) || x.TypeFullName.Contains(Input.Filter));
+                .AndIf(!Input.Filter.IsNullOrWhiteSpace(), x => x.Name.Contains(Input.Filter!) ||
+                    x.DisplayName.Contains(Input.Filter!) || x.TypeFullName.Contains(Input.Filter!));
         }
     }
 }

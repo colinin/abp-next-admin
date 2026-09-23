@@ -16,6 +16,8 @@
     "DisplayName:ClientId": "Client Id",
     "DisplayName:ClientSecret": "Client Secret",
     "Description:ClientSecret": "Please copy the key information before saving. You can only reset the key after the data is submitted.",
+    "DisplayName:JsonWebKeySet": "Json web key set",
+    "Description:JsonWebKeySet": "Paste the JSON Web Key Set (JWKS) containing RSA or ECDSA public keys for private_key_jwt client authentication. Leave empty to use client secret authentication.",
     "DisplayName:ClientType": "Client Type",
     "DisplayName:ApplicationType": "Application Type",
     "DisplayName:ConsentType": "Consent Type",

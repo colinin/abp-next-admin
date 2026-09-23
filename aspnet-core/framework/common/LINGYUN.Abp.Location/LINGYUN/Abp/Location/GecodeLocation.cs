@@ -20,7 +20,7 @@ public class GecodeLocation : Location
     /// <summary>
     /// 能精确理解的地址类型
     /// </summary>
-    public string Level { get; set; }
+    public string? Level { get; set; }
     /// <summary>
     /// 附加信息
     /// </summary>

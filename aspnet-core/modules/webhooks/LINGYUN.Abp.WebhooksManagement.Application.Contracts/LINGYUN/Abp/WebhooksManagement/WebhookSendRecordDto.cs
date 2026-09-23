@@ -13,7 +13,7 @@ public class WebhookSendRecordDto : EntityDto<Guid>
 
     public Guid WebhookSubscriptionId { get; set; }
 
-    public string Response { get; set; }
+    public string? Response { get; set; }
 
     public HttpStatusCode? ResponseStatusCode { get; set; }
 

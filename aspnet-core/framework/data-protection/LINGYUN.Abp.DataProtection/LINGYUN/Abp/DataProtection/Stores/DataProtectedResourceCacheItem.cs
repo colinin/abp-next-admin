@@ -12,17 +12,17 @@ public class DataProtectedResourceCacheItem
     /// <summary>
     /// 权限主体
     /// </summary>
-    public string SubjectName { get; set; }
+    public string SubjectName { get; set; } = default!;
 
     /// <summary>
     /// 权限主体标识
     /// </summary>
-    public string SubjectId { get; set; }
+    public string SubjectId { get; set; } = default!;
 
     /// <summary>
     /// 实体类型全名
     /// </summary>
-    public string EntityTypeFullName { get; set; }
+    public string EntityTypeFullName { get; set; } = default!;
 
     /// <summary>
     /// 数据权限操作
@@ -32,7 +32,7 @@ public class DataProtectedResourceCacheItem
     /// <summary>
     /// 获取或设置 数据过滤规则
     /// </summary>
-    public DataAccessFilterGroup FilterGroup { get; set; }
+    public DataAccessFilterGroup? FilterGroup { get; set; }
 
     /// <summary>
     /// 允许操作的属性列表
@@ -40,7 +40,7 @@ public class DataProtectedResourceCacheItem
     public List<string> AccessdProperties { get; set; }
     public DataProtectedResourceCacheItem()
     {
-
+        AccessdProperties = new List<string>();
     }
 
     public DataProtectedResourceCacheItem(
@@ -48,7 +48,7 @@ public class DataProtectedResourceCacheItem
         string subjectId, 
         string entityTypeFullName,
         DataAccessOperation operation, 
-        DataAccessFilterGroup filterGroup = null)
+        DataAccessFilterGroup? filterGroup = null)
     {
         SubjectName = subjectName;
         SubjectId = subjectId;

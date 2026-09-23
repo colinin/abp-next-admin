@@ -8,7 +8,7 @@ namespace LINGYUN.Platform.Datas;
 
 public interface IDataRepository : IBasicRepository<Data, Guid>
 {
-    Task<Data> FindByNameAsync(
+    Task<Data?> FindByNameAsync(
         string name,
         bool includeDetails = true,
         CancellationToken cancellationToken = default);
@@ -20,12 +20,12 @@ public interface IDataRepository : IBasicRepository<Data, Guid>
     );
 
     Task<int> GetCountAsync(
-        string filter = "",
+        string? filter = null,
         CancellationToken cancellationToken = default);
 
     Task<List<Data>> GetPagedListAsync(
-        string filter = "",
-        string sorting = nameof(Data.Code),
+        string? filter = null,
+        string? sorting = nameof(Data.Code),
         bool includeDetails = false,
         int skipCount = 0,
         int maxResultCount = 10,

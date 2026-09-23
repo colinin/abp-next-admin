@@ -60,7 +60,7 @@ async function onGet(name: string) {
     const dto = await getApi(name);
     formModel.value = dto;
     modalApi.setState({
-      title: `${$t('AbpLocalization.Resources')} - ${dto.name}`,
+      title: `${$t('LocalizationManagement.Resources')} - ${dto.name}`,
     });
   } finally {
     modalApi.setState({ loading: false });
@@ -99,21 +99,21 @@ async function onSubmit() {
         </Checkbox>
       </FormItem>
       <FormItem
-        :label="$t('AbpLocalization.DisplayName:ResourceName')"
+        :label="$t('LocalizationManagement.DisplayName:ResourceName')"
         name="name"
         required
       >
         <Input v-model:value="formModel.name" autocomplete="off" />
       </FormItem>
       <FormItem
-        :label="$t('AbpLocalization.DisplayName:DisplayName')"
+        :label="$t('LocalizationManagement.DisplayName:DisplayName')"
         name="displayName"
         required
       >
         <Input v-model:value="formModel.displayName" autocomplete="off" />
       </FormItem>
       <FormItem
-        :label="$t('AbpLocalization.DisplayName:Description')"
+        :label="$t('LocalizationManagement.DisplayName:Description')"
         name="description"
       >
         <Input v-model:value="formModel.description" autocomplete="off" />

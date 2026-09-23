@@ -5,5 +5,5 @@ namespace LINGYUN.Abp.Saas.Tenants;
 
 public class DataBaseConnectionStringCheckResult : AbpConnectionStringCheckResult
 {
-    public Exception Error { get; set; }
+    public Exception? Error { get; set; }
 }

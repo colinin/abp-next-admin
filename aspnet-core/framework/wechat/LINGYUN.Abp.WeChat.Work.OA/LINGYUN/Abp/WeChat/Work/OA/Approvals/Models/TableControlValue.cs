@@ -15,7 +15,7 @@ public class TableControlValue : ControlValue
     [NotNull]
     [JsonProperty("children")]
     [JsonPropertyName("children")]
-    public List<TableValue> Children { get; set; }
+    public List<TableValue> Children { get; set; } = default!;
     public TableControlValue()
     {
 
@@ -38,7 +38,7 @@ public class TableValue
     [NotNull]
     [JsonProperty("list")]
     [JsonPropertyName("list")]
-    public List<ControlData> List { get; set; }
+    public List<ControlData> List { get; set; } = default!;
     public TableValue()
     {
 

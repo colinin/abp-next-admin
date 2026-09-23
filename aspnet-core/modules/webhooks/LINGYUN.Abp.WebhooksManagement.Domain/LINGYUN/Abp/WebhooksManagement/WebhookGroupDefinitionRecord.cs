@@ -13,9 +13,9 @@ public class WebhookGroupDefinitionRecord : BasicAggregateRoot<Guid>, IHasExtraP
     [Newtonsoft.Json.JsonIgnore]
     public override Guid Id { get; protected set; }
 
-    public string Name { get; set; }
+    public string Name { get; set; } = default!;
 
-    public string DisplayName { get; set; }
+    public string DisplayName { get; set; } = default!;
 
     public ExtraPropertyDictionary ExtraProperties { get; protected set; }
 

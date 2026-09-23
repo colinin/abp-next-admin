@@ -8,8 +8,8 @@ namespace LINGYUN.Abp.Dapr.Actors.DynamicProxying;
 
 public class DaprHttpClientHandler : HttpClientHandler
 {
-    private Func<HttpRequestMessage, Task> _preConfigureInvoke;
-    protected Func<HttpRequestMessage, Task> PreConfigureInvoke => _preConfigureInvoke;
+    private Func<HttpRequestMessage, Task>? _preConfigureInvoke;
+    protected Func<HttpRequestMessage, Task>? PreConfigureInvoke => _preConfigureInvoke;
 
     public virtual void PreConfigure(Func<HttpRequestMessage, Task> config)
     {

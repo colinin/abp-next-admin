@@ -22,7 +22,7 @@ public class EfCoreUserChatGroupRepository : EfCoreRepository<IMessageServiceDbC
     {
     }
 
-    public async virtual Task<GroupUserCard> GetMemberAsync(
+    public async virtual Task<GroupUserCard?> GetMemberAsync(
         long groupId,
         Guid userId,
         CancellationToken cancellationToken = default)
@@ -59,7 +59,7 @@ public class EfCoreUserChatGroupRepository : EfCoreRepository<IMessageServiceDbC
 
     public async virtual Task<List<GroupUserCard>> GetMembersAsync(
         long groupId,
-        string sorting = nameof(UserChatCard.UserId),
+        string? sorting = nameof(UserChatCard.UserId),
         int skipCount = 0,
         int maxResultCount = 10,
         CancellationToken cancellationToken = default)

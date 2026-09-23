@@ -14,7 +14,7 @@ public class RelatedApprovalControlConfig : ControlConfig
     [NotNull]
     [JsonProperty("related_approval")]
     [JsonPropertyName("related_approval")]
-    public RelatedApprovalConfig RelatedApproval { get; set; }
+    public RelatedApprovalConfig RelatedApproval { get; set; } = default!;
     public RelatedApprovalControlConfig()
     {
 
@@ -34,7 +34,7 @@ public class RelatedApprovalConfig
     [NotNull]
     [JsonProperty("template_id")]
     [JsonPropertyName("template_id")]
-    public string TemplateId { get; set; }
+    public string TemplateId { get; set; } = default!;
     public RelatedApprovalConfig()
     {
 

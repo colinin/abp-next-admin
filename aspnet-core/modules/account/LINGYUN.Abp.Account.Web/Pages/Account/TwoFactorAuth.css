@@ -1,0 +1,68 @@
+﻿.authenticator-columns {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    align-items: stretch;
+}
+
+.authenticator-columns > .auth-col {
+    flex: 1 1 0;
+    min-width: 0; 
+    display: flex;
+    flex-direction: column;
+}
+
+.auth-col > .auth-col-inner {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+}
+
+#QrCode {
+    flex: 1 1 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 120px;
+}
+
+#QrCode img,
+#QrCode canvas {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-width: 100%;
+}
+
+#sharedKey {
+    flex: 1 1 auto;
+    overflow-wrap: anywhere;
+    word-break: break-all;
+}
+
+#sharedKey code {
+    display: block;
+    white-space: normal;
+    word-break: break-all;
+    line-height: 1.7;
+    font-size: 1rem;
+    background: transparent;
+    padding: 0;
+}
+
+@media (max-width: 576px) {
+    .authenticator-columns {
+        flex-direction: column;
+    }
+
+    .authenticator-columns > .auth-col {
+        width: 100%;
+    }
+
+    #QrCode img,
+    #QrCode canvas {
+        width: auto;
+        max-width: 220px;
+        margin: 0 auto;
+    }
+}

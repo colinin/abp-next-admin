@@ -6,7 +6,7 @@ namespace LINGYUN.Abp.DataProtectionManagement;
 public class OrganizationUnitEntityRule : EntityRuleBase
 {
     public virtual Guid OrgId { get; protected set; }
-    public virtual string OrgCode { get; protected set; }
+    public virtual string OrgCode { get; protected set; } = default!;
 
     protected OrganizationUnitEntityRule()
     {
@@ -19,8 +19,8 @@ public class OrganizationUnitEntityRule : EntityRuleBase
         Guid entityTypeId,
         string entityTypeFullName,
         DataAccessOperation operation,
-        string allowProperties = null,
-        DataAccessFilterGroup filterGroup = null,
+        string? allowProperties = null,
+        DataAccessFilterGroup? filterGroup = null,
         Guid? tenantId = null)
         : base(id, entityTypeId, entityTypeFullName, operation, allowProperties, filterGroup, tenantId)
     {

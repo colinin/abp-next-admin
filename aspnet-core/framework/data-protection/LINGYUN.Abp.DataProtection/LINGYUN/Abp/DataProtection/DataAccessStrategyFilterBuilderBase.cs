@@ -20,7 +20,9 @@ public abstract class DataAccessStrategyFilterBuilderBase : IDataAccessStrategyF
         _strategyStateProvider = strategyStateProvider;
     }
 
-    public async virtual Task<DataAccessStrategyFilterBuildResult<TEntity>> Build<TEntity, TKey, TEntityAuth>(IQueryable<TEntity> entity, IQueryable<TEntityAuth> entityAuth)
+    public async virtual Task<DataAccessStrategyFilterBuildResult<TEntity>?> Build<TEntity, TKey, TEntityAuth>(
+        IQueryable<TEntity> entity, 
+        IQueryable<TEntityAuth> entityAuth)
         where TEntityAuth : DataAuthBase<TEntity, TKey>
     {
         if (ShouldApplyFilter(typeof(TEntity), DataAccessOperation.Read))
@@ -61,6 +63,9 @@ public abstract class DataAccessStrategyFilterBuilderBase : IDataAccessStrategyF
         return true;
     }
 
-    protected abstract IQueryable<TEntity> Build<TEntity, TKey, TEntityAuth>(IQueryable<TEntity> entity, IQueryable<TEntityAuth> entityAuth, DataAccessStrategyState state)
+    protected abstract IQueryable<TEntity> Build<TEntity, TKey, TEntityAuth>(
+        IQueryable<TEntity> entity, 
+        IQueryable<TEntityAuth> entityAuth, 
+        DataAccessStrategyState state)
         where TEntityAuth : DataAuthBase<TEntity, TKey>;
 }

@@ -20,7 +20,7 @@ public class EfCoreOrganizationUnitEntityRuleRepository : EfCoreRepository<IAbpD
     {
     }
 
-    public async virtual Task<OrganizationUnitEntityRule> FindEntityRuleAsync(
+    public async virtual Task<OrganizationUnitEntityRule?> FindEntityRuleAsync(
         string orgCode,
         string entityTypeFullName, 
         DataAccessOperation operation = DataAccessOperation.Read, 
@@ -50,8 +50,8 @@ public class EfCoreOrganizationUnitEntityRuleRepository : EfCoreRepository<IAbpD
     }
 
     public async virtual Task<List<OrganizationUnitEntityRule>> GetCountAsync(
-    ISpecification<OrganizationUnitEntityRule> specification, 
-        string sorting = nameof(OrganizationUnitEntityRule.EntityTypeFullName), 
+        ISpecification<OrganizationUnitEntityRule> specification, 
+        string? sorting = nameof(OrganizationUnitEntityRule.EntityTypeFullName), 
         int maxResultCount = 10, 
         int skipCount = 0, 
         CancellationToken cancellationToken = default)

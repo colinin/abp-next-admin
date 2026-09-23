@@ -1,7 +1,7 @@
 ﻿using LINGYUN.Abp.AI.Localization;
+using LINGYUN.Abp.Dynamic.Definitions;
 using Microsoft.Extensions.AI;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using Volo.Abp.Localization;
@@ -57,6 +57,11 @@ public class AbpAIToolsModule : AbpModule
             options.Resources
                 .Get<AbpAIResource>()
                 .AddVirtualJson("/LINGYUN/Abp/AI/Tools/Localization/Resources");
+        });
+
+        Configure<AbpDynamicDefinitionsOptions>(options =>
+        {
+            options.MapStrategy<AIToolDefinition>(DynamicDefinitionStrategy.Merge);
         });
     }
 

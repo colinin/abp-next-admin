@@ -14,11 +14,11 @@ public class TenantCreateDto : TenantCreateOrUpdateBase
     [Required]
     [EmailAddress]
     [MaxLength(256)]
-    public string AdminEmailAddress { get; set; }
+    public string AdminEmailAddress { get; set; } = default!;
 
     [Required]
     [MaxLength(128)]
-    public string AdminPassword { get; set; }
+    public string AdminPassword { get; set; } = default!;
 
     /// <summary>
     /// 使用共享数据库
@@ -29,7 +29,7 @@ public class TenantCreateDto : TenantCreateOrUpdateBase
     /// 默认数据库连接字符串
     /// </summary>
     [DynamicStringLength(typeof(TenantConnectionStringConsts), nameof(TenantConnectionStringConsts.MaxValueLength))]
-    public string DefaultConnectionString { get; set; }
+    public string? DefaultConnectionString { get; set; }
 
     /// <summary>
     /// 其他数据库连接

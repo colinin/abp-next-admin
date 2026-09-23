@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using Volo.Abp.IdentityServer.ApiScopes;
+using Volo.Abp.Validation;
 
 namespace LINGYUN.Abp.IdentityServer.ApiScopes;
 
@@ -6,9 +8,11 @@ public class ApiScopeCreateOrUpdateDto
 {
     public bool Enabled { get; set; }
 
-    public string DisplayName { get; set; }
+    [DynamicStringLength(typeof(ApiScopeConsts), nameof(ApiScopeConsts.DisplayNameMaxLength))]
+    public string? DisplayName { get; set; }
 
-    public string Description { get; set; }
+    [DynamicStringLength(typeof(ApiScopeConsts), nameof(ApiScopeConsts.DescriptionMaxLength))]
+    public string? Description { get; set; }
 
     public bool Required { get; set; }
 

@@ -10,5 +10,5 @@ public class OpenIddictApplicationCreateDto : OpenIddictApplicationCreateOrUpdat
 {
     [Required]
     [DynamicStringLength(typeof(OpenIddictApplicationConsts), nameof(OpenIddictApplicationConsts.ClientIdMaxLength))]
-    public string ClientId { get; set; }
+    public string ClientId { get; set; } = default!;
 }

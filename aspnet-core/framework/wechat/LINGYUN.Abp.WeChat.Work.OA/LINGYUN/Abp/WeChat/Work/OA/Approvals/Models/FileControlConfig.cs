@@ -14,7 +14,7 @@ public class FileControlConfig : ControlConfig
     [NotNull]
     [JsonProperty("file")]
     [JsonPropertyName("file")]
-    public FileConfig File { get; set; }
+    public FileConfig File { get; set; } = default!;
     public FileControlConfig()
     {
 

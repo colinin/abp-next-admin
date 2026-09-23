@@ -18,7 +18,7 @@ public static class TencentSmsSenderExtensions
         this ISmsSender smsSender,
         string templateCode,
         string phoneNumber,
-        IDictionary<string, object> templateParams = null)
+        IDictionary<string, object>? templateParams = null)
     {
         var smsMessage = new SmsMessage(phoneNumber, nameof(TencentCloudSmsSender));
         smsMessage.Properties.Add("TemplateCode", templateCode);
@@ -43,7 +43,7 @@ public static class TencentSmsSenderExtensions
         string signName,
         string templateCode,
         string phoneNumber,
-        IDictionary<string, object> templateParams = null)
+        IDictionary<string, object>? templateParams = null)
     {
         var smsMessage = new SmsMessage(phoneNumber, nameof(TencentCloudSmsSender));
         smsMessage.Properties.Add("SignName", signName);

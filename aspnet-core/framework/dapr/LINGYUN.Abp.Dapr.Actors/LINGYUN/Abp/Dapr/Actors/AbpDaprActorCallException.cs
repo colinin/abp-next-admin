@@ -7,11 +7,11 @@ namespace LINGYUN.Abp.Dapr.Actors;
 
 public class AbpDaprActorCallException : AbpException, IHasErrorCode, IHasErrorDetails
 {
-    public string Code => Error?.Code;
+    public string? Code => Error?.Code;
 
-    public string Details => Error?.Details;
+    public string? Details => Error?.Details;
 
-    public RemoteServiceErrorInfo Error { get; set; }
+    public RemoteServiceErrorInfo? Error { get; set; }
 
     public AbpDaprActorCallException()
     {

@@ -14,7 +14,7 @@ public class DateRangeControlConfig : ControlConfig
     [NotNull]
     [JsonProperty("date_range")]
     [JsonPropertyName("date_range")]
-    public DateRangeConfig DateRange { get; set; }
+    public DateRangeConfig DateRange { get; set; } = default!;
     public DateRangeControlConfig()
     {
 

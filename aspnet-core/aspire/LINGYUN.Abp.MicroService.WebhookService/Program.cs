@@ -1,5 +1,4 @@
-﻿using LINGYUN.Abp.Identity.Session.AspNetCore;
-using LINGYUN.Abp.MicroService.WebhookService;
+﻿using LINGYUN.Abp.MicroService.WebhookService;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -59,7 +58,6 @@ try
     app.UseAuthentication();
     app.UseJwtTokenMiddleware();
     app.UseMultiTenancy();
-    app.UseAbpSession();
     app.UseDynamicClaims();
     app.UseAuthorization();
     app.UseSwagger();

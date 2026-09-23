@@ -11,7 +11,7 @@ public class SmsMessage : Message
         string phoneNumber,
         string content,
         Guid? userId = null,
-        string userName = null)
+        string? userName = null)
         : base(id, phoneNumber, content, userId, userName)
     {
     }

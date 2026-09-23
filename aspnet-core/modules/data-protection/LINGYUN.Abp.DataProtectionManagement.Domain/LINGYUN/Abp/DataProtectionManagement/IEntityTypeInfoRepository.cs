@@ -8,7 +8,7 @@ using Volo.Abp.Specifications;
 namespace LINGYUN.Abp.DataProtectionManagement;
 public interface IEntityTypeInfoRepository : IBasicRepository<EntityTypeInfo, Guid>
 {
-    Task<EntityTypeInfo> FindByTypeAsync(
+    Task<EntityTypeInfo?> FindByTypeAsync(
         string typeFullName,
         CancellationToken cancellationToken = default);
 
@@ -18,7 +18,7 @@ public interface IEntityTypeInfoRepository : IBasicRepository<EntityTypeInfo, Gu
 
     Task<List<EntityTypeInfo>> GetListAsync(
         ISpecification<EntityTypeInfo> specification,
-        string sorting = nameof(EntityTypeInfo.Id),
+        string? sorting = nameof(EntityTypeInfo.Id),
         int maxResultCount = 10,
         int skipCount = 0,
         CancellationToken cancellationToken = default);

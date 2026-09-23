@@ -7,7 +7,7 @@ public class NotificationTemplateResolveContext : INotificationTemplateResolveCo
 
     public NotificationTemplate Template { get; }
 
-    public object Model { get; set; }
+    public object? Model { get; set; }
 
     public bool Handled { get; set; }
 

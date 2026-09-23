@@ -8,20 +8,20 @@ namespace LINGYUN.Abp.OpenIddict.Scopes;
 [Serializable]
 public class OpenIddictScopeDto : ExtensibleAuditedEntityDto<Guid>, IHasConcurrencyStamp
 {
-    public string ConcurrencyStamp { get; set; }
+    public string ConcurrencyStamp { get; set; } = default!;
 
-    public string Description { get; set; }
+    public string? Description { get; set; }
 
     public Dictionary<string, string> Descriptions { get; set; } = new Dictionary<string, string>();
 
 
-    public string DisplayName { get; set; }
+    public string? DisplayName { get; set; }
 
     public Dictionary<string, string> DisplayNames { get; set; } = new Dictionary<string, string>();
 
-    public string Name { get; set; }
+    public string? Name { get; set; }
 
     public Dictionary<string, string> Properties { get; set; } = new Dictionary<string, string>();
 
-    public List<string> Resources { get; set; }
+    public List<string> Resources { get; set; } = new List<string>();
 }

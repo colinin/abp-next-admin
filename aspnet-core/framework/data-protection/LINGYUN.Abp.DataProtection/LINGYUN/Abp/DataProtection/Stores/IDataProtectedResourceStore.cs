@@ -7,5 +7,5 @@ public interface IDataProtectedResourceStore
 
     Task RemoveAsync(DataAccessResource resource);
 
-    Task<DataAccessResource> GetAsync(string subjectName, string subjectId, string entityTypeFullName, DataAccessOperation operation);
+    Task<DataAccessResource?> GetAsync(string subjectName, string subjectId, string entityTypeFullName, DataAccessOperation operation);
 }

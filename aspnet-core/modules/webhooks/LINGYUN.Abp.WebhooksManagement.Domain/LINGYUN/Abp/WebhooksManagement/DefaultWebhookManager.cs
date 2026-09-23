@@ -57,8 +57,8 @@ public class DefaultWebhookManager : WebhookManager, ITransientDependency
         Guid? tenantId,
         HttpStatusCode? statusCode, 
         string content,
-        IDictionary<string, string> requestHeaders = null,
-        IDictionary<string, string> responseHeaders = null)
+        IDictionary<string, string>? requestHeaders = null,
+        IDictionary<string, string>? responseHeaders = null)
     {
         using (CurrentTenant.Change(tenantId))
         {

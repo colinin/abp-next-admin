@@ -23,6 +23,7 @@ import {
   EditOutlined,
   EllipsisOutlined,
   LockOutlined,
+  LoginOutlined,
   PlusOutlined,
   UnlockOutlined,
 } from '@ant-design/icons-vue';
@@ -38,6 +39,10 @@ defineOptions({
   name: 'UserTable',
 });
 
+const emit = defineEmits<{
+  (event: 'impersonation', user: IdentityUserDto): void;
+}>();
+
 const UserModal = defineAsyncComponent(() => import('./UserModal.vue'));
 const LockModal = defineAsyncComponent(() => import('./UserLockModal.vue'));
 const ClaimModal = defineAsyncComponent(() => import('./UserClaimModal.vue'));
@@ -46,6 +51,7 @@ const PasswordModal = defineAsyncComponent(
 );
 
 const MenuItem = Menu.Item;
+const MenuDivider = Menu.Divider;
 const CheckIcon = createIconifyIcon('ant-design:check-outlined');
 const CloseIcon = createIconifyIcon('ant-design:close-outlined');
 const PasswordIcon = createIconifyIcon('carbon:password');
@@ -55,18 +61,66 @@ const PermissionsOutlined = createIconifyIcon('icon-park-outline:permissions');
 const SessionIcon = createIconifyIcon('carbon:prompt-session');
 const AuditLogIcon = createIconifyIcon('fluent-mdl2:compliance-audit');
 
-const getLockEnd = computed(() => {
-  return (row: IdentityUserDto) => {
-    if (row.lockoutEnd) {
-      const lockTime = new Date(row.lockoutEnd);
-      if (lockTime) {
-        // 锁定时间高于当前时间不显示
-        const nowTime = new Date();
-        return lockTime < nowTime;
-      }
+const isCurrentUser = (user: IdentityUserDto) => {
+  return abpStore.application?.currentUser.id === user.id;
+};
+
+const getLockEnd = (row: IdentityUserDto) => {
+  if (row.lockoutEnd) {
+    const lockTime = new Date(row.lockoutEnd);
+    if (lockTime) {
+      // 锁定时间高于当前时间不显示
+      const nowTime = new Date();
+      return lockTime < nowTime;
     }
-    return true;
+  }
+  return true;
+};
+
+const isDeleteEnabled = computed(() => {
+  return (user: IdentityUserDto) => {
+    return (
+      !isCurrentUser(user) && hasAccessByCodes([IdentityUserPermissions.Delete])
+    );
   };
+});
+
+const isLockEnabled = computed(() => {
+  return (user: IdentityUserDto) => {
+    return (
+      !isCurrentUser(user) &&
+      user.isActive &&
+      getLockEnd(user) &&
+      hasAccessByCodes([IdentityUserPermissions.Update])
+    );
+  };
+});
+
+const isUnLockEnabled = computed(() => {
+  return (user: IdentityUserDto) => {
+    return (
+      !isCurrentUser(user) &&
+      user.isActive &&
+      !getLockEnd(user) &&
+      hasAccessByCodes([IdentityUserPermissions.Update])
+    );
+  };
+});
+
+const isImpersonationEnabled = computed(() => {
+  return (user: IdentityUserDto) => {
+    return (
+      !isCurrentUser(user) &&
+      hasAccessByCodes([IdentityUserPermissions.Impersonation])
+    );
+  };
+});
+
+const isAuditLogEnabled = computed(() => {
+  return (
+    isEnabled('AbpAuditing.Logging.AuditLog') &&
+    hasAccessByCodes([AuditLogPermissions.Default])
+  );
 });
 
 const abpStore = useAbpStore();
@@ -240,6 +294,17 @@ const handleDelete = (row: IdentityUserDto) => {
   });
 };
 
+const handleImpersonationUser = (row: IdentityUserDto) => {
+  Modal.confirm({
+    centered: true,
+    content: $t('AbpAccount.ImpersonatorWarning', [row.userName]),
+    onOk: () => {
+      emit('impersonation', row);
+    },
+    title: $t('AbpUi.AreYouSure'),
+  });
+};
+
 const handleUnlock = async (row: IdentityUserDto) => {
   await unLockApi(row.id);
   await gridApi.query();
@@ -259,6 +324,10 @@ const handleMenuClick = async (row: IdentityUserDto, info: MenuInfo) => {
         subject: row.userName,
       });
       userChangeDrawerApi.open();
+      break;
+    }
+    case 'impersonation': {
+      handleImpersonationUser(row);
       break;
     }
     case 'lock': {
@@ -365,7 +434,7 @@ const handleMenuClick = async (row: IdentityUserDto, info: MenuInfo) => {
             block
             danger
             type="link"
-            v-access:code="[IdentityUserPermissions.Delete]"
+            :disabled="!isDeleteEnabled(row)"
             @click="handleDelete(row)"
           >
             {{ $t('AbpUi.Delete') }}
@@ -374,29 +443,22 @@ const handleMenuClick = async (row: IdentityUserDto, info: MenuInfo) => {
         <div class="basis-1/3">
           <Dropdown>
             <template #overlay>
-              <Menu @click="(info) => handleMenuClick(row, info)">
+              <Menu @click="(info: MenuInfo) => handleMenuClick(row, info)">
                 <MenuItem
-                  v-if="
-                    hasAccessByCodes([IdentityUserPermissions.Update]) &&
-                    row.isActive &&
-                    getLockEnd(row)
-                  "
+                  v-if="isLockEnabled(row)"
                   key="lock"
                   :icon="h(LockOutlined)"
                 >
                   {{ $t('AbpIdentity.Lock') }}
                 </MenuItem>
                 <MenuItem
-                  v-if="
-                    hasAccessByCodes([IdentityUserPermissions.Update]) &&
-                    row.isActive &&
-                    !getLockEnd(row)
-                  "
+                  v-if="isUnLockEnabled(row)"
                   key="unlock"
                   :icon="h(UnlockOutlined)"
                 >
                   {{ $t('AbpIdentity.UnLock') }}
                 </MenuItem>
+                <MenuDivider />
                 <MenuItem
                   v-if="
                     hasAccessByCodes([
@@ -425,12 +487,21 @@ const handleMenuClick = async (row: IdentityUserDto, info: MenuInfo) => {
                   {{ $t('AbpIdentity.ManageClaim') }}
                 </MenuItem>
                 <MenuItem
+                  v-if="isImpersonationEnabled(row)"
+                  key="impersonation"
+                  :icon="h(LoginOutlined)"
+                >
+                  {{ $t('AbpIdentity.ImpersonationUser') }}
+                </MenuItem>
+                <MenuDivider />
+                <MenuItem
                   v-if="hasAccessByCodes([IdentityUserPermissions.Update])"
                   key="password"
                   :icon="h(PasswordIcon)"
                 >
                   {{ $t('AbpIdentity.SetPassword') }}
                 </MenuItem>
+                <MenuDivider />
                 <MenuItem
                   v-if="hasAccessByCodes(['Platform.Menu.ManageUsers'])"
                   key="menus"
@@ -438,11 +509,9 @@ const handleMenuClick = async (row: IdentityUserDto, info: MenuInfo) => {
                 >
                   {{ $t('AppPlatform.Menu:Manage') }}
                 </MenuItem>
+                <MenuDivider />
                 <MenuItem
-                  v-if="
-                    isEnabled('AbpAuditing.Logging.AuditLog') &&
-                    hasAccessByCodes([AuditLogPermissions.Default])
-                  "
+                  v-if="isAuditLogEnabled"
                   key="entity-changes"
                   :icon="h(AuditLogIcon)"
                 >

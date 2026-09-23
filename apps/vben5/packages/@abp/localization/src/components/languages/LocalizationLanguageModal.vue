@@ -56,7 +56,7 @@ async function onGet(name: string) {
     const dto = await getApi(name);
     formModel.value = dto;
     modalApi.setState({
-      title: `${$t('AbpLocalization.Languages')} - ${dto.cultureName}`,
+      title: `${$t('LocalizationManagement.Languages')} - ${dto.cultureName}`,
     });
   } finally {
     modalApi.setState({ loading: false });
@@ -89,20 +89,20 @@ async function onSubmit() {
       :wrapper-col="{ span: 18 }"
     >
       <FormItem
-        :label="$t('AbpLocalization.DisplayName:CultureName')"
+        :label="$t('LocalizationManagement.DisplayName:CultureName')"
         name="cultureName"
         required
       >
         <Input v-model:value="formModel.cultureName" autocomplete="off" />
       </FormItem>
       <FormItem
-        :label="$t('AbpLocalization.DisplayName:UiCultureName')"
+        :label="$t('LocalizationManagement.DisplayName:UiCultureName')"
         name="uiCultureName"
       >
         <Input v-model:value="formModel.uiCultureName" autocomplete="off" />
       </FormItem>
       <FormItem
-        :label="$t('AbpLocalization.DisplayName:DisplayName')"
+        :label="$t('LocalizationManagement.DisplayName:DisplayName')"
         name="displayName"
         required
       >

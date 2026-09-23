@@ -13,7 +13,7 @@ public class JobDefinitionContext : IJobDefinitionContext
         Jobs = jobs;
     }
 
-    public virtual JobDefinition GetOrNull(string name)
+    public virtual JobDefinition? GetOrNull(string name)
     {
         return Jobs.GetOrDefault(name);
     }

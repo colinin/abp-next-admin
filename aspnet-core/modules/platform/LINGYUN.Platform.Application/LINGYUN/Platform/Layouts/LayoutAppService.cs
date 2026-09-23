@@ -40,7 +40,7 @@ public class LayoutAppService : PlatformApplicationServiceBase, ILayoutAppServic
             CurrentTenant.Id);
 
         layout = await LayoutRepository.InsertAsync(layout);
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
 
         return ObjectMapper.Map<Layout, LayoutDto>(layout);
     }
@@ -56,7 +56,7 @@ public class LayoutAppService : PlatformApplicationServiceBase, ILayoutAppServic
         //}
 
         await LayoutRepository.DeleteAsync(layout);
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
     }
 
     public async virtual Task<LayoutDto> GetAsync(Guid id)
@@ -117,7 +117,7 @@ public class LayoutAppService : PlatformApplicationServiceBase, ILayoutAppServic
             layout.Redirect = input.Redirect;
         }
         layout = await LayoutRepository.UpdateAsync(layout);
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
 
         return ObjectMapper.Map<Layout, LayoutDto>(layout);
     }

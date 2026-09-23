@@ -41,7 +41,7 @@ public class AbpCapSerializer : ISerializer
         return ValueTask.FromResult(new TransportMessage(message.Headers, jsonBytes));
     }
 
-    public ValueTask<Message> DeserializeAsync(TransportMessage transportMessage, Type valueType)
+    public ValueTask<Message> DeserializeAsync(TransportMessage transportMessage, Type? valueType)
     {
         if (valueType == null || ReadOnlyMemory<byte>.Empty.Equals(transportMessage.Body) || transportMessage.Body.Length == 0)
         {
@@ -67,7 +67,7 @@ public class AbpCapSerializer : ISerializer
         // return JsonSerializer.Deserialize<Message>(json, _jsonSerializerOptions.JsonSerializerOptions);
     }
 
-    public object Deserialize(object value, Type valueType)
+    public object? Deserialize(object value, Type valueType)
     {
         if (value is JsonElement jToken)
         {

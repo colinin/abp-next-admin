@@ -18,9 +18,9 @@ public static class AbpCAPMessageExtensions
         this Message message,
         out Guid? tenantId)
     {
-        if (message.Headers.TryGetValue(AbpCAPHeaders.TenantId, out string tenantStr))
+        if (message.Headers.TryGetValue(AbpCAPHeaders.TenantId, out var tenantStr))
         {
-            if (Guid.TryParse(tenantStr, out Guid id))
+            if (Guid.TryParse(tenantStr, out var id))
             {
                 tenantId = id;
                 return true;
@@ -37,7 +37,7 @@ public static class AbpCAPMessageExtensions
     public static Guid? GetTenantIdOrNull(
         this Message message)
     {
-        if (message.TryGetTenantId(out Guid? tenantId))
+        if (message.TryGetTenantId(out var tenantId))
         {
             return tenantId;
         }
@@ -51,7 +51,7 @@ public static class AbpCAPMessageExtensions
     /// <returns></returns>
     public static bool TryGetCorrelationId(
         this Message message,
-        out string correlationId)
+        out string? correlationId)
     {
         return message.Headers.TryGetValue(AbpCAPHeaders.CorrelationId, out correlationId);
     }
@@ -60,7 +60,7 @@ public static class AbpCAPMessageExtensions
     /// </summary>
     /// <param name="message"></param>
     /// <returns></returns>
-    public static string GetCorrelationIdOrNull(this Message message)
+    public static string? GetCorrelationIdOrNull(this Message message)
     {
         if (message.TryGetCorrelationId(out var correlationId))
         {

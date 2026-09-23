@@ -10,14 +10,14 @@ public class EditionCacheItem
 {
     private const string CacheKeyFormat = "t:{0}";
 
-    public EditionInfo Value { get; set; }
+    public EditionInfo? Value { get; set; }
 
     public EditionCacheItem()
     {
 
     }
 
-    public EditionCacheItem(EditionInfo value)
+    public EditionCacheItem(EditionInfo? value)
     {
         Value = value;
     }

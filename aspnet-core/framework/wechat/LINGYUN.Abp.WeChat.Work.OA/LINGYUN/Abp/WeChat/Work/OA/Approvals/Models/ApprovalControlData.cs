@@ -30,14 +30,14 @@ public class ApprovalControlData
     [NotNull]
     [JsonProperty("control")]
     [JsonPropertyName("control")]
-    public string Control { get; set; }
+    public string Control { get; set; } = default!;
     /// <summary>
     /// 控件id：控件的唯一id，可通过“获取审批模板详情”接口获取
     /// </summary>
     [NotNull]
     [JsonProperty("id")]
     [JsonPropertyName("id")]
-    public string Id { get; set; }
+    public string Id { get; set; } = default!;
     /// <summary>
     /// 控件值 ，需在此为申请人在各个控件中填写内容不同控件有不同的赋值参数
     /// </summary>
@@ -47,7 +47,7 @@ public class ApprovalControlData
     [NotNull]
     [JsonProperty("value")]
     [JsonPropertyName("value")]
-    public ApprovalControlValue Value { get; set; }
+    public ApprovalControlValue Value { get; set; } = default!;
     /// <summary>
     /// 控件隐藏标识，为1表示控件被隐藏
     /// </summary>

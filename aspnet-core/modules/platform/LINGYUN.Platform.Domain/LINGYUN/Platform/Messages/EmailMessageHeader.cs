@@ -6,8 +6,8 @@ namespace LINGYUN.Platform.Messages;
 public class EmailMessageHeader : Entity<long>
 {
     public virtual Guid MessageId { get; private set; }
-    public virtual string Key { get; private set; }
-    public virtual string Value { get; private set; }
+    public virtual string Key { get; private set; } = default!;
+    public virtual string Value { get; private set; } = default!;
     protected EmailMessageHeader()
     {
     }

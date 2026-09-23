@@ -7,7 +7,7 @@ namespace LINGYUN.Abp.ProjectManagement.Projects
     public class ProductBuildLog : Entity<int>
     {
         public virtual Guid ProjectId { get; set; }
-        public virtual string Message { get; set; }
+        public virtual string Message { get; set; } = default!;
         public virtual LogLevel Level { get; set; }
         protected ProductBuildLog() { }
         public ProductBuildLog(

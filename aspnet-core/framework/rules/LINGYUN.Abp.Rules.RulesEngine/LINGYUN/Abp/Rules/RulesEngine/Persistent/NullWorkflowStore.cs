@@ -10,9 +10,9 @@ namespace LINGYUN.Abp.Rules.RulesEngine.Persistent;
 [Dependency(TryRegister = true)]
 public class NullWorkflowStore : IWorkflowStore, ISingletonDependency
 {
-    public Task<Workflow> GetWorkflowAsync(string workflowName, CancellationToken cancellationToken = default)
+    public Task<Workflow?> GetWorkflowAsync(string workflowName, CancellationToken cancellationToken = default)
     {
-        return Task.FromResult<Workflow>(null);
+        return Task.FromResult<Workflow?>(null);
     }
 
     public Task<IEnumerable<Workflow>> GetWorkflowsAsync(Type inputType, CancellationToken cancellationToken = default)

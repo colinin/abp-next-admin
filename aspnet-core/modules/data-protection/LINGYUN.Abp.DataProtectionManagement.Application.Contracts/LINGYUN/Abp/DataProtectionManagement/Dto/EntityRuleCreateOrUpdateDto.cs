@@ -11,7 +11,7 @@ public abstract class EntityRuleCreateOrUpdateDto
     public DataAccessOperation Operation { get; set; }
 
     [Required]
-    public DataAccessFilterGroup FilterGroup { get; set; }
+    public DataAccessFilterGroup FilterGroup { get; set; } = default!;
 
-    public string[] AccessedProperties { get; set; }
+    public string[]? AccessedProperties { get; set; }
 }

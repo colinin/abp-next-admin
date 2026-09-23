@@ -1,6 +1,7 @@
 ﻿using LINGYUN.Abp.WxPusher.Settings;
 using System.Threading;
 using System.Threading.Tasks;
+using Volo.Abp;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Settings;
 
@@ -17,7 +18,10 @@ public class WxPusherTokenProvider : IWxPusherTokenProvider, ITransientDependenc
 
     public async virtual Task<string> GetTokenAsync(CancellationToken cancellationToken = default)
     {
-        return await SettingProvider.GetOrNullAsync(
-            WxPusherSettingNames.Security.AppToken);
+        var appToken = await SettingProvider.GetOrNullAsync(WxPusherSettingNames.Security.AppToken);
+
+        Check.NotNullOrWhiteSpace(appToken, nameof(appToken));
+
+        return appToken;
     }
 }

@@ -10,10 +10,10 @@ namespace LINGYUN.Abp.LocalizationManagement;
 [CacheName("DynamicLanguageInitializer")]
 public class DynamicLanguageInitializerCacheItem
 {
-    public string CultureName { get; set; }
-    public string UiCultureName { get; set; }
-    public string DisplayName { get; set; }
-    public string TwoLetterISOLanguageName { get; set; }
+    public string CultureName { get; set; } = default!;
+    public string UiCultureName { get; set; } = default!;
+    public string DisplayName { get; set; } = default!;
+    public string TwoLetterISOLanguageName { get; set; } = default!;
     public DynamicLanguageInitializerCacheItem()
     {
     }
@@ -35,14 +35,14 @@ public class DynamicLanguageInitializerCacheItem
 [CacheName("DynamicResourceInitializer")]
 public class DynamicResourceInitializerCacheItem
 {
-    public string ResourceName { get; set; }
-    public string DefaultCultureName { get; set; }
+    public string ResourceName { get; set; } = default!;
+    public string? DefaultCultureName { get; set; }
     public DynamicResourceInitializerCacheItem()
     {
     }
     public DynamicResourceInitializerCacheItem(
         string resourceName,
-        string defaultCultureName)
+        string? defaultCultureName)
     {
         ResourceName = resourceName;
         DefaultCultureName = defaultCultureName;
@@ -54,8 +54,8 @@ public class DynamicResourceInitializerCacheItem
 [CacheName("DynamicTextInitializer")]
 public class DynamicTextInitializerCacheItem
 {
-    public string ResourceName { get; set; }
-    public string CultureName { get; set; }
+    public string ResourceName { get; set; } = default!;
+    public string CultureName { get; set; } = default!;
     public Dictionary<string, string> Texts { get; set; }
     public DynamicTextInitializerCacheItem()
     {

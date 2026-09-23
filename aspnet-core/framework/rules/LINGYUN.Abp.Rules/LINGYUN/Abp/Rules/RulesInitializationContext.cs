@@ -15,5 +15,5 @@ public class RulesInitializationContext : IServiceProvider, IHasExtraProperties
         ExtraProperties = new ExtraPropertyDictionary();
     }
 
-    public object GetService(Type serviceType) => ServiceProvider.GetService(serviceType);
+    public object? GetService(Type serviceType) => ServiceProvider.GetService(serviceType);
 }

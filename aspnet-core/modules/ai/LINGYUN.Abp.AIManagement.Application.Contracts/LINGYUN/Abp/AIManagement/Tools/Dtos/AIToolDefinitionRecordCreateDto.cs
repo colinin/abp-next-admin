@@ -6,5 +6,5 @@ public class AIToolDefinitionRecordCreateDto : AIToolDefinitionRecordCreateOrUpd
 {
     [Required]
     [DynamicStringLength(typeof(AIToolDefinitionRecordConsts), nameof(AIToolDefinitionRecordConsts.MaxNameLength))]
-    public string Name { get; set; }
+    public string Name { get; set; } = default!;
 }

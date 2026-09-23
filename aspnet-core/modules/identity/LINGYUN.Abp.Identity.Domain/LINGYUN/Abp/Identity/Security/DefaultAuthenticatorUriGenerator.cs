@@ -21,7 +21,7 @@ public class DefaultAuthenticatorUriGenerator : IAuthenticatorUriGenerator, ITra
 
     public virtual string Generate(string email, string unformattedKey)
     {
-        var application = _urlEncoder.Encode(_applicationInfoAccessor.ApplicationName);
+        var application = _urlEncoder.Encode(_applicationInfoAccessor.ApplicationName ?? "IdentityApplication");
         var account = _urlEncoder.Encode(email);
 
         return string.Format(OTatpUrlFormat, application, account, unformattedKey, application);

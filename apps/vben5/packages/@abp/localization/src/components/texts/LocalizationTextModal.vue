@@ -12,7 +12,7 @@ import type {
 import {
   defineEmits,
   defineOptions,
-  onMounted,
+  defineProps,
   ref,
   toValue,
   useTemplateRef,
@@ -23,17 +23,24 @@ import { $t } from '@vben/locales';
 
 import { Form, Input, message, Select, Textarea } from 'ant-design-vue';
 
-import { useLanguagesApi } from '../../api/useLanguagesApi';
-import { useResourcesApi } from '../../api/useResourcesApi';
 import { useTextsApi } from '../../api/useTextsApi';
 
 defineOptions({
   name: 'LocalizationTextModal',
 });
+withDefaults(
+  defineProps<{
+    languages?: LanguageDto[];
+    resources?: ResourceDto[];
+  }>(),
+  {
+    languages: () => [],
+    resources: () => [],
+  },
+);
 const emits = defineEmits<{
   (event: 'change', data: TextDto): void;
 }>();
-
 const FormItem = Form.Item;
 
 const defaultModel = {} as TextDto;
@@ -41,11 +48,7 @@ const defaultModel = {} as TextDto;
 const isEditModal = ref(false);
 const form = useTemplateRef<FormInstance>('form');
 const formModel = ref<TextDto>({ ...defaultModel });
-const resources = ref<ResourceDto[]>([]);
-const languages = ref<LanguageDto[]>([]);
 
-const { getListApi: getLanguagesApi } = useLanguagesApi();
-const { getListApi: getResourcesApi } = useResourcesApi();
 const { cancel, getApi, setApi } = useTextsApi();
 
 const [Modal, modalApi] = useVbenModal({
@@ -72,15 +75,6 @@ const [Modal, modalApi] = useVbenModal({
   },
   title: $t('LocalizationManagement.Text:AddNew'),
 });
-
-async function onInit() {
-  const [languageRes, resourceRes] = await Promise.all([
-    getLanguagesApi(),
-    getResourcesApi(),
-  ]);
-  languages.value = languageRes.items;
-  resources.value = resourceRes.items;
-}
 
 async function onGet() {
   const dto = modalApi.getData<TextDifferenceDto>();
@@ -111,7 +105,7 @@ async function onLoad(input: GetTextByKeyInput) {
     const textDto = await getApi(input);
     formModel.value = textDto;
     modalApi.setState({
-      title: `${$t('AbpLocalization.Texts')} - ${textDto.key}`,
+      title: `${$t('LocalizationManagement.Texts')} - ${textDto.key}`,
     });
   } finally {
     modalApi.setState({ loading: false });
@@ -131,8 +125,6 @@ async function onSubmit() {
     modalApi.setState({ submitting: false });
   }
 }
-
-onMounted(onInit);
 </script>
 
 <template>
@@ -144,7 +136,7 @@ onMounted(onInit);
       :wrapper-col="{ span: 18 }"
     >
       <FormItem
-        :label="$t('AbpLocalization.DisplayName:CultureName')"
+        :label="$t('LocalizationManagement.DisplayName:CultureName')"
         name="cultureName"
         required
       >
@@ -156,7 +148,7 @@ onMounted(onInit);
         />
       </FormItem>
       <FormItem
-        :label="$t('AbpLocalization.DisplayName:ResourceName')"
+        :label="$t('LocalizationManagement.DisplayName:ResourceName')"
         name="resourceName"
         required
       >
@@ -168,7 +160,7 @@ onMounted(onInit);
         />
       </FormItem>
       <FormItem
-        :label="$t('AbpLocalization.DisplayName:Key')"
+        :label="$t('LocalizationManagement.DisplayName:Key')"
         name="key"
         required
       >
@@ -179,7 +171,7 @@ onMounted(onInit);
         />
       </FormItem>
       <FormItem
-        :label="$t('AbpLocalization.DisplayName:Value')"
+        :label="$t('LocalizationManagement.DisplayName:Value')"
         name="value"
         required
       >

@@ -30,8 +30,8 @@ public class WeChatWorkAuthorizeGenerator : IWeChatWorkAuthorizeGenerator, ISing
     public async virtual Task<string> GenerateOAuth2AuthorizeAsync(
         string redirectUri,
         string state,
-        string responseType = "code",
-        string scope = "snsapi_base")
+        string? responseType = "code",
+        string? scope = "snsapi_base")
     {
         var corpId = await SettingProvider.GetOrNullAsync(WeChatWorkSettingNames.Connection.CorpId);
         var agentId = await SettingProvider.GetOrNullAsync(WeChatWorkSettingNames.Connection.AgentId);
@@ -44,7 +44,7 @@ public class WeChatWorkAuthorizeGenerator : IWeChatWorkAuthorizeGenerator, ISing
         var generatedUrlBuilder = new StringBuilder();
 
         generatedUrlBuilder
-            .Append(client.BaseAddress.AbsoluteUri.EnsureEndsWith('/'))
+            .Append(client.BaseAddress!.AbsoluteUri.EnsureEndsWith('/'))
             .Append("connect/oauth2/authorize")
             .AppendFormat("?appid={0}", corpId)
             .AppendFormat("&redirect_uri={0}", HttpUtility.UrlEncode(redirectUri))
@@ -60,9 +60,9 @@ public class WeChatWorkAuthorizeGenerator : IWeChatWorkAuthorizeGenerator, ISing
     public async virtual Task<string> GenerateOAuth2LoginAsync(
         string redirectUri,
         string state,
-        string loginType = "ServiceApp",
-        string agentId = "",
-        string lang = "zh")
+        string? loginType = "ServiceApp",
+        string? agentId = "",
+        string? lang = "zh")
     {
         if (agentId.IsNullOrWhiteSpace())
         {
@@ -78,7 +78,7 @@ public class WeChatWorkAuthorizeGenerator : IWeChatWorkAuthorizeGenerator, ISing
         var generatedUrlBuilder = new StringBuilder();
 
         generatedUrlBuilder
-            .Append(client.BaseAddress.AbsoluteUri.EnsureEndsWith('/'))
+            .Append(client.BaseAddress!.AbsoluteUri.EnsureEndsWith('/'))
             .Append("wwlogin/sso/login")
             .AppendFormat("?login_type={0}", loginType)
             .AppendFormat("&appid={0}", corpId)

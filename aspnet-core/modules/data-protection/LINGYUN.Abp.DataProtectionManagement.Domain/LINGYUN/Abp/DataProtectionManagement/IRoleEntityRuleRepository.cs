@@ -9,7 +9,7 @@ using Volo.Abp.Specifications;
 namespace LINGYUN.Abp.DataProtectionManagement;
 public interface IRoleEntityRuleRepository : IBasicRepository<RoleEntityRule, Guid>
 {
-    Task<RoleEntityRule> FindEntityRuleAsync(
+    Task<RoleEntityRule?> FindEntityRuleAsync(
         string roleName,
         string entityTypeFullName,
         DataAccessOperation operation = DataAccessOperation.Read,
@@ -25,7 +25,7 @@ public interface IRoleEntityRuleRepository : IBasicRepository<RoleEntityRule, Gu
 
     Task<List<RoleEntityRule>> GetCountAsync(
         ISpecification<RoleEntityRule> specification,
-        string sorting = nameof(RoleEntityRule.EntityTypeFullName),
+        string? sorting = nameof(RoleEntityRule.EntityTypeFullName),
         int maxResultCount = 10,
         int skipCount = 0,
         CancellationToken cancellationToken = default);

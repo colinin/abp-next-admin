@@ -19,7 +19,7 @@ public static class PlatformDbContextModelBuilderExtensions
 {
     public static void ConfigurePlatform(
        this ModelBuilder builder,
-       Action<PlatformModelBuilderConfigurationOptions> optionsAction = null)
+       Action<PlatformModelBuilderConfigurationOptions>? optionsAction = null)
     {
         Check.NotNull(builder, nameof(builder));
 
@@ -462,7 +462,7 @@ public static class PlatformDbContextModelBuilderExtensions
     public static OwnedNavigationBuilder<TEntity, TRoute> ConfigureRoute<TEntity, TRoute>(
         [NotNull] this OwnedNavigationBuilder<TEntity, TRoute> builder,
         [CanBeNull] string tablePrefix = "",
-        [CanBeNull] string schema = null)
+        [CanBeNull] string? schema = null)
         where TEntity : class
         where TRoute : Route
     {

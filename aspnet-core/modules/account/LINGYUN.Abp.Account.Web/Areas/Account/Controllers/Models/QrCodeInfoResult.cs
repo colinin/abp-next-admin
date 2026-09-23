@@ -4,6 +4,6 @@ namespace LINGYUN.Abp.Account.Web.Areas.Account.Controllers.Models;
 
 public class QrCodeInfoResult
 {
-    public string Key { get; set; }
+    public string Key { get; set; } = default!;
     public QrCodeStatus Status { get; set; }
 }

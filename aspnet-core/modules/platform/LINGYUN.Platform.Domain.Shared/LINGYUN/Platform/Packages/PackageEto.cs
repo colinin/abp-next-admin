@@ -10,11 +10,11 @@ public class PackageEto
     /// <summary>
     /// 名称
     /// </summary>
-    public string Name { get; set; }
+    public string Name { get; set; } = default!;
     /// <summary>
     /// 版本
     /// </summary>
-    public string Version { get; set; }
+    public string Version { get; set; } = default!;
     /// <summary>
     /// 强制更新
     /// </summary>

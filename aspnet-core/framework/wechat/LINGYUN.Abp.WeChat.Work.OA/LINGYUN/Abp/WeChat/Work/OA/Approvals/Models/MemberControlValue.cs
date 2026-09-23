@@ -15,7 +15,7 @@ public class MemberControlValue : ContactControlValue
     [NotNull]
     [JsonProperty("members")]
     [JsonPropertyName("members")]
-    public List<MemberValue> Members { get; set; }
+    public List<MemberValue> Members { get; set; } = default!;
     public MemberControlValue()
     {
 
@@ -45,14 +45,14 @@ public class MemberValue
     [NotNull]
     [JsonProperty("userid")]
     [JsonPropertyName("userid")]
-    public string UserId { get; set; }
+    public string UserId { get; set; } = default!;
     /// <summary>
     /// 成员名
     /// </summary>
     [NotNull]
     [JsonProperty("name")]
     [JsonPropertyName("name")]
-    public string Name { get; set; }
+    public string Name { get; set; } = default!;
     public MemberValue()
     {
 

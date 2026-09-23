@@ -72,7 +72,7 @@ public class SignalRMessageSenderProvider : MessageSenderProviderBase
     {
         try
         {
-            var onlineClients = _hubContext.Clients.User(chatMessage.ToUserId.Value.ToString());
+            var onlineClients = _hubContext.Clients.User(chatMessage.ToUserId!.Value.ToString());
             if (onlineClients == null)
             {
                 Logger.LogDebug("Can not get user " + chatMessage.ToUserId + " connection from SignalR hub!");
@@ -111,7 +111,7 @@ public class SignalRMessageSenderProvider : MessageSenderProviderBase
                         ChatMessage.System(
                             chatMessage.FormUserId,
                             chatMessage.GroupId,
-                            errorInfo.Message,
+                            errorInfo.Message!,
                             clock,
                             chatMessage.MessageType,
                             chatMessage.TenantId)
@@ -123,8 +123,8 @@ public class SignalRMessageSenderProvider : MessageSenderProviderBase
                     await TrySendMessageToUserAsync(
                         ChatMessage.System(
                             chatMessage.FormUserId,
-                            chatMessage.ToUserId.Value,
-                            errorInfo.Message,
+                            chatMessage.ToUserId!.Value,
+                            errorInfo.Message!,
                             clock,
                             chatMessage.MessageType,
                             chatMessage.TenantId)

@@ -10,23 +10,23 @@ public class WeChatWorkAppChatInfo
     /// </summary>
     [JsonProperty("name")]
     [JsonPropertyName("name")]
-    public virtual string Name { get; set; }
+    public virtual string Name { get; set; } = default!;
     /// <summary>
     /// 群主id
     /// </summary>
     [JsonProperty("owner")]
     [JsonPropertyName("owner")]
-    public virtual string Owner { get; set; }
+    public virtual string Owner { get; set; } = default!;
     /// <summary>
     /// 群成员id列表
     /// </summary>
     [JsonProperty("userlist")]
     [JsonPropertyName("userlist")]
-    public virtual List<string> Users { get; set; }
+    public virtual List<string> Users { get; set; } = default!;
     /// <summary>
     /// 群聊唯一标志
     /// </summary>
     [JsonProperty("chatid")]
     [JsonPropertyName("chatid")]
-    public virtual string ChatId { get; set; }
+    public virtual string ChatId { get; set; } = default!;
 }

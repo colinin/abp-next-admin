@@ -18,7 +18,7 @@ public class EfCoreEntityTypeInfoRepository : EfCoreRepository<IAbpDataProtectio
     {
     }
 
-    public async virtual Task<EntityTypeInfo> FindByTypeAsync(
+    public async virtual Task<EntityTypeInfo?> FindByTypeAsync(
         string typeFullName, 
         CancellationToken cancellationToken = default)
     {
@@ -38,7 +38,7 @@ public class EfCoreEntityTypeInfoRepository : EfCoreRepository<IAbpDataProtectio
 
     public async virtual Task<List<EntityTypeInfo>> GetListAsync(
         ISpecification<EntityTypeInfo> specification,
-        string sorting = nameof(EntityTypeInfo.Id),
+        string? sorting = nameof(EntityTypeInfo.Id),
         int maxResultCount = 10,
         int skipCount = 0,
         CancellationToken cancellationToken = default)

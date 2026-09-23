@@ -46,7 +46,7 @@ public class EfCoreIdentityUserRepository : Volo.Abp.Identity.EntityFrameworkCor
                 GetCancellationToken(cancellationToken));
     }
 
-    public async virtual Task<IdentityUser> FindByPhoneNumberAsync(
+    public async virtual Task<IdentityUser?> FindByPhoneNumberAsync(
         string phoneNumber,
         bool isConfirmed = true,
         bool includeDetails = false,
@@ -70,7 +70,7 @@ public class EfCoreIdentityUserRepository : Volo.Abp.Identity.EntityFrameworkCor
 
     public async virtual Task<List<OrganizationUnit>> GetOrganizationUnitsAsync(
         Guid id,
-        string filter = null,
+        string? filter = null,
         bool includeDetails = false,
         int skipCount = 1,
         int maxResultCount = 10,
@@ -105,14 +105,14 @@ public class EfCoreIdentityUserRepository : Volo.Abp.Identity.EntityFrameworkCor
                     select ou;
 
         return await query
-            .WhereIf(!filter.IsNullOrWhiteSpace(), ou => ou.Code.Contains(filter) || ou.DisplayName.Contains(filter))
+            .WhereIf(!filter.IsNullOrWhiteSpace(), ou => ou.Code.Contains(filter!) || ou.DisplayName.Contains(filter!))
             .PageBy(skipCount, maxResultCount)
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
     public async virtual Task<long> GetUsersInOrganizationUnitCountAsync(
         Guid organizationUnitId,
-        string filter = null,
+        string? filter = null,
         CancellationToken cancellationToken = default
     )
     {
@@ -123,15 +123,15 @@ public class EfCoreIdentityUserRepository : Volo.Abp.Identity.EntityFrameworkCor
                     select user;
         return await query
             .WhereIf(!filter.IsNullOrWhiteSpace(), 
-                user => user.Name.Contains(filter) || user.UserName.Contains(filter) ||
-                    user.Surname.Contains(filter) || user.Email.Contains(filter) ||
-                    user.PhoneNumber.Contains(filter))
+                user => user.Name.Contains(filter!) || user.UserName.Contains(filter!) ||
+                    user.Surname.Contains(filter!) || user.Email.Contains(filter!) ||
+                    user.PhoneNumber.Contains(filter!))
             .LongCountAsync(GetCancellationToken(cancellationToken));
     }
 
     public async virtual Task<List<IdentityUser>> GetUsersInOrganizationUnitAsync(
         Guid organizationUnitId,
-        string filter = null,
+        string? filter = null,
         int skipCount = 1,
         int maxResultCount = 10,
         CancellationToken cancellationToken = default
@@ -144,16 +144,16 @@ public class EfCoreIdentityUserRepository : Volo.Abp.Identity.EntityFrameworkCor
                     select user;
         return await query
             .WhereIf(!filter.IsNullOrWhiteSpace(),
-                user => user.Name.Contains(filter) || user.UserName.Contains(filter) ||
-                    user.Surname.Contains(filter) || user.Email.Contains(filter) ||
-                    user.PhoneNumber.Contains(filter))
+                user => user.Name.Contains(filter!) || user.UserName.Contains(filter!) ||
+                    user.Surname.Contains(filter!) || user.Email.Contains(filter!) ||
+                    user.PhoneNumber.Contains(filter!))
             .PageBy(skipCount, maxResultCount)
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
     public async virtual Task<long> GetUsersInOrganizationsListCountAsync(
         List<Guid> organizationUnitIds,
-        string filter = null,
+        string? filter = null,
         CancellationToken cancellationToken = default
     )
     {
@@ -164,15 +164,15 @@ public class EfCoreIdentityUserRepository : Volo.Abp.Identity.EntityFrameworkCor
                     select user;
         return await query
             .WhereIf(!filter.IsNullOrWhiteSpace(),
-                user => user.Name.Contains(filter) || user.UserName.Contains(filter) ||
-                    user.Surname.Contains(filter) || user.Email.Contains(filter) ||
-                    user.PhoneNumber.Contains(filter))
+                user => user.Name.Contains(filter!) || user.UserName.Contains(filter!) ||
+                    user.Surname.Contains(filter!) || user.Email.Contains(filter!) ||
+                    user.PhoneNumber.Contains(filter!))
             .LongCountAsync(GetCancellationToken(cancellationToken));
     }
 
     public async virtual Task<List<IdentityUser>> GetUsersInOrganizationsListAsync(
         List<Guid> organizationUnitIds,
-        string filter = null,
+        string? filter = null,
         int skipCount = 1,
         int maxResultCount = 10,
         CancellationToken cancellationToken = default
@@ -185,16 +185,16 @@ public class EfCoreIdentityUserRepository : Volo.Abp.Identity.EntityFrameworkCor
                     select user;
         return await query
             .WhereIf(!filter.IsNullOrWhiteSpace(),
-                user => user.Name.Contains(filter) || user.UserName.Contains(filter) ||
-                    user.Surname.Contains(filter) || user.Email.Contains(filter) ||
-                    user.PhoneNumber.Contains(filter))
+                user => user.Name.Contains(filter!) || user.UserName.Contains(filter!) ||
+                    user.Surname.Contains(filter!) || user.Email.Contains(filter!) ||
+                    user.PhoneNumber.Contains(filter!))
             .PageBy(skipCount, maxResultCount)
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
     public async virtual Task<long> GetUsersInOrganizationUnitWithChildrenCountAsync(
         string code,
-        string filter = null,
+        string? filter = null,
         CancellationToken cancellationToken = default
     )
     {
@@ -206,15 +206,15 @@ public class EfCoreIdentityUserRepository : Volo.Abp.Identity.EntityFrameworkCor
                     select user;
         return await query
             .WhereIf(!filter.IsNullOrWhiteSpace(),
-                user => user.Name.Contains(filter) || user.UserName.Contains(filter) ||
-                    user.Surname.Contains(filter) || user.Email.Contains(filter) ||
-                    user.PhoneNumber.Contains(filter))
+                user => user.Name.Contains(filter!) || user.UserName.Contains(filter!) ||
+                    user.Surname.Contains(filter!) || user.Email.Contains(filter!) ||
+                    user.PhoneNumber.Contains(filter!))
             .LongCountAsync(GetCancellationToken(cancellationToken));
     }
 
     public async virtual Task<List<IdentityUser>> GetUsersInOrganizationUnitWithChildrenAsync(
         string code,
-        string filter = null,
+        string? filter = null,
         int skipCount = 1,
         int maxResultCount = 10,
         CancellationToken cancellationToken = default
@@ -228,9 +228,9 @@ public class EfCoreIdentityUserRepository : Volo.Abp.Identity.EntityFrameworkCor
                     select user;
         return await query
             .WhereIf(!filter.IsNullOrWhiteSpace(),
-                user => user.Name.Contains(filter) || user.UserName.Contains(filter) ||
-                    user.Surname.Contains(filter) || user.Email.Contains(filter) ||
-                    user.PhoneNumber.Contains(filter))
+                user => user.Name.Contains(filter!) || user.UserName.Contains(filter!) ||
+                    user.Surname.Contains(filter!) || user.Email.Contains(filter!) ||
+                    user.PhoneNumber.Contains(filter!))
             .PageBy(skipCount, maxResultCount)
             .ToListAsync(GetCancellationToken(cancellationToken));
     }

@@ -48,10 +48,10 @@ public class SubscribeMessager : ISubscribeMessager, ITransientDependency
     public async virtual Task SendAsync(
         Guid toUser,
         string templateId,
-        string page = "",
-        string lang = "zh_CN",
-        string state = "formal",
-        Dictionary<string, object> data = null,
+        string? page = "",
+        string? lang = "zh_CN",
+        string? state = "formal",
+        Dictionary<string, object?>? data = null,
         CancellationToken cancellation = default)
     {
         var openId = await UserWeChatOpenIdFinder.FindByUserIdAsync(toUser, AbpWeChatMiniProgramConsts.ProviderName);
@@ -87,7 +87,7 @@ public class SubscribeMessager : ISubscribeMessager, ITransientDependency
         var weChatSendNotificationPath = "/cgi-bin/message/subscribe/send";
         var requestUrl = BuildRequestUrl(weChatSendNotificationUrl, weChatSendNotificationPath, requestParamters);
         var responseContent = await MakeRequestAndGetResultAsync(requestUrl, message, cancellationToken);
-        var response = JsonConvert.DeserializeObject<SubscribeMessageResponse>(responseContent);
+        var response = JsonConvert.DeserializeObject<SubscribeMessageResponse>(responseContent)!;
 
         if (!response.IsSuccessed)
         {
@@ -100,7 +100,8 @@ public class SubscribeMessager : ISubscribeMessager, ITransientDependency
     {
         var client = HttpClientFactory.CreateClient(AbpWeChatMiniProgramConsts.HttpClient);
         var sendDataContent = JsonConvert.SerializeObject(message);
-        var requestContent = new StringContent(sendDataContent);
+        Logger.LogDebug("Send the subscription message request body: {content}", sendDataContent);
+        var requestContent = new StringContent(sendDataContent, Encoding.UTF8, "application/json");
         var requestMessage = new HttpRequestMessage(HttpMethod.Post, url)
         {
             Content = requestContent

@@ -13,11 +13,11 @@ public class BackgroundJobAction : AuditedAggregateRoot<Guid>, IMultiTenant
     /// <summary>
     /// 作业标识
     /// </summary>
-    public virtual string JobId { get; protected set; }
+    public virtual string JobId { get; protected set; } = default!;
     /// <summary>
     /// 名称
     /// </summary>
-    public virtual string Name { get; protected set; }
+    public virtual string Name { get; protected set; } = default!;
     /// <summary>
     /// 是否启用
     /// </summary>
@@ -25,7 +25,7 @@ public class BackgroundJobAction : AuditedAggregateRoot<Guid>, IMultiTenant
     /// <summary>
     /// 参数
     /// </summary>
-    public virtual ExtraPropertyDictionary Paramters { get; set; }
+    public virtual ExtraPropertyDictionary Paramters { get; set; } = default!;
 
     protected BackgroundJobAction() { }
 
@@ -33,7 +33,7 @@ public class BackgroundJobAction : AuditedAggregateRoot<Guid>, IMultiTenant
         Guid id,
         string jobId,
         string name,
-        IDictionary<string, object> paramters,
+        IDictionary<string, object?> paramters,
         Guid? tenantId = null) : base(id)
     {
         JobId = Check.NotNullOrWhiteSpace(jobId, nameof(jobId), BackgroundJobActionConsts.MaxJobIdLength);
@@ -43,6 +43,9 @@ public class BackgroundJobAction : AuditedAggregateRoot<Guid>, IMultiTenant
         IsEnabled = true;
 
         Paramters = new ExtraPropertyDictionary();
-        Paramters.AddIfNotContains(paramters);
+        foreach (var paramter in paramters)
+        {
+            Paramters[paramter.Key] = paramter.Value;
+        }
     }
 }

@@ -2,5 +2,5 @@
 
 public class AliyunSmsSuccessResponse : AliyunSmsResponse
 {
-    public string BizId { get; set; }
+    public string? BizId { get; set; }
 }

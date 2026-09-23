@@ -10,9 +10,9 @@ namespace LINGYUN.Abp.Webhooks
     {
         Task<WebhookPayload> GetWebhookPayloadAsync(WebhookSenderArgs webhookSenderArgs);
 
-        void SignWebhookRequest(HttpRequestMessage request, string serializedBody, string secret);
+        void SignWebhookRequest(HttpRequestMessage request, string? serializedBody, string? secret);
 
-        Task<string> GetSerializedBodyAsync(WebhookSenderArgs webhookSenderArgs);
+        Task<string?> GetSerializedBodyAsync(WebhookSenderArgs webhookSenderArgs);
 
         Task<Guid> InsertAndGetIdWebhookSendAttemptAsync(WebhookSenderArgs webhookSenderArgs);
 
@@ -21,7 +21,7 @@ namespace LINGYUN.Abp.Webhooks
             Guid? tenantId,
             HttpStatusCode? statusCode, 
             string content,
-            IDictionary<string, string> requestHeaders = null,
-            IDictionary<string, string> responseHeaders = null);
+            IDictionary<string, string>? requestHeaders = null,
+            IDictionary<string, string>? responseHeaders = null);
     }
 }

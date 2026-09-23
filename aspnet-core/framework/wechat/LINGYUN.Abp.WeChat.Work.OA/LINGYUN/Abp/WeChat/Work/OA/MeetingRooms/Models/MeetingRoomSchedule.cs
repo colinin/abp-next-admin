@@ -28,7 +28,7 @@ public class MeetingRoomSchedule
     [NotNull]
     [JsonProperty("booker")]
     [JsonPropertyName("booker")]
-    public string Booker { get; set; }
+    public string Booker { get; set; } = default!;
     /// <summary>
     /// 会议室的预定状态
     /// </summary>
@@ -42,7 +42,7 @@ public class MeetingRoomSchedule
     [NotNull]
     [JsonProperty("booking_id")]
     [JsonPropertyName("booking_id")]
-    public string BookingId { get; set; }
+    public string BookingId { get; set; } = default!;
     /// <summary>
     /// 会议关联日程的id
     /// </summary>

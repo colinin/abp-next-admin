@@ -23,7 +23,7 @@ public class EfCoreRuleRecordRepository : EfCoreRepository<IRulesEngineManagemen
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
-    public async virtual Task<ActionRecord> GetFailureActionAsync(Guid ruleId, CancellationToken cancellationToken = default)
+    public async virtual Task<ActionRecord?> GetFailureActionAsync(Guid ruleId, CancellationToken cancellationToken = default)
     {
         var dbContext = await GetDbContextAsync();
 
@@ -51,7 +51,7 @@ public class EfCoreRuleRecordRepository : EfCoreRepository<IRulesEngineManagemen
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 
-    public async virtual Task<ActionRecord> GetSuccessActionAsync(Guid ruleId, CancellationToken cancellationToken = default)
+    public async virtual Task<ActionRecord?> GetSuccessActionAsync(Guid ruleId, CancellationToken cancellationToken = default)
     {
         var dbContext = await GetDbContextAsync();
 

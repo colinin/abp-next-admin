@@ -2,5 +2,5 @@
 
 public class MyFriendAddRequestDto : MyFriendOperationDto
 {
-    public string RemarkName { get; set; }
+    public string? RemarkName { get; set; }
 }

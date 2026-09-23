@@ -24,7 +24,7 @@ public class WeChatOffcialTokenExtensionGrant : WeChatTokenExtensionGrant
     //    }
     //}
 
-    protected async override Task<WeChatOpenId> FindOpenIdAsync(ExtensionGrantContext context, string code)
+    protected async override Task<WeChatOpenId?> FindOpenIdAsync(ExtensionGrantContext context, string code)
     {
         var weChatOpenIdFinder = GetRequiredService<IWeChatOpenIdFinder>(context);
         var optionsFactory = GetRequiredService<AbpWeChatOfficialOptionsFactory>(context);

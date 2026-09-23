@@ -20,7 +20,7 @@ public static class INotificationSenderExtensions
         [NotNull] this INotificationSender sender,
         [NotNull] string name,
         [NotNull] NotificationData data,
-        UserIdentifier user = null,
+        UserIdentifier? user = null,
         Guid? tenantId = null,
         NotificationSeverity severity = NotificationSeverity.Info)
     {
@@ -49,7 +49,7 @@ public static class INotificationSenderExtensions
         [NotNull] this INotificationSender sender,
         [NotNull] string name,
         [NotNull] NotificationTemplate template,
-        UserIdentifier user = null,
+        UserIdentifier? user = null,
         Guid? tenantId = null,
         NotificationSeverity severity = NotificationSeverity.Info)
     {

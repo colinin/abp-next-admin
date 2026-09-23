@@ -29,35 +29,35 @@ public class WebhookTemplateCardHorizontalContent
     [CanBeNull]
     [JsonProperty("value")]
     [JsonPropertyName("value")]
-    public string Value { get; set; }
+    public string? Value { get; set; }
     /// <summary>
     /// 链接跳转的url，type是1时必填
     /// </summary>
     [CanBeNull]
     [JsonProperty("url")]
     [JsonPropertyName("url")]
-    public string Url { get; set; }
+    public string? Url { get; set; }
     /// <summary>
     /// 附件的media_id，type是2时必填
     /// </summary>
     [CanBeNull]
     [JsonProperty("media_id")]
     [JsonPropertyName("media_id")]
-    public string MediaId { get; set; }
+    public string? MediaId { get; set; }
     /// <summary>
     /// 成员详情的userid，type是3时必填
     /// </summary>
     [CanBeNull]
     [JsonProperty("userid")]
     [JsonPropertyName("userid")]
-    public string UserId { get; set; }
+    public string? UserId { get; set; }
     private WebhookTemplateCardHorizontalContent(
         string keyName,
         int? type = null,
-        string value = null,
-        string url = null,
-        string mediaId = null,
-        string userId = null)
+        string? value = null,
+        string? url = null,
+        string? mediaId = null,
+        string? userId = null)
     {
         Type = type;
         KeyName = keyName;
@@ -72,7 +72,7 @@ public class WebhookTemplateCardHorizontalContent
     /// <param name="keyName">二级标题</param>
     /// <param name="value">二级文本</param>
     /// <returns></returns>
-    public static WebhookTemplateCardHorizontalContent Default(string keyName, string value = null)
+    public static WebhookTemplateCardHorizontalContent Default(string keyName, string? value = null)
     {
         Check.NotNullOrWhiteSpace(keyName, nameof(keyName));
 
@@ -85,7 +85,7 @@ public class WebhookTemplateCardHorizontalContent
     /// <param name="url">链接跳转的url</param>
     /// <param name="value">二级文本</param>
     /// <returns></returns>
-    public static WebhookTemplateCardHorizontalContent Link(string keyName, string url, string value = null)
+    public static WebhookTemplateCardHorizontalContent Link(string keyName, string url, string? value = null)
     {
         Check.NotNullOrWhiteSpace(keyName, nameof(keyName));
         Check.NotNullOrWhiteSpace(url, nameof(url));

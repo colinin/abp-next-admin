@@ -8,7 +8,7 @@ namespace LINGYUN.Abp.Sonatype.Nexus.Components;
 public class NexusComponentListResult
 {
     [JsonPropertyName("continuationToken")]
-    public string ContinuationToken { get; set; }
+    public string ContinuationToken { get; set; } = default!;
 
     [JsonPropertyName("items")]
     public List<NexusComponent> Items { get; set; }

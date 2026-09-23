@@ -15,20 +15,20 @@ public interface ILayoutRepository : IBasicRepository<Layout, Guid>
     /// <param name="includeDetails"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    Task<Layout> FindByNameAsync(
+    Task<Layout?> FindByNameAsync(
         string name,
         bool includeDetails = true,
         CancellationToken cancellationToken = default);
 
     Task<int> GetCountAsync(
-        string framework = "",
-        string filter = "",
+        string? framework = null,
+        string? filter = null,
         CancellationToken cancellationToken = default);
 
     Task<List<Layout>> GetPagedListAsync(
-        string framework = "",
-        string filter = "",
-        string sorting = nameof(Layout.Name),
+        string? framework = null,
+        string? filter = null,
+        string? sorting = nameof(Layout.Name),
         bool includeDetails = false,
         int skipCount = 0,
         int maxResultCount = 10,

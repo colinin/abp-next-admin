@@ -18,5 +18,5 @@ public class WeChatWorkGetApprovalDetailResponse : WeChatWorkResponse
     [NotNull]
     [JsonProperty("info")]
     [JsonPropertyName("info")]
-    public ApprovalDetailInfo Info { get; set; }
+    public ApprovalDetailInfo Info { get; set; } = default!;
 }

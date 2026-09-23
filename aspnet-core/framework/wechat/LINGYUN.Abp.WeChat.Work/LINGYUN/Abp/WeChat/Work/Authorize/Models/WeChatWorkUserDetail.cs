@@ -14,7 +14,7 @@ public class WeChatWorkUserDetail
     [NotNull]
     [JsonProperty("userid")]
     [JsonPropertyName("userid")]
-    public string UserId { get; set; }
+    public string UserId { get; set; } = default!;
     /// <summary>
     /// 性别。
     /// 0表示未定义，
@@ -33,7 +33,7 @@ public class WeChatWorkUserDetail
     [CanBeNull]
     [JsonProperty("avatar")]
     [JsonPropertyName("avatar")]
-    public string Avatar { get; set; }
+    public string? Avatar { get; set; }
     /// <summary>
     /// 员工个人二维码（扫描可添加为外部联系人）
     /// 仅在用户同意snsapi_privateinfo授权时返回
@@ -41,7 +41,7 @@ public class WeChatWorkUserDetail
     [CanBeNull]
     [JsonProperty("qr_code")]
     [JsonPropertyName("qr_code")]
-    public string QrCode { get; set; }
+    public string? QrCode { get; set; }
     /// <summary>
     /// 手机
     /// 仅在用户同意snsapi_privateinfo授权时返回，第三方应用不可获取
@@ -49,7 +49,7 @@ public class WeChatWorkUserDetail
     [CanBeNull]
     [JsonProperty("mobile")]
     [JsonPropertyName("mobile")]
-    public string Mobile { get; set; }
+    public string? Mobile { get; set; }
     /// <summary>
     /// 邮箱
     /// 仅在用户同意snsapi_privateinfo授权时返回，第三方应用不可获取
@@ -57,7 +57,7 @@ public class WeChatWorkUserDetail
     [CanBeNull]
     [JsonProperty("email")]
     [JsonPropertyName("email")]
-    public string Email { get; set; }
+    public string? Email { get; set; }
     /// <summary>
     /// 企业邮箱
     /// 仅在用户同意snsapi_privateinfo授权时返回，第三方应用不可获取
@@ -65,7 +65,7 @@ public class WeChatWorkUserDetail
     [CanBeNull]
     [JsonProperty("biz_mail")]
     [JsonPropertyName("biz_mail")]
-    public string WorkEmail { get; set; }
+    public string? WorkEmail { get; set; }
     /// <summary>
     /// 地址
     /// 仅在用户同意snsapi_privateinfo授权时返回，第三方应用不可获取
@@ -73,5 +73,5 @@ public class WeChatWorkUserDetail
     [CanBeNull]
     [JsonProperty("address")]
     [JsonPropertyName("address")]
-    public string Address { get; set; }
+    public string? Address { get; set; }
 }

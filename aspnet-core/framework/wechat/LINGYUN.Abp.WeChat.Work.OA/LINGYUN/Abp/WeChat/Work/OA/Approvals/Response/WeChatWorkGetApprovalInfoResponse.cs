@@ -18,12 +18,12 @@ public class WeChatWorkGetApprovalInfoResponse : WeChatWorkResponse
     [NotNull]
     [JsonProperty("sp_no_list")]
     [JsonPropertyName("sp_no_list")]
-    public List<string> SpNos { get; set; }
+    public List<string> SpNos { get; set; } = default!;
     /// <summary>
     /// 后续请求查询的游标，当返回结果没有该字段时表示审批单已经拉取完
     /// </summary>
     [CanBeNull]
     [JsonProperty("new_next_cursor")]
     [JsonPropertyName("new_next_cursor")]
-    public string NewNextCursor { get; set; }
+    public string? NewNextCursor { get; set; }
 }

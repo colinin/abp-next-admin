@@ -26,7 +26,7 @@ public interface IUserChatGroupRepository : IBasicRepository<UserChatGroup, long
     /// <param name="userId"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    Task<GroupUserCard> GetMemberAsync(
+    Task<GroupUserCard?> GetMemberAsync(
         long groupId,
         Guid userId,
         CancellationToken cancellationToken = default);
@@ -50,7 +50,7 @@ public interface IUserChatGroupRepository : IBasicRepository<UserChatGroup, long
     /// <returns></returns>
     Task<List<GroupUserCard>> GetMembersAsync(
         long groupId,
-        string sorting = nameof(GroupUserCard.UserId),
+        string? sorting = nameof(GroupUserCard.UserId),
         int skipCount = 0,
         int maxResultCount = 10,
         CancellationToken cancellationToken = default);

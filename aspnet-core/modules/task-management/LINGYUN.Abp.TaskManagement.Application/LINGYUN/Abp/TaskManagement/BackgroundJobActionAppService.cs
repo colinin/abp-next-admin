@@ -42,7 +42,7 @@ public class BackgroundJobActionAppService : TaskManagementApplicationService, I
 
         action = await BackgroundJobActionRepository.InsertAsync(action);
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
 
         return ObjectMapper.Map<BackgroundJobAction, BackgroundJobActionDto>(action);
     }
@@ -53,7 +53,7 @@ public class BackgroundJobActionAppService : TaskManagementApplicationService, I
 
         await BackgroundJobActionRepository.DeleteAsync(action);
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
     }
 
     public async virtual Task<ListResultDto<BackgroundJobActionDto>> GetActionsAsync(string jobId)
@@ -70,20 +70,36 @@ public class BackgroundJobActionAppService : TaskManagementApplicationService, I
 
 
         var dtoList = actionDefinitions
-            .WhereIf(input.Type.HasValue, action => action.Type == input.Type.Value)
-            .Select(action => new BackgroundJobActionDefinitionDto
+            .WhereIf(input.Type.HasValue, action => action.Type == input.Type)
+            .Select(action =>
             {
-                Name = action.Name,
-                Type = action.Type,
-                DisplayName = action.DisplayName.Localize(StringLocalizerFactory),
-                Description = action.Description?.Localize(StringLocalizerFactory),
-                Paramters = action.Paramters.Select(p => new BackgroundJobActionParamterDto
+                var backgroundJob = new BackgroundJobActionDefinitionDto
                 {
-                    Name = p.Name,
-                    Required = p.Required,
-                    DisplayName = p.DisplayName.Localize(StringLocalizerFactory),
-                    Description = p.Description?.Localize(StringLocalizerFactory),
-                }).ToList(),
+                    Name = action.Name,
+                    Type = action.Type,
+                    DisplayName = action.DisplayName.Localize(StringLocalizerFactory),
+                    Paramters = action.Paramters.Select(p =>
+                    {
+                        var backgroundJobActionParamter = new BackgroundJobActionParamterDto
+                        {
+                            Name = p.Name,
+                            Required = p.Required,
+                            DisplayName = p.DisplayName.Localize(StringLocalizerFactory),
+                        };
+                        if (p.Description != null)
+                        {
+                            backgroundJobActionParamter.Description = p.Description.Localize(StringLocalizerFactory);
+                        }
+
+                        return backgroundJobActionParamter;
+                    }).ToList(),
+                };
+                if (action.Description != null)
+                {
+                    backgroundJob.Description = action.Description.Localize(StringLocalizerFactory);
+                }
+
+                return backgroundJob;
             }).ToList();
 
         return Task.FromResult(new ListResultDto<BackgroundJobActionDefinitionDto>(dtoList));
@@ -98,7 +114,7 @@ public class BackgroundJobActionAppService : TaskManagementApplicationService, I
 
         action = await BackgroundJobActionRepository.UpdateAsync(action);
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
 
         return ObjectMapper.Map<BackgroundJobAction, BackgroundJobActionDto>(action);
     }

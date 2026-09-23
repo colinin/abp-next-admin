@@ -6,5 +6,5 @@ public class BaiduGeocode
     public int Precise { get; set; }
     public int Confidence { get; set; }
     public int Comprehension { get; set; }
-    public string Level { get; set; }
+    public string? Level { get; set; }
 }

@@ -17,7 +17,7 @@ public class DataAccessStrategyStateProvider : IDataAccessStrategyStateProvider,
         _serviceScopeFactory = serviceScopeFactory;
     }
 
-    public async virtual Task<DataAccessStrategyState> GetOrNullAsync()
+    public async virtual Task<DataAccessStrategyState?> GetOrNullAsync()
     {
         using var scope = _serviceScopeFactory.CreateScope();
         var context = new DataAccessStrategyContributorContext(scope.ServiceProvider);

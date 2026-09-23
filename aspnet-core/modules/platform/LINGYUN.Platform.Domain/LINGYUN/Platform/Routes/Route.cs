@@ -18,23 +18,23 @@ public abstract class Route : FullAuditedAggregateRoot<Guid>, IMultiTenant
     /// <summary>
     /// 路径
     /// </summary>
-    public virtual string Path { get; set; }
+    public virtual string? Path { get; set; }
     /// <summary>
     /// 名称
     /// </summary>
-    public virtual string Name { get; set; }
+    public virtual string Name { get; set; } = default!;
     /// <summary>
     /// 显示名称
     /// </summary>
-    public virtual string DisplayName { get; set; }
+    public virtual string DisplayName { get; set; } = default!;
     /// <summary>
     /// 说明
     /// </summary>
-    public virtual string Description { get; set; }
+    public virtual string? Description { get; set; }
     /// <summary>
     /// 重定向路径
     /// </summary>
-    public virtual string Redirect { get; set; }
+    public virtual string? Redirect { get; set; }
 
     protected Route() { }
 
@@ -43,8 +43,8 @@ public abstract class Route : FullAuditedAggregateRoot<Guid>, IMultiTenant
         [NotNull] string path,
         [NotNull] string name,
         [NotNull] string displayName,
-        [CanBeNull] string redirect = "",
-        [CanBeNull] string description = "",
+        [CanBeNull] string? redirect = null,
+        [CanBeNull] string? description = null,
         [CanBeNull] Guid? tenantId = null)
         : base(id)
     {
@@ -91,7 +91,7 @@ public abstract class Route : FullAuditedAggregateRoot<Guid>, IMultiTenant
         return Name.GetHashCode();
     }
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
         if (obj == null)
         {

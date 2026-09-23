@@ -49,18 +49,12 @@ public class BlobAppService : BlobAppServiceBase, IBlobAppService
 
     public async virtual Task<IRemoteStreamContent> DownloadAsync(BlobDownloadByIdInput input)
     {
-        using (CurrentTenant.Change(input.TenantId ?? CurrentTenant.Id))
-        {
-            return await base.DownloadAsync(input.Id);
-        }
+        return await base.DownloadByKeyAsync(input.Key);
     }
 
     public async virtual Task<IRemoteStreamContent> PreviewAsync(BlobDownloadByIdInput input)
     {
-        using (CurrentTenant.Change(input.TenantId ?? CurrentTenant.Id))
-        {
-            return await base.DownloadAsync(input.Id);
-        }
+        return await base.DownloadByKeyAsync(input.Key);
     }
 
     public async virtual Task<IRemoteStreamContent> DownloadByNameAsync(BlobDownloadByNameInput input)

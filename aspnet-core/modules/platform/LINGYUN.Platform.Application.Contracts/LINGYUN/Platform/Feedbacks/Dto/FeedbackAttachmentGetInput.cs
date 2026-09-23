@@ -10,5 +10,5 @@ public class FeedbackAttachmentGetInput
 
     [Required]
     [DynamicStringLength(typeof(FeedbackAttachmentConsts), nameof(FeedbackAttachmentConsts.MaxNameLength))]
-    public string Name { get; set; }
+    public string Name { get; set; } = default!;
 }

@@ -39,19 +39,19 @@ public class WeChatOpenIdFinder : IWeChatOpenIdFinder
         Logger = NullLogger<WeChatOpenIdFinder>.Instance;
     }
 
-    public async virtual Task<WeChatOpenId> FindAsync(string appId)
+    public async virtual Task<WeChatOpenId?> FindAsync(string appId)
     {
         if (!CurrentUser.IsAuthenticated)
         {
             throw new AbpAuthorizationException("Try to get wechat information when the user is not logged in!");
         }
-        var cacheKey = WeChatOpenIdCacheItem.CalculateCacheKey(appId, CurrentUser.Id.Value);
+        var cacheKey = WeChatOpenIdCacheItem.CalculateCacheKey(appId, CurrentUser.GetId());
         var openIdCache = await Cache.GetAsync(cacheKey);
         return openIdCache?.WeChatOpenId ??
             throw new AbpException("The wechat login session has expired. Use 'wx.login' result code to exchange the sessionKey");
     }
 
-    public async virtual Task<WeChatOpenId> FindAsync(string code, string appId, string appSecret)
+    public async virtual Task<WeChatOpenId?> FindAsync(string code, string appId, string appSecret)
     {
         // TODO: 如果需要获取SessionKey的话呢，需要再以openid作为标识来缓存一下吗
         // 或者前端保存code,通过传递code来获取
@@ -78,7 +78,7 @@ public class WeChatOpenIdFinder : IWeChatOpenIdFinder
 
         var request = new WeChatOpenIdRequest
         {
-            BaseUrl = client.BaseAddress.AbsoluteUri,
+            BaseUrl = client.BaseAddress!.AbsoluteUri,
             AppId = appId,
             Secret = appSecret,
             Code = code
@@ -87,7 +87,7 @@ public class WeChatOpenIdFinder : IWeChatOpenIdFinder
         var response = await client.RequestWeChatOpenIdAsync(request);
         var responseContent = await response.Content.ReadAsStringAsync();
         // 改为直接引用 Newtownsoft.Json
-        var weChatOpenIdResponse = JsonConvert.DeserializeObject<WeChatOpenIdResponse>(responseContent);
+        var weChatOpenIdResponse = JsonConvert.DeserializeObject<WeChatOpenIdResponse>(responseContent)!;
         var weChatOpenId = weChatOpenIdResponse.ToWeChatOpenId();
         cacheItem = new WeChatOpenIdCacheItem(code, weChatOpenId);
 
@@ -106,7 +106,7 @@ public class WeChatOpenIdFinder : IWeChatOpenIdFinder
 
         if (CurrentUser.IsAuthenticated)
         {
-            await Cache.SetAsync(WeChatOpenIdCacheItem.CalculateCacheKey(appId, CurrentUser.Id.Value), cacheItem, cacheOptions);
+            await Cache.SetAsync(WeChatOpenIdCacheItem.CalculateCacheKey(appId, CurrentUser.GetId()), cacheItem, cacheOptions);
         }
 
         Logger.LogDebug($"Finished setting the cache item: {cacheKey}");

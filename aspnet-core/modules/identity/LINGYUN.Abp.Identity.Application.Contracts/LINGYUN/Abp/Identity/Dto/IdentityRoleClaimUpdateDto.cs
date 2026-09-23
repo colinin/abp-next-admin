@@ -8,5 +8,5 @@ public class IdentityRoleClaimUpdateDto : IdentityRoleClaimCreateDto
 {
     [Required]
     [DynamicMaxLength(typeof(IdentityRoleClaimConsts), nameof(IdentityRoleClaimConsts.MaxClaimValueLength))]
-    public string NewClaimValue { get; set; }
+    public string NewClaimValue { get; set; } = default!;
 }

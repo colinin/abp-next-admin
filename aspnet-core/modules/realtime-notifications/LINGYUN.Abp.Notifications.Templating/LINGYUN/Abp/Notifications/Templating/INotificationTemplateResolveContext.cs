@@ -5,7 +5,7 @@ public interface INotificationTemplateResolveContext : IServiceProviderAccessor
 {
     NotificationTemplate Template { get; }
 
-    object Model { get; set; }
+    object? Model { get; set; }
 
     bool Handled { get; set; }
 }

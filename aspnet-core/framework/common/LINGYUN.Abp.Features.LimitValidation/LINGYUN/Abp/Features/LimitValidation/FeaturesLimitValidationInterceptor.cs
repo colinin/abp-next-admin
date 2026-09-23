@@ -74,7 +74,7 @@ public class FeaturesLimitValidationInterceptor : AbpInterceptor, ITransientDepe
         await _limitFeatureChecker.ProcessAsync(context);
     }
 
-    protected async virtual Task<RequiresLimitFeatureAttribute> GetRequiresLimitFeature(MethodInfo methodInfo)
+    protected async virtual Task<RequiresLimitFeatureAttribute?> GetRequiresLimitFeature(MethodInfo methodInfo)
     {
         var limitFeature = methodInfo.GetCustomAttribute<RequiresLimitFeatureAttribute>(false);
         if (limitFeature != null)
@@ -82,14 +82,14 @@ public class FeaturesLimitValidationInterceptor : AbpInterceptor, ITransientDepe
             // 限制次数定义的不是范围参数,则不参与限制功能
             var featureLimitDefinition = await _featureDefinitionManager.GetOrNullAsync(limitFeature.LimitFeature);
             if (featureLimitDefinition == null ||
-                !typeof(NumericValueValidator).IsAssignableFrom(featureLimitDefinition.ValueType.Validator.GetType()))
+                !typeof(NumericValueValidator).IsAssignableFrom(featureLimitDefinition.ValueType?.Validator.GetType()))
             {
                 return null;
             }
             // 时长刻度定义的不是范围参数,则不参与限制功能
             var featureIntervalDefinition = await _featureDefinitionManager.GetOrNullAsync(limitFeature.IntervalFeature);
             if (featureIntervalDefinition == null ||
-                !typeof(NumericValueValidator).IsAssignableFrom(featureIntervalDefinition.ValueType.Validator.GetType()))
+                !typeof(NumericValueValidator).IsAssignableFrom(featureIntervalDefinition.ValueType?.Validator.GetType()))
             {
                 return null;
             }

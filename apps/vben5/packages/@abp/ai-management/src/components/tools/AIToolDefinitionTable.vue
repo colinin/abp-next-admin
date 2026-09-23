@@ -220,6 +220,7 @@ async function onDelete(row: AIToolDefinitionRecordDto) {
         </Button>
         <Button
           v-access:code="[AIToolDefinitionPermissions.Delete]"
+          :disabled="row.isStatic"
           :icon="h(DeleteOutlined)"
           block
           danger

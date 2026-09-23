@@ -15,6 +15,6 @@ public class DependencyResolver : IDependencyResolver
 
     public object Resolve(IResolutionContext context, Type serviceType)
     {
-        return _serviceProvider.GetService(serviceType);
+        return _serviceProvider.GetService(serviceType)!;
     }
 }

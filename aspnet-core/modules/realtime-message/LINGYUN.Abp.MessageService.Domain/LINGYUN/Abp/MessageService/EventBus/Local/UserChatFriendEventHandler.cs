@@ -81,7 +81,7 @@ public class UserChatFriendEventHandler :
         {
             TenantId = tenantId,
             FormUserId = _currentUser.GetId(), // 本地事件中可以获取到当前用户信息
-            FormUserName = _currentUser.UserName,
+            FormUserName = _currentUser.UserName!,
             SendTime = DateTime.Now,
             MessageType = MessageType.Text,
             ToUserId = friendId,
@@ -105,13 +105,13 @@ public class UserChatFriendEventHandler :
                 new LocalizableStringInfo(
                     LocalizationResourceNameAttribute.GetName(typeof(MessageServiceResource)),
                     "Notifications:RequestAddNewFriend",
-                    new Dictionary<object, object> { { "name", _currentUser.UserName } }),
+                    new Dictionary<object, object> { { "name", _currentUser.UserName! } }),
                 DateTime.Now,
-                _currentUser.UserName,
+                _currentUser.UserName!,
                 new LocalizableStringInfo(
                     LocalizationResourceNameAttribute.GetName(typeof(MessageServiceResource)),
                     "Notifications:RequestAddNewFriendDetail",
-                    new Dictionary<object, object> { { "description", userChatFriend.Description } }));
+                    new Dictionary<object, object> { { "description", userChatFriend.Description ?? "" } }));
         friendValidationNotifictionData.TrySetData("userId", userChatFriend.UserId);
         friendValidationNotifictionData.TrySetData("frientId", userChatFriend.FrientId);
 

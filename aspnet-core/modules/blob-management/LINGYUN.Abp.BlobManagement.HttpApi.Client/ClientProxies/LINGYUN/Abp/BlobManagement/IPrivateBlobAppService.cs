@@ -22,9 +22,9 @@ public interface IPrivateBlobAppService : IApplicationService
 
     Task DeleteAsync(Guid id);
 
-    Task<IRemoteStreamContent> GetContentAsync(Guid id);
+    Task<IRemoteStreamContent> DownloadAsync(Guid id);
 
-    Task<IRemoteStreamContent> GetContentByNameAsync(string name);
+    Task<IRemoteStreamContent> DownloadByNameAsync(string name);
 
     Task<BlobDto> GetAsync(Guid id);
 

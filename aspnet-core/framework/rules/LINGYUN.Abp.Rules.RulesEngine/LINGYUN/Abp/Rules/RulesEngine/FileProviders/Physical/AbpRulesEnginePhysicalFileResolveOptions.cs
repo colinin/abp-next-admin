@@ -5,5 +5,5 @@ public class AbpRulesEnginePhysicalFileResolveOptions
     /// <summary>
     /// 本地文件路径
     /// </summary>
-    public string PhysicalPath { get; set; }
+    public string PhysicalPath { get; set; } = default!;
 }

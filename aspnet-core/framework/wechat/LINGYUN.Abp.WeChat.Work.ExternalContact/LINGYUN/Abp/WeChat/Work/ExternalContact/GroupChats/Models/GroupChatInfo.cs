@@ -14,21 +14,21 @@ public class GroupChatInfo
     [NotNull]
     [JsonProperty("chat_id")]
     [JsonPropertyName("chat_id")]
-    public string ChatId { get; set; }
+    public string ChatId { get; set; } = default!;
     /// <summary>
     /// 群名
     /// </summary>
     [NotNull]
     [JsonProperty("name")]
     [JsonPropertyName("name")]
-    public string Name { get; set; }
+    public string Name { get; set; } = default!;
     /// <summary>
     /// 群主ID
     /// </summary>
     [NotNull]
     [JsonProperty("owner")]
     [JsonPropertyName("owner")]
-    public string Owner { get; set; }
+    public string Owner { get; set; } = default!;
     /// <summary>
     /// 群的创建时间
     /// </summary>
@@ -42,26 +42,26 @@ public class GroupChatInfo
     [CanBeNull]
     [JsonProperty("notice")]
     [JsonPropertyName("notice")]
-    public string Notice { get; set; }
+    public string? Notice { get; set; }
     /// <summary>
     /// 群成员列表
     /// </summary>
     [NotNull]
     [JsonProperty("member_list")]
     [JsonPropertyName("member_list")]
-    public GroupChatMember[] MemberList { get; set; }
+    public GroupChatMember[] MemberList { get; set; } = default!;
     /// <summary>
     /// 群管理员列表
     /// </summary>
     [NotNull]
     [JsonProperty("admin_list")]
     [JsonPropertyName("admin_list")]
-    public GroupChatManager[] AdminList { get; set; }
+    public GroupChatManager[] AdminList { get; set; } = default!;
     /// <summary>
     /// 当前群成员版本号。可以配合客户群变更事件减少主动调用本接口的次数
     /// </summary>
     [NotNull]
     [JsonProperty("member_version")]
     [JsonPropertyName("member_version")]
-    public string MemberVersion { get; set; }
+    public string MemberVersion { get; set; } = default!;
 }

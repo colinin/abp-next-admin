@@ -119,7 +119,7 @@ public class DaprApiDescriptionFinder : IDaprApiDescriptionFinder, ITransientDep
 
         var result = JsonSerializer.Deserialize<ApplicationApiDescriptionModel>(content, DeserializeOptions);
 
-        return result;
+        return result!;
     }
 
     protected virtual void AddHeaders(HttpRequestMessage requestMessage)

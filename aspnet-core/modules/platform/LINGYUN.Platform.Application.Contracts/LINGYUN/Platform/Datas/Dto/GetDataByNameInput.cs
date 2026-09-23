@@ -7,5 +7,5 @@ public class GetDataByNameInput
 {
     [Required]
     [DynamicStringLength(typeof(DataConsts), nameof(DataConsts.MaxNameLength))]
-    public string Name { get; set; }
+    public string Name { get; set; } = default!;
 }

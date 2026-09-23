@@ -1,0 +1,13 @@
+{
+    "culture": "zh-Hans",
+    "texts": {
+        "SmsMessageRetrySendJob": "短信重新发送作业",
+        "EmailMessageRetrySendJob": "邮件重新发送作业",
+        "DisplayName:RecentSnedFailedHours": "最近发送失败时间",
+        "Description:RecentSnedFailedHours": "最近发送失败时间, 单位: 小时, 默认: 2.",
+        "DisplayName:PropertyMaxOfFailedAttempts": "失败次数上限",
+        "Description:PropertyMaxOfFailedAttempts": "失败次数上限, 默认: 3.",
+        "DisplayName:PropertyPollingBatchCount": "轮询批次数量",
+        "Description:PropertyPollingBatchCount": "轮询批次数量, 默认: 100."
+    }
+}

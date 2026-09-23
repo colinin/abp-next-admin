@@ -9,22 +9,22 @@ public class PushPlusUserProfile
     /// 用户微信的openId
     /// </summary>
     [JsonProperty("openId")]
-    public string OpenId { get; set; }
+    public string? OpenId { get; set; }
     /// <summary>
     /// 用户微信的unionId
     /// </summary>
     [JsonProperty("unionId")]
-    public string UnionId { get; set; }
+    public string? UnionId { get; set; }
     /// <summary>
     /// 昵称
     /// </summary>
     [JsonProperty("nickName")]
-    public string NickName { get; set; }
+    public string? NickName { get; set; }
     /// <summary>
     /// 头像
     /// </summary>
     [JsonProperty("headImgUrl")]
-    public string HeadImgUrl { get; set; }
+    public string? HeadImgUrl { get; set; }
     /// <summary>
     /// 性别；
     /// 0-未设置，
@@ -37,17 +37,17 @@ public class PushPlusUserProfile
     /// 用户令牌
     /// </summary>
     [JsonProperty("token")]
-    public string Token { get; set; }
+    public string? Token { get; set; }
     /// <summary>
     /// 手机号
     /// </summary>
     [JsonProperty("phoneNumber")]
-    public string PhoneNumber { get; set; }
+    public string? PhoneNumber { get; set; }
     /// <summary>
     /// 邮箱
     /// </summary>
     [JsonProperty("email")]
-    public string Email { get; set; }
+    public string? Email { get; set; }
     /// <summary>
     /// 邮箱验证状态；
     /// 0-未验证，

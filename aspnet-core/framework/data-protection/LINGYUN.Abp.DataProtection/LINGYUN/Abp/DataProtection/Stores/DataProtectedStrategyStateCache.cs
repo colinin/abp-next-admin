@@ -14,7 +14,7 @@ public class DataProtectedStrategyStateCache : IDataProtectedStrategyStateCache,
         _cache = cache;
     }
 
-    public async virtual Task<DataAccessStrategyStateCacheItem> GetAsync(string subjectName, string subjectId)
+    public async virtual Task<DataAccessStrategyStateCacheItem?> GetAsync(string subjectName, string subjectId)
     {
         var cacheKey = DataAccessStrategyStateCacheItem.CalculateCacheKey(subjectName, subjectId);
         var cacheItem = await _cache.GetAsync(cacheKey);

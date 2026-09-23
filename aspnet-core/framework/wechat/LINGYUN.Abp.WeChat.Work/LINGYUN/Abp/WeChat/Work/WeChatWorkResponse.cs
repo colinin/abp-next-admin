@@ -20,7 +20,7 @@ public class WeChatWorkResponse
     /// </summary>
     [JsonProperty("errmsg")]
     [JsonPropertyName("errmsg")]
-    public string ErrorMessage { get; set; }
+    public string? ErrorMessage { get; set; }
 
     public bool IsSuccessed => ErrorCode == 0;
 

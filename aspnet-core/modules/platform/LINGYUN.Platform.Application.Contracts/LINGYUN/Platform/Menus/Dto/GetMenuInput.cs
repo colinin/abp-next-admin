@@ -6,5 +6,5 @@ namespace LINGYUN.Platform.Menus;
 public class GetMenuInput
 {
     [DynamicStringLength(typeof(LayoutConsts), nameof(LayoutConsts.MaxFrameworkLength))]
-    public string Framework { get; set; }
+    public string? Framework { get; set; }
 }

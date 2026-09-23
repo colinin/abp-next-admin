@@ -17,12 +17,12 @@ namespace LINGYUN.Abp.Webhooks
         /// <summary>
         /// Webhook unique name
         /// </summary>
-        public string WebhookName { get; set; }
+        public string WebhookName { get; set; } = default!;
 
         /// <summary>
         /// Webhook data as JSON string.
         /// </summary>
-        public string Data { get; set; }
+        public string? Data { get; set; }
 
         //Subscription information
 
@@ -34,12 +34,12 @@ namespace LINGYUN.Abp.Webhooks
         /// <summary>
         /// Subscription webhook endpoint
         /// </summary>
-        public string WebhookUri { get; set; }
+        public string WebhookUri { get; set; } = default!;
 
         /// <summary>
         /// Webhook secret
         /// </summary>
-        public string Secret { get; set; }
+        public string? Secret { get; set; }
 
         /// <summary>
         /// Gets a set of additional HTTP headers.That headers will be sent with the webhook.

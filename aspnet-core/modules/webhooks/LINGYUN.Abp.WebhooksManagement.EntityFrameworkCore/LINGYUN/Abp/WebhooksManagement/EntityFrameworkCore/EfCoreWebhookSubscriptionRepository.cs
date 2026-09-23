@@ -30,7 +30,7 @@ public class EfCoreWebhookSubscriptionRepository :
         return await (await GetDbSetAsync())
             .AnyAsync(x => x.TenantId == tenantId &&
                 x.WebhookUri == webhookUri &&
-                x.Webhooks.Contains("\"" + webhookName + "\""),
+                x.Webhooks!.Contains("\"" + webhookName + "\""),
                 GetCancellationToken(cancellationToken));
     }
 
@@ -45,7 +45,7 @@ public class EfCoreWebhookSubscriptionRepository :
 
     public async virtual Task<List<WebhookSubscription>> GetListAsync(
         ISpecification<WebhookSubscription> specification,
-        string sorting = $"{nameof(WebhookSubscription.CreationTime)} DESC",
+        string? sorting = $"{nameof(WebhookSubscription.CreationTime)} DESC",
         int maxResultCount = 10,
         int skipCount = 0,
         CancellationToken cancellationToken = default)

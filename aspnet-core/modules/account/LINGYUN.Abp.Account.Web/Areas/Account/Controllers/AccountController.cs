@@ -92,7 +92,7 @@ public class AccountController : AbpController
         if (string.IsNullOrWhiteSpace(provider) || string.IsNullOrWhiteSpace(returnUrl))
         {
             Logger.LogWarning("The parameter is incorrect");
-            return Redirect(QueryHelpers.AddQueryString(returnUrl, new Dictionary<string, string>()
+            return Redirect(QueryHelpers.AddQueryString(returnUrl, new Dictionary<string, string?>()
             {
                 ["error"] = "The parameter is incorrect"
             }));

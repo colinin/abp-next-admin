@@ -6,5 +6,5 @@ namespace LINGYUN.Abp.Identity;
 public class IdentityUserOrganizationUnitUpdateDto
 {
     [Required]
-    public Guid[] OrganizationUnitIds { get; set; }
+    public Guid[] OrganizationUnitIds { get; set; } = default!;
 }

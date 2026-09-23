@@ -1,11 +1,12 @@
 ﻿using Volo.Abp;
+using Volo.Abp.Json;
 using Volo.Abp.OpenIddict.Tokens;
 
 namespace LINGYUN.Abp.OpenIddict.Tokens;
 
 internal static class OpenIddictTokenExtensions
 {
-    public static OpenIddictToken ToEntity(this OpenIddictTokenDto dto, OpenIddictToken entity)
+    public static OpenIddictToken ToEntity(this OpenIddictTokenDto dto, OpenIddictToken entity, IJsonSerializer jsonSerializer)
     {
         Check.NotNull(dto, nameof(dto));
         Check.NotNull(entity, nameof(entity));
@@ -15,7 +16,7 @@ internal static class OpenIddictTokenExtensions
         entity.CreationDate = dto.CreationDate;
         entity.ExpirationDate = dto.ExpirationDate;
         entity.Payload = dto.Payload;
-        entity.Properties = dto.Properties;
+        entity.Properties = jsonSerializer.Serialize(dto.Properties);
         entity.RedemptionDate = dto.RedemptionDate;
         entity.ReferenceId = dto.ReferenceId;
         entity.Status = dto.Status;
@@ -31,7 +32,7 @@ internal static class OpenIddictTokenExtensions
         return entity;
     }
 
-    public static OpenIddictTokenDto ToDto(this OpenIddictToken entity)
+    public static OpenIddictTokenDto? ToDto(this OpenIddictToken entity, IJsonSerializer jsonSerializer)
     {
         if (entity == null)
         {
@@ -46,12 +47,12 @@ internal static class OpenIddictTokenExtensions
             CreationDate = entity.CreationDate,
             ExpirationDate = entity.ExpirationDate,
             Payload = entity.Payload,
-            Properties = entity.Properties,
             RedemptionDate = entity.RedemptionDate,
             ReferenceId = entity.ReferenceId,
             Status = entity.Status,
             Subject = entity.Subject,
-            Type = entity.Type
+            Type = entity.Type,
+            Properties = jsonSerializer.DeserializeToDictionary<string, string>(entity.Properties),
         };
 
         foreach (var extraProperty in entity.ExtraProperties)
