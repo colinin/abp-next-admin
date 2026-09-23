@@ -14,7 +14,7 @@ public class DateControlValue : ControlValue
     [NotNull]
     [JsonProperty("date")]
     [JsonPropertyName("date")]
-    public DateValue Date { get; set; }
+    public DateValue Date { get; set; } = default!;
     public DateControlValue()
     {
 
@@ -34,14 +34,14 @@ public class DateValue
     [NotNull]
     [JsonProperty("type")]
     [JsonPropertyName("type")]
-    public string Type { get; set; }
+    public string Type { get; set; } = default!;
     /// <summary>
     /// 时间戳-字符串类型，在此填写日期/日期+时间控件的选择值，以此为准
     /// </summary>
     [NotNull]
     [JsonProperty("s_timestamp")]
     [JsonPropertyName("s_timestamp")]
-    public string Timestamp { get; set; }
+    public string Timestamp { get; set; } = default!;
     public DateValue()
     {
 

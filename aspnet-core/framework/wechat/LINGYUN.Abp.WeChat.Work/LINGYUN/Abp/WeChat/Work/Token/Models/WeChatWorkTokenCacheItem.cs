@@ -2,11 +2,11 @@
 
 public class WeChatWorkTokenCacheItem
 {
-    public string CorpId { get; set; }
+    public string CorpId { get; set; } = default!;
 
-    public string AgentId { get; set; }
+    public string AgentId { get; set; } = default!;
 
-    public WeChatWorkToken Token { get; set; }
+    public WeChatWorkToken Token { get; set; } = default!;
 
     public WeChatWorkTokenCacheItem()
     {

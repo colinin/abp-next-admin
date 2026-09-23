@@ -1,21 +1,22 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System;
+using Volo.Abp;
 
 namespace LINGYUN.Abp.BackgroundTasks;
 
 public static class JobRunnableContextExtensions
 {
-    public static T GetService<T>(this JobRunnableContext context)
+    public static T? GetService<T>(this JobRunnableContext context)
     {
         return context.ServiceProvider.GetService<T>();
     }
 
-    public static object GetService(this JobRunnableContext context, Type serviceType)
+    public static object? GetService(this JobRunnableContext context, Type serviceType)
     {
         return context.ServiceProvider.GetService(serviceType);
     }
 
-    public static T GetRequiredService<T>(this JobRunnableContext context)
+    public static T GetRequiredService<T>(this JobRunnableContext context) where T : notnull
     {
         return context.ServiceProvider.GetRequiredService<T>();
     }
@@ -27,7 +28,11 @@ public static class JobRunnableContextExtensions
 
     public static string GetString(this JobRunnableContext context, string key)
     {
-        return context.GetJobData(key).ToString();
+        var strVal = context.GetJobData(key).ToString();
+
+        Check.NotNull(strVal, nameof(strVal));
+
+        return strVal;
     }
 
     public static string GetOrDefaultString(this JobRunnableContext context, string key, string defaultValue = "")
@@ -44,10 +49,10 @@ public static class JobRunnableContextExtensions
     {
         if (context.TryGetJobData(key, out var data) && data != null)
         {
-            value = data.ToString();
+            value = data.ToString()!;
             return true;
         }
-        value = default;
+        value = default!;
         return false;
     }
 
@@ -111,7 +116,7 @@ public static class JobRunnableContextExtensions
         throw new ArgumentException($"Job required data [{key}] not specified.");
     }
 
-    public static bool TryGetJobData(this JobRunnableContext context, string key, out object value)
+    public static bool TryGetJobData(this JobRunnableContext context, string key, out object? value)
     {
         if (context.JobData.TryGetValue(key, out value))
         {

@@ -9,15 +9,10 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
 		<PackageReference Include="Volo.Abp.Identity.Application.Contracts" />
 		<PackageReference Include="Volo.Abp.OpenIddict.EntityFrameworkCore" />
 		<PackageReference Include="Volo.Abp.FeatureManagement.EntityFrameworkCore" />
 		<PackageReference Include="Volo.Abp.SettingManagement.EntityFrameworkCore" />
-		<PackageReference Include="Volo.Abp.PermissionManagement.EntityFrameworkCore" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -32,6 +27,7 @@
 		<ProjectReference Include="..\..\modules\data-protection\LINGYUN.Abp.DataProtectionManagement.EntityFrameworkCore\LINGYUN.Abp.DataProtectionManagement.EntityFrameworkCore.csproj" />
 		<ProjectReference Include="..\..\modules\demo\LINGYUN.Abp.Demo.EntityFrameworkCore\LINGYUN.Abp.Demo.EntityFrameworkCore.csproj" />
 		<ProjectReference Include="..\..\modules\gdpr\LINGYUN.Abp.Gdpr.EntityFrameworkCore\LINGYUN.Abp.Gdpr.EntityFrameworkCore.csproj" />
+		<ProjectReference Include="..\..\modules\permissions-management\LINGYUN.Abp.PermissionManagement.EntityFrameworkCore\LINGYUN.Abp.PermissionManagement.EntityFrameworkCore.csproj" />
 		<ProjectReference Include="..\..\modules\platform\LINGYUN.Abp.UI.Navigation.VueVbenAdmin5\LINGYUN.Abp.UI.Navigation.VueVbenAdmin5.csproj" />
 		<ProjectReference Include="..\..\modules\realtime-message\LINGYUN.Abp.MessageService.EntityFrameworkCore\LINGYUN.Abp.MessageService.EntityFrameworkCore.csproj" />
 		<ProjectReference Include="..\..\modules\realtime-notifications\LINGYUN.Abp.Notifications.EntityFrameworkCore\LINGYUN.Abp.Notifications.EntityFrameworkCore.csproj" />

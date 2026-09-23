@@ -44,7 +44,7 @@ public class NexusBlobProvider : BlobProviderBase, ITransientDependency
         return nexusAsset != null;
     }
 
-    public async override Task<Stream> GetOrNullAsync(BlobProviderGetArgs args)
+    public async override Task<Stream?> GetOrNullAsync(BlobProviderGetArgs args)
     {
         var nexusAsset = await GetNexusAssetOrNull(args);
         if (nexusAsset == null)
@@ -80,7 +80,7 @@ public class NexusBlobProvider : BlobProviderBase, ITransientDependency
         await NexusComponentManager.UploadAsync(nexusRawBlobUploadArgs, args.CancellationToken);
     }
 
-    protected async virtual Task<NexusAsset> GetNexusAssetOrNull(BlobProviderArgs args)
+    protected async virtual Task<NexusAsset?> GetNexusAssetOrNull(BlobProviderArgs args)
     {
         var nexusConfiguration = args.Configuration.GetNexusConfiguration();
         var blobPath = BlobDirectoryCalculator.CalculateGroup(args.ContainerName, args.BlobName);
@@ -96,7 +96,7 @@ public class NexusBlobProvider : BlobProviderBase, ITransientDependency
         return nexusAsset;
     }
 
-    protected async virtual Task<NexusComponent> GetNexusomponentOrNull(BlobProviderArgs args)
+    protected async virtual Task<NexusComponent?> GetNexusomponentOrNull(BlobProviderArgs args)
     {
         var nexusConfiguration = args.Configuration.GetNexusConfiguration();
         var blobPath = BlobDirectoryCalculator.CalculateGroup(args.ContainerName, args.BlobName);

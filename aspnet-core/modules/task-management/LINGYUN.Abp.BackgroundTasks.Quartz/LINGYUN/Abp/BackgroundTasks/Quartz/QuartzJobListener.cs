@@ -93,7 +93,7 @@ public class QuartzJobListener : JobListenerSupport, ISingletonDependency
         }
     }
 
-    public override async Task JobWasExecuted(IJobExecutionContext context, JobExecutionException jobException, CancellationToken cancellationToken = default)
+    public override async Task JobWasExecuted(IJobExecutionContext context, JobExecutionException? jobException, CancellationToken cancellationToken = default)
     {
         try
         {

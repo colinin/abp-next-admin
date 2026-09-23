@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
 
@@ -36,6 +37,7 @@ public class EfCoreNotificationRepository : EfCoreRepository<INotificationsDbCon
         CancellationToken cancellationToken = default)
     {
         return await (await GetDbSetAsync()).Where(x => x.NotificationId.Equals(notificationId))
-            .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
+            .FirstOrDefaultAsync(GetCancellationToken(cancellationToken))
+            ?? throw new EntityNotFoundException(typeof(Notification), notificationId);
     }
 }

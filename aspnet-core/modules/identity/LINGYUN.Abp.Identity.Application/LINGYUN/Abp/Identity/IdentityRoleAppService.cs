@@ -15,7 +15,6 @@ public class IdentityRoleAppService : IdentityAppServiceBase, IIdentityRoleAppSe
 {
     protected IIdentityRoleRepository IdentityRoleRepository { get; }
     protected OrganizationUnitManager OrganizationUnitManager { get; }
-    protected IOrganizationUnitRepository OrganizationUnitRepository { get; }
     public IdentityRoleAppService(
         IIdentityRoleRepository roleRepository,
         OrganizationUnitManager organizationUnitManager)
@@ -53,7 +52,7 @@ public class IdentityRoleAppService : IdentityAppServiceBase, IIdentityRoleAppSe
             origanzationUnit.RemoveRole(id);
         }
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
     }
 
     [Authorize(IdentityPermissions.Roles.ManageOrganizationUnits)]
@@ -61,7 +60,7 @@ public class IdentityRoleAppService : IdentityAppServiceBase, IIdentityRoleAppSe
     {
         await OrganizationUnitManager.RemoveRoleFromOrganizationUnitAsync(id, ouId);
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
     }
 
     #endregion
@@ -88,7 +87,7 @@ public class IdentityRoleAppService : IdentityAppServiceBase, IIdentityRoleAppSe
         role.AddClaim(GuidGenerator, claim);
         await IdentityRoleRepository.UpdateAsync(role);
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
     }
 
     [Authorize(IdentityPermissions.Roles.ManageClaims)]
@@ -103,7 +102,7 @@ public class IdentityRoleAppService : IdentityAppServiceBase, IIdentityRoleAppSe
 
             await IdentityRoleRepository.UpdateAsync(role);
 
-            await CurrentUnitOfWork.SaveChangesAsync();
+            await CurrentUnitOfWork!.SaveChangesAsync();
         }
     }
 
@@ -115,7 +114,7 @@ public class IdentityRoleAppService : IdentityAppServiceBase, IIdentityRoleAppSe
 
         await IdentityRoleRepository.UpdateAsync(role);
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
     }
 
     #endregion

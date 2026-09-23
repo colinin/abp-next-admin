@@ -1,9 +1,9 @@
-import type { ListResultDto } from '@abp/core';
+import type { PagedResultDto } from '@abp/core';
 
 import type {
   ResourceCreateDto,
   ResourceDto,
-  ResourceGetListInput,
+  ResourceGetPagedListInput,
   ResourceUpdateDto,
 } from '../types/resources';
 
@@ -13,20 +13,17 @@ export function useResourcesApi() {
   const { cancel, request } = useRequest();
 
   /**
-   * 查询资源列表
+   * 查询资源分页列表
    * @param input 参数
    * @returns 资源列表
    */
-  function getListApi(
-    input?: ResourceGetListInput,
-  ): Promise<ListResultDto<ResourceDto>> {
-    return request<ListResultDto<ResourceDto>>(
-      '/api/abp/localization/resources',
-      {
-        method: 'GET',
-        params: input,
-      },
-    );
+  function getPagedListApi(
+    input?: ResourceGetPagedListInput,
+  ): Promise<PagedResultDto<ResourceDto>> {
+    return request<PagedResultDto<ResourceDto>>('/api/localization/resources', {
+      method: 'GET',
+      params: input,
+    });
   }
 
   /**
@@ -83,7 +80,7 @@ export function useResourcesApi() {
     createApi,
     deleteApi,
     getApi,
-    getListApi,
+    getPagedListApi,
     updateApi,
   };
 }

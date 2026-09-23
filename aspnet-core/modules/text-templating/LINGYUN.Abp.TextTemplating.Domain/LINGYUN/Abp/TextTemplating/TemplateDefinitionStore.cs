@@ -87,14 +87,14 @@ public class TemplateDefinitionStore : ITemplateDefinitionStore, IDynamicTemplat
     {
         if (!TemplatingCachingOptions.IsDynamicTemplateDefinitionStoreEnabled)
         {
-            return null;
+            throw new AbpException($"Undefined Template: {name}!");
         }
 
         using (await TemplateDefinitionStoreCache.SyncSemaphore.LockAsync())
         {
             await EnsureCacheIsUptoDateAsync();
 
-            return TemplateDefinitionStoreCache.GetOrNull(name);
+            return TemplateDefinitionStoreCache.GetOrNull(name) ?? throw new AbpException($"Undefined Template: {name}!");
         }
     }
     public async virtual Task<TemplateDefinition> GetAsync(string name)
@@ -107,7 +107,7 @@ public class TemplateDefinitionStore : ITemplateDefinitionStore, IDynamicTemplat
         return await GetAllAsync(GetCancellationToken());
     }
 
-    public async virtual Task<TemplateDefinition> GetOrNullAsync(string name)
+    public async virtual Task<TemplateDefinition?> GetOrNullAsync(string name)
     {
         return await GetOrNullAsync(name, GetCancellationToken());
     }
@@ -127,7 +127,7 @@ public class TemplateDefinitionStore : ITemplateDefinitionStore, IDynamicTemplat
         }
     }
 
-    public async virtual Task<TemplateDefinition> GetOrNullAsync(string name, CancellationToken cancellationToken = default)
+    public async virtual Task<TemplateDefinition?> GetOrNullAsync(string name, CancellationToken cancellationToken = default)
     {
         if (!TemplatingCachingOptions.IsDynamicTemplateDefinitionStoreEnabled)
         {

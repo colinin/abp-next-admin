@@ -25,7 +25,7 @@ public class BaiduLocationResolveProvider : ILocationResolveProvider
         return await BaiduLocationHttpClient.ReGeocodeAsync(lat, lng, radius);
     }
 
-    public async virtual Task<GecodeLocation> GeocodeAsync(string address, string city = null)
+    public async virtual Task<GecodeLocation> GeocodeAsync(string address, string? city = null)
     {
         return await BaiduLocationHttpClient.GeocodeAsync(address, city);
     }

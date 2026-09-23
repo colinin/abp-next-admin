@@ -7,5 +7,5 @@ namespace LINGYUN.Abp.Dynamic.Queryable;
 public class GetListByDynamicQueryableInput : PagedAndSortedResultRequestDto
 {
     [Required]
-    public DynamicQueryable Queryable { get; set; }
+    public DynamicQueryable Queryable { get; set; } = default!;
 }

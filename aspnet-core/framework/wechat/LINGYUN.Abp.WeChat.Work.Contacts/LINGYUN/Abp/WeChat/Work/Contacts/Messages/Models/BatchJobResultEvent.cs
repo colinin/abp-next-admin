@@ -17,7 +17,7 @@ public class BatchJobResultEvent : WeChatWorkEventMessage
     /// 异步任务信息
     /// </summary>
     [XmlElement("BatchJob")]
-    public BatchJob BatchJob { get; set; }
+    public BatchJob BatchJob { get; set; } = default!;
 
     public override WeChatMessageEto ToEto()
     {
@@ -31,12 +31,12 @@ public class BatchJob
     /// 异步任务id，最大长度为64字符
     /// </summary>
     [XmlElement("JobId")]
-    public string JobId { get; set; }
+    public string JobId { get; set; } = default!;
     /// <summary>
     /// 操作类型，字符串，目前分别有：sync_user(增量更新成员)、 replace_user(全量覆盖成员）、invite_user(邀请成员关注）、replace_party(全量覆盖部门)
     /// </summary>
     [XmlElement("JobType")]
-    public string JobType { get; set; }
+    public string JobType { get; set; } = default!;
     /// <summary>
     /// 返回码
     /// </summary>
@@ -46,5 +46,5 @@ public class BatchJob
     /// 对返回码的文本描述内容
     /// </summary>
     [XmlElement("ErrMsg")]
-    public string ErrMsg { get; set; }
+    public string? ErrMsg { get; set; }
 }

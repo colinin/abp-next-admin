@@ -8,14 +8,14 @@ public class AbpTencentQQOptions
     /// <remarks>
     /// see: https://wiki.connect.qq.com/%e5%87%86%e5%a4%87%e5%b7%a5%e4%bd%9c_oauth2-0
     /// </remarks>
-    public string AppId { get; set; }
+    public string AppId { get; set; } = default!;
     /// <summary>
     /// 在QQ互联上申请的AppKey
     /// </summary>
     /// <remarks>
     /// see: https://wiki.connect.qq.com/%e5%87%86%e5%a4%87%e5%b7%a5%e4%bd%9c_oauth2-0
     /// </remarks>
-    public string AppKey { get; set; }
+    public string AppKey { get; set; } = default!;
     /// <summary>
     /// 是否移动端样式
     /// </summary>

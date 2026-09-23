@@ -11,5 +11,5 @@ public class LayoutCreateDto : LayoutCreateOrUpdateDto
 
     [Required]
     [DynamicStringLength(typeof(LayoutConsts), nameof(LayoutConsts.MaxFrameworkLength))]
-    public string Framework { get; set; }
+    public string Framework { get; set; } = default!;
 }

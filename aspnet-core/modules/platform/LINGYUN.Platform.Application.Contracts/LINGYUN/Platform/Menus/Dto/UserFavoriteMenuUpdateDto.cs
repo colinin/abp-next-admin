@@ -5,5 +5,5 @@ namespace LINGYUN.Platform.Menus;
 public class UserFavoriteMenuUpdateDto : UserFavoriteMenuCreateOrUpdateDto, IHasConcurrencyStamp
 {
 
-    public string ConcurrencyStamp { get; set; }
+    public string ConcurrencyStamp { get; set; } = default!;
 }

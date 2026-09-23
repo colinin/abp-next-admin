@@ -7,5 +7,5 @@ namespace LINGYUN.Abp.Identity;
 public class OrganizationUnitAddRoleDto
 {
     [Required]
-    public List<Guid> RoleIds { get; set; }
+    public List<Guid> RoleIds { get; set; } = default!;
 }

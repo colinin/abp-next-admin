@@ -7,16 +7,16 @@ public class SetTextInput
 {
     [Required]
     [DynamicStringLength(typeof(ResourceConsts), nameof(ResourceConsts.MaxNameLength))]
-    public string ResourceName { get; set; }
+    public string ResourceName { get; set; } = default!;
 
     [Required]
     [DynamicStringLength(typeof(TextConsts), nameof(TextConsts.MaxKeyLength))]
-    public string Key { get; set; }
+    public string Key { get; set; } = default!;
 
     [Required]
     [DynamicStringLength(typeof(LanguageConsts), nameof(LanguageConsts.MaxCultureNameLength))]
-    public string CultureName { get; set; }
+    public string CultureName { get; set; } = default!;
 
     [DynamicStringLength(typeof(TextConsts), nameof(TextConsts.MaxValueLength))]
-    public string Value { get; set; }
+    public string? Value { get; set; }
 }

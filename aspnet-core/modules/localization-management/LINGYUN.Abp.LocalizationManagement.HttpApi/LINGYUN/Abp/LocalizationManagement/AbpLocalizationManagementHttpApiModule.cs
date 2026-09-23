@@ -1,6 +1,6 @@
-﻿using LINGYUN.Abp.AspNetCore.Mvc.Localization;
-using LINGYUN.Abp.LocalizationManagement.Localization;
+﻿using LINGYUN.Abp.LocalizationManagement.Localization;
 using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.AspNetCore.Mvc.Localization;
 using Volo.Abp.Localization;
 using Volo.Abp.Localization.Resources.AbpLocalization;
@@ -10,8 +10,8 @@ using Volo.Abp.Validation.Localization;
 namespace LINGYUN.Abp.LocalizationManagement;
 
 [DependsOn(
-    typeof(AbpAspNetCoreMvcLocalizationModule),
-    typeof(AbpLocalizationManagementApplicationContractsModule))]
+    typeof(AbpLocalizationManagementApplicationContractsModule),
+    typeof(AbpAspNetCoreMvcModule))]
 public class AbpLocalizationManagementHttpApiModule : AbpModule
 {
     public override void PreConfigureServices(ServiceConfigurationContext context)

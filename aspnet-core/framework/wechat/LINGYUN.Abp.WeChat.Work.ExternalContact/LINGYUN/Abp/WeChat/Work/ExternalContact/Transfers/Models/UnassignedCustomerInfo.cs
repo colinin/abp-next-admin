@@ -11,14 +11,14 @@ public class UnassignedCustomerInfo
     [NotNull]
     [JsonProperty("handover_userid")]
     [JsonPropertyName("handover_userid")]
-    public string HandoverUserid { get; set; }
+    public string HandoverUserid { get; set; } = default!;
     /// <summary>
     /// 外部联系人userid
     /// </summary>
     [NotNull]
     [JsonProperty("external_userid")]
     [JsonPropertyName("external_userid")]
-    public string ExternalUserid { get; set; }
+    public string ExternalUserid { get; set; } = default!;
     /// <summary>
     /// 成员离职时间
     /// </summary>

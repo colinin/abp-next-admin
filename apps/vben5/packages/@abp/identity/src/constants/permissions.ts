@@ -10,6 +10,8 @@ export const IdentityUserPermissions = {
   ManagePermissions: 'AbpIdentity.Users.ManagePermissions',
   /** 更新 */
   Update: 'AbpIdentity.Users.Update',
+  /** 模拟用户 */
+  Impersonation: 'AbpIdentity.Users.Impersonation',
 };
 /** 角色权限 */
 export const IdentityRolePermissions = {

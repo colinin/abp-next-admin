@@ -24,8 +24,8 @@ public class PackageSpecification : Specification<Package>
             .AndIf(!Filter.Description.IsNullOrWhiteSpace(), x => x.Description == Filter.Description)
             .AndIf(!Filter.Authors.IsNullOrWhiteSpace(), x => x.Authors == Filter.Authors)
             .AndIf(Filter.ForceUpdate.HasValue, x => x.ForceUpdate == Filter.ForceUpdate)
-            .AndIf(!Filter.Filter.IsNullOrWhiteSpace(), x => x.Name.Contains(Filter.Filter) ||
-                x.Note.Contains(Filter.Filter) || x.Version.Contains(Filter.Filter) ||
-                x.Description.Contains(Filter.Filter) || x.Authors.Contains(Filter.Filter));
+            .AndIf(!Filter.Filter.IsNullOrWhiteSpace(), x => x.Name.Contains(Filter.Filter!) ||
+                x.Note.Contains(Filter.Filter!) || x.Version.Contains(Filter.Filter!) ||
+                x.Description!.Contains(Filter.Filter!) || x.Authors!.Contains(Filter.Filter!));
     }
 }

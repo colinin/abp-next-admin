@@ -147,8 +147,7 @@ public class WorkspaceDefinition : IHasSimpleStateCheckers<WorkspaceDefinition>
         Name = name;
         Provider = provider;
         ModelName = modelName;
-        _displayName = displayName;
-        _displayName = displayName;
+        DisplayName = displayName;
         Description = description;
         SystemPrompt = systemPrompt;
         Instructions = instructions;

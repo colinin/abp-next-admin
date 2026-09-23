@@ -48,7 +48,7 @@ public class TenantCacheItemInvalidator :
         await RemoveTenantCache(eventData.Entity.Id, eventData.Entity.Name);
     }
 
-    protected async virtual Task RemoveTenantCache(Guid tenantId, string tenantName = null)
+    protected async virtual Task RemoveTenantCache(Guid tenantId, string? tenantName = null)
     {
         var removeTenantKeys = new string[]
         {

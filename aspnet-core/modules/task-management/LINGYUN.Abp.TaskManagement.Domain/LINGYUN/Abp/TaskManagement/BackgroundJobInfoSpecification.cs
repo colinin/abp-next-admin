@@ -17,16 +17,16 @@ public class BackgroundJobInfoSpecification : Specification<BackgroundJobInfo>
 
         return expression
             .AndIf(!Filter.NodeName.IsNullOrWhiteSpace(), x => x.NodeName == Filter.NodeName)
-            .AndIf(!Filter.Type.IsNullOrWhiteSpace(), x => x.Type.Contains(Filter.Type))
+            .AndIf(!Filter.Type.IsNullOrWhiteSpace(), x => x.Type.Contains(Filter.Type!))
             .AndIf(!Filter.Group.IsNullOrWhiteSpace(), x => x.Group.Equals(Filter.Group))
             .AndIf(!Filter.Name.IsNullOrWhiteSpace(), x => x.Name.Equals(Filter.Name))
-            .AndIf(!Filter.Filter.IsNullOrWhiteSpace(), x => x.Name.Contains(Filter.Filter) ||
-                x.Group.Contains(Filter.Filter) || x.Type.Contains(Filter.Filter) || x.Description.Contains(Filter.Filter))
+            .AndIf(!Filter.Filter.IsNullOrWhiteSpace(), x => x.Name.Contains(Filter.Filter!) ||
+                x.Group.Contains(Filter.Filter!) || x.Type.Contains(Filter.Filter!) || x.Description!.Contains(Filter.Filter!))
             .AndIf(Filter.JobType.HasValue, x => x.JobType == Filter.JobType)
-            .AndIf(Filter.Status.HasValue, x => x.Status == Filter.Status.Value)
-            .AndIf(Filter.Priority.HasValue, x => x.Priority == Filter.Priority.Value)
-            .AndIf(Filter.Source.HasValue, x => x.Source == Filter.Source.Value)
-            .AndIf(Filter.IsAbandoned.HasValue, x => x.IsAbandoned == Filter.IsAbandoned.Value)
+            .AndIf(Filter.Status.HasValue, x => x.Status == Filter.Status)
+            .AndIf(Filter.Priority.HasValue, x => x.Priority == Filter.Priority)
+            .AndIf(Filter.Source.HasValue, x => x.Source == Filter.Source)
+            .AndIf(Filter.IsAbandoned.HasValue, x => x.IsAbandoned == Filter.IsAbandoned)
             .AndIf(Filter.BeginLastRunTime.HasValue, x => x.LastRunTime >= Filter.BeginLastRunTime)
             .AndIf(Filter.EndLastRunTime.HasValue, x => x.LastRunTime <= Filter.EndLastRunTime)
             .AndIf(Filter.BeginTime.HasValue, x => x.BeginTime >= Filter.BeginTime)

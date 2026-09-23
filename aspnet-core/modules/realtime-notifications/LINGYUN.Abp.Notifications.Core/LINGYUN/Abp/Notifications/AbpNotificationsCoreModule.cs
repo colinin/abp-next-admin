@@ -1,4 +1,5 @@
-﻿using LINGYUN.Abp.Notifications.Localization;
+﻿using LINGYUN.Abp.Dynamic.Definitions;
+using LINGYUN.Abp.Notifications.Localization;
 using LINGYUN.Abp.RealTime;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -12,6 +13,7 @@ using Volo.Abp.TextTemplating;
 namespace LINGYUN.Abp.Notifications;
 
 [DependsOn(
+    typeof(AbpDynamicDefinitionsCoreModule),
     typeof(AbpTextTemplatingCoreModule),
     typeof(AbpRealTimeModule),
     typeof(AbpLocalizationModule),
@@ -35,6 +37,12 @@ public class AbpNotificationsCoreModule : AbpModule
         Configure<AbpNotificationsOptions>(options =>
         {
             preActions.Configure(options);
+        });
+
+        Configure<AbpDynamicDefinitionsOptions>(options =>
+        {
+            options.MapStrategy<NotificationDefinition>(DynamicDefinitionStrategy.Merge);
+            options.MapStrategy<NotificationGroupDefinition>(DynamicDefinitionStrategy.Merge);
         });
     }
 

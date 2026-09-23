@@ -82,7 +82,7 @@ internal class CustomDistributedEventSubscriber : ICustomDistributedEventSubscri
                 new[] { eventType }
             );
         var eventName = EventNameAttribute.GetNameOrDefault(eventType);
-        var topicAttr = method.GetCustomAttributes<TopicAttribute>(true);
+        var topicAttr = method!.GetCustomAttributes<TopicAttribute>(true);
         var topicAttributes = topicAttr.ToList();
 
         topicAttributes.Add(new CapSubscribeAttribute(eventName));
@@ -91,10 +91,10 @@ internal class CustomDistributedEventSubscriber : ICustomDistributedEventSubscri
         {
             SetSubscribeAttribute(attr);
 
-            var parameters = method.GetParameters()
+            var parameters = method!.GetParameters()
                 .Select(parameter => new ParameterDescriptor
                 {
-                    Name = parameter.Name,
+                    Name = parameter.Name!,
                     ParameterType = parameter.ParameterType,
                     IsFromCap = parameter.GetCustomAttributes(typeof(FromCapAttribute)).Any()
                 }).ToList();

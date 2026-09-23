@@ -25,7 +25,7 @@ public class EfCoreBackgroundJobActionRepository :
     {
         return await (await GetDbSetAsync())
             .Where(x => x.JobId.Equals(jobId))
-            .WhereIf(isEnabled.HasValue, x => x.IsEnabled == isEnabled.Value)
+            .WhereIf(isEnabled.HasValue, x => x.IsEnabled == isEnabled)
             .ToListAsync(GetCancellationToken(cancellationToken));
     }
 }

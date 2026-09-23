@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { VxeGridProps } from '@abp/ui';
+import type { MenuInfo } from 'ant-design-vue/es/menu/src/interface';
 
 import type { VbenFormProps } from '@vben/common-ui';
 
@@ -7,6 +8,7 @@ import type { WorkspaceDefinitionRecordDto } from '../../types/workspaces';
 
 import { defineAsyncComponent, h } from 'vue';
 
+import { useAccess } from '@vben/access';
 import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
@@ -17,9 +19,11 @@ import {
   CloseOutlined,
   DeleteOutlined,
   EditOutlined,
+  EllipsisOutlined,
   PlusOutlined,
+  RedoOutlined,
 } from '@ant-design/icons-vue';
-import { Button, message, Modal } from 'ant-design-vue';
+import { Button, Dropdown, Menu, message, Modal } from 'ant-design-vue';
 
 import { useWorkspaceDefinitionsApi } from '../../api/useWorkspaceDefinitionsApi';
 import { WorkspaceDefinitionPermissions } from '../../constants/permissions';
@@ -27,7 +31,11 @@ import { WorkspaceDefinitionPermissions } from '../../constants/permissions';
 defineOptions({
   name: 'WorkspaceDefinitionTable',
 });
+
+const MenuItem = Menu.Item;
+
 const { Lr } = useLocalization();
+const { hasAccessByCodes } = useAccess();
 const { deserialize: deserializeLocalizableString } =
   useLocalizationSerializer();
 const { deleteApi, getPagedListApi } = useWorkspaceDefinitionsApi();
@@ -101,6 +109,11 @@ const gridOptions: VxeGridProps<WorkspaceDefinitionRecordDto> = {
       slots: { default: 'actions' },
       title: $t('AbpUi.Actions'),
       width: 220,
+      visible: hasAccessByCodes([
+        WorkspaceDefinitionPermissions.Default,
+        WorkspaceDefinitionPermissions.Delete,
+        WorkspaceDefinitionPermissions.Update,
+      ]),
     },
   ],
   exportConfig: {},
@@ -148,6 +161,11 @@ const [WorkspaceDefinitionModal, modalApi] = useVbenModal({
     () => import('./WorkspaceDefinitionModal.vue'),
   ),
 });
+const [WorkspaceResetApiKeyModal, resetApiKeyModalApi] = useVbenModal({
+  connectedComponent: defineAsyncComponent(
+    () => import('./WorkspaceResetApiKeyModal.vue'),
+  ),
+});
 
 function onCreate() {
   modalApi.setData({});
@@ -170,6 +188,16 @@ async function onDelete(row: WorkspaceDefinitionRecordDto) {
     },
     title: $t('AbpUi.AreYouSure'),
   });
+}
+
+function onMenuClick(row: WorkspaceDefinitionRecordDto, info: MenuInfo) {
+  switch (info.key) {
+    case 'reset-api-key': {
+      resetApiKeyModalApi.setData(row);
+      resetApiKeyModalApi.open();
+      break;
+    }
+  }
 }
 </script>
 
@@ -204,6 +232,7 @@ async function onDelete(row: WorkspaceDefinitionRecordDto) {
         </Button>
         <Button
           v-access:code="[WorkspaceDefinitionPermissions.Delete]"
+          :disabled="row.isStatic"
           :icon="h(DeleteOutlined)"
           block
           danger
@@ -212,10 +241,25 @@ async function onDelete(row: WorkspaceDefinitionRecordDto) {
         >
           {{ $t('AbpUi.Delete') }}
         </Button>
+        <Dropdown>
+          <template #overlay>
+            <Menu @click="(info) => onMenuClick(row, info)">
+              <MenuItem
+                v-if="hasAccessByCodes([WorkspaceDefinitionPermissions.Update])"
+                key="reset-api-key"
+                :icon="h(RedoOutlined)"
+              >
+                {{ $t('AIManagement.ResetApiKey') }}
+              </MenuItem>
+            </Menu>
+          </template>
+          <Button :icon="h(EllipsisOutlined)" type="link" />
+        </Dropdown>
       </div>
     </template>
   </Grid>
   <WorkspaceDefinitionModal @change="() => gridApi.query()" />
+  <WorkspaceResetApiKeyModal @change="() => gridApi.query()" />
 </template>
 
 <style lang="scss" scoped></style>

@@ -25,17 +25,17 @@ public class SelectAccountModel : AccountPageModel
     private const string LastLoginTimeFieldName = "LastLoginTime";
     private const string AllowedTenantsFieldName = "AllowedTenants";
     public const string DefaultDateFormat = "yyyy-MM-dd HH:mm:ss";
-    private OriginalRequestInfo _originalRequest;
+    private OriginalRequestInfo? _originalRequest;
 
     [BindProperty(SupportsGet = true)]
-    public string RedirectUri { get; set; }
+    public string RedirectUri { get; set; } = default!;
 
-    public string ClientName { get; set; }
+    public string ClientName { get; set; } = default!;
 
-    public string UserName { get; set; }
+    public string UserName { get; set; } = default!;
 
     [BindProperty]
-    public SelectAccountInput Input { get; set; }
+    public SelectAccountInput Input { get; set; } = default!;
 
     public List<UserAccountInfo> AvailableAccounts { get; set; } = new();
 
@@ -53,7 +53,7 @@ public class SelectAccountModel : AccountPageModel
     public async virtual Task<IActionResult> OnGetAsync()
     {
         // 检查用户是否已登录
-        if (!User.Identity.IsAuthenticated)
+        if (User.Identity?.IsAuthenticated == false)
         {
             // 未登录，重定向到登录页面
             return RedirectToPage("/Account/Login", new
@@ -77,7 +77,7 @@ public class SelectAccountModel : AccountPageModel
         };
 
         var application = await ApplicationManager.FindByClientIdAsync(_originalRequest.ClientId);
-        ClientName = await ApplicationManager.GetLocalizedDisplayNameAsync(application) ?? _originalRequest.ClientId;
+        ClientName = await ApplicationManager.GetLocalizedDisplayNameAsync(application!) ?? _originalRequest.ClientId;
 
         var currentUser = await UserManager.GetUserAsync(User);
         if (currentUser == null)
@@ -198,7 +198,7 @@ public class SelectAccountModel : AccountPageModel
         }
         // 构建完整的授权请求 URL
         var authorizeUrl = "/connect/authorize";
-        var parameters = new Dictionary<string, string>
+        var parameters = new Dictionary<string, string?>
         {
             ["client_id"] = _originalRequest.ClientId,
             ["redirect_uri"] = _originalRequest.RedirectUri,
@@ -219,17 +219,17 @@ public class SelectAccountModel : AccountPageModel
         return QueryHelpers.AddQueryString(authorizeUrl, parameters);
     }
 
-    protected virtual Task<OriginalRequestInfo> ParseOriginalRequestFromRedirectUriAsync()
+    protected virtual Task<OriginalRequestInfo?> ParseOriginalRequestFromRedirectUriAsync()
     {
         if (string.IsNullOrWhiteSpace(RedirectUri))
         {
-            return Task.FromResult<OriginalRequestInfo>(null);
+            return Task.FromResult<OriginalRequestInfo?>(null);
         }
 
         try
         {
             var info = new OriginalRequestInfo();
-            string queryString = null;
+            string? queryString = null;
 
             if (RedirectUri.StartsWith("/"))
             {
@@ -270,8 +270,8 @@ public class SelectAccountModel : AccountPageModel
             {
                 var query = QueryHelpers.ParseQuery(queryString);
 
-                info.ClientId = GetQueryValue(query, "client_id");
-                info.RedirectUri = GetQueryValue(query, "redirect_uri");
+                info.ClientId = GetQueryValue(query, "client_id")!;
+                info.RedirectUri = GetQueryValue(query, "redirect_uri")!;
                 info.ResponseType = GetQueryValue(query, "response_type");
                 info.Scope = GetQueryValue(query, "scope");
                 info.State = GetQueryValue(query, "state");
@@ -281,12 +281,12 @@ public class SelectAccountModel : AccountPageModel
                 info.Prompt = GetQueryValue(query, "prompt");
             }
 
-            return Task.FromResult(info);
+            return Task.FromResult<OriginalRequestInfo?>(info);
         }
         catch (Exception ex)
         {
             Logger.LogWarning(ex, "Parse the error of the RedirectUri parameter: {message}", ex.Message);
-            return Task.FromResult<OriginalRequestInfo>(null);
+            return Task.FromResult<OriginalRequestInfo?>(null);
         }
     }
 
@@ -327,7 +327,7 @@ public class SelectAccountModel : AccountPageModel
             .ToList();
     }
 
-    protected async virtual Task<UserAccountInfo> GetTenantUserAccountInfoAsync(string userName, TenantInfo tenant)
+    protected async virtual Task<UserAccountInfo?> GetTenantUserAccountInfoAsync(string userName, TenantInfo tenant)
     {
         using (CurrentTenant.Change(tenant.Id, tenant.Name))
         {
@@ -421,12 +421,12 @@ public class SelectAccountModel : AccountPageModel
         return new TenantUser();
     }
 
-    protected virtual string GetQueryValue(Dictionary<string, StringValues> query, string key)
+    protected virtual string? GetQueryValue(Dictionary<string, StringValues> query, string key)
     {
         return query.TryGetValue(key, out var value) ? value.ToString() : null;
     }
 
-    protected async virtual Task<IdentityUser> ValidateSelectedAccountAsync(Guid userId, Guid? tenantId)
+    protected async virtual Task<IdentityUser?> ValidateSelectedAccountAsync(Guid userId, Guid? tenantId)
     {
         using (CurrentTenant.Change(tenantId))
         {
@@ -458,27 +458,27 @@ public class SelectAccountModel : AccountPageModel
 
     public class OriginalRequestInfo
     {
-        public string ClientId { get; set; }
-        public string RedirectUri { get; set; }
-        public string Scope { get; set; }
-        public string State { get; set; }
-        public string Nonce { get; set; }
-        public string ResponseType { get; set; }
-        public string CodeChallenge { get; set; }
-        public string CodeChallengeMethod { get; set; }
-        public string Prompt { get; set; }
+        public string ClientId { get; set; } = default!;
+        public string RedirectUri { get; set; } = default!;
+        public string? Scope { get; set; }
+        public string? State { get; set; }
+        public string? Nonce { get; set; }
+        public string? ResponseType { get; set; }
+        public string? CodeChallenge { get; set; }
+        public string? CodeChallengeMethod { get; set; }
+        public string? Prompt { get; set; }
     }
 
     public class SelectAccountInput
     {
         [Required]
-        public string SelectedAccountId { get; set; }
+        public string SelectedAccountId { get; set; } = default!;
 
         [Required]
-        public string ClientId { get; set; }
+        public string ClientId { get; set; } = default!;
 
         [Required]
-        public string RedirectUri { get; set; }
+        public string RedirectUri { get; set; } = default!;
 
         public bool RememberSelection { get; set; } = true;
 
@@ -487,11 +487,11 @@ public class SelectAccountModel : AccountPageModel
 
     public class UserAccountInfo
     {
-        public string UserId { get; set; }
+        public string UserId { get; set; } = default!;
         public Guid? TenantId { get; set; }
-        public string TenantName { get; set; }
-        public string UserName { get; set; }
-        public string Email { get; set; }
+        public string? TenantName { get; set; }
+        public string UserName { get; set; } = default!;
+        public string Email { get; set; } = default!;
         public DateTime? LastLoginTime { get; set; }
         public bool IsCurrentAccount { get; set; }
     }
@@ -499,7 +499,7 @@ public class SelectAccountModel : AccountPageModel
     public class TenantInfo
     {
         public Guid Id { get; set; }
-        public string Name { get; set; }
+        public string Name { get; set; } = default!;
     }
 
     public class TenantUser

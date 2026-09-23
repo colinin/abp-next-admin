@@ -16,7 +16,7 @@ public class SendMessage
     public string Content { get; }
 
     [JsonProperty("summary")]
-    public string Summary { get; set; }
+    public string? Summary { get; set; }
 
     [JsonProperty("contentType")]
     public MessageContentType ContentType { get; }
@@ -28,13 +28,13 @@ public class SendMessage
     public List<string> Uids { get; }
 
     [JsonProperty("url")]
-    public string Url { get; }
+    public string? Url { get; }
     public SendMessage(
         [NotNull] string appToken,
         [NotNull] string content,
-        string summary = "",
+        string? summary = null,
         MessageContentType contentType = MessageContentType.Text,
-        string url = "")
+        string? url = null)
     {
         AppToken = Check.NotNullOrWhiteSpace(appToken, nameof(appToken));
         // 单条消息的数据长度(字符数)限制是：content<40000;summary<20(微信的限制，大于20显示不完);url<400

@@ -28,7 +28,7 @@ public interface IBackgroundJobLogRepository : IRepository<BackgroundJobLog, lon
     /// <returns></returns>
     Task<List<BackgroundJobLog>> GetListAsync(
         ISpecification<BackgroundJobLog> specification,
-        string sorting = $"{nameof(BackgroundJobLog.RunTime)} DESC",
+        string? sorting = $"{nameof(BackgroundJobLog.RunTime)} DESC",
         int maxResultCount = 10,
         int skipCount = 0,
         CancellationToken cancellationToken = default);

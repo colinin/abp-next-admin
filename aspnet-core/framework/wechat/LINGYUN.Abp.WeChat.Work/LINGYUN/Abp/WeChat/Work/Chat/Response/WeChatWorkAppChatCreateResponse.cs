@@ -10,5 +10,5 @@ public class WeChatWorkAppChatCreateResponse : WeChatWorkResponse
     /// </summary>
     [JsonProperty("chatid")]
     [JsonPropertyName("chatid")]
-    public virtual string ChatId { get; set; }
+    public virtual string ChatId { get; set; } = default!;
 }

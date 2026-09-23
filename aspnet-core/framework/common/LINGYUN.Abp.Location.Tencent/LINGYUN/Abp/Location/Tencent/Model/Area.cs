@@ -11,12 +11,12 @@ public class Area
     /// 地点唯一标识
     /// </summary>
     [JsonProperty("id")]
-    public string Id { get; set; }
+    public string Id { get; set; } = default!;
     /// <summary>
     /// 名称/标题
     /// </summary>
     [JsonProperty("title")]
-    public string Title { get; set; }
+    public string? Title { get; set; }
     /// <summary>
     /// 坐标
     /// </summary>
@@ -26,11 +26,11 @@ public class Area
     /// 此参考位置到输入坐标的直线距离
     /// </summary>
     [JsonProperty("_distance")]
-    public string Distance { get; set; }
+    public string? Distance { get; set; }
     /// <summary>
     /// 此参考位置到输入坐标的方位关系，
     /// 如：北、南、内
     /// </summary>
     [JsonProperty("_dir_desc")]
-    public string DirDescription { get; set; }
+    public string? DirDescription { get; set; }
 }

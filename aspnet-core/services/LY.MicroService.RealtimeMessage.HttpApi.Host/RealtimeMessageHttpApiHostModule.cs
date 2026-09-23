@@ -1,20 +1,19 @@
 ﻿using LINGYUN.Abp.AspNetCore.HttpOverrides;
-using LINGYUN.Abp.AspNetCore.Mvc.Localization;
 using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
+using LINGYUN.Abp.AspNetCore.Session;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
 using LINGYUN.Abp.Authorization.OrganizationUnits;
 using LINGYUN.Abp.BackgroundTasks.DistributedLocking;
-using LINGYUN.Abp.BackgroundTasks.ExceptionHandling;
 using LINGYUN.Abp.BackgroundTasks.Quartz;
 using LINGYUN.Abp.Claims.Mapping;
 using LINGYUN.Abp.Data.DbMigrator;
+using LINGYUN.Abp.Dynamic.Definitions;
 using LINGYUN.Abp.Emailing.Platform;
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.ExceptionHandling.Notifications;
 using LINGYUN.Abp.Features.LimitValidation.Redis;
 using LINGYUN.Abp.Identity.EntityFrameworkCore;
 using LINGYUN.Abp.Identity.Notifications;
-using LINGYUN.Abp.Identity.Session.AspNetCore;
 using LINGYUN.Abp.Identity.WeChat;
 using LINGYUN.Abp.Identity.WeChat.Work;
 using LINGYUN.Abp.IM.SignalR;
@@ -72,7 +71,6 @@ namespace LY.MicroService.RealtimeMessage;
     typeof(AbpAspNetCoreSerilogModule),
     typeof(AbpAuditLoggingElasticsearchModule),
     typeof(AbpAspNetCoreMultiTenancyModule),
-    typeof(AbpAspNetCoreMvcLocalizationModule),
     typeof(AbpMessageServiceApplicationModule),
     typeof(AbpMessageServiceHttpApiModule),
     typeof(AbpNotificationsApplicationModule),
@@ -81,7 +79,6 @@ namespace LY.MicroService.RealtimeMessage;
     typeof(AbpIdentityWeChatWorkModule),
     typeof(AbpBackgroundTasksQuartzModule),
     typeof(AbpBackgroundTasksDistributedLockingModule),
-    typeof(AbpBackgroundTasksExceptionHandlingModule),
     typeof(TaskManagementEntityFrameworkCoreModule),
     typeof(AbpMessageServiceEntityFrameworkCoreModule),
     typeof(AbpNotificationsEntityFrameworkCoreModule),
@@ -120,15 +117,16 @@ namespace LY.MicroService.RealtimeMessage;
     typeof(AbpFeaturesValidationRedisModule),
     typeof(AbpCachingStackExchangeRedisModule),
     typeof(AbpLocalizationCultureMapModule),
-    typeof(AbpIdentitySessionAspNetCoreModule),
     typeof(AbpEmailingPlatformModule),
     typeof(AbpSmsPlatformModule),
     typeof(AbpHttpClientModule),
     typeof(AbpClaimsMappingModule),
     typeof(AbpTelemetryOpenTelemetryModule),
     typeof(AbpTelemetrySkyWalkingModule),
+    typeof(AbpAspNetCoreSessionModule),
     typeof(AbpAspNetCoreMvcWrapperModule),
     typeof(AbpAspNetCoreHttpOverridesModule),
+    typeof(AbpDynamicDefinitionsModule),
     typeof(AbpSwashbuckleModule),
     typeof(AbpAutofacModule)
     )]
@@ -193,7 +191,6 @@ public partial class RealtimeMessageHttpApiHostModule : AbpModule
         // 多租户
         app.UseMultiTenancy();
         // 会话
-        app.UseAbpSession();
         app.UseDynamicClaims();
         // 授权
         app.UseAuthorization();

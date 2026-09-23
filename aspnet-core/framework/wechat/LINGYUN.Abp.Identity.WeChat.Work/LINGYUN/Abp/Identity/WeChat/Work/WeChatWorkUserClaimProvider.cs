@@ -24,17 +24,7 @@ public class WeChatWorkUserClaimProvider : IWeChatWorkUserClaimProvider
         UserManager = userManager;
     }
 
-    protected string GetUserOpenIdOrNull(IdentityUser user, string provider)
-    {
-        // 微信扩展登录后openid存储在Login中
-        var userLogin = user?.Logins
-            .Where(login => login.LoginProvider == provider)
-            .FirstOrDefault();
-
-        return userLogin?.ProviderKey;
-    }
-
-    public async virtual Task<string> FindUserIdentifierAsync(Guid userId, CancellationToken cancellationToken = default)
+    public async virtual Task<string?> FindUserIdentifierAsync(Guid userId, CancellationToken cancellationToken = default)
     {
         var user = await UserManager.FindByIdAsync(userId.ToString());
 
@@ -73,5 +63,15 @@ public class WeChatWorkUserClaimProvider : IWeChatWorkUserClaimProvider
             AbpWeChatWorkGlobalConsts.ProviderName,
             weChatUserId,
             AbpWeChatWorkGlobalConsts.DisplayName));
+    }
+
+    protected virtual string? GetUserOpenIdOrNull(IdentityUser? user, string provider)
+    {
+        // 微信扩展登录后openid存储在Login中
+        var userLogin = user?.Logins
+            .Where(login => login.LoginProvider == provider)
+            .FirstOrDefault();
+
+        return userLogin?.ProviderKey;
     }
 }

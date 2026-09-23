@@ -33,7 +33,7 @@ public class ElasticsearchAuditLogWriter : IAuditLogWriter, ITransientDependency
         _logger = logger;
     }
 
-    public async virtual Task WriteAsync(AuditLogInfo auditLogInfo, CancellationToken cancellationToken = default)
+    public async virtual Task<string> WriteAsync(AuditLogInfo auditLogInfo, CancellationToken cancellationToken = default)
     {
         var client = _clientFactory.Create();
         var auditLog = await _auditLogConverter.ConvertAsync(auditLogInfo);
@@ -43,18 +43,14 @@ public class ElasticsearchAuditLogWriter : IAuditLogWriter, ITransientDependency
                       .Id(auditLog.Id),
             cancellationToken);
 
-        if (!response.IsValidResponse)
+        if (response.TryGetErrorMessage(out var errorMessage))
         {
             _logger.LogWarning("Could not save the audit log object: " + Environment.NewLine + auditLog.ToString());
-            if (response.TryGetOriginalException(out var ex))
-            {
-                _logger.LogWarning(ex, ex.Message);
-            }
-            else if (response.ElasticsearchServerError != null)
-            {
-                _logger.LogWarning(response.ElasticsearchServerError.ToString());
-            }
+            _logger.LogWarning(errorMessage);
+            return "";
         }
+
+        return auditLog.Id.ToString();
     }
 
     public async virtual Task BulkWriteAsync(IEnumerable<AuditLogInfo> auditLogInfos, CancellationToken cancellationToken = default)

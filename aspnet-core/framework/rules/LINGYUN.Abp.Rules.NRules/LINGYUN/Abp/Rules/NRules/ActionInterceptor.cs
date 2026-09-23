@@ -6,8 +6,8 @@ namespace LINGYUN.Abp.Rules.NRules;
 
 public class ActionInterceptor : IActionInterceptor
 {
-    public void Intercept(IContext context, IEnumerable<IActionInvocation> actions)
+    public void Intercept(IContext context, IReadOnlyCollection<IActionInvocation> actions)
     {
-        // TODO: Intercept
+
     }
 }

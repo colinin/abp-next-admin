@@ -7,5 +7,5 @@ public class PermissionGroupDefinitionCreateDto : PermissionGroupDefinitionCreat
 {
     [Required]
     [DynamicStringLength(typeof(PermissionGroupDefinitionRecordConsts), nameof(PermissionGroupDefinitionRecordConsts.MaxNameLength))]
-    public string Name { get; set; }
+    public string Name { get; set; } = default!;
 }

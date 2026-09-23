@@ -7,8 +7,8 @@ public class LanguageCreateDto : LanguageCreateOrUpdateDto
 {
     [Required]
     [DynamicStringLength(typeof(LanguageConsts), nameof(LanguageConsts.MaxCultureNameLength))]
-    public string CultureName { get; set; }
+    public string CultureName { get; set; } = default!;
 
     [DynamicStringLength(typeof(LanguageConsts), nameof(LanguageConsts.MaxUiCultureNameLength))]
-    public string UiCultureName { get; set; }
+    public string? UiCultureName { get; set; }
 }

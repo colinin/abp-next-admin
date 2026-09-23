@@ -19,7 +19,7 @@ public interface IGroupRepository : IBasicRepository<ChatGroup, long>
         Guid formUserId,
         CancellationToken cancellationToken = default);
 
-    Task<ChatGroup> FindByIdAsync(
+    Task<ChatGroup?> FindByIdAsync(
         long id,
         CancellationToken cancellationToken = default);
 
@@ -34,7 +34,7 @@ public interface IGroupRepository : IBasicRepository<ChatGroup, long>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     Task<int> GetCountAsync(
-        string filter = null,
+        string? filter = null,
         CancellationToken cancellationToken = default);
     /// <summary>
     /// 获取群组列表
@@ -46,8 +46,8 @@ public interface IGroupRepository : IBasicRepository<ChatGroup, long>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
     Task<List<ChatGroup>> GetListAsync(
-        string filter = null,
-        string sorting = nameof(ChatGroup.Name),
+        string? filter = null,
+        string? sorting = nameof(ChatGroup.Name),
         int skipCount = 0,
         int maxResultCount = 10,
         CancellationToken cancellationToken = default);

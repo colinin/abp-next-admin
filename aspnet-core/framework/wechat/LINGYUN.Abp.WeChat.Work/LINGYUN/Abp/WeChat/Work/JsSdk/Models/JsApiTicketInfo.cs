@@ -4,7 +4,7 @@ public class JsApiTicketInfo
     /// <summary>
     /// 生成签名所需的 jsapi_ticket，最长为512字节
     /// </summary>
-    public string Ticket { get; set; }
+    public string Ticket { get; set; } = default!;
     /// <summary>
     /// 凭证的有效时间（秒）
     /// </summary>

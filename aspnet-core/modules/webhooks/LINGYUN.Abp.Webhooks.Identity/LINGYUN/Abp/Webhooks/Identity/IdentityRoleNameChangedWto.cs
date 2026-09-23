@@ -7,7 +7,7 @@ public class IdentityRoleNameChangedWto
 {
     public Guid Id { get; set; }
 
-    public string Name { get; set; }
+    public string Name { get; set; } = default!;
 
-    public string OldName { get; set; }
+    public string OldName { get; set; } = default!;
 }

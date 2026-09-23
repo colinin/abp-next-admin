@@ -38,11 +38,11 @@ public class UserChatFriend : CreationAuditedAggregateRoot<long>, IMultiTenant
     /// <summary>
     /// 备注名称
     /// </summary>
-    public virtual string RemarkName { get; set; }
+    public virtual string? RemarkName { get; set; }
     /// <summary>
     /// 附加说明
     /// </summary>
-    public virtual string Description { get; set; }
+    public virtual string? Description { get; set; }
 
     public virtual UserFriendStatus Status { get; protected set; }
 
@@ -53,8 +53,8 @@ public class UserChatFriend : CreationAuditedAggregateRoot<long>, IMultiTenant
     public UserChatFriend(
         Guid userId,
         Guid friendId,
-        string remarkName = "",
-        string description = "",
+        string? remarkName = null,
+        string? description = null,
         Guid? tenantId = null)
     {
         UserId = userId;

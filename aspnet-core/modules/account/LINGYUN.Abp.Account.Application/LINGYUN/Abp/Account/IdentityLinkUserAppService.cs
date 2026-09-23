@@ -130,7 +130,7 @@ public class IdentityLinkUserAppService : AccountApplicationServiceBase, IIdenti
         {
             using (CurrentTenant.Change(input.TenantId))
             {
-                TenantConfiguration tenant = null;
+                TenantConfiguration? tenant = null;
                 if (input.TenantId.HasValue)
                 {
                     tenant = await TenantStore.FindAsync(input.TenantId.Value);

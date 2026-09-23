@@ -4,5 +4,5 @@ namespace LINGYUN.Abp.DataProtection;
 
 public interface IDataAccessStrategyStateProvider
 {
-    Task<DataAccessStrategyState> GetOrNullAsync();
+    Task<DataAccessStrategyState?> GetOrNullAsync();
 }

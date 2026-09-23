@@ -8,5 +8,5 @@ public class GroupUserGetByPagedDto : PagedAndSortedResultRequestDto
     [Required]
     public long GroupId { get; set; }
 
-    public string Filter { get; set; }
+    public string? Filter { get; set; }
 }

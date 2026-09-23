@@ -33,7 +33,7 @@ public static class NotificationDataWeChatWorkExtensions
     /// 获取消息应用标识
     /// </summary>
     /// <param name="notificationData"></param>
-    public static string GetAgentIdOrNull(
+    public static string? GetAgentIdOrNull(
         this NotificationData notificationData)
     {
         return notificationData.TryGetData(AgentIdKey)?.ToString();
@@ -54,7 +54,7 @@ public static class NotificationDataWeChatWorkExtensions
     /// 获取接收消息的标签
     /// </summary>
     /// <param name="notificationData"></param>
-    public static string GetTagOrNull(
+    public static string? GetTagOrNull(
         this NotificationData notificationData)
     {
         return notificationData.TryGetData(ToTagKey)?.ToString();
@@ -75,7 +75,7 @@ public static class NotificationDataWeChatWorkExtensions
     /// 获取接收消息的部门
     /// </summary>
     /// <param name="notificationData"></param>
-    public static string GetPartyOrNull(
+    public static string? GetPartyOrNull(
         this NotificationData notificationData)
     {
         return notificationData.TryGetData(ToPartyKey)?.ToString();

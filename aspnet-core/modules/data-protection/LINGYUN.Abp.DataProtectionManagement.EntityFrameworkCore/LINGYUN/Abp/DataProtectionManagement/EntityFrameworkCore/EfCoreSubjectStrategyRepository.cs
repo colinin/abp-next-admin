@@ -17,7 +17,7 @@ public class EfCoreSubjectStrategyRepository : EfCoreRepository<IAbpDataProtecti
     {
     }
 
-    public async virtual Task<SubjectStrategy> FindBySubjectAsync(
+    public async virtual Task<SubjectStrategy?> FindBySubjectAsync(
         string subjectName,
         string subjectId,
         CancellationToken cancellationToken = default)

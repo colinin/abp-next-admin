@@ -51,6 +51,7 @@ const defaultModel: WorkspaceDefinitionVto = {
   id: '',
   name: '',
   isEnabled: true,
+  isStatic: true,
   displayName: '',
   provider: '',
   modelName: '',
@@ -109,7 +110,8 @@ async function onInit() {
     modalApi.setState({
       title: $t('AIManagement.Workspaces:Edit'),
     });
-    isAllowUpdate.value = isGranted(WorkspaceDefinitionPermissions.Update);
+    isAllowUpdate.value =
+      !dto.isStatic && isGranted(WorkspaceDefinitionPermissions.Update);
   } finally {
     modalApi.setState({
       loading: false,

@@ -18,5 +18,5 @@ public class WeChatWorkGetGroupChatResponse : WeChatWorkResponse
     [NotNull]
     [JsonProperty("group_chat")]
     [JsonPropertyName("group_chat")]
-    public GroupChatInfo GroupChat { get; set; }
+    public GroupChatInfo GroupChat { get; set; } = default!;
 }

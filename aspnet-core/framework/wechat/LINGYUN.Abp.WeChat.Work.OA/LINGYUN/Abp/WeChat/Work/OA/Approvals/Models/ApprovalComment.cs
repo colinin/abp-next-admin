@@ -15,7 +15,7 @@ public class ApprovalComment
     [CanBeNull]
     [JsonProperty("commentUserInfo")]
     [JsonPropertyName("commentUserInfo")]
-    public ApprovalUser CommentUserInfo { get; set; }
+    public ApprovalUser? CommentUserInfo { get; set; }
     /// <summary>
     /// 审批申请提交时间,Unix时间戳
     /// </summary>
@@ -29,19 +29,19 @@ public class ApprovalComment
     [NotNull]
     [JsonProperty("commentcontent")]
     [JsonPropertyName("commentcontent")]
-    public string CommentContent { get; set; }
+    public string CommentContent { get; set; } = default!;
     /// <summary>
     /// 备注id
     /// </summary>
     [NotNull]
     [JsonProperty("commentid")]
     [JsonPropertyName("commentid")]
-    public string CommentId { get; set; }
+    public string CommentId { get; set; } = default!;
     /// <summary>
     /// 备注附件id，可能有多个，微盘文件无法获取
     /// </summary>
     [CanBeNull]
     [JsonProperty("media_id")]
     [JsonPropertyName("media_id")]
-    public List<string> MediaId { get; set; }
+    public List<string>? MediaId { get; set; }
 }

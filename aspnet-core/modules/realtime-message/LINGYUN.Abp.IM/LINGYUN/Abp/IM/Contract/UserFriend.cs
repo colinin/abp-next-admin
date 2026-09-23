@@ -23,14 +23,14 @@ public class UserFriend : UserCard
     /// <summary>
     /// 备注名称
     /// </summary>
-    public string RemarkName { get; set; }
+    public string? RemarkName { get; set; }
 
     public override int GetHashCode()
     {
         return FriendId.GetHashCode();
     }
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
         if (obj == null)
         {

@@ -8,19 +8,19 @@ public class EntityPropertyInfoDto : EntityDto<Guid>
     /// <summary>
     /// 名称
     /// </summary>
-    public string Name { get; set; }
+    public string Name { get; set; } = default!;
     /// <summary>
     /// 显示名称
     /// </summary>
-    public string DisplayName { get; set; }
+    public string DisplayName { get; set; } = default!;
     /// <summary>
     /// 类型全名
     /// </summary>
-    public string TypeFullName { get; set; }
+    public string TypeFullName { get; set; } = default!;
     /// <summary>
     /// Js类型
     /// </summary>
-    public string JavaScriptType { get; set; }
+    public string JavaScriptType { get; set; } = default!;
     /// <summary>
     /// 枚举列表
     /// </summary>

@@ -7,12 +7,12 @@ namespace LINGYUN.Abp.Saas.Tenants;
 public class TenantConnectionStringCheckInput
 {
     [Required]
-    public string Provider { get; set; }
+    public string Provider { get; set; } = default!;
 
-    public string Name { get; set; }
+    public string? Name { get; set; }
 
     [Required]
     [DisableAuditing]
     [DynamicStringLength(typeof(TenantConnectionStringConsts), nameof(TenantConnectionStringConsts.MaxValueLength))]
-    public string ConnectionString { get; set; }
+    public string ConnectionString { get; set; } = default!;
 }

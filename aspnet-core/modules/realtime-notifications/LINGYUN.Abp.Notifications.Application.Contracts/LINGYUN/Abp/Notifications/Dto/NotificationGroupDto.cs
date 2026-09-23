@@ -4,7 +4,7 @@ namespace LINGYUN.Abp.Notifications;
 
 public class NotificationGroupDto
 {
-    public string Name { get; set; }
-    public string DisplayName { get; set; }
+    public string Name { get; set; } = default!;
+    public string? DisplayName { get; set; }
     public List<NotificationDto> Notifications { get; set; } = new List<NotificationDto>();
 }

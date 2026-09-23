@@ -34,12 +34,12 @@ public static class NotificationDefinitionWeChatWorkExtensions
     /// 获取消息应用标识
     /// </summary>
     /// <param name="notification"></param>
-    public static string GetAgentIdOrNull(
+    public static string? GetAgentIdOrNull(
         this NotificationDefinition notification)
     {
         if (notification.Properties.TryGetValue(AgentIdKey, out var agentIdDefine))
         {
-            return agentIdDefine.ToString();
+            return agentIdDefine?.ToString();
         }
 
         return null;
@@ -62,12 +62,12 @@ public static class NotificationDefinitionWeChatWorkExtensions
     /// 获取接收消息的标签
     /// </summary>
     /// <param name="notification"></param>
-    public static string GetTagOrNull(
+    public static string? GetTagOrNull(
         this NotificationDefinition notification)
     {
         if (notification.Properties.TryGetValue(ToTagKey, out var tagDefine))
         {
-            return tagDefine.ToString();
+            return tagDefine?.ToString();
         }
 
         return null;
@@ -90,12 +90,12 @@ public static class NotificationDefinitionWeChatWorkExtensions
     /// 获取接收消息的部门
     /// </summary>
     /// <param name="notification"></param>
-    public static string GetPartyOrNull(
+    public static string? GetPartyOrNull(
         this NotificationDefinition notification)
     {
         if (notification.Properties.TryGetValue(ToPartyKey, out var partyDefine))
         {
-            return partyDefine.ToString();
+            return partyDefine?.ToString();
         }
 
         return null;

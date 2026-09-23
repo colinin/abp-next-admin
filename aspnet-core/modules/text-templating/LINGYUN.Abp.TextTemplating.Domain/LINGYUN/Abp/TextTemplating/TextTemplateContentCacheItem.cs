@@ -9,9 +9,9 @@ public class TextTemplateContentCacheItem
 {
     private const string CacheKeyFormat = "pn:template-content,n:{0},c:{1}";
 
-    public string Name { get; set; }
-    public string Culture { get; set; }
-    public string Content { get; set; }
+    public string Name { get; set; } = default!;
+    public string? Culture { get; set; }
+    public string? Content { get; set; }
     public TextTemplateContentCacheItem()
     {
 
@@ -19,8 +19,8 @@ public class TextTemplateContentCacheItem
 
     public TextTemplateContentCacheItem(
         string name,
-        string content,
-        string culture = null)
+        string? content,
+        string? culture = null)
     {
         Name = name;
         Content = content;
@@ -29,7 +29,7 @@ public class TextTemplateContentCacheItem
 
     public static string CalculateCacheKey(
         string name, 
-        string culture = null)
+        string? culture = null)
     {
         return string.Format(
             CacheKeyFormat,

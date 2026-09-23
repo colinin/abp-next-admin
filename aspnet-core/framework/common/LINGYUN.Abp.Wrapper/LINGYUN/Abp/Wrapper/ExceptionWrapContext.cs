@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using Volo.Abp.Http;
 
@@ -42,6 +43,7 @@ namespace LINGYUN.Abp.Wrapper
 
         public ExceptionWrapContext WithData(string key, object value)
         {
+            ErrorInfo.Data ??= new Dictionary<string, object>();
             ErrorInfo.Data[key] = value;
             return this;
         }

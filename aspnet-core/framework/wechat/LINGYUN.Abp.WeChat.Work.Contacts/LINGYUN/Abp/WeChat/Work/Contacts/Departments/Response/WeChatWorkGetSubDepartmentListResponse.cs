@@ -18,5 +18,5 @@ public class WeChatWorkGetSubDepartmentListResponse : WeChatWorkResponse
     [NotNull]
     [JsonProperty("department_id")]
     [JsonPropertyName("department_id")]
-    public SubDepartment[] Department { get; set; }
+    public SubDepartment[] Department { get; set; } = default!;
 }

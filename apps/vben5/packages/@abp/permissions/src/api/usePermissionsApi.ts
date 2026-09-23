@@ -1,4 +1,5 @@
 import type {
+  GetPermissionGrantedWithProviderListResultDto,
   PermissionProvider,
   PermissionResultDto,
   PermissionsUpdateDto,
@@ -40,9 +41,32 @@ export function usePermissionsApi() {
     });
   }
 
+  /**
+   * 获取已授权对象
+   * @param permissionName 权限名称
+   * @param providerName 授权提供者
+   * @returns
+   */
+  function getGrantedByProviderApi(
+    permissionName: string,
+    providerName: string,
+  ): Promise<GetPermissionGrantedWithProviderListResultDto> {
+    return request<GetPermissionGrantedWithProviderListResultDto>(
+      `/api/permission-management/permissions/granted/by-provider`,
+      {
+        method: 'GET',
+        params: {
+          permissionName,
+          providerName,
+        },
+      },
+    );
+  }
+
   return {
     cancel,
     getApi,
     updateApi,
+    getGrantedByProviderApi,
   };
 }

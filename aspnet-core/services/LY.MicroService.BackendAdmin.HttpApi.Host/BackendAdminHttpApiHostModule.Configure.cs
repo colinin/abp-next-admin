@@ -45,6 +45,7 @@ using Volo.Abp.Json;
 using Volo.Abp.Json.SystemTextJson;
 using Volo.Abp.Localization;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.OpenIddict.Tokens;
 using Volo.Abp.PermissionManagement;
 using Volo.Abp.Security.Claims;
 using Volo.Abp.SettingManagement;
@@ -147,7 +148,7 @@ public partial class BackendAdminHttpApiHostModule
             options.IsDynamicPermissionStoreEnabled = true;
             // Rename IdentityServer.Client.ManagePermissions
             // See https://github.com/abpframework/abp/blob/dev/modules/identityserver/src/Volo.Abp.PermissionManagement.Domain.IdentityServer/Volo/Abp/PermissionManagement/IdentityServer/AbpPermissionManagementDomainIdentityServerModule.cs
-            options.ProviderPolicies[ClientPermissionValueProvider.ProviderName] = "AbpIdentityServer.Clients.ManagePermissions";
+            options.ProviderPolicies[ClientPermissionValueProvider.ProviderName] = "AbpOpenIddict.Applications.ManagePermissions";
         });
     }
 
@@ -176,6 +177,14 @@ public partial class BackendAdminHttpApiHostModule
         Configure<SettingManagementOptions>(options =>
         {
             options.IsDynamicSettingStoreEnabled = true;
+        });
+    }
+
+    private void ConfigureBackgroundWorker()
+    {
+        Configure<TokenCleanupOptions>(options =>
+        {
+            options.IsCleanupEnabled = false;
         });
     }
 

@@ -8,20 +8,20 @@ public class ClientUpdateDto : ClientCreateOrUpdateDto
 {
 
     [DynamicStringLength(typeof(ClientConsts), nameof(ClientConsts.ClientUriMaxLength))]
-    public string ClientUri { get; set; }
+    public string? ClientUri { get; set; }
 
     [DynamicStringLength(typeof(ClientConsts), nameof(ClientConsts.LogoUriMaxLength))]
-    public string LogoUri { get; set; }
+    public string? LogoUri { get; set; }
 
     public bool Enabled { get; set; }
 
     [DynamicStringLength(typeof(ClientConsts), nameof(ClientConsts.ProtocolTypeMaxLength))]
-    public string ProtocolType { get; set; }
+    public string? ProtocolType { get; set; }
 
     public bool RequireClientSecret { get; set; }
 
     [DynamicStringLength(typeof(ClientConsts), nameof(ClientConsts.AllowedIdentityTokenSigningAlgorithms))]
-    public string AllowedIdentityTokenSigningAlgorithms { get; set; }
+    public string? AllowedIdentityTokenSigningAlgorithms { get; set; }
 
     public bool RequireConsent { get; set; } = false;
 
@@ -38,12 +38,12 @@ public class ClientUpdateDto : ClientCreateOrUpdateDto
     public bool AllowAccessTokensViaBrowser { get; set; }
 
     [DynamicStringLength(typeof(ClientConsts), nameof(ClientConsts.FrontChannelLogoutUriMaxLength))]
-    public string FrontChannelLogoutUri { get; set; }
+    public string? FrontChannelLogoutUri { get; set; }
 
     public bool FrontChannelLogoutSessionRequired { get; set; }
 
     [DynamicStringLength(typeof(ClientConsts), nameof(ClientConsts.BackChannelLogoutUriMaxLength))]
-    public string BackChannelLogoutUri { get; set; }
+    public string? BackChannelLogoutUri { get; set; }
 
     public bool BackChannelLogoutSessionRequired { get; set; }
 
@@ -76,15 +76,15 @@ public class ClientUpdateDto : ClientCreateOrUpdateDto
     public bool AlwaysSendClientClaims { get; set; }
 
     [DynamicStringLength(typeof(ClientConsts), nameof(ClientConsts.ClientClaimsPrefixMaxLength))]
-    public string ClientClaimsPrefix { get; set; }
+    public string? ClientClaimsPrefix { get; set; }
 
     [DynamicStringLength(typeof(ClientConsts), nameof(ClientConsts.PairWiseSubjectSaltMaxLength))]
-    public string PairWiseSubjectSalt { get; set; }
+    public string? PairWiseSubjectSalt { get; set; }
 
     public int? UserSsoLifetime { get; set; }
 
     [DynamicStringLength(typeof(ClientConsts), nameof(ClientConsts.UserCodeTypeMaxLength))]
-    public string UserCodeType { get; set; }
+    public string? UserCodeType { get; set; }
 
     public int DeviceCodeLifetime { get; set; }
 

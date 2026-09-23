@@ -7,7 +7,7 @@ public class AddressDetail
 {
     [JsonProperty("city")]
     [JsonPropertyName("city")]
-    public string City { get; set; }
+    public string City { get; set; } = default!;
 
     [JsonProperty("city_code")]
     [JsonPropertyName("city_code")]
@@ -15,5 +15,5 @@ public class AddressDetail
 
     [JsonProperty("province")]
     [JsonPropertyName("province")]
-    public string Province { get; set; }
+    public string? Province { get; set; }
 }

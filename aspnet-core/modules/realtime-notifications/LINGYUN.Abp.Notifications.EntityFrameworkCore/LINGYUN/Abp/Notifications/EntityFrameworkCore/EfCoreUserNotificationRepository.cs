@@ -8,6 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.Specifications;
@@ -64,7 +65,8 @@ public class EfCoreUserNotificationRepository : EfCoreRepository<INotificationsD
                              };
 
         return await notifilerQuery
-            .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
+            .FirstOrDefaultAsync(GetCancellationToken(cancellationToken))
+            ?? throw new EntityNotFoundException(typeof(UserNotification), notificationId);
     }
 
     public async virtual Task<List<UserNotification>> GetListAsync(
@@ -95,7 +97,7 @@ public class EfCoreUserNotificationRepository : EfCoreRepository<INotificationsD
         var dbContext = await GetDbContextAsync();
         var userNotifilerQuery = dbContext.Set<UserNotification>()
                                           .Where(x => x.UserId == userId)
-                                          .WhereIf(readState.HasValue, x => x.ReadStatus == readState.Value);
+                                          .WhereIf(readState.HasValue, x => x.ReadStatus == readState);
 
         var notifilerQuery = from un in userNotifilerQuery
                              join n in dbContext.Set<Notification>()
@@ -123,7 +125,7 @@ public class EfCoreUserNotificationRepository : EfCoreRepository<INotificationsD
 
     public async virtual Task<int> GetCountAsync(
         Guid userId,
-        string filter = "",
+        string? filter = null,
         NotificationReadState? readState = null,
         CancellationToken cancellationToken = default)
     {
@@ -147,10 +149,10 @@ public class EfCoreUserNotificationRepository : EfCoreRepository<INotificationsD
                              };
 
         return await notifilerQuery
-            .WhereIf(readState.HasValue, x => x.State == readState.Value)
+            .WhereIf(readState.HasValue, x => x.State == readState)
             .WhereIf(!filter.IsNullOrWhiteSpace(), nf =>
-                nf.Name.Contains(filter) ||
-                nf.NotificationTypeName.Contains(filter))
+                nf.Name.Contains(filter!) ||
+                nf.NotificationTypeName.Contains(filter!))
             .CountAsync(GetCancellationToken(cancellationToken));
     }
 
@@ -185,8 +187,8 @@ public class EfCoreUserNotificationRepository : EfCoreRepository<INotificationsD
 
     public async virtual Task<List<UserNotificationInfo>> GetListAsync(
         Guid userId,
-        string filter = "",
-        string sorting = nameof(Notification.CreationTime),
+        string? filter = null,
+        string? sorting = nameof(Notification.CreationTime),
         NotificationReadState? readState = null,
         int skipCount = 1,
         int maxResultCount = 10,
@@ -217,10 +219,10 @@ public class EfCoreUserNotificationRepository : EfCoreRepository<INotificationsD
                              };
 
         return await notifilerQuery
-            .WhereIf(readState.HasValue, x => x.State == readState.Value)
+            .WhereIf(readState.HasValue, x => x.State == readState)
             .WhereIf(!filter.IsNullOrWhiteSpace(), nf =>
-                nf.Name.Contains(filter) ||
-                nf.NotificationTypeName.Contains(filter))
+                nf.Name.Contains(filter!) ||
+                nf.NotificationTypeName.Contains(filter!))
             .OrderBy(sorting)
             .PageBy(skipCount, maxResultCount)
             .AsNoTracking()
@@ -230,7 +232,7 @@ public class EfCoreUserNotificationRepository : EfCoreRepository<INotificationsD
     public async virtual Task<List<UserNotificationInfo>> GetListAsync(
         Guid userId,
         ISpecification<UserNotificationInfo> specification,
-        string sorting = nameof(Notification.CreationTime),
+        string? sorting = nameof(Notification.CreationTime),
         int skipCount = 0,
         int maxResultCount = 10,
         CancellationToken cancellationToken = default)

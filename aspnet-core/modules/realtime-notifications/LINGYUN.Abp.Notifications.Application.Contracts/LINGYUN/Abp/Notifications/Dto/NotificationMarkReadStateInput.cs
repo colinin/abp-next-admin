@@ -7,7 +7,7 @@ public class NotificationMarkReadStateInput
 {
     [Required]
     [DisplayName("Notifications:Id")]
-    public long[] IdList { get; set; }
+    public long[] IdList { get; set; } = default!;
 
     [DisplayName("Notifications:State")]
     public NotificationReadState State { get; set; }

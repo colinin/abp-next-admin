@@ -9,17 +9,17 @@ public class UserFavoriteMenuDto : AuditedEntityDto<Guid>
 
     public Guid UserId { get; set; }
 
-    public string AliasName { get; set; }
+    public string? AliasName { get; set; }
 
-    public string Color { get; set; }
+    public string? Color { get; set; }
 
-    public string Framework { get; set; }
+    public string? Framework { get; set; }
 
-    public string Name { get; set; }
+    public string Name { get; set; } = default!;
 
-    public string DisplayName { get; set; }
+    public string DisplayName { get; set; } = default!;
 
-    public string Path { get; set; }
+    public string Path { get; set; } = default!;
 
-    public string Icon { get; set; }
+    public string? Icon { get; set; }
 }

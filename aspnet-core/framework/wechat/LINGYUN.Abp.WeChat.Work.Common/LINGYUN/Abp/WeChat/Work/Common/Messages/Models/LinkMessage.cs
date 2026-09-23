@@ -13,17 +13,17 @@ public class LinkMessage : WeChatWorkGeneralMessage
     /// 消息标题
     /// </summary>
     [XmlElement("Title")]
-    public string Title { get; set; }
+    public string Title { get; set; } = default!;
     /// <summary>
     /// 消息描述
     /// </summary>
     [XmlElement("Description")]
-    public string Description { get; set; }
+    public string? Description { get; set; }
     /// <summary>
     /// 消息链接
     /// </summary>
     [XmlElement("Url")]
-    public string Url { get; set; }
+    public string? Url { get; set; }
     public override WeChatMessageEto ToEto()
     {
         return new WeChatWorkGeneralMessageEto<LinkMessage>(this);

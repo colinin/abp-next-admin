@@ -13,7 +13,7 @@ public class WeChatWorkTokenResponse : WeChatWorkResponse
     /// </summary>
     [JsonProperty("access_token")]
     [JsonPropertyName("access_token")]
-    public string AccessToken { get; set; }
+    public string AccessToken { get; set; } = default!;
     /// <summary>
     /// 过期时间,单位(s)
     /// </summary>

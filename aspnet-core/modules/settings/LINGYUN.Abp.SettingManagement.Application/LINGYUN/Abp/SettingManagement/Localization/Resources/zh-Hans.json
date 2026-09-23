@@ -2,6 +2,7 @@
   "culture": "zh-Hans",
   "texts": {
     "SettingManagement:001001": "已经存在名为 {Name} 的设置定义!",
+    "SettingManagement:001002": "没有名为 {Name} 的设置定义!",
     "SettingManagement:001010": "静态设置项 {Name} 不允许变更!",
     "Permission:Definition": "定义设置",
     "Permission:Create": "新增",

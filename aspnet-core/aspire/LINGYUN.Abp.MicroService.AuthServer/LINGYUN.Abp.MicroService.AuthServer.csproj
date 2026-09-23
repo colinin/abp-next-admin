@@ -8,6 +8,11 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<Content Remove="Pages\**\*.js" />
+		<EmbeddedResource Include="Pages\**\*.js" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="AgileConfig.Client" />
 		<PackageReference Include="DotNetCore.CAP.Dashboard" />
 		<PackageReference Include="DotNetCore.CAP.PostgreSql" />
@@ -40,8 +45,10 @@
 	<ItemGroup>
 		<ProjectReference Include="..\..\framework\auditing\LINGYUN.Abp.AuditLogging.Elasticsearch\LINGYUN.Abp.AuditLogging.Elasticsearch.csproj" />
 		<ProjectReference Include="..\..\framework\common\LINGYUN.Abp.AspNetCore.HttpOverrides\LINGYUN.Abp.AspNetCore.HttpOverrides.csproj" />
+		<ProjectReference Include="..\..\framework\common\LINGYUN.Abp.AspNetCore.Session\LINGYUN.Abp.AspNetCore.Session.csproj" />
 		<ProjectReference Include="..\..\framework\common\LINGYUN.Abp.Data.DbMigrator\LINGYUN.Abp.Data.DbMigrator.csproj" />
 		<ProjectReference Include="..\..\framework\common\LINGYUN.Abp.EventBus.CAP\LINGYUN.Abp.EventBus.CAP.csproj" />
+		<ProjectReference Include="..\..\framework\dynamic-definition\LINGYUN.Abp.Dynamic.Definitions\LINGYUN.Abp.Dynamic.Definitions.csproj" />
 		<ProjectReference Include="..\..\framework\exporter\LINGYUN.Abp.Exporter.MiniSoftware\LINGYUN.Abp.Exporter.MiniSoftware.csproj" />
 		<ProjectReference Include="..\..\framework\localization\LINGYUN.Abp.Localization.CultureMap\LINGYUN.Abp.Localization.CultureMap.csproj" />
 		<ProjectReference Include="..\..\framework\logging\LINGYUN.Abp.Serilog.Enrichers.Application\LINGYUN.Abp.Serilog.Enrichers.Application.csproj" />
@@ -49,24 +56,26 @@
 		<ProjectReference Include="..\..\framework\mvc\LINGYUN.Abp.AspNetCore.Mvc.Wrapper\LINGYUN.Abp.AspNetCore.Mvc.Wrapper.csproj" />
 		<ProjectReference Include="..\..\framework\security\LINGYUN.Abp.Claims.Mapping\LINGYUN.Abp.Claims.Mapping.csproj" />
 		<ProjectReference Include="..\..\framework\tenants\LINGYUN.Abp.AspNetCore.MultiTenancy\LINGYUN.Abp.AspNetCore.MultiTenancy.csproj" />
-		<ProjectReference Include="..\..\modules\identity\LINGYUN.Abp.Identity.AspNetCore\LINGYUN.Abp.Identity.AspNetCore.csproj" />
+		<ProjectReference Include="..\..\framework\tenants\LINGYUN.Abp.AspNetCore.Mvc.UI.MultiTenancy\LINGYUN.Abp.AspNetCore.Mvc.UI.MultiTenancy.csproj" />
+		<ProjectReference Include="..\..\modules\account\LINGYUN.Abp.Account.Web.AliyunCaptcha\LINGYUN.Abp.Account.Web.AliyunCaptcha.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\LINGYUN.Abp.MicroService.AuthServer.EntityFrameworkCore\LINGYUN.Abp.MicroService.AuthServer.EntityFrameworkCore.csproj" />
 		<ProjectReference Include="..\..\modules\account\LINGYUN.Abp.Account.Application\LINGYUN.Abp.Account.Application.csproj" />
 		<ProjectReference Include="..\..\modules\account\LINGYUN.Abp.Account.HttpApi\LINGYUN.Abp.Account.HttpApi.csproj" />
+		<ProjectReference Include="..\..\modules\account\LINGYUN.Abp.Account.Web.LazyCaptcha\LINGYUN.Abp.Account.Web.LazyCaptcha.csproj" />
 		<ProjectReference Include="..\..\modules\account\LINGYUN.Abp.Account.Web.OAuth\LINGYUN.Abp.Account.Web.OAuth.csproj" />
 		<ProjectReference Include="..\..\modules\account\LINGYUN.Abp.Account.Web.OpenIddict\LINGYUN.Abp.Account.Web.OpenIddict.csproj" />
+		<ProjectReference Include="..\..\modules\account\LINGYUN.Abp.Account.Web.TencentCaptcha\LINGYUN.Abp.Account.Web.TencentCaptcha.csproj" />
 		<ProjectReference Include="..\..\modules\blob-management\LINGYUN.Abp.BlobStoring.BlobManagement\LINGYUN.Abp.BlobStoring.BlobManagement.csproj" />
 		<ProjectReference Include="..\..\modules\gdpr\LINGYUN.Abp.Gdpr.Application\LINGYUN.Abp.Gdpr.Application.csproj" />
 		<ProjectReference Include="..\..\modules\gdpr\LINGYUN.Abp.Gdpr.HttpApi\LINGYUN.Abp.Gdpr.HttpApi.csproj" />
 		<ProjectReference Include="..\..\modules\gdpr\LINGYUN.Abp.Gdpr.Web\LINGYUN.Abp.Gdpr.Web.csproj" />
 		<ProjectReference Include="..\..\modules\identity\LINGYUN.Abp.Identity.Application.Contracts\LINGYUN.Abp.Identity.Application.Contracts.csproj" />
-		<ProjectReference Include="..\..\modules\identity\LINGYUN.Abp.Identity.AspNetCore.Session\LINGYUN.Abp.Identity.AspNetCore.Session.csproj" />
+		<ProjectReference Include="..\..\modules\identity\LINGYUN.Abp.Identity.AspNetCore\LINGYUN.Abp.Identity.AspNetCore.csproj" />
 		<ProjectReference Include="..\..\modules\identity\LINGYUN.Abp.Identity.OrganizaztionUnits\LINGYUN.Abp.Identity.OrganizaztionUnits.csproj" />
-		<ProjectReference Include="..\..\modules\identity\LINGYUN.Abp.Identity.Session.AspNetCore\LINGYUN.Abp.Identity.Session.AspNetCore.csproj" />
-		<ProjectReference Include="..\..\modules\openIddict\LINGYUN.Abp.OpenIddict.AspNetCore.Session\LINGYUN.Abp.OpenIddict.AspNetCore.Session.csproj" />
+		<ProjectReference Include="..\..\modules\openIddict\LINGYUN.Abp.OpenIddict.Impersonation\LINGYUN.Abp.OpenIddict.Impersonation.csproj" />
 		<ProjectReference Include="..\..\modules\openIddict\LINGYUN.Abp.OpenIddict.LinkUser\LINGYUN.Abp.OpenIddict.LinkUser.csproj" />
 		<ProjectReference Include="..\..\modules\openIddict\LINGYUN.Abp.OpenIddict.Portal\LINGYUN.Abp.OpenIddict.Portal.csproj" />
 		<ProjectReference Include="..\..\modules\openIddict\LINGYUN.Abp.OpenIddict.Sms\LINGYUN.Abp.OpenIddict.Sms.csproj" />
@@ -86,7 +95,7 @@
 		<PropertyGroup>
 			<PackageJsonPath>$(MSBuildProjectDirectory)\package.json</PackageJsonPath>
 		</PropertyGroup>
-		
+
 		<Exec Command="abp install-libs" Condition="Exists('$(PackageJsonPath)')" WorkingDirectory="$(MSBuildProjectDirectory)" IgnoreExitCode="false" />
 	</Target>
 

@@ -21,5 +21,5 @@ public interface IBlobIntegrationService : IApplicationService
 
     Task<bool> ExistsAsync(BlobFileGetByNameIntegrationDto input);
 
-    Task<IRemoteStreamContent> GetContentAsync(BlobFileGetByNameIntegrationDto input);
+    Task<IRemoteStreamContent> DownloadAsync(BlobFileGetByNameIntegrationDto input);
 }

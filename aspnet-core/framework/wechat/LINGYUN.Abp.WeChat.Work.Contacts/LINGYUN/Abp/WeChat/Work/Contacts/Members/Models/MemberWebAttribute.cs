@@ -14,7 +14,7 @@ public class MemberWebAttribute : MemberAttribute
     [NotNull]
     [JsonProperty("web")]
     [JsonPropertyName("web")]
-    public MemberWebModel Web { get; set; }
+    public MemberWebModel Web { get; set; } = default!;
 }
 
 public class MemberWebModel
@@ -25,12 +25,12 @@ public class MemberWebModel
     [NotNull]
     [JsonProperty("url")]
     [JsonPropertyName("url")]
-    public string Url { get; set; }
+    public string Url { get; set; } = default!;
     /// <summary>
     /// 网页的展示标题，长度限制12个UTF8字符
     /// </summary>
     [NotNull]
     [JsonProperty("title")]
     [JsonPropertyName("title")]
-    public string Title { get; set; }
+    public string Title { get; set; } = default!;
 }

@@ -5,8 +5,8 @@ namespace LINGYUN.Abp.Tencent.QQ;
 public class AbpTencentQQCacheItem
 {
     public const string CacheKeyFormat = "pn:tenant-cloud,n:qq";
-    public string AppId { get; set; }
-    public string AppKey { get; set; }
+    public string AppId { get; set; } = default!;
+    public string AppKey { get; set; } = default!;
     public bool IsMobile { get; set; }
     public AbpTencentQQCacheItem()
     {

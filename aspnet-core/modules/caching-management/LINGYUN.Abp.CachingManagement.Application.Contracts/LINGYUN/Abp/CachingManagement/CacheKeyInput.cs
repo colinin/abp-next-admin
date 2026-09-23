@@ -5,5 +5,5 @@ namespace LINGYUN.Abp.CachingManagement;
 public class CacheKeyInput
 {
     [Required]
-    public string Key { get; set; }
+    public string Key { get; set; } = default!;
 }

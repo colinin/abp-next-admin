@@ -9,11 +9,11 @@ public class IdentitySessionCacheItem
     /// <summary>
     /// 登录设备
     /// </summary>
-    public string Device { get; set; }
+    public string Device { get; set; } = default!;
     /// <summary>
     /// 设备描述
     /// </summary>
-    public string DeviceInfo { get; set; }
+    public string? DeviceInfo { get; set; }
     /// <summary>
     /// 用户Id
     /// </summary>
@@ -21,19 +21,19 @@ public class IdentitySessionCacheItem
     /// <summary>
     /// 会话Id
     /// </summary>
-    public string SessionId { get; set; }
+    public string SessionId { get; set; } = default!;
     /// <summary>
     /// 客户端Id
     /// </summary>
-    public string ClientId { get; set; }
+    public string? ClientId { get; set; }
     /// <summary>
     /// IP地址
     /// </summary>
-    public string IpAddresses { get; set; }
+    public string? IpAddresses { get; set; }
     /// <summary>
     /// IP属地
     /// </summary>
-    public string IpRegion { get; set; }
+    public string? IpRegion { get; set; }
     /// <summary>
     /// 登录时间
     /// </summary>
@@ -53,14 +53,14 @@ public class IdentitySessionCacheItem
 
     public IdentitySessionCacheItem(
         string device,
-        string deviceInfo,
+        string? deviceInfo,
         Guid userId,
         string sessionId,
-        string clientId,
-        string ipAddresses,
+        string? clientId,
+        string? ipAddresses,
         DateTime signedIn,
         DateTime? lastAccessed = null,
-        string ipRegion = null,
+        string? ipRegion = null,
         double? expiraIn = null)
     {
         Device = device;

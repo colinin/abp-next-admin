@@ -4,9 +4,9 @@ namespace LINGYUN.Abp.LocalizationManagement.External;
 
 public interface IExternalLocalizationStoreCache
 {
-    LocalizationResourceCacheItem GetResourceOrNull(string resourceName);
+    LocalizationResourceCacheItem? GetResourceOrNull(string resourceName);
 
-    Task<LocalizationResourceCacheItem> GetResourceOrNullAsync(string resourceName);
+    Task<LocalizationResourceCacheItem?> GetResourceOrNullAsync(string resourceName);
 
     Task<string[]> GetResourceNamesAsync();
 

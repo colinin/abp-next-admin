@@ -18,7 +18,7 @@ public class EfCoreLayoutRepository : EfCoreRepository<IPlatformDbContext, Layou
     {
     }
 
-    public async virtual Task<Layout> FindByNameAsync(
+    public async virtual Task<Layout?> FindByNameAsync(
         string name,
         bool includeDetails = false,
         CancellationToken cancellationToken = default)
@@ -30,22 +30,22 @@ public class EfCoreLayoutRepository : EfCoreRepository<IPlatformDbContext, Layou
     }
 
     public async virtual Task<int> GetCountAsync(
-        string framework = "",
-        string filter = "", 
+        string? framework = null,
+        string? filter = null,
         CancellationToken cancellationToken = default)
     {
         return await (await GetDbSetAsync())
             .WhereIf(!framework.IsNullOrWhiteSpace(), x => x.Framework.Equals(framework))
             .WhereIf(!filter.IsNullOrWhiteSpace(), x =>
-                    x.Name.Contains(filter) || x.DisplayName.Contains(filter) ||
-                    x.Description.Contains(filter) || x.Redirect.Contains(filter))
+                    x.Name.Contains(filter!) || x.DisplayName.Contains(filter!) ||
+                    x.Description!.Contains(filter!) || x.Redirect!.Contains(filter!))
             .CountAsync(GetCancellationToken(cancellationToken));
     }
 
     public async virtual Task<List<Layout>> GetPagedListAsync(
-        string framework = "",
-        string filter = "",
-        string sorting = nameof(Layout.Name),
+        string? framework = null,
+        string? filter = null,
+        string? sorting = nameof(Layout.Name),
         bool includeDetails = false, 
         int skipCount = 0, 
         int maxResultCount = 10,
@@ -60,8 +60,8 @@ public class EfCoreLayoutRepository : EfCoreRepository<IPlatformDbContext, Layou
             .IncludeDetails(includeDetails)
             .WhereIf(!framework.IsNullOrWhiteSpace(), x => x.Framework.Equals(framework))
             .WhereIf(!filter.IsNullOrWhiteSpace(), x =>
-                    x.Name.Contains(filter) || x.DisplayName.Contains(filter) ||
-                    x.Description.Contains(filter) || x.Redirect.Contains(filter))
+                    x.Name.Contains(filter!) || x.DisplayName.Contains(filter!) ||
+                    x.Description!.Contains(filter!) || x.Redirect!.Contains(filter!))
             .OrderBy(sorting)
             .PageBy(skipCount, maxResultCount)
             .ToListAsync(GetCancellationToken(cancellationToken));

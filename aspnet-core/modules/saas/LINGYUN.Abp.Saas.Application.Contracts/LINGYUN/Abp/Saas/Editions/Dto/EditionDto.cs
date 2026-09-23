@@ -6,6 +6,6 @@ namespace LINGYUN.Abp.Saas.Editions;
 
 public class EditionDto : ExtensibleAuditedEntityDto<Guid>, IHasConcurrencyStamp
 {
-    public string DisplayName { get; set; }
-    public string ConcurrencyStamp { get; set; }
+    public string DisplayName { get; set; } = default!;
+    public string ConcurrencyStamp { get; set; } = default!;
 }

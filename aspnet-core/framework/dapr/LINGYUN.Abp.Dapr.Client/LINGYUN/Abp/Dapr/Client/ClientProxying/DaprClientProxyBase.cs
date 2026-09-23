@@ -38,24 +38,28 @@ public abstract class DaprClientProxyBase<TService> : ClientProxyBase<TService>
                 responseContent.Headers?.ContentLength);
         }
 
-        var stringContent = await DaprClientProxyOptions
-            .Value
-            .ProxyResponseContent(response, LazyServiceProvider);
-
-        if (stringContent.IsNullOrWhiteSpace())
+        if (DaprClientProxyOptions.Value.ProxyResponseContent != null)
         {
-            return default;
-        }
+            var proxyStringContent = await DaprClientProxyOptions
+                .Value
+                .ProxyResponseContent(response, LazyServiceProvider);
 
-        if (typeof(T) == typeof(string))
-        {
-            return (T)(object)stringContent;
+                if (proxyStringContent.IsNullOrWhiteSpace())
+                {
+                    return default!;
+                }
+
+                if (typeof(T) == typeof(string))
+                {
+                    return (T)(object)proxyStringContent;
+                }
         }
+        var stringContent = await response.Content.ReadAsStringAsync();
 
         return JsonSerializer.Deserialize<T>(stringContent);
     }
 
-    protected async override Task<string> GetConfiguredApiVersionAsync(ClientProxyRequestContext requestContext)
+    protected async override Task<string?> GetConfiguredApiVersionAsync(ClientProxyRequestContext requestContext)
     {
         var clientConfig = DaprClientProxyOptions.Value.DaprClientProxies.GetOrDefault(requestContext.ServiceType)
                            ?? throw new AbpException($"Could not get DynamicDaprClientProxyConfig for {requestContext.ServiceType.FullName}.");

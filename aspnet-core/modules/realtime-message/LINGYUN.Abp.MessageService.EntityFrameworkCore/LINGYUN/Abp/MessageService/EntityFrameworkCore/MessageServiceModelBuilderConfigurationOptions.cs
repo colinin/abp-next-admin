@@ -7,7 +7,7 @@ public class MessageServiceModelBuilderConfigurationOptions : AbpModelBuilderCon
 {
     public MessageServiceModelBuilderConfigurationOptions(
         [NotNull] string tablePrefix = AbpMessageServiceDbProperties.DefaultTablePrefix,
-        [CanBeNull] string schema = AbpMessageServiceDbProperties.DefaultSchema)
+        [CanBeNull] string? schema = AbpMessageServiceDbProperties.DefaultSchema)
         : base(
             tablePrefix,
             schema)

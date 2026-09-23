@@ -32,7 +32,7 @@ public class RuleProvider : IRuleProvider, ISingletonDependency
         _serviceProvider = serviceProvider;
     }
 
-    public async virtual Task ExecuteAsync<T>(T input, object[] @params = null, CancellationToken cancellationToken = default)
+    public async virtual Task ExecuteAsync<T>(T input, object[]? @params = null, CancellationToken cancellationToken = default) where T: notnull
     {
         _logger.LogDebug("Starting all typed rules engine.");
 

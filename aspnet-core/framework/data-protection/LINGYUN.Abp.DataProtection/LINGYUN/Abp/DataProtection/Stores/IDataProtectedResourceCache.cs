@@ -31,7 +31,7 @@ public interface IDataProtectedResourceCache
     /// <param name="entityTypeFullName">实体类型名称</param>
     /// <param name="operation">数据权限操作</param>
     /// <returns>数据过滤条件组</returns>
-    DataProtectedResourceCacheItem GetCache(string subjectName, string subjectId, string entityTypeFullName, DataAccessOperation operation);
+    DataProtectedResourceCacheItem? GetCache(string subjectName, string subjectId, string entityTypeFullName, DataAccessOperation operation);
     /// <summary>
     /// 获取指定主体与实体类型的数据权限过滤规则
     /// </summary>
@@ -40,5 +40,5 @@ public interface IDataProtectedResourceCache
     /// <param name="entityTypeFullName">实体类型名称</param>
     /// <param name="operation">数据权限操作</param>
     /// <returns>数据过滤条件组</returns>
-    Task<DataProtectedResourceCacheItem> GetCacheAsync(string subjectName, string subjectId, string entityTypeFullName, DataAccessOperation operation);
+    Task<DataProtectedResourceCacheItem?> GetCacheAsync(string subjectName, string subjectId, string entityTypeFullName, DataAccessOperation operation);
 }

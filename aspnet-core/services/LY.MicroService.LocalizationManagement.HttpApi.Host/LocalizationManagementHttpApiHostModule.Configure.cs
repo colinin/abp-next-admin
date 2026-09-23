@@ -307,6 +307,7 @@ public partial class LocalizationManagementHttpApiHostModule
         Configure<AbpLocalizationManagementOptions>(options =>
         {
             options.SaveStaticLocalizationsToDatabase = true;
+            options.IsDynamicLocalizationInitializerHost = true;
         });
     }
 

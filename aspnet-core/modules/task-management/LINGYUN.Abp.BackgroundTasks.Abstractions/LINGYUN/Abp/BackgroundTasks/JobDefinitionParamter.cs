@@ -11,12 +11,12 @@ public class JobDefinitionParamter
 
     public ILocalizableString DisplayName { get; }
 
-    public ILocalizableString Description { get; }
+    public ILocalizableString? Description { get; }
 
     public JobDefinitionParamter(
         [NotNull] string name,
         [NotNull] ILocalizableString displayName,
-        [CanBeNull] ILocalizableString description = null,
+        [CanBeNull] ILocalizableString? description = null,
         bool required = false)
     {
         Name = name;

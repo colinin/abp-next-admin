@@ -40,7 +40,7 @@ public class DataItemMappingOptions
                 var joinString = string.Empty;
                 foreach (var node in jsonArray)
                 {
-                    joinString += node.ToString() + ",";
+                    joinString += node!.ToString() + ",";
                 }
                 return joinString.EndsWith(",") ? joinString[..^1] : joinString;
             }
@@ -66,7 +66,7 @@ public class DataItemMappingOptions
                 }
                 else
                 {
-                    var boInput = value.ToString().ToLower();
+                    var boInput = value.ToString()!.ToLower();
                     if (boInput == "true" ||
                         boInput == "false")
                     {
@@ -99,7 +99,7 @@ public class DataItemMappingOptions
                 var valueType = value.GetType();
                 if (!valueType.IsClass && !valueType.IsInterface && typeof(IFormattable).IsAssignableFrom(valueType))
                 {
-                    return value.ToString();
+                    return value.ToString()!;
                 }
             }
             throw new BusinessException(PlatformErrorCodes.MetaFormatMissMatch);
@@ -110,7 +110,7 @@ public class DataItemMappingOptions
             {
                 return "";
             }
-            return value.ToString();
+            return value.ToString()!;
         });
         SetMapping(ValueType.Object, value =>
         {

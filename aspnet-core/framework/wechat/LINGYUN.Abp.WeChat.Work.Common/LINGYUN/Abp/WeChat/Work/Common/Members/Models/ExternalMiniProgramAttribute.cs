@@ -14,7 +14,7 @@ public class ExternalMiniProgramAttribute : ExternalAttribute
     [NotNull]
     [JsonProperty("miniprogram")]
     [JsonPropertyName("miniprogram")]
-    public ExternalMiniProgramModel MiniProgram { get; set; }
+    public ExternalMiniProgramModel MiniProgram { get; set; } = default!;
 }
 
 public class ExternalMiniProgramModel
@@ -25,19 +25,19 @@ public class ExternalMiniProgramModel
     [NotNull]
     [JsonProperty("appid")]
     [JsonPropertyName("appid")]
-    public string AppId { get; set; }
+    public string AppId { get; set; } = default!;
     /// <summary>
     /// 小程序的展示标题，长度限制12个UTF8字符
     /// </summary>
     [NotNull]
     [JsonProperty("title")]
     [JsonPropertyName("title")]
-    public string Title { get; set; }
+    public string Title { get; set; } = default!;
     /// <summary>
     /// 小程序的页面路径
     /// </summary>
     [NotNull]
     [JsonProperty("pagepath")]
     [JsonPropertyName("pagepath")]
-    public string PagePath { get; set; }
+    public string PagePath { get; set; } = default!;
 }

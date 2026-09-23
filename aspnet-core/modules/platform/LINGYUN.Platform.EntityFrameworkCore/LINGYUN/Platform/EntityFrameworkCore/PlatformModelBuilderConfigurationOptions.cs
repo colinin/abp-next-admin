@@ -7,7 +7,7 @@ public class PlatformModelBuilderConfigurationOptions : AbpModelBuilderConfigura
 {
     public PlatformModelBuilderConfigurationOptions(
        [NotNull] string tablePrefix = "",
-       [CanBeNull] string schema = null)
+       [CanBeNull] string? schema = null)
        : base(
            tablePrefix,
            schema)

@@ -27,7 +27,7 @@ public class EntityChangesController : AbpControllerBase, IEntityChangesAppServi
 
     [HttpGet]
     [Route("{id}")]
-    public Task<EntityChangeDto> GetAsync(Guid id)
+    public Task<EntityChangeDto?> GetAsync(Guid id)
     {
         return EntityChangeAppService.GetAsync(id);
     }
@@ -40,7 +40,7 @@ public class EntityChangesController : AbpControllerBase, IEntityChangesAppServi
 
     [HttpGet]
     [Route("with-username/{id}")]
-    public Task<EntityChangeWithUsernameDto> GetWithUsernameAsync(Guid id)
+    public Task<EntityChangeWithUsernameDto?> GetWithUsernameAsync(Guid id)
     {
         return EntityChangeAppService.GetWithUsernameAsync(id);
     }

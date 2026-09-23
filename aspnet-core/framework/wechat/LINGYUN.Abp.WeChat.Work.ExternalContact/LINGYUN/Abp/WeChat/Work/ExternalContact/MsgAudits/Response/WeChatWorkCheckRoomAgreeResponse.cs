@@ -18,5 +18,5 @@ public class WeChatWorkCheckRoomAgreeResponse : WeChatWorkResponse
     [NotNull]
     [JsonProperty("agreeinfo")]
     [JsonPropertyName("agreeinfo")]
-    public RoomAgreeInfo[] AgreeInfo { get; set; }
+    public RoomAgreeInfo[] AgreeInfo { get; set; } = default!;
 }

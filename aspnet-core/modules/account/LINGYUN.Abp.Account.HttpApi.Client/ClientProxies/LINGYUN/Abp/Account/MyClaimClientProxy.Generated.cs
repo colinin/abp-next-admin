@@ -17,14 +17,6 @@ namespace LINGYUN.Abp.Account;
 [ExposeServices(typeof(IMyClaimAppService), typeof(MyClaimClientProxy))]
 public partial class MyClaimClientProxy : ClientProxyBase<IMyClaimAppService>, IMyClaimAppService
 {
-    public virtual async Task ChangeAvatarAsync(ChangeAvatarInput input)
-    {
-        await RequestAsync(nameof(ChangeAvatarAsync), new ClientProxyRequestTypeValue
-        {
-            { typeof(ChangeAvatarInput), input }
-        });
-    }
-
     public virtual async Task<GetUserClaimStateDto> GetStateAsync(string claimType)
     {
         return await RequestAsync<GetUserClaimStateDto>(nameof(GetStateAsync), new ClientProxyRequestTypeValue

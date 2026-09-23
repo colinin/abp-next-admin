@@ -44,7 +44,7 @@ public class DynamicNotificationDefinitionStore : IDynamicNotificationDefinition
         CacheOptions = cacheOptions.Value;
     }
 
-    public async virtual Task<NotificationDefinition> GetOrNullAsync(string name)
+    public async virtual Task<NotificationDefinition?> GetOrNullAsync(string name)
     {
         if (!NotificationManagementOptions.IsDynamicNotificationsStoreEnabled)
         {
@@ -72,7 +72,7 @@ public class DynamicNotificationDefinitionStore : IDynamicNotificationDefinition
         }
     }
 
-    public async virtual Task<NotificationGroupDefinition> GetGroupOrNullAsync(string name)
+    public async virtual Task<NotificationGroupDefinition?> GetGroupOrNullAsync(string name)
     {
         if (!NotificationManagementOptions.IsDynamicNotificationsStoreEnabled)
         {

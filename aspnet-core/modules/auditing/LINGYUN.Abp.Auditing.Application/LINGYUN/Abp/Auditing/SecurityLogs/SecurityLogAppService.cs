@@ -20,11 +20,11 @@ public class SecurityLogAppService : AuditingApplicationServiceBase, ISecurityLo
         SecurityLogManager = securityLogManager;
     }
 
-    public async virtual Task<SecurityLogDto> GetAsync(Guid id)
+    public async virtual Task<SecurityLogDto?> GetAsync(Guid id)
     {
         var securityLog = await SecurityLogManager.GetAsync(id, includeDetails: true);
 
-        return ObjectMapper.Map<SecurityLog, SecurityLogDto>(securityLog);
+        return ObjectMapper.Map<SecurityLog?, SecurityLogDto?>(securityLog);
     }
 
     public async virtual Task<PagedResultDto<SecurityLogDto>> GetListAsync(SecurityLogGetByPagedDto input)

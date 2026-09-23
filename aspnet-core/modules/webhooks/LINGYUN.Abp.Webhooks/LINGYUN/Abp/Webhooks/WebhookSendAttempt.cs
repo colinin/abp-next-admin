@@ -23,7 +23,7 @@ namespace LINGYUN.Abp.Webhooks
         /// <summary>
         /// Webhook response content that webhook endpoint send back
         /// </summary>
-        public string Response { get; set; }
+        public string? Response { get; set; }
 
         /// <summary>
         /// Webhook response status code that webhook endpoint send back

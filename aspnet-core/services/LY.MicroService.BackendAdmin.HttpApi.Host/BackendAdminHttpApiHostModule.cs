@@ -1,25 +1,25 @@
 ﻿using LINGYUN.Abp.Aliyun.SettingManagement;
 using LINGYUN.Abp.AspNetCore.HttpOverrides;
-using LINGYUN.Abp.AspNetCore.Mvc.Localization;
 using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
+using LINGYUN.Abp.AspNetCore.Session;
 using LINGYUN.Abp.Auditing;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
+using LINGYUN.Abp.BlobManagement.SettingManagement;
 using LINGYUN.Abp.CachingManagement;
 using LINGYUN.Abp.CachingManagement.StackExchangeRedis;
 using LINGYUN.Abp.Claims.Mapping;
 using LINGYUN.Abp.Data.DbMigrator;
 using LINGYUN.Abp.DataProtectionManagement;
+using LINGYUN.Abp.Dynamic.Definitions;
 using LINGYUN.Abp.Emailing.Platform;
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
 using LINGYUN.Abp.FeatureManagement;
 using LINGYUN.Abp.FeatureManagement.HttpApi;
 using LINGYUN.Abp.Identity.EntityFrameworkCore;
-using LINGYUN.Abp.Identity.Session.AspNetCore;
 using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
 using LINGYUN.Abp.Logging.Serilog.Elasticsearch;
-using LINGYUN.Abp.BlobManagement.SettingManagement;
 using LINGYUN.Abp.PermissionManagement;
 using LINGYUN.Abp.PermissionManagement.HttpApi;
 using LINGYUN.Abp.PermissionManagement.OrganizationUnits;
@@ -49,11 +49,11 @@ using Volo.Abp.Autofac;
 using Volo.Abp.Caching.StackExchangeRedis;
 using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.Http.Client;
-using Volo.Abp.IdentityServer.EntityFrameworkCore;
 using Volo.Abp.Modularity;
+using Volo.Abp.OpenIddict.EntityFrameworkCore;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.PermissionManagement.Identity;
-using Volo.Abp.PermissionManagement.IdentityServer;
+using Volo.Abp.PermissionManagement.OpenIddict;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.Swashbuckle;
 
@@ -67,7 +67,6 @@ namespace LY.MicroService.BackendAdmin;
     typeof(AbpLoggingSerilogElasticsearchModule),
     typeof(AbpAuditLoggingElasticsearchModule),
     typeof(AbpAspNetCoreMvcUiMultiTenancyModule),
-    typeof(AbpAspNetCoreMvcLocalizationModule),
 
     // 设置管理
     typeof(AbpAliyunSettingManagementModule),
@@ -96,22 +95,18 @@ namespace LY.MicroService.BackendAdmin;
     typeof(AbpCachingManagementHttpApiModule),
     typeof(AbpCachingManagementStackExchangeRedisModule),
     typeof(AbpIdentityEntityFrameworkCoreModule),// 用户角色权限需要引用包
-    typeof(AbpIdentityServerEntityFrameworkCoreModule), // 客户端权限需要引用包
+    typeof(AbpOpenIddictEntityFrameworkCoreModule), // 客户端权限需要引用包
     typeof(AbpPermissionManagementDomainOrganizationUnitsModule), // 组织机构权限管理
     typeof(AbpSaasEntityFrameworkCoreModule),
     typeof(AbpSettingManagementEntityFrameworkCoreModule),
     typeof(AbpPermissionManagementDomainIdentityModule),
-    typeof(AbpPermissionManagementDomainIdentityServerModule),
+    typeof(AbpPermissionManagementDomainOpenIddictModule),
     typeof(AbpPermissionManagementEntityFrameworkCoreModule),
     typeof(AbpFeatureManagementEntityFrameworkCoreModule),
     typeof(AbpLocalizationManagementEntityFrameworkCoreModule),
     typeof(AbpTextTemplatingEntityFrameworkCoreModule),
-
     // 重写模板引擎支持外部本地化
     typeof(AbpTextTemplatingScribanModule),
-
-    typeof(AbpIdentitySessionAspNetCoreModule),
-
     typeof(BackendAdminMigrationsEntityFrameworkCoreModule),
     typeof(AbpDataDbMigratorModule),
     typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
@@ -123,8 +118,10 @@ namespace LY.MicroService.BackendAdmin;
     typeof(AbpEmailingPlatformModule),
     typeof(AbpCachingStackExchangeRedisModule),
     typeof(AbpLocalizationCultureMapModule),
+    typeof(AbpAspNetCoreSessionModule),
     typeof(AbpAspNetCoreMvcWrapperModule),
     typeof(AbpAspNetCoreHttpOverridesModule),
+    typeof(AbpDynamicDefinitionsModule),
     typeof(AbpClaimsMappingModule),
     typeof(AbpSwashbuckleModule),
     typeof(AbpAutofacModule)
@@ -148,6 +145,7 @@ public partial class BackendAdminHttpApiHostModule : AbpModule
 
         ConfigureWrapper();
         ConfigureLocalization();
+        ConfigureBackgroundWorker();
         ConfigureExceptionHandling();
         ConfigureVirtualFileSystem();
         ConfigureTextTemplating();
@@ -187,8 +185,6 @@ public partial class BackendAdminHttpApiHostModule : AbpModule
         app.UseJwtTokenMiddleware();
         // 多租户
         app.UseMultiTenancy();
-        // 会话
-        app.UseAbpSession();
         // jwt
         app.UseDynamicClaims();
         // 授权

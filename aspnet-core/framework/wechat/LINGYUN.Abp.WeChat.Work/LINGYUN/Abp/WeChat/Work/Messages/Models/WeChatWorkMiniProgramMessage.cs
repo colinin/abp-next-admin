@@ -14,21 +14,21 @@ public class WeChatWorkMiniProgramMessage
     /// </summary>
     [JsonProperty("touser")]
     [JsonPropertyName("touser")]
-    public virtual string ToUser { get; set; }
+    public virtual string? ToUser { get; set; }
     /// <summary>
     /// 指定接收消息的部门，部门ID列表，多个接收者用‘|’分隔，最多支持100个。
     /// 当touser为"@all"时忽略本参数
     /// </summary>
     [JsonProperty("toparty")]
     [JsonPropertyName("toparty")]
-    public virtual string ToParty { get; set; }
+    public virtual string? ToParty { get; set; }
     /// <summary>
     /// 指定接收消息的标签，标签ID列表，多个接收者用‘|’分隔，最多支持100个。
     /// 当touser为"@all"时忽略本参数
     /// </summary>
     [JsonProperty("totag")]
     [JsonPropertyName("totag")]
-    public virtual string ToTag { get; set; }
+    public virtual string? ToTag { get; set; }
     /// <summary>
     /// 消息类型
     /// </summary>

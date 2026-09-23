@@ -20,7 +20,7 @@ public class ClientProxiesWebhookPublisher : IWebhookPublisher, ITransientDepend
         PublishAppService = publishAppService;
     }
 
-    public async virtual Task PublishAsync(string webhookName, object data, bool sendExactSameData = false, WebhookHeader headers = null)
+    public async virtual Task PublishAsync(string webhookName, object data, bool sendExactSameData = false, WebhookHeader? headers = null)
     {
         var input = new WebhookPublishInput
         {
@@ -40,7 +40,7 @@ public class ClientProxiesWebhookPublisher : IWebhookPublisher, ITransientDepend
         await PublishAsync(input);
     }
 
-    public async virtual Task PublishAsync(string webhookName, object data, Guid? tenantId, bool sendExactSameData = false, WebhookHeader headers = null)
+    public async virtual Task PublishAsync(string webhookName, object data, Guid? tenantId, bool sendExactSameData = false, WebhookHeader? headers = null)
     {
         var input = new WebhookPublishInput
         {
@@ -64,7 +64,7 @@ public class ClientProxiesWebhookPublisher : IWebhookPublisher, ITransientDepend
         await PublishAsync(input);
     }
 
-    public async virtual Task PublishAsync(Guid?[] tenantIds, string webhookName, object data, bool sendExactSameData = false, WebhookHeader headers = null)
+    public async virtual Task PublishAsync(Guid?[] tenantIds, string webhookName, object data, bool sendExactSameData = false, WebhookHeader? headers = null)
     {
         var input = new WebhookPublishInput
         {

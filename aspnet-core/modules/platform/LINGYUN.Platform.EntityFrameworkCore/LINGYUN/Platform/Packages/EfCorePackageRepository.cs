@@ -21,7 +21,7 @@ public class EfCorePackageRepository :
     {
     }
 
-    public async virtual Task<Package> FindByNameAsync(
+    public async virtual Task<Package?> FindByNameAsync(
         string name,
         bool includeDetails = true,
         CancellationToken cancellationToken = default)
@@ -33,9 +33,9 @@ public class EfCorePackageRepository :
             .FirstOrDefaultAsync(GetCancellationToken(cancellationToken));
     }
 
-    public async virtual Task<Package> FindLatestAsync(
+    public async virtual Task<Package?> FindLatestAsync(
         string name,
-        string version = null,
+        string? version = null,
         bool includeDetails = true,
         CancellationToken cancellationToken = default)
     {
@@ -67,7 +67,7 @@ public class EfCorePackageRepository :
 
     public async virtual Task<List<Package>> GetListAsync(
         Specification<Package> specification,
-        string sorting = $"{nameof(Package.Version)} DESC",
+        string? sorting = $"{nameof(Package.Version)} DESC",
         int skipCount = 0, 
         int maxResultCount = 10, 
         CancellationToken cancellationToken = default)

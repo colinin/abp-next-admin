@@ -14,7 +14,7 @@ public class FormulaControlValue : ControlValue
     [NotNull]
     [JsonProperty("formula")]
     [JsonPropertyName("formula")]
-    public FormulaValue Formula { get; set; }
+    public FormulaValue Formula { get; set; } = default!;
     public FormulaControlValue()
     {
 
@@ -34,7 +34,7 @@ public class FormulaValue
     [NotNull]
     [JsonProperty("value")]
     [JsonPropertyName("value")]
-    public string Value { get; set; }
+    public string Value { get; set; } = default!;
     public FormulaValue()
     {
 

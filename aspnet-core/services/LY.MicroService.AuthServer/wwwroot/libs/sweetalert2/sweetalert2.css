@@ -12,7 +12,6 @@
   --swal2-show-animation: swal2-show 0.3s;
   --swal2-hide-animation: swal2-hide 0.15s forwards;
   --swal2-icon-zoom: 1;
-  --swal2-icon-animations: true;
   --swal2-title-padding: 0.8em 1em 0;
   --swal2-html-container-padding: 1em 1.6em 0.3em;
   --swal2-input-border: 1px solid #d9d9d9;
@@ -266,7 +265,6 @@ div:where(.swal2-container) div:where(.swal2-popup) {
   color: var(--swal2-color);
   font-family: inherit;
   font-size: 1rem;
-  container-name: swal2-popup;
 }
 div:where(.swal2-container) div:where(.swal2-popup):focus {
   outline: none;
@@ -692,49 +690,41 @@ div:where(.swal2-icon).swal2-error [class^=swal2-x-mark-line][class$=right] {
   right: 1em;
   transform: rotate(-45deg);
 }
-@container swal2-popup style(--swal2-icon-animations:true) {
-  div:where(.swal2-icon).swal2-error.swal2-icon-show {
-    animation: swal2-animate-error-icon 0.5s;
-  }
-  div:where(.swal2-icon).swal2-error.swal2-icon-show .swal2-x-mark {
-    animation: swal2-animate-error-x-mark 0.5s;
-  }
+div:where(.swal2-icon).swal2-error.swal2-icon-show {
+  animation: swal2-animate-error-icon 0.5s;
+}
+div:where(.swal2-icon).swal2-error.swal2-icon-show .swal2-x-mark {
+  animation: swal2-animate-error-x-mark 0.5s;
 }
 div:where(.swal2-icon).swal2-warning {
   border-color: #f8bb86;
   color: #f8bb86;
 }
-@container swal2-popup style(--swal2-icon-animations:true) {
-  div:where(.swal2-icon).swal2-warning.swal2-icon-show {
-    animation: swal2-animate-error-icon 0.5s;
-  }
-  div:where(.swal2-icon).swal2-warning.swal2-icon-show .swal2-icon-content {
-    animation: swal2-animate-i-mark 0.5s;
-  }
+div:where(.swal2-icon).swal2-warning.swal2-icon-show {
+  animation: swal2-animate-error-icon 0.5s;
+}
+div:where(.swal2-icon).swal2-warning.swal2-icon-show .swal2-icon-content {
+  animation: swal2-animate-i-mark 0.5s;
 }
 div:where(.swal2-icon).swal2-info {
   border-color: #3fc3ee;
   color: #3fc3ee;
 }
-@container swal2-popup style(--swal2-icon-animations:true) {
-  div:where(.swal2-icon).swal2-info.swal2-icon-show {
-    animation: swal2-animate-error-icon 0.5s;
-  }
-  div:where(.swal2-icon).swal2-info.swal2-icon-show .swal2-icon-content {
-    animation: swal2-animate-i-mark 0.8s;
-  }
+div:where(.swal2-icon).swal2-info.swal2-icon-show {
+  animation: swal2-animate-error-icon 0.5s;
+}
+div:where(.swal2-icon).swal2-info.swal2-icon-show .swal2-icon-content {
+  animation: swal2-animate-i-mark 0.8s;
 }
 div:where(.swal2-icon).swal2-question {
   border-color: #87adbd;
   color: #87adbd;
 }
-@container swal2-popup style(--swal2-icon-animations:true) {
-  div:where(.swal2-icon).swal2-question.swal2-icon-show {
-    animation: swal2-animate-error-icon 0.5s;
-  }
-  div:where(.swal2-icon).swal2-question.swal2-icon-show .swal2-icon-content {
-    animation: swal2-animate-question-mark 0.8s;
-  }
+div:where(.swal2-icon).swal2-question.swal2-icon-show {
+  animation: swal2-animate-error-icon 0.5s;
+}
+div:where(.swal2-icon).swal2-question.swal2-icon-show .swal2-icon-content {
+  animation: swal2-animate-question-mark 0.8s;
 }
 div:where(.swal2-icon).swal2-success {
   border-color: #a5dc86;
@@ -800,16 +790,14 @@ div:where(.swal2-icon).swal2-success [class^=swal2-success-line][class$=long] {
   width: 2.9375em;
   transform: rotate(-45deg);
 }
-@container swal2-popup style(--swal2-icon-animations:true) {
-  div:where(.swal2-icon).swal2-success.swal2-icon-show .swal2-success-line-tip {
-    animation: swal2-animate-success-line-tip 0.75s;
-  }
-  div:where(.swal2-icon).swal2-success.swal2-icon-show .swal2-success-line-long {
-    animation: swal2-animate-success-line-long 0.75s;
-  }
-  div:where(.swal2-icon).swal2-success.swal2-icon-show .swal2-success-circular-line-right {
-    animation: swal2-rotate-success-circular-line 4.25s ease-in;
-  }
+div:where(.swal2-icon).swal2-success.swal2-icon-show .swal2-success-line-tip {
+  animation: swal2-animate-success-line-tip 0.75s;
+}
+div:where(.swal2-icon).swal2-success.swal2-icon-show .swal2-success-line-long {
+  animation: swal2-animate-success-line-long 0.75s;
+}
+div:where(.swal2-icon).swal2-success.swal2-icon-show .swal2-success-circular-line-right {
+  animation: swal2-rotate-success-circular-line 4.25s ease-in;
 }
 
 [class^=swal2] {
@@ -995,13 +983,11 @@ div:where(.swal2-icon).swal2-success [class^=swal2-success-line][class$=long] {
   right: 0.1875em;
   width: 1.375em;
 }
-@container swal2-popup style(--swal2-icon-animations:true) {
-  .swal2-toast .swal2-success.swal2-icon-show .swal2-success-line-tip {
-    animation: swal2-toast-animate-success-line-tip 0.75s;
-  }
-  .swal2-toast .swal2-success.swal2-icon-show .swal2-success-line-long {
-    animation: swal2-toast-animate-success-line-long 0.75s;
-  }
+.swal2-toast .swal2-success.swal2-icon-show .swal2-success-line-tip {
+  animation: swal2-toast-animate-success-line-tip 0.75s;
+}
+.swal2-toast .swal2-success.swal2-icon-show .swal2-success-line-long {
+  animation: swal2-toast-animate-success-line-long 0.75s;
 }
 .swal2-toast.swal2-show {
   animation: var(--swal2-toast-show-animation);

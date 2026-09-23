@@ -13,12 +13,12 @@ public class VoiceMessage : WeChatWorkGeneralMessage
     /// 语音格式，如amr，speex等
     /// </summary>
     [XmlElement("Format")]
-    public string Format { get; set; }
+    public string Format { get; set; } = default!;
     /// <summary>
     /// 语音消息媒体id，可以调用获取临时素材接口拉取该媒体
     /// </summary>
     [XmlElement("MediaId")]
-    public string MediaId { get; set; }
+    public string MediaId { get; set; } = default!;
     public override WeChatMessageEto ToEto()
     {
         return new WeChatWorkGeneralMessageEto<VoiceMessage>(this);

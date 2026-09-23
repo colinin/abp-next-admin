@@ -21,7 +21,7 @@ public class WebhookPublishIntegrationService : WebhooksManagementAppServiceBase
             UseOnlyGivenHeaders = input.Header.UseOnlyGivenHeaders,
             Headers = input.Header.Headers,
         };
-        var inputData = JsonConvert.DeserializeObject(input.Data);
+        var inputData = JsonConvert.DeserializeObject(input.Data)!;
 
         if (input.TenantIds.Any())
         {

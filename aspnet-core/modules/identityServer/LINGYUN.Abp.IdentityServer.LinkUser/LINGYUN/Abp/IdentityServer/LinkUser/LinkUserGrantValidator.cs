@@ -142,7 +142,7 @@ public class LinkUserGrantValidator : IExtensionGrantValidator
     {
         if (user.TenantId.HasValue)
         {
-            customClaims.Add(new Claim(AbpClaimTypes.TenantId, user.TenantId?.ToString()));
+            customClaims.Add(new Claim(AbpClaimTypes.TenantId, user.TenantId.Value.ToString()));
         }
 
         return Task.CompletedTask;

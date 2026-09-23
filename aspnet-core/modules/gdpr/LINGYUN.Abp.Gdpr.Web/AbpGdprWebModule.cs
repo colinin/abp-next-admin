@@ -62,14 +62,14 @@ public class AbpGdprWebModule : AbpModule
         Configure<AbpBundlingOptions>(options =>
         {
             options.ScriptBundles
-                .Configure(typeof(ManageModel).FullName,
+                .Configure(typeof(ManageModel).FullName!,
                     configuration =>
                     {
                         configuration.AddFiles("/client-proxies/gdpr-proxy.js");
                         configuration.AddFiles("/Pages/Account/Components/ProfileManagementGroup/Gdpr/Index.js");
                     });
             options.ScriptBundles
-                .Configure(typeof(DeleteModel).FullName,
+                .Configure(typeof(DeleteModel).FullName!,
                     configuration =>
                     {
                         configuration.AddFiles("/client-proxies/gdpr-proxy.js");

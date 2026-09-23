@@ -31,7 +31,7 @@ public class EfCoreEditionRepository : EfCoreRepository<ISaasDbContext, Edition,
             .AnyAsync(x => x.EditionId == id, GetCancellationToken(cancellationToken));
     }
 
-    public async virtual Task<Edition> FindByDisplayNameAsync(
+    public async virtual Task<Edition?> FindByDisplayNameAsync(
         string displayName,
         CancellationToken cancellationToken = default)
     {
@@ -40,7 +40,7 @@ public class EfCoreEditionRepository : EfCoreRepository<ISaasDbContext, Edition,
             .FirstOrDefaultAsync(t => t.DisplayName == displayName, GetCancellationToken(cancellationToken));
     }
 
-    public async virtual Task<Edition> FindByTenantIdAsync(
+    public async virtual Task<Edition?> FindByTenantIdAsync(
         Guid tenantId,
         CancellationToken cancellationToken = default)
     {
@@ -60,19 +60,19 @@ public class EfCoreEditionRepository : EfCoreRepository<ISaasDbContext, Edition,
     }
 
     public async virtual Task<long> GetCountAsync(
-        string filter = null, 
+        string? filter = null, 
         CancellationToken cancellationToken = default)
     {
         return await (await GetDbSetAsync())
-              .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.DisplayName.Contains(filter))
+              .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.DisplayName.Contains(filter!))
               .CountAsync(GetCancellationToken(cancellationToken));
     }
 
     public async virtual Task<List<Edition>> GetListAsync(
-        string sorting = null, 
+        string? filter = null,
+        string? sorting = nameof(Edition.DisplayName),
         int maxResultCount = 10, 
         int skipCount = 0, 
-        string filter = null,
         CancellationToken cancellationToken = default)
     {
         if (sorting.IsNullOrWhiteSpace())
@@ -80,7 +80,7 @@ public class EfCoreEditionRepository : EfCoreRepository<ISaasDbContext, Edition,
             sorting = nameof(Edition.DisplayName);
         }
         return await (await GetDbSetAsync())
-            .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.DisplayName.Contains(filter))
+            .WhereIf(!filter.IsNullOrWhiteSpace(), x => x.DisplayName.Contains(filter!))
             .OrderBy(sorting)
             .PageBy(skipCount, maxResultCount)
             .ToListAsync(GetCancellationToken(cancellationToken));

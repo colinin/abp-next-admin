@@ -33,7 +33,7 @@ public class DefaultDbSchemaMigrator : IDbSchemaMigrator, ITransientDependency
     {
         var connectionStringName = ConnectionStringNameAttribute.GetConnStringName<TDbContext>();
 
-        string connectionString = null;
+        string? connectionString = null;
         if (_currentTenant.IsAvailable)
         {
             var connectionStringResolver = _serviceProvider.GetRequiredService<IConnectionStringResolver>();
@@ -57,10 +57,10 @@ public class DefaultDbSchemaMigrator : IDbSchemaMigrator, ITransientDependency
             return;
         }
 
-        connectionString??= defaultConnectionString;
+        connectionString ??= defaultConnectionString;
 
         var dbContextBuilder = new DbContextOptionsBuilder<TDbContext>();
-        using var dbContext = configureDbContext(connectionString, dbContextBuilder);
+        using var dbContext = configureDbContext(connectionString!, dbContextBuilder);
 
         await dbContext.Database.MigrateAsync();
     }

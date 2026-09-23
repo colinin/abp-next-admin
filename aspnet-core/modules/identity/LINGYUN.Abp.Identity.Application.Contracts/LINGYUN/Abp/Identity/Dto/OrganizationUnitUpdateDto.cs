@@ -1,8 +1,11 @@
-﻿using Volo.Abp.ObjectExtending;
+﻿using Volo.Abp.Identity;
+using Volo.Abp.ObjectExtending;
+using Volo.Abp.Validation;
 
 namespace LINGYUN.Abp.Identity;
 
 public class OrganizationUnitUpdateDto : ExtensibleObject
 {
-    public string DisplayName { get; set; }
+    [DynamicStringLength(typeof(OrganizationUnitConsts), nameof(OrganizationUnitConsts.MaxDisplayNameLength))]
+    public string? DisplayName { get; set; }
 }

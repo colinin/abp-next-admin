@@ -52,7 +52,7 @@ public class TextTemplateDefinitionAppService : AbpTextTemplatingAppServiceBase,
 
         await _store.CreateAsync(templateDefinitionRecord);
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
 
         return DefinitionRecordToDto(templateDefinitionRecord);
     }
@@ -68,7 +68,8 @@ public class TextTemplateDefinitionAppService : AbpTextTemplatingAppServiceBase,
         var templateDefinitionRecord = await _repository.FindByNameAsync(name);
         if (templateDefinitionRecord == null)
         {
-            return null;
+            throw new BusinessException(AbpTextTemplatingErrorCodes.TextTemplateDefinition.TemplateNotFound)
+               .WithData("Name", name);
         }
         return DefinitionRecordToDto(templateDefinitionRecord);
     }
@@ -83,7 +84,7 @@ public class TextTemplateDefinitionAppService : AbpTextTemplatingAppServiceBase,
         return new ListResultDto<TextTemplateDefinitionDto>(templateDtoList
             .WhereIf(input.IsStatic.HasValue, x => x.IsStatic == input.IsStatic)
             .WhereIf(input.IsLayout.HasValue, x => x.IsLayout == input.IsLayout)
-            .WhereIf(!input.Filter.IsNullOrWhiteSpace(), x => x.Name.Contains(input.Filter) || x.DisplayName.Contains(input.Filter))
+            .WhereIf(!input.Filter.IsNullOrWhiteSpace(), x => x.Name.Contains(input.Filter!) || x.DisplayName.Contains(input.Filter!))
             .ToList());
     }
 
@@ -121,7 +122,7 @@ public class TextTemplateDefinitionAppService : AbpTextTemplatingAppServiceBase,
             await _store.UpdateAsync(templateDefinitionRecord);
         }
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
 
         return DefinitionRecordToDto(templateDefinitionRecord);
     }
@@ -188,7 +189,7 @@ public class TextTemplateDefinitionAppService : AbpTextTemplatingAppServiceBase,
             Layout = definition.Layout,
             Name = definition.Name,
             LocalizationResourceName = definition.LocalizationResourceName,
-            DisplayName = _localizableStringSerializer.Serialize(definition.DisplayName),
+            DisplayName = _localizableStringSerializer.Serialize(definition.DisplayName)!,
         };
 
         foreach (var property in definition.Properties)

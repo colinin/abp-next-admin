@@ -17,13 +17,13 @@ public class Data : FullAuditedAggregateRoot<Guid>, IMultiTenant
 {
     public virtual Guid? TenantId { get; protected set; }
 
-    public virtual string Name { get; set; }
+    public virtual string Name { get; set; } = default!;
 
-    public virtual string Code { get; set; }
+    public virtual string Code { get; set; } = default!;
 
-    public virtual string DisplayName { get; set; }
+    public virtual string DisplayName { get; set; } = default!;
 
-    public virtual string Description { get; set; }
+    public virtual string? Description { get; set; }
 
     public virtual Guid? ParentId { get; set; }
 
@@ -41,7 +41,7 @@ public class Data : FullAuditedAggregateRoot<Guid>, IMultiTenant
         [NotNull] string name,
         [NotNull] string code,
         [NotNull] string displayName,
-        string description = "",
+        string? description = null,
         Guid? parentId = null,
         Guid? tenantId = null)
     {
@@ -67,9 +67,9 @@ public class Data : FullAuditedAggregateRoot<Guid>, IMultiTenant
         [NotNull] IGuidGenerator guidGenerator,
         [NotNull] string name,
         [NotNull] string displayName,
-        [CanBeNull] string defaultValue,
+        [CanBeNull] string? defaultValue,
         ValueType valueType = ValueType.String,
-        string description = "",
+        string? description = null,
         bool allowBeNull = true,
         bool isStatic = false)
     {
@@ -99,12 +99,12 @@ public class Data : FullAuditedAggregateRoot<Guid>, IMultiTenant
         return this;
     }
 
-    public DataItem FindItem(string name)
+    public DataItem? FindItem(string name)
     {
         return Items.FirstOrDefault(item => item.Name == name);
     }
 
-    public DataItem FindItem(Guid id)
+    public DataItem? FindItem(Guid id)
     {
         return Items.FirstOrDefault(item => item.Id == id);
     }

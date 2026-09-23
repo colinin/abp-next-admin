@@ -8,9 +8,9 @@ public class IdentityRoleClaimCreateDto
 {
     [Required]
     [DynamicMaxLength(typeof(IdentityRoleClaimConsts), nameof(IdentityRoleClaimConsts.MaxClaimTypeLength))]
-    public string ClaimType { get; set; }
+    public string ClaimType { get; set; } = default!;
 
     [Required]
     [DynamicMaxLength(typeof(IdentityRoleClaimConsts), nameof(IdentityRoleClaimConsts.MaxClaimValueLength))]
-    public string ClaimValue { get; set; }
+    public string ClaimValue { get; set; } = default!;
 }

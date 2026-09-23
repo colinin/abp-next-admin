@@ -13,11 +13,11 @@ internal static class JsonElementExtensions
     {
         var result = new List<string>();
 
-        if (json.TryGetProperty(key, out JsonElement property) && property.ValueKind == JsonValueKind.Array)
+        if (json.TryGetProperty(key, out var property) && property.ValueKind == JsonValueKind.Array)
         {
             foreach (var jsonProp in property.EnumerateArray())
             {
-                result.Add(jsonProp.GetString());
+                result.Add(jsonProp.GetString()!);
             }
         }
 
@@ -26,18 +26,18 @@ internal static class JsonElementExtensions
 
     public static string GetRootString(this JsonDocument json, string key, string defaultValue = "")
     {
-        if (json.RootElement.TryGetProperty(key, out JsonElement property))
+        if (json.RootElement.TryGetProperty(key, out var property))
         {
-            return property.GetString();
+            return property.GetString()!;
         }
         return defaultValue;
     }
 
     public static string GetString(this JsonElement json, string key, string defaultValue = "")
     {
-        if (json.TryGetProperty(key, out JsonElement property))
+        if (json.TryGetProperty(key, out var property))
         {
-            return property.GetString();
+            return property.GetString()!;
         }
         return defaultValue;
     }

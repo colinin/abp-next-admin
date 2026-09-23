@@ -42,6 +42,7 @@
     "Permission:Delete": "Delete",
     "Permission:ManageConnectionStrings": "Manage connection strings",
     "Permission:ManageFeatures": "Manage features",
+    "Permission:Impersonation": "Impersonation",
     "DisplayName:AdminEmailAddress": "Admin Email Address",
     "DisplayName:AdminPassword": "Admin Password",
     "Features:RecycleStrategy": "Recycle Strategy",
@@ -54,6 +55,7 @@
     "RecycleStrategy:Reserve": "Reserve",
     "RecycleStrategy:Recycle": "Recycle",
     "ManageFeatures": "Manage Features",
-    "IfUseCustomDataBaseDefaultConnectionStringIsRequiredMessage": "If you use a custom database, the default connection string must be required!"
+    "IfUseCustomDataBaseDefaultConnectionStringIsRequiredMessage": "If you use a custom database, the default connection string must be required!",
+    "ImpersonationTenant": "Impersonation"
   }
 }

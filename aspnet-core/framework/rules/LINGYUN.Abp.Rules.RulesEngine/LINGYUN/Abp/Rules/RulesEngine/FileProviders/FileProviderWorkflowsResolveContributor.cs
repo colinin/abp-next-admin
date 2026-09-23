@@ -13,10 +13,9 @@ namespace LINGYUN.Abp.Rules.RulesEngine.FileProviders;
 
 public abstract class FileProviderWorkflowsResolveContributor : WorkflowsResolveContributorBase
 {
-    protected IMemoryCache RulesCache { get; private set; }
-    protected IJsonSerializer JsonSerializer { get; private set; }
-
-    protected IFileProvider FileProvider { get; private set; }
+    protected IMemoryCache RulesCache { get; private set; } = default!;
+    protected IJsonSerializer JsonSerializer { get; private set; } = default!;
+    protected IFileProvider? FileProvider { get; private set; }
     protected FileProviderWorkflowsResolveContributor()
     {
     }
@@ -35,7 +34,7 @@ public abstract class FileProviderWorkflowsResolveContributor : WorkflowsResolve
     {
     }
 
-    protected abstract IFileProvider BuildFileProvider(RulesInitializationContext context);
+    protected abstract IFileProvider? BuildFileProvider(RulesInitializationContext context);
 
     public async override Task ResolveAsync(IWorkflowsResolveContext context)
     {
@@ -60,13 +59,15 @@ public abstract class FileProviderWorkflowsResolveContributor : WorkflowsResolve
 
         var ruleId = GetRuleId(type);
 
-        return await RulesCache.GetOrCreateAsync(ruleId,
-            async (entry) =>
-            {
-                entry.SetAbsoluteExpiration(TimeSpan.FromMinutes(30));
+        var workflows = RulesCache.Get<Workflow[]>(ruleId);
+        if (workflows == null)
+        {
+            workflows = await GetFileSystemRulesAsync(type, cancellationToken);
 
-                return await GetFileSystemRulesAsync(type, cancellationToken);
-            });
+            RulesCache.Set(ruleId, workflows);
+        }
+
+        return workflows;
     }
     protected abstract int GetRuleId(Type type);
 
@@ -76,12 +77,12 @@ public abstract class FileProviderWorkflowsResolveContributor : WorkflowsResolve
     {
         var ruleId = GetRuleId(type);
         var ruleFile = GetRuleName(type);
-        var fileInfo = FileProvider.GetFileInfo(ruleFile);
+        var fileInfo = FileProvider?.GetFileInfo(ruleFile);
         if (fileInfo != null && fileInfo.Exists)
         {
             // 规则文件监控
             ChangeToken.OnChange(
-                () => FileProvider.Watch(ruleFile),
+                () => FileProvider!.Watch(ruleFile),
                 (int ruleId) =>
                 {
                     // 清除规则缓存
@@ -91,7 +92,11 @@ public abstract class FileProviderWorkflowsResolveContributor : WorkflowsResolve
             // 打开文本流
             using var stream = fileInfo.CreateReadStream();
             var result = new byte[stream.Length];
-            await stream.ReadAsync(result, 0, (int)stream.Length);
+#if NETSTANDARD2_0_OR_GREATER || NETSTANDARD2_1_OR_GREATER
+            await stream.ReadAsync(result, 0, result.Length, cancellationToken);
+#else
+            await stream.ReadExactlyAsync(result, 0, result.Length, cancellationToken);
+#endif
             var ruleDsl = Encoding.UTF8.GetString(result);
             // 解析
             return JsonSerializer.Deserialize<Workflow[]>(ruleDsl);

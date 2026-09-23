@@ -26,10 +26,10 @@ public class WeChatWorkApplyEventRequest : WeChatWorkRequest
     /// <summary>
     /// 摘要信息，用于显示在审批通知卡片、审批列表的摘要信息，最多3行
     /// </summary>
-    [NotNull]
+    [CanBeNull]
     [JsonProperty("summary_list")]
     [JsonPropertyName("summary_list")]
-    public List<ApprovalSummary> Summaries { get; set; }
+    public List<ApprovalSummary>? Summaries { get; set; }
     /// <summary>
     /// 审批申请数据，可定义审批申请中各个控件的值，其中必填项必须有值，选填项可为空，数据结构同“获取审批申请详情”接口返回值中同名参数“apply_data”
     /// </summary>

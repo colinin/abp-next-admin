@@ -9,7 +9,7 @@ public class WrapResult: WrapResult<object>
     public WrapResult(
         string code,
         string message,
-        string details = null)
+        string? details = null)
         : base(code, message, details)
     {
     }

@@ -287,5 +287,14 @@ public class SingleMigrationsDbContext :
         modelBuilder.ConfigureBlobManagement();
 
         modelBuilder.ConfigureIdentityUserInactive();
+
+        modelBuilder.Entity<ResourcePermissionGrant>(b =>
+        {
+            var maxResourceNameLength = modelBuilder.IsUsingMySQL() ? 128 : PermissionGrantConsts.MaxResourceNameLength;
+            var maxResourceKeyLength = modelBuilder.IsUsingMySQL() ? 128 : PermissionGrantConsts.MaxResourceKeyLength;
+
+            b.Property(x => x.ResourceName).HasMaxLength(maxResourceNameLength).IsRequired();
+            b.Property(x => x.ResourceKey).HasMaxLength(maxResourceKeyLength).IsRequired();
+        });
     }
 }

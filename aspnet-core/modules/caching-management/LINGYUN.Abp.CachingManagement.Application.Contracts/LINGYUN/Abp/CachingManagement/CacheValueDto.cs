@@ -5,7 +5,7 @@ namespace LINGYUN.Abp.CachingManagement;
 
 public class CacheValueDto
 {
-    public string Type { get; set; }
+    public string Type { get; set; } = default!;
     public long Size { get; set; }
     public DateTime? Expiration { get; set; }
     public IDictionary<string, object> Values { get; set; } = new Dictionary<string, object>();

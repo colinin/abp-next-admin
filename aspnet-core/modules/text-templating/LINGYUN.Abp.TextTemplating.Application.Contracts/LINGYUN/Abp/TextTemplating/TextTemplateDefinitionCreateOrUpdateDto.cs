@@ -7,21 +7,21 @@ public abstract class TextTemplateDefinitionCreateOrUpdateDto
 {
     [Required]
     [DynamicStringLength(typeof(TextTemplateDefinitionConsts), nameof(TextTemplateDefinitionConsts.MaxDisplayNameLength))]
-    public string DisplayName { get; set; }
+    public string DisplayName { get; set; } = default!;
 
     [DynamicStringLength(typeof(TextTemplateDefinitionConsts), nameof(TextTemplateDefinitionConsts.MaxDefaultCultureNameLength))]
-    public string DefaultCultureName { get; set; }
+    public string? DefaultCultureName { get; set; }
 
     [DynamicStringLength(typeof(TextTemplateDefinitionConsts), nameof(TextTemplateDefinitionConsts.MaxLocalizationResourceNameLength))]
-    public string LocalizationResourceName { get; set; }
+    public string? LocalizationResourceName { get; set; }
 
     public bool IsInlineLocalized { get; set; }
 
     public bool IsLayout { get; set; }
 
     [DynamicStringLength(typeof(TextTemplateDefinitionConsts), nameof(TextTemplateDefinitionConsts.MaxLayoutLength))]
-    public string Layout { get; set; }
+    public string? Layout { get; set; }
 
     [DynamicStringLength(typeof(TextTemplateDefinitionConsts), nameof(TextTemplateDefinitionConsts.MaxRenderEngineLength))]
-    public string RenderEngine { get; set; }
+    public string? RenderEngine { get; set; }
 }

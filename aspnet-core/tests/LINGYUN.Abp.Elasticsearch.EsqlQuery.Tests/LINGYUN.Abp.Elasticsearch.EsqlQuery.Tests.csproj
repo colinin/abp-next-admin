@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net10.0</TargetFramework>
+		<RootNamespace />
+		<IsPackable>false</IsPackable>
+		<Platforms>AnyCPU</Platforms>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.NET.Test.Sdk" />
+		<PackageReference Include="Moq.AutoMock" />
+		<PackageReference Include="Serilog.Sinks.Elasticsearch" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\framework\elasticsearch\LINGYUN.Abp.Elasticsearch.EsqlQuery\LINGYUN.Abp.Elasticsearch.EsqlQuery.csproj" />
+		<ProjectReference Include="..\LINGYUN.Abp.Elasticsearch.Tests\LINGYUN.Abp.Elasticsearch.Tests.csproj" />
+	</ItemGroup>
+</Project>

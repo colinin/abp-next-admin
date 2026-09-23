@@ -7,7 +7,7 @@ public class WebhookNotificationData
     public string WebhookName { get; }
     public object Data { get; }
     public bool SendExactSameData { get; set; }
-    public WebhookHeader Headers { get; set; }
+    public WebhookHeader? Headers { get; set; }
     public WebhookNotificationData(string webhookName, object data)
     {
         WebhookName = Check.NotNullOrWhiteSpace(webhookName, nameof(webhookName));

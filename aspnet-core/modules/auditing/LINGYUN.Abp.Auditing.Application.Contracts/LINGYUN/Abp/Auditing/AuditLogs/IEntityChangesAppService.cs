@@ -7,9 +7,9 @@ namespace LINGYUN.Abp.Auditing.AuditLogs;
 
 public interface IEntityChangesAppService : IApplicationService
 {
-    Task<EntityChangeDto> GetAsync(Guid id);
+    Task<EntityChangeDto?> GetAsync(Guid id);
 
-    Task<EntityChangeWithUsernameDto> GetWithUsernameAsync(Guid id);
+    Task<EntityChangeWithUsernameDto?> GetWithUsernameAsync(Guid id);
 
     Task<PagedResultDto<EntityChangeDto>> GetListAsync(EntityChangeGetByPagedDto input);
 

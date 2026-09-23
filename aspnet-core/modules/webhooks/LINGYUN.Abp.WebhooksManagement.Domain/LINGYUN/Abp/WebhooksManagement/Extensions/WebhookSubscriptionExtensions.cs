@@ -6,7 +6,7 @@ namespace LINGYUN.Abp.WebhooksManagement.Extensions;
 
 public static class WebhookSubscriptionExtensions
 {
-    public static string ToSubscribedWebhooksString(this WebhookSubscriptionInfo webhookSubscription)
+    public static string? ToSubscribedWebhooksString(this WebhookSubscriptionInfo webhookSubscription)
     {
         if (webhookSubscription.Webhooks.Any())
         {
@@ -16,7 +16,7 @@ public static class WebhookSubscriptionExtensions
         return null;
     }
 
-    public static string ToWebhookHeadersString(this WebhookSubscriptionInfo webhookSubscription)
+    public static string? ToWebhookHeadersString(this WebhookSubscriptionInfo webhookSubscription)
     {
         if (webhookSubscription.Headers.Any())
         {

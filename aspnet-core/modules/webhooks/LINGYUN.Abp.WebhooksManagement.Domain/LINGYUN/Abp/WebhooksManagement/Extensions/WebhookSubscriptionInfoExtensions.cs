@@ -18,7 +18,7 @@ public static class WebhookSubscriptionInfoExtensions
             return new List<string>();
         }
 
-        return JsonConvert.DeserializeObject<List<string>>(webhookSubscription.Webhooks);
+        return JsonConvert.DeserializeObject<List<string>>(webhookSubscription.Webhooks)!;
     }
 
     /// <summary>
@@ -101,7 +101,7 @@ public static class WebhookSubscriptionInfoExtensions
             return new Dictionary<string, string>();
         }
 
-        return JsonConvert.DeserializeObject<Dictionary<string, string>>(webhookSubscription.Headers);
+        return JsonConvert.DeserializeObject<Dictionary<string, string>>(webhookSubscription.Headers)!;
     }
 
     /// <summary>

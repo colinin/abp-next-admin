@@ -8,7 +8,7 @@ namespace LINGYUN.Abp.RealTime;
 [GenericEventName(Prefix = "abp.realtime.")]
 public class RealTimeEto<T> : EtoBase
 {
-    public T Data { get; set; }
+    public T Data { get; set; } = default!;
     public RealTimeEto() : base()
     {
     }

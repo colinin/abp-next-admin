@@ -18,7 +18,7 @@ public class WeChatWorkGetExternalContactListResponse : WeChatWorkResponse
     [NotNull]
     [JsonProperty("info_list")]
     [JsonPropertyName("info_list")]
-    public ExternalContactInfo[] InfoList { get; set; }
+    public ExternalContactInfo[] InfoList { get; set; } = default!;
     /// <summary>
     /// 分页游标，再下次请求时填写以获取之后分页的记录，如果已经没有更多的数据则返回空,有效期为4小时
     /// </summary>

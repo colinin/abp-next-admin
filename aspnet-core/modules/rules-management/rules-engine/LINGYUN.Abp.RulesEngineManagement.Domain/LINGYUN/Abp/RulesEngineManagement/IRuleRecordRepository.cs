@@ -13,10 +13,10 @@ public interface IRuleRecordRepository : IRepository<RuleRecord, Guid>
     Task<List<ParamRecord>> GetParamsAsync(
         Guid ruleId, 
         CancellationToken cancellationToken = default);
-    Task<ActionRecord> GetSuccessActionAsync(
+    Task<ActionRecord?> GetSuccessActionAsync(
         Guid ruleId, 
         CancellationToken cancellationToken = default);
-    Task<ActionRecord> GetFailureActionAsync(
+    Task<ActionRecord?> GetFailureActionAsync(
         Guid ruleId,
         CancellationToken cancellationToken = default);
 }

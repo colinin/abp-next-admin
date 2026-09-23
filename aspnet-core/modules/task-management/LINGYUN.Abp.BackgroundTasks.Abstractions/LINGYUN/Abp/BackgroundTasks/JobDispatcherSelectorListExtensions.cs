@@ -12,7 +12,7 @@ public static class JobDispatcherSelectorListExtensions
     public static void AddNamespace(
         [NotNull] this IJobDispatcherSelectorList selectors,
         [NotNull] string namespaceName,
-        [CanBeNull] Action<JobTypeSelector> setup = null)
+        [CanBeNull] Action<JobTypeSelector>? setup = null)
     {
         Check.NotNull(selectors, nameof(selectors));
 
@@ -29,7 +29,7 @@ public static class JobDispatcherSelectorListExtensions
         selectors.Add(selector);
     }
 
-    public static void Add<TJob>([NotNull] this IJobDispatcherSelectorList selectors, [CanBeNull] Action<JobTypeSelector> setup = null)
+    public static void Add<TJob>([NotNull] this IJobDispatcherSelectorList selectors, [CanBeNull] Action<JobTypeSelector>? setup = null)
         where TJob : IJobRunnable
     {
         Check.NotNull(selectors, nameof(selectors));
@@ -56,7 +56,7 @@ public static class JobDispatcherSelectorListExtensions
         selectors.RemoveAll(s => s.Name == selectorName);
     }
 
-    public static void AddAll([NotNull] this IJobDispatcherSelectorList selectors, [CanBeNull] Action<JobTypeSelector> setup = null)
+    public static void AddAll([NotNull] this IJobDispatcherSelectorList selectors, [CanBeNull] Action<JobTypeSelector>? setup = null)
     {
         Check.NotNull(selectors, nameof(selectors));
 
@@ -76,7 +76,7 @@ public static class JobDispatcherSelectorListExtensions
         [NotNull] this IJobDispatcherSelectorList selectors,
         string selectorName,
         Func<Type, bool> predicate,
-        [CanBeNull] Action<JobTypeSelector> setup = null)
+        [CanBeNull] Action<JobTypeSelector>? setup = null)
     {
         Check.NotNull(selectors, nameof(selectors));
 
@@ -95,7 +95,7 @@ public static class JobDispatcherSelectorListExtensions
     public static void Add(
         [NotNull] this IJobDispatcherSelectorList selectors,
         Func<Type, bool> predicate,
-        [CanBeNull] Action<JobTypeSelector> setup = null)
+        [CanBeNull] Action<JobTypeSelector>? setup = null)
     {
         var selector = new JobTypeSelector(Guid.NewGuid().ToString("N"), predicate);
 
@@ -118,5 +118,12 @@ public static class JobDispatcherSelectorListExtensions
     {
         Check.NotNull(selectors, nameof(selectors));
         return selectors.Any(s => s.Predicate(jobType));
+    }
+
+    public static JobTypeSelector GetJobTypeSelector([NotNull] this IJobDispatcherSelectorList selectors, Type jobType)
+    {
+        Check.NotNull(selectors, nameof(selectors));
+        // 取最后一次注册作业配置
+        return selectors.Last(x => x.Predicate(jobType));
     }
 }

@@ -19,14 +19,14 @@ public class WeChatWorkGetCustomerResponse : WeChatWorkResponse
     [NotNull]
     [JsonProperty("external_contact")]
     [JsonPropertyName("external_contact")]
-    public ExternalContactInfo ExternalContact { get; set; }
+    public ExternalContactInfo ExternalContact { get; set; } = default!;
     /// <summary>
     /// 添加了此外部联系人的企业成员
     /// </summary>
     [NotNull]
     [JsonProperty("follow_user")]
     [JsonPropertyName("follow_user")]
-    public List<FollowUser> FollowUser { get; set; }
+    public List<FollowUser> FollowUser { get; set; } = default!;
     /// <summary>
     /// 分页的cursor，当跟进人多于500人时返回
     /// </summary>

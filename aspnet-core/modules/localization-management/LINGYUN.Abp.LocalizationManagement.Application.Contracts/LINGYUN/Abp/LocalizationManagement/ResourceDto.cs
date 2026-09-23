@@ -6,8 +6,8 @@ namespace LINGYUN.Abp.LocalizationManagement;
 public class ResourceDto : AuditedEntityDto<Guid>
 {
     public bool Enable { get; set; }
-    public string Name { get; set; }
-    public string DisplayName { get; set; }
-    public string Description { get; set; }
-    public string DefaultCultureName { get; set; }
+    public string Name { get; set; } = default!;
+    public string? DisplayName { get; set; }
+    public string? Description { get; set; }
+    public string? DefaultCultureName { get; set; }
 }

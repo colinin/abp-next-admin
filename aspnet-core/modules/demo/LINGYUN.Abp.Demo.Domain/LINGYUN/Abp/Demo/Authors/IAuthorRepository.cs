@@ -8,7 +8,7 @@ public interface IAuthorRepository : IRepository<Author, Guid>
     Task<List<Author>> GetListAsync(
         int skipCount,
         int maxResultCount,
-        string sorting,
+        string? sorting = nameof(Author.Name),
         string? filter = null
     );
 }

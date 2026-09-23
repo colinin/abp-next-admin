@@ -15,7 +15,7 @@ public class ControlInfo
     [NotNull]
     [JsonProperty("id")]
     [JsonPropertyName("id")]
-    public string Id { get; set; }
+    public string Id { get; set; } = default!;
     /// <summary>
     /// 控件类型
     /// </summary>
@@ -42,21 +42,21 @@ public class ControlInfo
     [NotNull]
     [JsonProperty("control")]
     [JsonPropertyName("control")]
-    public string Control { get; set; }
+    public string Control { get; set; } = default!;
     /// <summary>
     /// 控件名称
     /// </summary>
     [NotNull]
     [JsonProperty("title")]
     [JsonPropertyName("title")]
-    public List<ControlTtile> Title { get; set; }
+    public List<ControlTtile> Title { get; set; } = default!;
     /// <summary>
     /// 控件说明，假勤组件（Vacation、Attendance）暂不支持设置
     /// </summary>
     [CanBeNull]
     [JsonProperty("placeholder")]
     [JsonPropertyName("placeholder")]
-    public List<ControlPlaceholder> Placeholder { get; set; }
+    public List<ControlPlaceholder>? Placeholder { get; set; }
     /// <summary>
     /// 控件是否必填。0-非必填；1-必填；默认为0;假勤组件（Vacation、Attendance）不支持设置非必填
     /// </summary>
@@ -84,7 +84,7 @@ public class ControlInfo
     [CanBeNull]
     [JsonProperty("inner_id")]
     [JsonPropertyName("inner_id")]
-    public string InnerId { get; set; }
+    public string? InnerId { get; set; }
     /// <summary>
     /// 控件是否隐藏
     /// </summary>

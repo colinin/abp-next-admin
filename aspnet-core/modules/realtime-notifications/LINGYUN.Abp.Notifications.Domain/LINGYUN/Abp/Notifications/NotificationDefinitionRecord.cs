@@ -12,29 +12,29 @@ public class NotificationDefinitionRecord : BasicAggregateRoot<Guid>, IHasExtraP
     /// <summary>
     /// 名称
     /// </summary>
-    public virtual string Name { get; set; }
+    public virtual string Name { get; set; } = default!;
     /// <summary>
     /// 分组名称
     /// </summary>
-    public virtual string GroupName { get; set; }
+    public virtual string GroupName { get; set; } = default!;
     /// <summary>
     /// 显示名称
     /// </summary>
     /// <remarks>
     /// 如果为空,回退到Name
     /// </remarks>
-    public virtual string DisplayName { get; set; }
+    public virtual string? DisplayName { get; set; }
     /// <summary>
     /// 描述
     /// </summary>
     /// <remarks>
     /// 如果为空,回退到Name
     /// </remarks>
-    public virtual string Description { get; set; }
+    public virtual string? Description { get; set; }
     /// <summary>
     /// 通知模板
     /// </summary>
-    public virtual string Template { get; set; }
+    public virtual string? Template { get; set; }
     /// <summary>
     /// 存活类型
     /// </summary>
@@ -53,7 +53,7 @@ public class NotificationDefinitionRecord : BasicAggregateRoot<Guid>, IHasExtraP
     /// <remarks>
     /// 多个之间用;分隔
     /// </remarks>
-    public virtual string Providers { get; set; }
+    public virtual string? Providers { get; set; }
     /// <summary>
     /// 允许客户端订阅
     /// </summary>
@@ -70,9 +70,9 @@ public class NotificationDefinitionRecord : BasicAggregateRoot<Guid>, IHasExtraP
         Guid id,
         string name,
         string groupName,
-        string displayName = null,
-        string description = null,
-        string template = null,
+        string? displayName = null,
+        string? description = null,
+        string? template = null,
         NotificationLifetime lifetime = NotificationLifetime.Persistent,
         NotificationType notificationType = NotificationType.Application,
         NotificationContentType contentType = NotificationContentType.Text)

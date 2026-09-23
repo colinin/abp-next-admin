@@ -30,7 +30,7 @@ public interface IFriendStore
     Task<List<UserFriend>> GetListAsync(
         Guid? tenantId,
         Guid userId,
-        string sorting = nameof(UserFriend.UserId),
+        string? sorting = nameof(UserFriend.UserId),
         CancellationToken cancellationToken = default
         );
     /// <summary>
@@ -43,7 +43,7 @@ public interface IFriendStore
     Task<int> GetCountAsync(
         Guid? tenantId,
         Guid userId,
-        string filter = "",
+        string? filter = null,
         CancellationToken cancellationToken = default);
     /// <summary>
     /// 获取好友列表
@@ -58,8 +58,8 @@ public interface IFriendStore
     Task<List<UserFriend>> GetPagedListAsync(
         Guid? tenantId,
         Guid userId,
-        string filter = "",
-        string sorting = nameof(UserFriend.UserId),
+        string? filter = null,
+        string? sorting = nameof(UserFriend.UserId),
         int skipCount = 0,
         int maxResultCount = 10,
         CancellationToken cancellationToken = default);
@@ -84,7 +84,7 @@ public interface IFriendStore
     /// <param name="userId"></param>
     /// <param name="friendId"></param>
     /// <returns></returns>
-    Task<UserFriend> GetMemberAsync(
+    Task<UserFriend?> GetMemberAsync(
         Guid? tenantId,
         Guid userId,
         Guid friendId,
@@ -100,7 +100,7 @@ public interface IFriendStore
         Guid? tenantId,
         Guid userId,
         Guid friendId,
-        string remarkName = "",
+        string? remarkName = null,
         bool isStatic = false,
         CancellationToken cancellationToken = default);
     /// <summary>
@@ -115,8 +115,8 @@ public interface IFriendStore
         Guid? tenantId,
         Guid userId,
         Guid friendId,
-        string remarkName = "",
-        string description = "",
+        string? remarkName = null,
+        string? description = null,
         CancellationToken cancellationToken = default);
     /// <summary>
     /// 移除好友

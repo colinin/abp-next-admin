@@ -14,28 +14,28 @@ public class CalendarInfo
     [NotNull]
     [JsonProperty("cal_id")]
     [JsonPropertyName("cal_id")]
-    public string CalId { get; set; }
+    public string CalId { get; set; } = default!;
     /// <summary>
     /// 日历的管理员userid列表
     /// </summary>
     [NotNull]
     [JsonProperty("admins")]
     [JsonPropertyName("admins")]
-    public string[] Admins { get; set; }
+    public string[] Admins { get; set; } = default!;
     /// <summary>
     /// 日历标题。1 ~ 128 字符
     /// </summary>
     [NotNull]
     [JsonProperty("summary")]
     [JsonPropertyName("summary")]
-    public string Summary { get; set; }
+    public string Summary { get; set; } = default!;
     /// <summary>
     /// 日历颜色，RGB颜色编码16进制表示，例如："#0000FF" 表示纯蓝色
     /// </summary>
     [NotNull]
     [JsonProperty("color")]
     [JsonPropertyName("color")]
-    public string Color { get; set; }
+    public string Color { get; set; } = default!;
     /// <summary>
     /// 日历描述。0 ~ 512 字符
     /// </summary>
@@ -74,5 +74,5 @@ public class CalendarInfo
     [NotNull]
     [JsonProperty("shares")]
     [JsonPropertyName("shares")]
-    public CalendarShare[] Shares { get; set; }
+    public CalendarShare[] Shares { get; set; } = default!;
 }

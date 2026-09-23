@@ -3,11 +3,11 @@
 public class MessageSendResult
 {
     public bool Success { get; }
-    public string Error { get; }
+    public string? Error { get; }
     public int Code { get; }
     public string Form { get; }
     public string To { get; }
-    public string Content { get; }
+    public string Content { get; } = default!;
     public static MessageSendResult Successed(string form, string to, string content)
     {
         return new MessageSendResult(form, to, content);

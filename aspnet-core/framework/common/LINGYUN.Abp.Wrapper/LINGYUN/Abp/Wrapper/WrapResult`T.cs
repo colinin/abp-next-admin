@@ -12,24 +12,24 @@ public class WrapResult<TResult>
     /// <summary>
     /// 错误代码
     /// </summary>
-    public string Code { get; set; }
+    public string Code { get; set; } = default!;
     /// <summary>
     /// 错误提示消息
     /// </summary>
-    public string Message { get; set; }
+    public string Message { get; set; } = default!;
     /// <summary>
     /// 补充消息
     /// </summary>
-    public string Details { get; set; }
+    public string? Details { get; set; }
     /// <summary>
     /// 返回值
     /// </summary>
-    public TResult Result { get; set; }
+    public TResult? Result { get; set; }
     public WrapResult() { }
     public WrapResult(
         string code,
         string message,
-        string details = null)
+        string? details = null)
     {
         Code = code;
         Message = message;

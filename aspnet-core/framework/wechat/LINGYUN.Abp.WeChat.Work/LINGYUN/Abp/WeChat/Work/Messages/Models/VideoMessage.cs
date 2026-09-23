@@ -24,14 +24,14 @@ public class VideoMessage
     [CanBeNull]
     [JsonProperty("title")]
     [JsonPropertyName("title")]
-    public string Title { get; set; }
+    public string? Title { get; set; }
     /// <summary>
     /// 视频消息的描述，不超过512个字节，超过会自动截断
     /// </summary>
     [CanBeNull]
     [JsonProperty("description")]
     [JsonPropertyName("description")]
-    public string Description { get; set; }
+    public string? Description { get; set; }
     /// <summary>
     /// 视频媒体文件id，可以调用上传临时素材接口获取
     /// </summary>

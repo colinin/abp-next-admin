@@ -37,10 +37,10 @@ public class AbpDataProtectedWriteEntityInterceptor : SaveChangesInterceptor, IT
                 if (!updateGrant.Succeeded)
                 {
                     var entityKeys = updateEntites
-                        .Select(entity => (entity is IEntity abpEntity ? abpEntity.GetKeys() : new string[1] { entity.ToString() }).ToString())
+                        .Select(entity => (entity is IEntity abpEntity ? abpEntity.GetKeys() : new string[1] { entity!.ToString()! }).ToString()!)
                         .JoinAsString(";");
                     throw new AbpDataAccessDeniedException(
-                        $"Delete data permission not granted to entity {updateEntites.First().GetType()} for data {entityKeys}!");
+                        $"Delete data permission not granted to entity {updateEntites.First()!.GetType()} for data {entityKeys}!");
                 }
             }
             
@@ -53,10 +53,10 @@ public class AbpDataProtectedWriteEntityInterceptor : SaveChangesInterceptor, IT
                 if (!deleteGrant.Succeeded)
                 {
                     var entityKeys = deleteEntites
-                        .Select(entity => (entity is IEntity abpEntity ? abpEntity.GetKeys() : new string[1] { entity.ToString() }).ToString())
+                        .Select(entity => (entity is IEntity abpEntity ? abpEntity.GetKeys() : new string[1] { entity!.ToString()! }).ToString()!)
                         .JoinAsString(";");
                     throw new AbpDataAccessDeniedException(
-                        $"Delete data permission not granted to entity {deleteEntites.First().GetType()} for data {entityKeys}!");
+                        $"Delete data permission not granted to entity {deleteEntites.First()!.GetType()} for data {entityKeys}!");
                 }
             }
         }

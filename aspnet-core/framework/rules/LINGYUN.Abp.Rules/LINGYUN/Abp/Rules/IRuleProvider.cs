@@ -5,5 +5,5 @@ namespace LINGYUN.Abp.Rules;
 
 public interface IRuleProvider
 {
-    Task ExecuteAsync<T>(T input, object[] @params = null, CancellationToken cancellationToken = default);
+    Task ExecuteAsync<T>(T input, object[]? @params = null, CancellationToken cancellationToken = default) where T : notnull;
 }

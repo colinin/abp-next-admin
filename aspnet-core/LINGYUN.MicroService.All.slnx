@@ -9,6 +9,7 @@
   <Folder Name="/.changes/">
     <File Path="../.changes/Migration 10.0.2 - 10.2.0.md" />
     <File Path="../.changes/Migration 10.2.0 - 10.4.0.md" />
+    <File Path="../.changes/Migration 10.4.0 - 10.6.0.md" />
   </Folder>
   <Folder Name="/.github/" />
   <Folder Name="/.github/workflows/">
@@ -92,16 +93,17 @@
     <Project Path="../gateways/internal/LINGYUN.MicroService.Internal.ApiGateway/src/LINGYUN.MicroService.OpenApi.Gateway/LINGYUN.MicroService.OpenApi.Gateway.csproj" />
   </Folder>
   <Folder Name="/framework/" />
+  <Folder Name="/framework/aspnetcore/">
+    <Project Path="framework/common/LINGYUN.Abp.AspNetCore.HttpOverrides/LINGYUN.Abp.AspNetCore.HttpOverrides.csproj" />
+    <Project Path="framework/common/LINGYUN.Abp.AspNetCore.Mvc.Client/LINGYUN.Abp.AspNetCore.Mvc.Client.csproj" />
+    <Project Path="framework/common/LINGYUN.Abp.AspNetCore.Session/LINGYUN.Abp.AspNetCore.Session.csproj" />
+  </Folder>
   <Folder Name="/framework/auditing/">
     <Project Path="framework/auditing/LINGYUN.Abp.AspNetCore.Auditing/LINGYUN.Abp.AspNetCore.Auditing.csproj" />
     <Project Path="framework/auditing/LINGYUN.Abp.AuditLogging.Elasticsearch/LINGYUN.Abp.AuditLogging.Elasticsearch.csproj" />
     <Project Path="framework/auditing/LINGYUN.Abp.AuditLogging.EntityFrameworkCore/LINGYUN.Abp.AuditLogging.EntityFrameworkCore.csproj" />
     <Project Path="framework/auditing/LINGYUN.Abp.AuditLogging.IP.Location/LINGYUN.Abp.AuditLogging.IP.Location.csproj" />
     <Project Path="framework/auditing/LINGYUN.Abp.AuditLogging/LINGYUN.Abp.AuditLogging.csproj" />
-  </Folder>
-  <Folder Name="/framework/authentication/">
-    <Project Path="framework/authentication/LINGYUN.Abp.Authentication.QQ/LINGYUN.Abp.Authentication.QQ.csproj" />
-    <Project Path="framework/authentication/LINGYUN.Abp.Authentication.WeChat/LINGYUN.Abp.Authentication.WeChat.csproj" />
   </Folder>
   <Folder Name="/framework/authorization/">
     <Project Path="framework/authorization/LINGYUN.Abp.Authorization.OrganizationUnits/LINGYUN.Abp.Authorization.OrganizationUnits.csproj" />
@@ -113,6 +115,7 @@
     <Project Path="framework/cli/LINGYUN.Abp.Cli/LINGYUN.Abp.Cli.csproj" />
   </Folder>
   <Folder Name="/framework/cloud-aliyun/">
+    <Project Path="framework/cloud-aliyun/LINGYUN.Abp.Aliyun.Captcha/LINGYUN.Abp.Aliyun.Captcha.csproj" />
     <Project Path="framework/cloud-aliyun/LINGYUN.Abp.Aliyun.SettingManagement/LINGYUN.Abp.Aliyun.SettingManagement.csproj" />
     <Project Path="framework/cloud-aliyun/LINGYUN.Abp.Aliyun/LINGYUN.Abp.Aliyun.csproj" />
     <Project Path="framework/common/LINGYUN.Abp.BlobStoring.Aliyun/LINGYUN.Abp.BlobStoring.Aliyun.csproj" />
@@ -121,13 +124,12 @@
   <Folder Name="/framework/cloud-tencent/">
     <Project Path="framework/cloud-tencent/LINGYUN.Abp.BlobStoring.Tencent/LINGYUN.Abp.BlobStoring.Tencent.csproj" />
     <Project Path="framework/cloud-tencent/LINGYUN.Abp.Sms.Tencent/LINGYUN.Abp.Sms.Tencent.csproj" />
+    <Project Path="framework/cloud-tencent/LINGYUN.Abp.Tencent.Captcha/LINGYUN.Abp.Tencent.Captcha.csproj" />
     <Project Path="framework/cloud-tencent/LINGYUN.Abp.Tencent.QQ/LINGYUN.Abp.Tencent.QQ.csproj" />
     <Project Path="framework/cloud-tencent/LINGYUN.Abp.Tencent.SettingManagement/LINGYUN.Abp.Tencent.SettingManagement.csproj" />
     <Project Path="framework/cloud-tencent/LINGYUN.Abp.Tencent/LINGYUN.Abp.Tencent.csproj" />
   </Folder>
   <Folder Name="/framework/common/">
-    <Project Path="framework/common/LINGYUN.Abp.AspNetCore.HttpOverrides/LINGYUN.Abp.AspNetCore.HttpOverrides.csproj" />
-    <Project Path="framework/common/LINGYUN.Abp.AspNetCore.Mvc.Client/LINGYUN.Abp.AspNetCore.Mvc.Client.csproj" />
     <Project Path="framework/common/LINGYUN.Abp.Core/LINGYUN.Abp.Core.csproj" />
     <Project Path="framework/common/LINGYUN.Abp.Data.DbMigrator/LINGYUN.Abp.Data.DbMigrator.csproj" />
     <Project Path="framework/common/LINGYUN.Abp.EventBus.CAP/LINGYUN.Abp.EventBus.CAP.csproj" />
@@ -149,6 +151,10 @@
     <Project Path="framework/data-protection/LINGYUN.Abp.DataProtection.EntityFrameworkCore/LINGYUN.Abp.DataProtection.EntityFrameworkCore.csproj" />
     <Project Path="framework/data-protection/LINGYUN.Abp.DataProtection/LINGYUN.Abp.DataProtection.csproj" />
   </Folder>
+  <Folder Name="/framework/dynamic-definition/">
+    <Project Path="framework/dynamic-definition/LINGYUN.Abp.Dynamic.Definitions.Core/LINGYUN.Abp.Dynamic.Definitions.Core.csproj" Id="4cc5fdb2-2b0b-4937-a5b5-1c2afbc0c071" />
+    <Project Path="framework/dynamic-definition/LINGYUN.Abp.Dynamic.Definitions/LINGYUN.Abp.Dynamic.Definitions.csproj" Id="6b19229f-012f-436a-b2b4-16ef943eb3fa" />
+  </Folder>
   <Folder Name="/framework/dynamic-queryable/">
     <Project Path="framework/dynamic-queryable/LINGYUN.Abp.Dynamic.Queryable.Application.Contracts/LINGYUN.Abp.Dynamic.Queryable.Application.Contracts.csproj" />
     <Project Path="framework/dynamic-queryable/LINGYUN.Abp.Dynamic.Queryable.Application/LINGYUN.Abp.Dynamic.Queryable.Application.csproj" />
@@ -159,6 +165,7 @@
     <Project Path="framework/efcore/LINGYUN.Abp.EntityFrameworkCore.MySQL.Microting/LINGYUN.Abp.EntityFrameworkCore.MySQL.Microting.csproj" />
   </Folder>
   <Folder Name="/framework/elasticsearch/">
+    <Project Path="framework/elasticsearch/LINGYUN.Abp.Elasticsearch.EsqlQuery/LINGYUN.Abp.Elasticsearch.EsqlQuery.csproj" Id="ef34fa8c-55e4-4976-852b-20e94c355ab5" />
     <Project Path="framework/elasticsearch/LINGYUN.Abp.Elasticsearch/LINGYUN.Abp.Elasticsearch.csproj" />
   </Folder>
   <Folder Name="/framework/entity-change/">
@@ -244,6 +251,7 @@
   </Folder>
   <Folder Name="/framework/tenants/">
     <Project Path="framework/tenants/LINGYUN.Abp.AspNetCore.MultiTenancy/LINGYUN.Abp.AspNetCore.MultiTenancy.csproj" />
+    <Project Path="framework/tenants/LINGYUN.Abp.AspNetCore.Mvc.UI.MultiTenancy/LINGYUN.Abp.AspNetCore.Mvc.UI.MultiTenancy.csproj" />
     <Project Path="framework/tenants/LINGYUN.Abp.MultiTenancy.Editions/LINGYUN.Abp.MultiTenancy.Editions.csproj" />
   </Folder>
   <Folder Name="/framework/wechat/">
@@ -292,8 +300,11 @@
     <Project Path="modules/account/LINGYUN.Abp.Account.HttpApi/LINGYUN.Abp.Account.HttpApi.csproj" />
     <Project Path="modules/account/LINGYUN.Abp.Account.OAuth/LINGYUN.Abp.Account.OAuth.csproj" />
     <Project Path="modules/account/LINGYUN.Abp.Account.Security/LINGYUN.Abp.Account.Security.csproj" />
+    <Project Path="modules/account/LINGYUN.Abp.Account.Web.AliyunCaptcha/LINGYUN.Abp.Account.Web.AliyunCaptcha.csproj" />
+    <Project Path="modules/account/LINGYUN.Abp.Account.Web.LazyCaptcha/LINGYUN.Abp.Account.Web.LazyCaptcha.csproj" />
     <Project Path="modules/account/LINGYUN.Abp.Account.Web.OAuth/LINGYUN.Abp.Account.Web.OAuth.csproj" />
     <Project Path="modules/account/LINGYUN.Abp.Account.Web.OpenIddict/LINGYUN.Abp.Account.Web.OpenIddict.csproj" />
+    <Project Path="modules/account/LINGYUN.Abp.Account.Web.TencentCaptcha/LINGYUN.Abp.Account.Web.TencentCaptcha.csproj" />
     <Project Path="modules/account/LINGYUN.Abp.Account.Web/LINGYUN.Abp.Account.Web.csproj" />
   </Folder>
   <Folder Name="/modules/auditing/">
@@ -312,6 +323,7 @@
     <Project Path="modules/blob-management/LINGYUN.Abp.BlobManagement.FileSystem/LINGYUN.Abp.BlobManagement.FileSystem.csproj" />
     <Project Path="modules/blob-management/LINGYUN.Abp.BlobManagement.HttpApi.Client/LINGYUN.Abp.BlobManagement.HttpApi.Client.csproj" />
     <Project Path="modules/blob-management/LINGYUN.Abp.BlobManagement.HttpApi/LINGYUN.Abp.BlobManagement.HttpApi.csproj" />
+    <Project Path="modules/blob-management/LINGYUN.Abp.BlobManagement.MimeCheck/LINGYUN.Abp.BlobManagement.MimeCheck.csproj" />
     <Project Path="modules/blob-management/LINGYUN.Abp.BlobManagement.Minio/LINGYUN.Abp.BlobManagement.Minio.csproj" />
     <Project Path="modules/blob-management/LINGYUN.Abp.BlobManagement.SettingManagement/LINGYUN.Abp.BlobManagement.SettingManagement.csproj" />
     <Project Path="modules/blob-management/LINGYUN.Abp.BlobManagement.Tencent/LINGYUN.Abp.BlobManagement.Tencent.csproj" />
@@ -323,6 +335,10 @@
     <Project Path="modules/caching-management/LINGYUN.Abp.CachingManagement.Domain/LINGYUN.Abp.CachingManagement.Domain.csproj" />
     <Project Path="modules/caching-management/LINGYUN.Abp.CachingManagement.HttpApi/LINGYUN.Abp.CachingManagement.HttpApi.csproj" />
     <Project Path="modules/caching-management/LINGYUN.Abp.CachingManagement.StackExchangeRedis/LINGYUN.Abp.CachingManagement.StackExchangeRedis.csproj" />
+  </Folder>
+  <Folder Name="/modules/captcha/">
+    <Project Path="modules/captcha/LINGYUN.Abp.Captcha.Abstractions/LINGYUN.Abp.Captcha.Abstractions.csproj" />
+    <Project Path="modules/captcha/LINGYUN.Abp.LazyCaptcha/LINGYUN.Abp.LazyCaptcha.csproj" />
   </Folder>
   <Folder Name="/modules/data-protection/">
     <Project Path="modules/data-protection/LINGYUN.Abp.DataProtectionManagement.Application.Contracts/LINGYUN.Abp.DataProtectionManagement.Application.Contracts.csproj" />
@@ -367,7 +383,6 @@
     <Project Path="modules/identity/LINGYUN.Abp.Identity.Application.Contracts/LINGYUN.Abp.Identity.Application.Contracts.csproj" />
     <Project Path="modules/identity/LINGYUN.Abp.Identity.Application/LINGYUN.Abp.Identity.Application.csproj" />
     <Project Path="modules/identity/LINGYUN.Abp.Identity.AspNetCore.QrCode/LINGYUN.Abp.Identity.AspNetCore.QrCode.csproj" />
-    <Project Path="modules/identity/LINGYUN.Abp.Identity.AspNetCore.Session/LINGYUN.Abp.Identity.AspNetCore.Session.csproj" />
     <Project Path="modules/identity/LINGYUN.Abp.Identity.Domain.Shared/LINGYUN.Abp.Identity.Domain.Shared.csproj" />
     <Project Path="modules/identity/LINGYUN.Abp.Identity.Domain/LINGYUN.Abp.Identity.Domain.csproj" />
     <Project Path="modules/identity/LINGYUN.Abp.Identity.EntityFrameworkCore/LINGYUN.Abp.Identity.EntityFrameworkCore.csproj" />
@@ -376,7 +391,6 @@
     <Project Path="modules/identity/LINGYUN.Abp.Identity.Notifications/LINGYUN.Abp.Identity.Notifications.csproj" />
     <Project Path="modules/identity/LINGYUN.Abp.Identity.OrganizaztionUnits/LINGYUN.Abp.Identity.OrganizaztionUnits.csproj" />
     <Project Path="modules/identity/LINGYUN.Abp.Identity.QrCode/LINGYUN.Abp.Identity.QrCode.csproj" />
-    <Project Path="modules/identity/LINGYUN.Abp.Identity.Session.AspNetCore/LINGYUN.Abp.Identity.Session.AspNetCore.csproj" />
     <Project Path="modules/identity/LINGYUN.Abp.Identity.Session/LINGYUN.Abp.Identity.Session.csproj" />
     <Project Path="modules/task-management/LINGYUN.Abp.Identity.Jobs/LINGYUN.Abp.Identity.Jobs.csproj" />
   </Folder>
@@ -392,10 +406,10 @@
   <Folder Name="/modules/openiddict/">
     <Project Path="modules/openIddict/LINGYUN.Abp.OpenIddict.Application.Contracts/LINGYUN.Abp.OpenIddict.Application.Contracts.csproj" />
     <Project Path="modules/openIddict/LINGYUN.Abp.OpenIddict.Application/LINGYUN.Abp.OpenIddict.Application.csproj" />
-    <Project Path="modules/openIddict/LINGYUN.Abp.OpenIddict.AspNetCore.Session/LINGYUN.Abp.OpenIddict.AspNetCore.Session.csproj" />
     <Project Path="modules/openIddict/LINGYUN.Abp.OpenIddict.Dapr.Client/LINGYUN.Abp.OpenIddict.Dapr.Client.csproj" />
     <Project Path="modules/openIddict/LINGYUN.Abp.OpenIddict.HttpApi.Client/LINGYUN.Abp.OpenIddict.HttpApi.Client.csproj" />
     <Project Path="modules/openIddict/LINGYUN.Abp.OpenIddict.HttpApi/LINGYUN.Abp.OpenIddict.HttpApi.csproj" />
+    <Project Path="modules/openIddict/LINGYUN.Abp.OpenIddict.Impersonation/LINGYUN.Abp.OpenIddict.Impersonation.csproj" />
     <Project Path="modules/openIddict/LINGYUN.Abp.OpenIddict.LinkUser/LINGYUN.Abp.OpenIddict.LinkUser.csproj" />
     <Project Path="modules/openIddict/LINGYUN.Abp.OpenIddict.Portal/LINGYUN.Abp.OpenIddict.Portal.csproj" />
     <Project Path="modules/openIddict/LINGYUN.Abp.OpenIddict.Sms/LINGYUN.Abp.OpenIddict.Sms.csproj" />
@@ -406,6 +420,8 @@
     <Project Path="modules/permissions-management/LINGYUN.Abp.PermissionManagement.Application.Contracts/LINGYUN.Abp.PermissionManagement.Application.Contracts.csproj" />
     <Project Path="modules/permissions-management/LINGYUN.Abp.PermissionManagement.Application/LINGYUN.Abp.PermissionManagement.Application.csproj" />
     <Project Path="modules/permissions-management/LINGYUN.Abp.PermissionManagement.Domain.OrganizationUnits/LINGYUN.Abp.PermissionManagement.Domain.OrganizationUnits.csproj" />
+    <Project Path="modules/permissions-management/LINGYUN.Abp.PermissionManagement.Domain/LINGYUN.Abp.PermissionManagement.Domain.csproj" Id="867ae033-0d5c-4ad3-934a-971efd0c6b43" />
+    <Project Path="modules/permissions-management/LINGYUN.Abp.PermissionManagement.EntityFrameworkCore/LINGYUN.Abp.PermissionManagement.EntityFrameworkCore.csproj" Id="59d20b04-2670-4cea-8335-4dea120a6a9d" />
     <Project Path="modules/permissions-management/LINGYUN.Abp.PermissionManagement.HttpApi/LINGYUN.Abp.PermissionManagement.HttpApi.csproj" />
   </Folder>
   <Folder Name="/modules/platform/">
@@ -420,6 +436,7 @@
     <Project Path="modules/platform/LINGYUN.Platform.EntityFrameworkCore/LINGYUN.Platform.EntityFrameworkCore.csproj" />
     <Project Path="modules/platform/LINGYUN.Platform.HttpApi.Client/LINGYUN.Platform.HttpApi.Client.csproj" />
     <Project Path="modules/platform/LINGYUN.Platform.HttpApi/LINGYUN.Platform.HttpApi.csproj" />
+    <Project Path="modules/platform/LINGYUN.Platform.Jobs/LINGYUN.Platform.Jobs.csproj" />
     <Project Path="modules/platform/LINGYUN.Platform.Settings.VueVbenAdmin/LINGYUN.Platform.Settings.VueVbenAdmin.csproj" />
     <Project Path="modules/platform/LINGYUN.Platform.Theme.VueVbenAdmin/LINGYUN.Platform.Theme.VueVbenAdmin.csproj" />
   </Folder>
@@ -524,9 +541,13 @@
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/LINGYUN.Abp.Aliyun.Tests/LINGYUN.Abp.Aliyun.Tests.csproj" />
+    <Project Path="tests/LINGYUN.Abp.AuditLogging.Elasticsearch.Tests/LINGYUN.Abp.AuditLogging.Elasticsearch.Tests.csproj" />
+    <Project Path="tests/LINGYUN.Abp.AuditLogging.Tests/LINGYUN.Abp.AuditLogging.Tests.csproj" Id="a360d3e3-0cef-433c-a866-77abd64d8a52" />
     <Project Path="tests/LINGYUN.Abp.BlobStoring.Aliyun.Tests/LINGYUN.Abp.BlobStoring.Aliyun.Tests.csproj" />
     <Project Path="tests/LINGYUN.Abp.BlobStoring.Nexus.Tests/LINGYUN.Abp.BlobStoring.Nexus.Tests.csproj" />
     <Project Path="tests/LINGYUN.Abp.DataProtection.Tests/LINGYUN.Abp.DataProtection.Tests.csproj" />
+    <Project Path="tests/LINGYUN.Abp.Elasticsearch.EsqlQuery.Tests/LINGYUN.Abp.Elasticsearch.EsqlQuery.Tests.csproj" Id="52d961a7-c89d-4fca-ad35-8c7f3588aeb9" />
+    <Project Path="tests/LINGYUN.Abp.Elasticsearch.Tests/LINGYUN.Abp.Elasticsearch.Tests.csproj" Id="056a13a4-8fbb-4437-adc8-fe76d0869880" />
     <Project Path="tests/LINGYUN.Abp.Emailing.Platform.Tests/LINGYUN.Abp.Emailing.Platform.Tests.csproj" />
     <Project Path="tests/LINGYUN.Abp.EntityFrameworkCore.Tests/LINGYUN.Abp.EntityFrameworkCore.Tests.csproj" />
     <Project Path="tests/LINGYUN.Abp.ExceptionHandling.Emailing.Tests/LINGYUN.Abp.ExceptionHandling.Emailing.Tests.csproj" />
@@ -536,6 +557,8 @@
     <Project Path="tests/LINGYUN.Abp.Localization.Xml.Tests/LINGYUN.Abp.Localization.Xml.Tests.csproj" />
     <Project Path="tests/LINGYUN.Abp.Location.Baidu.Tests/LINGYUN.Abp.Location.Baidu.Tests.csproj" />
     <Project Path="tests/LINGYUN.Abp.Location.Tencent.Tests/LINGYUN.Abp.Location.Tencent.Tests.csproj" />
+    <Project Path="tests/LINGYUN.Abp.Logging.Serilog.Elasticsearch.Tests/LINGYUN.Abp.Logging.Serilog.Elasticsearch.Tests.csproj" Id="d9b9a706-000c-4344-8eac-27ee78fcbb2a" />
+    <Project Path="tests/LINGYUN.Abp.Logging.Tests/LINGYUN.Abp.Logging.Tests.csproj" Id="1e05270f-6652-443d-b76f-5d4360f2722e" />
     <Project Path="tests/LINGYUN.Abp.Rules.RulesEngine.Tests/LINGYUN.Abp.Rules.RulesEngine.Tests.csproj" />
     <Project Path="tests/LINGYUN.Abp.Sms.Platform.Tests/LINGYUN.Abp.Sms.Platform.Tests.csproj" />
     <Project Path="tests/LINGYUN.Abp.TestBase/LINGYUN.Abp.TestsBase.csproj" />

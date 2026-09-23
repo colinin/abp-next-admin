@@ -11,18 +11,27 @@ export function generatePermissionTree(
 ): PermissionTree[] {
   const trees: PermissionTree[] = [];
   permissionGroups.forEach((g) => {
+    const children: PermissionTree[] = g.permissions.map((permission) => {
+      return {
+        ...permission,
+        children: [],
+        isRoot: false,
+        disabled: false,
+        key: permission.name,
+      };
+    });
     const tree: PermissionTree = {
       disabled: false,
       displayName: g.displayName,
       isRoot: true,
+      key: g.name,
       name: g.name,
       parentName: g.name,
-      children: [],
+      children: listToTree(children, {
+        id: 'name',
+        pid: 'parentName',
+      }),
     };
-    tree.children = listToTree(g.permissions, {
-      id: 'name',
-      pid: 'parentName',
-    });
     trees.push(tree);
   });
   return trees;

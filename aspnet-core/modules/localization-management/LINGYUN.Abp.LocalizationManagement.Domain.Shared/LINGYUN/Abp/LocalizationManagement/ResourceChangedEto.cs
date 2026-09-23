@@ -6,6 +6,6 @@ namespace LINGYUN.Abp.LocalizationManagement;
 [Serializable]
 public class ResourceChangedEto
 {
-    public List<string> Resources { get; set; }
-    public List<string> Cultures { get; set; }
+    public List<string> Resources { get; set; } = default!;
+    public List<string> Cultures { get; set; } = default!;
 }

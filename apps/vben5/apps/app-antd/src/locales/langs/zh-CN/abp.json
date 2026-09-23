@@ -80,6 +80,7 @@
   "account": {
     "title": "账户管理",
     "linkAccount": "关联账户",
+    "revertImpersonation": "回到我的账户",
     "settings": {
       "title": "个人设置",
       "basic": {

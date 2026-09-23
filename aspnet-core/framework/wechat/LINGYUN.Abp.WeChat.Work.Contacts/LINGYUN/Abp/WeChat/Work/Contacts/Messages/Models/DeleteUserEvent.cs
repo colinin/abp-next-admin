@@ -14,7 +14,7 @@ public class DeleteUserEvent : WeChatWorkEventMessage
     /// 变更信息的成员UserID
     /// </summary>
     [XmlElement("UserID")]
-    public string UserId { get; set; }
+    public string UserId { get; set; } = default!;
 
     public override WeChatMessageEto ToEto()
     {

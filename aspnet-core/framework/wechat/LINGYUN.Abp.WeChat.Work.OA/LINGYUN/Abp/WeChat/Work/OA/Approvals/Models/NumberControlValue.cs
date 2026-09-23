@@ -14,7 +14,7 @@ public class NumberControlValue : ControlValue
     [NotNull]
     [JsonProperty("new_number")]
     [JsonPropertyName("new_number")]
-    public string NewMumber { get; set; }
+    public string NewMumber { get; set; } = default!;
     public NumberControlValue()
     {
 

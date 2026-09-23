@@ -18,5 +18,5 @@ public class WeChatWorkUpdateCalendarResponse : WeChatWorkResponse
     [NotNull]
     [JsonProperty("fail_result")]
     [JsonPropertyName("fail_result")]
-    public CalendarFailResult FailResult { get; set; }
+    public CalendarFailResult FailResult { get; set; } = default!;
 }

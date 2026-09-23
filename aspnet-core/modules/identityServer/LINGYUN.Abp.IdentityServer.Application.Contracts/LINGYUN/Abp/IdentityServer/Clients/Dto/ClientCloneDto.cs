@@ -11,18 +11,18 @@ public class ClientCloneDto
     /// </summary>
     [Required]
     [DynamicStringLength(typeof(ClientConsts), nameof(ClientConsts.ClientIdMaxLength))]
-    public string ClientId { get; set; }
+    public string ClientId { get; set; } = default!;
     /// <summary>
     /// 客户端名称
     /// </summary>
     [Required]
     [DynamicStringLength(typeof(ClientConsts), nameof(ClientConsts.ClientNameMaxLength))]
-    public string ClientName { get; set; }
+    public string ClientName { get; set; } = default!;
     /// <summary>
     /// 说明
     /// </summary>
     [DynamicStringLength(typeof(ClientConsts), nameof(ClientConsts.DescriptionMaxLength))]
-    public string Description { get; set; }
+    public string? Description { get; set; }
     /// <summary>
     /// 复制客户端授权类型
     /// </summary>

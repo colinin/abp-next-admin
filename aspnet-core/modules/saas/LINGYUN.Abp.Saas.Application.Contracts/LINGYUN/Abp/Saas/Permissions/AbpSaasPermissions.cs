@@ -23,6 +23,7 @@ public static class AbpSaasPermissions
         public const string Delete = Default + ".Delete";
         public const string ManageFeatures = Default + ".ManageFeatures";
         public const string ManageConnectionStrings = Default + ".ManageConnectionStrings";
+        public const string Impersonation = Default + ".Impersonation";
     }
 
     public static string[] GetAll()

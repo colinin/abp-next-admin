@@ -7,22 +7,22 @@ namespace LINGYUN.Abp.Sonatype.Nexus.Services.CoreUI.Browsers;
 public class CoreUIBrowseComponent
 {
     [JsonPropertyName("id")]
-    public string Id { get; set; }
+    public string Id { get; set; } = default!;
 
     [JsonPropertyName("assetId")]
-    public string AssetId { get; set; }
+    public string AssetId { get; set; } = default!;
 
     [JsonPropertyName("componentId")]
-    public string ComponentId { get; set; }
+    public string ComponentId { get; set; } = default!;
 
     [JsonPropertyName("packageUrl")]
-    public string PackageUrl { get; set; }
+    public string? PackageUrl { get; set; }
 
     [JsonPropertyName("text")]
-    public string Text { get; set; }
+    public string? Text { get; set; }
 
     [JsonPropertyName("type")]
-    public string Type { get; set; }
+    public string? Type { get; set; }
 
     [JsonPropertyName("leaf")]
     public bool Leaf { get; set; }

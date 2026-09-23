@@ -24,7 +24,7 @@ public class PersistedGrantAppService : AbpIdentityServerAppServiceBase, IPersis
         var persistedGrant = await PersistentGrantRepository.GetAsync(id);
 
         await PersistentGrantRepository.DeleteAsync(persistedGrant);
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
     }
 
     public async virtual Task<PersistedGrantDto> GetAsync(Guid id)

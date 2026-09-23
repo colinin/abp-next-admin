@@ -11,7 +11,7 @@ using Volo.Abp.TextTemplating;
 namespace LINGYUN.Abp.TextTemplating;
 public class InMemoryTemplateDefinitionStoreCache : ITemplateDefinitionStoreCache, ISingletonDependency
 {
-    public string CacheStamp { get; set; }
+    public string? CacheStamp { get; set; }
     public SemaphoreSlim SyncSemaphore { get; }
     public DateTime? LastCheckTime { get; set; }
 
@@ -51,7 +51,7 @@ public class InMemoryTemplateDefinitionStoreCache : ITemplateDefinitionStoreCach
             }
             foreach (var property in templateDefinitionRecord.ExtraProperties)
             {
-                templateDefinition.WithProperty(property.Key, property.Value);
+                templateDefinition.WithProperty(property.Key, property.Value!);
             }
             templateDefinition.WithProperty(nameof(TextTemplateDefinition.IsStatic), templateDefinitionRecord.IsStatic);
 
@@ -74,7 +74,7 @@ public class InMemoryTemplateDefinitionStoreCache : ITemplateDefinitionStoreCach
         return Task.CompletedTask;
     }
 
-    public virtual TemplateDefinition GetOrNull(string name)
+    public virtual TemplateDefinition? GetOrNull(string name)
     {
         return TemplateDefinitions.GetOrDefault(name);
     }

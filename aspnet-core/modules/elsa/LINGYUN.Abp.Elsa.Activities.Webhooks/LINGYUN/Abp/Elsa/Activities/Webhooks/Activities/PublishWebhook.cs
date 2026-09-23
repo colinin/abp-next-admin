@@ -23,7 +23,7 @@ public class PublishWebhook : AbpActivity
     [ActivityInput(
         Hint = "Unique name of the webhook.",
         SupportedSyntaxes = new[] { SyntaxNames.JavaScript, SyntaxNames.Liquid })]
-    public string WebhooName { get; set; }
+    public string WebhooName { get; set; } = default!;
 
     [ActivityInput(
             Hint = "Data to send.",
@@ -31,7 +31,7 @@ public class PublishWebhook : AbpActivity
             SupportedSyntaxes = new[] { SyntaxNames.JavaScript, SyntaxNames.Liquid },
             DefaultWorkflowStorageProvider = TransientWorkflowStorageProvider.ProviderName
         )]
-    public object WebhookData { get; set; }
+    public object WebhookData { get; set; } = default!;
 
     [ActivityInput(
        Hint = "If true, It sends the exact same data as the parameter to clients.",
@@ -49,7 +49,7 @@ public class PublishWebhook : AbpActivity
             SupportedSyntaxes = new[] { SyntaxNames.Json, SyntaxNames.JavaScript, SyntaxNames.Liquid },
             Category = PropertyCategories.Advanced
         )]
-    public IDictionary<string, string> Headers { get; set; }
+    public IDictionary<string, string>? Headers { get; set; }
 
     public PublishWebhook(
         IWebhookPublisher webhookPublisher)
@@ -68,7 +68,7 @@ public class PublishWebhook : AbpActivity
             new WebhookHeader
             {
                 UseOnlyGivenHeaders = UseOnlyGivenHeaders,
-                Headers = Headers
+                Headers = Headers ?? new Dictionary<string, string>()
             });
 
         return Done();

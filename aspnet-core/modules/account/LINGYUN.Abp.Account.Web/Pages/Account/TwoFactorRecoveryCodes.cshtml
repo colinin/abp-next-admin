@@ -1,0 +1,46 @@
+﻿@page
+@using LINGYUN.Abp.Account.Web.Pages.Account
+@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.Account.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Layout;
+@using Volo.Abp.AspNetCore.Mvc.UI.Theming;
+@model LINGYUN.Abp.Account.Web.Pages.Account.TwoFactorRecoveryCodesModel
+@inject IHtmlLocalizer<AccountResource> L
+@inject IPageLayout PageLayout
+@inject IThemeManager ThemeManager
+@{
+    Layout = ThemeManager.CurrentTheme.GetAccountLayout();
+    PageLayout.Content.Title = L["RecoveryCode"].Value;
+}
+
+@section scripts
+{
+    <abp-script-bundle name="@typeof(TwoFactorRecoveryCodesModel).FullName">
+        <abp-script src="/Pages/Account/TwoFactorRecoveryCodes.js" />
+    </abp-script-bundle>
+}
+
+<div class="card mt-3 shadow-sm rounded">
+    <div class="card-body p-5">
+        <h4>@L["RecoveryCode"]</h4>
+        <p class="mb-3">@L["RecoveryCodeDesc"]</p>
+        <form method="post">
+            <div id="recoveryCode" class="bg-light rounded px-3 py-2 mt-4">
+                <code class="fs-4 lh-lg">@Model.RecoveryCodes</code>
+            </div>
+
+            <div class="d-flex flex-row gap-2 mt-3">
+                <button type="button" id="printRecoverCodes" class="btn btn-outline-primary btn-sm flex-fill">
+                    @L["Authenticator:PrintRecoverCodes"]
+                </button>
+                <button type="button" id="copyRecoveryCode" class="btn btn-outline-secondary btn-sm flex-fill">
+                    @L["Authenticator:CopyToClipboard"]
+                </button>
+            </div>
+
+            <div class="d-grid mt-3">
+                <abp-button type="submit" button-type="Primary" class="btn-block btn-lg" text="@L["Continue"].Value" />
+            </div>
+        </form>
+    </div>
+</div>

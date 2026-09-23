@@ -45,7 +45,7 @@ public class DynamicWebhookDefinitionStore : IDynamicWebhookDefinitionStore, ITr
         CacheOptions = cacheOptions.Value;
     }
 
-    public async virtual Task<WebhookDefinition> GetOrNullAsync(string name)
+    public async virtual Task<WebhookDefinition?> GetOrNullAsync(string name)
     {
         if (!WebhookManagementOptions.IsDynamicWebhookStoreEnabled)
         {
@@ -73,7 +73,7 @@ public class DynamicWebhookDefinitionStore : IDynamicWebhookDefinitionStore, ITr
         }
     }
 
-    public async virtual Task<WebhookGroupDefinition> GetGroupOrNullAsync(string name)
+    public async virtual Task<WebhookGroupDefinition?> GetGroupOrNullAsync(string name)
     {
         if (!WebhookManagementOptions.IsDynamicWebhookStoreEnabled)
         {

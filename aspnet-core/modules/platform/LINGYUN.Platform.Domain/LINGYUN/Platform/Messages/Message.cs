@@ -8,14 +8,14 @@ namespace LINGYUN.Platform.Messages;
 public class Message : AuditedAggregateRoot<Guid>
 {
     public virtual Guid? UserId { get; private set; }
-    public virtual string Sender { get; private set; }
-    public virtual string Provider { get; set; }
-    public virtual string Receiver { get; private set; }
-    public virtual string Content { get; private set; }
+    public virtual string? Sender { get; private set; }
+    public virtual string? Provider { get; set; }
+    public virtual string Receiver { get; private set; } = default!;
+    public virtual string Content { get; private set; } = default!;
     public virtual DateTime? SendTime { get; private set; }
     public virtual int SendCount { get; private set; }
     public virtual MessageStatus Status { get; private set; }
-    public virtual string Reason { get; private set; }
+    public virtual string? Reason { get; private set; }
 
     protected Message()
     {
@@ -25,13 +25,13 @@ public class Message : AuditedAggregateRoot<Guid>
     public Message(
         Guid id,
         string receiver,
-        string content,
+        string? content,
         Guid? userId = null, 
-        string userName = null)
+        string? userName = null)
         : base(id)
     {
         Receiver = Check.NotNullOrWhiteSpace(receiver, nameof(receiver), MessageConsts.MaxReceiverLength);
-        Content = content;
+        Content = content ?? "";
 
         UserId = userId;
         Sender = Check.Length(userName, nameof(userName), MessageConsts.MaxSenderLength);

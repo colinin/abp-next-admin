@@ -2,7 +2,6 @@
 
 namespace Newtonsoft.Json;
 
-#nullable enable
 public class EnumToNumberStringConverter<T> : JsonConverter where T : struct, Enum
 {
     public override bool CanConvert(Type objectType)
@@ -58,5 +57,4 @@ public class EnumToNumberStringConverter<T> : JsonConverter where T : struct, En
         }
     }
 }
-#nullable disable
 

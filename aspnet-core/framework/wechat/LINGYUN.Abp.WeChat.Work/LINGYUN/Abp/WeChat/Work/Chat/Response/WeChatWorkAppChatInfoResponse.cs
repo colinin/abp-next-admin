@@ -10,5 +10,5 @@ public class WeChatWorkAppChatInfoResponse : WeChatWorkResponse
     /// </summary>
     [JsonProperty("chat_info")]
     [JsonPropertyName("chat_info")]
-    public WeChatWorkAppChatInfo ChatInfo { get; set; }
+    public WeChatWorkAppChatInfo ChatInfo { get; set; } = default!;
 }

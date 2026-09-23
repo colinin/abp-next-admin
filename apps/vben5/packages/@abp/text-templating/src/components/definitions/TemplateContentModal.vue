@@ -144,8 +144,8 @@ async function onSubmit(values: Record<string, string>) {
 
 <template>
   <Modal :title="$t('AbpTextTemplating.EditContents')">
-    <Alert v-if="textTemplate?.isInlineLocalized" type="warning">
-      <template #message>
+    <Alert v-if="textTemplate?.isInlineLocalized" type="warning" show-icon>
+      <template #description>
         <MarkdownViewer
           :value="$t('AbpTextTemplating.InlineContentDescription')"
         />

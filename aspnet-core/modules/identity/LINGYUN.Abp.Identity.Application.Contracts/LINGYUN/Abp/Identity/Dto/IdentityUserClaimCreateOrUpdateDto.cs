@@ -8,8 +8,9 @@ public abstract class IdentityUserClaimCreateOrUpdateDto
 {
     [Required]
     [DynamicMaxLength(typeof(IdentityUserClaimConsts), nameof(IdentityUserClaimConsts.MaxClaimTypeLength))]
-    public string ClaimType { get; set; }
+    public string ClaimType { get; set; } = default!;
 
+    [Required]
     [DynamicMaxLength(typeof(IdentityUserClaimConsts), nameof(IdentityUserClaimConsts.MaxClaimValueLength))]
-    public string ClaimValue { get; set; }
+    public string ClaimValue { get; set; } = default!;
 }

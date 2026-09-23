@@ -32,7 +32,7 @@ public class PortalTokenExtensionGrant : ITokenExtensionGrant
 {
     public string Name => PortalTokenExtensionGrantConsts.GrantType;
 
-    protected IAbpLazyServiceProvider LazyServiceProvider { get; set; }
+    protected IAbpLazyServiceProvider LazyServiceProvider { get; set; } = default!;
     protected ICurrentTenant CurrentTenant => LazyServiceProvider.LazyGetRequiredService<ICurrentTenant>();
     protected IEnterpriseRepository EnterpriseRepository => LazyServiceProvider.LazyGetRequiredService<IEnterpriseRepository>();
     protected SignInManager<IdentityUser> SignInManager => LazyServiceProvider.LazyGetRequiredService<SignInManager<IdentityUser>>();
@@ -40,7 +40,7 @@ public class PortalTokenExtensionGrant : ITokenExtensionGrant
     protected IOpenIddictScopeManager ScopeManager => LazyServiceProvider.LazyGetRequiredService<IOpenIddictScopeManager>();
     protected AbpOpenIddictClaimsPrincipalManager OpenIddictClaimsPrincipalManager => LazyServiceProvider.LazyGetRequiredService<AbpOpenIddictClaimsPrincipalManager>();
     protected ILoggerFactory LoggerFactory => LazyServiceProvider.LazyGetRequiredService<ILoggerFactory>();
-    protected ILogger Logger => LazyServiceProvider.LazyGetService<ILogger>(provider => LoggerFactory?.CreateLogger(GetType().FullName) ?? NullLogger.Instance);
+    protected ILogger Logger => LazyServiceProvider.LazyGetService<ILogger>(provider => LoggerFactory?.CreateLogger(GetType().FullName!) ?? NullLogger.Instance);
     protected IServiceScopeFactory ServiceScopeFactory => LazyServiceProvider.LazyGetRequiredService<IServiceScopeFactory>();
     protected IOptions<AbpIdentityOptions> AbpIdentityOptions => LazyServiceProvider.LazyGetRequiredService<IOptions<AbpIdentityOptions>>();
     protected IOptions<IdentityOptions> IdentityOptions => LazyServiceProvider.LazyGetRequiredService<IOptions<IdentityOptions>>();
@@ -63,12 +63,12 @@ public class PortalTokenExtensionGrant : ITokenExtensionGrant
                 var enterprises = await EnterpriseRepository.GetEnterprisesInTenantListAsync(25);
 
                 var properties = new AuthenticationProperties(
-                    new Dictionary<string, string>
+                    new Dictionary<string, string?>
                     {
                         [OpenIddictServerAspNetCoreConstants.Properties.Error] = OpenIddictConstants.Errors.InvalidGrant,
                         [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = "invalid_enterprise"
                     },
-                    new Dictionary<string, object>
+                    new Dictionary<string, object?>
                     {
                         // 是否可直接选择的模式
                         { "Enterprises", JsonConvert.SerializeObject(enterprises.Select(x => new { Id = x.Id, Name = x.Name, Logo = x.Logo })) },
@@ -95,7 +95,7 @@ public class PortalTokenExtensionGrant : ITokenExtensionGrant
         using var scope = ServiceScopeFactory.CreateScope();
         await ReplaceEmailToUsernameOfInputIfNeeds(context.Request);
 
-        IdentityUser user = null;
+        IdentityUser? user = null;
 
         if (AbpIdentityOptions.Value.ExternalLoginProviders.Any())
         {
@@ -106,7 +106,7 @@ public class PortalTokenExtensionGrant : ITokenExtensionGrant
 
                 if (await externalLoginProvider.TryAuthenticateAsync(context.Request.Username, context.Request.Password))
                 {
-                    user = await UserManager.FindByNameAsync(context.Request.Username);
+                    user = await UserManager.FindByNameAsync(context.Request.Username!);
                     if (user == null)
                     {
                         user = await externalLoginProvider.CreateUserAsync(context.Request.Username, externalLoginProviderInfo.Name);
@@ -123,12 +123,12 @@ public class PortalTokenExtensionGrant : ITokenExtensionGrant
 
         await IdentityOptions.SetAsync();
 
-        user = await UserManager.FindByNameAsync(context.Request.Username);
+        user = await UserManager.FindByNameAsync(context.Request.Username!);
         if (user == null)
         {
             Logger.LogInformation("No user found matching username: {username}", context.Request.Username);
 
-            var properties = new AuthenticationProperties(new Dictionary<string, string>
+            var properties = new AuthenticationProperties(new Dictionary<string, string?>
             {
                 [OpenIddictServerAspNetCoreConstants.Properties.Error] = OpenIddictConstants.Errors.InvalidGrant,
                 [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = "Invalid username or password!"
@@ -145,7 +145,7 @@ public class PortalTokenExtensionGrant : ITokenExtensionGrant
             return Forbid(properties, OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
         }
 
-        var result = await SignInManager.CheckPasswordSignInAsync(user, context.Request.Password, true);
+        var result = await SignInManager.CheckPasswordSignInAsync(user, context.Request.Password!, true);
         if (!result.Succeeded)
         {
             await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext
@@ -184,7 +184,7 @@ public class PortalTokenExtensionGrant : ITokenExtensionGrant
                 errorDescription = "Invalid username or password!";
             }
 
-            var properties = new AuthenticationProperties(new Dictionary<string, string>
+            var properties = new AuthenticationProperties(new Dictionary<string, string?>
             {
                 [OpenIddictServerAspNetCoreConstants.Properties.Error] = OpenIddictConstants.Errors.InvalidGrant,
                 [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = errorDescription
@@ -203,18 +203,18 @@ public class PortalTokenExtensionGrant : ITokenExtensionGrant
 
     protected virtual async Task ReplaceEmailToUsernameOfInputIfNeeds(OpenIddictRequest request)
     {
-        if (!ValidationHelper.IsValidEmailAddress(request.Username))
+        if (!ValidationHelper.IsValidEmailAddress(request.Username!))
         {
             return;
         }
 
-        var userByUsername = await UserManager.FindByNameAsync(request.Username);
+        var userByUsername = await UserManager.FindByNameAsync(request.Username!);
         if (userByUsername != null)
         {
             return;
         }
 
-        var userByEmail = await UserManager.FindByEmailAsync(request.Username);
+        var userByEmail = await UserManager.FindByEmailAsync(request.Username!);
         if (userByEmail == null)
         {
             return;
@@ -237,7 +237,7 @@ public class PortalTokenExtensionGrant : ITokenExtensionGrant
 
             Logger.LogInformation("Authentication failed for username: {username}, reason: InvalidAuthenticatorCode", context.Request.Username);
 
-            var properties = new AuthenticationProperties(new Dictionary<string, string>
+            var properties = new AuthenticationProperties(new Dictionary<string, string?>
             {
                 [OpenIddictServerAspNetCoreConstants.Properties.Error] = OpenIddictConstants.Errors.InvalidGrant,
                 [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = "Invalid authenticator code!"
@@ -259,13 +259,13 @@ public class PortalTokenExtensionGrant : ITokenExtensionGrant
             });
 
             var properties = new AuthenticationProperties(
-                items: new Dictionary<string, string>
+                items: new Dictionary<string, string?>
                 {
                     [OpenIddictServerAspNetCoreConstants.Properties.Error] = OpenIddictConstants.Errors.InvalidGrant,
                     [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] =
                         nameof(SignInResult.RequiresTwoFactor),
                 },
-                parameters: new Dictionary<string, object>
+                parameters: new Dictionary<string, object?>
                 {
                     ["userId"] = user.Id.ToString("N"),
                     ["twoFactorToken"] = twoFactorToken
@@ -275,17 +275,17 @@ public class PortalTokenExtensionGrant : ITokenExtensionGrant
         }
     }
 
-    protected virtual async Task<IActionResult> HandleShouldChangePasswordOnNextLoginAsync(ExtensionGrantContext context, IdentityUser user, string currentPassword)
+    protected virtual async Task<IActionResult> HandleShouldChangePasswordOnNextLoginAsync(ExtensionGrantContext context, IdentityUser user, string? currentPassword)
     {
         return await HandleChangePasswordAsync(context, user, currentPassword, ChangePasswordType.ShouldChangePasswordOnNextLogin);
     }
 
-    protected virtual async Task<IActionResult> HandlePeriodicallyChangePasswordAsync(ExtensionGrantContext context, IdentityUser user, string currentPassword)
+    protected virtual async Task<IActionResult> HandlePeriodicallyChangePasswordAsync(ExtensionGrantContext context, IdentityUser user, string? currentPassword)
     {
         return await HandleChangePasswordAsync(context, user, currentPassword, ChangePasswordType.PeriodicallyChangePassword);
     }
 
-    protected virtual async Task<IActionResult> HandleChangePasswordAsync(ExtensionGrantContext context, IdentityUser user, string currentPassword, ChangePasswordType changePasswordType)
+    protected virtual async Task<IActionResult> HandleChangePasswordAsync(ExtensionGrantContext context, IdentityUser user, string? currentPassword, ChangePasswordType changePasswordType)
     {
         var changePasswordToken = context.Request.GetParameter("ChangePasswordToken")?.ToString();
         var newPassword = context.Request.GetParameter("NewPassword")?.ToString();
@@ -316,7 +316,7 @@ public class PortalTokenExtensionGrant : ITokenExtensionGrant
                 {
                     Logger.LogInformation("ChangePassword failed for username: {username}, reason: {changePasswordResult}", context.Request.Username, changePasswordResult.Errors.Select(x => x.Description).JoinAsString(", "));
 
-                    var properties = new AuthenticationProperties(new Dictionary<string, string>
+                    var properties = new AuthenticationProperties(new Dictionary<string, string?>
                     {
                         [OpenIddictServerAspNetCoreConstants.Properties.Error] = OpenIddictConstants.Errors.InvalidGrant,
                         [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = changePasswordResult.Errors.Select(x => x.Description).JoinAsString(", ")
@@ -328,7 +328,7 @@ public class PortalTokenExtensionGrant : ITokenExtensionGrant
             {
                 Logger.LogInformation("Authentication failed for username: {username}, reason: InvalidAuthenticatorCode", context.Request.Username);
 
-                var properties = new AuthenticationProperties(new Dictionary<string, string>
+                var properties = new AuthenticationProperties(new Dictionary<string, string?>
                 {
                     [OpenIddictServerAspNetCoreConstants.Properties.Error] = OpenIddictConstants.Errors.InvalidGrant,
                     [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = "Invalid authenticator code!"
@@ -350,12 +350,12 @@ public class PortalTokenExtensionGrant : ITokenExtensionGrant
             });
 
             var properties = new AuthenticationProperties(
-                items: new Dictionary<string, string>
+                items: new Dictionary<string, string?>
                 {
                     [OpenIddictServerAspNetCoreConstants.Properties.Error] = OpenIddictConstants.Errors.InvalidGrant,
                     [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = changePasswordType.ToString()
                 },
-                parameters: new Dictionary<string, object>
+                parameters: new Dictionary<string, object?>
                 {
                     ["userId"] = user.Id.ToString("N"),
                     ["changePasswordToken"] = await UserManager.GenerateUserTokenAsync(user, TokenOptions.DefaultProvider, changePasswordType.ToString())

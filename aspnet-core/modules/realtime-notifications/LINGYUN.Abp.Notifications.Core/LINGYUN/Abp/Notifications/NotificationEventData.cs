@@ -13,7 +13,7 @@ public class NotificationEventData : IMultiTenant
     /// <summary>
     /// 通知名称
     /// </summary>
-    public string Name { get; set; }
+    public string Name { get; set; } = default!;
     /// <summary>
     /// 用来标识一个应用程序
     /// </summary>
@@ -24,7 +24,7 @@ public class NotificationEventData : IMultiTenant
     /// <summary>
     /// 数据
     /// </summary>
-    public NotificationData Data { get; set; }
+    public NotificationData Data { get; set; } = default!;
     /// <summary>
     /// 创建时间
     /// </summary>

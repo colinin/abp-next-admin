@@ -14,5 +14,5 @@ public class CalendarFailResult
     [CanBeNull]
     [JsonProperty("shares")]
     [JsonPropertyName("shares")]
-    public CalendarFailShare[] Shares { get; set; }
+    public CalendarFailShare[] Shares { get; set; } = default!;
 }

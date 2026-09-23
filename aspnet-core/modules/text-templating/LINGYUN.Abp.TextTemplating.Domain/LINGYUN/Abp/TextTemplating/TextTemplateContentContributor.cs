@@ -27,12 +27,12 @@ public class TextTemplateContentContributor : ITemplateContentContributor, ITran
         Logger = NullLogger<TextTemplateContentContributor>.Instance;
     }
 
-    public async virtual Task<string> GetOrNullAsync(TemplateContentContributorContext context)
+    public async virtual Task<string?> GetOrNullAsync(TemplateContentContributorContext context)
     {
-        return (await GetCacheItemAsync(context)).Content;
+        return (await GetCacheItemAsync(context))?.Content;
     }
 
-    protected async virtual Task<TextTemplateContentCacheItem> GetCacheItemAsync(TemplateContentContributorContext context)
+    protected async virtual Task<TextTemplateContentCacheItem?> GetCacheItemAsync(TemplateContentContributorContext context)
     {
         var culture = context.TemplateDefinition.IsInlineLocalized ? null : context.Culture;
         var cacheKey = TextTemplateContentCacheItem.CalculateCacheKey(context.TemplateDefinition.Name, culture);
@@ -57,7 +57,7 @@ public class TextTemplateContentContributor : ITemplateContentContributor, ITran
         }
 
         cacheItem = new TextTemplateContentCacheItem(
-            template?.Name,
+            context.TemplateDefinition.Name,
             template?.Content,
             template?.Culture);
 

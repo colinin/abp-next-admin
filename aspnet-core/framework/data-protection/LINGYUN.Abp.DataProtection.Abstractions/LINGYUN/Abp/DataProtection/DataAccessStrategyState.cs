@@ -8,12 +8,12 @@ public class DataAccessStrategyState
     /// <summary>
     /// 权限主体
     /// </summary>
-    public string SubjectName { get; set; }
+    public string SubjectName { get; set; } = default!;
 
     /// <summary>
     /// 权限主体标识
     /// </summary>
-    public string[] SubjectKeys { get; set; }
+    public string[] SubjectKeys { get; set; } = default!;
 
     /// <summary>
     /// 权限策略

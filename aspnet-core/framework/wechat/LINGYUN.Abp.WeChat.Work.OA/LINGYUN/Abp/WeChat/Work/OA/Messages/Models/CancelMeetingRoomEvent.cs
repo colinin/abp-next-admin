@@ -22,7 +22,7 @@ public class CancelMeetingRoomEvent : WeChatWorkEventMessage
     /// 预定id，可根据该ID查询具体的会议预定情况
     /// </summary>
     [XmlElement("BookingId")]
-    public string BookingId { get; set; }
+    public string BookingId { get; set; } = default!;
 
     public override WeChatMessageEto ToEto()
     {

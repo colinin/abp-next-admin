@@ -13,7 +13,6 @@ using Volo.Abp;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Data;
-using Volo.Abp.Domain.Entities;
 using Volo.Abp.Security.Encryption;
 
 namespace LINGYUN.Abp.AIManagement.Workspaces;
@@ -137,6 +136,8 @@ public class WorkspaceDefinitionAppService :
             }
         }
 
+        entity.SetProperty(nameof(WorkspaceDefinitionRecordDto.IsStatic), false);
+
         return entity;
     }
 
@@ -210,12 +211,16 @@ public class WorkspaceDefinitionAppService :
 
         if (!entity.HasSameExtraProperties(updateInput))
         {
+            var isStatic = entity.GetProperty(nameof(WorkspaceDefinitionRecordDto.IsStatic), true);
+
             entity.ExtraProperties.Clear();
 
             foreach (var property in updateInput.ExtraProperties)
             {
                 entity.ExtraProperties.Add(property.Key, property.Value);
             }
+
+            entity.SetProperty(nameof(WorkspaceDefinitionRecordDto.IsStatic), isStatic);
         }
 
         entity.SetConcurrencyStampIfNotNull(updateInput.ConcurrencyStamp);

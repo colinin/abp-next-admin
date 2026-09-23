@@ -33,7 +33,7 @@ public class SendSms : AbpActivity
     public ICollection<string> To { get; set; } = new List<string>();
 
     [ActivityInput(Hint = "The message content.")]
-    public string Message { get; set; }
+    public string Message { get; set; } = default!;
 
     [ActivityInput(
            Hint = "Attachment property that are sent with the message.",

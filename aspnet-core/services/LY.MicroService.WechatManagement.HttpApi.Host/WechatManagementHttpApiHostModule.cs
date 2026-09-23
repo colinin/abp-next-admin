@@ -1,14 +1,14 @@
 ﻿using LINGYUN.Abp.AspNetCore.HttpOverrides;
-using LINGYUN.Abp.AspNetCore.Mvc.Localization;
 using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
+using LINGYUN.Abp.AspNetCore.Session;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
 using LINGYUN.Abp.Authorization.OrganizationUnits;
 using LINGYUN.Abp.Claims.Mapping;
+using LINGYUN.Abp.Dynamic.Definitions;
 using LINGYUN.Abp.EntityFrameworkCore.MySQL;
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
 using LINGYUN.Abp.Http.Client.Wrapper;
-using LINGYUN.Abp.Identity.Session.AspNetCore;
 using LINGYUN.Abp.Identity.WeChat.Work;
 using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
 using LINGYUN.Abp.Saas.EntityFrameworkCore;
@@ -74,7 +74,6 @@ namespace LY.MicroService.WechatManagement;
     typeof(AbpCAPEventBusModule),
     typeof(AbpHttpClientIdentityModelWebModule),
     typeof(AbpAspNetCoreMultiTenancyModule),
-    typeof(AbpAspNetCoreMvcLocalizationModule),
     typeof(AbpCachingStackExchangeRedisModule),
     typeof(AbpDistributedLockingModule),
     typeof(AbpSwashbuckleModule),
@@ -83,9 +82,10 @@ namespace LY.MicroService.WechatManagement;
     typeof(AbpClaimsMappingModule),
     typeof(AbpTelemetryOpenTelemetryModule),
     typeof(AbpTelemetrySkyWalkingModule),
+    typeof(AbpAspNetCoreSessionModule),
     typeof(AbpAspNetCoreMvcWrapperModule),
     typeof(AbpAspNetCoreHttpOverridesModule),
-    typeof(AbpIdentitySessionAspNetCoreModule),
+    typeof(AbpDynamicDefinitionsModule),
     typeof(AbpAutofacModule)
     )]
 public partial class WechatManagementHttpApiHostModule : AbpModule
@@ -142,7 +142,6 @@ public partial class WechatManagementHttpApiHostModule : AbpModule
         app.UseAuthentication();
         app.UseJwtTokenMiddleware();
         app.UseMultiTenancy();
-        app.UseAbpSession();
         app.UseDynamicClaims();
         app.UseAuthorization();
         app.UseSwagger();

@@ -25,9 +25,9 @@ namespace LINGYUN.Abp.IM.SignalR.Hubs;
 [Authorize]
 public class MessagesHub : AbpHub
 {
-    protected IMessageProcessor Processor => LazyServiceProvider.LazyGetService<IMessageProcessor>();
+    protected IMessageProcessor? Processor => LazyServiceProvider.LazyGetService<IMessageProcessor>();
 
-    protected IUserOnlineChanger OnlineChanger => LazyServiceProvider.LazyGetService<IUserOnlineChanger>();
+    protected IUserOnlineChanger? OnlineChanger => LazyServiceProvider.LazyGetService<IUserOnlineChanger>();
 
     protected IDistributedIdGenerator DistributedIdGenerator => LazyServiceProvider.LazyGetRequiredService<IDistributedIdGenerator>();
 
@@ -63,7 +63,7 @@ public class MessagesHub : AbpHub
         }
     }
 
-    public override async Task OnDisconnectedAsync(Exception exception)
+    public override async Task OnDisconnectedAsync(Exception? exception)
     {
         await base.OnDisconnectedAsync(exception);
 
@@ -122,7 +122,10 @@ public class MessagesHub : AbpHub
     {
         try
         {
-            await Processor?.ReCallAsync(chatMessage);
+            if (Processor != null)
+            {
+                await Processor.ReCallAsync(chatMessage);
+            }
             if (!chatMessage.GroupId.IsNullOrWhiteSpace())
             {
                 await SendMessageAsync(
@@ -148,7 +151,7 @@ public class MessagesHub : AbpHub
                 await SendMessageAsync(
                     Options.ReCallChatMessageMethod,
                     ChatMessage.SystemLocalized(
-                        chatMessage.ToUserId.Value,
+                        chatMessage.ToUserId!.Value,
                         chatMessage.FormUserId,
                         new LocalizableStringInfo(
                             LocalizationResourceNameAttribute.GetName(typeof(AbpIMResource)),
@@ -177,9 +180,9 @@ public class MessagesHub : AbpHub
                 await SendMessageAsync(
                     Options.ReCallChatMessageMethod,
                     ChatMessage.System(
-                        chatMessage.ToUserId.Value,
+                        chatMessage.ToUserId!.Value,
                         chatMessage.FormUserId,
-                        errorInfo.Message,
+                        errorInfo.Message!,
                         Clock,
                         MessageType.Notifier,
                         chatMessage.TenantId)
@@ -194,7 +197,10 @@ public class MessagesHub : AbpHub
     {
         try
         {
-            await Processor?.ReadAsync(chatMessage);
+            if (Processor != null)
+            {
+                await Processor.ReadAsync(chatMessage);
+            }
         }
         catch (OperationCanceledException)
         {
@@ -243,7 +249,7 @@ public class MessagesHub : AbpHub
                         ChatMessage.System(
                             chatMessage.FormUserId,
                             chatMessage.GroupId,
-                            errorInfo.Message,
+                            errorInfo.Message!,
                             Clock,
                             MessageType.Notifier,
                             chatMessage.TenantId));
@@ -253,9 +259,9 @@ public class MessagesHub : AbpHub
                     await SendMessageToUserAsync(
                         methodName,
                         ChatMessage.System(
-                            chatMessage.ToUserId.Value,
+                            chatMessage.ToUserId!.Value,
                             chatMessage.FormUserId,
-                            errorInfo.Message,
+                            errorInfo.Message!,
                             Clock,
                             MessageType.Notifier,
                             chatMessage.TenantId));

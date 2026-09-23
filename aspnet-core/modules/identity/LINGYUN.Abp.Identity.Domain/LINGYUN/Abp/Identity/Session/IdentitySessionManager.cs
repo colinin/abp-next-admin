@@ -10,6 +10,7 @@ using Volo.Abp.Identity;
 using Volo.Abp.Security.Claims;
 
 namespace LINGYUN.Abp.Identity.Session;
+
 public class IdentitySessionManager : DomainService, IIdentitySessionManager
 {
     protected IDeviceInfoProvider DeviceInfoProvider { get; }
@@ -31,6 +32,17 @@ public class IdentitySessionManager : DomainService, IIdentitySessionManager
 
     [DisableAuditing]
     public async virtual Task SaveSessionAsync(
+        ClaimsPrincipal claimsPrincipal,
+        CancellationToken cancellationToken = default)
+    {
+        var clientId = claimsPrincipal.FindClientId();
+
+        await SaveSessionAsync(clientId, claimsPrincipal, cancellationToken);
+    }
+
+    [DisableAuditing]
+    public async virtual Task SaveSessionAsync(
+        string? clientId,
         ClaimsPrincipal claimsPrincipal,
         CancellationToken cancellationToken = default)
     {
@@ -58,9 +70,7 @@ public class IdentitySessionManager : DomainService, IIdentitySessionManager
                 var clientIpAddress = deviceInfo.ClientIpAddress;
                 var userName = claimsPrincipal.FindFirstValue(AbpClaimTypes.UserName);
 
-                var clientId = claimsPrincipal.FindClientId();
-
-                Logger.LogDebug($"Save user session for user: {userId}, session: {sessionId}");
+                Logger.LogDebug("Save user session for user: {userId}, session: {sessionId}", userId, sessionId);
 
                 await IdentitySessionStore.CreateAsync(
                     sessionId,
@@ -76,7 +86,7 @@ public class IdentitySessionManager : DomainService, IIdentitySessionManager
                     tenantId,
                     cancellationToken);
 
-                Logger.LogDebug($"Remove dynamic claims cache for user: {userId}");
+                Logger.LogDebug("Remove dynamic claims cache for user: {userId}", userId);
 
                 await IdentityDynamicClaimsPrincipalContributorCache.ClearAsync(userId.Value, tenantId);
 
@@ -99,9 +109,9 @@ public class IdentitySessionManager : DomainService, IIdentitySessionManager
 
     public async virtual Task RevokeSessionAsync(
         string sessionId,
-        CancellationToken cancellation = default)
+        CancellationToken cancellationToken = default)
     {
-        Logger.LogDebug($"Revoke user session for: {sessionId}");
-        await IdentitySessionStore.RevokeAsync(sessionId, cancellation);
+        Logger.LogDebug("Revoke user session for: {sessionId}", sessionId);
+        await IdentitySessionStore.RevokeAsync(sessionId, cancellationToken: cancellationToken);
     }
 }

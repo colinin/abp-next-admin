@@ -41,7 +41,7 @@ public class ExternalLoginBindModel : AbpPageModel
         if (string.IsNullOrWhiteSpace(provider) || string.IsNullOrWhiteSpace(returnUrl))
         {
             Logger.LogWarning("The parameter is incorrect");
-            return Redirect(QueryHelpers.AddQueryString(returnUrl, new Dictionary<string, string>()
+            return Redirect(QueryHelpers.AddQueryString(returnUrl, new Dictionary<string, string?>()
             {
                 ["error"] = "The parameter is incorrect"
             }));
@@ -73,7 +73,7 @@ public class ExternalLoginBindModel : AbpPageModel
         if (string.IsNullOrWhiteSpace(returnUrl))
         {
             Logger.LogWarning("The returnUrl cannot be empty");
-            return Redirect(QueryHelpers.AddQueryString(returnUrl, new Dictionary<string, string>()
+            return Redirect(QueryHelpers.AddQueryString(returnUrl, new Dictionary<string, string?>()
             {
                 ["error"] = "The returnUrl cannot be empty"
             }));
@@ -89,7 +89,7 @@ public class ExternalLoginBindModel : AbpPageModel
             if (loginInfo == null)
             {
                 Logger.LogWarning("External login info is not available");
-                return Redirect(QueryHelpers.AddQueryString(returnUrl, new Dictionary<string, string>()
+                return Redirect(QueryHelpers.AddQueryString(returnUrl, new Dictionary<string, string?>()
                 {
                     ["error"] = "External login info is not available."
                 }));
@@ -100,7 +100,7 @@ public class ExternalLoginBindModel : AbpPageModel
             if (await UserManager.FindByLoginAsync(loginInfo.LoginProvider, loginInfo.ProviderKey) == null)
             {
                 var externalUser = await UserManager.FindByIdAsync(userId);
-                CheckIdentityErrors(await UserManager.AddLoginAsync(externalUser, loginInfo));
+                CheckIdentityErrors(await UserManager.AddLoginAsync(externalUser!, loginInfo));
             }
 
             return Redirect(returnUrl);

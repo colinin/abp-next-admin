@@ -38,7 +38,7 @@ public class ElasticsearchSecurityLogManager : ISecurityLogManager, ITransientDe
         Logger = NullLogger<ElasticsearchSecurityLogManager>.Instance;
     }
 
-    public async virtual Task<SecurityLog> GetAsync(
+    public async virtual Task<SecurityLog?> GetAsync(
         Guid id,
         bool includeDetails = false,
         CancellationToken cancellationToken = default)
@@ -80,19 +80,19 @@ public class ElasticsearchSecurityLogManager : ISecurityLogManager, ITransientDe
     }
 
     public async virtual Task<List<SecurityLog>> GetListAsync(
-        string sorting = null,
+        string? sorting = null,
         int maxResultCount = 50,
         int skipCount = 0,
         DateTime? startTime = null,
         DateTime? endTime = null,
-        string applicationName = null,
-        string identity = null,
-        string action = null,
+        string? applicationName = null,
+        string? identity = null,
+        string? action = null,
         Guid? userId = null,
-        string userName = null,
-        string clientId = null,
-        string clientIpAddress = null,
-        string correlationId = null,
+        string? userName = null,
+        string? clientId = null,
+        string? clientIpAddress = null,
+        string? correlationId = null,
         bool includeDetails = false,
         CancellationToken cancellationToken = default)
     {
@@ -134,14 +134,14 @@ public class ElasticsearchSecurityLogManager : ISecurityLogManager, ITransientDe
     public async virtual Task<long> GetCountAsync(
         DateTime? startTime = null,
         DateTime? endTime = null,
-        string applicationName = null,
-        string identity = null,
-        string action = null,
+        string? applicationName = null,
+        string? identity = null,
+        string? action = null,
         Guid? userId = null,
-        string userName = null,
-        string clientId = null,
-        string clientIpAddress = null,
-        string correlationId = null,
+        string? userName = null,
+        string? clientId = null,
+        string? clientIpAddress = null,
+        string? correlationId = null,
         CancellationToken cancellationToken = default)
     {
         var client = _clientFactory.Create();
@@ -172,14 +172,14 @@ public class ElasticsearchSecurityLogManager : ISecurityLogManager, ITransientDe
     protected virtual List<Query> BuildQueryDescriptor(
         DateTime? startTime = null,
         DateTime? endTime = null,
-        string applicationName = null,
-        string identity = null,
-        string action = null,
+        string? applicationName = null,
+        string? identity = null,
+        string? action = null,
         Guid? userId = null,
-        string userName = null,
-        string clientId = null,
-        string clientIpAddress = null,
-        string correlationId = null)
+        string? userName = null,
+        string? clientId = null,
+        string? clientIpAddress = null,
+        string? correlationId = null)
     {
         var queries = new List<Query>();
 
@@ -256,7 +256,7 @@ public class ElasticsearchSecurityLogManager : ISecurityLogManager, ITransientDe
     };
     protected virtual string GetField(string field)
     {
-        if (_fieldMaps.TryGetValue(field, out string mapField))
+        if (_fieldMaps.TryGetValue(field, out var mapField))
         {
             return _elasticsearchOptions.FieldCamelCase ? mapField.ToCamelCase() : mapField.ToPascalCase();
         }

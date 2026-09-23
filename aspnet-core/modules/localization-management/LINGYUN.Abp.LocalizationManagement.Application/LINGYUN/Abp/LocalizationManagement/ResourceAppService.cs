@@ -1,8 +1,13 @@
 ﻿using LINGYUN.Abp.LocalizationManagement.Features;
 using LINGYUN.Abp.LocalizationManagement.Permissions;
 using Microsoft.AspNetCore.Authorization;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Volo.Abp;
+using Volo.Abp.Application.Dtos;
 using Volo.Abp.Features;
 
 namespace LINGYUN.Abp.LocalizationManagement;
@@ -11,6 +16,7 @@ namespace LINGYUN.Abp.LocalizationManagement;
 [Authorize(LocalizationManagementPermissions.Resource.Default)]
 public class ResourceAppService : LocalizationAppServiceBase, IResourceAppService
 {
+
     private readonly IResourceRepository _repository;
 
     public ResourceAppService(IResourceRepository repository)
@@ -43,7 +49,9 @@ public class ResourceAppService : LocalizationAppServiceBase, IResourceAppServic
 
         resource = await _repository.InsertAsync(resource);
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await PublishDynamicLocalizationRefreshEvent(new DynamicResourceRefreshEventData(resource.Name));
+
+        await CurrentUnitOfWork!.SaveChangesAsync();
 
         return ObjectMapper.Map<Resource, ResourceDto>(resource);
     }
@@ -55,7 +63,9 @@ public class ResourceAppService : LocalizationAppServiceBase, IResourceAppServic
 
         await _repository.DeleteAsync(resource);
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await PublishDynamicLocalizationRefreshEvent(new DynamicResourceRefreshEventData(resource.Name));
+
+        await CurrentUnitOfWork!.SaveChangesAsync();
     }
 
     [Authorize(LocalizationManagementPermissions.Resource.Update)]
@@ -69,9 +79,29 @@ public class ResourceAppService : LocalizationAppServiceBase, IResourceAppServic
 
         await _repository.UpdateAsync(resource);
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await PublishDynamicLocalizationRefreshEvent(new DynamicResourceRefreshEventData(resource.Name));
+
+        await CurrentUnitOfWork!.SaveChangesAsync();
 
         return ObjectMapper.Map<Resource, ResourceDto>(resource);
+    }
+
+    public async virtual Task<PagedResultDto<ResourceDto>> GetListAsync(ResourceGetPagedListInput input)
+    {
+        Expression<Func<Resource, bool>> predicate = _ => true;
+        if (!input.Filter.IsNullOrWhiteSpace())
+        {
+            predicate = predicate.And(x => x.Name.Contains(input.Filter) ||
+                x.DisplayName!.Contains(input.Filter) || x.Description!.Contains(input.Filter));
+        }
+
+        var specification = new Volo.Abp.Specifications.ExpressionSpecification<Resource>(predicate);
+        var totalCount = await _repository.GetCountAsync(specification);
+        var languages = await _repository.GetListAsync(specification,
+            input.Sorting, input.MaxResultCount, input.SkipCount);
+
+        return new PagedResultDto<ResourceDto>(totalCount,
+            ObjectMapper.Map<List<Resource>, List<ResourceDto>>(languages));
     }
 
     private async Task<Resource> InternalGetByNameAsync(string name)

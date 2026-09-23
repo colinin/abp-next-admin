@@ -2,6 +2,6 @@
 
 public class WebhookDefinitionGetListInput
 {
-    public string Filter { get; set; }
-    public string GroupName { get; set; }
+    public string? Filter { get; set; }
+    public string? GroupName { get; set; }
 }

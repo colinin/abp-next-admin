@@ -1,5 +1,4 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace LINGYUN.Abp.Account.Dto;
 /// <summary>
@@ -11,5 +10,5 @@ public class LinkUserInput : LinkUserBaseDto
     /// 关联用户Token
     /// </summary>
     [Required]
-    public string Token { get; set; }
+    public string Token { get; set; } = default!;
 }

@@ -51,15 +51,13 @@ public class BlobController : BlobControllerBase, IBlobAppService
         return _service.DeleteAsync(id);
     }
 
-    [HttpGet("download/{id}")]
-    [HttpGet("download/t/{tenantId}/{id}")]
+    [HttpGet("download/{key}")]
     public virtual Task<IRemoteStreamContent> DownloadAsync(BlobDownloadByIdInput input)
     {
         return _service.DownloadAsync(input);
     }
 
-    [HttpGet("preview/{id}")]
-    [HttpGet("preview/t/{tenantId}/{id}")]
+    [HttpGet("preview/{key}")]
     public async virtual Task<IRemoteStreamContent> PreviewAsync(BlobDownloadByIdInput input)
     {
         var content = await _service.PreviewAsync(input);

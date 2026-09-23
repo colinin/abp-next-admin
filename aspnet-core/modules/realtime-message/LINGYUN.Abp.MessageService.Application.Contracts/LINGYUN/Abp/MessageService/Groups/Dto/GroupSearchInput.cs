@@ -4,5 +4,5 @@ namespace LINGYUN.Abp.MessageService.Groups;
 
 public class GroupSearchInput : PagedAndSortedResultRequestDto
 {
-    public string Filter { get; set; }
+    public string? Filter { get; set; }
 }

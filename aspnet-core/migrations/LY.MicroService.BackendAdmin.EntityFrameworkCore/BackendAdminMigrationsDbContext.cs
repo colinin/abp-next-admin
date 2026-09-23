@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.FeatureManagement.EntityFrameworkCore;
+using Volo.Abp.PermissionManagement;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
 
@@ -29,5 +30,14 @@ public class BackendAdminMigrationsDbContext : AbpDbContext<BackendAdminMigratio
         modelBuilder.ConfigureSettingManagement();
         modelBuilder.ConfigurePermissionManagement();
         modelBuilder.ConfigureDataProtectionManagement();
+
+        modelBuilder.Entity<ResourcePermissionGrant>(b =>
+        {
+            var maxResourceNameLength = modelBuilder.IsUsingMySQL() ? 128 : PermissionGrantConsts.MaxResourceNameLength;
+            var maxResourceKeyLength = modelBuilder.IsUsingMySQL() ? 128 : PermissionGrantConsts.MaxResourceKeyLength;
+
+            b.Property(x => x.ResourceName).HasMaxLength(maxResourceNameLength).IsRequired();
+            b.Property(x => x.ResourceKey).HasMaxLength(maxResourceKeyLength).IsRequired();
+        });
     }
 }

@@ -13,23 +13,23 @@ public class EntityPropertyInfo : Entity<Guid>
     /// <summary>
     /// 名称
     /// </summary>
-    public virtual string Name { get; protected set; }
+    public virtual string Name { get; protected set; } = default!;
     /// <summary>
     /// 显示名称
     /// </summary>
-    public virtual string DisplayName { get; protected set; }
+    public virtual string DisplayName { get; protected set; } = default!;
     /// <summary>
     /// 类型全名
     /// </summary>
-    public virtual string TypeFullName { get; protected set; }
+    public virtual string TypeFullName { get; protected set; } = default!;
     /// <summary>
     /// Js类型
     /// </summary>
-    public virtual string JavaScriptType { get; protected set; }
+    public virtual string JavaScriptType { get; protected set; } = default!;
     /// <summary>
     /// 所属类型
     /// </summary>
-    public virtual EntityTypeInfo TypeInfo { get; protected set; }
+    public virtual EntityTypeInfo TypeInfo { get; protected set; } = default!;
     /// <summary>
     /// 所属类型标识
     /// </summary>
@@ -62,7 +62,7 @@ public class EntityPropertyInfo : Entity<Guid>
         Enums = new Collection<EntityEnumInfo>();
     }
 
-    public EntityEnumInfo FindEnum(string name)
+    public EntityEnumInfo? FindEnum(string name)
     {
         return Enums.FirstOrDefault(x => x.Name == name);
     }

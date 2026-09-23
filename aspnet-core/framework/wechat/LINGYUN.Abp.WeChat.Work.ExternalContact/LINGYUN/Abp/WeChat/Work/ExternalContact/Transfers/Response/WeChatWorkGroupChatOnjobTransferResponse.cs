@@ -18,5 +18,5 @@ public class WeChatWorkGroupChatOnjobTransferResponse : WeChatWorkResponse
     [NotNull]
     [JsonProperty("failed_chat_list")]
     [JsonPropertyName("failed_chat_list")]
-    public GroupChatTransferFailed[] FailedChatList { get; set; }
+    public GroupChatTransferFailed[] FailedChatList { get; set; } = default!;
 }

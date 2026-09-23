@@ -11,23 +11,23 @@ public class BackgroundJobInfoFilter
     /// <summary>
     /// 其他过滤条件
     /// </summary>
-    public string Filter { get; set; }
+    public string? Filter { get; set; }
     /// <summary>
     /// 任务名称
     /// </summary>
-    public string Name { get; set; }
+    public string? Name { get; set; }
     /// <summary>
     /// 任务分组
     /// </summary>
-    public string Group { get; set; }
+    public string? Group { get; set; }
     /// <summary>
     /// 任务类型
     /// </summary>
-    public string Type { get; set; }
+    public string? Type { get; set; }
     /// <summary>
     /// 节点名称
     /// </summary>
-    public string NodeName { get; set; }
+    public string? NodeName { get; set; }
     /// <summary>
     /// 任务状态
     /// </summary>

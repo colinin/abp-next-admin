@@ -29,5 +29,5 @@ public class ApprovalSpRecord
     [NotNull]
     [JsonProperty("details")]
     [JsonPropertyName("details")]
-    public List<ApprovalSpRecordDetail> Details { get; set; }
+    public List<ApprovalSpRecordDetail> Details { get; set; } = default!;
 }

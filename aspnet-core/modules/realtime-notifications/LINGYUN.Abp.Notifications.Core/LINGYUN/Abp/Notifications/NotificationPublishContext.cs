@@ -4,7 +4,6 @@ using System.Collections.Generic;
 
 namespace LINGYUN.Abp.Notifications;
 
-#nullable enable
 public class NotificationPublishContext
 {
     [NotNull]
@@ -32,4 +31,3 @@ public class NotificationPublishContext
         Exception = exception;
     }
 }
-#nullable disable

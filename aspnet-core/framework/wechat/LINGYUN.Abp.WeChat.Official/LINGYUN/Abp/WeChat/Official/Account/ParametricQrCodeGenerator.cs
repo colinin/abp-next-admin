@@ -70,7 +70,7 @@ public class ParametricQrCodeGenerator : IParametricQrCodeGenerator, ITransientD
         response.ThrowNotSuccessStatusCode();
 
         var responseContent = await response.Content.ReadAsStringAsync();
-        var ticketModel = JsonConvert.DeserializeObject<TicketModel>(responseContent);
+        var ticketModel = JsonConvert.DeserializeObject<TicketModel>(responseContent)!;
 
         cacheItem = new TicketModelCacheItem(ticketModel.Ticket, ticketModel.ExpireSeconds, ticketModel.Url);
 

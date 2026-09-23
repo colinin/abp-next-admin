@@ -11,7 +11,7 @@ public static class BackgroundJobInfoEbackgroundJobInfotensions
             TenantId = backgroundJobInfo.TenantId,
             Name = backgroundJobInfo.Name,
             NextRunTime = backgroundJobInfo.NextRunTime,
-            Args = backgroundJobInfo.Args,
+            Args = backgroundJobInfo.Args!,
             IsAbandoned = backgroundJobInfo.IsAbandoned,
             BeginTime = backgroundJobInfo.BeginTime,
             EndTime = backgroundJobInfo.EndTime,

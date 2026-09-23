@@ -1,23 +1,27 @@
 ﻿using LINGYUN.Abp.Account;
+using LINGYUN.Abp.Account.Web.AliyunCaptcha;
+using LINGYUN.Abp.Account.Web.LazyCaptcha;
 using LINGYUN.Abp.Account.Web.OAuth;
 using LINGYUN.Abp.Account.Web.OpenIddict;
+using LINGYUN.Abp.Account.Web.TencentCaptcha;
 using LINGYUN.Abp.AspNetCore.HttpOverrides;
 using LINGYUN.Abp.AspNetCore.MultiTenancy;
+using LINGYUN.Abp.AspNetCore.Mvc.UI.MultiTenancy;
 using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
+using LINGYUN.Abp.AspNetCore.Session;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
 using LINGYUN.Abp.BlobStoring.BlobManagement;
 using LINGYUN.Abp.Data.DbMigrator;
+using LINGYUN.Abp.Dynamic.Definitions;
 using LINGYUN.Abp.Emailing.Platform;
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.Exporter.MiniSoftware;
 using LINGYUN.Abp.Gdpr;
 using LINGYUN.Abp.Gdpr.Web;
 using LINGYUN.Abp.Identity.AspNetCore;
-using LINGYUN.Abp.Identity.AspNetCore.Session;
 using LINGYUN.Abp.Identity.OrganizaztionUnits;
-using LINGYUN.Abp.Identity.Session.AspNetCore;
 using LINGYUN.Abp.Localization.CultureMap;
-using LINGYUN.Abp.OpenIddict.AspNetCore.Session;
+using LINGYUN.Abp.OpenIddict.Impersonation;
 using LINGYUN.Abp.OpenIddict.LinkUser;
 using LINGYUN.Abp.OpenIddict.Portal;
 using LINGYUN.Abp.OpenIddict.Sms;
@@ -45,6 +49,12 @@ namespace LINGYUN.Abp.MicroService.AuthServer;
     typeof(AbpAspNetCoreSerilogModule),
     typeof(AbpAccountApplicationModule),
     typeof(AbpAccountHttpApiModule),
+    // 使用 LazyCaptcha 验证码组件
+    typeof(AbpAccountWebLazyCaptchaModule),
+    // 使用 腾讯云验证码组件, 需配置好腾讯云相关参数
+    typeof(AbpAccountWebTencentCaptchaModule),
+    // 使用 阿里云验证码组件, 需配置好阿里云相关参数
+    typeof(AbpAccountWebAliyunCaptchaModule),
     typeof(AbpAccountWebOpenIddictModule),
     typeof(AbpAccountWebOAuthModule),
     typeof(AbpBlobStoringBlobManagementModule),
@@ -55,14 +65,12 @@ namespace LINGYUN.Abp.MicroService.AuthServer;
     typeof(AbpAutofacModule),
     typeof(AbpCachingStackExchangeRedisModule),
     typeof(AbpIdentityAspNetCoreModule),
-    typeof(AbpIdentityAspNetCoreSessionModule),
-    typeof(AbpOpenIddictAspNetCoreSessionModule),
-    typeof(AbpIdentitySessionAspNetCoreModule),
     typeof(AbpOpenIddictSmsModule),
     typeof(AbpOpenIddictWeChatModule),
     typeof(AbpOpenIddictLinkUserModule),
     typeof(AbpOpenIddictPortalModule),
     typeof(AbpOpenIddictWeChatWorkModule),
+    typeof(AbpOpenIddictImpersonationModule),
     typeof(AbpIdentityOrganizaztionUnitsModule),
     typeof(AbpPermissionManagementDomainIdentityModule),
     typeof(AuthServerMigrationsEntityFrameworkCoreModule),
@@ -70,8 +78,11 @@ namespace LINGYUN.Abp.MicroService.AuthServer;
     typeof(AbpAuditLoggingElasticsearchModule), // 放在 AbpIdentity 模块之后,避免被覆盖
     typeof(AbpLocalizationCultureMapModule),
     typeof(AbpAspNetCoreMultiTenancyModule),
+    typeof(AbpAspNetCoreSessionModule),
+    typeof(AbpAspNetCoreMvcUiMultiTenancyModule),
     typeof(AbpAspNetCoreMvcWrapperModule),
     typeof(AbpAspNetCoreHttpOverridesModule),
+    typeof(AbpDynamicDefinitionsModule),
     typeof(AbpHttpClientIdentityModelWebModule),
     typeof(AbpExporterMiniSoftwareModule),
     typeof(AbpEmailingPlatformModule),
@@ -88,9 +99,9 @@ public partial class AuthServerModule : AbpModule
         PreConfigureWrapper();
         PreConfigureFeature();
         PreForwardedHeaders();
-        PreConfigureAuthServer();
         PreConfigureApp(configuration);
         PreConfigureCAP(configuration);
+        PreConfigureAuthServer(configuration);
         PreConfigureCertificate(configuration, hostingEnvironment);
     }
 

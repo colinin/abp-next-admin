@@ -11,7 +11,7 @@ public static class ObjectQueryableExtensions
         this Expression<T> condition,
         DynamicQueryable queryable)
     {
-        var typeExpression = condition.Parameters.FirstOrDefault();
+        var typeExpression = condition.Parameters.First();
 
         return BuildExpressions(condition, typeExpression, queryable.Paramters);
     }
@@ -24,16 +24,16 @@ public static class ObjectQueryableExtensions
         var expressions = new Stack<Expression>();
         foreach (var paramter in paramters)
         {
-            Expression exp = null;
-            Type propertyType = null;
+            Expression? exp = null;
+            Type propertyType;
             var leftParamter = Expression.PropertyOrField(typeExpression, paramter.Field);
             if (!string.IsNullOrWhiteSpace(paramter.Type))
             {
-                propertyType = Type.GetType(paramter.Type, true);
+                propertyType = Type.GetType(paramter.Type, true)!;
             }
             else
             {
-                propertyType = (leftParamter.Member as PropertyInfo)?.PropertyType ?? paramter.Value.GetType();
+                propertyType = (leftParamter.Member as PropertyInfo)?.PropertyType ?? paramter.Value!.GetType();
             }
             switch (paramter.Comparison)
             {
@@ -71,7 +71,7 @@ public static class ObjectQueryableExtensions
                     // ...Other And Field LIKE 'Value%'
                     exp = Expression.Call(
                         leftParamter,
-                        typeof(string).GetMethod(nameof(String.StartsWith), new[] { typeof(string) }),
+                        typeof(string).GetMethod(nameof(String.StartsWith), new[] { typeof(string) })!,
                         GetValue(paramter, propertyType));
 
                     // TODO: 单元测试通过
@@ -97,7 +97,7 @@ public static class ObjectQueryableExtensions
                     exp = Expression.Not(
                         Expression.Call(
                             leftParamter,
-                            typeof(string).GetMethod(nameof(String.StartsWith), new[] { typeof(string) }),
+                            typeof(string).GetMethod(nameof(String.StartsWith), new[] { typeof(string) })!,
                             GetValue(paramter, propertyType)));
 
                     // TODO: 单元测试通过
@@ -120,7 +120,7 @@ public static class ObjectQueryableExtensions
                     // ...Other AND Field LIKE '%Value'
                     exp = Expression.Call(
                         leftParamter,
-                        typeof(string).GetMethod(nameof(String.EndsWith), new[] { typeof(string) }),
+                        typeof(string).GetMethod(nameof(String.EndsWith), new[] { typeof(string) })!,
                         GetValue(paramter, propertyType));
 
                     // TODO: 单元测试通过
@@ -144,7 +144,7 @@ public static class ObjectQueryableExtensions
                     exp = Expression.Not(
                         Expression.Call(
                             leftParamter,
-                            typeof(string).GetMethod(nameof(String.EndsWith), new[] { typeof(string) }),
+                            typeof(string).GetMethod(nameof(String.EndsWith), new[] { typeof(string) })!,
                             GetValue(paramter, propertyType)));
 
                     // TODO: 单元测试通过
@@ -167,7 +167,7 @@ public static class ObjectQueryableExtensions
                     // ...Other AND (Field LIKE '%Value%')
                     exp = Expression.Call(
                         leftParamter,
-                        typeof(string).GetMethod(nameof(String.Contains), new[] { typeof(string) }),
+                        typeof(string).GetMethod(nameof(String.Contains), new[] { typeof(string) })!,
                         GetValue(paramter, propertyType));
 
                     // TODO: 单元测试通过
@@ -191,7 +191,7 @@ public static class ObjectQueryableExtensions
                     exp = Expression.Not(
                        Expression.Call(
                            leftParamter,
-                           typeof(string).GetMethod(nameof(String.Contains), new[] { typeof(string) }),
+                           typeof(string).GetMethod(nameof(String.Contains), new[] { typeof(string) })!,
                            GetValue(paramter, propertyType)));
                     // TODO: 单元测试通过
                     // For example(MySql): 
@@ -265,14 +265,14 @@ public static class ObjectQueryableExtensions
             return Expression.LessThan(
                 Expression.Call(
                     member,
-                    typeof(string).GetMethod("CompareTo", new[] { typeof(string) }),
+                    typeof(string).GetMethod("CompareTo", new[] { typeof(string) })!,
                     Expression.Constant(Convert.ToString(paramter.Value))),
                 Expression.Constant(0));
         }
         if (propertyType.IsNullableType())
         {
             // 可空类型比较: Field < Value
-            var underlyingType = Nullable.GetUnderlyingType(propertyType);
+            var underlyingType = Nullable.GetUnderlyingType(propertyType)!;
 
             var hasValue = Expression.Property(member, "HasValue");
             var value = Expression.Property(member, "Value");
@@ -300,14 +300,14 @@ public static class ObjectQueryableExtensions
             return Expression.LessThanOrEqual(
                 Expression.Call(
                     member,
-                    typeof(string).GetMethod("CompareTo", new[] { typeof(string) }),
+                    typeof(string).GetMethod("CompareTo", new[] { typeof(string) })!,
                     Expression.Constant(Convert.ToString(paramter.Value))),
                 Expression.Constant(0));
         }
         if (propertyType.IsNullableType())
         {
             // 可空类型比较: Field <= Value
-            var underlyingType = Nullable.GetUnderlyingType(propertyType);
+            var underlyingType = Nullable.GetUnderlyingType(propertyType)!;
 
             var hasValue = Expression.Property(member, "HasValue");
             var value = Expression.Property(member, "Value");
@@ -335,14 +335,14 @@ public static class ObjectQueryableExtensions
             return Expression.GreaterThan(
                 Expression.Call(
                     member,
-                    typeof(string).GetMethod("CompareTo", new[] { typeof(string) }),
+                    typeof(string).GetMethod("CompareTo", new[] { typeof(string) })!,
                     Expression.Constant(Convert.ToString(paramter.Value))),
                 Expression.Constant(0));
         }
         if (propertyType.IsNullableType())
         {
             // 可空类型比较: Field > Value
-            var underlyingType = Nullable.GetUnderlyingType(propertyType);
+            var underlyingType = Nullable.GetUnderlyingType(propertyType)!;
 
             var hasValue = Expression.Property(member, "HasValue");
             var value = Expression.Property(member, "Value");
@@ -370,7 +370,7 @@ public static class ObjectQueryableExtensions
             return Expression.GreaterThanOrEqual(
                 Expression.Call(
                     member,
-                    typeof(string).GetMethod("CompareTo", new[] { typeof(string) }),
+                    typeof(string).GetMethod("CompareTo", new[] { typeof(string) })!,
                     Expression.Constant(Convert.ToString(paramter.Value))),
                 Expression.Constant(0));
         }
@@ -378,7 +378,7 @@ public static class ObjectQueryableExtensions
         if (propertyType.IsNullableType())
         {
             // 可空类型比较: Field >= Value
-            var underlyingType = Nullable.GetUnderlyingType(propertyType);
+            var underlyingType = Nullable.GetUnderlyingType(propertyType)!;
 
             var hasValue = Expression.Property(member, "HasValue");
             var value = Expression.Property(member, "Value");
@@ -403,15 +403,15 @@ public static class ObjectQueryableExtensions
         object typedValue;
         if (propertyType.IsNullableType())
         {
-            propertyType = Nullable.GetUnderlyingType(propertyType);
+            propertyType = Nullable.GetUnderlyingType(propertyType)!;
         }
 
-        typedValue = Convert.ChangeType(paramter.Value, propertyType);
+        typedValue = Convert.ChangeType(paramter.Value, propertyType)!;
 
         return Expression.Constant(typedValue, propertyType);
     }
 
-    private static object GetDefaultValue(Type type)
+    private static object? GetDefaultValue(Type type)
     {
         // TODO: 非空字段此处返回默认值
         if (type.IsNullableType())

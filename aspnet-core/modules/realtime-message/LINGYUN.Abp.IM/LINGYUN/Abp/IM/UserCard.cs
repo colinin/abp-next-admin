@@ -10,15 +10,15 @@ public class UserCard
 
     #region 细粒度的用户资料
 
-    public string UserName { get; set; }
+    public string UserName { get; set; } = default!;
     /// <summary>
     /// 头像
     /// </summary>
-    public string AvatarUrl { get; set; }
+    public string? AvatarUrl { get; set; }
     /// <summary>
     /// 昵称
     /// </summary>
-    public string NickName { get; set; }
+    public string? NickName { get; set; }
     /// <summary>
     /// 年龄
     /// </summary>
@@ -30,11 +30,11 @@ public class UserCard
     /// <summary>
     /// 签名
     /// </summary>
-    public string Sign { get; set; }
+    public string? Sign { get; set; }
     /// <summary>
     /// 说明
     /// </summary>
-    public string Description { get; set; }
+    public string? Description { get; set; }
     /// <summary>
     /// 生日
     /// </summary>

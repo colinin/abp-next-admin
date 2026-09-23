@@ -14,7 +14,7 @@ namespace LINGYUN.Abp.Notifications;
     typeof(DynamicNotificationDefinitionInMemoryCache))]
 public class DynamicNotificationDefinitionInMemoryCache : IDynamicNotificationDefinitionStoreCache, ISingletonDependency
 {
-    public string CacheStamp { get; set; }
+    public string? CacheStamp { get; set; }
 
     protected IDictionary<string, NotificationGroupDefinition> NotificationGroupDefinitions { get; }
     protected IDictionary<string, NotificationDefinition> NotificationDefinitions { get; }
@@ -47,14 +47,20 @@ public class DynamicNotificationDefinitionInMemoryCache : IDynamicNotificationDe
 
         foreach (var notificationGroupRecord in notificationGroupRecords)
         {
-            ILocalizableString description = null;
+            ILocalizableString? displayName = null;
+            if (!notificationGroupRecord.DisplayName.IsNullOrWhiteSpace())
+            {
+                displayName = LocalizableStringSerializer.Deserialize(notificationGroupRecord.DisplayName);
+            }
+            ILocalizableString? description = null;
             if (!notificationGroupRecord.Description.IsNullOrWhiteSpace())
             {
                 description = LocalizableStringSerializer.Deserialize(notificationGroupRecord.Description);
             }
+
             var notificationGroup = context.AddGroup(
                 notificationGroupRecord.Name,
-                LocalizableStringSerializer.Deserialize(notificationGroupRecord.DisplayName),
+                displayName,
                 description,
                 notificationGroupRecord.AllowSubscriptionToClients
             );
@@ -78,7 +84,7 @@ public class DynamicNotificationDefinitionInMemoryCache : IDynamicNotificationDe
         return Task.CompletedTask;
     }
 
-    public virtual NotificationDefinition GetNotificationOrNull(string name)
+    public virtual NotificationDefinition? GetNotificationOrNull(string name)
     {
         return NotificationDefinitions.GetOrDefault(name);
     }
@@ -88,7 +94,7 @@ public class DynamicNotificationDefinitionInMemoryCache : IDynamicNotificationDe
         return NotificationDefinitions.Values.ToList();
     }
 
-    public virtual NotificationGroupDefinition GetNotificationGroupOrNull(string name)
+    public virtual NotificationGroupDefinition? GetNotificationGroupOrNull(string name)
     {
         return NotificationGroupDefinitions.GetOrDefault(name);
     }
@@ -102,7 +108,12 @@ public class DynamicNotificationDefinitionInMemoryCache : IDynamicNotificationDe
         NotificationGroupDefinition notificationGroup,
         NotificationDefinitionRecord notificationRecord)
     {
-        ILocalizableString description = null;
+        ILocalizableString? displayName = null;
+        if (!notificationRecord.DisplayName.IsNullOrWhiteSpace())
+        {
+            displayName = LocalizableStringSerializer.Deserialize(notificationRecord.DisplayName);
+        }
+        ILocalizableString? description = null;
         if (!notificationRecord.Description.IsNullOrWhiteSpace())
         {
             description = LocalizableStringSerializer.Deserialize(notificationRecord.Description);
@@ -110,7 +121,7 @@ public class DynamicNotificationDefinitionInMemoryCache : IDynamicNotificationDe
 
         var notification = notificationGroup.AddNotification(
             notificationRecord.Name,
-            LocalizableStringSerializer.Deserialize(notificationRecord.DisplayName),
+            displayName,
             description,
             notificationRecord.NotificationType,
             notificationRecord.NotificationLifetime,

@@ -14,20 +14,20 @@ public class WebhookSubscriptionCreateInput : WebhookSubscriptionCreateOrUpdateI
 public class WebhookSubscriptionUpdateInput : WebhookSubscriptionCreateOrUpdateInput, IHasConcurrencyStamp
 {
     [StringLength(40)]
-    public string ConcurrencyStamp { get; set; }
+    public string ConcurrencyStamp { get; set; } = default!;
 }
 
 public abstract class WebhookSubscriptionCreateOrUpdateInput
 {
     [Required]
     [DynamicStringLength(typeof(WebhookSubscriptionConsts), nameof(WebhookSubscriptionConsts.MaxWebhookUriLength))]
-    public string WebhookUri { get; set; }
+    public string WebhookUri { get; set; } = default!;
 
     [DynamicStringLength(typeof(WebhookSubscriptionConsts), nameof(WebhookSubscriptionConsts.MaxSecretLength))]
-    public string Secret { get; set; }
+    public string? Secret { get; set; }
 
     [DynamicStringLength(typeof(WebhookSubscriptionConsts), nameof(WebhookSubscriptionConsts.MaxDescriptionLength))]
-    public string Description { get; set; }
+    public string? Description { get; set; }
 
     [DynamicRange(
         typeof(WebhookSubscriptionConsts), 

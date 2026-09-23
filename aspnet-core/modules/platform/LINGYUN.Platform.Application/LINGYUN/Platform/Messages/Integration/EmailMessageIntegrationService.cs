@@ -52,13 +52,13 @@ public class EmailMessageIntegrationService : PlatformApplicationServiceBase, IE
 
                 await _blobContainer.SaveAsync(attachmentName, attachmentStream, overrideExisting: true);
 
-                emailMessage.AddAttachment(attachment.FileName, attachmentName, attachmentStream.Length);
+                emailMessage.AddAttachment(attachment.FileName!, attachmentName, attachmentStream.Length);
             }
         }
 
         emailMessage = await _emailMessageRepository.InsertAsync(emailMessage);
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
 
         return ObjectMapper.Map<EmailMessage, EmailMessageDto>(emailMessage);
     }

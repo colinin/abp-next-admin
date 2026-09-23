@@ -17,7 +17,7 @@ public class EfCoreDataAccessStrategyFilterBuilder : DataAccessStrategyFilterBui
         = typeof(DbFunctionsExtensions)
             .GetMethod(
                 nameof(DbFunctionsExtensions.Like),
-                new[] { typeof(DbFunctions), typeof(string), typeof(string) });
+                new[] { typeof(DbFunctions), typeof(string), typeof(string) })!;
 
     private static readonly MethodInfo ContainsMethodInfo
         = typeof(Enumerable)

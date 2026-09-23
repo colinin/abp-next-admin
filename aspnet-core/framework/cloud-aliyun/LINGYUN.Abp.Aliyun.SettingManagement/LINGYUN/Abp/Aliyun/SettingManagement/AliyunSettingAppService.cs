@@ -1,4 +1,5 @@
-﻿using LINGYUN.Abp.Aliyun.Features;
+﻿using LINGYUN.Abp.Aliyun.Captcha.Settings;
+using LINGYUN.Abp.Aliyun.Features;
 using LINGYUN.Abp.Aliyun.Localization;
 using LINGYUN.Abp.Aliyun.Settings;
 using LINGYUN.Abp.SettingManagement;
@@ -40,7 +41,7 @@ public class AliyunSettingAppService : ApplicationService, IAliyunSettingAppServ
         return await GetAllForProviderAsync(GlobalSettingValueProvider.ProviderName, null);
     }
 
-    protected async virtual Task<SettingGroupResult> GetAllForProviderAsync(string providerName, string providerKey)
+    protected async virtual Task<SettingGroupResult> GetAllForProviderAsync(string providerName, string? providerKey = null)
     {
         var settingGroups = new SettingGroupResult();
 
@@ -59,7 +60,7 @@ public class AliyunSettingAppService : ApplicationService, IAliyunSettingAppServ
                 await SettingManager.GetOrNullAsync(AliyunSettingNames.Authorization.RegionId, providerName, providerKey),
                 ValueType.Option,
                 providerName)
-                .AddOptions(GetAvailableRegionOptions());
+                ?.AddOptions(GetAvailableRegionOptions());
             ramSetting.AddDetail(
                 await SettingDefinitionManager.GetAsync(AliyunSettingNames.Authorization.AccessKeyId),
                 StringLocalizerFactory,
@@ -173,6 +174,42 @@ public class AliyunSettingAppService : ApplicationService, IAliyunSettingAppServ
                    ValueType.String,
                     providerName);
             }
+
+            #endregion
+
+            #region 验证码
+
+            var captchaSetting = aliyunSettingGroup.AddSetting(L["DisplayName:Aliyun.Captcha"], L["DisplayName:Aliyun.Captcha"]);
+            captchaSetting.AddDetail(
+               await SettingDefinitionManager.GetAsync(AliyunCaptchaSettingNames.SceneId),
+               StringLocalizerFactory,
+               await SettingManager.GetOrNullAsync(AliyunCaptchaSettingNames.SceneId, providerName, providerKey),
+               ValueType.String,
+                providerName);
+            captchaSetting.AddDetail(
+               await SettingDefinitionManager.GetAsync(AliyunCaptchaSettingNames.Prefix),
+               StringLocalizerFactory,
+               await SettingManager.GetOrNullAsync(AliyunCaptchaSettingNames.Prefix, providerName, providerKey),
+               ValueType.String,
+                providerName);
+            captchaSetting.AddDetail(
+               await SettingDefinitionManager.GetAsync(AliyunCaptchaSettingNames.UseEncryptedSceneId),
+               StringLocalizerFactory,
+               await SettingManager.GetOrNullAsync(AliyunCaptchaSettingNames.UseEncryptedSceneId, providerName, providerKey),
+               ValueType.Boolean,
+                providerName);
+            captchaSetting.AddDetail(
+               await SettingDefinitionManager.GetAsync(AliyunCaptchaSettingNames.EKey),
+               StringLocalizerFactory,
+               await SettingManager.GetOrNullAsync(AliyunCaptchaSettingNames.EKey, providerName, providerKey),
+               ValueType.String,
+                providerName);
+            captchaSetting.AddDetail(
+               await SettingDefinitionManager.GetAsync(AliyunCaptchaSettingNames.EncryptedExpireTimeSec),
+               StringLocalizerFactory,
+               await SettingManager.GetOrNullAsync(AliyunCaptchaSettingNames.EncryptedExpireTimeSec, providerName, providerKey),
+               ValueType.Number,
+                providerName);
 
             #endregion
 

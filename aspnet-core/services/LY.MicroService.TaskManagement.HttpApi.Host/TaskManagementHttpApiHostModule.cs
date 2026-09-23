@@ -1,16 +1,16 @@
 ﻿using LINGYUN.Abp.AspNetCore.HttpOverrides;
-using LINGYUN.Abp.AspNetCore.Mvc.Localization;
 using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
+using LINGYUN.Abp.AspNetCore.Session;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
 using LINGYUN.Abp.Authorization.OrganizationUnits;
 using LINGYUN.Abp.BackgroundTasks.DistributedLocking;
-using LINGYUN.Abp.BackgroundTasks.ExceptionHandling;
 using LINGYUN.Abp.BackgroundTasks.Jobs;
 using LINGYUN.Abp.BackgroundTasks.Notifications;
 using LINGYUN.Abp.BackgroundTasks.Quartz;
 using LINGYUN.Abp.BlobManagement;
 using LINGYUN.Abp.Claims.Mapping;
 using LINGYUN.Abp.Data.DbMigrator;
+using LINGYUN.Abp.Dynamic.Definitions;
 using LINGYUN.Abp.Elasticsearch.Jobs;
 using LINGYUN.Abp.Emailing.Platform;
 using LINGYUN.Abp.EventBus.CAP;
@@ -27,6 +27,8 @@ using LINGYUN.Abp.TaskManagement;
 using LINGYUN.Abp.TaskManagement.EntityFrameworkCore;
 using LINGYUN.Abp.Telemetry.OpenTelemetry;
 using LINGYUN.Abp.Telemetry.SkyWalking;
+using LINGYUN.Platform.EntityFrameworkCore;
+using LINGYUN.Platform.Jobs;
 using LY.MicroService.TaskManagement.EntityFrameworkCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -61,14 +63,13 @@ namespace LY.MicroService.TaskManagement;
     typeof(AbpBlobManagementHttpApiClientModule),
     typeof(AbpHttpClientIdentityModelWebModule),
     typeof(AbpAspNetCoreMultiTenancyModule),
-    typeof(AbpAspNetCoreMvcLocalizationModule),
     typeof(AbpBackgroundTasksJobsModule),
     typeof(AbpBackgroundTasksQuartzModule),
     typeof(AbpBackgroundTasksDistributedLockingModule),
-    typeof(AbpBackgroundTasksExceptionHandlingModule),
     typeof(AbpBackgroundTasksNotificationsModule),
     typeof(AbpElasticsearchJobsModule),
     typeof(AbpIdentityJobsModule),
+    typeof(PlatformJobsModule),
     typeof(TaskManagementApplicationModule),
     typeof(TaskManagementHttpApiModule),
     typeof(TaskManagementEntityFrameworkCoreModule),
@@ -78,6 +79,7 @@ namespace LY.MicroService.TaskManagement;
     typeof(AbpSettingManagementEntityFrameworkCoreModule),
     typeof(AbpSaasEntityFrameworkCoreModule),
     typeof(AbpLocalizationManagementEntityFrameworkCoreModule),
+    typeof(PlatformEntityFrameworkCoreModule),
     typeof(TaskManagementMigrationsEntityFrameworkCoreModule),
     typeof(AbpDataDbMigratorModule),
     typeof(AbpCachingStackExchangeRedisModule),
@@ -86,8 +88,10 @@ namespace LY.MicroService.TaskManagement;
     typeof(AbpAspNetCoreMvcModule),
     typeof(AbpSwashbuckleModule),
     typeof(AbpLocalizationCultureMapModule),
+    typeof(AbpAspNetCoreSessionModule),
     typeof(AbpAspNetCoreMvcWrapperModule),
     typeof(AbpAspNetCoreHttpOverridesModule),
+    typeof(AbpDynamicDefinitionsModule),
     typeof(AbpTelemetryOpenTelemetryModule),
     typeof(AbpTelemetrySkyWalkingModule),
     typeof(AbpClaimsMappingModule),

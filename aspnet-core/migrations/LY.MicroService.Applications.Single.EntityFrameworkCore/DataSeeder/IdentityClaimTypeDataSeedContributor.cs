@@ -1,5 +1,6 @@
 ﻿using JetBrains.Annotations;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using OpenIddict.Abstractions;
 using System.Threading.Tasks;
 using Volo.Abp.Data;
@@ -23,6 +24,8 @@ public class IdentityClaimTypeDataSeedContributor : IDataSeedContributor, ITrans
         GuidGenerator = guidGenerator;
         IdentityClaimTypeManager = identityClaimTypeManager;
         IdentityClaimTypeRepository = identityClaimTypeRepository;
+
+        Logger = NullLogger<IdentityClaimTypeDataSeedContributor>.Instance;
     }
 
     public async virtual Task SeedAsync(DataSeedContext context)
@@ -67,9 +70,9 @@ public class IdentityClaimTypeDataSeedContributor : IDataSeedContributor, ITrans
         [NotNull] string name,
         bool required = false,
         bool isStatic = false,
-        [CanBeNull] string regex = null,
-        [CanBeNull] string regexDescription = null,
-        [CanBeNull] string description = null,
+        [CanBeNull] string? regex = null,
+        [CanBeNull] string? regexDescription = null,
+        [CanBeNull] string? description = null,
         IdentityClaimValueType valueType = IdentityClaimValueType.String)
     {
         if (!await IdentityClaimTypeRepository.AnyAsync(name))

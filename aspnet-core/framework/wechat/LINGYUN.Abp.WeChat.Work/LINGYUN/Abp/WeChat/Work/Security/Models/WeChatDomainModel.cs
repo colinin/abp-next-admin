@@ -16,7 +16,7 @@ public class WeChatDomainModel
     /// </summary>
     [JsonProperty("universal_domian")]
     [JsonPropertyName("universal_domian")]
-    public string UniversalDomian { get; set; }
+    public string? UniversalDomian { get; set; }
     /// <summary>
     /// 协议 如TCP UDP
     /// </summary>
@@ -40,5 +40,5 @@ public class WeChatDomainModel
     /// </summary>
     [JsonProperty("description")]
     [JsonPropertyName("description")]
-    public string Description { get; set; }
+    public string? Description { get; set; }
 }

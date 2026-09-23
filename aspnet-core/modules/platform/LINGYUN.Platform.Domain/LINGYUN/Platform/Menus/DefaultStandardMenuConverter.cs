@@ -11,7 +11,7 @@ public class DefaultStandardMenuConverter : IStandardMenuConverter, ISingletonDe
         {
             Icon = "",
             Name = menu.Name,
-            Path = menu.Path,
+            Path = menu.Path!,
             DisplayName = menu.DisplayName,
             Description = menu.Description,
             Redirect = menu.Redirect,

@@ -8,7 +8,7 @@ namespace LINGYUN.Abp.WebhooksManagement;
 
 public interface IDynamicWebhookDefinitionStoreCache
 {
-    string CacheStamp { get; set; }
+    string? CacheStamp { get; set; }
     
     SemaphoreSlim SyncSemaphore { get; }
     
@@ -18,11 +18,11 @@ public interface IDynamicWebhookDefinitionStoreCache
         List<WebhookGroupDefinitionRecord> webhookGroupRecords,
         List<WebhookDefinitionRecord> webhookRecords);
 
-    WebhookDefinition GetWebhookOrNull(string name);
+    WebhookDefinition? GetWebhookOrNull(string name);
     
     IReadOnlyList<WebhookDefinition> GetWebhooks();
 
-    WebhookGroupDefinition GetWebhookGroupOrNull(string name);
+    WebhookGroupDefinition? GetWebhookGroupOrNull(string name);
 
     IReadOnlyList<WebhookGroupDefinition> GetGroups();
 }

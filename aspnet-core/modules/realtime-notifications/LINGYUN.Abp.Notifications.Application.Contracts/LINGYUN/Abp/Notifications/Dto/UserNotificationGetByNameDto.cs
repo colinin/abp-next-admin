@@ -8,5 +8,5 @@ public class UserNotificationGetByNameDto
     [Required]
     [StringLength(NotificationConsts.MaxNameLength)]
     [DisplayName("Notifications:Name")]
-    public string NotificationName { get; set; }
+    public string NotificationName { get; set; } = default!;
 }

@@ -11,8 +11,8 @@ public class SubjectStrategy : AuditedAggregateRoot<Guid>, IMultiTenant
 {
     public virtual bool IsEnabled { get; set; }
     public virtual Guid? TenantId { get; protected set; }
-    public virtual string SubjectName { get; protected set; }
-    public virtual string SubjectId { get; protected set; }
+    public virtual string SubjectName { get; protected set; } = default!;
+    public virtual string SubjectId { get; protected set; } = default!;
     public virtual DataAccessStrategy Strategy { get; set; }
     protected SubjectStrategy()
     {

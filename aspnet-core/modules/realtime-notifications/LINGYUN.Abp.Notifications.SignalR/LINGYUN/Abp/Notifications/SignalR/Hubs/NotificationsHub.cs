@@ -30,7 +30,7 @@ public class NotificationsHub : AbpHub
         }
     }
 
-    public override async Task OnDisconnectedAsync(Exception exception)
+    public override async Task OnDisconnectedAsync(Exception? exception)
     {
         await base.OnDisconnectedAsync(exception);
 

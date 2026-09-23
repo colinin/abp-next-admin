@@ -22,7 +22,7 @@ public class NotificationEto<T> : RealTimeEto<T>, IMultiTenant
     /// <summary>
     /// 通知名称
     /// </summary>
-    public string Name { get; set; }
+    public string Name { get; set; } = default!;
     /// <summary>
     /// 创建时间
     /// </summary>

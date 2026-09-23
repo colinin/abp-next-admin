@@ -10,5 +10,5 @@ public class CoreUIAssetResult
     public bool Success { get; set; }
 
     [JsonPropertyName("data")]
-    public CoreUIAssetData Data { get; set; }
+    public CoreUIAssetData Data { get; set; } = default!;
 }

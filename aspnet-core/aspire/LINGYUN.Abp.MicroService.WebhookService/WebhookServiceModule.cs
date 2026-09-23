@@ -1,18 +1,17 @@
 ﻿using LINGYUN.Abp.AspNetCore.HttpOverrides;
-using LINGYUN.Abp.AspNetCore.Mvc.Localization;
 using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
+using LINGYUN.Abp.AspNetCore.Session;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
 using LINGYUN.Abp.Authorization.OrganizationUnits;
 using LINGYUN.Abp.BackgroundTasks.DistributedLocking;
-using LINGYUN.Abp.BackgroundTasks.ExceptionHandling;
 using LINGYUN.Abp.BackgroundTasks.Quartz;
 using LINGYUN.Abp.Claims.Mapping;
 using LINGYUN.Abp.Dapr.Client.Wrapper;
+using LINGYUN.Abp.Dynamic.Definitions;
 using LINGYUN.Abp.Emailing.Platform;
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
 using LINGYUN.Abp.Http.Client.Wrapper;
-using LINGYUN.Abp.Identity.Session.AspNetCore;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
 using LINGYUN.Abp.Sms.Platform;
@@ -47,7 +46,6 @@ namespace LINGYUN.Abp.MicroService.WebhookService;
     typeof(AbpWebhooksEventBusModule),
     typeof(AbpBackgroundTasksQuartzModule),
     typeof(AbpBackgroundTasksDistributedLockingModule),
-    typeof(AbpBackgroundTasksExceptionHandlingModule),
     typeof(WebhookServiceMigrationsEntityFrameworkCoreModule),
     typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
     typeof(AbpAuthorizationOrganizationUnitsModule),
@@ -55,7 +53,6 @@ namespace LINGYUN.Abp.MicroService.WebhookService;
     typeof(AbpCAPEventBusModule),
     typeof(AbpHttpClientIdentityModelWebModule),
     typeof(AbpAspNetCoreMultiTenancyModule),
-    typeof(AbpAspNetCoreMvcLocalizationModule),
     typeof(AbpCachingStackExchangeRedisModule),
     typeof(AbpDistributedLockingModule),
     typeof(AbpSwashbuckleModule),
@@ -64,9 +61,10 @@ namespace LINGYUN.Abp.MicroService.WebhookService;
     typeof(AbpClaimsMappingModule),
     typeof(AbpEmailingPlatformModule),
     typeof(AbpSmsPlatformModule),
+    typeof(AbpAspNetCoreSessionModule),
     typeof(AbpAspNetCoreMvcWrapperModule),
     typeof(AbpAspNetCoreHttpOverridesModule),
-    typeof(AbpIdentitySessionAspNetCoreModule),
+    typeof(AbpDynamicDefinitionsModule),
     typeof(AbpAutofacModule)
     )]
 public partial class WebhookServiceModule : AbpModule

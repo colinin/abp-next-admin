@@ -3,14 +3,15 @@ using Elastic.Clients.Elasticsearch.QueryDsl;
 using LINGYUN.Abp.Elasticsearch;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
-using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
+using Volo.Abp.Specifications;
 using Volo.Abp.Timing;
 
 namespace LINGYUN.Abp.AuditLogging.Elasticsearch;
@@ -18,39 +19,98 @@ namespace LINGYUN.Abp.AuditLogging.Elasticsearch;
 [Dependency(ReplaceServices = true)]
 public class ElasticsearchAuditLogManager : IAuditLogManager, ITransientDependency
 {
-    private readonly AbpElasticsearchOptions _elasticsearchOptions;
     private readonly IIndexNameNormalizer _indexNameNormalizer;
     private readonly IElasticsearchClientFactory _clientFactory;
+    private readonly IIndexMappingProvider _indexMappingProvider;
+    private readonly IExpressionQueryService _expressionQueryService;
     private readonly IClock _clock;
 
     public ILogger<ElasticsearchAuditLogManager> Logger { protected get; set; }
 
     public ElasticsearchAuditLogManager(
         IClock clock,
+        IElasticsearchClientFactory clientFactory,
         IIndexNameNormalizer indexNameNormalizer,
-        IOptions<AbpElasticsearchOptions> elasticsearchOptions,
-        IElasticsearchClientFactory clientFactory)
+        IIndexMappingProvider indexMappingProvider,
+        IExpressionQueryService expressionQueryService)
     {
         _clock = clock;
         _clientFactory = clientFactory;
-        _elasticsearchOptions = elasticsearchOptions.Value;
         _indexNameNormalizer = indexNameNormalizer;
+        _indexMappingProvider = indexMappingProvider;
+        _expressionQueryService = expressionQueryService;
 
         Logger = NullLogger<ElasticsearchAuditLogManager>.Instance;
     }
 
+    public async virtual Task<long> GetCountAsync(
+        ISpecification<AuditLog> specification,
+        CancellationToken cancellationToken = default)
+    {
+        var indexName = CreateIndex();
+
+        return await _expressionQueryService.GetCountAsync(
+            indexName,
+            specification.ToExpression(),
+            cancellationToken);
+    }
+
+    public async virtual Task<List<AuditLog>> GetListAsync(
+        ISpecification<AuditLog> specification,
+        string? sorting = null,
+        int maxResultCount = 50,
+        int skipCount = 0,
+        bool includeDetails = false,
+        CancellationToken cancellationToken = default)
+    {
+        var indexName = CreateIndex();
+
+        var sortingField = sorting;
+        if (sortingField.IsNullOrWhiteSpace())
+        {
+            var indexMapping = await _indexMappingProvider.GetMappingAsync<AuditLog>(indexName, cancellationToken);
+            if (indexMapping != null)
+            {
+                var sortingFieldMap = indexMapping.Fields
+                    .Where(x => x.Key.Equals(sortingField, StringComparison.CurrentCultureIgnoreCase))
+                    .Select(x => x.Value)
+                    .FirstOrDefault();
+                if (sortingFieldMap != null)
+                {
+                    sortingField = sortingFieldMap.Path;
+                }
+            }
+        }
+
+        return await _expressionQueryService.GetListAsync(
+            indexName,
+            specification.ToExpression(),
+            sortingField,
+            maxResultCount,
+            skipCount,
+            sourceExcludes: includeDetails == false
+                ? Fields.FromFields(
+                [
+                    new Field(nameof(AuditLog.Actions)),
+                    new Field(nameof(AuditLog.Comments)),
+                    new Field(nameof(AuditLog.EntityChanges)),
+                    new Field(nameof(AuditLog.Exceptions)),
+                ])
+                : null,
+            cancellationToken: cancellationToken);
+    }
 
     public async virtual Task<long> GetCountAsync(
         DateTime? startTime = null,
         DateTime? endTime = null,
-        string httpMethod = null,
-        string url = null,
+        string? httpMethod = null,
+        string? url = null,
         Guid? userId = null,
-        string userName = null,
-        string applicationName = null,
-        string correlationId = null,
-        string clientId = null,
-        string clientIpAddress = null,
+        string? userName = null,
+        string? applicationName = null,
+        string? correlationId = null,
+        string? clientId = null,
+        string? clientIpAddress = null,
         int? maxExecutionDuration = null,
         int? minExecutionDuration = null,
         bool? hasException = null,
@@ -59,47 +119,45 @@ public class ElasticsearchAuditLogManager : IAuditLogManager, ITransientDependen
     {
         var client = _clientFactory.Create();
 
-        var querys = BuildQueryDescriptor(
-            startTime,
-            endTime,
-            httpMethod,
-            url,
-            userId,
-            userName,
-            applicationName,
-            correlationId,
-            clientId,
-            clientIpAddress,
-            maxExecutionDuration,
-            minExecutionDuration,
-            hasException,
-            httpStatusCode);
+        Expression<Func<AuditLog, bool>> expression = _ => true;
 
-        var response = await client.CountAsync<AuditLog>(dsl =>
-            dsl.Indices(CreateIndex())
-               .Query(new BoolQuery
-               {
-                   Must = querys
-               }),
+        expression = expression
+            .AndIf(startTime.HasValue, x => x.ExecutionTime >= _clock.Normalize(startTime!.Value))
+            .AndIf(endTime.HasValue, x => x.ExecutionTime <= _clock.Normalize(endTime!.Value))
+            .AndIf(!httpMethod.IsNullOrWhiteSpace(), x => x.HttpMethod == httpMethod)
+            .AndIf(!url.IsNullOrWhiteSpace(), x => x.Url!.Contains(url!))
+            .AndIf(userId.HasValue, x => x.UserId == userId)
+            .AndIf(!userName.IsNullOrWhiteSpace(), x => x.UserName == userName)
+            .AndIf(!applicationName.IsNullOrWhiteSpace(), x => x.ApplicationName == applicationName)
+            .AndIf(!correlationId.IsNullOrWhiteSpace(), x => x.CorrelationId == correlationId)
+            .AndIf(!clientId.IsNullOrWhiteSpace(), x => x.ClientId == clientId)
+            .AndIf(!clientIpAddress.IsNullOrWhiteSpace(), x => x.ClientIpAddress == clientIpAddress)
+            .AndIf(maxExecutionDuration.HasValue, x => x.ExecutionDuration >= maxExecutionDuration)
+            .AndIf(minExecutionDuration.HasValue, x => x.ExecutionDuration <= minExecutionDuration)
+            .AndIf(hasException == true, x => x.Exceptions != null)
+            .AndIf(hasException == false, x => x.Exceptions == null)
+            .AndIf(httpStatusCode.HasValue, x => x.HttpStatusCode == (int)httpStatusCode!);
+
+        return await _expressionQueryService.GetCountAsync(
+            CreateIndex(),
+            expression,
             cancellationToken);
-
-        return response.Count;
     }
 
     public async virtual Task<List<AuditLog>> GetListAsync(
-        string sorting = null,
+        string? sorting = null,
         int maxResultCount = 50,
         int skipCount = 0,
         DateTime? startTime = null,
         DateTime? endTime = null,
-        string httpMethod = null,
-        string url = null,
+        string? httpMethod = null,
+        string? url = null,
         Guid? userId = null,
-        string userName = null,
-        string applicationName = null,
-        string correlationId = null,
-        string clientId = null,
-        string clientIpAddress = null,
+        string? userName = null,
+        string? applicationName = null,
+        string? correlationId = null,
+        string? clientId = null,
+        string? clientIpAddress = null,
         int? maxExecutionDuration = null,
         int? minExecutionDuration = null,
         bool? hasException = null,
@@ -108,58 +166,49 @@ public class ElasticsearchAuditLogManager : IAuditLogManager, ITransientDependen
         CancellationToken cancellationToken = default)
     {
         var client = _clientFactory.Create();
-
-        var sortOrder = !sorting.IsNullOrWhiteSpace() && sorting.EndsWith("asc", StringComparison.InvariantCultureIgnoreCase)
-            ? SortOrder.Asc : SortOrder.Desc;
-        sorting = !sorting.IsNullOrWhiteSpace()
-            ? sorting.Split()[0]
-            : nameof(AuditLog.ExecutionTime);
-
-        var querys = BuildQueryDescriptor(
-            startTime,
-            endTime,
-            httpMethod,
-            url,
-            userId,
-            userName,
-            applicationName,
-            correlationId,
-            clientId,
-            clientIpAddress,
-            maxExecutionDuration,
-            minExecutionDuration,
-            hasException,
-            httpStatusCode);
-
-        var searchResponse = await client.SearchAsync<AuditLog>(dsl =>
+        if (sorting.IsNullOrWhiteSpace())
         {
-            dsl.Indices(CreateIndex())
-                .Query(new BoolQuery
-                {
-                    Must = querys
-                })
-                .Sort(s => s.Field(new FieldSort(GetField(sorting))
-                {
-                    Order = sortOrder
-                }))
-               .From(skipCount)
-               .Size(maxResultCount);
+            sorting = $"{nameof(AuditLog.ExecutionTime)} DESC";
+        }
 
-            // 字段过滤
-            if (!includeDetails)
-            {
-                dsl.SourceExcludes(
-                    ex => ex.Actions, 
-                    ex => ex.Comments,
-                    ex => ex.Exceptions,
-                    ex => ex.EntityChanges);
-            }
-        }, cancellationToken);
+        Expression<Func<AuditLog, bool>> expression = _ => true;
 
-        return searchResponse.Documents.ToList();
+        expression = expression
+            .AndIf(startTime.HasValue, x => x.ExecutionTime >= _clock.Normalize(startTime!.Value))
+            .AndIf(endTime.HasValue, x => x.ExecutionTime <= _clock.Normalize(endTime!.Value))
+            .AndIf(!httpMethod.IsNullOrWhiteSpace(), x => x.HttpMethod == httpMethod)
+            .AndIf(!url.IsNullOrWhiteSpace(), x => x.Url!.Contains(url!))
+            .AndIf(userId.HasValue, x => x.UserId == userId)
+            .AndIf(!userName.IsNullOrWhiteSpace(), x => x.UserName == userName)
+            .AndIf(!applicationName.IsNullOrWhiteSpace(), x => x.ApplicationName == applicationName)
+            .AndIf(!correlationId.IsNullOrWhiteSpace(), x => x.CorrelationId == correlationId)
+            .AndIf(!clientId.IsNullOrWhiteSpace(), x => x.ClientId == clientId)
+            .AndIf(!clientIpAddress.IsNullOrWhiteSpace(), x => x.ClientIpAddress == clientIpAddress)
+            .AndIf(maxExecutionDuration.HasValue, x => x.ExecutionDuration >= maxExecutionDuration)
+            .AndIf(minExecutionDuration.HasValue, x => x.ExecutionDuration <= minExecutionDuration)
+            .AndIf(hasException == true, x => x.Exceptions != null)
+            .AndIf(hasException == false, x => x.Exceptions == null)
+            .AndIf(httpStatusCode.HasValue, x => x.HttpStatusCode == (int)httpStatusCode!);
+
+        return await _expressionQueryService.GetListAsync(
+            CreateIndex(),
+            expression,
+            sorting: sorting,
+            maxResultCount: maxResultCount,
+            skipCount: skipCount,
+            sourceExcludes: includeDetails == false
+                ? Fields.FromFields(
+                [
+                    new Field(nameof(AuditLog.Actions)),
+                    new Field(nameof(AuditLog.Comments)),
+                    new Field(nameof(AuditLog.EntityChanges)),
+                    new Field(nameof(AuditLog.Exceptions)),
+                ])
+                : null,
+            cancellationToken: cancellationToken);
     }
 
-    public async virtual Task<AuditLog> GetAsync(
+    public async virtual Task<AuditLog?> GetAsync(
         Guid id,
         bool includeDetails = false,
         CancellationToken cancellationToken = default)
@@ -209,148 +258,8 @@ public class ElasticsearchAuditLogManager : IAuditLogManager, ITransientDependen
             cancellationToken);
     }
 
-    protected virtual List<Query> BuildQueryDescriptor(
-        DateTime? startTime = null,
-        DateTime? endTime = null,
-        string httpMethod = null,
-        string url = null,
-        Guid? userId = null,
-        string userName = null,
-        string applicationName = null,
-        string correlationId = null,
-        string clientId = null,
-        string clientIpAddress = null,
-        int? maxExecutionDuration = null,
-        int? minExecutionDuration = null,
-        bool? hasException = null,
-        HttpStatusCode? httpStatusCode = null)
-    {
-        var queries = new List<Query>();
-
-        if (startTime.HasValue)
-        {
-            queries.Add(new DateRangeQuery(GetField(nameof(AuditLog.ExecutionTime)))
-            {
-                Gte = _clock.Normalize(startTime.Value)
-            });
-        }
-        if (endTime.HasValue)
-        {
-            queries.Add(new DateRangeQuery(GetField(nameof(AuditLog.ExecutionTime)))
-            {
-                Lte = _clock.Normalize(endTime.Value)
-            });
-        }
-        if (!httpMethod.IsNullOrWhiteSpace())
-        {
-            queries.Add(new TermQuery(GetField(nameof(AuditLog.HttpMethod)), httpMethod));
-        }
-        if (!url.IsNullOrWhiteSpace())
-        {
-            queries.Add(new WildcardQuery(GetField(nameof(AuditLog.Url)))
-            {
-                Value = $"*{url}*"
-            });
-        }
-        if (userId.HasValue)
-        {
-            queries.Add(new TermQuery(GetField(nameof(AuditLog.UserId)), userId.Value.ToString()));
-        }
-        if (!userName.IsNullOrWhiteSpace())
-        {
-            queries.Add(new TermQuery(GetField(nameof(AuditLog.UserName)), userName));
-        }
-        if (!applicationName.IsNullOrWhiteSpace())
-        {
-            queries.Add(new TermQuery(GetField(nameof(AuditLog.ApplicationName)), applicationName));
-        }
-        if (!correlationId.IsNullOrWhiteSpace())
-        {
-            queries.Add(new TermQuery(GetField(nameof(AuditLog.CorrelationId)), correlationId));
-        }
-        if (!clientId.IsNullOrWhiteSpace())
-        {
-            queries.Add(new TermQuery(GetField(nameof(AuditLog.ClientId)), clientId));
-        }
-        if (!clientIpAddress.IsNullOrWhiteSpace())
-        {
-            queries.Add(new TermQuery(GetField(nameof(AuditLog.ClientIpAddress)), clientIpAddress));
-        }
-        if (maxExecutionDuration.HasValue)
-        {
-            queries.Add(new NumberRangeQuery(GetField(nameof(AuditLog.ExecutionDuration)))
-            {
-                Lte = maxExecutionDuration.Value
-            });
-        }
-        if (minExecutionDuration.HasValue)
-        {
-            queries.Add(new NumberRangeQuery(GetField(nameof(AuditLog.ExecutionDuration)))
-            {
-                Gte = minExecutionDuration.Value
-            });
-        }
-
-
-        if (hasException.HasValue)
-        {
-            if (hasException.Value)
-            {
-                queries.Add(new ExistsQuery(GetField("Exceptions")));
-            }
-            else
-            {
-                queries.Add(new BoolQuery
-                {
-                    MustNot = new List<Query>
-                    {
-                        new ExistsQuery(GetField("Exceptions"))
-                    }
-                });
-            }
-        }
-
-        if (httpStatusCode.HasValue)
-        {
-            queries.Add(new TermQuery(GetField(nameof(AuditLog.HttpStatusCode)), ((int)httpStatusCode.Value).ToString()));
-        }
-
-        return queries;
-    }
-
     protected virtual string CreateIndex()
     {
         return _indexNameNormalizer.NormalizeIndex("audit-log");
-    }
-
-    private readonly static IDictionary<string, string> _fieldMaps = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase)
-    {
-        { "Id", "Id.keyword" },
-        { "ApplicationName", "ApplicationName.keyword" },
-        { "UserId", "UserId.keyword" },
-        { "UserName", "UserName.keyword" },
-        { "TenantId", "TenantId.keyword" },
-        { "TenantName", "TenantName.keyword" },
-        { "ImpersonatorUserId", "ImpersonatorUserId.keyword" },
-        { "ImpersonatorTenantId", "ImpersonatorTenantId.keyword" },
-        { "ClientName", "ClientName.keyword" },
-        { "ClientIpAddress", "ClientIpAddress.keyword" },
-        { "ClientId", "ClientId.keyword" },
-        { "CorrelationId", "CorrelationId.keyword" },
-        { "BrowserInfo", "BrowserInfo.keyword" },
-        { "HttpMethod", "HttpMethod.keyword" },
-        { "Url", "Url.keyword" },
-        { "ExecutionDuration", "ExecutionDuration" },
-        { "ExecutionTime", "ExecutionTime" },
-        { "HttpStatusCode", "HttpStatusCode" },
-    };
-    protected virtual string GetField(string field)
-    {
-        if (_fieldMaps.TryGetValue(field, out string mapField))
-        {
-            return _elasticsearchOptions.FieldCamelCase ? mapField.ToCamelCase() : mapField.ToPascalCase();
-        }
-
-        return _elasticsearchOptions.FieldCamelCase ? field.ToCamelCase() : field.ToPascalCase();
     }
 }

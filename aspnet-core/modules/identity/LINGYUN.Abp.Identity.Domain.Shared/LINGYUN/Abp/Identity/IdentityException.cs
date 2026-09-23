@@ -9,10 +9,10 @@ namespace LINGYUN.Abp.Identity;
 public class IdentityException : BusinessException, IExceptionWithSelfLogging
 {
     public IdentityException(
-        string code = null, 
-        string message = null, 
-        string details = null, 
-        Exception innerException = null, 
+        string? code = null, 
+        string? message = null, 
+        string? details = null, 
+        Exception? innerException = null, 
         LogLevel logLevel = LogLevel.Warning) 
         : base(code, message, details, innerException, logLevel)
     {

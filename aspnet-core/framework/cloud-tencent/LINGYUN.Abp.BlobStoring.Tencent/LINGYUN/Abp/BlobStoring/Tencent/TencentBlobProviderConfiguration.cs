@@ -16,7 +16,7 @@ public class TencentBlobProviderConfiguration
     /// <summary>
     /// 区域
     /// </summary>
-    public string Region {
+    public string? Region {
         get => _containerConfiguration.GetConfiguration<string>(TencentBlobProviderConfigurationNames.Region);
         set => _containerConfiguration.SetConfiguration(TencentBlobProviderConfigurationNames.Region, value);
     }
@@ -39,7 +39,7 @@ public class TencentBlobProviderConfiguration
     /// <summary>
     /// 创建命名空间时防盗链列表
     /// </summary>
-    public List<string> CreateBucketReferer {
+    public List<string>? CreateBucketReferer {
         get => _containerConfiguration.GetConfigurationOrDefault(TencentBlobProviderConfigurationNames.CreateBucketReferer, new List<string>());
         set {
             if (value == null)

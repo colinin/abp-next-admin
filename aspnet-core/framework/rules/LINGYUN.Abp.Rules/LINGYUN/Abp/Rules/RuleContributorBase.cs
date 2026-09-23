@@ -18,7 +18,7 @@ public abstract class RuleContributorBase : IRuleContributor
     {
     }
 
-    public virtual Task ExecuteAsync<T>(T input, object[] @params = null, CancellationToken cancellationToken = default)
+    public virtual Task ExecuteAsync<T>(T input, object[]? @params = null, CancellationToken cancellationToken = default) where T : notnull
     {
         return Task.CompletedTask;
     }

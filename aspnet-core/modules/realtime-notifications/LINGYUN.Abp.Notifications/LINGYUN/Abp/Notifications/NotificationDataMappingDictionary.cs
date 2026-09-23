@@ -48,7 +48,7 @@ public class NotificationDataMappingDictionary : Dictionary<string, List<Notific
     /// <param name="name"></param>
     /// <param name="provider"></param>
     /// <returns></returns>
-    public NotificationDataMappingDictionaryItem GetMapItemOrDefault(string provider, string name)
+    public NotificationDataMappingDictionaryItem? GetMapItemOrDefault(string provider, string name)
     {
         if (ContainsKey(provider))
         {

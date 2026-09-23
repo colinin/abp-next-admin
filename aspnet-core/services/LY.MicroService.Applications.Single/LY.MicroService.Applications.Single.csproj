@@ -7,8 +7,7 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<RootNamespace>LY.MicroService.Applications.Single</RootNamespace>
 		<UserSecretsId>A47DB958-CC3F-430B-A18A-57AA535BAB49</UserSecretsId>
-		<ImplicitUsings>enable</ImplicitUsings>
-		<Version>10.2.0</Version>
+		<Version>10.6.0</Version>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -77,6 +76,7 @@
 		<ProjectReference Include="..\..\framework\cloud-tencent\LINGYUN.Abp.Tencent.SettingManagement\LINGYUN.Abp.Tencent.SettingManagement.csproj" />
 		<ProjectReference Include="..\..\framework\cloud-tencent\LINGYUN.Abp.Tencent\LINGYUN.Abp.Tencent.csproj" />
 		<ProjectReference Include="..\..\framework\common\LINGYUN.Abp.AspNetCore.HttpOverrides\LINGYUN.Abp.AspNetCore.HttpOverrides.csproj" />
+		<ProjectReference Include="..\..\framework\common\LINGYUN.Abp.AspNetCore.Session\LINGYUN.Abp.AspNetCore.Session.csproj" />
 		<ProjectReference Include="..\..\framework\common\LINGYUN.Abp.Data.DbMigrator\LINGYUN.Abp.Data.DbMigrator.csproj" />
 		<ProjectReference Include="..\..\framework\common\LINGYUN.Abp.EventBus.CAP\LINGYUN.Abp.EventBus.CAP.csproj" />
 		<ProjectReference Include="..\..\framework\common\LINGYUN.Abp.ExceptionHandling.Emailing\LINGYUN.Abp.ExceptionHandling.Emailing.csproj" />
@@ -89,13 +89,13 @@
 		<ProjectReference Include="..\..\framework\common\LINGYUN.Abp.IP2Region\LINGYUN.Abp.IP2Region.csproj" />
 		<ProjectReference Include="..\..\framework\common\LINGYUN.Abp.RealTime\LINGYUN.Abp.RealTime.csproj" />
 		<ProjectReference Include="..\..\framework\common\LINGYUN.Abp.Wrapper\LINGYUN.Abp.Wrapper.csproj" />
+		<ProjectReference Include="..\..\framework\dynamic-definition\LINGYUN.Abp.Dynamic.Definitions\LINGYUN.Abp.Dynamic.Definitions.csproj" />
 		<ProjectReference Include="..\..\framework\dynamic-queryable\LINGYUN.Abp.Dynamic.Queryable.Application.Contracts\LINGYUN.Abp.Dynamic.Queryable.Application.Contracts.csproj" />
 		<ProjectReference Include="..\..\framework\dynamic-queryable\LINGYUN.Abp.Dynamic.Queryable.Application\LINGYUN.Abp.Dynamic.Queryable.Application.csproj" />
 		<ProjectReference Include="..\..\framework\dynamic-queryable\LINGYUN.Abp.Dynamic.Queryable.HttpApi\LINGYUN.Abp.Dynamic.Queryable.HttpApi.csproj" />
 		<ProjectReference Include="..\..\framework\dynamic-queryable\LINGYUN.Linq.Dynamic.Queryable\LINGYUN.Linq.Dynamic.Queryable.csproj" />
 		<ProjectReference Include="..\..\framework\exporter\LINGYUN.Abp.Exporter.MiniSoftware\LINGYUN.Abp.Exporter.MiniSoftware.csproj" />
 		<ProjectReference Include="..\..\framework\features\LINGYUN.Abp.FeatureManagement.Client\LINGYUN.Abp.FeatureManagement.Client.csproj" />
-		<ProjectReference Include="..\..\framework\localization\LINGYUN.Abp.AspNetCore.Mvc.Localization\LINGYUN.Abp.AspNetCore.Mvc.Localization.csproj" />
 		<ProjectReference Include="..\..\framework\localization\LINGYUN.Abp.Localization.CultureMap\LINGYUN.Abp.Localization.CultureMap.csproj" />
 		<ProjectReference Include="..\..\framework\logging\LINGYUN.Abp.Logging.Serilog.Elasticsearch\LINGYUN.Abp.Logging.Serilog.Elasticsearch.csproj" />
 		<ProjectReference Include="..\..\framework\logging\LINGYUN.Abp.Logging\LINGYUN.Abp.Logging.csproj" />
@@ -110,6 +110,8 @@
 		<ProjectReference Include="..\..\framework\security\LINGYUN.Abp.Claims.Mapping\LINGYUN.Abp.Claims.Mapping.csproj" />
 		<ProjectReference Include="..\..\framework\settings\LINGYUN.Abp.SettingManagement.Application.Contracts\LINGYUN.Abp.SettingManagement.Application.Contracts.csproj" />
 		<ProjectReference Include="..\..\framework\tenants\LINGYUN.Abp.MultiTenancy.Editions\LINGYUN.Abp.MultiTenancy.Editions.csproj" />
+		<ProjectReference Include="..\..\framework\tenants\LINGYUN.Abp.AspNetCore.MultiTenancy\LINGYUN.Abp.AspNetCore.MultiTenancy.csproj" />
+		<ProjectReference Include="..\..\framework\tenants\LINGYUN.Abp.AspNetCore.Mvc.UI.MultiTenancy\LINGYUN.Abp.AspNetCore.Mvc.UI.MultiTenancy.csproj" />
 		<ProjectReference Include="..\..\framework\wechat\LINGYUN.Abp.Identity.WeChat.Work\LINGYUN.Abp.Identity.WeChat.Work.csproj" />
 		<ProjectReference Include="..\..\framework\wechat\LINGYUN.Abp.Identity.WeChat\LINGYUN.Abp.Identity.WeChat.csproj" />
 		<ProjectReference Include="..\..\framework\wechat\LINGYUN.Abp.WeChat.MiniProgram\LINGYUN.Abp.WeChat.MiniProgram.csproj" />
@@ -138,8 +140,11 @@
 		<ProjectReference Include="..\..\modules\account\LINGYUN.Abp.Account.Application.Contracts\LINGYUN.Abp.Account.Application.Contracts.csproj" />
 		<ProjectReference Include="..\..\modules\account\LINGYUN.Abp.Account.Application\LINGYUN.Abp.Account.Application.csproj" />
 		<ProjectReference Include="..\..\modules\account\LINGYUN.Abp.Account.HttpApi\LINGYUN.Abp.Account.HttpApi.csproj" />
+		<ProjectReference Include="..\..\modules\account\LINGYUN.Abp.Account.Web.AliyunCaptcha\LINGYUN.Abp.Account.Web.AliyunCaptcha.csproj" />
+		<ProjectReference Include="..\..\modules\account\LINGYUN.Abp.Account.Web.LazyCaptcha\LINGYUN.Abp.Account.Web.LazyCaptcha.csproj" />
 		<ProjectReference Include="..\..\modules\account\LINGYUN.Abp.Account.Web.OAuth\LINGYUN.Abp.Account.Web.OAuth.csproj" />
 		<ProjectReference Include="..\..\modules\account\LINGYUN.Abp.Account.Web.OpenIddict\LINGYUN.Abp.Account.Web.OpenIddict.csproj" />
+		<ProjectReference Include="..\..\modules\account\LINGYUN.Abp.Account.Web.TencentCaptcha\LINGYUN.Abp.Account.Web.TencentCaptcha.csproj" />
 		<ProjectReference Include="..\..\modules\ai\LINGYUN.Abp.AI.Tools.Http\LINGYUN.Abp.AI.Tools.Http.csproj" />
 		<ProjectReference Include="..\..\modules\ai\LINGYUN.Abp.AI.Tools.Mcp\LINGYUN.Abp.AI.Tools.Mcp.csproj" />
 		<ProjectReference Include="..\..\modules\ai\LINGYUN.Abp.AIManagement.Application\LINGYUN.Abp.AIManagement.Application.csproj" />
@@ -188,22 +193,21 @@
 		<ProjectReference Include="..\..\modules\gdpr\LINGYUN.Abp.Gdpr.Web\LINGYUN.Abp.Gdpr.Web.csproj" />
 		<ProjectReference Include="..\..\modules\identity\LINGYUN.Abp.Identity.Application.Contracts\LINGYUN.Abp.Identity.Application.Contracts.csproj" />
 		<ProjectReference Include="..\..\modules\identity\LINGYUN.Abp.Identity.Application\LINGYUN.Abp.Identity.Application.csproj" />
-		<ProjectReference Include="..\..\modules\identity\LINGYUN.Abp.Identity.AspNetCore.Session\LINGYUN.Abp.Identity.AspNetCore.Session.csproj" />
+		<ProjectReference Include="..\..\modules\identity\LINGYUN.Abp.Identity.AspNetCore\LINGYUN.Abp.Identity.AspNetCore.csproj" />
 		<ProjectReference Include="..\..\modules\identity\LINGYUN.Abp.Identity.Domain.Shared\LINGYUN.Abp.Identity.Domain.Shared.csproj" />
 		<ProjectReference Include="..\..\modules\identity\LINGYUN.Abp.Identity.Domain\LINGYUN.Abp.Identity.Domain.csproj" />
 		<ProjectReference Include="..\..\modules\identity\LINGYUN.Abp.Identity.EntityFrameworkCore\LINGYUN.Abp.Identity.EntityFrameworkCore.csproj" />
 		<ProjectReference Include="..\..\modules\identity\LINGYUN.Abp.Identity.HttpApi\LINGYUN.Abp.Identity.HttpApi.csproj" />
 		<ProjectReference Include="..\..\modules\identity\LINGYUN.Abp.Identity.Notifications\LINGYUN.Abp.Identity.Notifications.csproj" />
 		<ProjectReference Include="..\..\modules\identity\LINGYUN.Abp.Identity.OrganizaztionUnits\LINGYUN.Abp.Identity.OrganizaztionUnits.csproj" />
-		<ProjectReference Include="..\..\modules\identity\LINGYUN.Abp.Identity.Session.AspNetCore\LINGYUN.Abp.Identity.Session.AspNetCore.csproj" />
 		<ProjectReference Include="..\..\modules\localization-management\LINGYUN.Abp.LocalizationManagement.Application.Contracts\LINGYUN.Abp.LocalizationManagement.Application.Contracts.csproj" />
 		<ProjectReference Include="..\..\modules\localization-management\LINGYUN.Abp.LocalizationManagement.Application\LINGYUN.Abp.LocalizationManagement.Application.csproj" />
 		<ProjectReference Include="..\..\modules\localization-management\LINGYUN.Abp.LocalizationManagement.Domain.Shared\LINGYUN.Abp.LocalizationManagement.Domain.Shared.csproj" />
 		<ProjectReference Include="..\..\modules\localization-management\LINGYUN.Abp.LocalizationManagement.Domain\LINGYUN.Abp.LocalizationManagement.Domain.csproj" />
 		<ProjectReference Include="..\..\modules\localization-management\LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore\LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore.csproj" />
 		<ProjectReference Include="..\..\modules\localization-management\LINGYUN.Abp.LocalizationManagement.HttpApi\LINGYUN.Abp.LocalizationManagement.HttpApi.csproj" />
-		<ProjectReference Include="..\..\modules\openIddict\LINGYUN.Abp.OpenIddict.AspNetCore.Session\LINGYUN.Abp.OpenIddict.AspNetCore.Session.csproj" />
 		<ProjectReference Include="..\..\modules\openIddict\LINGYUN.Abp.OpenIddict.QrCode\LINGYUN.Abp.OpenIddict.QrCode.csproj" />
+		<ProjectReference Include="..\..\modules\platform\LINGYUN.Platform.Jobs\LINGYUN.Platform.Jobs.csproj" />
 		<ProjectReference Include="..\..\modules\realtime-message\LINGYUN.Abp.IM.SignalR\LINGYUN.Abp.IM.SignalR.csproj" />
 		<ProjectReference Include="..\..\modules\realtime-message\LINGYUN.Abp.IM\LINGYUN.Abp.IM.csproj" />
 		<ProjectReference Include="..\..\modules\realtime-message\LINGYUN.Abp.MessageService.Application.Contracts\LINGYUN.Abp.MessageService.Application.Contracts.csproj" />
@@ -245,8 +249,6 @@
 		<ProjectReference Include="..\..\modules\platform\LINGYUN.Platform.Domain\LINGYUN.Platform.Domain.csproj" />
 		<ProjectReference Include="..\..\modules\platform\LINGYUN.Platform.EntityFrameworkCore\LINGYUN.Platform.EntityFrameworkCore.csproj" />
 		<ProjectReference Include="..\..\modules\platform\LINGYUN.Platform.HttpApi\LINGYUN.Platform.HttpApi.csproj" />
-		<ProjectReference Include="..\..\modules\platform\LINGYUN.Platform.Settings.VueVbenAdmin\LINGYUN.Platform.Settings.VueVbenAdmin.csproj" />
-		<ProjectReference Include="..\..\modules\platform\LINGYUN.Platform.Theme.VueVbenAdmin\LINGYUN.Platform.Theme.VueVbenAdmin.csproj" />
 		<ProjectReference Include="..\..\modules\saas\LINGYUN.Abp.Saas.Application.Contracts\LINGYUN.Abp.Saas.Application.Contracts.csproj" />
 		<ProjectReference Include="..\..\modules\saas\LINGYUN.Abp.Saas.DbChecker\LINGYUN.Abp.Saas.DbChecker.csproj" />
 		<ProjectReference Include="..\..\modules\saas\LINGYUN.Abp.Saas.Domain.Shared\LINGYUN.Abp.Saas.Domain.Shared.csproj" />

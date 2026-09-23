@@ -44,7 +44,7 @@ public class IdentityUserAppService : IdentityAppServiceBase, IIdentityUserAppSe
 
         await UserManager.SetOrganizationUnitsAsync(user, input.OrganizationUnitIds);
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
     }
 
     [Authorize(IdentityPermissions.Users.ManageOrganizationUnits)]
@@ -52,7 +52,7 @@ public class IdentityUserAppService : IdentityAppServiceBase, IIdentityUserAppSe
     {
         await UserManager.RemoveFromOrganizationUnitAsync(id, ouId);
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
     }
 
     #endregion
@@ -78,7 +78,7 @@ public class IdentityUserAppService : IdentityAppServiceBase, IIdentityUserAppSe
         user.AddClaim(GuidGenerator, claim);
         (await UserManager.UpdateAsync(user)).CheckErrors();
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
     }
 
     [Authorize(IdentityPermissions.Users.ManageClaims)]
@@ -90,7 +90,7 @@ public class IdentityUserAppService : IdentityAppServiceBase, IIdentityUserAppSe
         user.ReplaceClaim(oldClaim, newClaim);
         (await UserManager.UpdateAsync(user)).CheckErrors();
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
     }
 
     [Authorize(IdentityPermissions.Users.ManageClaims)]
@@ -100,7 +100,7 @@ public class IdentityUserAppService : IdentityAppServiceBase, IIdentityUserAppSe
         user.RemoveClaim(new Claim(input.ClaimType, input.ClaimValue));
         (await UserManager.UpdateAsync(user)).CheckErrors();
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
     }
 
     #endregion
@@ -128,7 +128,7 @@ public class IdentityUserAppService : IdentityAppServiceBase, IIdentityUserAppSe
             (await UserManager.ResetPasswordAsync(user, token, input.Password)).CheckErrors();
         }
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
     }
 
     [Authorize(Volo.Abp.Identity.IdentityPermissions.Users.Update)]
@@ -138,7 +138,7 @@ public class IdentityUserAppService : IdentityAppServiceBase, IIdentityUserAppSe
 
         (await UserManager.SetTwoFactorEnabledWithAccountConfirmedAsync(user, input.Enabled)).CheckErrors();
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
     }
 
     #endregion
@@ -156,7 +156,7 @@ public class IdentityUserAppService : IdentityAppServiceBase, IIdentityUserAppSe
         var endDate = new DateTimeOffset(Clock.Now).AddSeconds(seconds);
         (await UserManager.SetLockoutEndDateAsync(user, endDate)).CheckErrors();
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
     }
 
     [Authorize(Volo.Abp.Identity.IdentityPermissions.Users.Update)]
@@ -165,7 +165,7 @@ public class IdentityUserAppService : IdentityAppServiceBase, IIdentityUserAppSe
         var user = await GetUserAsync(id);
         (await UserManager.SetLockoutEndDateAsync(user, null)).CheckErrors();
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
     }
 
     #endregion

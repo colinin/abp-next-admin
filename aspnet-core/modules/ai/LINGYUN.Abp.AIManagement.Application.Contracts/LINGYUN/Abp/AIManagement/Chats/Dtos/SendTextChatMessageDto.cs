@@ -11,9 +11,9 @@ public class SendTextChatMessageDto
 
     [Required]
     [DynamicStringLength(typeof(WorkspaceDefinitionRecordConsts), nameof(WorkspaceDefinitionRecordConsts.MaxNameLength))]
-    public string Workspace { get; set; }
+    public string Workspace { get; set; } = default!;
 
     [Required]
     [DynamicStringLength(typeof(TextChatMessageRecordConsts), nameof(TextChatMessageRecordConsts.MaxContentLength))]
-    public string Content { get; set; }
+    public string Content { get; set; } = default!;
 }

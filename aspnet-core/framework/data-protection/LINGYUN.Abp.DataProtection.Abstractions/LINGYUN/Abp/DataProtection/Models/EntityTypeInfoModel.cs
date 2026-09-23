@@ -7,11 +7,11 @@ public class EntityTypeInfoModel
     /// <summary>
     /// 实体名称
     /// </summary>
-    public string Name { get; set; }
+    public string Name { get; set; } = default!;
     /// <summary>
     /// 显示名称
     /// </summary>
-    public string DisplayName { get; set; }
+    public string DisplayName { get; set; } = default!;
     /// <summary>
     /// 可访问属性列表
     /// </summary>

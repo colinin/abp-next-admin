@@ -15,7 +15,7 @@ public class VacationControlValue : ControlValue
     [NotNull]
     [JsonProperty("vacation")]
     [JsonPropertyName("vacation")]
-    public VacationValue Vacation { get; set; }
+    public VacationValue Vacation { get; set; } = default!;
     public VacationControlValue()
     {
 
@@ -35,14 +35,14 @@ public class VacationValue
     [NotNull]
     [JsonProperty("selector")]
     [JsonPropertyName("selector")]
-    public VacationSelector Selector { get; set; }
+    public VacationSelector Selector { get; set; } = default!;
     /// <summary>
     /// 假勤组件
     /// </summary>
     [NotNull]
     [JsonProperty("attendance")]
     [JsonPropertyName("attendance")]
-    public AttendanceValue Attendance { get; set; }
+    public AttendanceValue Attendance { get; set; } = default!;
     public VacationValue()
     {
 
@@ -63,14 +63,14 @@ public class VacationSelector
     [NotNull]
     [JsonProperty("type")]
     [JsonPropertyName("type")]
-    public string Type { get; set; }
+    public string Type { get; set; } = default!;
     /// <summary>
     /// 用户所选选项
     /// </summary>
     [NotNull]
     [JsonProperty("options")]
     [JsonPropertyName("options")]
-    public List<VacationSelectorOption> Options { get; set; }
+    public List<VacationSelectorOption> Options { get; set; } = default!;
     public VacationSelector()
     {
 
@@ -91,14 +91,14 @@ public class VacationSelectorOption
     [NotNull]
     [JsonProperty("key")]
     [JsonPropertyName("key")]
-    public string Key { get; set; }
+    public string Key { get; set; } = default!;
     /// <summary>
     /// 选项值，若配置了多语言则会包含中英文的选项值
     /// </summary>
     [NotNull]
     [JsonProperty("value")]
     [JsonPropertyName("value")]
-    public VacationSelectorOptionValue Value { get; set; }
+    public VacationSelectorOptionValue Value { get; set; } = default!;
     public VacationSelectorOption()
     {
 
@@ -119,14 +119,14 @@ public class VacationSelectorOptionValue
     [NotNull]
     [JsonProperty("text")]
     [JsonPropertyName("text")]
-    public string Text { get; set; }
+    public string Text { get; set; } = default!;
     /// <summary>
     /// 多语言名称
     /// </summary>
     [NotNull]
     [JsonProperty("lang")]
     [JsonPropertyName("lang")]
-    public string Lang { get; set; }
+    public string Lang { get; set; } = default!;
     public VacationSelectorOptionValue()
     {
 

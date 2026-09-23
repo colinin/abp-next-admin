@@ -11,15 +11,15 @@ public class EntityTypeInfoEto : EntityEto<Guid>
     /// <summary>
     /// 名称
     /// </summary>
-    public string Name { get; set; }
+    public string Name { get; set; } = default!;
     /// <summary>
     /// 显示名称
     /// </summary>
-    public string DisplayName { get; set; }
+    public string DisplayName { get; set; } = default!;
     /// <summary>
     /// 类型全名
     /// </summary>
-    public string TypeFullName { get; set; }
+    public string TypeFullName { get; set; } = default!;
     /// <summary>
     /// 是否启用数据审计
     /// </summary>

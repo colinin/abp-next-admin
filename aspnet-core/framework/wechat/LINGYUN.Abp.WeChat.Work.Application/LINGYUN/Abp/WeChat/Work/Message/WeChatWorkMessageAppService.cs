@@ -48,7 +48,7 @@ public class WeChatWorkMessageAppService : ApplicationService, IWeChatWorkMessag
             corpId,
             token,
             aesKey,
-            input.Msg_Signature,
+            input.MsgSignature,
             input.TimeStamp.ToString(),
             input.Nonce);
 
@@ -78,7 +78,7 @@ public class WeChatWorkMessageAppService : ApplicationService, IWeChatWorkMessag
             corpId,
             token,
             aesKey,
-            input.Msg_Signature,
+            input.MsgSignature,
             input.TimeStamp,
             input.Nonce,
             input.Data);

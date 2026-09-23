@@ -10,27 +10,27 @@ public class PackageBlobUploadDto
 {
     [Required]
     [DynamicMaxLength(typeof(PackageBlobConsts), nameof(PackageBlobConsts.MaxNameLength))]
-    public string Name { get; set; }
+    public string Name { get; set; } = default!;
 
     public long? Size { get; set; }
 
     [DynamicMaxLength(typeof(PackageBlobConsts), nameof(PackageBlobConsts.MaxSummaryLength))]
-    public string Summary { get; set; }
+    public string? Summary { get; set; }
 
     [DynamicMaxLength(typeof(PackageBlobConsts), nameof(PackageBlobConsts.MaxContentTypeLength))]
-    public string ContentType { get; set; }
+    public string? ContentType { get; set; }
 
     public DateTime CreatedAt { get; set; }
 
     public DateTime? UpdatedAt { get; set; }
 
     [DynamicMaxLength(typeof(PackageBlobConsts), nameof(PackageBlobConsts.MaxLicenseLength))]
-    public string License { get; set; }
+    public string? License { get; set; }
 
     [DynamicMaxLength(typeof(PackageBlobConsts), nameof(PackageBlobConsts.MaxAuthorsLength))]
-    public string Authors { get; set; }
+    public string? Authors { get; set; }
 
     [Required]
     [DisableAuditing]
-    public IRemoteStreamContent File { get; set; }
+    public IRemoteStreamContent File { get; set; } = default!;
 }

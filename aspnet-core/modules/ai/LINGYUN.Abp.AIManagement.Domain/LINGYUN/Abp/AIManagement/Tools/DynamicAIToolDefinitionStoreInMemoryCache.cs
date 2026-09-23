@@ -11,7 +11,7 @@ using Volo.Abp.SimpleStateChecking;
 namespace LINGYUN.Abp.AIManagement.Tools;
 public class DynamicAIToolDefinitionStoreInMemoryCache : IDynamicAIToolDefinitionStoreInMemoryCache, ISingletonDependency
 {
-    public string CacheStamp { get; set; }
+    public string? CacheStamp { get; set; }
     protected IDictionary<string, AIToolDefinition> AIToolDefinitions { get; }
     protected ISimpleStateCheckerSerializer StateCheckerSerializer { get; }
     protected ILocalizableStringSerializer LocalizableStringSerializer { get; }

@@ -2,6 +2,6 @@
 
 public class EntityChangeGetWithUsernameDto
 {
-    public string EntityId { get; set; }
-    public string EntityTypeFullName { get; set; }
+    public string EntityId { get; set; } = default!;
+    public string EntityTypeFullName { get; set; } = default!;
 }

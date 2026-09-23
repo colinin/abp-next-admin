@@ -7,7 +7,7 @@ namespace LINGYUN.Abp.Sonatype.Nexus.Repositories;
 public abstract class NexusRepositoryCreateArgs
 {
     [JsonPropertyName("name")]
-    public string Name { get; set; }
+    public string Name { get; set; } = default!;
 
     [JsonPropertyName("online")]
     public bool Online { get; set; }

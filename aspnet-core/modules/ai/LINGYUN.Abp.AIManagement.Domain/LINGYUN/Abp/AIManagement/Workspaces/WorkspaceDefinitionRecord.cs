@@ -7,13 +7,13 @@ using Volo.Abp.Domain.Entities.Auditing;
 namespace LINGYUN.Abp.AIManagement.Workspaces;
 public class WorkspaceDefinitionRecord : AuditedAggregateRoot<Guid>
 {
-    public string Name { get; private set; }
+    public string Name { get; private set; } = default!;
 
-    public string Provider { get; private set; }
+    public string Provider { get; private set; } = default!;
 
-    public string ModelName { get; private set; }
+    public string ModelName { get; private set; } = default!;
 
-    public string DisplayName { get; private set; }
+    public string DisplayName { get; private set; } = default!;
 
     public string? Description { get; set; }
 

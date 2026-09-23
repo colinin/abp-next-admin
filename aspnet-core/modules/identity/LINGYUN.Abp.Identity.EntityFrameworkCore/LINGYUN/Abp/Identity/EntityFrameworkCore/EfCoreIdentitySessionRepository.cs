@@ -19,9 +19,9 @@ public class EfCoreIdentitySessionRepository : Volo.Abp.Identity.EntityFramework
     {
     }
 
-    public async virtual Task<IdentitySession> FindLastAsync(
+    public async virtual Task<IdentitySession?> FindLastAsync(
         Guid userId,
-        string device = null,
+        string? device = null,
         CancellationToken cancellationToken = default)
     {
         return await (await GetDbSetAsync())
@@ -42,7 +42,7 @@ public class EfCoreIdentitySessionRepository : Volo.Abp.Identity.EntityFramework
 
     public async virtual Task<List<IdentitySession>> GetListAsync(
         Guid userId,
-        string device,
+        string? device = null,
         Guid? exceptSessionId = null,
         int maxResultCount = 0,
         CancellationToken cancellationToken = default)
@@ -72,7 +72,7 @@ public class EfCoreIdentitySessionRepository : Volo.Abp.Identity.EntityFramework
 
     public async virtual Task<List<IdentitySession>> GetListAsync(
         ISpecification<IdentitySession> specification,
-        string sorting = $"{nameof(IdentitySession.SignedIn)} DESC",
+        string? sorting = $"{nameof(IdentitySession.SignedIn)} DESC",
         int maxResultCount = 10,
         int skipCount = 0,
         CancellationToken cancellationToken = default)

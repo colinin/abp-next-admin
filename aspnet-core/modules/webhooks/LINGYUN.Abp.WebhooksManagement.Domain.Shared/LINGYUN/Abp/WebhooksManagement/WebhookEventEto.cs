@@ -9,5 +9,5 @@ public class WebhookEventEto
 {
     public Guid Id { get; set; }
     public Guid? TenantId { get; set; }
-    public string WebhookName { get; set; }
+    public string WebhookName { get; set; } = default!;
 }

@@ -10,10 +10,10 @@ public class AbpWeChatWorkException : BusinessException
     }
 
     public AbpWeChatWorkException(
-        string code = null,
-        string message = null,
-        string details = null,
-        Exception innerException = null)
+        string? code = null,
+        string? message = null,
+        string? details = null,
+        Exception? innerException = null)
         : base(code, message, details, innerException)
     {
     }

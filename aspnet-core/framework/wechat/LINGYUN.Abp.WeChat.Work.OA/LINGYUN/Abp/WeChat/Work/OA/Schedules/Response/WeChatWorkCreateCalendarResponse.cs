@@ -18,12 +18,12 @@ public class WeChatWorkCreateCalendarResponse : WeChatWorkResponse
     [NotNull]
     [JsonProperty("cal_id")]
     [JsonPropertyName("cal_id")]
-    public string CalId { get; set; }
+    public string CalId { get; set; } = default!;
     /// <summary>
     /// 无效的输入内容
     /// </summary>
     [NotNull]
     [JsonProperty("fail_result")]
     [JsonPropertyName("fail_result")]
-    public CalendarFailResult FailResult { get; set; }
+    public CalendarFailResult FailResult { get; set; } = default!;
 }

@@ -31,7 +31,7 @@ public class SmsMessageIntegrationService : PlatformApplicationServiceBase, ISms
 
         smsMessage = await _smsMessageRepository.InsertAsync(smsMessage);
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
 
         return ObjectMapper.Map<SmsMessage, SmsMessageDto>(smsMessage);
     }

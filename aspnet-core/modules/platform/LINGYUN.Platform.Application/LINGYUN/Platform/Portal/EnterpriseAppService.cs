@@ -69,7 +69,7 @@ public class EnterpriseAppService :
 
     protected async override Task MapToEntityAsync(EnterpriseUpdateDto updateInput, Enterprise entity)
     {
-        if (!string.Equals(entity.EnglishName, updateInput.EnglishName, StringComparison.InvariantCultureIgnoreCase))
+        if (!string.IsNullOrWhiteSpace(updateInput.EnglishName) && !string.Equals(entity.EnglishName, updateInput.EnglishName, StringComparison.InvariantCultureIgnoreCase))
         {
             if (await EnterpriseRepository.FindByNameAsync(updateInput.EnglishName) != null)
             {
@@ -133,9 +133,9 @@ public class EnterpriseAppService :
 
         Expression<Func<Enterprise, bool>> expression = _ => true;
 
-        expression = expression.AndIf(!input.Filter.IsNullOrWhiteSpace(), x => x.Name.Contains(input.Filter) ||
-            x.EnglishName.Contains(input.Filter) || x.Address.Contains(input.Filter) || x.LegalMan.Contains(input.Filter) ||
-            x.TaxCode.Contains(input.Filter)|| x.OrganizationCode.Contains(input.Filter) || x.RegistrationCode.Contains(input.Filter));
+        expression = expression.AndIf(!input.Filter.IsNullOrWhiteSpace(), x => x.Name.Contains(input.Filter!) ||
+            x.EnglishName!.Contains(input.Filter!) || x.Address!.Contains(input.Filter!) || x.LegalMan!.Contains(input.Filter!) ||
+            x.TaxCode!.Contains(input.Filter!)|| x.OrganizationCode!.Contains(input.Filter!) || x.RegistrationCode!.Contains(input.Filter!));
 
         expression = expression.AndIf(input.BeginRegistrationDate.HasValue, x => x.RegistrationDate >= input.BeginRegistrationDate);
         expression = expression.AndIf(input.EndRegistrationDate.HasValue, x => x.RegistrationDate <= input.EndRegistrationDate);

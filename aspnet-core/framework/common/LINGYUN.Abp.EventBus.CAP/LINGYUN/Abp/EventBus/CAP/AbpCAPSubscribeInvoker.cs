@@ -82,7 +82,7 @@ public class AbpCAPSubscribeInvoker : ISubscribeInvoker
 
         var message = context.DeliverMessage;
         var parameterDescriptors = context.ConsumerDescriptor.Parameters;
-        var executeParameters = new object[parameterDescriptors.Count];
+        var executeParameters = new object?[parameterDescriptors.Count];
         // 租户数据可能在消息标头中
         var tenantId = message.GetTenantIdOrNull();
         var correlationId = message.GetCorrelationIdOrNull();
@@ -154,7 +154,7 @@ public class AbpCAPSubscribeInvoker : ISubscribeInvoker
             using (_currentTenant.Change(tenantId))
             {
                 var filter = provider.GetService<ISubscribeFilter>();
-                object resultObj = null;
+                object? resultObj = null;
 
                 try
                 {
@@ -204,7 +204,7 @@ public class AbpCAPSubscribeInvoker : ISubscribeInvoker
                 else
                 {
                     var capHeader = executeParameters.FirstOrDefault(x => x is CapHeader) as CapHeader;
-                    IDictionary<string, string> callbackHeader = null;
+                    IDictionary<string, string?>? callbackHeader = null;
                     // TODO: CapHeader.ResponseHeader
                     return new ConsumerExecutedResult(resultObj, message.GetId(), callbackName, callbackHeader);
                 }
@@ -245,10 +245,10 @@ public class AbpCAPSubscribeInvoker : ISubscribeInvoker
         var srvType = context.ConsumerDescriptor.ServiceTypeInfo?.AsType();
         var implType = context.ConsumerDescriptor.ImplTypeInfo.AsType();
 
-        object obj = null;
+        object? obj = null;
         if (srvType != null)
         {
-            obj = provider.GetServices(srvType).FirstOrDefault(o => o.GetType() == implType);
+            obj = provider.GetServices(srvType).FirstOrDefault(o => o?.GetType() == implType);
         }
 
         if (obj == null)
@@ -265,7 +265,7 @@ public class AbpCAPSubscribeInvoker : ISubscribeInvoker
     /// <param name="class"></param>
     /// <param name="parameter"></param>
     /// <returns></returns>
-    private async Task<object> ExecuteWithParameterAsync(ObjectMethodExecutor executor, object @class, object[] parameter)
+    private async Task<object?> ExecuteWithParameterAsync(ObjectMethodExecutor executor, object @class, object?[]? parameter)
     {
         if (executor.IsMethodAsync)
         {

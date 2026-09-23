@@ -6,5 +6,5 @@ public class WorkspaceDefinitionRecordUpdateDto : WorkspaceDefinitionRecordCreat
 {
     [Required]
     [StringLength(40)]
-    public string ConcurrencyStamp { get; set; }
+    public string ConcurrencyStamp { get; set; } = default!;
 }

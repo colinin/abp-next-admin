@@ -14,7 +14,7 @@ public class UpdateUserEvent : UserChangeEvent
     /// 新的UserID，变更时推送（userid由系统生成时可更改一次）
     /// </summary>
     [XmlElement("NewUserID")]
-    public string NewUserId { get; set; }
+    public string NewUserId { get; set; } = default!;
 
     public override WeChatMessageEto ToEto()
     {

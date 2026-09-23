@@ -21,7 +21,7 @@ public class DefaultIdentitySessionCache : IIdentitySessionCache, ITransientDepe
         Logger = NullLogger<DefaultIdentitySessionCache>.Instance;
     }
 
-    public async virtual Task<IdentitySessionCacheItem> GetAsync(string sessionId, CancellationToken cancellationToken = default)
+    public async virtual Task<IdentitySessionCacheItem?> GetAsync(string sessionId, CancellationToken cancellationToken = default)
     {
         Logger.LogDebug($"Get user session cache for: {sessionId}");
         var cacheKey = IdentitySessionCacheItem.CalculateCacheKey(sessionId);
@@ -34,7 +34,7 @@ public class DefaultIdentitySessionCache : IIdentitySessionCache, ITransientDepe
         Logger.LogDebug($"Refresh user session cache for: {sessionId}");
 
         var cacheKey = IdentitySessionCacheItem.CalculateCacheKey(sessionId);
-        DistributedCacheEntryOptions cacheOptions = null;
+        DistributedCacheEntryOptions? cacheOptions = null;
         if (cacheItem.ExpiraIn.HasValue)
         {
             cacheOptions = new DistributedCacheEntryOptions

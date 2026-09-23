@@ -1,5 +1,4 @@
-﻿using LINGYUN.Abp.Identity.Session.AspNetCore;
-using LINGYUN.Abp.MicroService.AuthServer;
+﻿using LINGYUN.Abp.MicroService.AuthServer;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -70,7 +69,6 @@ try
     app.UseAuthentication();
     app.UseAbpOpenIddictValidation();
     app.UseMultiTenancy();
-    app.UseAbpSession();
     app.UseUnitOfWork();
     app.UseDynamicClaims();
     app.UseAuthorization();

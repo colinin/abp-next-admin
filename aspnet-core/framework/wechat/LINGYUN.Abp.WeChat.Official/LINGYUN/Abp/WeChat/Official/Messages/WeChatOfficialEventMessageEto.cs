@@ -7,7 +7,7 @@ namespace LINGYUN.Abp.WeChat.Official.Messages;
 public class WeChatOfficialEventMessageEto<TEvent> : WeChatMessageEto
     where TEvent : WeChatEventMessage
 {
-    public TEvent Event { get; set; }
+    public TEvent Event { get; set; } = default!;
     public WeChatOfficialEventMessageEto()
     {
 

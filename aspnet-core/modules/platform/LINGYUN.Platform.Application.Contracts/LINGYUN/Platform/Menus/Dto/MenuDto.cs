@@ -9,15 +9,15 @@ public class MenuDto : RouteDto
     /// <summary>
     /// 菜单编号
     /// </summary>
-    public string Code { get; set; }
+    public string Code { get; set; } = default!;
     /// <summary>
     /// 菜单布局页
     /// </summary>
-    public string Component { get; set; }
+    public string Component { get; set; } = default!;
     /// <summary>
     /// 框架
     /// </summary>
-    public string Framework { get; set; }
+    public string Framework { get; set; } = default!;
     /// <summary>
     /// 父节点
     /// </summary>

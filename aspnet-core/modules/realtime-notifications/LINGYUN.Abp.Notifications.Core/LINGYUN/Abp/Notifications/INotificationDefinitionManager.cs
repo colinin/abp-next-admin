@@ -11,9 +11,9 @@ public interface INotificationDefinitionManager
 
     Task<IReadOnlyList<NotificationDefinition>> GetNotificationsAsync();
 
-    Task<NotificationDefinition> GetOrNullAsync(string name);
+    Task<NotificationDefinition?> GetOrNullAsync(string name);
 
-    Task<NotificationGroupDefinition> GetGroupOrNullAsync(string name);
+    Task<NotificationGroupDefinition?> GetGroupOrNullAsync(string name);
 
     Task<IReadOnlyList<NotificationGroupDefinition>> GetGroupsAsync();
 }

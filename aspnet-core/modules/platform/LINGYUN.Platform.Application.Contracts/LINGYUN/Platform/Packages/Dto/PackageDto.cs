@@ -7,29 +7,29 @@ namespace LINGYUN.Platform.Packages;
 
 public class PackageDto : ExtensibleAuditedEntityDto<Guid>, IHasConcurrencyStamp
 {
-    public string ConcurrencyStamp { get; set; }
+    public string ConcurrencyStamp { get; set; } = default!;
     /// <summary>
     /// 名称
     /// </summary>
-    public string Name { get; set; }
+    public string Name { get; set; } = default!;
     /// <summary>
     /// 版本说明
     /// </summary>
-    public string Note { get; set; }
+    public string Note { get; set; } = default!;
     /// <summary>
     /// 版本
     /// </summary>
-    public string Version { get; set; }
+    public string Version { get; set; } = default!;
     /// <summary>
     /// 描述
     /// </summary>
-    public string Description { get; set; }
+    public string? Description { get; set; }
     /// <summary>
     /// 强制更新
     /// </summary>
     public bool ForceUpdate { get; set; }
 
-    public string Authors { get; set; }
+    public string? Authors { get; set; }
 
     public PackageLevel Level { get; set; }
 

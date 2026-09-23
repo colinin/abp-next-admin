@@ -20,11 +20,11 @@ public class LogAppService : AuditingApplicationServiceBase, ILogAppService
         _manager = manager;
     }
 
-    public async virtual Task<LogDto> GetAsync(string id)
+    public async virtual Task<LogDto?> GetAsync(string id)
     {
         var log = await _manager.GetAsync(id);
 
-        return ObjectMapper.Map<LogInfo, LogDto>(log);
+        return ObjectMapper.Map<LogInfo?, LogDto?>(log);
     }
 
     public async virtual Task<PagedResultDto<LogDto>> GetListAsync(LogGetByPagedDto input)

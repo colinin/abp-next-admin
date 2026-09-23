@@ -8,5 +8,5 @@ public interface IDataProtectedStrategyStateStore
 
     Task RemoveAsync(DataAccessStrategyState state);
 
-    Task<DataAccessStrategyState> GetOrNullAsync(string subjectName, string subjectId);
+    Task<DataAccessStrategyState?> GetOrNullAsync(string subjectName, string subjectId);
 }

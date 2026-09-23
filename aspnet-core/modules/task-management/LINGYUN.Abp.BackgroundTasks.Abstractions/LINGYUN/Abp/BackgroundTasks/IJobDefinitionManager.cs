@@ -10,5 +10,5 @@ public interface IJobDefinitionManager
 
     IReadOnlyList<JobDefinition> GetAll();
 
-    JobDefinition GetOrNull(string name);
+    JobDefinition? GetOrNull(string name);
 }

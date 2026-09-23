@@ -17,12 +17,12 @@ public class WeChatWorkBookMeetingRoomByMeetingResponse : WeChatWorkResponse
     [NotNull]
     [JsonProperty("booking_id")]
     [JsonPropertyName("booking_id")]
-    public string BookingId { get; set; }
+    public string BookingId { get; set; } = default!;
     /// <summary>
     /// 会议室冲突日期列表，为当天0点的时间戳；使用重复日程预定会议室，部分日期与会议室预定情况冲突时返回
     /// </summary>
     [NotNull]
     [JsonProperty("conflict_date")]
     [JsonPropertyName("conflict_date")]
-    public long[] ConflictDate { get; set; }
+    public long[] ConflictDate { get; set; } = default!;
 }

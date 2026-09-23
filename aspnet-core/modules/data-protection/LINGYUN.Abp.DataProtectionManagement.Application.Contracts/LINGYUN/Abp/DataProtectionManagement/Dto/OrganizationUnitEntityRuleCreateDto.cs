@@ -13,5 +13,5 @@ public class OrganizationUnitEntityRuleCreateDto : EntityRuleCreateOrUpdateDto
 
     [Required]
     [DynamicStringLength(typeof(OrganizationUnitEntityRuleConsts), nameof(OrganizationUnitEntityRuleConsts.MaxCodeLength))]
-    public string OrgCode { get; set; }
+    public string OrgCode { get; set; } = default!;
 }

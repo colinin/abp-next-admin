@@ -9,6 +9,6 @@ public class UserMessageGetByPagedDto : PagedAndSortedResultRequestDto
 {
     [Required]
     public Guid ReceiveUserId { get; set; }
-    public string Filter { get; set; }
+    public string? Filter { get; set; }
     public MessageType? MessageType { get; set; }
 }

@@ -61,15 +61,18 @@ public class IdempotentChecker : IIdempotentChecker, ITransientDependency
                     var matchValue = regex.Match(attr.RedirectUrl).Value;
                     var replaceMatchKey = "{" + matchValue + "}";
                     var redirectUrl = "";
-                    foreach (var arg in context.ArgumentsDictionary)
+                    if (context.ArgumentsDictionary != null)
                     {
-                        if (arg.Value != null && string.Equals(arg.Key, matchValue, StringComparison.InvariantCultureIgnoreCase))
+                        foreach (var arg in context.ArgumentsDictionary)
                         {
-                            redirectUrl = attr.RedirectUrl!.Replace(replaceMatchKey, arg.Value.ToString());
+                            if (arg.Value != null && string.Equals(arg.Key, matchValue, StringComparison.InvariantCultureIgnoreCase))
+                            {
+                                redirectUrl = attr.RedirectUrl!.Replace(replaceMatchKey, arg.Value.ToString());
+                            }
                         }
                     }
 
-                    if (redirectUrl.IsNullOrWhiteSpace())
+                    if (redirectUrl.IsNullOrWhiteSpace() && context.ArgumentsDictionary != null)
                     {
                         foreach (var arg in context.ArgumentsDictionary)
                         {

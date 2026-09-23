@@ -14,7 +14,7 @@ public class AttendanceControlConfig : ControlConfig
     [NotNull]
     [JsonProperty("attendance")]
     [JsonPropertyName("attendance")]
-    public AttendanceConfig Attendance { get; set; }
+    public AttendanceConfig Attendance { get; set; } = default!;
     public AttendanceControlConfig()
     {
 
@@ -41,7 +41,7 @@ public class AttendanceConfig
     [NotNull]
     [JsonProperty("date_range")]
     [JsonPropertyName("date_range")]
-    public DateRangeConfig DateRange { get; set; }
+    public DateRangeConfig DateRange { get; set; } = default!;
     public AttendanceConfig()
     {
 

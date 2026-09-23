@@ -14,7 +14,7 @@ public class ContactControlConfig : ControlConfig
     [NotNull]
     [JsonProperty("contact")]
     [JsonPropertyName("contact")]
-    public ContactConfig Contact { get; set; }
+    public ContactConfig Contact { get; set; } = default!;
     public ContactControlConfig()
     {
 
@@ -34,14 +34,14 @@ public class ContactConfig
     [NotNull]
     [JsonProperty("type")]
     [JsonPropertyName("type")]
-    public string Type { get; set; }
+    public string Type { get; set; } = default!;
     /// <summary>
     /// user-成员、department-部门
     /// </summary>
     [NotNull]
     [JsonProperty("mode")]
     [JsonPropertyName("mode")]
-    public string Mode { get; set; }
+    public string Mode { get; set; } = default!;
     public ContactConfig()
     {
 

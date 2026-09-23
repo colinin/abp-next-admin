@@ -13,11 +13,11 @@ public class AuditLogAction : IHasExtraProperties
 
     public Guid AuditLogId { get; set; }
 
-    public string ServiceName { get; set; }
+    public string ServiceName { get; set; } = default!;
 
-    public string MethodName { get; set; }
+    public string MethodName { get; set; } = default!;
 
-    public string Parameters { get; set; }
+    public string Parameters { get; set; } = default!;
 
     public DateTime ExecutionTime { get; set; }
 

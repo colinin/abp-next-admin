@@ -9,7 +9,7 @@ public abstract class FeatureGroupDefinitionCreateOrUpdateDto : IHasExtraPropert
 {
     [Required]
     [DynamicStringLength(typeof(FeatureGroupDefinitionRecordConsts), nameof(FeatureGroupDefinitionRecordConsts.MaxDisplayNameLength))]
-    public string DisplayName { get; set; }
+    public string DisplayName { get; set; } = default!;
 
     public ExtraPropertyDictionary ExtraProperties { get; set; } = new ExtraPropertyDictionary();
 }

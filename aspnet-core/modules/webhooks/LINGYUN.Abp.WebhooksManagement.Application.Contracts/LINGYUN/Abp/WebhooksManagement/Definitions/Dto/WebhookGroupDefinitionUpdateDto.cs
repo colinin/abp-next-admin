@@ -6,5 +6,5 @@ namespace LINGYUN.Abp.WebhooksManagement.Definitions;
 public class WebhookGroupDefinitionUpdateDto : WebhookGroupDefinitionCreateOrUpdateDto, IHasConcurrencyStamp
 {
     [StringLength(40)]
-    public string ConcurrencyStamp { get; set; }
+    public string ConcurrencyStamp { get; set; } = default!;
 }

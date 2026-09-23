@@ -15,25 +15,25 @@ public class Package : FullAuditedAggregateRoot<Guid>
     /// <summary>
     /// 名称
     /// </summary>
-    public virtual string Name { get; protected set; }
+    public virtual string Name { get; protected set; } = default!;
     /// <summary>
     /// 版本说明
     /// </summary>
-    public virtual string Note { get; protected set; }
+    public virtual string Note { get; protected set; } = default!;
     /// <summary>
     /// 版本
     /// </summary>
-    public virtual string Version { get; protected set; }
+    public virtual string Version { get; protected set; } = default!;
     /// <summary>
     /// 描述
     /// </summary>
-    public virtual string Description { get; set; }
+    public virtual string? Description { get; set; }
     /// <summary>
     /// 强制更新
     /// </summary>
     public virtual bool ForceUpdate { get; set; }
 
-    public virtual string Authors { get; set; }
+    public virtual string? Authors { get; set; }
 
     public virtual PackageLevel Level { get; set; }
 
@@ -51,7 +51,7 @@ public class Package : FullAuditedAggregateRoot<Guid>
         string name,
         string note, 
         string version,
-        string description = null)
+        string? description = null)
         : base(id)
     {
         Name = Check.NotNullOrWhiteSpace(name, nameof(name), PackageConsts.MaxNameLength);
@@ -76,7 +76,7 @@ public class Package : FullAuditedAggregateRoot<Guid>
         DateTime createdAt,
         DateTime? updatedAt = null,
         long? size = null,
-        string summary = null)
+        string? summary = null)
     {
         var findBlob = FindBlob(name);
         if (findBlob == null)
@@ -93,7 +93,7 @@ public class Package : FullAuditedAggregateRoot<Guid>
         return findBlob;
     }
 
-    public PackageBlob FindBlob(string name)
+    public PackageBlob? FindBlob(string name)
     {
         return Blobs.FirstOrDefault(x => x.Name == name);
     }

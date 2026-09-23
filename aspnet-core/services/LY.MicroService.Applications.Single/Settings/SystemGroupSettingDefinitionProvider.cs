@@ -37,12 +37,7 @@ public class SystemGroupSettingDefinitionProvider : SettingDefinitionProvider
             ?.WithGroup(GroupName, L("Settings:System"), order: 0)
             ?.WithParent("Language", L("Settings:System.Language"), order: 0)
             ?.WithOrder(0)
-            ?.WithOptions(LocalizationOptions.Languages.Select(l => new NameValue<string>(l.DisplayName, l.CultureName)))
-            ?.ReplaceProviders(
-                DefaultValueSettingValueProvider.ProviderName,
-                ConfigurationSettingValueProvider.ProviderName,
-                GlobalSettingValueProvider.ProviderName,
-                TenantSettingValueProvider.ProviderName);
+            ?.WithOptions(LocalizationOptions.Languages.Select(l => new NameValue<string>(l.DisplayName, l.CultureName)));
 
         var timezoneSetting = context.GetOrNull(TimingSettingNames.TimeZone);
         if (timezoneSetting != null)
@@ -63,12 +58,7 @@ public class SystemGroupSettingDefinitionProvider : SettingDefinitionProvider
                     requiredPermissions: [Volo.Abp.SettingManagement.SettingManagementPermissions.TimeZone])
                 .WithParent("Timing", L("Settings:System.Timing"), order: 0)
                 .WithOrder(1)
-                .WithOptions(timezones)
-                .ReplaceProviders(
-                    DefaultValueSettingValueProvider.ProviderName,
-                    ConfigurationSettingValueProvider.ProviderName,
-                    GlobalSettingValueProvider.ProviderName,
-                    TenantSettingValueProvider.ProviderName);
+                .WithOptions(timezones);
         }
     }
 

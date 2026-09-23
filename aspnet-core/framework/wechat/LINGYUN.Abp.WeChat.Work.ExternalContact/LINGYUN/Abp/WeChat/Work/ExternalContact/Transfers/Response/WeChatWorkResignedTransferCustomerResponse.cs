@@ -18,5 +18,5 @@ public class WeChatWorkResignedTransferCustomerResponse : WeChatWorkResponse
     [NotNull]
     [JsonProperty("customer")]
     [JsonPropertyName("customer")]
-    public UnassignedTransferCustomer[] Customer { get; set; }
+    public UnassignedTransferCustomer[] Customer { get; set; } = default!;
 }

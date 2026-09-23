@@ -161,7 +161,7 @@ public class SmsTokenGrantValidator : IExtensionGrantValidator
         await IdentitySecurityLogManager.SaveAsync(logContext);
     }
 
-    protected virtual Task<string> FindClientIdAsync(ExtensionGrantValidationContext context)
+    protected virtual Task<string?> FindClientIdAsync(ExtensionGrantValidationContext context)
     {
         return Task.FromResult(context.Request?.Client?.ClientId);
     }
@@ -176,7 +176,7 @@ public class SmsTokenGrantValidator : IExtensionGrantValidator
             customClaims.Add(
                 new Claim(
                     AbpClaimTypes.TenantId,
-                    user.TenantId?.ToString()
+                    user.TenantId.Value.ToString()
                 )
             );
         }

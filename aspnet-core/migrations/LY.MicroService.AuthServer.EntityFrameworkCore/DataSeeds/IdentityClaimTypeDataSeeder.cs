@@ -70,9 +70,9 @@ public class IdentityClaimTypeDataSeeder : ITransientDependency
         [NotNull] string name,
         bool required = false,
         bool isStatic = false,
-        [CanBeNull] string regex = null,
-        [CanBeNull] string regexDescription = null,
-        [CanBeNull] string description = null,
+        [CanBeNull] string? regex = null,
+        [CanBeNull] string? regexDescription = null,
+        [CanBeNull] string? description = null,
         IdentityClaimValueType valueType = IdentityClaimValueType.String)
     {
         Logger.LogInformation("Check claim types {name} exists.", name);

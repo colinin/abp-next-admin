@@ -5,7 +5,7 @@ using Volo.Abp.Domain.Entities.Auditing;
 namespace LINGYUN.Abp.Demo.Books;
 public class Book : AuditedAggregateRoot<Guid>, IDataProtected
 {
-    public string Name { get; set; }
+    public string Name { get; set; } = default!;
 
     public BookType Type { get; set; }
 

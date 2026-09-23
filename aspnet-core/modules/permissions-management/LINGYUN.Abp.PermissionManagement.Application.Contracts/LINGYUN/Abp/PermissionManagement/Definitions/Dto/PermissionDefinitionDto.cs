@@ -6,17 +6,17 @@ namespace LINGYUN.Abp.PermissionManagement.Definitions;
 
 public class PermissionDefinitionDto : IHasExtraProperties
 {
-    public string Name { get; set; }
+    public string Name { get; set; } = default!;
 
-    public string ParentName { get; set; }
+    public string? ParentName { get; set; }
 
-    public string DisplayName { get; set; }
+    public string DisplayName { get; set; } = default!;
 
-    public string GroupName { get; set; }
+    public string? GroupName { get; set; }
 
-    public string ResourceName { get; set; }
+    public string? ResourceName { get; set; }
 
-    public string ManagementPermissionName { get; set; }
+    public string? ManagementPermissionName { get; set; }
 
     public bool IsEnabled { get; set; }
 
@@ -26,7 +26,7 @@ public class PermissionDefinitionDto : IHasExtraProperties
 
     public List<string> Providers { get; set; } = new List<string>();
 
-    public string StateCheckers { get; set; }
+    public string? StateCheckers { get; set; }
 
     public ExtraPropertyDictionary ExtraProperties { get; set; } = new ExtraPropertyDictionary();
 }

@@ -17,14 +17,14 @@ public class WeChatWorkUploadAttachmentResponse : WeChatWorkResponse
     [NotNull]
     [JsonProperty("type")]
     [JsonPropertyName("type")]
-    public string MediaType { get; set; }
+    public string MediaType { get; set; } = default!;
     /// <summary>
     /// 媒体文件上传后获取的唯一标识，三天有效，可使用获取临时素材接口获取
     /// </summary>
     [NotNull]
     [JsonProperty("media_id")]
     [JsonPropertyName("media_id")]
-    public string MediaId { get; set; }
+    public string MediaId { get; set; } = default!;
     /// <summary>
     /// 媒体文件上传时间戳
     /// </summary>

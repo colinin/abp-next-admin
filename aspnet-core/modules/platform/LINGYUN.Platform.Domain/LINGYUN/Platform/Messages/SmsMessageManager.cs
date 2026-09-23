@@ -34,7 +34,7 @@ public class SmsMessageManager : DomainService, ISmsMessageManager
         return message;
     }
 
-    public async virtual Task<string> TrySendAsync(ISmsSender smsSender, SmsMessage message)
+    public async virtual Task<string?> TrySendAsync(ISmsSender smsSender, SmsMessage message)
     {
         try
         {
@@ -44,7 +44,7 @@ public class SmsMessageManager : DomainService, ISmsMessageManager
 
             foreach (var prop in message.ExtraProperties)
             {
-                smsMessage.Properties.Add(prop.Key, prop.Value);
+                smsMessage.Properties.Add(prop.Key, prop.Value ?? "");
             }
 
             await smsSender.SendAsync(smsMessage);

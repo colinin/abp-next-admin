@@ -52,7 +52,7 @@ public class UserSettingAppService : SettingManagementAppServiceBase, IUserSetti
             await SettingManager.SetForCurrentUserAsync(setting.Name, setting.Value);
         }
 
-        CurrentUnitOfWork.OnCompleted(async () =>
+        CurrentUnitOfWork!.OnCompleted(async () =>
         {
             // 发送刷新用户缓存事件
             await EventBus.PublishAsync(new CurrentApplicationConfigurationCacheResetEventData());
@@ -91,8 +91,8 @@ public class UserSettingAppService : SettingManagementAppServiceBase, IUserSetti
            await SettingManager.GetOrNullAsync(TimingSettingNames.TimeZone, providerName, providerKey),
            ValueType.Option,
            providerName)
-            .AddOptions(timezones.Select(timezone => new OptionDto(timezone.Name, timezone.Value)))
-            .RequiredPermission("SettingManagement.TimeZone");
+            ?.AddOptions(timezones.Select(timezone => new OptionDto(timezone.Name, timezone.Value)))
+            ?.RequiredPermission("SettingManagement.TimeZone");
         settingGroups.AddGroup(sysSettingGroup);
 
         #endregion

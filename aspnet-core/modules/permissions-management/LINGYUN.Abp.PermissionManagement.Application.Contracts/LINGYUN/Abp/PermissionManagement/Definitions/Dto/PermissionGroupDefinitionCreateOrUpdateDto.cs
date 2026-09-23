@@ -9,7 +9,7 @@ public abstract class PermissionGroupDefinitionCreateOrUpdateDto : IHasExtraProp
 {
     [Required]
     [DynamicStringLength(typeof(PermissionGroupDefinitionRecordConsts), nameof(PermissionGroupDefinitionRecordConsts.MaxDisplayNameLength))]
-    public string DisplayName { get; set; }
+    public string DisplayName { get; set; } = default!;
 
     public ExtraPropertyDictionary ExtraProperties { get; set; } = new ExtraPropertyDictionary();
 }

@@ -108,9 +108,9 @@ public class AbpWrapperOptions
         ExceptionHandles[exceptionType] = handler;
     }
 
-    public IExceptionWrapHandler GetHandler(Type exceptionType)
+    public IExceptionWrapHandler? GetHandler(Type exceptionType)
     {
-        ExceptionHandles.TryGetValue(exceptionType, out IExceptionWrapHandler handler);
+        ExceptionHandles.TryGetValue(exceptionType, out var handler);
 
         return handler;
     }

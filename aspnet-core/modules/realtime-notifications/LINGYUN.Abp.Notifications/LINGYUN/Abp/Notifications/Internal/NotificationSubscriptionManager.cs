@@ -19,7 +19,7 @@ internal class NotificationSubscriptionManager : INotificationSubscriptionManage
     public async virtual Task<List<NotificationSubscriptionInfo>> GetUsersSubscriptionsAsync(
         Guid? tenantId,
         string notificationName, 
-        IEnumerable<UserIdentifier> identifiers = null,
+        IEnumerable<UserIdentifier>? identifiers = null,
         CancellationToken cancellationToken = default)
     {
         return await _store.GetUserSubscriptionsAsync(tenantId, notificationName, identifiers, cancellationToken);

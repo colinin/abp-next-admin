@@ -6,11 +6,11 @@ public class WebhookPayload
 {
     public string Id { get; set; }
 
-    public string WebhookEvent { get; set; }
+    public string WebhookEvent { get; set; } = default!;
 
     public int Attempt { get; set; }
 
-    public dynamic Data { get; set; }
+    public dynamic Data { get; set; } = default!;
 
     public DateTime CreationTimeUtc { get; set; }
 

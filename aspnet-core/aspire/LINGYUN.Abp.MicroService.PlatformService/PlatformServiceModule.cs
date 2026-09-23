@@ -1,6 +1,6 @@
 ﻿using LINGYUN.Abp.AspNetCore.HttpOverrides;
-using LINGYUN.Abp.AspNetCore.Mvc.Localization;
 using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
+using LINGYUN.Abp.AspNetCore.Session;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
 using LINGYUN.Abp.Authorization.OrganizationUnits;
 using LINGYUN.Abp.BlobManagement;
@@ -12,10 +12,10 @@ using LINGYUN.Abp.BlobManagement.Tencent;
 using LINGYUN.Abp.BlobStoring.BlobManagement;
 using LINGYUN.Abp.Claims.Mapping;
 using LINGYUN.Abp.Data.DbMigrator;
+using LINGYUN.Abp.Dynamic.Definitions;
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
 using LINGYUN.Abp.Features.LimitValidation.Redis;
-using LINGYUN.Abp.Identity.Session.AspNetCore;
 using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
 using LINGYUN.Abp.MicroService.PlatformService.BackgroundWorkers;
@@ -55,7 +55,6 @@ namespace LINGYUN.Abp.MicroService.PlatformService;
     typeof(AbpAspNetCoreSerilogModule),
     typeof(AbpAuditLoggingElasticsearchModule),
     typeof(AbpAspNetCoreMultiTenancyModule),
-    typeof(AbpAspNetCoreMvcLocalizationModule),
 
     typeof(AbpBlobManagementApplicationModule),
     typeof(AbpBlobManagementAliyunModule),
@@ -90,13 +89,14 @@ namespace LINGYUN.Abp.MicroService.PlatformService;
     // typeof(AbpFeaturesValidationRedisClientModule),// 当需要客户端特性限制时取消注释此模块
     typeof(AbpCachingStackExchangeRedisModule),
     typeof(AbpLocalizationCultureMapModule),
-    typeof(AbpIdentitySessionAspNetCoreModule),
     typeof(AbpHttpClientModule),
     typeof(AbpMailKitModule),
     typeof(AbpAliyunSmsModule),
-    typeof(AbpAspNetCoreMvcWrapperModule),
     typeof(AbpClaimsMappingModule),
+    typeof(AbpAspNetCoreSessionModule),
+    typeof(AbpAspNetCoreMvcWrapperModule),
     typeof(AbpAspNetCoreHttpOverridesModule),
+    typeof(AbpDynamicDefinitionsModule),
     typeof(AbpSwashbuckleModule),
     typeof(AbpAutofacModule)
     )]

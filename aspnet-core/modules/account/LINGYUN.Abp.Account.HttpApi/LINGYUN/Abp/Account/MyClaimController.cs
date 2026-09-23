@@ -1,7 +1,6 @@
 ﻿using Asp.Versioning;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Account;
@@ -22,14 +21,6 @@ public class MyClaimController : AbpControllerBase, IMyClaimAppService
         IMyClaimAppService service)
     {
         _service = service;
-    }
-
-    [HttpPost]
-    [Route("change-avatar")]
-    [Obsolete("请使用 IMyProfileAppService.ChangePictureAsync")]
-    public virtual Task ChangeAvatarAsync(ChangeAvatarInput input)
-    {
-        return _service.ChangeAvatarAsync(input);
     }
 
     [HttpGet]

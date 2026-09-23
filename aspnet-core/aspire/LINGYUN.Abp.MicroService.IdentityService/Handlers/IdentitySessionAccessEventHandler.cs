@@ -4,6 +4,7 @@ using LINGYUN.Abp.Identity.Settings;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.DistributedLocking;
@@ -18,6 +19,7 @@ namespace LINGYUN.Abp.MicroService.IdentityService.Handlers;
 /// 会话控制事件处理器
 /// </summary>
 public class IdentitySessionAccessEventHandler :
+    IDistributedEventHandler<IdentityUserSessionPasswordChangedEto>,
     IDistributedEventHandler<IdentitySessionChangeAccessedEvent>,
     IDistributedEventHandler<EntityCreatedEto<IdentitySessionEto>>,
     IDistributedEventHandler<EntityDeletedEto<UserEto>>,
@@ -50,11 +52,11 @@ public class IdentitySessionAccessEventHandler :
         var lockKey = $"{nameof(IdentitySessionAccessEventHandler)}_{nameof(EntityCreatedEto<IdentitySessionEto>)}";
         await using (var handle = await DistributedLock.TryAcquireAsync(lockKey))
         {
-            Logger.LogInformation($"Lock is acquired for {lockKey}");
+            Logger.LogDebug($"Lock is acquired for {lockKey}");
 
             if (handle == null)
             {
-                Logger.LogInformation($"Handle is null because of the locking for : {lockKey}");
+                Logger.LogDebug($"Handle is null because of the locking for : {lockKey}");
                 return;
             }
 
@@ -69,15 +71,41 @@ public class IdentitySessionAccessEventHandler :
         var lockKey = $"{nameof(IdentitySessionAccessEventHandler)}_{nameof(EntityDeletedEto<UserEto>)}";
         await using (var handle = await DistributedLock.TryAcquireAsync(lockKey))
         {
-            Logger.LogInformation($"Lock is acquired for {lockKey}");
+            Logger.LogDebug($"Lock is acquired for {lockKey}");
 
             if (handle == null)
             {
-                Logger.LogInformation($"Handle is null because of the locking for : {lockKey}");
+                Logger.LogDebug($"Handle is null because of the locking for : {lockKey}");
+                return;
+            }
+            Logger.LogDebug("Due to the deletion of user {Id}, all sessions have been cancelled.", eventData.Entity.Id);
+
+            await IdentitySessionStore.RevokeAllAsync(eventData.Entity.Id);
+        }
+    }
+
+    [UnitOfWork]
+    public async virtual Task HandleEventAsync(IdentityUserSessionPasswordChangedEto eventData)
+    {
+        if (!eventData.SessionId.IsNullOrWhiteSpace())
+        {
+            // 用户密码更新使会话过期
+            var lockKey = $"{nameof(IdentitySessionAccessEventHandler)}_{nameof(IdentityUserSessionPasswordChangedEto)}";
+            await using var handle = await DistributedLock.TryAcquireAsync(lockKey);
+
+            Logger.LogDebug($"Lock is acquired for {lockKey}");
+
+            if (handle == null)
+            {
+                Logger.LogDebug($"Handle is null because of the locking for : {lockKey}");
                 return;
             }
 
-            await IdentitySessionStore.RevokeAllAsync(eventData.Entity.Id);
+            Logger.LogDebug("Due to the password update of user {Id}, all sessions have been revoked.", eventData.Id);
+
+            var session = await IdentitySessionStore.FindAsync(eventData.SessionId);
+
+            await IdentitySessionStore.RevokeAllAsync(eventData.Id, session?.Id);
         }
     }
 
@@ -88,11 +116,11 @@ public class IdentitySessionAccessEventHandler :
         var lockKey = $"{nameof(IdentitySessionAccessEventHandler)}_{nameof(IdentitySessionChangeAccessedEvent)}";
         await using (var handle = await DistributedLock.TryAcquireAsync(lockKey))
         {
-            Logger.LogInformation($"Lock is acquired for {lockKey}");
+            Logger.LogDebug($"Lock is acquired for {lockKey}");
 
             if (handle == null)
             {
-                Logger.LogInformation($"Handle is null because of the locking for : {lockKey}");
+                Logger.LogDebug($"Handle is null because of the locking for : {lockKey}");
                 return;
             }
 
@@ -101,16 +129,23 @@ public class IdentitySessionAccessEventHandler :
             {
                 if (!eventData.IpAddresses.IsNullOrWhiteSpace())
                 {
-                    idetitySession.SetIpAddresses(eventData.IpAddresses.Split(","));
+                    var ipAddresses = idetitySession.GetIpAddresses().ToList();
+                    ipAddresses.RemoveAll(x => x == eventData.IpAddresses);
+                    ipAddresses.Add(eventData.IpAddresses);
+                    idetitySession.SetIpAddresses(ipAddresses);
                 }
                 idetitySession.UpdateLastAccessedTime(eventData.LastAccessed);
 
                 await IdentitySessionStore.UpdateAsync(idetitySession);
+
+                Logger.LogDebug("User session {SessionId} has been updated.", eventData.SessionId);
             }
             else
             {
                 // 数据库中不存在会话, 清理缓存, 后续请求会话失效
                 await IdentitySessionCache.RemoveAsync(eventData.SessionId);
+
+                Logger.LogWarning("User session {SessionId} is invalid. Remove all session caches.", eventData.SessionId);
             }
         }
     }

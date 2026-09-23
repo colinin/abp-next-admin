@@ -66,16 +66,21 @@ public class NotificationDefinitionSerializer : INotificationDefinitionSerialize
 
     public virtual Task<NotificationDefinitionRecord> SerializeAsync(
         NotificationDefinition notification, 
-        [CanBeNull] NotificationGroupDefinition notificationGroup)
+        NotificationGroupDefinition notificationGroup)
     {
         using (CultureHelper.Use(CultureInfo.InvariantCulture))
         {
+            string? description = null;
+            if (notification.Description != null)
+            {
+                description = LocalizableStringSerializer.Serialize(notification.Description);
+            }
             var notificationRecord = new NotificationDefinitionRecord(
                 GuidGenerator.Create(),
                 notification.Name,
-                notificationGroup?.Name,
+                notificationGroup.Name,
                 LocalizableStringSerializer.Serialize(notification.DisplayName),
-                LocalizableStringSerializer.Serialize(notification.Description),
+                description,
                 notification.Template?.Name,
                 notification.NotificationLifetime,
                 notification.NotificationType,
@@ -91,7 +96,7 @@ public class NotificationDefinitionSerializer : INotificationDefinitionSerialize
         }
     }
 
-    protected virtual string SerializeProviders(ICollection<string> providers)
+    protected virtual string? SerializeProviders(ICollection<string> providers)
     {
         return providers.Any()
             ? providers.JoinAsString(",")

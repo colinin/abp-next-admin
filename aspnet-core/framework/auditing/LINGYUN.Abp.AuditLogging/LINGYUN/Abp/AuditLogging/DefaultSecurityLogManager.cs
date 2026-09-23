@@ -67,7 +67,7 @@ public class DefaultSecurityLogManager : ISecurityLogManager, ISingletonDependen
         return Task.CompletedTask;
     }
 
-    public virtual Task<SecurityLog> GetAsync(
+    public virtual Task<SecurityLog?> GetAsync(
         Guid id, 
         bool includeDetails = false, 
         CancellationToken cancellationToken = default)
@@ -75,7 +75,7 @@ public class DefaultSecurityLogManager : ISecurityLogManager, ISingletonDependen
         Logger.LogDebug("No security log manager is available!");
 
         SecurityLog? securityLog = null;
-        return Task.FromResult(securityLog!);
+        return Task.FromResult(securityLog);
     }
 
     public virtual Task DeleteAsync(Guid id, CancellationToken cancellationToken = default)

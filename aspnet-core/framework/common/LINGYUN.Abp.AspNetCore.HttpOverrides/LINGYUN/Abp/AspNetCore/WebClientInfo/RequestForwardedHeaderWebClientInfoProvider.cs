@@ -24,9 +24,9 @@ public class RequestForwardedHeaderWebClientInfoProvider : HttpContextWebClientI
         Options = options.Value;
     }
 
-    protected override string GetClientIpAddress()
+    protected override string? GetClientIpAddress()
     {
-        string forwardedForHeader = null;
+        string? forwardedForHeader = null;
         var requestHeaders = HttpContextAccessor.HttpContext?.Request?.Headers;
         if (requestHeaders != null &&
             Options.ForwardedHeaders.HasFlag(ForwardedHeaders.XForwardedFor) &&

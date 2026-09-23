@@ -10,8 +10,8 @@ namespace LINGYUN.Abp.BlobManagement;
 public class BlobContainer : AuditedAggregateRoot<Guid>, IMultiTenant
 {
     public virtual Guid? TenantId { get; protected set; }
-    public virtual string Name { get; protected set; }
-    public virtual string Provider { get; protected set; }
+    public virtual string Name { get; protected set; } = default!;
+    public virtual string Provider { get; protected set; } = default!;
     protected BlobContainer()
     {
         ExtraProperties = new ExtraPropertyDictionary();

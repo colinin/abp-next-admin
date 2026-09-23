@@ -25,6 +25,7 @@ import {
 import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
+import { CodeEditor } from '@abp/components/codeeditor';
 import { DownOutlined } from '@ant-design/icons-vue';
 import {
   Checkbox,
@@ -57,12 +58,7 @@ const MenuItem = Menu.Item;
 const TabPane = Tabs.TabPane;
 
 type TabKeys =
-  | 'authorize'
-  | 'basic'
-  | 'dispalyName'
-  | 'endpoint'
-  | 'props'
-  | 'scope';
+  'authorize' | 'basic' | 'dispalyName' | 'endpoint' | 'props' | 'scope';
 
 const defaultModel: OpenIddictApplicationDto = {
   applicationType: 'web',
@@ -313,25 +309,6 @@ function onUriDelete(uri: string) {
             <Input v-model:value="formModel.clientId" autocomplete="off" />
           </FormItem>
           <FormItem
-            :label="$t('AbpOpenIddict.DisplayName:ClientType')"
-            name="clientType"
-          >
-            <Select
-              v-model:value="formModel.clientType"
-              :options="clientTypes"
-            />
-          </FormItem>
-          <FormItem
-            v-if="!formModel.id && formModel.clientType === 'confidential'"
-            :label="$t('AbpOpenIddict.DisplayName:ClientSecret')"
-            name="clientSecret"
-          >
-            <InputPassword
-              v-model:value="formModel.clientSecret"
-              autocomplete="off"
-            />
-          </FormItem>
-          <FormItem
             :label="$t('AbpOpenIddict.DisplayName:ClientUri')"
             name="clientUri"
           >
@@ -345,8 +322,6 @@ function onUriDelete(uri: string) {
           </FormItem>
           <FormItem
             :label="$t('AbpOpenIddict.DisplayName:ConsentType')"
-            :label-col="{ span: 4 }"
-            :wrapper-col="{ span: 20 }"
             name="consentType"
           >
             <Select
@@ -355,6 +330,41 @@ function onUriDelete(uri: string) {
               default-value="explicit"
             />
           </FormItem>
+          <FormItem
+            :label="$t('AbpOpenIddict.DisplayName:ClientType')"
+            name="clientType"
+          >
+            <Select
+              v-model:value="formModel.clientType"
+              :options="clientTypes"
+            />
+          </FormItem>
+          <template v-if="formModel.clientType === 'confidential'">
+            <FormItem
+              v-if="!formModel.id"
+              :label="$t('AbpOpenIddict.DisplayName:ClientSecret')"
+              name="clientSecret"
+            >
+              <InputPassword
+                v-model:value="formModel.clientSecret"
+                autocomplete="off"
+              />
+            </FormItem>
+            <FormItem
+              :label="$t('AbpOpenIddict.DisplayName:JsonWebKeySet')"
+              :extra="$t('AbpOpenIddict.Description:JsonWebKeySet')"
+              name="jsonWebKeySet"
+            >
+              <div
+                class="overflow-hidden rounded-md border border-gray-200 transition-colors focus-within:border-blue-400"
+              >
+                <CodeEditor
+                  v-model:value="formModel.jsonWebKeySet"
+                  :options="{ lineNumbers: false }"
+                />
+              </div>
+            </FormItem>
+          </template>
         </TabPane>
         <!-- 显示名称 -->
         <TabPane key="dispalyName" :tab="$t('AbpOpenIddict.DisplayNames')">

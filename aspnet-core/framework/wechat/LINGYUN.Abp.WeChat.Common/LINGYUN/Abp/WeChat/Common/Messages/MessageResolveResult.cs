@@ -5,7 +5,7 @@ public class MessageResolveResult
 {
     public string Input { get; internal set; }
 
-    public WeChatMessage Message { get; set; }
+    public WeChatMessage? Message { get; set; }
 
     public List<string> AppliedResolvers { get; }
 

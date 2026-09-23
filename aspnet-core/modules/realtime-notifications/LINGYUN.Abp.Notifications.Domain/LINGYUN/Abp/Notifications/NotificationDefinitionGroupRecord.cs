@@ -10,21 +10,21 @@ public class NotificationDefinitionGroupRecord : BasicAggregateRoot<Guid>, IHasE
     /// <summary>
     /// 分组名称
     /// </summary>
-    public virtual string Name { get; set; }
+    public virtual string Name { get; set; } = default!;
     /// <summary>
     /// 显示名称
     /// </summary>
     /// <remarks>
     /// 如果为空,回退到Name
     /// </remarks>
-    public virtual string DisplayName { get; set; }
+    public virtual string? DisplayName { get; set; }
     /// <summary>
     /// 描述
     /// </summary>
     /// <remarks>
     /// 如果为空,回退到Name
     /// </remarks>
-    public virtual string Description { get; set; }
+    public virtual string? Description { get; set; }
     /// <summary>
     /// 允许客户端订阅
     /// </summary>
@@ -41,8 +41,8 @@ public class NotificationDefinitionGroupRecord : BasicAggregateRoot<Guid>, IHasE
     public NotificationDefinitionGroupRecord(
         Guid id,
         string name,
-        string displayName = null,
-        string description = null)
+        string? displayName = null,
+        string? description = null)
         : base(id)
     {
         Name = Check.NotNullOrWhiteSpace(name, nameof(name), NotificationDefinitionGroupRecordConsts.MaxNameLength);

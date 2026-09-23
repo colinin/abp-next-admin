@@ -2,30 +2,23 @@
 
 namespace Newtonsoft.Json;
 
-public class IntToBoolConverter : JsonConverter
+public class IntToBoolConverter : JsonConverter<bool>
 {
-    public override bool CanConvert(Type objectType)
-    {
-        return objectType == typeof(bool);
-    }
-
-    public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+    public override bool ReadJson(JsonReader reader, Type objectType, bool existingValue, bool hasExistingValue, JsonSerializer serializer)
     {
         switch (reader.TokenType)
         {
             case JsonToken.Integer:
-                var value = (long)reader.Value;
-                return value == 1;
+                return reader.ReadAsInt32() == 1;
             case JsonToken.Boolean:
-                return (bool)reader.Value;
+                return reader.ReadAsBoolean() == true;
             default:
                 throw new JsonSerializationException($"Unexpected token {reader.TokenType} when parsing bool.");
         }
     }
 
-    public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+    public override void WriteJson(JsonWriter writer, bool value, JsonSerializer serializer)
     {
-        var boolValue = (bool)value;
-        writer.WriteValue(boolValue ? 1 : 0);
+        writer.WriteValue(value ? 1 : 0);
     }
 }

@@ -11,9 +11,9 @@ public class GetUserSessionsInput : PagedAndSortedResultRequestDto
     /// <summary>
     /// 设备
     /// </summary>
-    public string Device { get; set; }
+    public string? Device { get; set; }
     /// <summary>
     /// 客户端id
     /// </summary>
-    public string ClientId { get; set; }
+    public string? ClientId { get; set; }
 }

@@ -5,6 +5,7 @@ namespace LINGYUN.Abp.PermissionManagement;
 
 [DependsOn(
     typeof(AbpPermissionManagementApplicationContractsModule),
+    typeof(AbpPermissionManagementDomainModule),
     typeof(VoloAbpPermissionManagementApplicationModule))]
 public class AbpPermissionManagementApplicationModule : AbpModule
 {

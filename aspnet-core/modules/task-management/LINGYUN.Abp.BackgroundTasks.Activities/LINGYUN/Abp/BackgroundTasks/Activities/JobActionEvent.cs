@@ -42,7 +42,7 @@ public class JobActionEvent : JobEventBase<JobActionEvent>, ITransientDependency
 
             if (definition == null)
             {
-                Logger.LogWarning($"Cannot execute job action {definition.Name}, Because it's not registered.");
+                Logger.LogWarning($"Cannot execute job action {action.Name}, Because it's not registered.");
                 continue;
             }
 

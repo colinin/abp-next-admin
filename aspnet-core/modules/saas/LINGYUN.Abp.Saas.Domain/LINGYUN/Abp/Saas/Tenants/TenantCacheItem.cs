@@ -10,18 +10,18 @@ public class TenantCacheItem
 {
     private const string CacheKeyFormat = "i:{0},n:{1}";
 
-    public TenantConfiguration Value { get; set; }
+    public TenantConfiguration? Value { get; set; }
 
     public TenantCacheItem()
     {
     }
 
-    public TenantCacheItem(TenantConfiguration value)
+    public TenantCacheItem(TenantConfiguration? value)
     {
         Value = value;
     }
 
-    public static string CalculateCacheKey(Guid? id, string name)
+    public static string CalculateCacheKey(Guid? id, string? name)
     {
         if (id == null && name.IsNullOrWhiteSpace())
         {

@@ -8,19 +8,19 @@ public class DataAccessFilterRule
     /// <summary>
     /// 字段名称
     /// </summary>
-    public string Field { get; set; }
+    public string Field { get; set; } = default!;
     /// <summary>
     /// 字段值
     /// </summary>
-    public object Value { get; set; }
+    public object? Value { get; set; }
     /// <summary>
     /// 类型全名
     /// </summary>
-    public string TypeFullName { get; set; }
+    public string TypeFullName { get; set; } = default!;
     /// <summary>
     /// Js类型
     /// </summary>
-    public string JavaScriptType { get; set; }
+    public string JavaScriptType { get; set; } = default!;
     /// <summary>
     /// 操作类型
     /// </summary>

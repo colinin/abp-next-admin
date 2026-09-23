@@ -26,6 +26,7 @@
 	<ItemGroup>
 		<ProjectReference Include="..\..\settings\LINGYUN.Abp.SettingManagement.Application.Contracts\LINGYUN.Abp.SettingManagement.Application.Contracts.csproj" />
 		<ProjectReference Include="..\LINGYUN.Abp.Aliyun\LINGYUN.Abp.Aliyun.csproj" />
+		<ProjectReference Include="..\LINGYUN.Abp.Aliyun.Captcha\LINGYUN.Abp.Aliyun.Captcha.csproj" />
 	</ItemGroup>
 
 </Project>

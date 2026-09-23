@@ -20,7 +20,7 @@ public class EfCoreRoleEntityRuleRepository : EfCoreRepository<IAbpDataProtectio
     {
     }
 
-    public async virtual Task<RoleEntityRule> FindEntityRuleAsync(
+    public async virtual Task<RoleEntityRule?> FindEntityRuleAsync(
         string roleName, 
         string entityTypeFullName, 
         DataAccessOperation operation = DataAccessOperation.Read, 
@@ -50,8 +50,8 @@ public class EfCoreRoleEntityRuleRepository : EfCoreRepository<IAbpDataProtectio
     }
 
     public async virtual Task<List<RoleEntityRule>> GetCountAsync(
-    ISpecification<RoleEntityRule> specification, 
-        string sorting = nameof(RoleEntityRule.EntityTypeFullName), 
+        ISpecification<RoleEntityRule> specification, 
+        string? sorting = nameof(RoleEntityRule.EntityTypeFullName), 
         int maxResultCount = 10, 
         int skipCount = 0, 
         CancellationToken cancellationToken = default)

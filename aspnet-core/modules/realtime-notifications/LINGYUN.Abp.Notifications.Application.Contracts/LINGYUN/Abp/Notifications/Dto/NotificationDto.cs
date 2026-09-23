@@ -5,15 +5,15 @@ public class NotificationDto
     /// <summary>
     /// 通知名称
     /// </summary>
-    public string Name { get; set; }
+    public string Name { get; set; } = default!;
     /// <summary>
     /// 显示名称
     /// </summary>
-    public string DisplayName { get; set; }
+    public string? DisplayName { get; set; }
     /// <summary>
     /// 说明
     /// </summary>
-    public string Description { get; set; }
+    public string? Description { get; set; }
     /// <summary>
     /// 存活类型
     /// </summary>

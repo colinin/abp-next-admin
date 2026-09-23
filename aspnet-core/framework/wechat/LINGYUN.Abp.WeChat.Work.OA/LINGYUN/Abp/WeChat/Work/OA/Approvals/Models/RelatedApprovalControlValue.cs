@@ -14,7 +14,7 @@ public class RelatedApprovalControlValue : ControlValue
     [NotNull]
     [JsonProperty("related_approval")]
     [JsonPropertyName("related_approval")]
-    public RelatedApprovalValue RelatedApproval { get; set; }
+    public RelatedApprovalValue RelatedApproval { get; set; } = default!;
     public RelatedApprovalControlValue()
     {
 
@@ -35,7 +35,7 @@ public class RelatedApprovalValue
     [NotNull]
     [JsonProperty("sp_no")]
     [JsonPropertyName("sp_no")]
-    public string SpNo { get; set; }
+    public string SpNo { get; set; } = default!;
     public RelatedApprovalValue()
     {
 

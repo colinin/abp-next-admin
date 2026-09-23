@@ -6,5 +6,5 @@ namespace LINGYUN.Abp.Auditing.SecurityLogs;
 public class SecurityLogDeleteManyInput
 {
     [Required]
-    public List<Guid> Ids { get; set; }
+    public List<Guid> Ids { get; set; } = default!;
 }

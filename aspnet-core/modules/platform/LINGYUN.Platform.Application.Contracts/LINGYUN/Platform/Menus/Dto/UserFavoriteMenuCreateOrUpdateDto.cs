@@ -10,11 +10,11 @@ public abstract class UserFavoriteMenuCreateOrUpdateDto
     public Guid MenuId { get; set; }
 
     [DynamicStringLength(typeof(UserFavoriteMenuConsts), nameof(UserFavoriteMenuConsts.MaxColorLength))]
-    public string Color { get; set; }
+    public string? Color { get; set; }
 
     [DynamicStringLength(typeof(UserFavoriteMenuConsts), nameof(UserFavoriteMenuConsts.MaxAliasNameLength))]
-    public string AliasName { get; set; }
+    public string? AliasName { get; set; }
 
     [DynamicStringLength(typeof(UserFavoriteMenuConsts), nameof(UserFavoriteMenuConsts.MaxIconLength))]
-    public string Icon { get; set; }
+    public string? Icon { get; set; }
 }

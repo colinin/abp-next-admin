@@ -2,5 +2,5 @@
 
 public interface ICurrentDataAccessAccessor
 {
-    DataAccessOperation[] Current { get; set; }
+    DataAccessOperation[]? Current { get; set; }
 }

@@ -15,14 +15,14 @@ public class ApprovalSpRecordDetail
     [NotNull]
     [JsonProperty("approver")]
     [JsonPropertyName("approver")]
-    public ApprovalUser Approver { get; set; }
+    public ApprovalUser Approver { get; set; } = default!;
     /// <summary>
     /// 审批意见
     /// </summary>
     [NotNull]
     [JsonProperty("speech")]
     [JsonPropertyName("speech")]
-    public string Speech { get; set; }
+    public string Speech { get; set; } = default!;
     /// <summary>
     /// 分支审批人审批状态
     /// </summary>
@@ -43,5 +43,5 @@ public class ApprovalSpRecordDetail
     [CanBeNull]
     [JsonProperty("media_id")]
     [JsonPropertyName("media_id")]
-    public List<string> MediaId { get; set; }
+    public List<string>? MediaId { get; set; }
 }

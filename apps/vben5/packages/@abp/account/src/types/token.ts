@@ -47,6 +47,19 @@ interface LinkUserTokenRequest {
   /** 关联用户Id */
   linkUserId: string;
 }
+/** 模拟用户授权请求数据模型 */
+interface ImpersonationTokenRequest {
+  /** 当前用户访问令牌 */
+  accessToken?: string;
+  /** 模拟租户Id */
+  tenantId?: string;
+  /** 模拟租户用户名 */
+  tenantUserName?: string;
+  /** 委托用户Id */
+  userDelegationId?: string;
+  /** 模拟用户Id */
+  userId?: string;
+}
 /** 令牌撤销请求数据类型 */
 interface RevokeTokenRequest {
   /** 令牌 */
@@ -101,6 +114,7 @@ interface ShouldChangePasswordError extends OAuthError {
 }
 
 export type {
+  ImpersonationTokenRequest,
   LinkUserTokenRequest,
   OAuthError,
   OAuthTokenRefreshModel,

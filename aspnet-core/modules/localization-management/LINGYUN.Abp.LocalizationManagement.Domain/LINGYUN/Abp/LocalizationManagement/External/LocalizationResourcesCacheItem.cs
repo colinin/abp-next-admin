@@ -23,7 +23,7 @@ public class LocalizationResourcesCacheItem
         Resources = resources;
     }
 
-    public LocalizationResourceCacheItem GetResourceOrNull(string name)
+    public LocalizationResourceCacheItem? GetResourceOrNull(string name)
     {
         return Resources?.FirstOrDefault(x => x.Name == name);
     }

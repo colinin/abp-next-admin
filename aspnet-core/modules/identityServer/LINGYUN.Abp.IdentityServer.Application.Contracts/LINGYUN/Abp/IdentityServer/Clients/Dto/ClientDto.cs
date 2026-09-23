@@ -6,19 +6,19 @@ namespace LINGYUN.Abp.IdentityServer.Clients;
 
 public class ClientDto : FullAuditedEntityDto<Guid>
 {
-    public string ClientId { get; set; }
+    public string ClientId { get; set; } = default!;
 
-    public string ClientName { get; set; }
+    public string? ClientName { get; set; }
 
-    public string Description { get; set; }
+    public string? Description { get; set; }
 
-    public string ClientUri { get; set; }
+    public string? ClientUri { get; set; }
 
-    public string LogoUri { get; set; }
+    public string? LogoUri { get; set; }
 
     public bool Enabled { get; set; }
 
-    public string ProtocolType { get; set; }
+    public string ProtocolType { get; set; } = default!;
 
     public bool RequireClientSecret { get; set; }
 
@@ -28,7 +28,7 @@ public class ClientDto : FullAuditedEntityDto<Guid>
 
     public bool RequireRequestObject { get; set; }
 
-    public string AllowedIdentityTokenSigningAlgorithms { get; set; }
+    public string? AllowedIdentityTokenSigningAlgorithms { get; set; }
 
     public bool AlwaysIncludeUserClaimsInIdToken { get; set; }
 
@@ -38,11 +38,11 @@ public class ClientDto : FullAuditedEntityDto<Guid>
 
     public bool AllowAccessTokensViaBrowser { get; set; }
 
-    public string FrontChannelLogoutUri { get; set; }
+    public string? FrontChannelLogoutUri { get; set; }
 
     public bool FrontChannelLogoutSessionRequired { get; set; }
 
-    public string BackChannelLogoutUri { get; set; }
+    public string? BackChannelLogoutUri { get; set; }
 
     public bool BackChannelLogoutSessionRequired { get; set; }
 
@@ -74,17 +74,17 @@ public class ClientDto : FullAuditedEntityDto<Guid>
 
     public bool AlwaysSendClientClaims { get; set; }
 
-    public string ClientClaimsPrefix { get; set; }
+    public string? ClientClaimsPrefix { get; set; }
 
-    public string PairWiseSubjectSalt { get; set; }
+    public string? PairWiseSubjectSalt { get; set; }
 
     public int? UserSsoLifetime { get; set; }
 
-    public string UserCodeType { get; set; }
+    public string? UserCodeType { get; set; }
 
     public int DeviceCodeLifetime { get; set; }
 
-    public string ConcurrencyStamp { get; set; }
+    public string ConcurrencyStamp { get; set; } = default!;
 
     public List<ClientScopeDto> AllowedScopes { get; set; }
 

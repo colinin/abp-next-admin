@@ -1,14 +1,14 @@
 ﻿using LINGYUN.Abp.AspNetCore.HttpOverrides;
-using LINGYUN.Abp.AspNetCore.Mvc.Localization;
 using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
+using LINGYUN.Abp.AspNetCore.Session;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
 using LINGYUN.Abp.Authorization.OrganizationUnits;
 using LINGYUN.Abp.BackgroundTasks.DistributedLocking;
-using LINGYUN.Abp.BackgroundTasks.ExceptionHandling;
 using LINGYUN.Abp.BackgroundTasks.Quartz;
 using LINGYUN.Abp.BlobStoring.BlobManagement;
 using LINGYUN.Abp.Claims.Mapping;
 using LINGYUN.Abp.Data.DbMigrator;
+using LINGYUN.Abp.Dynamic.Definitions;
 using LINGYUN.Abp.Elsa;
 using LINGYUN.Abp.Elsa.Activities;
 using LINGYUN.Abp.Elsa.EntityFrameworkCore.PostgreSql;
@@ -17,7 +17,6 @@ using LINGYUN.Abp.Emailing.Platform;
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
 using LINGYUN.Abp.Http.Client.Wrapper;
-using LINGYUN.Abp.Identity.Session.AspNetCore;
 using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
 using LINGYUN.Abp.Quartz.PostgresSqlInstaller;
@@ -60,10 +59,8 @@ namespace LINGYUN.Abp.MicroService.WorkflowService;
     typeof(AbpEmailingExceptionHandlingModule),
     typeof(AbpHttpClientIdentityModelWebModule),
     typeof(AbpAspNetCoreMultiTenancyModule),
-    typeof(AbpAspNetCoreMvcLocalizationModule),
     typeof(AbpBackgroundTasksQuartzModule),
     typeof(AbpBackgroundTasksDistributedLockingModule),
-    typeof(AbpBackgroundTasksExceptionHandlingModule),
     typeof(AbpQuartzPostgresSqlInstallerModule),
     typeof(TaskManagementEntityFrameworkCoreModule),
     typeof(AbpFeatureManagementEntityFrameworkCoreModule),
@@ -86,9 +83,10 @@ namespace LINGYUN.Abp.MicroService.WorkflowService;
     typeof(AbpSmsPlatformModule),
     typeof(AbpEmailingPlatformModule),
     typeof(AbpClaimsMappingModule),
+    typeof(AbpAspNetCoreSessionModule),
     typeof(AbpAspNetCoreMvcNewtonsoftModule),
     typeof(AbpAspNetCoreHttpOverridesModule),
-    typeof(AbpIdentitySessionAspNetCoreModule),
+    typeof(AbpDynamicDefinitionsModule),
     typeof(AbpAutofacModule)
     )]
 public partial class WorkflowServiceModule : AbpModule

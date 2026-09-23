@@ -18,5 +18,5 @@ public class WeChatWorkGetMemberListResponse : WeChatWorkResponse
     [NotNull]
     [JsonProperty("userlist")]
     [JsonPropertyName("userlist")]
-    public MemberInfo[] UserList { get; set; }
+    public MemberInfo[] UserList { get; set; } = default!;
 }

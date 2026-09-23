@@ -1,5 +1,4 @@
-﻿using LINGYUN.Abp.Identity.Session.AspNetCore;
-using LINGYUN.Abp.MicroService.IdentityService;
+﻿using LINGYUN.Abp.MicroService.IdentityService;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -65,8 +64,6 @@ try
     app.UseAuthentication();
     // 多租户
     app.UseMultiTenancy();
-    // 会话
-    app.UseAbpSession();
     // 动态身份
     app.UseDynamicClaims();
     // 授权

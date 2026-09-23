@@ -30,7 +30,7 @@ public class TextTemplateContentAppService : AbpTextTemplatingAppServiceBase, IT
     public async virtual Task<TextTemplateContentDto> GetAsync(TextTemplateContentGetInput input)
     {
         var templateDefinition = await GetTemplateDefinition(input.Name);
-        string content = null;
+        string? content = null;
 
         try
         {
@@ -63,11 +63,11 @@ public class TextTemplateContentAppService : AbpTextTemplatingAppServiceBase, IT
         var templateDefinition = await GetTemplateDefinition(name);
 
         var templates = await TextTemplateRepository
-            .GetListAsync(x => x.Name.Equals(templateDefinition.Name) && x.Culture.Equals(input.Culture));
+            .GetListAsync(x => x.Name.Equals(templateDefinition.Name) && x.Culture == input.Culture);
 
         await TextTemplateRepository.DeleteManyAsync(templates);
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
     }
 
     [Authorize(AbpTextTemplatingPermissions.TextTemplateContent.Update)]
@@ -81,7 +81,7 @@ public class TextTemplateContentAppService : AbpTextTemplatingAppServiceBase, IT
             template = new TextTemplate(
                 GuidGenerator.Create(),
                 templateDefinition.Name,
-                LocalizableStringSerializer.Serialize(templateDefinition.DisplayName),
+                LocalizableStringSerializer.Serialize(templateDefinition.DisplayName)!,
                 input.Content,
                 input.Culture);
 
@@ -94,7 +94,7 @@ public class TextTemplateContentAppService : AbpTextTemplatingAppServiceBase, IT
             await TextTemplateRepository.UpdateAsync(template);
         }
 
-        await CurrentUnitOfWork.SaveChangesAsync();
+        await CurrentUnitOfWork!.SaveChangesAsync();
 
         return new TextTemplateContentDto
         {

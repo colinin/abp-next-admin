@@ -22,7 +22,7 @@ public class ConnectionStringInvalidator :
         await RemoveTenantCache(eventData.Id, eventData.Name);
     }
 
-    protected async virtual Task RemoveTenantCache(Guid tenantId, string tenantName = null)
+    protected async virtual Task RemoveTenantCache(Guid tenantId, string? tenantName = null)
     {
         var keys = new string[]
         {

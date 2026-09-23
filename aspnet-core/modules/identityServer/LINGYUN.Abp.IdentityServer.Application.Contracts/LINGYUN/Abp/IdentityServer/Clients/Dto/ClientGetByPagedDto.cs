@@ -4,5 +4,5 @@ namespace LINGYUN.Abp.IdentityServer.Clients;
 
 public class ClientGetByPagedDto : PagedAndSortedResultRequestDto
 {
-    public string Filter { get; set; }
+    public string? Filter { get; set; }
 }

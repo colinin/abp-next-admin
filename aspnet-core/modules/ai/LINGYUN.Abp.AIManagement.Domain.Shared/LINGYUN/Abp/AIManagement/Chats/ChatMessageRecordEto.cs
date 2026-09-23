@@ -6,6 +6,6 @@ namespace LINGYUN.Abp.AIManagement.Chats;
 public abstract class ChatMessageRecordEto : EntityEto<Guid>, IMultiTenant
 {
     public Guid? TenantId { get; set; }
-    public string Workspace { get; set; }
+    public string Workspace { get; set; } = default!;
     public Guid? ConversationId { get; set; }
 }

@@ -2,5 +2,5 @@
 
 public class ClientRedirectUriDto
 {
-    public string RedirectUri { get; set; }
+    public string RedirectUri { get; set; } = default!;
 }

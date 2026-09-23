@@ -2,6 +2,7 @@
   "culture": "en",
   "texts": {
     "SettingManagement:001001": "A setting definition called {Name} already exists!",
+    "SettingManagement:001002": "There is no setting definition named {Name}!",
     "SettingManagement:001010": "The {Name} static setting is not allowed to change!",
     "Permission:Definition": "Definition Settings",
     "Permission:Create": "Create",

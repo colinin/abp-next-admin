@@ -1,8 +1,14 @@
 ﻿@page
 @using Microsoft.AspNetCore.Mvc.Localization
 @using Volo.Abp.Account.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Layout
 @model LINGYUN.Abp.Account.Web.Pages.Account.VerifyAuthenticatorCodeModel
 @inject IHtmlLocalizer<AccountResource> L
+@inject IPageLayout PageLayout
+@{
+    PageLayout.Content.Title = L["TwoFactor"].Value;
+}
+
 <div class="card mt-3 shadow-sm rounded">
     <div class="card-body p-5">
         <form method="post" class="mt-4">
@@ -13,14 +19,39 @@
                 <input asp-for="Input.VerifyCode" class="form-control" />
                 <span asp-validation-for="Input.VerifyCode" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="RememberBrowser"></label>
-                <abp-input asp-for="RememberBrowser" />
+            <abp-row class="mt-2">
+                <abp-column>
+                    <abp-input asp-for="Input.RememberBrowser" />
+                </abp-column>
+                <abp-column>
+                    <a href="@Url.Page("./UseRecoveryCodes", new
+                       {
+                           returnUrl = Model.ReturnUrl,
+                           returnUrlHash = Model.ReturnUrlHash,
+                           rememberMe = Model.RememberMe.ToString(),
+                           linkUserId = Model.LinkUserId?.ToString(),
+                           linkTenantId = Model.LinkTenantId?.ToString(),
+                           linkToken = Model.LinkToken
+                       })">@L["UseRecoveryCodes"]</a>
+                </abp-column>
+            </abp-row>
+            <div class="d-grid gap-2">
+                <abp-button type="submit" button-type="Primary" class="btn-block btn-lg">@L["VerifyAuthenticatorCode"]</abp-button>
+                <a abp-button="Secondary"
+                   asp-page="./Login"
+                   class="btn-block btn-lg"
+                   asp-all-route-data="@(new Dictionary<string, string?> {
+                       { "returnUrl", Model.ReturnUrl },
+                       { "returnUrlHash", Model.ReturnUrlHash } ,
+                       { "rememberMe", Model.RememberMe.ToString() },
+                       { "linkUserId", Model.LinkUserId?.ToString() },
+                       { "linkTenantId", Model.LinkTenantId?.ToString() },
+                       { "linkToken", Model.LinkToken }
+                   })">
+                    <i class="fa fa-long-arrow-left"></i>
+                    @L["BackToLogin"]
+                </a>
             </div>
-            <abp-button type="submit" button-type="Primary" class="btn-block btn-lg mt-3">@L["VerifyAuthenticatorCode"]</abp-button>
-            <a asp-page="./Login" asp-all-route-data="@(new Dictionary<string, string> {{"returnUrl", Model.ReturnUrl}, {"returnUrlHash", Model.ReturnUrlHash}})">
-                <i class="fa fa-long-arrow-left"></i> @L["Login"]
-            </a>
         </form>
     </div>
 </div>

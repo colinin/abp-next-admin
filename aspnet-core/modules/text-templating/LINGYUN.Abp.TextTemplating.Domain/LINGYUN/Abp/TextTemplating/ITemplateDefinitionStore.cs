@@ -20,5 +20,5 @@ public interface ITemplateDefinitionStore
     Task<IReadOnlyList<TemplateDefinition>> GetAllAsync(CancellationToken cancellationToken = default);
 
     [CanBeNull]
-    Task<TemplateDefinition> GetOrNullAsync(string name, CancellationToken cancellationToken = default);
+    Task<TemplateDefinition?> GetOrNullAsync(string name, CancellationToken cancellationToken = default);
 }

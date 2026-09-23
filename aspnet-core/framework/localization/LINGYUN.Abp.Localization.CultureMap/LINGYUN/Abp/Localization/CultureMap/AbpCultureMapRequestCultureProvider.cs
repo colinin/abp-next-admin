@@ -13,7 +13,7 @@ namespace LINGYUN.Abp.Localization.CultureMap;
 
 public class AbpCultureMapRequestCultureProvider : RequestCultureProvider
 {
-    public override async Task<ProviderCultureResult> DetermineProviderCultureResult(HttpContext httpContext)
+    public override async Task<ProviderCultureResult?> DetermineProviderCultureResult(HttpContext httpContext)
     {
         if (httpContext == null)
         {

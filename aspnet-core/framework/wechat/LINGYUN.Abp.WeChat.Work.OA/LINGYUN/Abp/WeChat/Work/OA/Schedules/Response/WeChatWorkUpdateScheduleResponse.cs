@@ -20,5 +20,5 @@ public class WeChatWorkUpdateScheduleResponse : WeChatWorkResponse
     [NotNull]
     [JsonProperty("schedule_id")]
     [JsonPropertyName("schedule_id")]
-    public string ScheduleId { get; set; }
+    public string ScheduleId { get; set; } = default!;
 }

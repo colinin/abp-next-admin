@@ -7,13 +7,13 @@ public class DynamicParamter
 {
     [NotNull]
     [Required]
-    public string Field { get; set; }
+    public string Field { get; set; } = default!;
 
     public DynamicLogic Logic { get; set; } = DynamicLogic.And;
 
     public DynamicComparison Comparison { get; set; } = DynamicComparison.Equal;
 
-    public object Value { get; set; }
+    public object? Value { get; set; }
 
-    public string Type { get; set; }
+    public string? Type { get; set; }
 }

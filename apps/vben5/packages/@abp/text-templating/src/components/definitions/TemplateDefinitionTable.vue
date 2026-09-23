@@ -130,6 +130,11 @@ const gridOptions: VxeGridProps<TextTemplateDefinitionDto> = {
       slots: { default: 'action' },
       title: $t('AbpUi.Actions'),
       width: 220,
+      visible: hasAccessByCodes([
+        WebhookDefinitionsPermissions.Default,
+        WebhookDefinitionsPermissions.Delete,
+        WebhookDefinitionsPermissions.Update,
+      ]),
     },
   ],
   exportConfig: {},
@@ -290,10 +295,7 @@ onMounted(onGet);
           {{ $t('AbpUi.Edit') }}
         </Button>
         <Button
-          v-if="
-            !row.isStatic &&
-            hasAccessByCodes([WebhookDefinitionsPermissions.Delete])
-          "
+          :disabled="row.isStatic"
           :icon="h(DeleteOutlined)"
           block
           danger

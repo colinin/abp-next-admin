@@ -28,13 +28,13 @@ public class AbpWrapIdempotentActionFilter : AbpIdempotentActionFilter, ITransie
         var exceptionHandlingOptions = context.ExecutingContext.GetRequiredService<IOptions<AbpExceptionHandlingOptions>>().Value;
 
         var errorInfo = new RemoteServiceErrorResponse(
-            errorInfoConverter.Convert(context.GrantResult.Exception, options =>
+            errorInfoConverter.Convert(context.GrantResult.Exception!, options =>
             {
                 options.SendExceptionsDetailsToClients = exceptionHandlingOptions.SendExceptionsDetailsToClients;
                 options.SendStackTraceToClients = exceptionHandlingOptions.SendStackTraceToClients;
             })
         );
-        var result = new WrapResult(errorInfo.Error.Code, errorInfo.Error.Message, errorInfo.Error.Details);
+        var result = new WrapResult(errorInfo.Error.Code!, errorInfo.Error.Message!, errorInfo.Error.Details);
         context.ExecutingContext.Result = new JsonResult(result)
         {
             StatusCode = context.IdempotentOptions.HttpStatusCode,

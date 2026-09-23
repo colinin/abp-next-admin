@@ -5,5 +5,5 @@ public class VerifyAuthenticatorCodeInput
 {
     [Required]
     [StringLength(6)]
-    public string AuthenticatorCode { get; set; }
+    public string AuthenticatorCode { get; set; } = default!;
 }

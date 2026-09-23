@@ -18,6 +18,6 @@ public class OrganizationUnitGetListSpecification : Specification<OrganizationUn
 
         return expression
             .AndIf(!Input.Filter.IsNullOrWhiteSpace(), x =>
-                x.DisplayName.Contains(Input.Filter) || x.Code.Contains(Input.Filter));
+                x.DisplayName.Contains(Input.Filter!) || x.Code.Contains(Input.Filter!));
     }
 }

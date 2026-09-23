@@ -15,7 +15,7 @@ public interface IWeChatWorkUserClaimProvider
     /// <param name="userId"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    Task<string> FindUserIdentifierAsync(
+    Task<string?> FindUserIdentifierAsync(
         Guid userId, 
         CancellationToken cancellationToken = default);
     /// <summary>

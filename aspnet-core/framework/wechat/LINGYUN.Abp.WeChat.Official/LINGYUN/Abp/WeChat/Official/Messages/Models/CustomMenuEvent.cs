@@ -13,7 +13,7 @@ public class CustomMenuEvent : WeChatEventMessage
     /// 事件KEY值
     /// </summary>
     [XmlElement("EventKey")]
-    public string EventKey { get; set; }
+    public string EventKey { get; set; } = default!;
 
     public override WeChatMessageEto ToEto()
     {

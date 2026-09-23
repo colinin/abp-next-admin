@@ -21,7 +21,7 @@ public interface IBackgroundJobInfoRepository : IRepository<BackgroundJobInfo, s
     /// <param name="includeDetails"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    Task<JobInfo> FindJobAsync(
+    Task<JobInfo?> FindJobAsync(
         string id,
         bool includeDetails = true,
         CancellationToken cancellationToken = default);
@@ -36,7 +36,7 @@ public interface IBackgroundJobInfoRepository : IRepository<BackgroundJobInfo, s
     Task<List<BackgroundJobInfo>> GetExpiredJobsAsync(
         int maxResultCount,
         TimeSpan jobExpiratime,
-        string nodeName = null,
+        string? nodeName = null,
         CancellationToken cancellationToken = default);
     /// <summary>
     /// 获取所有周期性任务
@@ -74,7 +74,7 @@ public interface IBackgroundJobInfoRepository : IRepository<BackgroundJobInfo, s
     /// <returns></returns>
     Task<List<BackgroundJobInfo>> GetListAsync(
         ISpecification<BackgroundJobInfo> specification,
-        string sorting = nameof(BackgroundJobInfo.Name),
+        string? sorting = $"{nameof(BackgroundJobInfo.CreationTime)} DESC",
         int maxResultCount = 10,
         int skipCount = 0,
         CancellationToken cancellationToken = default);

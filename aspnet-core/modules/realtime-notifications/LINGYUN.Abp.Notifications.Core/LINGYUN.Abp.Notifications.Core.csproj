@@ -22,6 +22,7 @@
 
 	<ItemGroup>
 	  <ProjectReference Include="..\..\..\framework\common\LINGYUN.Abp.RealTime\LINGYUN.Abp.RealTime.csproj" />
+	  <ProjectReference Include="..\..\..\framework\dynamic-definition\LINGYUN.Abp.Dynamic.Definitions.Core\LINGYUN.Abp.Dynamic.Definitions.Core.csproj" />
 	</ItemGroup>
 
 </Project>

@@ -43,7 +43,7 @@ public interface INotificationStore
     Task<List<NotificationSubscriptionInfo>> GetUserSubscriptionsAsync(
         Guid? tenantId, 
         string notificationName, 
-        IEnumerable<UserIdentifier> identifiers = null,
+        IEnumerable<UserIdentifier>? identifiers = null,
         CancellationToken cancellationToken = default);
 
     Task<List<NotificationSubscriptionInfo>> GetUserSubscriptionsAsync(

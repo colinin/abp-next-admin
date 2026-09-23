@@ -19,11 +19,11 @@ public abstract class Message : CreationAuditedAggregateRoot<long>, IMultiTenant
     /// <summary>
     /// 发送用户名称
     /// </summary>
-    public virtual string SendUserName { get; protected set; }
+    public virtual string SendUserName { get; protected set; } = default!;
     /// <summary>
     /// 内容
     /// </summary>
-    public virtual string Content { get; protected set; }
+    public virtual string Content { get; protected set; } = default!;
     /// <summary>
     /// 消息类型
     /// </summary>

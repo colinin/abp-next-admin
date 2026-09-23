@@ -1,21 +1,22 @@
 ﻿using LINGYUN.Abp.AspNetCore.HttpOverrides;
-using LINGYUN.Abp.AspNetCore.Mvc.Localization;
 using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
+using LINGYUN.Abp.AspNetCore.Session;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
 using LINGYUN.Abp.Authorization.OrganizationUnits;
 using LINGYUN.Abp.BlobManagement;
 using LINGYUN.Abp.BlobManagement.Aliyun;
 using LINGYUN.Abp.BlobManagement.FileSystem;
+using LINGYUN.Abp.BlobManagement.MimeCheck;
 using LINGYUN.Abp.BlobManagement.Minio;
 using LINGYUN.Abp.BlobManagement.SettingManagement;
 using LINGYUN.Abp.BlobManagement.Tencent;
 using LINGYUN.Abp.BlobStoring.BlobManagement;
 using LINGYUN.Abp.Claims.Mapping;
 using LINGYUN.Abp.Data.DbMigrator;
+using LINGYUN.Abp.Dynamic.Definitions;
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
 using LINGYUN.Abp.Features.LimitValidation.Redis;
-using LINGYUN.Abp.Identity.Session.AspNetCore;
 using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
 using LINGYUN.Abp.Notifications;
@@ -66,13 +67,13 @@ namespace LY.MicroService.PlatformManagement;
     typeof(AbpAspNetCoreSerilogModule),
     typeof(AbpAuditLoggingElasticsearchModule),
     typeof(AbpAspNetCoreMultiTenancyModule),
-    typeof(AbpAspNetCoreMvcLocalizationModule),
     typeof(AbpUINavigationVueVbenAdmin5Module),
     typeof(PlatformThemeVueVbenAdminModule),
     typeof(AbpBlobManagementAliyunModule),    // 阿里云存储提供者模块
     typeof(AbpBlobManagementTencentModule),   // 腾讯云存储提供者模块
     typeof(AbpBlobManagementMinioModule),     // Minio存储提供者模块
     typeof(AbpBlobManagementFileSystemModule),// 本地文件系统提供者模块
+    typeof(AbpBlobManagementMimeCheckModule),
     typeof(AbpBlobManagementApplicationModule),
     typeof(AbpBlobManagementHttpApiModule),
     typeof(AbpBlobManagementSettingManagementModule),
@@ -101,15 +102,16 @@ namespace LY.MicroService.PlatformManagement;
     // typeof(AbpFeaturesValidationRedisClientModule),// 当需要客户端特性限制时取消注释此模块
     typeof(AbpCachingStackExchangeRedisModule),
     typeof(AbpLocalizationCultureMapModule),
-    typeof(AbpIdentitySessionAspNetCoreModule),
     typeof(AbpTelemetryOpenTelemetryModule),
     typeof(AbpTelemetrySkyWalkingModule),
     typeof(AbpHttpClientModule),
     typeof(AbpMailKitModule),
     typeof(AbpAliyunSmsModule),
+    typeof(AbpAspNetCoreSessionModule),
     typeof(AbpAspNetCoreMvcWrapperModule),
     typeof(AbpClaimsMappingModule),
     typeof(AbpAspNetCoreHttpOverridesModule),
+    typeof(AbpDynamicDefinitionsModule),
     typeof(AbpSwashbuckleModule),
     typeof(AbpAutofacModule)
     )]
@@ -189,7 +191,6 @@ public partial class PlatformManagementHttpApiHostModule : AbpModule
         // 多租户
         app.UseMultiTenancy();
         // 会话
-        app.UseAbpSession();
         app.UseDynamicClaims();
         // 授权
         app.UseAuthorization();

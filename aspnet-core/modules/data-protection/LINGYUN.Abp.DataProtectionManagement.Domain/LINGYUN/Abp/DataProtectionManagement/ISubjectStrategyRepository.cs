@@ -7,7 +7,7 @@ namespace LINGYUN.Abp.DataProtectionManagement;
 
 public interface ISubjectStrategyRepository : IBasicRepository<SubjectStrategy, Guid>
 {
-    Task<SubjectStrategy> FindBySubjectAsync(
+    Task<SubjectStrategy?> FindBySubjectAsync(
         string subjectName,
         string subjectId,
         CancellationToken cancellationToken = default);

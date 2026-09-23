@@ -14,7 +14,7 @@ public class LocationControlValue : ControlValue
     [NotNull]
     [JsonProperty("location")]
     [JsonPropertyName("location")]
-    public LocationValue Location { get; set; }
+    public LocationValue Location { get; set; } = default!;
     public LocationControlValue()
     {
 
@@ -48,14 +48,14 @@ public class LocationValue
     [NotNull]
     [JsonProperty("title")]
     [JsonPropertyName("title")]
-    public string Title { get; set; }
+    public string Title { get; set; } = default!;
     /// <summary>
     /// 地点详情地址
     /// </summary>
     [NotNull]
     [JsonProperty("address")]
     [JsonPropertyName("address")]
-    public string Address { get; set; }
+    public string Address { get; set; } = default!;
     /// <summary>
     /// 选择地点的时间
     /// </summary>

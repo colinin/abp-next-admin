@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using Volo.Abp;
+using Volo.Abp.Application.Dtos;
 using Volo.Abp.AspNetCore.Mvc;
 namespace LINGYUN.Abp.LocalizationManagement;
 
@@ -24,6 +25,12 @@ public class LanguageController : AbpControllerBase, ILanguageAppService
     public virtual Task<LanguageDto> GetByNameAsync(string name)
     {
         return _service.GetByNameAsync(name);
+    }
+
+    [HttpGet]
+    public virtual Task<PagedResultDto<LanguageDto>> GetListAsync(LanguageGetPagedListInput input)
+    {
+        return _service.GetListAsync(input);
     }
 
     [HttpPost]

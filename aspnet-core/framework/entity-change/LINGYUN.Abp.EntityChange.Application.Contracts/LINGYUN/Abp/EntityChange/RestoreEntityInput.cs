@@ -9,7 +9,7 @@ public class RestoreEntityInput
     /// 实体标识
     /// </summary>
     [Required]
-    public string EntityId { get; set; }
+    public string EntityId { get; set; } = default!;
     /// <summary>
     /// 还原到某个版本标识
     /// </summary>

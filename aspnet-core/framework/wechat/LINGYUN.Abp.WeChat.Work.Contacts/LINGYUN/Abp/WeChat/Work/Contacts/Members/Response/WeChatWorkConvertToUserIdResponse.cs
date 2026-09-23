@@ -17,5 +17,5 @@ public class WeChatWorkConvertToUserIdResponse : WeChatWorkResponse
     [NotNull]
     [JsonProperty("userid")]
     [JsonPropertyName("userid")]
-    public string UserId { get; set; }
+    public string UserId { get; set; } = default!;
 }

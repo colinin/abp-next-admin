@@ -1,4 +1,7 @@
-import type { AuditedEntityDto } from '@abp/core';
+import type {
+  AuditedEntityDto,
+  PagedAndSortedResultRequestDto,
+} from '@abp/core';
 
 interface LanguageDto extends AuditedEntityDto<string> {
   cultureName: string;
@@ -7,7 +10,7 @@ interface LanguageDto extends AuditedEntityDto<string> {
   uiCultureName: string;
 }
 
-interface LanguageGetListInput {
+interface LanguageGetPagedListInput extends PagedAndSortedResultRequestDto {
   filter?: string;
 }
 
@@ -25,6 +28,6 @@ type LanguageUpdateDto = LanguageCreateOrUpdateDto;
 export type {
   LanguageCreateDto,
   LanguageDto,
-  LanguageGetListInput,
+  LanguageGetPagedListInput,
   LanguageUpdateDto,
 };

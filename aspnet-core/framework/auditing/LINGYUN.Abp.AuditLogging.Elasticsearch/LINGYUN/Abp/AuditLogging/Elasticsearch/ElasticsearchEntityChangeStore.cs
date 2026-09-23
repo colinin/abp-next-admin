@@ -39,7 +39,7 @@ public class ElasticsearchEntityChangeStore : IEntityChangeStore, ITransientDepe
         Logger = NullLogger<ElasticsearchEntityChangeStore>.Instance;
     }
 
-    public async virtual Task<EntityChange> GetAsync(
+    public async virtual Task<EntityChange?> GetAsync(
         Guid entityChangeId, 
         CancellationToken cancellationToken = default)
     {
@@ -89,8 +89,8 @@ public class ElasticsearchEntityChangeStore : IEntityChangeStore, ITransientDepe
         DateTime? startTime = null,
         DateTime? endTime = null, 
         EntityChangeType? changeType = null, 
-        string entityId = null, 
-        string entityTypeFullName = null,
+        string? entityId = null, 
+        string? entityTypeFullName = null,
         CancellationToken cancellationToken = default)
     {
         var client = _clientFactory.Create();
@@ -127,15 +127,15 @@ public class ElasticsearchEntityChangeStore : IEntityChangeStore, ITransientDepe
     }
 
     public async virtual Task<List<EntityChange>> GetListAsync(
-        string sorting = null,
+        string? sorting = null,
         int maxResultCount = 50,
         int skipCount = 0,
         Guid? auditLogId = null, 
         DateTime? startTime = null, 
         DateTime? endTime = null, 
         EntityChangeType? changeType = null, 
-        string entityId = null,
-        string entityTypeFullName = null, 
+        string? entityId = null,
+        string? entityTypeFullName = null, 
         bool includeDetails = false,
         CancellationToken cancellationToken = default)
     {
@@ -204,7 +204,7 @@ public class ElasticsearchEntityChangeStore : IEntityChangeStore, ITransientDepe
             .ToList();
     }
 
-    public async virtual Task<EntityChangeWithUsername> GetWithUsernameAsync(
+    public async virtual Task<EntityChangeWithUsername?> GetWithUsernameAsync(
         Guid entityChangeId,
         CancellationToken cancellationToken = default)
     {
@@ -288,7 +288,7 @@ public class ElasticsearchEntityChangeStore : IEntityChangeStore, ITransientDepe
 
                 foreach (var entityChanges in entityChangesList)
                 {
-                    foreach (var entityChange in entityChanges.Where(e => e.EntityId.Equals(entityId) && e.EntityTypeFullName.Equals(entityTypeFullName)))
+                    foreach (var entityChange in entityChanges.Where(e => string.Equals(e.EntityId, entityId) && string.Equals(e.EntityTypeFullName, entityTypeFullName)))
                     {
                         result.Add(
                             new EntityChangeWithUsername
@@ -309,8 +309,8 @@ public class ElasticsearchEntityChangeStore : IEntityChangeStore, ITransientDepe
         DateTime? startTime = null,
         DateTime? endTime = null,
         EntityChangeType? changeType = null,
-        string entityId = null,
-        string entityTypeFullName = null,
+        string? entityId = null,
+        string? entityTypeFullName = null,
         Guid? entityChangeId = null)
     {
         var queries = new List<Query>();

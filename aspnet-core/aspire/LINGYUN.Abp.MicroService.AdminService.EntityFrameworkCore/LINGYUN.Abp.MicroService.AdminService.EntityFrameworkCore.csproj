@@ -18,7 +18,6 @@
 		<PackageReference Include="Volo.Abp.EntityFrameworkCore.PostgreSql" />
 		<PackageReference Include="Volo.Abp.FeatureManagement.EntityFrameworkCore" />
 		<PackageReference Include="Volo.Abp.SettingManagement.EntityFrameworkCore" />
-		<PackageReference Include="Volo.Abp.PermissionManagement.EntityFrameworkCore" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -38,6 +37,7 @@
 		<ProjectReference Include="..\..\modules\openIddict\LINGYUN.Abp.OpenIddict.Application.Contracts\LINGYUN.Abp.OpenIddict.Application.Contracts.csproj" />
 		<ProjectReference Include="..\..\modules\blob-management\LINGYUN.Abp.BlobManagement.Application.Contracts\LINGYUN.Abp.BlobManagement.Application.Contracts.csproj" />
 		<ProjectReference Include="..\..\modules\permissions-management\LINGYUN.Abp.PermissionManagement.Application.Contracts\LINGYUN.Abp.PermissionManagement.Application.Contracts.csproj" />
+		<ProjectReference Include="..\..\modules\permissions-management\LINGYUN.Abp.PermissionManagement.EntityFrameworkCore\LINGYUN.Abp.PermissionManagement.EntityFrameworkCore.csproj" />
 		<ProjectReference Include="..\..\modules\platform\LINGYUN.Platform.Application.Contracts\LINGYUN.Platform.Application.Contracts.csproj" />
 		<ProjectReference Include="..\..\modules\project\LINGYUN.Abp.ProjectManagement.Application.Contracts\LINGYUN.Abp.ProjectManagement.Application.Contracts.csproj" />
 		<ProjectReference Include="..\..\modules\realtime-message\LINGYUN.Abp.MessageService.Application.Contracts\LINGYUN.Abp.MessageService.Application.Contracts.csproj" />

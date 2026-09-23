@@ -13,6 +13,7 @@ interface WorkspaceDefinitionRecordDto
   frequencyPenalty?: number;
   instructions?: string;
   isEnabled: boolean;
+  isStatic: boolean;
   maxOutputTokens?: number;
   modelName: string;
   name: string;

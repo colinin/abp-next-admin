@@ -10,7 +10,7 @@ public class WorkdayCalendarInfo
     /// <summary>
     /// 日历名称
     /// </summary>
-    public string Name { get; set; }
+    public string Name { get; set; } = default!;
     /// <summary>
     /// 默认日历
     /// </summary>
@@ -18,7 +18,7 @@ public class WorkdayCalendarInfo
     /// <summary>
     /// 工作日范围
     /// </summary>
-    public DayOfWeek[] Workdays { get; set; }
+    public DayOfWeek[] Workdays { get; set; } = default!;
     /// <summary>
     /// 工作时间范围
     /// </summary>

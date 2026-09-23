@@ -11,11 +11,11 @@ public abstract class ExternalChatChangeEvent : WeChatWorkEventMessage
     /// 变更类型
     /// </summary>
     [XmlElement("ChangeType")]
-    public string ChangeType { get; set; }
+    public string ChangeType { get; set; } = default!;
     /// <summary>
     /// 群ID
     /// </summary>
     [XmlElement("ChatId")]
-    public string ChatId { get; set; }
+    public string ChatId { get; set; } = default!;
 }
 

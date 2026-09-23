@@ -7,5 +7,5 @@ public class WeChatWorkImageResponse : WeChatWorkResponse
     /// 上传后得到的图片URL。永久有效
     /// </summary>
     [JsonProperty("url")]
-    public string Url { get; set; }
+    public string Url { get; set; } = default!;
 }

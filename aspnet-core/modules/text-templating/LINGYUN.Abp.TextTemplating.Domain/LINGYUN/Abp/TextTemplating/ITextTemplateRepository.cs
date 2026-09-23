@@ -7,5 +7,8 @@ namespace LINGYUN.Abp.TextTemplating;
 
 public interface ITextTemplateRepository : IRepository<TextTemplate, Guid>
 {
-    Task<TextTemplate> FindByNameAsync(string name, string culture = null, CancellationToken cancellationToken = default);
+    Task<TextTemplate?> FindByNameAsync(
+        string name, 
+        string? culture = null, 
+        CancellationToken cancellationToken = default);
 }

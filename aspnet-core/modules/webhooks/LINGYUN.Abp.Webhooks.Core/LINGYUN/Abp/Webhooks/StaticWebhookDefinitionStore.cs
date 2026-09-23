@@ -73,14 +73,14 @@ public class StaticWebhookDefinitionStore : IStaticWebhookDefinitionStore, ISing
 
             foreach (var provider in providers)
             {
-                provider.Define(new WebhookDefinitionContext(definitions));
+                provider?.Define(new WebhookDefinitionContext(definitions));
             }
         }
 
         return definitions;
     }
 
-    public virtual Task<WebhookDefinition> GetOrNullAsync(string name)
+    public virtual Task<WebhookDefinition?> GetOrNullAsync(string name)
     {
         return Task.FromResult(WebhookDefinitions.GetOrDefault(name));
     }
@@ -99,7 +99,7 @@ public class StaticWebhookDefinitionStore : IStaticWebhookDefinitionStore, ISing
         );
     }
 
-    public virtual Task<WebhookGroupDefinition> GetGroupOrNullAsync(string name)
+    public virtual Task<WebhookGroupDefinition?> GetGroupOrNullAsync(string name)
     {
         return Task.FromResult(WebhookGroupDefinitions.GetOrDefault(name));
     }

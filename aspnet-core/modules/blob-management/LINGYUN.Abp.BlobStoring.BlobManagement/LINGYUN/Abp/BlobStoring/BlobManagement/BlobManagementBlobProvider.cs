@@ -40,7 +40,7 @@ public class BlobManagementBlobProvider : BlobProviderBase, ITransientDependency
 
     public async override Task<Stream?> GetOrNullAsync(BlobProviderGetArgs args)
     {
-        var content = await _blobService.GetContentAsync(
+        var content = await _blobService.DownloadAsync(
             new BlobFileGetByNameIntegrationDto
             {
                 ContainerName = args.ContainerName,

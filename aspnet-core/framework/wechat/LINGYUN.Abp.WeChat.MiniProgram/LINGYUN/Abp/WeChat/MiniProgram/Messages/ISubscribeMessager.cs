@@ -35,9 +35,9 @@ public interface ISubscribeMessager
     Task SendAsync(
         Guid toUser, 
         string templateId,
-        string page = "",
-        string lang = "zh_CN",
-        string state = "formal",
-        Dictionary<string, object> data = null,
+        string? page = "",
+        string? lang = "zh_CN",
+        string? state = "formal",
+        Dictionary<string, object?>? data = null,
         CancellationToken cancellation = default);
 }

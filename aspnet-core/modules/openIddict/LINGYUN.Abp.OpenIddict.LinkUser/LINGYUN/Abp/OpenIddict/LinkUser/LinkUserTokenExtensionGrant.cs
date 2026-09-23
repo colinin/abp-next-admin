@@ -35,7 +35,7 @@ public class LinkUserTokenExtensionGrant : ITokenExtensionGrant
         var accessToken = accessTokenParam.ToString();
         if (accessToken.IsNullOrWhiteSpace())
         {
-            var properties = new AuthenticationProperties(new Dictionary<string, string>
+            var properties = new AuthenticationProperties(new Dictionary<string, string?>
             {
                 [OpenIddictServerAspNetCoreConstants.Properties.Error] = OpenIddictConstants.Errors.InvalidGrant,
                 [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = localizer["InvalidAccessToken"]
@@ -61,7 +61,7 @@ public class LinkUserTokenExtensionGrant : ITokenExtensionGrant
         if (notification.IsRejected)
         {
             return Forbid(
-                new AuthenticationProperties(new Dictionary<string, string>
+                new AuthenticationProperties(new Dictionary<string, string?>
                 {
                     [OpenIddictServerAspNetCoreConstants.Properties.Error] = notification.Error ?? OpenIddictConstants.Errors.InvalidRequest,
                     [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = notification.ErrorDescription,
@@ -74,7 +74,7 @@ public class LinkUserTokenExtensionGrant : ITokenExtensionGrant
         if (principal == null)
         {
             return Forbid(
-                new AuthenticationProperties(new Dictionary<string, string>
+                new AuthenticationProperties(new Dictionary<string, string?>
                 {
                     [OpenIddictServerAspNetCoreConstants.Properties.Error] = notification.Error ?? OpenIddictConstants.Errors.InvalidRequest,
                     [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = notification.ErrorDescription,
@@ -93,7 +93,7 @@ public class LinkUserTokenExtensionGrant : ITokenExtensionGrant
             var linkUserIdParam = context.Request.GetParameter("LinkUserId");
             if (!linkUserIdParam.HasValue || !Guid.TryParse(linkUserIdParam.Value.ToString(), out var linkUserId))
             {
-                var properties = new AuthenticationProperties(new Dictionary<string, string>
+                var properties = new AuthenticationProperties(new Dictionary<string, string?>
                 {
                     [OpenIddictServerAspNetCoreConstants.Properties.Error] = OpenIddictConstants.Errors.InvalidGrant,
                     [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = localizer["InvalidLinkUserId"]
@@ -108,7 +108,7 @@ public class LinkUserTokenExtensionGrant : ITokenExtensionGrant
             {
                 if (!Guid.TryParse(linkTenantIdParam.Value.ToString(), out var parsedGuid))
                 {
-                    var properties = new AuthenticationProperties(new Dictionary<string, string>
+                    var properties = new AuthenticationProperties(new Dictionary<string, string?>
                     {
                         [OpenIddictServerAspNetCoreConstants.Properties.Error] = OpenIddictConstants.Errors.InvalidGrant,
                         [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = localizer["InvalidLinkTenantId"]
@@ -124,7 +124,7 @@ public class LinkUserTokenExtensionGrant : ITokenExtensionGrant
             var linkUserManager = GetRequiredService<IdentityLinkUserManager>(context);
 
             var isLinked = await linkUserManager.IsLinkedAsync(
-                new IdentityLinkUserInfo(userId.Value, currentTenant.Id),
+                new IdentityLinkUserInfo(userId!.Value, currentTenant.Id),
                 new IdentityLinkUserInfo(linkUserId, linkTenantId));
 
             if (isLinked)
@@ -138,7 +138,7 @@ public class LinkUserTokenExtensionGrant : ITokenExtensionGrant
             }
             else
             {
-                var properties = new AuthenticationProperties(new Dictionary<string, string>
+                var properties = new AuthenticationProperties(new Dictionary<string, string?>
                 {
                     [OpenIddictServerAspNetCoreConstants.Properties.Error] = OpenIddictConstants.Errors.InvalidGrant,
                     [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = localizer["TheTargetUserIsNotLinkedToYou"]
@@ -149,7 +149,7 @@ public class LinkUserTokenExtensionGrant : ITokenExtensionGrant
         }
     }
 
-    protected virtual T GetRequiredService<T>(ExtensionGrantContext context)
+    protected virtual T GetRequiredService<T>(ExtensionGrantContext context) where T: notnull
     {
         return context.HttpContext.RequestServices.GetRequiredService<T>();
     }
@@ -196,7 +196,7 @@ public class LinkUserTokenExtensionGrant : ITokenExtensionGrant
         await identitySecurityLogManager.SaveAsync(logContext);
     }
 
-    protected virtual Task<string> FindClientIdAsync(ExtensionGrantContext context)
+    protected virtual Task<string?> FindClientIdAsync(ExtensionGrantContext context)
     {
         return Task.FromResult(context.Request.ClientId);
     }

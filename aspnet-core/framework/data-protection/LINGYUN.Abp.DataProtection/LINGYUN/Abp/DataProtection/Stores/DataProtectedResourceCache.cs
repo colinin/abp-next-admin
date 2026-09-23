@@ -13,14 +13,14 @@ public class DataProtectedResourceCache : IDataProtectedResourceCache, ITransien
         _cache = cache;
     }
 
-    public virtual DataProtectedResourceCacheItem GetCache(string subjectName, string subjectId, string entityTypeFullName, DataAccessOperation operation)
+    public virtual DataProtectedResourceCacheItem? GetCache(string subjectName, string subjectId, string entityTypeFullName, DataAccessOperation operation)
     {
         var cacheKey = DataProtectedResourceCacheItem.CalculateCacheKey(subjectName, subjectId, entityTypeFullName, operation);
         var cacheItem = _cache.Get(cacheKey);
         return cacheItem;
     }
 
-    public async virtual Task<DataProtectedResourceCacheItem> GetCacheAsync(string subjectName, string subjectId, string entityTypeFullName, DataAccessOperation operation)
+    public async virtual Task<DataProtectedResourceCacheItem?> GetCacheAsync(string subjectName, string subjectId, string entityTypeFullName, DataAccessOperation operation)
     {
         var cacheKey = DataProtectedResourceCacheItem.CalculateCacheKey(subjectName, subjectId, entityTypeFullName, operation);
         var cacheItem = await _cache.GetAsync(cacheKey);

@@ -14,7 +14,7 @@ public class DateRangeControlValue : ControlValue
     [NotNull]
     [JsonProperty("date_range")]
     [JsonPropertyName("date_range")]
-    public DateRangeValue DateRange { get; set; }
+    public DateRangeValue DateRange { get; set; } = default!;
     public DateRangeControlValue()
     {
 
@@ -34,14 +34,14 @@ public class DateRangeValue
     [NotNull]
     [JsonProperty("type")]
     [JsonPropertyName("type")]
-    public string Type { get; set; }
+    public string Type { get; set; } = default!;
     /// <summary>
     /// 开始时间,unix时间戳。当type 为halfday时，取值只能为固定两个时间点 上午：当天00:00:00点时间戳 下午：当天12:00:00时间戳
     /// </summary>
     [NotNull]
     [JsonProperty("new_begin")]
     [JsonPropertyName("new_begin")]
-    public long NewBegin { get; set; }
+    public long NewBegin { get; set; } = default!;
     /// <summary>
     /// 结束时间，unix时间戳。 当type 为halfday时，取值只能为固定两个时间点 上午：当天00:00:00点时间戳 下午：当天12:00:00时间戳
     /// </summary>

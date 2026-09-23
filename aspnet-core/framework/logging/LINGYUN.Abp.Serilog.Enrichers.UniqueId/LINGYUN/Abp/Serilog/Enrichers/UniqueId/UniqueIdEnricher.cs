@@ -6,7 +6,7 @@ namespace LINGYUN.Abp.Serilog.Enrichers.UniqueId;
 
 public class UniqueIdEnricher : ILogEventEnricher
 {
-    internal static IDistributedIdGenerator DistributedIdGenerator;
+    internal static IDistributedIdGenerator DistributedIdGenerator = default!;
 
     public void Enrich(LogEvent logEvent, ILogEventPropertyFactory propertyFactory)
     {

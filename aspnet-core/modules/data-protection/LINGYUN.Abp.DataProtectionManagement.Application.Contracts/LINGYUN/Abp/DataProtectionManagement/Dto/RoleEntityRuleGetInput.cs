@@ -9,7 +9,7 @@ public class RoleEntityRuleGetInput
 {
     [Required]
     [DynamicStringLength(typeof(RoleEntityRuleConsts), nameof(RoleEntityRuleConsts.MaxRuletNameLength))]
-    public string RoleName { get; set; }
+    public string RoleName { get; set; } = default!;
 
     [Required]
     public Guid EntityTypeId { get; set; }

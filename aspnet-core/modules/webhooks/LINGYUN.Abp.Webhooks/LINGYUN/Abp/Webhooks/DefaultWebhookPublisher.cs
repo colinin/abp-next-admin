@@ -36,7 +36,7 @@ namespace LINGYUN.Abp.Webhooks
             string webhookName,
             object data, 
             bool sendExactSameData = false, 
-            WebhookHeader headers = null)
+            WebhookHeader? headers = null)
         {
             var subscriptions = await _webhookSubscriptionManager.GetAllSubscriptionsIfFeaturesGrantedAsync(_currentTenant.Id, webhookName);
             await PublishAsync(webhookName, data, subscriptions, sendExactSameData, headers);
@@ -47,7 +47,7 @@ namespace LINGYUN.Abp.Webhooks
             object data,
             Guid? tenantId,
             bool sendExactSameData = false, 
-            WebhookHeader headers = null)
+            WebhookHeader? headers = null)
         {
             var subscriptions = await _webhookSubscriptionManager.GetAllSubscriptionsIfFeaturesGrantedAsync(tenantId, webhookName);
             await PublishAsync(webhookName, data, subscriptions, sendExactSameData, headers);
@@ -58,7 +58,7 @@ namespace LINGYUN.Abp.Webhooks
             string webhookName,
             object data,
             bool sendExactSameData = false, 
-            WebhookHeader headers = null)
+            WebhookHeader? headers = null)
         {
             var subscriptions = await _webhookSubscriptionManager.GetAllSubscriptionsOfTenantsIfFeaturesGrantedAsync(tenantIds, webhookName);
             await PublishAsync(webhookName, data, subscriptions, sendExactSameData, headers);
@@ -69,7 +69,7 @@ namespace LINGYUN.Abp.Webhooks
             object data, 
             List<WebhookSubscriptionInfo> webhookSubscriptions,
             bool sendExactSameData = false, 
-            WebhookHeader headers = null)
+            WebhookHeader? headers = null)
         {
             if (webhookSubscriptions.IsNullOrEmpty())
             {

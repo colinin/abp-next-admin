@@ -100,7 +100,7 @@ public class NullNotificationStore : INotificationStore, ISingletonDependency
     public Task<List<NotificationSubscriptionInfo>> GetUserSubscriptionsAsync(
         Guid? tenantId, 
         string notificationName,
-        IEnumerable<UserIdentifier> identifiers,
+        IEnumerable<UserIdentifier>? identifiers = null,
         CancellationToken cancellationToken = default)
     {
         return Task.FromResult(new List<NotificationSubscriptionInfo>());

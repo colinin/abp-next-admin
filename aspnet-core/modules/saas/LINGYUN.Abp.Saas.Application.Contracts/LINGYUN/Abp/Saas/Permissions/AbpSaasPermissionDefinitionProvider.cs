@@ -23,6 +23,7 @@ public class AbpSaasPermissionDefinitionProvider : PermissionDefinitionProvider
         tenantsPermission.AddChild(AbpSaasPermissions.Tenants.Delete, L("Permission:Delete"), multiTenancySide: MultiTenancySides.Host);
         tenantsPermission.AddChild(AbpSaasPermissions.Tenants.ManageFeatures, L("Permission:ManageFeatures"), multiTenancySide: MultiTenancySides.Host);
         tenantsPermission.AddChild(AbpSaasPermissions.Tenants.ManageConnectionStrings, L("Permission:ManageConnectionStrings"), multiTenancySide: MultiTenancySides.Host);
+        tenantsPermission.AddChild(AbpSaasPermissions.Tenants.Impersonation, L("Permission:Impersonation"), multiTenancySide: MultiTenancySides.Host);
     }
 
     private static LocalizableString L(string name)

@@ -15,14 +15,14 @@ public class ApprovalProcessSubNode
     [NotNull]
     [JsonProperty("userid")]
     [JsonPropertyName("userid")]
-    public string UserId { get; set; }
+    public string UserId { get; set; } = default!;
     /// <summary>
     /// 审批/办理意见
     /// </summary>
     [NotNull]
     [JsonProperty("speech")]
     [JsonPropertyName("speech")]
-    public string Speech { get; set; }
+    public string Speech { get; set; } = default!;
     /// <summary>
     /// 子节点状态 1-审批中；2-同意；3-驳回；4-转审；11-退回给指定审批人；12-加签；13-同意并加签；14-办理；15-转交
     /// </summary>
@@ -43,5 +43,5 @@ public class ApprovalProcessSubNode
     [CanBeNull]
     [JsonProperty("media_ids")]
     [JsonPropertyName("media_ids")]
-    public List<string> MediaIds { get; set; }
+    public List<string>? MediaIds { get; set; }
 }

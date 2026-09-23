@@ -149,7 +149,7 @@ public class InactiveIdentityUserNotifierJob : IJobRunnable
             context.CancellationToken,
             async (inactiveUser, ctx) =>
             {
-                var notificationTemplateData = new Dictionary<string, object>
+                var notificationTemplateData = new Dictionary<string, object?>
                 {
                     { "now", clock.Now },
                     { "loginUrl", userLoginUri },

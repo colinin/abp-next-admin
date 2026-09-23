@@ -15,7 +15,7 @@ public class DepartmentControlValue : ContactControlValue
     [NotNull]
     [JsonProperty("departments")]
     [JsonPropertyName("departments")]
-    public List<DepartmentValue> Departments { get; set; }
+    public List<DepartmentValue> Departments { get; set; } = default!;
     public DepartmentControlValue()
     {
 
@@ -45,14 +45,14 @@ public class DepartmentValue
     [NotNull]
     [JsonProperty("openapi_id")]
     [JsonPropertyName("openapi_id")]
-    public string DepartmentId { get; set; }
+    public string DepartmentId { get; set; } = default!;
     /// <summary>
     /// 所选部门名
     /// </summary>
     [NotNull]
     [JsonProperty("name")]
     [JsonPropertyName("name")]
-    public string Name { get; set; }
+    public string Name { get; set; } = default!;
     public DepartmentValue()
     {
 

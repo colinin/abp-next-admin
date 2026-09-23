@@ -45,11 +45,7 @@ public class WxPusherNotificationPublishProvider : NotificationPublishProvider
 
         var notificationDefine = await NotificationDefinitionManager.GetOrNullAsync(context.Notification.Name);
         var url = context.Notification.Data.GetUrlOrNull() ?? notificationDefine?.GetUrlOrNull();
-        var topicDefine = notificationDefine?.GetTopics();
-        if (topicDefine.Any())
-        {
-            topics = topicDefine;
-        }
+        topics ??= notificationDefine?.GetTopics();
         var contentType = notificationDefine?.GetContentTypeOrDefault(MessageContentType.Text)
              ?? MessageContentType.Text;
         var notificationData = await NotificationDataSerializer.ToStandard(context.Notification.Data);

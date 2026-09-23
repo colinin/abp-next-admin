@@ -60,7 +60,7 @@ namespace LINGYUN.Abp.Webhooks
             HttpStatusCode? statusCode = null;
             var content = FailedRequestDefaultContent;
             var reqHeaders = GetHeaders(request.Headers);
-            IDictionary<string, string> resHeaders = null;
+            IDictionary<string, string>? resHeaders = null;
 
             try
             {
@@ -139,7 +139,7 @@ namespace LINGYUN.Abp.Webhooks
                     }
                 }
 
-                if (!request.Content.Headers.Contains(header.Key))
+                if (!request.Content!.Headers.Contains(header.Key))
                 {
                     if (request.Content.Headers.TryAddWithoutValidation(header.Key, header.Value))
                     {
@@ -165,7 +165,7 @@ namespace LINGYUN.Abp.Webhooks
                     }
                 }
 
-                if (request.Content.Headers.Contains(header.Key) && request.Content.Headers.Remove(header.Key))
+                if (request.Content!.Headers.Contains(header.Key) && request.Content.Headers.Remove(header.Key))
                 {
                     if (request.Content.Headers.TryAddWithoutValidation(header.Key, header.Value))
                     {

@@ -73,8 +73,8 @@ public class MessageStore : IMessageStore, ITransientDependency
         Guid? tenantId,
         long groupId,
         MessageType? type = null,
-        string filter = "",
-        string sorting = nameof(ChatMessage.MessageId),
+        string? filter = null,
+        string? sorting = nameof(ChatMessage.MessageId),
         int skipCount = 0,
         int maxResultCount = 10,
         CancellationToken cancellationToken = default)
@@ -102,8 +102,8 @@ public class MessageStore : IMessageStore, ITransientDependency
         Guid sendUserId,
         Guid receiveUserId,
         MessageType? type = null,
-        string filter = "",
-        string sorting = nameof(ChatMessage.MessageId),
+        string? filter = null,
+        string? sorting = nameof(ChatMessage.MessageId),
         int skipCount = 0,
         int maxResultCount = 10,
         CancellationToken cancellationToken = default)
@@ -131,7 +131,7 @@ public class MessageStore : IMessageStore, ITransientDependency
         Guid? tenantId,
         Guid userId,
         MessageState? state = null,
-        string sorting = nameof(LastChatMessage.SendTime),
+        string? sorting = nameof(LastChatMessage.SendTime),
         int maxResultCount = 10,
         CancellationToken cancellationToken = default
         )
@@ -152,7 +152,7 @@ public class MessageStore : IMessageStore, ITransientDependency
         Guid? tenantId,
         long groupId,
         MessageType? type = null,
-        string filter = "",
+        string? filter = null,
         CancellationToken cancellationToken = default)
     {
         using (_currentTenant.Change(tenantId))
@@ -166,7 +166,7 @@ public class MessageStore : IMessageStore, ITransientDependency
         Guid sendUserId,
         Guid receiveUserId,
         MessageType? type = null,
-        string filter = "",
+        string? filter = null,
         CancellationToken cancellationToken = default)
     {
         using (_currentTenant.Change(tenantId))

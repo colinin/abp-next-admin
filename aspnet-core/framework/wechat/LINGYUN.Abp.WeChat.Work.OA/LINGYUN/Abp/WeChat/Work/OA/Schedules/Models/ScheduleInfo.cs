@@ -14,28 +14,28 @@ public class ScheduleInfo
     [NotNull]
     [JsonProperty("schedule_id")]
     [JsonPropertyName("schedule_id")]
-    public string ScheduleId { get; set; }
+    public string ScheduleId { get; set; } = default!;
     /// <summary>
     /// 管理员userid列表
     /// </summary>
     [NotNull]
     [JsonProperty("admins")]
     [JsonPropertyName("admins")]
-    public string[] Admins { get; set; }
+    public string[] Admins { get; set; } = default!;
     /// <summary>
     /// 日程参与者列表
     /// </summary>
     [NotNull]
     [JsonProperty("attendees")]
     [JsonPropertyName("attendees")]
-    public ScheduleAttendeeInfo[] Attendees { get; set; }
+    public ScheduleAttendeeInfo[] Attendees { get; set; } = default!;
     /// <summary>
     /// 日程标题
     /// </summary>
     [NotNull]
     [JsonProperty("summary")]
     [JsonPropertyName("summary")]
-    public string Summary { get; set; }
+    public string Summary { get; set; } = default!;
     /// <summary>
     /// 日程描述
     /// </summary>

@@ -12,5 +12,5 @@ public class WebhookSubscriptionEto : IMultiTenant
 
     public Guid? TenantId { get; set; }
 
-    public string WebhookUri { get; set; }
+    public string WebhookUri { get; set; } = default!;
 }

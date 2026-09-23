@@ -5,7 +5,7 @@ using Volo.Abp.Domain.Entities.Auditing;
 namespace LINGYUN.Abp.Demo.Authors;
 public class Author : FullAuditedAggregateRoot<Guid>
 {
-    public string Name { get; private set; }
+    public string Name { get; private set; } = default!;
     public DateTime BirthDate { get; set; }
     public string? ShortBio { get; set; }
 

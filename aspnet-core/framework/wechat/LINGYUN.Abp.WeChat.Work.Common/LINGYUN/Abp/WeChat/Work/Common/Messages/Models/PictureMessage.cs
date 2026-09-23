@@ -13,12 +13,12 @@ public class PictureMessage : WeChatWorkGeneralMessage
     /// 图片链接（由系统生成）
     /// </summary>
     [XmlElement("PicUrl")]
-    public string PicUrl { get; set; }
+    public string PicUrl { get; set; } = default!;
     /// <summary>
     /// 图片消息媒体id，可以调用获取临时素材接口拉取数据。
     /// </summary>
     [XmlElement("MediaId")]
-    public string MediaId { get; set; }
+    public string MediaId { get; set; } = default!;
     public override WeChatMessageEto ToEto()
     {
         return new WeChatWorkGeneralMessageEto<PictureMessage>(this);

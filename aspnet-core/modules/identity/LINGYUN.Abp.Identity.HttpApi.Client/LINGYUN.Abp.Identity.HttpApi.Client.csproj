@@ -14,6 +14,11 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<None Remove="ClientProxies\*.json" />
+		<EmbeddedResource Include="ClientProxies\*.json" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="Volo.Abp.Identity.HttpApi.Client" />
 	</ItemGroup>
 

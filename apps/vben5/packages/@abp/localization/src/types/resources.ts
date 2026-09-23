@@ -1,4 +1,7 @@
-import type { AuditedEntityDto } from '@abp/core';
+import type {
+  AuditedEntityDto,
+  PagedAndSortedResultRequestDto,
+} from '@abp/core';
 
 interface ResourceDto extends AuditedEntityDto<string> {
   defaultCultureName?: string;
@@ -21,13 +24,13 @@ interface ResourceCreateDto extends ResourceCreateOrUpdateDto {
 
 type ResourceUpdateDto = ResourceCreateOrUpdateDto;
 
-interface ResourceGetListInput {
+interface ResourceGetPagedListInput extends PagedAndSortedResultRequestDto {
   filter?: string;
 }
 
 export type {
   ResourceCreateDto,
   ResourceDto,
-  ResourceGetListInput,
+  ResourceGetPagedListInput,
   ResourceUpdateDto,
 };

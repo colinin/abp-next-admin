@@ -52,6 +52,7 @@ const defaultModel: AIToolDefinitionVto = {
   name: '',
   isEnabled: true,
   isGlobal: false,
+  isStatic: false,
   isSystem: false,
   provider: '',
   extraProperties: {},
@@ -80,7 +81,7 @@ const getAIToolOptions = computed<NonNullable<SelectProps['options']>>(() => {
 // 表单允许编辑
 const getIsAllowUpdate = computed<boolean>(() => {
   if (formModel.value.id) {
-    if (formModel.value.isSystem) {
+    if (formModel.value.isSystem || formModel.value.isStatic) {
       return false;
     }
     return isGranted(AIToolDefinitionPermissions.Update);
@@ -140,6 +141,7 @@ async function onInit() {
     modalApi.setState({
       loading: true,
       title: $t('AIManagement.Tools:New'),
+      showConfirmButton: true,
     });
     await onInitProviderOptions();
     const { id } = modalApi.getData<AIToolDefinitionVto>();
@@ -154,6 +156,7 @@ async function onInit() {
       (p) => p.name === dto.provider,
     );
     modalApi.setState({
+      showConfirmButton: !dto.isSystem && !dto.isStatic,
       title: $t('AIManagement.Tools:Edit'),
     });
   } finally {

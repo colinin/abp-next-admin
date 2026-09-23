@@ -17,8 +17,8 @@ public interface IWeChatWorkAuthorizeGenerator
     Task<string> GenerateOAuth2AuthorizeAsync(
         string redirectUri,
         string state,
-        string responseType = "code",
-        string scope = "snsapi_base");
+        string? responseType = "code",
+        string? scope = "snsapi_base");
     /// <summary>
     /// 构建网页登录链接
     /// </summary>
@@ -31,7 +31,7 @@ public interface IWeChatWorkAuthorizeGenerator
     Task<string> GenerateOAuth2LoginAsync(
         string redirectUri,
         string state,
-        string loginType = "ServiceApp",
-        string agentId = "",
-        string lang = "zh");
+        string? loginType = "ServiceApp",
+        string? agentId = "",
+        string? lang = "zh");
 }

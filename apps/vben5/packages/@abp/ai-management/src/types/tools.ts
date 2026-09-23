@@ -11,6 +11,7 @@ interface AIToolDefinitionRecordDto
   description?: string;
   isEnabled: boolean;
   isGlobal: boolean;
+  isStatic: boolean;
   isSystem: boolean;
   name: string;
   provider: string;

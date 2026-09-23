@@ -12,7 +12,7 @@ namespace LINGYUN.Abp.LocalizationManagement;
 public class LocalizationLanguageCacheItem
 {
     public const string CacheKey = "All";
-    public List<LanguageInfo> Languages { get; set; }
+    public List<LanguageInfo> Languages { get; set; } = default!;
 
     public LocalizationLanguageCacheItem()
     {

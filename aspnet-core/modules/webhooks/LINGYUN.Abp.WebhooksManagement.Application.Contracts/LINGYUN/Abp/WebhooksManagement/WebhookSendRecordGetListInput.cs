@@ -6,7 +6,7 @@ namespace LINGYUN.Abp.WebhooksManagement;
 
 public class WebhookSendRecordGetListInput : PagedAndSortedResultRequestDto
 {
-    public string Filter { get; set; }
+    public string? Filter { get; set; }
 
     public Guid? TenantId { get; set; }
 

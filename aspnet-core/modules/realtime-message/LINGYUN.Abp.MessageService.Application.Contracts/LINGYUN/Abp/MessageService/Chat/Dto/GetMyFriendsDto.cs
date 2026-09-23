@@ -4,5 +4,5 @@ namespace LINGYUN.Abp.MessageService.Chat;
 
 public class GetMyFriendsDto : ISortedResultRequest
 {
-    public string Sorting { get; set; }
+    public string? Sorting { get; set; }
 }

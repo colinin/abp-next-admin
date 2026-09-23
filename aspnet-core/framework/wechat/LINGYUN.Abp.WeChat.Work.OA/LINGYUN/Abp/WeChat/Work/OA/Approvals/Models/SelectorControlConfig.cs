@@ -15,7 +15,7 @@ public class SelectorControlConfig : ControlConfig
     [NotNull]
     [JsonProperty("selector")]
     [JsonPropertyName("selector")]
-    public SelectorConfig Selector { get; set; }
+    public SelectorConfig Selector { get; set; } = default!;
     public SelectorControlConfig()
     {
 
@@ -35,14 +35,14 @@ public class SelectorConfig
     [NotNull]
     [JsonProperty("type")]
     [JsonPropertyName("type")]
-    public string Type { get; set; }
+    public string Type { get; set; } = default!;
     /// <summary>
     /// 多选选项，多选属性的选择控件允许输入多个
     /// </summary>
     [CanBeNull]
     [JsonProperty("options")]
     [JsonPropertyName("options")]
-    public List<SelectorOption> Options {  get; set; }
+    public List<SelectorOption>? Options {  get; set; }
     /// <summary>
     /// 关联控件
     /// </summary>
@@ -99,14 +99,14 @@ public class SelectorOption
     [NotNull]
     [JsonProperty("key")]
     [JsonPropertyName("key")]
-    public string Key { get; set; }
+    public string Key { get; set; } = default!;
     /// <summary>
     /// 选项说明
     /// </summary>
     [NotNull]
     [JsonProperty("value")]
     [JsonPropertyName("value")]
-    public List<SelectorOptionValue> Value { get; set; }
+    public List<SelectorOptionValue> Value { get; set; } = default!;
     public SelectorOption()
     {
 
@@ -127,14 +127,14 @@ public class SelectorOptionValue
     [NotNull]
     [JsonProperty("text")]
     [JsonPropertyName("text")]
-    public string Text { get; set; }
+    public string Text { get; set; } = default!;
     /// <summary>
     /// 显示语言
     /// </summary>
     [NotNull]
     [JsonProperty("lang")]
     [JsonPropertyName("lang")]
-    public string Lang { get; set; }
+    public string Lang { get; set; } = default!;
     public SelectorOptionValue()
     {
 
@@ -155,14 +155,14 @@ public class SelectorOptionRelation
     [NotNull]
     [JsonProperty("key")]
     [JsonPropertyName("key")]
-    public string Key { get; set; }
+    public string Key { get; set; } = default!;
     /// <summary>
     /// 关联控件列表
     /// </summary>
     [NotNull]
     [JsonProperty("relation_list")]
     [JsonPropertyName("relation_list")]
-    public List<SelectorRelation> Relations { get; set; }
+    public List<SelectorRelation> Relations { get; set; } = default!;
     public SelectorOptionRelation()
     {
 
@@ -183,7 +183,7 @@ public class SelectorRelation
     [NotNull]
     [JsonProperty("related_control_id")]
     [JsonPropertyName("related_control_id")]
-    public string ControlId { get; set; }
+    public string ControlId { get; set; } = default!;
     /// <summary>
     /// 操作方法
     /// </summary>
@@ -193,7 +193,7 @@ public class SelectorRelation
     [NotNull]
     [JsonProperty("action")]
     [JsonPropertyName("action")]
-    public int Action { get; set; }
+    public int Action { get; set; } = default!;
     public SelectorRelation()
     {
 
@@ -221,7 +221,7 @@ public class SelectorOptionExternal
     [NotNull]
     [JsonProperty("external_url")]
     [JsonPropertyName("external_url")]
-    public string ExternalUrl { get; set; }
+    public string ExternalUrl { get; set; } = default!;
     public SelectorOptionExternal()
     {
 

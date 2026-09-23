@@ -9,17 +9,17 @@ namespace LINGYUN.Abp.WebhooksManagement;
 [IgnoreMultiTenancy]
 public class WebhookDefinitionRecord : BasicAggregateRoot<Guid>, IHasExtraProperties
 {
-    public string GroupName { get; set; }
+    public string GroupName { get; set; } = default!;
 
-    public string Name { get; set; }
+    public string Name { get; set; } = default!;
 
-    public string DisplayName { get; set; }
+    public string DisplayName { get; set; } = default!;
 
-    public string Description { get; set; }
+    public string? Description { get; set; }
 
     public bool IsEnabled { get; set; }
 
-    public string RequiredFeatures { get; set; }
+    public string? RequiredFeatures { get; set; }
 
     public ExtraPropertyDictionary ExtraProperties { get; protected set; }
 
@@ -34,9 +34,9 @@ public class WebhookDefinitionRecord : BasicAggregateRoot<Guid>, IHasExtraProper
         string groupName,
         string name,
         string displayName,
-        string description = null,
+        string? description = null,
         bool isEnabled = true,
-        string requiredFeatures = null)
+        string? requiredFeatures = null)
         : base(id)
     {
         GroupName = Check.NotNullOrWhiteSpace(groupName, nameof(groupName), WebhookGroupDefinitionRecordConsts.MaxNameLength);

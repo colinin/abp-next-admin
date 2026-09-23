@@ -30,14 +30,14 @@ public class TenantStore : ITenantStore, ITransientDependency
         TenantAppService = tenantAppService;
     }
 
-    public async virtual Task<TenantConfiguration> FindAsync(string name)
+    public async virtual Task<TenantConfiguration?> FindAsync(string name)
     {
-        return (await GetCacheItemAsync(null, name)).Value;
+        return (await GetCacheItemAsync(null, name))?.Value;
     }
 
-    public async virtual Task<TenantConfiguration> FindAsync(Guid id)
+    public async virtual Task<TenantConfiguration?> FindAsync(Guid id)
     {
-        return (await GetCacheItemAsync(id, null)).Value;
+        return (await GetCacheItemAsync(id, null))?.Value;
     }
 
     public async virtual Task<IReadOnlyList<TenantConfiguration>> GetListAsync(bool includeDetails = false)
@@ -68,18 +68,18 @@ public class TenantStore : ITenantStore, ITransientDependency
     }
 
     [Obsolete("Use FindAsync method.")]
-    public virtual TenantConfiguration Find(string name)
+    public virtual TenantConfiguration? Find(string name)
     {
         return AsyncHelper.RunSync(async () => await FindAsync(name));
     }
 
     [Obsolete("Use FindAsync method.")]
-    public virtual TenantConfiguration Find(Guid id)
+    public virtual TenantConfiguration? Find(Guid id)
     {
         return AsyncHelper.RunSync(async () => await FindAsync(id));
     }
 
-    protected async virtual Task<TenantCacheItem> GetCacheItemAsync(Guid? id, string name)
+    protected async virtual Task<TenantCacheItem?> GetCacheItemAsync(Guid? id, string? name = null)
     {
         var cacheKey = CalculateCacheKey(id, name);
 
@@ -119,7 +119,7 @@ public class TenantStore : ITenantStore, ITransientDependency
 
     protected async virtual Task<TenantCacheItem> SetCacheAsync(
         string cacheKey,
-        [CanBeNull] TenantDto tenant,
+        [CanBeNull] TenantDto? tenant,
         [CanBeNull] IReadOnlyList<TenantConnectionStringDto> connectionStrings)
     {
         var tenantConfiguration = tenant != null
@@ -130,6 +130,7 @@ public class TenantStore : ITenantStore, ITransientDependency
             : null;
         if (tenantConfiguration != null && connectionStrings?.Any() == true)
         {
+            tenantConfiguration.ConnectionStrings ??= new ConnectionStrings();
             foreach (var connectionString in connectionStrings)
             {
                 tenantConfiguration.ConnectionStrings.Add(
@@ -142,7 +143,7 @@ public class TenantStore : ITenantStore, ITransientDependency
         return cacheItem;
     }
 
-    protected virtual string CalculateCacheKey(Guid? id, string name)
+    protected virtual string CalculateCacheKey(Guid? id, string? name = null)
     {
         return TenantCacheItem.CalculateCacheKey(id, name);
     }

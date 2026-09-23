@@ -74,7 +74,7 @@ public class WebhookSendRecordAppService : WebhooksManagementAppServiceBase, IWe
         var headersToSend = new Dictionary<string, string>();
         if (!sendRecord.RequestHeaders.IsNullOrWhiteSpace())
         {
-            headersToSend = JsonConvert.DeserializeObject<Dictionary<string, string>>(sendRecord.RequestHeaders);
+            headersToSend = JsonConvert.DeserializeObject<Dictionary<string, string>>(sendRecord.RequestHeaders)!;
         }
 
         using (CurrentTenant.Change(sendRecord.TenantId))
@@ -126,7 +126,7 @@ public class WebhookSendRecordAppService : WebhooksManagementAppServiceBase, IWe
                 .AndIf(Filter.ResponseStatusCode.HasValue, x => x.ResponseStatusCode == Filter.ResponseStatusCode)
                 .AndIf(Filter.BeginCreationTime.HasValue, x => x.CreationTime >= Filter.BeginCreationTime)
                 .AndIf(Filter.EndCreationTime.HasValue, x => x.CreationTime <= Filter.EndCreationTime)
-                .AndIf(!Filter.Filter.IsNullOrWhiteSpace(), x => x.Response.Contains(Filter.Filter));
+                .AndIf(!Filter.Filter.IsNullOrWhiteSpace(), x => x.Response!.Contains(Filter.Filter!));
         }
     }
 }

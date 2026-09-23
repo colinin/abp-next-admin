@@ -15,7 +15,7 @@ public class FileControlValue : ControlValue
     [NotNull]
     [JsonProperty("files")]
     [JsonPropertyName("files")]
-    public List<FileValue> Files { get; set; }
+    public List<FileValue> Files { get; set; } = default!;
     public FileControlValue()
     {
 
@@ -35,14 +35,14 @@ public class FileValue
     [NotNull]
     [JsonProperty("file_id")]
     [JsonPropertyName("file_id")]
-    public string FileId { get; set; }
+    public string FileId { get; set; } = default!;
     /// <summary>
     /// 文件名称，类型为string，如果没有可以填空字符串。
     /// </summary>
     [CanBeNull]
     [JsonProperty("file_name")]
     [JsonPropertyName("file_name")]
-    public string FileName { get; set; }
+    public string? FileName { get; set; }
     /// <summary>
     /// 文件大小，类型为number，如果没有可以填空字符串。
     /// </summary>
@@ -56,14 +56,14 @@ public class FileValue
     [CanBeNull]
     [JsonProperty("file_type")]
     [JsonPropertyName("file_type")]
-    public string FileType { get; set; }
+    public string? FileType { get; set; }
     /// <summary>
     /// 文件地址，类型为string，如果没有可以填空字符串。
     /// </summary>
     [CanBeNull]
     [JsonProperty("file_url")]
     [JsonPropertyName("file_url")]
-    public string FileUrl { get; set; }
+    public string? FileUrl { get; set; }
     public FileValue()
     {
 

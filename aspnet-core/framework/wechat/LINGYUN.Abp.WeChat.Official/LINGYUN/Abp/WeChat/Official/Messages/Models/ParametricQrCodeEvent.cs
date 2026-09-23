@@ -13,12 +13,12 @@ public class ParametricQrCodeEvent : WeChatEventMessage
     /// 事件KEY值
     /// </summary>
     [XmlElement("EventKey")]
-    public string EventKey { get; set; }
+    public string EventKey { get; set; } = default!;
     /// <summary>
     /// 二维码的ticket，可用来换取二维码图片
     /// </summary>
     [XmlElement("Ticket")]
-    public string Ticket { get; set; }
+    public string Ticket { get; set; } = default!;
     public override WeChatMessageEto ToEto()
     {
         return new WeChatOfficialEventMessageEto<ParametricQrCodeEvent>(this);

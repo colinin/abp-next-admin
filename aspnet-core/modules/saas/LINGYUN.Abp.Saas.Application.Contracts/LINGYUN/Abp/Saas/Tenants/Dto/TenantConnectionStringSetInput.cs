@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Volo.Abp.Auditing;
 using Volo.Abp.Validation;
 
 namespace LINGYUN.Abp.Saas.Tenants;
@@ -7,9 +8,10 @@ public class TenantConnectionStringSetInput
 {
     [Required]
     [DynamicStringLength(typeof(TenantConnectionStringConsts), nameof(TenantConnectionStringConsts.MaxNameLength))]
-    public string Name { get; set; }
+    public string Name { get; set; } = default!;
 
     [Required]
+    [DisableAuditing]
     [DynamicStringLength(typeof(TenantConnectionStringConsts), nameof(TenantConnectionStringConsts.MaxValueLength))]
-    public string Value { get; set; }
+    public string Value { get; set; } = default!;
 }

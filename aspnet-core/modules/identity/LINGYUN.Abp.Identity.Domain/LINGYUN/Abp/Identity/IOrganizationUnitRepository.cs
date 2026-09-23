@@ -14,7 +14,7 @@ public interface IOrganizationUnitRepository : Volo.Abp.Identity.IOrganizationUn
 
     Task<List<OrganizationUnit>> GetListAsync(
         ISpecification<OrganizationUnit> specification,
-        string sorting = nameof(OrganizationUnit.Code),
+        string? sorting = nameof(OrganizationUnit.Code),
         int maxResultCount = 10,
         int skipCount = 0,
         bool includeDetails = false,

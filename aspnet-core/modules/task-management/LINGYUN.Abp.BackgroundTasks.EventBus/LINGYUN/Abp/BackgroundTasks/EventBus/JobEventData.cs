@@ -10,6 +10,6 @@ namespace LINGYUN.Abp.BackgroundTasks.EventBus;
 public class JobEventData : IMultiTenant
 {
     public Guid? TenantId { get; set; }
-    public string NodeName { get; set; }
+    public string? NodeName { get; set; }
     public List<string> IdList { get; set; } = new List<string>();
 }

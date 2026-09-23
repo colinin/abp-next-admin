@@ -18,19 +18,19 @@ public class WeChatWorkTagMemberInfoResponse : WeChatWorkResponse
     [NotNull]
     [JsonProperty("tagname")]
     [JsonPropertyName("tagname")]
-    public string TagName { get; set; }
+    public string TagName { get; set; } = default!;
     /// <summary>
     /// 标签中包含的成员列表
     /// </summary>
     [NotNull]
     [JsonProperty("userlist")]
     [JsonPropertyName("userlist")]
-    public TagUserInfo[] Users { get; set; }
+    public TagUserInfo[] Users { get; set; } = default!;
     /// <summary>
     /// 标签中包含的部门id列表
     /// </summary>
     [NotNull]
     [JsonProperty("partylist")]
     [JsonPropertyName("partylist")]
-    public int[] Parts { get; set; }
+    public int[] Parts { get; set; } = default!;
 }

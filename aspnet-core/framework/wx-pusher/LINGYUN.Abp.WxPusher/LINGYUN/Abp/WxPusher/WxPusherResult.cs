@@ -15,12 +15,12 @@ public class WxPusherResult<T>
     /// 错误消息
     /// </summary>
     [JsonProperty("msg")]
-    public string Message { get; set; }
+    public string? Message { get; set; }
     /// <summary>
     /// 返回数据
     /// </summary>
     [JsonProperty("data")]
-    public T Data { get; set; }
+    public T? Data { get; set; }
     /// <summary>
     /// 是否调用成功
     /// </summary>
@@ -48,14 +48,14 @@ public class WxPusherResult<T>
     {
         ThrowOfFailed();
 
-        return Data;
+        return Data!;
     }
 
     public void ThrowOfFailed()
     {
         if (!Success)
         {
-            throw new WxPusherRemoteCallException(Code.ToString(), Message);
+            throw new WxPusherRemoteCallException(Code.ToString(), Message!);
         }
     }
 }

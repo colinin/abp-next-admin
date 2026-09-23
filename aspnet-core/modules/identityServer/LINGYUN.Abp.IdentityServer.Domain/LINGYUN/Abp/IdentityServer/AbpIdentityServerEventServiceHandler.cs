@@ -106,11 +106,11 @@ public class AbpIdentityServerEventServiceHandler : IAbpIdentityServerEventServi
     /// <returns></returns>
     protected virtual Task PrepareEventAsync(Event evt)
     {
-        evt.ActivityId = Context.HttpContext.TraceIdentifier;
+        evt.ActivityId = Context.HttpContext?.TraceIdentifier;
         evt.TimeStamp = Clock.Now;
         evt.ProcessId = Process.GetCurrentProcess().Id;
 
-        if (Context.HttpContext.Connection.LocalIpAddress != null)
+        if (Context.HttpContext?.Connection.LocalIpAddress != null)
         {
             evt.LocalIpAddress = Context.HttpContext.Connection.LocalIpAddress.ToString() + ":" + Context.HttpContext.Connection.LocalPort;
         }
@@ -119,7 +119,7 @@ public class AbpIdentityServerEventServiceHandler : IAbpIdentityServerEventServi
             evt.LocalIpAddress = "unknown";
         }
 
-        if (Context.HttpContext.Connection.RemoteIpAddress != null)
+        if (Context.HttpContext?.Connection.RemoteIpAddress != null)
         {
             evt.RemoteIpAddress = Context.HttpContext.Connection.RemoteIpAddress.ToString();
         }

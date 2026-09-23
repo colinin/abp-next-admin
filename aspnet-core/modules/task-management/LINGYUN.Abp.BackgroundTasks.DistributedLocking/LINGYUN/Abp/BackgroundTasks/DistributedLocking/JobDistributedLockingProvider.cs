@@ -28,7 +28,7 @@ public class JobDistributedLockingProvider : IJobLockProvider, ISingletonDepende
             await LockCache.GetOrCreateAsync(jobKey, (entry) =>
             {
                 entry.SetAbsoluteExpiration(TimeSpan.FromSeconds(lockSeconds));
-                entry.RegisterPostEvictionCallback(async (object key, object value, EvictionReason reason, object state) =>
+                entry.RegisterPostEvictionCallback(async (object key, object? value, EvictionReason reason, object? state) =>
                 {
                     if (reason == EvictionReason.Expired && value is IAbpDistributedLockHandle handleValue)
                     {
@@ -49,7 +49,10 @@ public class JobDistributedLockingProvider : IJobLockProvider, ISingletonDepende
     {
         if (LockCache.TryGetValue<IAbpDistributedLockHandle>(jobKey, out var handle))
         {
-            await handle.DisposeAsync();
+            if (handle != null)
+            {
+                await handle.DisposeAsync();
+            }
 
             LockCache.Remove(jobKey);
 
