@@ -65,13 +65,20 @@ public class OpenIddictScopeAppService : OpenIddictApplicationServiceBase, IOpen
         return scope.ToDto(JsonSerializer)!;
     }
 
+    public async virtual Task<ListResultDto<OpenIddictScopeDto>> GetAssignableScopesAsync()
+    {
+        var entities = await _scoppeRepository.GetListAsync();
+
+        return new ListResultDto<OpenIddictScopeDto>(entities.Select(entity => entity.ToDto(JsonSerializer)!).ToList());
+    }
+
     public async virtual Task<PagedResultDto<OpenIddictScopeDto>> GetListAsync(OpenIddictScopeGetListInput input)
     {
         var totalCount = await _scoppeRepository.GetCountAsync(input.Filter);
-        var entites = await _scoppeRepository.GetListAsync(input.Sorting, input.SkipCount, input.MaxResultCount, input.Filter);
+        var entities = await _scoppeRepository.GetListAsync(input.Sorting, input.SkipCount, input.MaxResultCount, input.Filter);
 
         return new PagedResultDto<OpenIddictScopeDto>(totalCount,
-            entites.Select(entity => entity.ToDto(JsonSerializer)!).ToList());
+            entities.Select(entity => entity.ToDto(JsonSerializer)!).ToList());
     }
 
     [Authorize(AbpOpenIddictPermissions.Scopes.Update)]

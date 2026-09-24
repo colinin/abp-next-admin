@@ -34,8 +34,6 @@ defineOptions({
 const MenuItem = Menu.Item;
 
 const AuditLogIcon = createIconifyIcon('fluent-mdl2:compliance-audit');
-const CheckIcon = createIconifyIcon('ant-design:check-outlined');
-const CloseIcon = createIconifyIcon('ant-design:close-outlined');
 
 const { isEnabled } = useFeatures();
 const { hasAccessByCodes } = useAccess();
@@ -194,18 +192,6 @@ const onMenuClick = (row: OpenIddictScopeDto, info: MenuInfo) => {
       >
         {{ $t('AbpOpenIddict.Scopes:AddNew') }}
       </Button>
-    </template>
-    <template #required="{ row }">
-      <div class="flex flex-row justify-center">
-        <CheckIcon v-if="row.required" class="text-green-500" />
-        <CloseIcon v-else class="text-red-500" />
-      </div>
-    </template>
-    <template #static="{ row }">
-      <div class="flex flex-row justify-center">
-        <CheckIcon v-if="row.isStatic" class="text-green-500" />
-        <CloseIcon v-else class="text-red-500" />
-      </div>
     </template>
     <template #action="{ row }">
       <div class="flex flex-row">

@@ -45,6 +45,13 @@ public class OpenIddictScopeController : OpenIddictControllerBase, IOpenIddictSc
     }
 
     [HttpGet]
+    [Route("assignable-scopes")]
+    public virtual Task<ListResultDto<OpenIddictScopeDto>> GetAssignableScopesAsync()
+    {
+        return Service.GetAssignableScopesAsync();
+    }
+
+    [HttpGet]
     public virtual Task<PagedResultDto<OpenIddictScopeDto>> GetListAsync(OpenIddictScopeGetListInput input)
     {
         return Service.GetListAsync(input);
