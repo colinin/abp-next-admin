@@ -1,12 +1,11 @@
 ﻿using Elastic.Clients.Elasticsearch;
-using Elastic.Clients.Elasticsearch.QueryDsl;
 using LINGYUN.Abp.Elasticsearch;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
-using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Volo.Abp.Auditing;
@@ -18,10 +17,10 @@ namespace LINGYUN.Abp.AuditLogging.Elasticsearch;
 [Dependency(ReplaceServices = true)]
 public class ElasticsearchEntityChangeStore : IEntityChangeStore, ITransientDependency
 {
-    private readonly AbpElasticsearchOptions _elasticsearchOptions;
+    private readonly IClock _clock;
     private readonly IIndexNameNormalizer _indexNameNormalizer;
     private readonly IElasticsearchClientFactory _clientFactory;
-    private readonly IClock _clock;
+    private readonly IExpressionQueryService _expressionQueryService;
 
     public ILogger<ElasticsearchEntityChangeStore> Logger { protected get; set; }
 
@@ -29,12 +28,12 @@ public class ElasticsearchEntityChangeStore : IEntityChangeStore, ITransientDepe
         IClock clock,
         IIndexNameNormalizer indexNameNormalizer,
         IElasticsearchClientFactory clientFactory,
-        IOptions<AbpElasticsearchOptions> elasticsearchOptions)
+        IExpressionQueryService expressionQueryService)
     {
         _clock = clock;
         _clientFactory = clientFactory;
         _indexNameNormalizer = indexNameNormalizer;
-        _elasticsearchOptions = elasticsearchOptions.Value;
+        _expressionQueryService = expressionQueryService;
 
         Logger = NullLogger<ElasticsearchEntityChangeStore>.Instance;
     }
@@ -45,34 +44,15 @@ public class ElasticsearchEntityChangeStore : IEntityChangeStore, ITransientDepe
     {
         var client = _clientFactory.Create();
 
-        var sortOrder = SortOrder.Desc;
+        Expression<Func<AuditLog, bool>> expression = x => x.EntityChanges.Any(e => e.Id == entityChangeId);
 
-        var querys = BuildQueryDescriptor(entityChangeId: entityChangeId);
+        var auditLogs = await _expressionQueryService.GetListAsync(
+            CreateIndexPattern(),
+            expression,
+            sorting: $"{nameof(AuditLog.ExecutionTime)} DESC",
+            cancellationToken: cancellationToken);
 
-        var searchResponse = await client.SearchAsync<AuditLog>(dsl =>
-        {
-            dsl.Indices(CreateIndex())
-               .From(0)
-               .Size(1)
-               .Query(new BoolQuery
-               {
-                   Must = querys
-               });
-
-            dsl.Sort(s => s.Field(new FieldSort(GetField(nameof(EntityChange.ChangeTime)))
-            {
-                Order = sortOrder
-            }));
-
-            dsl.SourceIncludes(ix => ix.EntityChanges);
-
-            dsl.SourceExcludes(
-                ex => ex.Actions,
-                ex => ex.Comments,
-                ex => ex.Exceptions);
-        }, cancellationToken);
-
-        var auditLog = searchResponse.Documents.FirstOrDefault();
+        var auditLog = auditLogs.FirstOrDefault();
         if (auditLog != null)
         {
             return auditLog
@@ -95,33 +75,21 @@ public class ElasticsearchEntityChangeStore : IEntityChangeStore, ITransientDepe
     {
         var client = _clientFactory.Create();
 
-        var querys = BuildQueryDescriptor(
-            auditLogId,
-            startTime,
-            endTime,
-            changeType,
-            entityId,
-            entityTypeFullName);
+        Expression<Func<AuditLog, bool>> expression = _ => true;
 
-        var searchResponse = await client.SearchAsync<AuditLog>(dsl =>
-        {
-            dsl.Indices(CreateIndex())
-               .Query(new BoolQuery
-               {
-                   Must = querys
-               })
-               .SourceIncludes(
-                    ix => ix.UserName, 
-                    ix => ix.EntityChanges)
-               .SourceExcludes(
-                    ex => ex.Actions,
-                    ex => ex.Comments,
-                    ex => ex.Exceptions)
-               .From(0)
-               .Size(1000);
-        }, cancellationToken);
+        expression = expression
+            .AndIf(auditLogId.HasValue, x => x.Id == auditLogId)
+            .AndIf(startTime.HasValue, x => x.ExecutionTime >= _clock.Normalize(startTime!.Value))
+            .AndIf(endTime.HasValue, x => x.ExecutionTime <= _clock.Normalize(endTime!.Value))
+            .AndIf(changeType.HasValue, x => x.EntityChanges.Any(x => x.ChangeType == changeType))
+            .AndIf(!entityId.IsNullOrWhiteSpace(), x => x.EntityChanges.Any(x => x.EntityId == entityId))
+            .AndIf(!entityTypeFullName.IsNullOrWhiteSpace(), x => x.EntityChanges.Any(x => x.EntityTypeFullName == entityTypeFullName));
 
-        var auditLogs = searchResponse.Documents.ToList();
+        var auditLogs = await _expressionQueryService.GetListAsync(
+            CreateIndexPattern(),
+            expression,
+            sorting: $"{nameof(AuditLog.ExecutionTime)} DESC",
+            cancellationToken: cancellationToken);
 
         return auditLogs.Sum(log => log.EntityChanges.Count);
     }
@@ -139,48 +107,25 @@ public class ElasticsearchEntityChangeStore : IEntityChangeStore, ITransientDepe
         bool includeDetails = false,
         CancellationToken cancellationToken = default)
     {
-        // TODO: 正确的索引可以避免性能损耗
-
         var result = new List<EntityChange>();
         var client = _clientFactory.Create();
 
-        var sortOrder = !sorting.IsNullOrWhiteSpace() && sorting.EndsWith("asc", StringComparison.InvariantCultureIgnoreCase)
-                ? SortOrder.Asc : SortOrder.Desc;
-        sorting = !sorting.IsNullOrWhiteSpace()
-                ? sorting.Split()[0]
-                : nameof(EntityChange.ChangeTime);
+        Expression<Func<AuditLog, bool>> expression = _ => true;
 
-        var querys = BuildQueryDescriptor(
-            auditLogId,
-            startTime,
-            endTime,
-            changeType,
-            entityId,
-            entityTypeFullName);
+        expression = expression
+            .AndIf(auditLogId.HasValue, x => x.Id == auditLogId)
+            .AndIf(startTime.HasValue, x => x.ExecutionTime >= _clock.Normalize(startTime!.Value))
+            .AndIf(endTime.HasValue, x => x.ExecutionTime <= _clock.Normalize(endTime!.Value))
+            .AndIf(changeType.HasValue, x => x.EntityChanges.Any(x => x.ChangeType == changeType))
+            .AndIf(!entityId.IsNullOrWhiteSpace(), x => x.EntityChanges.Any(x => x.EntityId == entityId))
+            .AndIf(!entityTypeFullName.IsNullOrWhiteSpace(), x => x.EntityChanges.Any(x => x.EntityTypeFullName == entityTypeFullName));
 
-        var searchResponse = await client.SearchAsync<AuditLog>(dsl =>
-        {
-            dsl.Indices(CreateIndex())
-               .Query(new BoolQuery
-               {
-                   Must = querys
-               })
-               .SourceIncludes(
-                    ix => ix.UserName,
-                    ix => ix.EntityChanges)
-               .From(0)
-               .Size(1000);
-            if (includeDetails)
-            {
-                dsl.SourceExcludes(
-                    ex => ex.Actions,
-                    ex => ex.Comments,
-                    ex => ex.Exceptions);
-            }
-        }, cancellationToken);
-
-        var auditLogs = searchResponse.Documents.ToList();
-        if (auditLogs.Any())
+        var auditLogs = await _expressionQueryService.GetListAsync(
+            CreateIndexPattern(),
+            expression,
+            sorting: sorting,
+            cancellationToken: cancellationToken);
+        if (auditLogs.Count > 0)
         {
             var groupAuditLogs = auditLogs.GroupBy(log => log.UserName);
             foreach (var group in groupAuditLogs)
@@ -210,29 +155,15 @@ public class ElasticsearchEntityChangeStore : IEntityChangeStore, ITransientDepe
     {
         var client = _clientFactory.Create();
 
-        var sortOrder = SortOrder.Desc;
+        Expression<Func<AuditLog, bool>> expression = x => x.EntityChanges.Any(e => e.Id == entityChangeId);
 
-        var querys = BuildQueryDescriptor(entityChangeId: entityChangeId);
+        var auditLogs = await _expressionQueryService.GetListAsync(
+            CreateIndexPattern(),
+            expression,
+            sorting: $"{nameof(AuditLog.ExecutionTime)} DESC",
+            cancellationToken: cancellationToken);
 
-        var searchResponse = await client.SearchAsync<AuditLog>(dsl =>
-        {
-            dsl.Indices(CreateIndex())
-               .Query(new BoolQuery
-               {
-                   Must = querys
-               })
-               .SourceExcludes(
-                    ix => ix.UserName,
-                    ix => ix.EntityChanges)
-               .Sort(s => s.Field(new FieldSort(GetField(nameof(EntityChange.ChangeTime)))
-               {
-                   Order = sortOrder
-               }))
-               .From(0)
-               .Size(1);
-        }, cancellationToken);
-
-        var auditLog = searchResponse.Documents.FirstOrDefault();
+        var auditLog = auditLogs.FirstOrDefault();
         if (auditLog != null)
         {
             return auditLog.EntityChanges.Select(e => 
@@ -255,31 +186,15 @@ public class ElasticsearchEntityChangeStore : IEntityChangeStore, ITransientDepe
         var result = new List<EntityChangeWithUsername>();
         var client = _clientFactory.Create();
 
-        var sortOrder = SortOrder.Desc;
+        Expression<Func<AuditLog, bool>> expression = x => x.EntityChanges.Any(e => e.EntityId == entityId && e.EntityTypeFullName == entityTypeFullName);
 
-        var querys = BuildQueryDescriptor(entityId: entityId, entityTypeFullName: entityTypeFullName);
+        var auditLogs = await _expressionQueryService.GetListAsync(
+            CreateIndexPattern(),
+            expression,
+            sorting: $"{nameof(AuditLog.ExecutionTime)} DESC",
+            cancellationToken: cancellationToken);
 
-        var searchResponse = await client.SearchAsync<AuditLog>(dsl =>
-        {
-            dsl.Indices(CreateIndex())
-               .Query(new BoolQuery
-               {
-                   Must = querys
-               })
-               .SourceExcludes(
-                    ix => ix.Actions,
-                    ix => ix.Comments,
-                    ix => ix.Exceptions)
-               .Sort(s => s.Field(new FieldSort(GetField(nameof(EntityChange.ChangeTime)))
-               {
-                   Order = sortOrder
-               }))
-               .From(0)
-               .Size(1);
-        }, cancellationToken);
-
-        var auditLogs = searchResponse.Documents.ToList();
-        if (auditLogs.Any())
+        if (auditLogs.Count > 0)
         {
             var groupAuditLogs = auditLogs.GroupBy(log => log.UserName);
             foreach (var group in groupAuditLogs)
@@ -304,83 +219,8 @@ public class ElasticsearchEntityChangeStore : IEntityChangeStore, ITransientDepe
         return result;
     }
 
-    protected virtual List<Query> BuildQueryDescriptor(
-        Guid? auditLogId = null,
-        DateTime? startTime = null,
-        DateTime? endTime = null,
-        EntityChangeType? changeType = null,
-        string? entityId = null,
-        string? entityTypeFullName = null,
-        Guid? entityChangeId = null)
+    protected virtual string CreateIndexPattern()
     {
-        var queries = new List<Query>();
-
-        if (auditLogId.HasValue)
-        {
-            queries.Add(new TermQuery(GetField(nameof(EntityChange.AuditLogId)), auditLogId.Value.ToString()));
-        }
-        if (startTime.HasValue)
-        {
-            queries.Add(new DateRangeQuery(GetField(nameof(EntityChange.ChangeTime)))
-            {
-                Gte = _clock.Normalize(startTime.Value)
-            });
-        }
-        if (endTime.HasValue)
-        {
-            queries.Add(new DateRangeQuery(GetField(nameof(EntityChange.ChangeTime)))
-            {
-                Lte = _clock.Normalize(endTime.Value)
-            });
-        }
-        if (changeType.HasValue)
-        {
-            queries.Add(new TermQuery(GetField(nameof(EntityChange.ChangeType)), ((int)changeType.Value).ToString()));
-        }
-        if (!entityId.IsNullOrWhiteSpace())
-        {
-            queries.Add(new TermQuery(GetField(nameof(EntityChange.EntityId)), entityId));
-        }
-        if (!entityTypeFullName.IsNullOrWhiteSpace())
-        {
-            queries.Add(new WildcardQuery(GetField(nameof(EntityChange.EntityTypeFullName)))
-            {
-                Value = $"*{entityTypeFullName}*"
-            });
-        }
-        if (entityChangeId.HasValue)
-        {
-            queries.Add(new TermQuery(GetField(nameof(EntityChange.Id)), entityChangeId.Value.ToString()));
-        }
-
-        return queries;
-    }
-
-    protected virtual string CreateIndex()
-    {
-        return _indexNameNormalizer.NormalizeIndex("audit-log");
-    }
-
-    private readonly static IDictionary<string, string> _fieldMaps = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase)
-    {
-        { "Id", "EntityChanges.Id.keyword" },
-        { "AuditLogId", "EntityChanges.AuditLogId.keyword" },
-        { "TenantId", "EntityChanges.TenantId.keyword" },
-        { "EntityTenantId", "EntityChanges.EntityTenantId.keyword" },
-        { "EntityId", "EntityChanges.EntityId.keyword" },
-        { "EntityTypeFullName", "EntityChanges.EntityTypeFullName.keyword" },
-        { "PropertyChanges", "EntityChanges.PropertyChanges" },
-        { "ExtraProperties", "EntityChanges.ExtraProperties" },
-        { "ChangeType", "EntityChanges.ChangeType" },
-        { "ChangeTime", "EntityChanges.ChangeTime" },
-    };
-    protected virtual string GetField(string field)
-    {
-        if (_fieldMaps.TryGetValue(field, out var mapField))
-        {
-            return _elasticsearchOptions.FieldCamelCase ? mapField.ToCamelCase() : mapField.ToPascalCase();
-        }
-
-        return _elasticsearchOptions.FieldCamelCase ? field.ToCamelCase() : field.ToPascalCase();
+        return _indexNameNormalizer.NormalizeIndexPattern("audit-log");
     }
 }

@@ -7,6 +7,10 @@ public class AbpAuditLoggingElasticsearchOptions
     public const string DefaultIndexPrefix = "auditlogging";
     public string IndexPrefix { get; set; }
     /// <summary>
+    /// 索引滚动间隔
+    /// </summary>
+    public RollingInterval RollingInterval { get; set; }
+    /// <summary>
     /// 索引初始化失败抛出异常
     /// </summary>
     /// <remarks>
@@ -26,6 +30,7 @@ public class AbpAuditLoggingElasticsearchOptions
     {
         IndexPrefix = DefaultIndexPrefix;
         ThrowIfIndexInitFailed = true;
+        RollingInterval = RollingInterval.Year;
 
         AuditLogSettings = new IndexSettings()
         {

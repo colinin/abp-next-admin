@@ -47,7 +47,7 @@ public class ElasticsearchAuditLogManager : IAuditLogManager, ITransientDependen
         ISpecification<AuditLog> specification,
         CancellationToken cancellationToken = default)
     {
-        var indexName = CreateIndex();
+        var indexName = CreateIndexPattern();
 
         return await _expressionQueryService.GetCountAsync(
             indexName,
@@ -63,7 +63,7 @@ public class ElasticsearchAuditLogManager : IAuditLogManager, ITransientDependen
         bool includeDetails = false,
         CancellationToken cancellationToken = default)
     {
-        var indexName = CreateIndex();
+        var indexName = CreateIndexPattern();
 
         var sortingField = sorting;
         if (sortingField.IsNullOrWhiteSpace())
@@ -139,7 +139,7 @@ public class ElasticsearchAuditLogManager : IAuditLogManager, ITransientDependen
             .AndIf(httpStatusCode.HasValue, x => x.HttpStatusCode == (int)httpStatusCode!);
 
         return await _expressionQueryService.GetCountAsync(
-            CreateIndex(),
+            CreateIndexPattern(),
             expression,
             cancellationToken);
     }
@@ -191,7 +191,7 @@ public class ElasticsearchAuditLogManager : IAuditLogManager, ITransientDependen
             .AndIf(httpStatusCode.HasValue, x => x.HttpStatusCode == (int)httpStatusCode!);
 
         return await _expressionQueryService.GetListAsync(
-            CreateIndex(),
+            CreateIndexPattern(),
             expression,
             sorting: sorting,
             maxResultCount: maxResultCount,
@@ -215,51 +215,45 @@ public class ElasticsearchAuditLogManager : IAuditLogManager, ITransientDependen
     {
         var client = _clientFactory.Create();
 
-        var response = await client.GetAsync<AuditLog>(
-            id.ToString(),
-            dsl =>
-            {
-                dsl.Index(CreateIndex());
-                if (!includeDetails)
-                {
-                    dsl.SourceExcludes(
-                        ex => ex.Actions,
-                        ex => ex.Comments,
-                        ex => ex.Exceptions,
-                        ex => ex.EntityChanges);
-                }
-            },
-            cancellationToken);
+        var response = await client.SearchAsync<AuditLog>(s =>
+        {
+            s.Indices(CreateIndexPattern());
+            s.Query(q => q.Ids(ids => ids.Values(id.ToString())));
+            s.Size(1);
 
-        return response.Source;
+            if (!includeDetails)
+            {
+                s.SourceExcludes(
+                    ex => ex.Actions,
+                    ex => ex.Comments,
+                    ex => ex.Exceptions,
+                    ex => ex.EntityChanges);
+            }
+        }, cancellationToken);
+
+        return response.Documents.FirstOrDefault();
     }
 
     public async virtual Task DeleteAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        var client = _clientFactory.Create();
-
-        await client.DeleteAsync<AuditLog>(
-            id.ToString(),
-            dsl => dsl.Index(CreateIndex()),
-            cancellationToken);
+        await DeleteManyAsync([id], cancellationToken);
     }
 
     public async virtual Task DeleteManyAsync(List<Guid> ids, CancellationToken cancellationToken = default)
     {
         var client = _clientFactory.Create();
 
-        var idValues = ids.Select(id => FieldValue.String(id.ToString())).ToList();
-        await client.DeleteByQueryAsync<AuditLog>(
-            x => x.Indices(CreateIndex())
-                  .Query(query =>
-                    query.Terms(terms =>
-                        terms.Field(field => field.Id)
-                            .Terms(new TermsQueryField(idValues)))),
-            cancellationToken);
+        var idValues = ids.Select(id => id.ToString()).ToArray();
+
+        await client.DeleteByQueryAsync<AuditLog>(d =>
+        {
+            d.Indices(CreateIndexPattern());
+            d.Query(q => q.Ids(idsQuery => idsQuery.Values(idValues)));
+        }, cancellationToken);
     }
 
-    protected virtual string CreateIndex()
+    protected virtual string CreateIndexPattern()
     {
-        return _indexNameNormalizer.NormalizeIndex("audit-log");
+        return _indexNameNormalizer.NormalizeIndexPattern("audit-log");
     }
 }
