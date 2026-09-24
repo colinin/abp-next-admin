@@ -16,6 +16,7 @@
 		<PackageVersion Include="LINGYUN.Abp.AspNetCore.HttpOverrides" Version="$(LINGYUNAbpPackageVersion)" />
 		<PackageVersion Include="LINGYUN.Abp.AspNetCore.Mvc.Localization" Version="$(LINGYUNAbpPackageVersion)" />
 		<PackageVersion Include="LINGYUN.Abp.AspNetCore.Mvc.Wrapper" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageVersion Include="LINGYUN.Abp.AspNetCore.Session" Version="$(LINGYUNAbpPackageVersion)" />
 		<PackageVersion Include="LINGYUN.Abp.AuditLogging" Version="$(LINGYUNAbpPackageVersion)" />
 		<PackageVersion Include="LINGYUN.Abp.AuditLogging.Elasticsearch" Version="$(LINGYUNAbpPackageVersion)" />
 		<PackageVersion Include="LINGYUN.Abp.Authorization.OrganizationUnits" Version="$(LINGYUNAbpPackageVersion)" />
@@ -34,6 +35,7 @@
 		<PackageVersion Include="LINGYUN.Abp.DataProtectionManagement.HttpApi" Version="$(LINGYUNAbpPackageVersion)" />
 		<PackageVersion Include="LINGYUN.Abp.Dapr.Client" Version="$(LINGYUNAbpPackageVersion)" />
 		<PackageVersion Include="LINGYUN.Abp.Dapr.Client.Wrapper" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageVersion Include="LINGYUN.Abp.Dynamic.Definitions" Version="$(LINGYUNAbpPackageVersion)" />
 		<PackageVersion Include="LINGYUN.Abp.Dynamic.Queryable.Application" Version="$(LINGYUNAbpPackageVersion)" />
 		<PackageVersion Include="LINGYUN.Abp.Dynamic.Queryable.Application.Contracts" Version="$(LINGYUNAbpPackageVersion)" />
 		<PackageVersion Include="LINGYUN.Abp.Dynamic.Queryable.HttpApi" Version="$(LINGYUNAbpPackageVersion)" />
@@ -53,7 +55,7 @@
 		<PackageVersion Include="LINGYUN.Abp.Http.Client.Wrapper" Version="$(LINGYUNAbpPackageVersion)" />
 		<PackageVersion Include="LINGYUN.Abp.IdGenerator" Version="$(LINGYUNAbpPackageVersion)" />
 		<PackageVersion Include="LINGYUN.Abp.Identity.Session" Version="$(LINGYUNAbpPackageVersion)" />
-		<PackageVersion Include="LINGYUN.Abp.Identity.Session.AspNetCore" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageVersion Include="LINGYUN.Abp.IP2Region" Version="$(LINGYUNAbpPackageVersion)" />
 		<PackageVersion Include="LINGYUN.Abp.Localization.CultureMap" Version="$(LINGYUNAbpPackageVersion)" />
 		<PackageVersion Include="LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore" Version="$(LINGYUNAbpPackageVersion)" />
 		<PackageVersion Include="LINGYUN.Abp.MultiTenancy" Version="$(LINGYUNAbpPackageVersion)" />
@@ -78,6 +80,7 @@
 		<PackageVersion Include="LINGYUN.Abp.Authentication.WeChat" Version="$(LINGYUNAbpPackageVersion)" />
 		<PackageVersion Include="LINGYUN.Abp.Aliyun.SettingManagement" Version="$(LINGYUNAbpPackageVersion)" />
 		<PackageVersion Include="LINGYUN.Abp.Aliyun" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageVersion Include="LINGYUN.Abp.Settings" Version="$(LINGYUNAbpPackageVersion)" />
 		<PackageVersion Include="LINGYUN.Abp.Tencent.QQ" Version="$(LINGYUNAbpPackageVersion)" />
 		<PackageVersion Include="LINGYUN.Abp.Tencent.SettingManagement" Version="$(LINGYUNAbpPackageVersion)" />
 		<PackageVersion Include="LINGYUN.Abp.Tencent" Version="$(LINGYUNAbpPackageVersion)" />
@@ -131,10 +134,8 @@
 		<PackageVersion Include="LINGYUN.Abp.EntityFrameworkCore.MySQL.Microting" Version="$(LINGYUNAbpPackageVersion)" />
 		<PackageVersion Include="LINGYUN.Abp.FeatureManagement.Application" Version="$(LINGYUNAbpPackageVersion)" />
 		<PackageVersion Include="LINGYUN.Abp.FeatureManagement.HttpApi" Version="$(LINGYUNAbpPackageVersion)" />
-		<PackageVersion Include="LINGYUN.Abp.IdentityServer.Session" Version="$(LINGYUNAbpPackageVersion)" />
 		<PackageVersion Include="LINGYUN.Abp.Identity.Application.Contracts" Version="$(LINGYUNAbpPackageVersion)" />
 		<PackageVersion Include="LINGYUN.Abp.Identity.Application" Version="$(LINGYUNAbpPackageVersion)" />
-		<PackageVersion Include="LINGYUN.Abp.Identity.AspNetCore.Session" Version="$(LINGYUNAbpPackageVersion)" />
 		<PackageVersion Include="LINGYUN.Abp.Identity.Domain.Shared" Version="$(LINGYUNAbpPackageVersion)" />
 		<PackageVersion Include="LINGYUN.Abp.Identity.Domain" Version="$(LINGYUNAbpPackageVersion)" />
 		<PackageVersion Include="LINGYUN.Abp.Identity.EntityFrameworkCore" Version="$(LINGYUNAbpPackageVersion)" />
@@ -155,7 +156,6 @@
 		<PackageVersion Include="LINGYUN.Abp.LocalizationManagement.Domain.Shared" Version="$(LINGYUNAbpPackageVersion)" />
 		<PackageVersion Include="LINGYUN.Abp.LocalizationManagement.Domain" Version="$(LINGYUNAbpPackageVersion)" />
 		<PackageVersion Include="LINGYUN.Abp.LocalizationManagement.HttpApi" Version="$(LINGYUNAbpPackageVersion)" />
-		<PackageVersion Include="LINGYUN.Abp.OpenIddict.AspNetCore.Session" Version="$(LINGYUNAbpPackageVersion)" />
 		<PackageVersion Include="LINGYUN.Abp.OpenIddict.AspNetCore" Version="$(LINGYUNAbpPackageVersion)" />
 		<PackageVersion Include="LINGYUN.Abp.IM.SignalR" Version="$(LINGYUNAbpPackageVersion)" />
 		<PackageVersion Include="LINGYUN.Abp.IM" Version="$(LINGYUNAbpPackageVersion)" />

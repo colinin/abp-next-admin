@@ -15,6 +15,9 @@ spec:
       labels:
         name: project-name-api
     spec:
+      # 内部docker镜像仓库
+      # imagePullSecrets:
+      # - name: internal-docker-repo
       containers:
       - name: project-name-api
         image: project-name-api:latest
@@ -80,6 +83,13 @@ spec:
   - host: "project-name-api.local"
     http:
         paths:
+        # - path: /integration-api/project-name
+        #   pathType: Prefix
+        #   backend:
+        #       service:
+        #         name: project-name-api
+        #         port:
+        #           number: 8080
         - path: /api/project-name
           pathType: Prefix
           backend:

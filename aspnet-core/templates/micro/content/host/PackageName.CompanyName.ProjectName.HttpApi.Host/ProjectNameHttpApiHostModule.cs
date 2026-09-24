@@ -1,13 +1,15 @@
 using LINGYUN.Abp.AspNetCore.HttpOverrides;
 using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
+using LINGYUN.Abp.AspNetCore.Session;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
 using LINGYUN.Abp.BlobStoring.BlobManagement;
 using LINGYUN.Abp.Claims.Mapping;
+using LINGYUN.Abp.Dynamic.Definitions;
 using LINGYUN.Abp.Emailing.Platform;
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
 using LINGYUN.Abp.Exporter.MiniSoftware;
-using LINGYUN.Abp.Identity.Session.AspNetCore;
+using LINGYUN.Abp.IP2Region;
 using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
 using LINGYUN.Abp.Saas.EntityFrameworkCore;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
@@ -67,7 +69,9 @@ namespace PackageName.CompanyName.ProjectName;
     typeof(AbpDistributedLockingModule),
     typeof(AbpAspNetCoreMvcWrapperModule),
     typeof(AbpAspNetCoreHttpOverridesModule),
-    typeof(AbpIdentitySessionAspNetCoreModule),
+    typeof(AbpAspNetCoreSessionModule),
+    typeof(AbpDynamicDefinitionsModule),
+    typeof(AbpIP2RegionModule),
     typeof(AbpTelemetrySkyWalkingModule),
     typeof(AbpTelemetryOpenTelemetryModule),
     typeof(AbpExporterMiniSoftwareModule),
@@ -113,8 +117,8 @@ public partial class ProjectNameHttpApiHostModule : AbpModule
 
         ConfigureMvc(context.Services, configuration);
         ConfigureCors(context.Services, configuration);
-        ConfigureSwagger(context.Services, configuration);
         ConfigureDistributedLock(context.Services, configuration);
+        ConfigureSwagger(context.Services, configuration, hostingEnvironment.IsDevelopment());
         ConfigureSecurity(context.Services, configuration, hostingEnvironment.IsDevelopment());
     }
 
@@ -132,19 +136,21 @@ public partial class ProjectNameHttpApiHostModule : AbpModule
         app.UseAuthentication();
         app.UseJwtTokenMiddleware();
         app.UseMultiTenancy();
-        app.UseAbpSession();
         app.UseUnitOfWork();
         app.UseDynamicClaims();
         app.UseAuthorization();
-        app.UseSwagger();
-        app.UseAbpSwaggerUI(options =>
+        if (env.IsDevelopment())
         {
-            options.SwaggerEndpoint("/swagger/v1/swagger.json", "Support ProjectName API");
+            app.UseSwagger();
+            app.UseAbpSwaggerUI(options =>
+            {
+                options.SwaggerEndpoint("/swagger/v1/swagger.json", "Support ProjectName API");
 
-            var configuration = context.GetConfiguration();
-            options.OAuthClientId(configuration["AuthServer:SwaggerClientId"]);
-            options.OAuthScopes(configuration["AuthServer:Audience"]);
-        });
+                var configuration = context.GetConfiguration();
+                options.OAuthClientId(configuration["AuthServer:SwaggerClientId"]);
+                options.OAuthScopes(configuration["AuthServer:Audience"]);
+            });
+        }
         app.UseAuditing();
         app.UseAbpSerilogEnrichers();
         app.UseConfiguredEndpoints();
