@@ -16,22 +16,22 @@ namespace LINGYUN.Abp.AuditLogging.Elasticsearch;
 public class AuditLoggingIndexInitializer : IAuditLoggingIndexInitializer, ISingletonDependency
 {
     private readonly AbpJsonOptions _jsonOptions;
-    private readonly AbpAuditLoggingElasticsearchOptions _elasticsearchOptions;
     private readonly IIndexNameNormalizer _nameNormalizer;
     private readonly IElasticsearchClientFactory _clientFactory;
+    private readonly AbpAuditLoggingElasticsearchOptions _elasticsearchOptions;
 
     public ILogger<AuditLoggingIndexInitializer> Logger { protected get; set; }
 
     public AuditLoggingIndexInitializer(
         IOptions<AbpJsonOptions> jsonOptions,
-        IOptions<AbpAuditLoggingElasticsearchOptions> elasticsearchOptions,
         IIndexNameNormalizer nameNormalizer,
-        IElasticsearchClientFactory clientFactory)
+        IElasticsearchClientFactory clientFactory,
+        IOptions<AbpAuditLoggingElasticsearchOptions> elasticsearchOptions)
     {
         _jsonOptions = jsonOptions.Value;
-        _elasticsearchOptions = elasticsearchOptions.Value;
         _nameNormalizer = nameNormalizer;
         _clientFactory = clientFactory;
+        _elasticsearchOptions = elasticsearchOptions.Value;
 
         Logger = NullLogger<AuditLoggingIndexInitializer>.Instance;
     }
@@ -48,9 +48,9 @@ public class AuditLoggingIndexInitializer : IAuditLoggingIndexInitializer, ISing
 
     protected async virtual Task InitlizeAuditLogIndexTemplate(ElasticsearchClient client, string dateTimeFormat, CancellationToken cancellationToken = default)
     {
-        var indexName = _nameNormalizer.NormalizeIndex("audit-log");
-        var indexPatterns = new[] { indexName + "*" };
-        var indexTemplateName = indexName + "-generic";
+        var indexPrefix = _nameNormalizer.NormalizeIndexPrefix("audit-log");
+        var indexPatterns = new[] { _nameNormalizer.NormalizeIndexPattern("audit-log") };
+        var indexTemplateName = indexPrefix + "-generic";
 
         var indexTemplateExists = await client.Indices.ExistsIndexTemplateAsync(indexTemplateName, cancellationToken);
         if (indexTemplateExists.Exists)
@@ -157,9 +157,9 @@ public class AuditLoggingIndexInitializer : IAuditLoggingIndexInitializer, ISing
 
     protected async virtual Task InitlizeSecurityLogIndexTemplate(ElasticsearchClient client, string dateTimeFormat, CancellationToken cancellationToken = default)
     {
-        var indexName = _nameNormalizer.NormalizeIndex("security-log");
-        var indexPatterns = new[] { indexName + "*" };
-        var indexTemplateName = indexName + "-generic";
+        var indexPrefix = _nameNormalizer.NormalizeIndexPrefix("security-log");
+        var indexPatterns = new[] { _nameNormalizer.NormalizeIndexPattern("security-log") };
+        var indexTemplateName = indexPrefix + "-generic";
 
         var indexTemplateExists = await client.Indices.ExistsIndexTemplateAsync(indexTemplateName, cancellationToken);
         if (indexTemplateExists.Exists)
