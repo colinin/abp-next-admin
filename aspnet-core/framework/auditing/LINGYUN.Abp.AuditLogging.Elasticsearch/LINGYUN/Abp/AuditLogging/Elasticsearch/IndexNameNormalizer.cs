@@ -27,6 +27,10 @@ public class IndexNameNormalizer : IIndexNameNormalizer, ISingletonDependency
     /// 参考: https://www.elastic.co/docs/api/doc/elasticsearch/operation/operation-indices-create
     /// </summary>
     public const int MaxByteLength = 255;
+    /// <summary>
+    /// 通配符占用的字节数（用于 pattern 预留）。
+    /// </summary>
+    private const int WildcardByteLength = 1;
 
     private readonly IClock _clock;
     private readonly ICurrentTenant _currentTenant;
@@ -44,53 +48,40 @@ public class IndexNameNormalizer : IIndexNameNormalizer, ISingletonDependency
 
     public virtual string NormalizeIndex(string index)
     {
-        var now = _clock.Now;
+        return BuildIndexName(index, GetSuffix(_clock.Now), reserveBytes: 0);
+    }
 
-        var essentialPart = NormalizeSegment(index) + GetTenantPart() + GetSuffix(now);
+    public virtual string NormalizeIndexPrefix(string index)
+    {
+        return BuildIndexName(index, suffix: string.Empty, reserveBytes: 0);
+    }
+
+    public virtual string NormalizeIndexPattern(string index)
+    {
+        var prefix = BuildIndexName(index, suffix: string.Empty, reserveBytes: WildcardByteLength);
+        return prefix + "*";
+    }
+
+    protected virtual string BuildIndexName(string index, string suffix, int reserveBytes)
+    {
+        var maxBytes = MaxByteLength - reserveBytes;
+
+        var normalizedIndex = NormalizeSegment(index);
+        var essentialPart = normalizedIndex + GetTenantPart() + suffix;
         var essentialBytes = Encoding.UTF8.GetByteCount(essentialPart);
 
-        if (essentialBytes >= MaxByteLength)
+        if (essentialBytes >= maxBytes)
         {
-            essentialPart = NormalizeSegment(index);
-
-            return TruncateToByteLength(essentialPart, MaxByteLength);
+            return TruncateToByteLength(normalizedIndex, maxBytes);
         }
 
         var prefix = GetPrefix();
-        var remaining = MaxByteLength - essentialBytes;
+        var remaining = maxBytes - essentialBytes;
         var safePrefix = TruncateToByteLength(prefix, remaining);
 
         var fullName = safePrefix + essentialPart;
 
         return NormalizeToValidIndexName(fullName);
-    }
-
-    public virtual string NormalizeIndexPrefix(string index)
-    {
-        var prefix = GetPrefix();
-        var tenantPart = GetTenantPart();
-
-        var essentialPart = NormalizeSegment(index) + tenantPart;
-        var essentialBytes = Encoding.UTF8.GetByteCount(essentialPart);
-
-        if (essentialBytes >= MaxByteLength)
-        {
-            essentialPart = NormalizeSegment(index);
-
-            return TruncateToByteLength(essentialPart, MaxByteLength);
-        }
-
-        var remaining = MaxByteLength - essentialBytes;
-        var safePrefix = TruncateToByteLength(prefix, remaining);
-
-        var fullPrefix = safePrefix + essentialPart;
-
-        return NormalizeToValidIndexName(fullPrefix);
-    }
-
-    public virtual string NormalizeIndexPattern(string index)
-    {
-        return NormalizeIndexPrefix(index) + "*";
     }
 
     protected virtual string GetPrefix()
@@ -208,38 +199,6 @@ public class IndexNameNormalizer : IIndexNameNormalizer, ISingletonDependency
         }
 
         result = new string(chars).TrimStart(InvalidLeadingChars);
-
-        if (Encoding.UTF8.GetByteCount(result) > MaxByteLength)
-        {
-            var truncated = TruncateToByteLength(result, MaxByteLength);
-
-            result = truncated;
-        }
-
-        return result;
-    }
-
-    protected virtual string NormalizeToValidIndexPattern(string name)
-    {
-        name ??= string.Empty;
-
-        var result = name.ToLowerInvariant();
-
-        var chars = result.ToCharArray();
-        for (var i = 0; i < chars.Length; i++)
-        {
-            if (chars[i] != '*' && Array.IndexOf(InvalidChars, chars[i]) >= 0)
-            {
-                chars[i] = '-';
-            }
-        }
-
-        result = new string(chars).TrimStart(InvalidLeadingChars);
-
-        if (result.IndexOf('*') < 0)
-        {
-            result += "*";
-        }
 
         if (Encoding.UTF8.GetByteCount(result) > MaxByteLength)
         {
