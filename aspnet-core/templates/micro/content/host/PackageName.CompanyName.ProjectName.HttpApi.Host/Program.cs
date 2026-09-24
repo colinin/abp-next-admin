@@ -29,7 +29,7 @@ try
         .UseSerilog((context, provider, config) =>
         {
             config.ReadFrom.Configuration(context.Configuration);
-        });
+        }, writeToProviders: true);
     await builder.AddApplicationAsync<ProjectNameHttpApiHostModule>(options =>
     {
         ProjectNameHttpApiHostModule.ApplicationName = Environment.GetEnvironmentVariable("APPLICATION_NAME")
