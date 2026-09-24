@@ -3,7 +3,6 @@ import type { OpenIdConfiguration } from '@abp/core';
 import type { FormInstance } from 'ant-design-vue';
 import type { MenuInfo } from 'ant-design-vue/es/menu/src/interface';
 import type { DefaultOptionType } from 'ant-design-vue/es/select';
-import type { TransferItem } from 'ant-design-vue/es/transfer';
 
 import type { Component } from 'vue';
 
@@ -43,6 +42,7 @@ import {
 
 import { useApplicationsApi } from '../../api/useApplicationsApi';
 import { useOpenIdApi } from '../../api/useOpenIdApi';
+import { useScopeTransfer } from '../../hooks/useScopeTransfer';
 import DisplayNameTable from '../display-names/DisplayNameTable.vue';
 import PropertyTable from '../properties/PropertyTable.vue';
 
@@ -141,18 +141,10 @@ const getResponseTypes = computed(() => {
     };
   });
 });
-const getSupportScopes = computed((): TransferItem[] => {
-  const types = openIdConfiguration.value?.scopes_supported ?? [];
-  return types.map((type) => {
-    return {
-      key: type,
-      title: type,
-    };
-  });
-});
 
 const { discoveryApi } = useOpenIdApi();
 const { cancel, createApi, getApi, updateApi } = useApplicationsApi();
+const { availableResources, initAssignableScopes } = useScopeTransfer();
 const [Modal, modalApi] = useVbenModal({
   class: 'w-1/2',
   draggable: true,
@@ -190,7 +182,7 @@ const [Modal, modalApi] = useVbenModal({
       });
       try {
         modalApi.setState({ loading: true });
-        await onDiscovery();
+        await onInit();
         const claimTypeDto = modalApi.getData<OpenIddictApplicationDto>();
         if (claimTypeDto?.id) {
           const dto = await getApi(claimTypeDto.id);
@@ -207,7 +199,10 @@ const [Modal, modalApi] = useVbenModal({
   },
   title: 'ClaimType',
 });
-async function onDiscovery() {
+async function onInit() {
+  await Promise.all([onLoadConfiguration(), initAssignableScopes()]);
+}
+async function onLoadConfiguration() {
   openIdConfiguration.value = await discoveryApi();
 }
 function onDisplayNameChange(displayName: DisplayNameInfo) {
@@ -250,11 +245,13 @@ function onUriChange(uri: string) {
     case 'PostLogoutRedirectUris': {
       formModel.value.postLogoutRedirectUris ??= [];
       formModel.value.postLogoutRedirectUris.push(uri);
+      uriComponentState.uris = formModel.value.postLogoutRedirectUris;
       break;
     }
     case 'RedirectUris': {
       formModel.value.redirectUris ??= [];
       formModel.value.redirectUris.push(uri);
+      uriComponentState.uris = formModel.value.redirectUris;
       break;
     }
   }
@@ -339,9 +336,10 @@ function onUriDelete(uri: string) {
               :options="clientTypes"
             />
           </FormItem>
-          <template v-if="formModel.clientType === 'confidential'">
+          <template
+            v-if="!formModel.id && formModel.clientType === 'confidential'"
+          >
             <FormItem
-              v-if="!formModel.id"
               :label="$t('AbpOpenIddict.DisplayName:ClientSecret')"
               name="clientSecret"
             >
@@ -481,7 +479,7 @@ function onUriDelete(uri: string) {
         <TabPane key="scope" :tab="$t('AbpOpenIddict.Scopes')">
           <Transfer
             v-model:target-keys="formModel.scopes"
-            :data-source="getSupportScopes"
+            :data-source="availableResources"
             :list-style="{
               width: '47%',
               height: '338px',
@@ -491,7 +489,7 @@ function onUriDelete(uri: string) {
               $t('AbpOpenIddict.Assigned'),
               $t('AbpOpenIddict.Available'),
             ]"
-            class="tree-transfer"
+            show-search
           />
         </TabPane>
         <!-- 授权 -->

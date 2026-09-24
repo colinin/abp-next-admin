@@ -1,21 +1,19 @@
 <script setup lang="ts">
-import type { OpenIdConfiguration } from '@abp/core';
 import type { FormInstance } from 'ant-design-vue';
-import type { TransferItem } from 'ant-design-vue/es/transfer';
 
 import type { OpenIddictScopeDto } from '../../types/scopes';
 import type { DisplayNameInfo } from '../display-names/types';
 import type { PropertyInfo } from '../properties/types';
 
-import { computed, defineEmits, defineOptions, ref, toValue } from 'vue';
+import { defineEmits, defineOptions, ref, toValue } from 'vue';
 
 import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
 import { Form, Input, message, Tabs, Transfer } from 'ant-design-vue';
 
-import { useOpenIdApi } from '../../api/useOpenIdApi';
 import { useScopesApi } from '../../api/useScopesApi';
+import { useScopeTransfer } from '../../hooks/useScopeTransfer';
 import DisplayNameTable from '../display-names/DisplayNameTable.vue';
 import PropertyTable from '../properties/PropertyTable.vue';
 
@@ -30,32 +28,16 @@ const FormItem = Form.Item;
 const TabPane = Tabs.TabPane;
 
 type TabKeys =
-  | 'authorize'
-  | 'basic'
-  | 'description'
-  | 'dispalyName'
-  | 'props'
-  | 'resource';
+  'authorize' | 'basic' | 'description' | 'displayName' | 'props' | 'resource';
 
 const defaultModel = {} as OpenIddictScopeDto;
 
 const form = ref<FormInstance>();
 const formModel = ref<OpenIddictScopeDto>({ ...defaultModel });
-const openIdConfiguration = ref<OpenIdConfiguration>();
 const activeTab = ref<TabKeys>('basic');
 
-const getSupportClaims = computed((): TransferItem[] => {
-  const types = openIdConfiguration.value?.claims_supported ?? [];
-  return types.map((type) => {
-    return {
-      key: type,
-      title: type,
-    };
-  });
-});
-
-const { discoveryApi } = useOpenIdApi();
 const { cancel, createApi, getApi, updateApi } = useScopesApi();
+const { availableResources, initAssignableScopes } = useScopeTransfer();
 const [Modal, modalApi] = useVbenModal({
   class: 'w-1/2',
   draggable: true,
@@ -71,16 +53,15 @@ const [Modal, modalApi] = useVbenModal({
     const api = formModel.value.id
       ? updateApi(formModel.value.id, toValue(formModel))
       : createApi(toValue(formModel));
-    modalApi.setState({ submitting: true });
-    api
-      .then((res) => {
-        message.success($t('AbpUi.SavedSuccessfully'));
-        emits('change', res);
-        modalApi.close();
-      })
-      .finally(() => {
-        modalApi.setState({ submitting: false });
-      });
+    try {
+      modalApi.lock();
+      const res = await api;
+      message.success($t('AbpUi.SavedSuccessfully'));
+      emits('change', res);
+      modalApi.close();
+    } finally {
+      modalApi.unlock();
+    }
   },
   onOpenChange: async (isOpen: boolean) => {
     if (isOpen) {
@@ -91,7 +72,7 @@ const [Modal, modalApi] = useVbenModal({
       });
       try {
         modalApi.setState({ loading: true });
-        await onDiscovery();
+        await initAssignableScopes();
         const { id } = modalApi.getData<OpenIddictScopeDto>();
         id && (await onGet(id));
       } finally {
@@ -107,9 +88,6 @@ async function onGet(id: string) {
   modalApi.setState({
     title: `${$t('AbpOpenIddict.Scopes')} - ${dto.name}`,
   });
-}
-async function onDiscovery() {
-  openIdConfiguration.value = await discoveryApi();
 }
 function onDescriptionChange(displayName: DisplayNameInfo) {
   formModel.value.descriptions ??= {};
@@ -157,7 +135,7 @@ function onPropDelete(prop: PropertyInfo) {
           </FormItem>
         </TabPane>
         <!-- 显示名称 -->
-        <TabPane key="dispalyName" :tab="$t('AbpOpenIddict.DisplayNames')">
+        <TabPane key="displayName" :tab="$t('AbpOpenIddict.DisplayNames')">
           <FormItem
             :label="$t('AbpOpenIddict.DisplayName:DefaultDisplayName')"
             name="displayName"
@@ -188,7 +166,7 @@ function onPropDelete(prop: PropertyInfo) {
         <TabPane key="resource" :tab="$t('AbpOpenIddict.Resources')">
           <Transfer
             v-model:target-keys="formModel.resources"
-            :data-source="getSupportClaims"
+            :data-source="availableResources"
             :list-style="{
               width: '47%',
               height: '338px',
@@ -198,7 +176,7 @@ function onPropDelete(prop: PropertyInfo) {
               $t('AbpOpenIddict.Assigned'),
               $t('AbpOpenIddict.Available'),
             ]"
-            class="tree-transfer"
+            show-search
           />
         </TabPane>
         <!-- 属性 -->
