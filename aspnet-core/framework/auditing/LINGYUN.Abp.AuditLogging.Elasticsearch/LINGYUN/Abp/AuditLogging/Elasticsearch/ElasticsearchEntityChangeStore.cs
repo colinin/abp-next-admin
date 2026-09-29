@@ -1,5 +1,4 @@
-﻿using Elastic.Clients.Elasticsearch;
-using LINGYUN.Abp.Elasticsearch;
+﻿using LINGYUN.Abp.Elasticsearch;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using System;
@@ -19,7 +18,6 @@ public class ElasticsearchEntityChangeStore : IEntityChangeStore, ITransientDepe
 {
     private readonly IClock _clock;
     private readonly IIndexNameNormalizer _indexNameNormalizer;
-    private readonly IElasticsearchClientFactory _clientFactory;
     private readonly IExpressionQueryService _expressionQueryService;
 
     public ILogger<ElasticsearchEntityChangeStore> Logger { protected get; set; }
@@ -27,11 +25,9 @@ public class ElasticsearchEntityChangeStore : IEntityChangeStore, ITransientDepe
     public ElasticsearchEntityChangeStore(
         IClock clock,
         IIndexNameNormalizer indexNameNormalizer,
-        IElasticsearchClientFactory clientFactory,
         IExpressionQueryService expressionQueryService)
     {
         _clock = clock;
-        _clientFactory = clientFactory;
         _indexNameNormalizer = indexNameNormalizer;
         _expressionQueryService = expressionQueryService;
 
@@ -42,8 +38,6 @@ public class ElasticsearchEntityChangeStore : IEntityChangeStore, ITransientDepe
         Guid entityChangeId, 
         CancellationToken cancellationToken = default)
     {
-        var client = _clientFactory.Create();
-
         Expression<Func<AuditLog, bool>> expression = x => x.EntityChanges.Any(e => e.Id == entityChangeId);
 
         var auditLogs = await _expressionQueryService.GetListAsync(
@@ -73,8 +67,6 @@ public class ElasticsearchEntityChangeStore : IEntityChangeStore, ITransientDepe
         string? entityTypeFullName = null,
         CancellationToken cancellationToken = default)
     {
-        var client = _clientFactory.Create();
-
         Expression<Func<AuditLog, bool>> expression = _ => true;
 
         expression = expression
@@ -108,7 +100,6 @@ public class ElasticsearchEntityChangeStore : IEntityChangeStore, ITransientDepe
         CancellationToken cancellationToken = default)
     {
         var result = new List<EntityChange>();
-        var client = _clientFactory.Create();
 
         Expression<Func<AuditLog, bool>> expression = _ => true;
 
@@ -124,7 +115,9 @@ public class ElasticsearchEntityChangeStore : IEntityChangeStore, ITransientDepe
             CreateIndexPattern(),
             expression,
             sorting: sorting,
-            cancellationToken: cancellationToken);
+            cancellationToken: cancellationToken,
+            maxResultCount: maxResultCount,
+            skipCount: skipCount);
         if (auditLogs.Count > 0)
         {
             var groupAuditLogs = auditLogs.GroupBy(log => log.UserName);
@@ -142,19 +135,13 @@ public class ElasticsearchEntityChangeStore : IEntityChangeStore, ITransientDepe
             }
         }
 
-        // TODO: 临时在内存中分页
-        return result
-            .AsQueryable()
-            .PageBy(skipCount, maxResultCount)
-            .ToList();
+        return result;
     }
 
     public async virtual Task<EntityChangeWithUsername?> GetWithUsernameAsync(
         Guid entityChangeId,
         CancellationToken cancellationToken = default)
     {
-        var client = _clientFactory.Create();
-
         Expression<Func<AuditLog, bool>> expression = x => x.EntityChanges.Any(e => e.Id == entityChangeId);
 
         var auditLogs = await _expressionQueryService.GetListAsync(
@@ -184,14 +171,19 @@ public class ElasticsearchEntityChangeStore : IEntityChangeStore, ITransientDepe
         CancellationToken cancellationToken = default)
     {
         var result = new List<EntityChangeWithUsername>();
-        var client = _clientFactory.Create();
 
         Expression<Func<AuditLog, bool>> expression = x => x.EntityChanges.Any(e => e.EntityId == entityId && e.EntityTypeFullName == entityTypeFullName);
+
+        var totalCount = await _expressionQueryService.GetCountAsync(
+            CreateIndexPattern(),
+            expression,
+            cancellationToken: cancellationToken);
 
         var auditLogs = await _expressionQueryService.GetListAsync(
             CreateIndexPattern(),
             expression,
             sorting: $"{nameof(AuditLog.ExecutionTime)} DESC",
+            maxResultCount: (int)totalCount,
             cancellationToken: cancellationToken);
 
         if (auditLogs.Count > 0)

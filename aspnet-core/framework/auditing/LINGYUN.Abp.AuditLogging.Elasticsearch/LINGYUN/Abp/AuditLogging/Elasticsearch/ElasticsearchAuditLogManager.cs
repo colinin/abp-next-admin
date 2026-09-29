@@ -1,5 +1,4 @@
 ﻿using Elastic.Clients.Elasticsearch;
-using Elastic.Clients.Elasticsearch.QueryDsl;
 using LINGYUN.Abp.Elasticsearch;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -21,7 +20,6 @@ public class ElasticsearchAuditLogManager : IAuditLogManager, ITransientDependen
 {
     private readonly IIndexNameNormalizer _indexNameNormalizer;
     private readonly IElasticsearchClientFactory _clientFactory;
-    private readonly IIndexMappingProvider _indexMappingProvider;
     private readonly IExpressionQueryService _expressionQueryService;
     private readonly IClock _clock;
 
@@ -31,13 +29,11 @@ public class ElasticsearchAuditLogManager : IAuditLogManager, ITransientDependen
         IClock clock,
         IElasticsearchClientFactory clientFactory,
         IIndexNameNormalizer indexNameNormalizer,
-        IIndexMappingProvider indexMappingProvider,
         IExpressionQueryService expressionQueryService)
     {
         _clock = clock;
         _clientFactory = clientFactory;
         _indexNameNormalizer = indexNameNormalizer;
-        _indexMappingProvider = indexMappingProvider;
         _expressionQueryService = expressionQueryService;
 
         Logger = NullLogger<ElasticsearchAuditLogManager>.Instance;
@@ -65,27 +61,15 @@ public class ElasticsearchAuditLogManager : IAuditLogManager, ITransientDependen
     {
         var indexName = CreateIndexPattern();
 
-        var sortingField = sorting;
-        if (sortingField.IsNullOrWhiteSpace())
+        if (sorting.IsNullOrWhiteSpace())
         {
-            var indexMapping = await _indexMappingProvider.GetMappingAsync<AuditLog>(indexName, cancellationToken);
-            if (indexMapping != null)
-            {
-                var sortingFieldMap = indexMapping.Fields
-                    .Where(x => x.Key.Equals(sortingField, StringComparison.CurrentCultureIgnoreCase))
-                    .Select(x => x.Value)
-                    .FirstOrDefault();
-                if (sortingFieldMap != null)
-                {
-                    sortingField = sortingFieldMap.Path;
-                }
-            }
+            sorting = $"{nameof(AuditLog.ExecutionTime)} DESC";
         }
 
         return await _expressionQueryService.GetListAsync(
             indexName,
             specification.ToExpression(),
-            sortingField,
+            sorting,
             maxResultCount,
             skipCount,
             sourceExcludes: includeDetails == false
@@ -117,8 +101,6 @@ public class ElasticsearchAuditLogManager : IAuditLogManager, ITransientDependen
         HttpStatusCode? httpStatusCode = null,
         CancellationToken cancellationToken = default)
     {
-        var client = _clientFactory.Create();
-
         Expression<Func<AuditLog, bool>> expression = _ => true;
 
         expression = expression
@@ -165,7 +147,6 @@ public class ElasticsearchAuditLogManager : IAuditLogManager, ITransientDependen
         bool includeDetails = false,
         CancellationToken cancellationToken = default)
     {
-        var client = _clientFactory.Create();
         if (sorting.IsNullOrWhiteSpace())
         {
             sorting = $"{nameof(AuditLog.ExecutionTime)} DESC";
