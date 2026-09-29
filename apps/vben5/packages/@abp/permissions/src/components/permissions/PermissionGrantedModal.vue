@@ -81,6 +81,8 @@ const expandNodeKeys = ref<string[]>([]);
 const checkedNodeKeys = ref<string[]>([]);
 const autoExpandParent = ref<boolean>(false);
 const permissionGroups = ref<PermissionGroupVo[]>([]);
+/** 根据搜索条件过滤后的权限树 */
+const filteredPermissionGroups = ref<PermissionGroupVo[]>([]);
 const permissionProviders = ref<NameValue<string>[]>([]);
 
 const { Lr } = useLocalization();
@@ -92,46 +94,110 @@ const { getListApi: getPermissionGroupDefinitionsApi } =
   usePermissionGroupDefinitionsApi();
 const { getGrantedByProviderApi, updateApi } = usePermissionsApi();
 
-const searchPermissionKeys = (
-  key: string,
+/**
+ * 递归过滤权限树
+ * 数据结构的子节点字段是 permissions（不是 children）
+ * - 当前节点自身匹配关键字 → 保留
+ * - 当前节点不匹配，但子孙中有匹配 → 保留当前节点，并保留匹配的子孙
+ * - 当前节点和所有子孙都不匹配 → 丢弃
+ */
+function filterPermissionTree(
   permissions: PermissionVo[],
-): string[] => {
-  const parentKeys: string[] = [];
-  if (!permissions) return parentKeys;
+  keyword: string,
+): PermissionVo[] {
+  if (!permissions?.length) return [];
+
+  const lowerKeyword = keyword.toLowerCase();
+  const result: PermissionVo[] = [];
+
   for (const permission of permissions) {
-    if (permission.children) {
-      if (permission.children.some((item) => item.key === key)) {
-        parentKeys.push(permission.key);
-      } else if (permission.children.some((item) => item.displayName === key)) {
-        parentKeys.push(permission.key);
-      } else if (searchPermissionKeys(key, permission.children)) {
-        parentKeys.push(...searchPermissionKeys(key, permission.children));
-      }
-    } else if (permission.key.includes(key)) {
-      parentKeys.push(permission.key);
-    } else if (permission.displayName.includes(key)) {
-      parentKeys.push(permission.key);
+    const displayName = (permission.displayName ?? '').toLowerCase();
+    const name = (permission.name ?? '').toLowerCase();
+
+    const selfMatched =
+      displayName.includes(lowerKeyword) || name.includes(lowerKeyword);
+
+    // 递归过滤子节点（字段是 permissions）
+    const children = (permission as any).permissions ?? [];
+    const filteredChildren = filterPermissionTree(children, keyword);
+
+    if (selfMatched || filteredChildren.length > 0) {
+      result.push({
+        ...permission,
+        // 保留原字段名 permissions
+        permissions: filteredChildren,
+      } as any);
     }
   }
-  return parentKeys;
-};
+
+  return result;
+}
+
+/**
+ * 收集过滤后树中所有非叶子节点的 key，用于全部展开
+ * 字段名同样是 permissions
+ */
+function collectExpandKeys(
+  permissions: PermissionVo[],
+  keys: string[] = [],
+): string[] {
+  for (const permission of permissions) {
+    const children = (permission as any).permissions ?? [];
+    if (children.length > 0) {
+      keys.push(permission.key);
+      collectExpandKeys(children, keys);
+    }
+  }
+  return keys;
+}
 
 watch(searchPermission, (value) => {
-  if (!value) {
+  const keyword = value?.trim() ?? '';
+
+  // 清空搜索 → 恢复完整树，并收起所有展开节点
+  if (!keyword) {
+    filteredPermissionGroups.value = permissionGroups.value;
     expandNodeKeys.value = [];
     autoExpandParent.value = false;
     return;
   }
-  const expanded: string[] = [];
-  permissionGroups.value.forEach((group) => {
-    const parentKeys = searchPermissionKeys(value, group.permissions);
-    expanded.push(...parentKeys);
-  });
-  expandNodeKeys.value = expanded.filter(
-    (item, i, self) => item && self.indexOf(item) === i,
-  );
-  searchPermission.value = value;
-  autoExpandParent.value = true;
+
+  const lowerKeyword = keyword.toLowerCase();
+  const filtered: PermissionGroupVo[] = [];
+
+  for (const group of permissionGroups.value) {
+    // 组名本身也参与匹配
+    const groupMatched = (group.displayName ?? '')
+      .toLowerCase()
+      .includes(lowerKeyword);
+
+    const filteredPermissions = filterPermissionTree(
+      group.permissions,
+      keyword,
+    );
+
+    // 组名匹配 或 组内有匹配权限 → 保留该组
+    if (groupMatched || filteredPermissions.length > 0) {
+      filtered.push({
+        ...group,
+        permissions: filteredPermissions,
+      });
+    }
+  }
+
+  filteredPermissionGroups.value = filtered;
+
+  // 收集所有非叶子节点 key，实现搜索后全部展开
+  const expandKeys: string[] = [];
+  for (const group of filtered) {
+    // 如果组下面还有权限，组本身也要展开
+    if (group.permissions?.length) {
+      expandKeys.push(group.key);
+      collectExpandKeys(group.permissions, expandKeys);
+    }
+  }
+  expandNodeKeys.value = [...new Set(expandKeys)];
+  autoExpandParent.value = false;
 });
 
 const [Modal, modalApi] = useVbenModal({
@@ -261,6 +327,8 @@ async function onInit() {
   expandNodeKeys.value = [];
   checkedNodeKeys.value = [];
   permissionGroups.value = [];
+  filteredPermissionGroups.value = [];
+  searchPermission.value = '';
   const state = modalApi.getData<ModalState>();
   providerName.value = state.providerName;
   const [providerRes, permissionRes, permissionGroupRes] = await Promise.all([
@@ -296,6 +364,9 @@ async function onInit() {
       }),
     };
   });
+
+  // 初始化过滤树（无搜索条件时等同于完整树）
+  filteredPermissionGroups.value = permissionGroups.value;
 }
 
 async function onDeleteGrand(grantedInfo: PermissionProvider) {
@@ -333,7 +404,7 @@ async function onDeleteGrand(grantedInfo: PermissionProvider) {
               :checkable="true"
               :checked-keys="checkedNodeKeys"
               :expanded-keys="expandNodeKeys"
-              :tree-data="permissionGroups"
+              :tree-data="filteredPermissionGroups"
               :field-names="{
                 key: 'name',
                 title: 'displayName',
