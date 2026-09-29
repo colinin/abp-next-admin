@@ -88,7 +88,6 @@ public class ElasticsearchSecurityLogManager : ISecurityLogManager, ITransientDe
         bool includeDetails = false,
         CancellationToken cancellationToken = default)
     {
-        var client = _clientFactory.Create();
         if (sorting.IsNullOrWhiteSpace())
         {
             sorting = $"{nameof(SecurityLog.CreationTime)} DESC";
@@ -131,8 +130,6 @@ public class ElasticsearchSecurityLogManager : ISecurityLogManager, ITransientDe
         string? correlationId = null,
         CancellationToken cancellationToken = default)
     {
-        var client = _clientFactory.Create();
-
         Expression<Func<SecurityLog, bool>> expression = _ => true;
 
         expression = expression
