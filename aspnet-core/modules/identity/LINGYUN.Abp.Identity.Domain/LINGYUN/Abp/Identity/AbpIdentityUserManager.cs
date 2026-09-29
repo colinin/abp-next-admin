@@ -11,6 +11,7 @@ using Volo.Abp.DependencyInjection;
 using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.Identity;
 using Volo.Abp.MultiTenancy;
+using Volo.Abp.Roles;
 using Volo.Abp.Security.Claims;
 using Volo.Abp.Settings;
 using Volo.Abp.Threading;
@@ -25,7 +26,9 @@ namespace LINGYUN.Abp.Identity;
     typeof(UserManager<IdentityUser>))]
 public class AbpIdentityUserManager : IdentityUserManager
 {
+    protected IdentityTwoFactorManager IdentityTwoFactorManager { get; }
     public AbpIdentityUserManager(
+        IdentityTwoFactorManager identityTwoFactorManager,
         IdentityUserStore store,
         Volo.Abp.Identity.IIdentityRoleRepository roleRepository,
         Volo.Abp.Identity.IIdentityUserRepository userRepository,
@@ -68,6 +71,35 @@ public class AbpIdentityUserManager : IdentityUserManager
         currentTenant,
         dataFilter)
     {
+        IdentityTwoFactorManager = identityTwoFactorManager;
+    }
+
+    public async override Task<IdentityResult> CreateAsync(IdentityUser user)
+    {
+        var result = await base.CreateAsync(user);
+
+        if (result.Succeeded && 
+            !user.TwoFactorEnabled &&
+            await IdentityTwoFactorManager.IsForcedEnableAsync())
+        {
+            result = await SetTwoFactorEnabledAsync(user, true);
+        }
+
+        return result;
+    }
+
+    public async override Task<IdentityResult> UpdateAsync(IdentityUser user)
+    {
+        var result = await base.UpdateAsync(user);
+
+        if (result.Succeeded &&
+            !user.TwoFactorEnabled &&
+            await IdentityTwoFactorManager.IsForcedEnableAsync())
+        {
+            result = await SetTwoFactorEnabledAsync(user, true);
+        }
+
+        return result;
     }
 
     public async override Task<IdentityResult> ResetPasswordAsync(IdentityUser user, string token, string newPassword)
@@ -106,5 +138,20 @@ public class AbpIdentityUserManager : IdentityUserManager
         });
 
         return result;
+    }
+
+    public async override Task<bool> GetTwoFactorEnabledAsync(IdentityUser user)
+    {
+        if (!user.TwoFactorEnabled)
+        {
+            var isInAdminRole = await IsInRoleAsync(user, AbpRoleConsts.AdminRoleName);
+
+            if (await IdentityTwoFactorManager.GetTwoFactorEnabledAsync(user, isInAdminRole))
+            {
+                return true;
+            }
+        }
+
+        return await base.GetTwoFactorEnabledAsync(user);
     }
 }
