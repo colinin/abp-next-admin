@@ -68,7 +68,8 @@ services:
     environment:
       - "cluster.name=elasticsearch"
       - "discovery.type=single-node"
-      - "ES_JAVA_OPTS=-Xms15g -Xmx15g"
+      - "ES_JAVA_OPTS=-Xms2g -Xmx2g"
+      - "xpack.security.enabled=false"
       - TZ=Asia/Shanghai
     volumes:
       - ./deploy/middleware/elasticsearch/plugins:/usr/share/elasticsearch/plugins

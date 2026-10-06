@@ -1,134 +1,125 @@
 version: '3.4'
 
 services:
-  sts-server:
+  auth-server:
     build:
-      context: ./aspnet-core/services/Publish/identityserver
+      context: .
+      dockerfile: aspnet-core/services/LINGYUN.Abp.MicroService.AuthServer/Dockerfile
     volumes:
-      - ./deploy/framework/ids-sts/logs:/app/Logs
-      - ./deploy/framework/ids-sts/modules:/app/Modules
+      - ./deploy/framework/auth-server/logs:/app/Logs
+      - ./deploy/framework/auth-server/modules:/app/Modules
     restart: always
 
-  sts-api:
+  identity-service:
     build:
-      context: ./aspnet-core/services/Publish/identityserver4-admin
+      context: .
+      dockerfile: aspnet-core/services/LINGYUN.Abp.MicroService.IdentityService/Dockerfile
     volumes:
-      - ./deploy/framework/ids-admin/logs:/app/Logs
-      - ./deploy/framework/ids-admin/modules:/app/Modules
-    restart: always
-    depends_on:
-      - sts-server
-
-  # 取消注释以使用openiddict
-  # sts-server:
-  #   build:
-  #     context: ./aspnet-core/services/Publish/authserver
-  #   volumes:
-  #     - ./deploy/framework/ids-sts/logs:/app/Logs
-  #     - ./deploy/framework/ids-sts/modules:/app/Modules
-  #   restart: always
-
-  # 取消注释以使用openiddict
-  # sts-api:
-  #   build:
-  #     context: ./aspnet-core/services/Publish/authserver-api
-  #   volumes:
-  #     - ./deploy/framework/ids-admin/logs:/app/Logs
-  #     - ./deploy/framework/ids-admin/modules:/app/Modules
-  #   restart: always
-  #   depends_on:
-  #     - sts-server
-
-  admin-api:
-    build:
-      context: ./aspnet-core/services/Publish/admin
-    volumes:
-      - ./deploy/framework/ids-admin/logs:/app/Logs
-      - ./deploy/framework/ids-admin/modules:/app/Modules
+      - ./deploy/framework/identity-service/logs:/app/Logs
+      - ./deploy/framework/identity-service/modules:/app/Modules
     restart: always
     depends_on:
-      - sts-server
+      - auth-server
 
-  localization-api:
+  admin-service:
     build:
-      context: ./aspnet-core/services/Publish/localization
+      context: .
+      dockerfile: aspnet-core/services/LINGYUN.Abp.MicroService.AdminService/Dockerfile
     volumes:
-      - ./deploy/framework/localization/logs:/app/Logs
-      - ./deploy/framework/localization/modules:/app/Modules
+      - ./deploy/framework/admin-service/logs:/app/Logs
+      - ./deploy/framework/admin-service/modules:/app/Modules
     restart: always
     depends_on:
-      - sts-server
+      - auth-server
 
-  platform-api:
+  localization-service:
     build:
-      context: ./aspnet-core/services/Publish/platform
+      context: .
+      dockerfile: aspnet-core/services/LINGYUN.Abp.MicroService.LocalizationService/Dockerfile
     volumes:
-      - ./deploy/framework/platform/logs:/app/Logs
-      - ./deploy/framework/platform/modules:/app/Modules
-      - ./deploy/framework/platform/blobs:/app/file-blob-storing
+      - ./deploy/framework/localization-service/logs:/app/Logs
+      - ./deploy/framework/localization-service/modules:/app/Modules
     restart: always
     depends_on:
-      - sts-server
+      - auth-server
 
-  messages-api:
+  platform-service:
     build:
-      context: ./aspnet-core/services/Publish/messages
+      context: .
+      dockerfile: aspnet-core/services/LINGYUN.Abp.MicroService.PlatformService/Dockerfile
     volumes:
-      - ./deploy/framework/messages/logs:/app/Logs
-      - ./deploy/framework/messages/modules:/app/Modules
+      - ./deploy/framework/platform-service/logs:/app/Logs
+      - ./deploy/framework/platform-service/modules:/app/Modules
+      - ./deploy/framework/platform-service/blobs:/app/file-blob-storing
     restart: always
     depends_on:
-      - sts-server
+      - auth-server
 
-  task-api:
+  message-service:
     build:
-      context: ./aspnet-core/services/Publish/task-management
+      context: .
+      dockerfile: aspnet-core/services/LINGYUN.Abp.MicroService.MessageService/Dockerfile
     volumes:
-      - ./deploy/framework/task/logs:/app/Logs
-      - ./deploy/framework/task/modules:/app/Modules
+      - ./deploy/framework/message-service/logs:/app/Logs
+      - ./deploy/framework/message-service/modules:/app/Modules
     restart: always
     depends_on:
-      - sts-server
+      - auth-server
 
-  webhook-api:
+  task-service:
     build:
-      context: ./aspnet-core/services/Publish/webhooks
+      context: .
+      dockerfile: aspnet-core/services/LINGYUN.Abp.MicroService.TaskService/Dockerfile
     volumes:
-      - ./deploy/framework/webhook/logs:/app/Logs
-      - ./deploy/framework/webhook/modules:/app/Modules
+      - ./deploy/framework/task-service/logs:/app/Logs
+      - ./deploy/framework/task-service/modules:/app/Modules
     restart: always
     depends_on:
-      - sts-server
+      - auth-server
 
-  workflow-api:
+  webhook-service:
     build:
-      context: ./aspnet-core/services/Publish/workflow
+      context: .
+      dockerfile: aspnet-core/services/LINGYUN.Abp.MicroService.WebhookService/Dockerfile
     volumes:
-      - ./deploy/framework/workflow/logs:/app/Logs
-      - ./deploy/framework/workflow/modules:/app/Modules
+      - ./deploy/framework/webhook-service/logs:/app/Logs
+      - ./deploy/framework/webhook-service/modules:/app/Modules
     restart: always
     depends_on:
-      - sts-server
+      - auth-server
 
-  wechat-api:
+  workflow-service:
     build:
-      context: ./aspnet-core/services/Publish/wechat
+      context: .
+      dockerfile: aspnet-core/services/LINGYUN.Abp.MicroService.WorkflowService/Dockerfile
     volumes:
-      - ./deploy/framework/wechat/logs:/app/Logs
-      - ./deploy/framework/wechat/modules:/app/Modules
+      - ./deploy/framework/workflow-service/logs:/app/Logs
+      - ./deploy/framework/workflow-service/modules:/app/Modules
     restart: always
     depends_on:
-      - sts-server
+      - auth-server
+
+  wechat-service:
+    build:
+      context: .
+      dockerfile: aspnet-core/services/LINGYUN.Abp.MicroService.WeChatService/Dockerfile
+    volumes:
+      - ./deploy/framework/wechat-service/logs:/app/Logs
+      - ./deploy/framework/wechat-service/modules:/app/Modules
+    restart: always
+    depends_on:
+      - auth-server
 
   internal-apigateway:
     build:
-      context: ./aspnet-core/services/Publish/internal-apigateway
+      context: .
+      dockerfile: gateways/internal/LINGYUN.MicroService.Internal.ApiGateway/src/LINGYUN.MicroService.Internal.Gateway/Dockerfile
     volumes:
-      - ./deploy/framework/apigateway/logs:/app/Logs
-      - ./deploy/framework/apigateway/modules:/app/Modules
+      - ./deploy/framework/internal-apigateway/logs:/app/Logs
+      - ./deploy/framework/internal-apigateway/modules:/app/Modules
     restart: always
 
-  ui:
-    build:
-      context: ./apps/vue
-    restart: always
+  # ui:
+  #   build:
+  #     context: ./apps/vue
+  #   restart: always
