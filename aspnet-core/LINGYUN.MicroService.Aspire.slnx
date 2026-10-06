@@ -146,6 +146,7 @@
     <Project Path="framework/efcore/LINGYUN.Abp.EntityFrameworkCore.MySQL.Microting/LINGYUN.Abp.EntityFrameworkCore.MySQL.Microting.csproj" Id="83359abe-f8c3-4f18-a597-dd6c96c42ecb" />
   </Folder>
   <Folder Name="/framework/elasticsearch/">
+    <Project Path="framework/elasticsearch/LINGYUN.Abp.Elasticsearch.EsqlQuery/LINGYUN.Abp.Elasticsearch.EsqlQuery.csproj" />
     <Project Path="framework/elasticsearch/LINGYUN.Abp.Elasticsearch/LINGYUN.Abp.Elasticsearch.csproj" />
   </Folder>
   <Folder Name="/framework/entity-change/">
