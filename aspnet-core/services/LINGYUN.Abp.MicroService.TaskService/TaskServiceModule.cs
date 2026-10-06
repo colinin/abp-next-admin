@@ -1,0 +1,175 @@
+﻿using LINGYUN.Abp.AspNetCore.HttpOverrides;
+using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
+using LINGYUN.Abp.AspNetCore.Session;
+using LINGYUN.Abp.AuditLogging.Elasticsearch;
+using LINGYUN.Abp.Authorization.OrganizationUnits;
+using LINGYUN.Abp.BackgroundTasks.DistributedLocking;
+using LINGYUN.Abp.BackgroundTasks.Jobs;
+using LINGYUN.Abp.BackgroundTasks.Notifications;
+using LINGYUN.Abp.BackgroundTasks.Quartz;
+using LINGYUN.Abp.BlobManagement;
+using LINGYUN.Abp.Claims.Mapping;
+using LINGYUN.Abp.Data.DbMigrator;
+using LINGYUN.Abp.Dynamic.Definitions;
+using LINGYUN.Abp.Elasticsearch.Jobs;
+using LINGYUN.Abp.Emailing.Platform;
+using LINGYUN.Abp.EventBus.CAP;
+using LINGYUN.Abp.ExceptionHandling.Emailing;
+using LINGYUN.Abp.Identity.EntityFrameworkCore;
+using LINGYUN.Abp.Identity.Jobs;
+using LINGYUN.Abp.Localization.CultureMap;
+using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
+using LINGYUN.Abp.MicroService.TaskService.EntityFrameworkCore;
+using LINGYUN.Abp.Saas.EntityFrameworkCore;
+using LINGYUN.Abp.Serilog.Enrichers.Application;
+using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
+using LINGYUN.Abp.Sms.Platform;
+using LINGYUN.Abp.TaskManagement;
+using LINGYUN.Abp.TaskManagement.EntityFrameworkCore;
+using LINGYUN.Abp.Telemetry.OpenTelemetry;
+using LINGYUN.Abp.Telemetry.SkyWalking;
+using LINGYUN.Platform.EntityFrameworkCore;
+using LINGYUN.Platform.Jobs;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Volo.Abp;
+using Volo.Abp.AspNetCore.Authentication.JwtBearer;
+using Volo.Abp.AspNetCore.MultiTenancy;
+using Volo.Abp.AspNetCore.Mvc;
+using Volo.Abp.AspNetCore.Serilog;
+using Volo.Abp.Autofac;
+using Volo.Abp.Caching.StackExchangeRedis;
+using Volo.Abp.DistributedLocking;
+using Volo.Abp.FeatureManagement.EntityFrameworkCore;
+using Volo.Abp.Http.Client.IdentityModel.Web;
+using Volo.Abp.Modularity;
+using Volo.Abp.PermissionManagement.EntityFrameworkCore;
+using Volo.Abp.SettingManagement.EntityFrameworkCore;
+using Volo.Abp.Swashbuckle;
+
+namespace LINGYUN.Abp.MicroService.TaskService;
+
+[DependsOn(
+    typeof(AbpSerilogEnrichersApplicationModule),
+    typeof(AbpSerilogEnrichersUniqueIdModule),
+    typeof(AbpAuditLoggingElasticsearchModule),
+    typeof(AbpAspNetCoreSerilogModule),
+    typeof(AbpDistributedLockingModule),
+    typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
+    typeof(AbpAuthorizationOrganizationUnitsModule),
+    typeof(AbpEmailingExceptionHandlingModule),
+    typeof(AbpBlobManagementHttpApiClientModule),
+    typeof(AbpHttpClientIdentityModelWebModule),
+    typeof(AbpAspNetCoreMultiTenancyModule),
+    typeof(AbpBackgroundTasksJobsModule),
+    typeof(AbpBackgroundTasksQuartzModule),
+    typeof(AbpBackgroundTasksDistributedLockingModule),
+    typeof(AbpBackgroundTasksNotificationsModule),
+    typeof(AbpElasticsearchJobsModule),
+    typeof(AbpIdentityJobsModule),
+    typeof(PlatformJobsModule),
+    typeof(TaskManagementApplicationModule),
+    typeof(TaskManagementHttpApiModule),
+    typeof(TaskManagementEntityFrameworkCoreModule),
+    typeof(AbpIdentityEntityFrameworkCoreModule),
+    typeof(AbpFeatureManagementEntityFrameworkCoreModule),
+    typeof(AbpPermissionManagementEntityFrameworkCoreModule),
+    typeof(AbpSettingManagementEntityFrameworkCoreModule),
+    typeof(AbpSaasEntityFrameworkCoreModule),
+    typeof(AbpLocalizationManagementEntityFrameworkCoreModule),
+    typeof(PlatformEntityFrameworkCoreModule),
+    typeof(TaskServiceMigrationsEntityFrameworkCoreModule),
+    typeof(AbpDataDbMigratorModule),
+    typeof(AbpCachingStackExchangeRedisModule),
+    typeof(AbpEmailingPlatformModule),
+    typeof(AbpSmsPlatformModule),
+    typeof(AbpAspNetCoreMvcModule),
+    typeof(AbpSwashbuckleModule),
+    typeof(AbpLocalizationCultureMapModule),
+    typeof(AbpAspNetCoreSessionModule),
+    typeof(AbpAspNetCoreMvcWrapperModule),
+    typeof(AbpAspNetCoreHttpOverridesModule),
+    typeof(AbpDynamicDefinitionsModule),
+    typeof(AbpTelemetryOpenTelemetryModule),
+    typeof(AbpTelemetrySkyWalkingModule),
+    typeof(AbpClaimsMappingModule),
+    typeof(AbpCAPEventBusModule),
+    typeof(AbpAutofacModule)
+    )]
+public partial class TaskServiceModule : AbpModule
+{
+    public override void PreConfigureServices(ServiceConfigurationContext context)
+    {
+        var configuration = context.Services.GetConfiguration();
+
+        PreConfigureWrapper();
+        PreConfigureFeature();
+        PreForwardedHeaders();
+        PreConfigureApp(configuration);
+        PreConfigureCAP(configuration);
+        PreConfigureQuartz(configuration);
+    }
+
+    public override void ConfigureServices(ServiceConfigurationContext context)
+    {
+        var hostingEnvironment = context.Services.GetHostingEnvironment();
+        var configuration = context.Services.GetConfiguration();
+
+        ConfigureWrapper();
+        ConfigureLocalization();
+        ConfigureBackgroundTasks();
+        ConfigureExceptionHandling();
+        ConfigureVirtualFileSystem();
+        ConfigureFeatureManagement();
+        ConfigureTiming(configuration);
+        ConfigureCaching(configuration);
+        ConfigureAuditing(configuration);
+        ConfigureIdentity(configuration);
+        ConfigureBlobStoring(configuration);
+        ConfigureMultiTenancy(configuration);
+        ConfigureJsonSerializer(configuration);
+        ConfigureMvc(context.Services, configuration);
+        ConfigureCors(context.Services, configuration);
+        if (hostingEnvironment.IsDevelopment())
+        {
+            ConfigureSwagger(context.Services, configuration);
+        }
+        ConfigureDistributedLock(context.Services, configuration);
+        ConfigureSecurity(context.Services, configuration, hostingEnvironment.IsDevelopment());
+    }
+
+    public override void OnApplicationInitialization(ApplicationInitializationContext context)
+    {
+        var app = context.GetApplicationBuilder();
+        var env = context.GetEnvironment();
+
+        app.UseForwardedHeaders();
+        app.UseAbpRequestLocalization();
+        app.MapAbpStaticAssets();
+        app.UseCorrelationId();
+        app.UseRouting();
+        app.UseCors();
+        app.UseAuthentication();
+        app.UseJwtTokenMiddleware();
+        app.UseMultiTenancy();
+        app.UseDynamicClaims();
+        app.UseAuthorization();
+        if (env.IsDevelopment())
+        {
+            app.UseSwagger();
+            app.UseAbpSwaggerUI(options =>
+            {
+                options.SwaggerEndpoint("/swagger/v1/swagger.json", "Support Task Service API");
+
+                var configuration = context.GetConfiguration();
+                options.OAuthClientId(configuration["AuthServer:SwaggerClientId"]);
+                options.OAuthScopes(configuration["AuthServer:Audience"]);
+            });
+        }
+        app.UseAuditing();
+        app.UseAbpSerilogEnrichers();
+        app.UseConfiguredEndpoints();
+    }
+}

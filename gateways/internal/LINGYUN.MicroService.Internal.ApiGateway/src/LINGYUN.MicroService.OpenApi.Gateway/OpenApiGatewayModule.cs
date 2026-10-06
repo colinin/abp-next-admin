@@ -114,6 +114,17 @@ public class OpenApiGatewayModule : AbpModule
                 .AddJwtBearer(options =>
                 {
                     configuration.GetSection("AuthServer").Bind(options);
+
+                    var validIssuers = configuration.GetSection("AuthServer:ValidIssuers").Get<List<string>>();
+                    var validAudiences = configuration.GetSection("AuthServer:ValidAudiences").Get<List<string>>();
+                    if (validIssuers?.Count > 0)
+                    {
+                        options.TokenValidationParameters.ValidIssuers = validIssuers;
+                    }
+                    if (validAudiences?.Count > 0)
+                    {
+                        options.TokenValidationParameters.ValidAudiences = validAudiences;
+                    }
                 });
 
         if (hostingEnvironment.IsProduction())

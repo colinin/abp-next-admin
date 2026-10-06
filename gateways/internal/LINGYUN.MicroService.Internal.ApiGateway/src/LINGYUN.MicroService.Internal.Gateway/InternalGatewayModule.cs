@@ -95,12 +95,12 @@ public class InternalGatewayModule : AbpModule
                 configuration.GetSection("AuthServer").Bind(options);
 
                 var validIssuers = configuration.GetSection("AuthServer:ValidIssuers").Get<List<string>>();
+                var validAudiences = configuration.GetSection("AuthServer:ValidAudiences").Get<List<string>>();
                 if (validIssuers?.Count > 0)
                 {
                     options.TokenValidationParameters.ValidIssuers = validIssuers;
                     options.TokenValidationParameters.IssuerValidator = TokenWildcardIssuerValidator.IssuerValidator;
                 }
-                var validAudiences = configuration.GetSection("AuthServer:ValidAudiences").Get<List<string>>();
                 if (validAudiences?.Count > 0)
                 {
                     options.TokenValidationParameters.ValidAudiences = validAudiences;

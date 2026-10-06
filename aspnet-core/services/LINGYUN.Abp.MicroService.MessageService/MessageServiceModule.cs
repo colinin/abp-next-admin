@@ -1,0 +1,222 @@
+﻿using LINGYUN.Abp.AspNetCore.HttpOverrides;
+using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
+using LINGYUN.Abp.AspNetCore.Session;
+using LINGYUN.Abp.AuditLogging.Elasticsearch;
+using LINGYUN.Abp.Authorization.OrganizationUnits;
+using LINGYUN.Abp.BackgroundTasks.DistributedLocking;
+using LINGYUN.Abp.BackgroundTasks.Quartz;
+using LINGYUN.Abp.Claims.Mapping;
+using LINGYUN.Abp.Data.DbMigrator;
+using LINGYUN.Abp.Dynamic.Definitions;
+using LINGYUN.Abp.Emailing.Platform;
+using LINGYUN.Abp.EventBus.CAP;
+using LINGYUN.Abp.ExceptionHandling.Notifications;
+using LINGYUN.Abp.Features.LimitValidation.Redis;
+using LINGYUN.Abp.Identity.EntityFrameworkCore;
+using LINGYUN.Abp.Identity.Notifications;
+using LINGYUN.Abp.Identity.WeChat;
+using LINGYUN.Abp.Identity.WeChat.Work;
+using LINGYUN.Abp.IM.SignalR;
+using LINGYUN.Abp.Localization.CultureMap;
+using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
+using LINGYUN.Abp.MessageService;
+using LINGYUN.Abp.MessageService.EntityFrameworkCore;
+using LINGYUN.Abp.MicroService.MessageService.EntityFrameworkCore;
+using LINGYUN.Abp.Notifications;
+using LINGYUN.Abp.Notifications.Calendar;
+using LINGYUN.Abp.Notifications.Common;
+using LINGYUN.Abp.Notifications.Emailing;
+using LINGYUN.Abp.Notifications.EntityFrameworkCore;
+using LINGYUN.Abp.Notifications.Jobs;
+using LINGYUN.Abp.Notifications.SignalR;
+using LINGYUN.Abp.Notifications.Sms;
+using LINGYUN.Abp.Notifications.Templating;
+using LINGYUN.Abp.Notifications.WeChat.MiniProgram;
+using LINGYUN.Abp.Notifications.WeChat.Work;
+using LINGYUN.Abp.Notifications.WxPusher;
+using LINGYUN.Abp.Saas.EntityFrameworkCore;
+using LINGYUN.Abp.Serilog.Enrichers.Application;
+using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
+using LINGYUN.Abp.Sms.Platform;
+using LINGYUN.Abp.TaskManagement.EntityFrameworkCore;
+using LINGYUN.Abp.Telemetry.OpenTelemetry;
+using LINGYUN.Abp.Telemetry.SkyWalking;
+using LINGYUN.Abp.TextTemplating.EntityFrameworkCore;
+using LINGYUN.Abp.TextTemplating.Scriban;
+using LINGYUN.Abp.WeChat.Official.Handlers;
+using LINGYUN.Abp.WeChat.Work.Handlers;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Volo.Abp;
+using Volo.Abp.AspNetCore.Authentication.JwtBearer;
+using Volo.Abp.AspNetCore.MultiTenancy;
+using Volo.Abp.AspNetCore.Serilog;
+using Volo.Abp.Autofac;
+using Volo.Abp.BackgroundWorkers;
+using Volo.Abp.Caching.StackExchangeRedis;
+using Volo.Abp.FeatureManagement.EntityFrameworkCore;
+using Volo.Abp.Http.Client;
+using Volo.Abp.Modularity;
+using Volo.Abp.PermissionManagement.EntityFrameworkCore;
+using Volo.Abp.SettingManagement.EntityFrameworkCore;
+using Volo.Abp.Swashbuckle;
+
+namespace LINGYUN.Abp.MicroService.MessageService;
+
+[DependsOn(
+    typeof(AbpSerilogEnrichersApplicationModule),
+    typeof(AbpSerilogEnrichersUniqueIdModule),
+    typeof(AbpAspNetCoreSerilogModule),
+    typeof(AbpAuditLoggingElasticsearchModule),
+    typeof(AbpAspNetCoreMultiTenancyModule),
+    typeof(AbpMessageServiceApplicationModule),
+    typeof(AbpMessageServiceHttpApiModule),
+    typeof(AbpNotificationsApplicationModule),
+    typeof(AbpNotificationsHttpApiModule),
+    typeof(AbpIdentityWeChatModule),
+    typeof(AbpIdentityWeChatWorkModule),
+    typeof(AbpBackgroundTasksQuartzModule),
+    typeof(AbpBackgroundTasksDistributedLockingModule),
+    typeof(TaskManagementEntityFrameworkCoreModule),
+    typeof(AbpMessageServiceEntityFrameworkCoreModule),
+    typeof(AbpNotificationsEntityFrameworkCoreModule),
+    typeof(AbpSaasEntityFrameworkCoreModule),
+    typeof(AbpFeatureManagementEntityFrameworkCoreModule),
+    typeof(AbpSettingManagementEntityFrameworkCoreModule),
+    typeof(AbpPermissionManagementEntityFrameworkCoreModule),
+    typeof(AbpLocalizationManagementEntityFrameworkCoreModule),
+    typeof(AbpTextTemplatingEntityFrameworkCoreModule),
+    typeof(AbpIdentityEntityFrameworkCoreModule),
+    typeof(MessageServiceMigrationsEntityFrameworkCoreModule),
+    typeof(AbpDataDbMigratorModule),
+    typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
+    typeof(AbpAuthorizationOrganizationUnitsModule),
+    typeof(AbpBackgroundWorkersModule),
+    typeof(AbpIMSignalRModule),
+    typeof(AbpNotificationsJobsModule),
+    typeof(AbpNotificationsCommonModule),
+    typeof(AbpNotificationsSmsModule),
+    typeof(AbpNotificationsEmailingModule),
+    typeof(AbpNotificationsSignalRModule),
+    typeof(AbpNotificationsWxPusherModule),
+    typeof(AbpNotificationsWeChatMiniProgramModule),
+    typeof(AbpNotificationsWeChatWorkModule),
+    typeof(AbpNotificationsExceptionHandlingModule),
+    typeof(AbpNotificationsTemplatingModule),
+    typeof(AbpNotificationsCalendarModule),
+    typeof(AbpWeChatWorkHandlersModule),
+    typeof(AbpWeChatOfficialHandlersModule),
+    typeof(AbpIdentityNotificationsModule),
+
+    // 重写模板引擎支持外部本地化
+    typeof(AbpTextTemplatingScribanModule),
+
+    typeof(AbpCAPEventBusModule),
+    typeof(AbpFeaturesValidationRedisModule),
+    typeof(AbpCachingStackExchangeRedisModule),
+    typeof(AbpLocalizationCultureMapModule),
+    typeof(AbpEmailingPlatformModule),
+    typeof(AbpSmsPlatformModule),
+    typeof(AbpHttpClientModule),
+    typeof(AbpClaimsMappingModule),
+    typeof(AbpTelemetryOpenTelemetryModule),
+    typeof(AbpTelemetrySkyWalkingModule),
+    typeof(AbpAspNetCoreSessionModule),
+    typeof(AbpAspNetCoreMvcWrapperModule),
+    typeof(AbpAspNetCoreHttpOverridesModule),
+    typeof(AbpDynamicDefinitionsModule),
+    typeof(AbpSwashbuckleModule),
+    typeof(AbpAutofacModule)
+    )]
+public partial class MessageServiceModule : AbpModule
+{
+    public override void PreConfigureServices(ServiceConfigurationContext context)
+    {
+        var configuration = context.Services.GetConfiguration();
+
+        PreConfigureWrapper();
+        PreConfigureFeature();
+        PreForwardedHeaders();
+        PreConfigureApp(configuration);
+        PreConfigureCAP(configuration);
+        PreConfigureQuartz(configuration);
+        PreConfigureSignalR(configuration);
+    }
+
+    public override void ConfigureServices(ServiceConfigurationContext context)
+    {
+        var hostingEnvironment = context.Services.GetHostingEnvironment();
+        var configuration = context.Services.GetConfiguration();
+
+        ConfigureWrapper();
+        ConfigureLocalization();
+        ConfigureNotifications();
+        ConfigureTextTemplating();
+        ConfigureExceptionHandling();
+        ConfigureVirtualFileSystem();
+        ConfigureFeatureManagement();
+        ConfigureTiming(configuration);
+        ConfigureCaching(configuration);
+        ConfigureAuditing(configuration);
+        ConfigureIdentity(configuration);
+        ConfigureMultiTenancy(configuration);
+        ConfigureJsonSerializer(configuration);
+        ConfigureBackgroundTasks(configuration);
+        ConfigureMvc(context.Services, configuration);
+        ConfigureCors(context.Services, configuration);
+        if (hostingEnvironment.IsDevelopment())
+        {
+            ConfigureSwagger(context.Services, configuration);
+        }
+        ConfigureDistributedLocking(context.Services, configuration);
+        ConfigureSecurity(context.Services, configuration, hostingEnvironment.IsDevelopment());
+    }
+
+    public override void OnApplicationInitialization(ApplicationInitializationContext context)
+    {
+        var app = context.GetApplicationBuilder();
+        var env = context.GetEnvironment();
+
+        app.UseForwardedHeaders();
+        // 本地化
+        app.UseMapRequestLocalization();
+        // http调用链
+        app.UseCorrelationId();
+        // 虚拟文件系统
+        app.MapAbpStaticAssets();
+        // 路由
+        app.UseRouting();
+        // 跨域
+        app.UseCors();
+        // 认证
+        app.UseAuthentication();
+        app.UseJwtTokenMiddleware();
+        // 多租户
+        app.UseMultiTenancy();
+        // 会话
+        app.UseDynamicClaims();
+        // 授权
+        app.UseAuthorization();
+        if (env.IsDevelopment())
+        {
+            // Swagger
+            app.UseSwagger();
+            // Swagger可视化界面
+            app.UseAbpSwaggerUI(options =>
+            {
+                options.SwaggerEndpoint("/swagger/v1/swagger.json", "Support Message Service API");
+
+                var configuration = context.GetConfiguration();
+                options.OAuthClientId(configuration["AuthServer:SwaggerClientId"]);
+                options.OAuthScopes(configuration["AuthServer:Audience"]);
+            });
+        }
+        // 审计日志
+        app.UseAuditing();
+        app.UseAbpSerilogEnrichers();
+        // 路由
+        app.UseConfiguredEndpoints();
+    }
+}
