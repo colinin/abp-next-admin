@@ -119,7 +119,7 @@ const formOptions: VbenFormProps = {
         ],
       },
       fieldName: 'state',
-      label: $t('WebhooksManagement.DisplayName:State'),
+      label: $t('Notifications.DisplayName:SendState'),
     },
     {
       component: 'ApiSelect',
