@@ -8,7 +8,7 @@ This is a [vue-vben-admin](https://github.com/anncwb/vue-vben-admin) -based Abp 
 
 ## Build
 
-[![Build](https://github.com/colinin/abp-next-admin/actions/workflows/build.yml/badge.svg)](https://github.com/colinin/abp-next-admin/actions/workflows/build.yml)
+[![Build](https://github.com/colinin/abp-next-admin/actions/workflows/build.yml/badge.svg)](https://github.com/colinin/abp-next-admin/actions/workflows/build.yml)  [![NuGet](https://img.shields.io/nuget/v/LINGYUN.Abp.Core.svg?style=flat-square)](https://www.nuget.org/packages/LINGYUN.Abp.Core)
 
 ## Deployment Options
 
@@ -23,43 +23,44 @@ If you don't need a microservices architecture, you can choose the monolithic se
 
 If you need higher scalability and a more flexible service architecture, you can choose the microservices deployment option.
 
-## Quick Start
+## Quick Start of a Microservice Project
 
-### 0、Configurate hosts
-windows: modify C:\Windows\System32\drivers\etc\hosts ；
-linux: modify /etc/hosts；
-add config:
+### 0. Configure the hosts file
+
+On Windows, modify C:\Windows\System32\drivers\etc\hosts ;
+on Linux, modify /etc/hosts ;
+add the following entry:
 ```
 	127.0.0.1 host.docker.internal
 ```
-In linux, execute restart network command:
+On Linux, restart the network after changing the hosts file:
 ```shell
 	/etc/init.d/network restart
 ```
 
-### 1、Install cli
+### 1. Install the dotnet tool
 
 ```shell
   dotnet tool install --global LINGYUN.Abp.Cli
 ```
 
-### 2、Install .NET Template
+### 2. Install the .NET template
 
 ```shell
   dotnet new --install LINGYUN.Abp.MicroService.Templates
 ```
 
-### 3、Use cli create new project
+### 3. Create a project with the CLI
 
 ```shell
-  # use sqlserver
-  # MyCompanyName you company name
-  # MyProjectName you project name
-  # MyPackageName you package name
-  # -o  See: abp cli
-  # --dbms  See: abp cli
-  # --cs    See: abp cli
-  # --no-random-port See: abp cli
+  # Initialize a project with a sqlserver connection string
+  # MyCompanyName company name
+  # MyProjectName project name
+  # MyPackageName package name
+  # -o  output to the specified directory, see abp cli
+  # --dbms  specify the database provider, see abp cli
+  # --cs    specify the database connection string, see abp cli
+  # --no-random-port do not use random ports (app port 5000, dapr listening port 3500 by default)
   labp create MyCompanyName.MyProjectName -pk MyPackageName -o "D:\Project" --dbms sqlserver --cs "Server=127.0.0.1;Database=MyProject;User Id=sa;Password=123456" --no-random-port
 
   cd D:\Project\host\MyPackageName.MyCompanyName.MyProjectName.HttpApi.Host
@@ -74,7 +75,7 @@ In linux, execute restart network command:
 
 ### Feedback
 
-* The author is not a freelancer and does not have much time to maintain the project. If there is a problem, please contact **colin.in@foxmail.com** by email  
+* The author is not a freelancer and does not have much time to maintain the project. If you have any problems, you can contact **colin.in@foxmail.com** by email
 
 ## Screenshots
 
@@ -92,7 +93,7 @@ In linux, execute restart network command:
 
 ![Settings](./apps/vue/images/settings.png)
 
-![Dynamic Manus](./apps/vue/images/menus.png)
+![Dynamic Menus](./apps/vue/images/menus.png)
 
 ![Organization Unit](./apps/vue/images/organization-unit.png)
 
@@ -100,13 +101,15 @@ In linux, execute restart network command:
 
 ## Related Projects
 
+Backend projects
+
 [abpframework/abp](https://github.com/abpframework/abp) (abp vNext)
 
 [EasyAbp/Cap](https://github.com/EasyAbp/Abp.EventBus.CAP) (EasyAbp)
 
 [DotNetCore/CAP](https://github.com/dotnetcore/CAP) (CAP)
 
-Javascript version:
+Frontend projects
 
 [vue-vben-admin](https://github.com/anncwb/vue-vben-admin.git) (vue-vben-admin)
 
@@ -123,163 +126,312 @@ Javascript version:
 
 ## Project Structure
 
-```bash
-├── mock/                      # mock server & mock data
-├── public                     # public static assets (directly copied)
-│   │── favicon.ico            # favicon
-│   │── manifest.json          # PWA config file
-│   └── index.html             # index.html template
-├── src                        # main source code
-│   ├── api                    # api service
-│   ├── assets                 # module assets like fonts, images (processed by webpack)
-│   ├── components             # global components
-│   ├── directives             # global directives
-│   ├── enums                  # global enums
-│   ├── hooks                  # global hooks
-│   ├── locales                # locales
-│   ├── layout                 # layouts
-│   ├── router                 # router
-│   ├── settings               # global settings
-│   ├── store                  # store
-│   ├── utils                  # global utils
-│   ├── views                  # views
-│   ├── App.vue                # main app component
-│   ├── main.ts                # app entry file
-├── types                      # types
-├── tests/                     # tests
-├── .env.xxx                   # env variable configuration
-├── .eslintrc.js               # eslint config
-├── jest.config.js             # jest unit test config
-├── package.json               # package.json
-├── postcss.config.js          # postcss config
-├── tsconfig.json              # typescript config
-└── vite.config.js             # vue vite config
-```
-
-## Project setup
-
-With [yarn](https://yarnpkg.com/lang/en/) or [npm](https://www.npmjs.com/get-npm)
-
-
-#### Install dependencies
+### Frontend: apps/vben5 (a pnpm workspace + turbo monorepo)
 
 ```bash
-yarn install
-
+apps/vben5/
+├── apps/                        # Independently runnable UI applications
+│   ├── app-antd/                # ABP business frontend (the one in use: pnpm dev:app / pnpm build:app)
+│   ├── web-antd/                # Official vben antd demo application
+│   ├── web-antdv-next/          # antdv-next demo application
+│   ├── web-ele/                 # Element Plus demo application
+│   ├── web-naive/               # Naive UI demo application
+│   └── web-tdesign/             # TDesign demo application
+├── packages/
+│   ├── @abp/                    # ABP business module packages (27 in total)
+│   │   ├── account/             # Account, external logins (third-party account binding)
+│   │   ├── ai-management/       # AI management (workspaces, tools, agents)
+│   │   ├── auditing/            # Audit logs and security logs
+│   │   ├── blob-management/     # Object storage (containers, files)
+│   │   ├── cache-management/    # Cache management
+│   │   ├── components/          # Shared ABP business components
+│   │   ├── core/                # ABP frontend core (request, permissions, menus, etc.)
+│   │   ├── data-protection/     # Data protection (entity/field level access control)
+│   │   ├── demo/                # Demo module
+│   │   ├── features/            # Feature management
+│   │   ├── gdpr/                # GDPR data export and deletion
+│   │   ├── identity/            # Users, roles, organization units, sessions, login logs
+│   │   ├── localization/        # Localization (languages, resources, texts)
+│   │   ├── notifications/       # Notifications (definitions, my notifications, send records)
+│   │   ├── openiddict/          # OpenIddict (applications, scopes, authorizations, tokens)
+│   │   ├── oss/                 # OSS/Blob file list
+│   │   ├── permissions/         # Permission definitions and grants
+│   │   ├── platform/            # Platform (layouts, menus, data dictionaries, email/SMS)
+│   │   ├── request/             # HTTP request wrapper (token, error handling, tenant header)
+│   │   ├── saas/                # Tenants and editions
+│   │   ├── settings/            # Setting definitions and values
+│   │   ├── signalr/             # SignalR real-time communication
+│   │   ├── tasks/               # Background tasks (job management)
+│   │   ├── text-templating/     # Text templates
+│   │   ├── ui/                  # ABP frontend UI component library
+│   │   ├── webhooks/            # Webhook definitions, subscriptions and send attempts
+│   │   └── wechat/              # WeChat (official account, WeCom, etc.)
+│   ├── @core/                   # Core: base / ui-kit / forward
+│   ├── effects/                 # Shared capabilities: plugins / hooks / common-ui, etc.
+│   ├── icons/  types/           # Icons and type definitions
+│   └── ...                      # The remaining shared packages (see pnpm-workspace.yaml)
+├── internal/                    # Engineering configuration: vite-config / lint-configs / tailwind-config / tsconfig / node-utils
+├── docs/                        # VitePress documentation
+├── playground/                  # Component and example playground
+├── scripts/                     # Cleanup, build and deployment scripts
+├── package.json                 # Root scripts: dev / dev:app / build:app / lint / format / test:unit / check:type
+├── pnpm-workspace.yaml          # Workspace layout and dependency catalog
+├── turbo.json                   # turbo pipeline configuration
+└── vitest.config.ts             # Unit test (vitest) configuration
 ```
 
-### Custom vue project config
-
-Modify the server address that the development environment will use for the proxy. Provide the following three addresses: IdentityService, IdentityServer, and ApiService
+### Backend: aspnet-core and the surrounding directories
 
 ```bash
-VITE_PROXY = [["/connect","http://127.0.0.1:44385"],["/api","http://127.0.0.1:30000"],["/signalr-hubs","ws://127.0.0.1:30000"]]
+.
+├── aspnet-core/
+│   ├── services/                # Service hosts (each with its own Dockerfile)
+│   │   ├── LINGYUN.Abp.MicroService.AuthServer/        # Auth server (STS, 44385)
+│   │   ├── LINGYUN.Abp.MicroService.IdentityService/   # Identity service (30015)
+│   │   ├── LINGYUN.Abp.MicroService.AdminService/      # Admin service (30010)
+│   │   ├── LINGYUN.Abp.MicroService.LocalizationService/# Localization service (30030)
+│   │   ├── LINGYUN.Abp.MicroService.PlatformService/   # Platform service (30025)
+│   │   ├── LINGYUN.Abp.MicroService.MessageService/    # Message service (30020)
+│   │   ├── LINGYUN.Abp.MicroService.TaskService/       # Task service (30040)
+│   │   ├── LINGYUN.Abp.MicroService.WebhookService/    # Webhook service (30045)
+│   │   ├── LINGYUN.Abp.MicroService.WorkflowService/   # Workflow service (30050)
+│   │   ├── LINGYUN.Abp.MicroService.WeChatService/     # WeChat service (30060)
+│   │   ├── LINGYUN.Abp.MicroService.AIService/         # AI service (30070)
+│   │   ├── LY.MicroService.Applications.Single/        # Monolith (30000, gateway and all modules merged)
+│   │   ├── LY.MicroService.IdentityServer/             # IdentityServer based services and hosts
+│   │   ├── LINGYUN.Abp.Applications/  LY.AIO.Applications.Single/  # Other hosts
+│   │   └── Publish/             # Publish output directory (used by the container image builds)
+│   ├── modules/                 # Business modules, each layered by DDD (Domain / Application / EntityFrameworkCore / HttpApi ...)
+│   │   ├── account/             # Account and sign-in (OpenIddict/IdentityServer web integration, captcha)
+│   │   ├── identity/            # Users, roles, organization units, sessions, login logs
+│   │   ├── identityServer/      # IdentityServer4 based implementation
+│   │   ├── openIddict/          # OpenIddict server (applications, scopes, tokens, Portal, QR code, SMS, WeChat)
+│   │   ├── permissions-management/  # Permission management and grants
+│   │   ├── saas/                # Multi-tenancy and editions
+│   │   ├── settings/  feature-management/  # Settings and features
+│   │   ├── localization-management/  text-templating/  # Localization and text templates
+│   │   ├── auditing/  data-protection/  gdpr/  captcha/  # Auditing, data protection, GDPR, captcha
+│   │   ├── blob-management/  caching-management/  # Object storage and cache management
+│   │   ├── platform/  project/  system-info/  demo/  # Platform, project, system info, demo
+│   │   ├── realtime-message/  realtime-notifications/  # Instant messaging and real-time notifications
+│   │   ├── task-management/  rules-management/  webhooks/  # Background tasks, rules engine, webhooks
+│   │   ├── ai/  elsa/           # AI capabilities and workflow (Elsa)
+│   ├── framework/               # Base framework packages (33 groups), the most used ones:
+│   │   ├── common/  core packages (LINGYUN.Abp.Core, CAP, Hangfire, BlobStoring, SignalR ...)
+│   │   ├── security/  authentication/  authorization/   # Security, sign-in methods, authorization
+│   │   ├── auditing/  logging/  telemetry/              # Auditing, logging, tracing (OpenTelemetry/SkyWalking)
+│   │   ├── multi-tenancy: tenants/                      # Multi-tenancy and editions
+│   │   ├── wechat/  wx-pusher/  pushplus/  tui-juhe/    # WeChat and message push
+│   │   ├── cloud-aliyun/  cloud-tencent/                # Aliyun and Tencent Cloud integration
+│   │   ├── dapr/  elasticsearch/  efcore/  data-protection/  # Dapr, Elasticsearch, EF Core, data protection
+│   │   ├── dynamic-queryable/  dynamic-definition/  exporter/  # Dynamic query, dynamic definitions, import/export
+│   │   ├── localization/  settings/  features/  mvc/  open-api/  cli/  ...  # Other base packages
+│   ├── migrations/              # DbMigrator and EntityFrameworkCore migration projects of each service (run by deploy.ps1)
+│   ├── aspire/                  # .NET Aspire: LINGYUN.Abp.MicroService.AppHost and the Aspire hosts of each service
+│   ├── templates/               # dotnet new project templates (micro / aio)
+│   ├── tests/                   # Unit test projects
+│   ├── LINGYUN.MicroService.All.slnx            # Full solution
+│   ├── LINGYUN.MicroService.Aspire.slnx         # Aspire solution
+│   └── LINGYUN.MicroService.SingleProject.slnx  # Monolith solution
+├── gateways/
+│   ├── internal/                # Internal gateway (YARP): Internal.Gateway / OpenApi.Gateway + yarp*.json routes
+│   └── web/                     # Web gateway: LY.MicroService.ApiGateway
+├── apps/                        # Frontend: vben5 (current) / vue (legacy)
+├── build/                       # Build and migration scripts: build-aspnetcore-ef-update.ps1, build-aspnetcore-docker-build.ps1 ...
+├── deploy/                      # One-click deployment script (deploy.ps1), middleware data and service log directories
+├── docs/                        # Documentation (monolith startup guide, etc.)
+├── docker-compose.yml                        # Backend service orchestration
+├── docker-compose.override.yml               # Image tags, volumes and startup order
+├── docker-compose.override.configuration.yml # Environment variables of each service (connection strings, CAP, Redis, Elasticsearch, ...)
+├── docker-compose.middleware.yml             # Middleware: MySQL/Redis/RabbitMQ/Elasticsearch/Kibana/Logstash/OpenObserve
+├── docker-compose.override.agile.yml         # AgileConfig configuration center (optional)
+├── Directory.Build.props  Directory.Packages.props  NuGet.Config  common.props  # Shared build and package version management
+└── README.md  README.en.md  RELEASE.md  LICENSE  # Documentation and license
 ```
 
-Modify the actual address of the production environment, as above
+## Starting the Project
+
+Three startup options are provided; choose the one that fits your needs:
+
+| Option | Description | Middleware | Frontend |
+| --- | --- | --- | --- |
+| Option 1: Microservices | Full microservices architecture, all backends run as containers | Must **start first**: `docker-compose.middleware.yml` | Start vben5 separately |
+| Option 2: Aspire | AppHost orchestrates a local microservices development environment | AppHost creates the containers automatically (PostgreSQL/Redis/RabbitMQ/Elasticsearch/Kibana) | Started automatically by AppHost |
+| Option 3: Monolith | Gateway, authentication and business modules merged into a single process | Must **start first**: `docker-compose.middleware.yml` | Start vben5 separately |
+
+### Prerequisites
+
+- **.NET SDK 10** (`dotnet --version`)
+- **Docker / Docker Compose** (middleware for options 1 and 3; option 2 also relies on Docker for its middleware containers)
+- **Node.js 20+ and pnpm** (the frontend lives in `apps/vben5`, a pnpm monorepo; `preinstall` runs `only-allow pnpm`)
+- **hosts**: on Windows edit `C:\Windows\System32\drivers\etc\hosts`, on Linux edit `/etc/hosts`, and add the following entry
+  ```
+  127.0.0.1 host.docker.internal
+  ```
+  (containers reach the middleware on the host through `extra_hosts: host.docker.internal:host-gateway`)
+
+---
+
+### Option 1: Microservices
+
+#### 1) One-click startup: deploy/deploy.ps1
+
+```powershell
+cd ./deploy
+powershell -ExecutionPolicy Bypass -File .\deploy.ps1
+```
+
+The script performs the following steps (see `deploy/deploy.ps1`):
+
+1. Starts the middleware: `docker-compose -f .\docker-compose.middleware.yml -p labp up -d --build` (MySQL, Redis, RabbitMQ, Elasticsearch, Kibana, Logstash, OpenObserve)
+2. Waits 30 seconds for MySQL initialization to complete
+3. Runs the 8 database migration projects one by one (`dotnet run --no-build`, **so the backend must have been built before running the script**)
+4. Builds the 12 backend images (`labp-*-service:10.6.0`)
+5. Starts the backend: `docker-compose -f .\docker-compose.yml -f .\docker-compose.override.yml -f .\docker-compose.override.configuration.yml -p labp up -d`
+6. Runs `pnpm dev:app` under `apps/vben5` to start the frontend
+
+Notes:
+
+- The script must be executed in the **deploy directory** (it uses relative paths internally).
+- The script calls `docker-compose` (Compose V1 command); if only the Compose V2 plugin is installed on your machine, replace `docker-compose` with `docker compose` in the script.
+- The script does not include AgileConfig (`docker-compose.override.agile.yml`); all configuration comes from `docker-compose.override.configuration.yml`.
+
+#### 2) Manual startup (equivalent to the script; make sure the middleware is started first)
+
+```powershell
+# 1) Start the middleware (must be first)
+docker-compose -f .\docker-compose.middleware.yml -p labp up -d
+# On the first run, wait at least 30 seconds so that MySQL can execute the init scripts under deploy/mysql/docker-entrypoint-initdb.d
+
+# 2) Database migration: use the migration script (it runs dotnet run for each of the 8 *.DbMigrator projects under aspnet-core/migrations, and builds automatically)
+cd .\build
+.\build-aspnetcore-ef-update.ps1
+
+# 3) Build the backend images: produces the 12 labp-*-service:10.6.0 images (the tags must match the image values in docker-compose.override.yml)
+.\build-aspnetcore-docker-build.ps1
+
+# 4) Start the backend (all three compose files are required)
+docker-compose -f .\docker-compose.yml -f .\docker-compose.override.yml -f .\docker-compose.override.configuration.yml -p labp up -d
+
+# 5) Start the frontend
+cd .\apps\vben5
+pnpm install
+pnpm dev:app
+```
+
+Notes on the manual steps:
+
+- Both scripts in steps 2 and 3 must be executed in the **build directory** (they reference `./build-aspnetcore-common.ps1` relatively).
+- `build-aspnetcore-ef-update.ps1` uses `dotnet run` internally (it builds first, then runs), so the manual flow does **not** require a pre-built backend; the one-click `deploy.ps1` uses `dotnet run --no-build`, so the backend must be built before running it.
+- To migrate only a single service, run it from its own directory, for example:
+
+  ```powershell
+  cd .\aspnet-core\migrations\LINGYUN.Abp.MicroService.AuthServer.DbMigrator
+  dotnet run
+  ```
+
+#### 3) Endpoints
+
+| Component | Address |
+| --- | --- |
+| Frontend (vben5, `@abp/app-antd`) | http://localhost:5666 |
+| API Gateway | http://localhost:30000 |
+| Auth Server (STS) | http://localhost:44385 |
+| Identity / Admin / Platform / Message / Localization | 30015 / 30010 / 30025 / 30020 / 30030 |
+| Task / Webhook / Workflow / WeChat / AI | 30040 / 30045 / 30050 / 30060 / 30070 |
+| Kibana | http://localhost:5601 |
+| RabbitMQ management | http://localhost:15672 (admin / 123456) |
+| MySQL | localhost:3306 (root / 123456, database `abp`) |
+| Redis | localhost:6379 |
+| OpenObserve console | http://localhost:5080 (admin@abp.io / ww1Z5L%6) |
+
+### Option 2: Aspire
+
+The AppHost brings up its own middleware containers (PostgreSQL, Redis, RabbitMQ, Elasticsearch, Kibana), automatically runs the database migration projects of each service in the Development environment, and automatically starts the vben5 frontend with `pnpm dev:app`, so there is **no need** to start `docker-compose.middleware.yml` as well.
+
+```powershell
+cd ./aspnet-core/aspire/LINGYUN.Abp.MicroService.AppHost
+aspire run
+```
+
+- The Aspire CLI must be installed (the version must match the AppHost's `Aspire.AppHost.Sdk` 13.x): `dotnet tool install --global Aspire.Cli`; if you prefer not to install the CLI, you can simply run `dotnet run --project .\LINGYUN.Abp.MicroService.AppHost.csproj`.
+- Docker must be running, and `apps/vben5` must already have run `pnpm install` (the AppHost runs `pnpm dev:app`, and the frontend port is fixed at 5666).
+- After startup the terminal prints the Aspire Dashboard address, where you can inspect resource status, logs and traces.
+- The host ports used by the AppHost fully overlap with the middleware of option 1 (6379/9200/5601/5672/15672/5432, etc.) — **do not run it at the same time as the option 1 middleware**.
+
+### Option 3: Monolith
+
+The monolith merges the gateway, authentication and all business modules into a single process, but it **still depends on the middleware, so the middleware must be started first**:
+
+```powershell
+# 1) Start the middleware
+docker-compose -f .\docker-compose.middleware.yml -p labp up -d
+# On the first run, wait at least 30 seconds
+
+# 2) Start the monolith
+cd .\aspnet-core\services\LY.MicroService.Applications.Single
+dotnet run --launch-profile Single.MySql.Dev
+
+# 3) Start the frontend
+cd .\apps\vben5
+pnpm install
+pnpm dev:app
+```
+
+- Default address **http://localhost:30000**: both `App:SelfUrl` and `AuthServer:Authority` point to it, so the token endpoint and the API share the same port.
+- **Specify the profile explicitly**: without `--launch-profile`, `dotnet run` uses the first profile in `launchSettings.json` (currently `Single.PostgreSql.Dev`). With the default database (MySQL) use `Single.MySql.Dev`; the other options are `Single.PostgreSql.Dev` and `Single.SqlServer.Dev`.
+- The connection strings of each database can be found in `appsettings.Development.MySql.json` / `appsettings.Development.PostgreSql.json` / `appsettings.Development.SqlServer.json`.
+
+### Troubleshooting
+
+- **`docker-compose` command not found**: the scripts use the Compose V1 command; if only Compose V2 is installed, use `docker compose` instead.
+- **Image `labp-*-service:10.6.0` not found**: `docker-compose.override.yml` references pre-built images through `image:`, so run `build/build-aspnetcore-docker-build.ps1` first (option 1, manual startup, step 3).
+- **One-click migration fails (`dotnet run --no-build`)**: `deploy.ps1` uses `--no-build` internally, so the backend must be built before running the script (`dotnet build .\aspnet-core\LINGYUN.MicroService.All.slnx`); for manual migration use **build/build-aspnetcore-ef-update.ps1** instead (it uses `dotnet run` and builds automatically).
+- **Frontend dependency installation fails**: `apps/vben5` enforces pnpm (`preinstall` runs `only-allow pnpm`), so use `pnpm install` / `pnpm dev:app`.
+- **Containers cannot reach the middleware on the host**: make sure the hosts file contains `127.0.0.1 host.docker.internal`.
+
+---
+
+### Lints and fixes files
+
+Run the following in `apps/vben5` (vben5 enforces pnpm):
 
 ```bash
-# STS Connect
-# token issue
-VITE_GLOB_AUTHORITY='http://127.0.0.1:44385'
-# client id
-VITE_GLOB_CLIENT_ID='vue-admin-element'
-# client secret
-VITE_GLOB_CLIENT_SECRET='1q2w3e*'
+cd apps/vben5
+
+# lint
+pnpm lint
+
+# auto-fix
+pnpm format
+
+# type check
+pnpm check:type
 ```
 
-### EntityFramework migration
-
-Please switch to the service project startup directory and execute the **dotnet EF ** command for database migration
-
-example:
-
-``` shell
-
-cd aspnet-core/services/admin/LINGYUN.BackendAdminApp.Host
-
-dotnet ef database update
-
-```
-
-- You can also use quick migration script files: **./build/build-aspnetcore-ef-update.ps1**
-
-### Configure the RabbitMQ
-
-Therefore project design for the micro service architecture, with the method of distributed event, communication between project USES is [DotNetCore/CAP](https://github.com/dotnetcore/CAP)
-
-The communication mode is **RabbitMQ Server**, so you need to install **RabbitMQ** in advance. Please refer to the official website for the specific installation mode
-
-
-
-Then you need to change the **CAP:RabbitMQ** configuration in the configuration file to set it to your own defined configuration. The **rabbitmq_management** plug-in is recommended for quick management of **RabbitMQ**
-
-
-### Compiles background services
-
-```shell
-cd aspnet-core/services
-
-start-all-service.bat
-
-```
-
-#### Compiles and hot-reloads for development
-
-```shell
-
-cd apps/vue
-
-yarn dev
-
-```
-
-#### Compiles and minifies for production
+### Run your unit tests
 
 ```bash
-yarn run build
+cd apps/vben5
+
+pnpm test:unit
 ```
-
-### About Docker container
-
-**Step 1**: Building background services, powershell script: **./build/build-aspnetcore-release.ps1**,  **Warning: after the release of service need configuration file: appsettings.Production.json**
-
-**Step 2**: Build the front-end, **./build/build-vue-apps.ps1**
-
-**Step 3**: Build after the release of the address of the default in **./aspnet-core/services/Publish**, change nginx proxy server address: **./client/docker/nginx/default.conf**
-
-**Step 4**: Run command **sudo docker-compose down && sudo docker-compose -f docker-compose.yml -f docker-compose.override.yml up --build -d**
-
-**Using A CI tool such as Jenkins is recommended to simplify this into a single step**
-
-#### Lints and fixes files
-
-```bash
-yarn lint:eslint
-```
-
-#### Run your unit tests
-
-```bash
-yarn run test:unit
-```
-
 
 ## How to contribute
 
-You are very welcome to join！Raise an issue Or submit a Pull Request。
+You are very welcome to join! Raise an issue or submit a Pull Request.
 
 **Pull Request:**
 
-1. Fork code!
+1. Fork the code!
 2. Create your own branch: `git checkout -b feat/xxxx`
 3. Submit your changes: `git commit -am 'feat(function): add xxxxx'`
 4. Push your branch: `git push origin feat/xxxx`
-5. submit`pull request`
+5. Submit a `pull request`
 
 ## Git Contribution submission specification
 
-- reference [vue](./apps/vue/.github/COMMIT_CONVENTION.md) specification ([Angular](https://github.com/conventional-changelog/conventional-changelog/tree/master/packages/conventional-changelog-angular))
+- Reference the [vue](./apps/vue/.github/COMMIT_CONVENTION.md) specification ([Angular](https://github.com/conventional-changelog/conventional-changelog/tree/master/packages/conventional-changelog-angular))
 
   - `feat` Add new features
   - `fix` Fix the problem/BUG
@@ -295,18 +447,6 @@ You are very welcome to join！Raise an issue Or submit a Pull Request。
   - `types` Type definition file changes
   - `wip` In development
 
-## Related warehouse
-
-If these plugins are helpful to you, you can give a star support
-
-- [vite-plugin-mock](https://github.com/anncwb/vite-plugin-mock) - Used for local and development environment data mock
-- [vite-plugin-html](https://github.com/anncwb/vite-plugin-html) - Used for html template conversion and compression
-- [vite-plugin-style-import](https://github.com/anncwb/vite-plugin-style-import) - Used for component library style introduction on demand
-- [vite-plugin-theme](https://github.com/anncwb/vite-plugin-theme) - Used for online switching of theme colors and other color-related configurations
-- [vite-plugin-imagemin](https://github.com/anncwb/vite-plugin-imagemin) - Used to pack compressed image resources
-- [vite-plugin-compression](https://github.com/anncwb/vite-plugin-compression) - Used to pack input .gz|.brotil files
-- [vite-plugin-svg-icons](https://github.com/anncwb/vite-plugin-svg-icons) - Used to quickly generate svg sprite
-
 ## Browser support
 
 The `Chrome 80+` browser is recommended for local development
@@ -318,11 +458,11 @@ Support modern browsers, not IE
 | not support | last 2 versions | last 2 versions | last 2 versions | last 2 versions |
 
 
+
 ## License
 
 [MIT License](./LICENSE)
 
-
 ## Thanks
 
-![JetBrains Logo (Main) logo](https://resources.jetbrains.com/storage/products/company/brand/logos/jb_beam.png)
+![JetBrains Logo (Main) logo](https://resources.jetbrains.com/storage/products/company/brand/logos/jb_beam.svg)

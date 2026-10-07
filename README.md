@@ -125,148 +125,295 @@ linux下，修改完hosts后需要重启网络，在shell中执行：
 
 ## 目录结构
 
-本项目已经为你生成了一个完整的开发框架，提供了涵盖后台开发的各类功能和坑位，下面是整个项目的目录结构。
+### 前端：apps/vben5（pnpm workspace + turbo 的 monorepo）
 
 ```bash
-├── mock                       # mock 服务器 与 模拟数据
-├── public                     # 静态资源 (会被直接复制)
-│   │── favicon.ico            # favicon图标
-│   │── manifest.json          # PWA 配置文件
-│   └── index.html             # html模板
-├── src                        # 源代码
-│   ├── api                    # 所有请求
-│   ├── assets                 # 主题 字体等静态资源 (由 webpack 处理加载)
-│   ├── components             # 全局组件
-│   ├── directive              # 全局指令
-│   ├── enums                  # 全局枚举
-│   ├── hooks                  # 全局hooks
-│   ├── locales                # 国际化
-│   ├── layout                 # 全局布局
-│   ├── router                 # 路由
-│   ├── settings               # 全局 配置
-│   ├── store                  # 全局 vuex store
-│   ├── utils                  # 全局方法
-│   ├── views                  # 所有页面
-│   ├── App.vue                # 入口页面
-│   └── main.js                # 入口文件 加载组件 初始化等
-├── types                      # ts类型
-├── tests                      # 测试
-├── .env.xxx                   # 环境变量配置
-├── .eslintrc.js               # eslint 配置
-├── jest.config.js             # jest 单元测试配置
-├── package.json               # package.json 依赖
-├── postcss.config.js          # postcss 配置
-├── tsconfig.json              # typescript 配置
-└── vite.config.js             # vue vite 配置
+apps/vben5/
+├── apps/                        # 可独立运行的 UI 应用
+│   ├── app-antd/                # ABP 业务前端（当前使用：pnpm dev:app / pnpm build:app）
+│   ├── web-antd/                # vben 官方 antd 示例应用
+│   ├── web-antdv-next/          # antdv-next 示例应用
+│   ├── web-ele/                 # Element Plus 示例应用
+│   ├── web-naive/               # Naive UI 示例应用
+│   └── web-tdesign/             # TDesign 示例应用
+├── packages/
+│   ├── @abp/                    # ABP 业务模块包（27 个）
+│   │   ├── account/             # 账户、外部登录（第三方账号绑定）
+│   │   ├── ai-management/       # AI 管理（工作区、工具、智能体）
+│   │   ├── auditing/            # 审计日志、安全日志
+│   │   ├── blob-management/     # 对象存储（容器、文件）
+│   │   ├── cache-management/    # 缓存管理
+│   │   ├── components/          # ABP 前端通用业务组件
+│   │   ├── core/                # ABP 前端核心（请求、权限、菜单等基础能力）
+│   │   ├── data-protection/     # 数据保护（实体/字段级访问控制）
+│   │   ├── demo/                # 示例模块
+│   │   ├── features/            # 特性（Feature）管理
+│   │   ├── gdpr/                # GDPR 数据导出与删除
+│   │   ├── identity/            # 用户、角色、组织机构、会话、登录日志
+│   │   ├── localization/        # 本地化（语言、资源、文本）
+│   │   ├── notifications/       # 通知（通知定义、我的通知、发送记录）
+│   │   ├── openiddict/          # OpenIddict（应用、作用域、授权、令牌）
+│   │   ├── oss/                 # OSS/Blob 文件列表
+│   │   ├── permissions/         # 权限定义与授权
+│   │   ├── platform/            # 平台（布局、菜单、数据字典、邮件/短信）
+│   │   ├── request/             # HTTP 请求封装（令牌、错误处理、租户头）
+│   │   ├── saas/                # 租户与版本（Edition）
+│   │   ├── settings/            # 设置定义与设置值
+│   │   ├── signalr/             # SignalR 实时通信
+│   │   ├── tasks/               # 后台任务（作业管理）
+│   │   ├── text-templating/     # 文本模板
+│   │   ├── ui/                  # ABP 前端 UI 组件库
+│   │   ├── webhooks/            # Webhook 定义、订阅与发送记录
+│   │   └── wechat/              # 微信（公众号、企业微信等）
+│   ├── @core/                   # 内核：base / ui-kit / forward
+│   ├── effects/                 # 通用能力：plugins / hooks / common-ui 等
+│   ├── icons/  types/           # 图标、类型定义
+│   └── ...                      # 其余公共包（见 pnpm-workspace.yaml）
+├── internal/                    # 工程化配置：vite-config / lint-configs / tailwind-config / tsconfig / node-utils
+├── docs/                        # VitePress 文档
+├── playground/                  # 组件与示例演练场
+├── scripts/                     # 清理、构建、部署等脚本
+├── package.json                 # 根脚本：dev / dev:app / build:app / lint / format / test:unit / check:type
+├── pnpm-workspace.yaml          # workspace 划分与依赖 catalog
+├── turbo.json                   # turbo 流水线配置
+└── vitest.config.ts             # 单元测试（vitest）配置
 ```
 
-## 如何设置以及启动项目
-
-### 安装依赖
+### 后端：aspnet-core 与配套目录
 
 ```bash
-yarn install
+.
+├── aspnet-core/
+│   ├── services/                # 各服务宿主（含 Dockerfile）
+│   │   ├── LINGYUN.Abp.MicroService.AuthServer/        # 认证服务（STS，44385）
+│   │   ├── LINGYUN.Abp.MicroService.IdentityService/   # 身份服务（30015）
+│   │   ├── LINGYUN.Abp.MicroService.AdminService/      # 管理服务（30010）
+│   │   ├── LINGYUN.Abp.MicroService.LocalizationService/# 本地化服务（30030）
+│   │   ├── LINGYUN.Abp.MicroService.PlatformService/   # 平台服务（30025）
+│   │   ├── LINGYUN.Abp.MicroService.MessageService/    # 消息服务（30020）
+│   │   ├── LINGYUN.Abp.MicroService.TaskService/       # 任务服务（30040）
+│   │   ├── LINGYUN.Abp.MicroService.WebhookService/    # Webhook 服务（30045）
+│   │   ├── LINGYUN.Abp.MicroService.WorkflowService/   # 工作流服务（30050）
+│   │   ├── LINGYUN.Abp.MicroService.WeChatService/     # 微信服务（30060）
+│   │   ├── LINGYUN.Abp.MicroService.AIService/         # AI 服务（30070）
+│   │   ├── LY.MicroService.Applications.Single/        # 单体应用（30000，合并网关与全部模块）
+│   │   ├── LY.MicroService.IdentityServer/             # IdentityServer 版本服务与宿主
+│   │   ├── LINGYUN.Abp.Applications/  LY.AIO.Applications.Single/  # 其它宿主
+│   │   └── Publish/             # 发布输出目录（容器镜像构建使用）
+│   ├── modules/                 # 业务模块，每个模块按 DDD 分层（Domain / Application / EntityFrameworkCore / HttpApi ...）
+│   │   ├── account/             # 账户与登录（含 OpenIddict/IdentityServer 的 Web 集成、验证码）
+│   │   ├── identity/            # 用户、角色、组织机构、会话、登录日志
+│   │   ├── identityServer/      # IdentityServer4 相关实现
+│   │   ├── openIddict/          # OpenIddict 服务端（应用、作用域、令牌、Portal、二维码、短信、微信登录）
+│   │   ├── permissions-management/  # 权限管理与授权
+│   │   ├── saas/                # 多租户与版本
+│   │   ├── settings/  feature-management/  # 设置、特性管理
+│   │   ├── localization-management/  text-templating/  # 本地化、文本模板
+│   │   ├── auditing/  data-protection/  gdpr/  captcha/  # 审计、数据保护、GDPR、验证码
+│   │   ├── blob-management/  caching-management/  # 对象存储、缓存管理
+│   │   ├── platform/  project/  system-info/  demo/  # 平台、项目、系统信息、示例
+│   │   ├── realtime-message/  realtime-notifications/  # 即时消息、实时通知
+│   │   ├── task-management/  rules-management/  webhooks/  # 后台任务、规则引擎、Webhook
+│   │   ├── ai/  elsa/           # AI 能力、工作流（Elsa）
+│   ├── framework/               # 基础框架包（33 个分组），常用分组：
+│   │   ├── common/  core 相关基础包（LINGYUN.Abp.Core、CAP、Hangfire、BlobStoring、SignalR ...）
+│   │   ├── security/  authentication/  authorization/   # 安全、登录方式、授权
+│   │   ├── auditing/  logging/  telemetry/              # 审计、日志、链路追踪（OpenTelemetry/SkyWalking）
+│   │   ├── multi-tenancy 相关：tenants/                 # 多租户与版本
+│   │   ├── wechat/  wx-pusher/  pushplus/  tui-juhe/    # 微信、消息推送
+│   │   ├── cloud-aliyun/  cloud-tencent/                # 阿里云、腾讯云集成
+│   │   ├── dapr/  elasticsearch/  efcore/  data-protection/  # Dapr、ES、EF Core、数据保护
+│   │   ├── dynamic-queryable/  dynamic-definition/  exporter/  # 动态查询、动态定义、导入导出
+│   │   ├── localization/  settings/  features/  mvc/  open-api/  cli/  ...  # 其它基础包
+│   ├── migrations/              # 各服务的 DbMigrator 与 EntityFrameworkCore 迁移项目（deploy.ps1 会依次执行）
+│   ├── aspire/                  # .NET Aspire：LINGYUN.Abp.MicroService.AppHost 及各服务的 Aspire 宿主
+│   ├── templates/               # dotnet new 项目模板（micro 微服务 / aio 单体）
+│   ├── tests/                   # 单元测试项目
+│   ├── LINGYUN.MicroService.All.slnx            # 全量解决方案
+│   ├── LINGYUN.MicroService.Aspire.slnx         # Aspire 解决方案
+│   └── LINGYUN.MicroService.SingleProject.slnx  # 单体解决方案
+├── gateways/
+│   ├── internal/                # 内部网关（YARP）：Internal.Gateway / OpenApi.Gateway + yarp*.json 路由
+│   └── web/                     # Web 网关：LY.MicroService.ApiGateway
+├── apps/                        # 前端：vben5（当前）/ vue（旧版）
+├── build/                       # 构建与迁移脚本：build-aspnetcore-ef-update.ps1、build-aspnetcore-docker-build.ps1 ...
+├── deploy/                      # 一键部署脚本（deploy.ps1）、中间件数据与各服务日志目录
+├── docs/                        # 文档（单体服务启动指南等）
+├── docker-compose.yml                        # 后端服务编排
+├── docker-compose.override.yml               # 镜像标签、卷映射与启动顺序
+├── docker-compose.override.configuration.yml # 各服务环境变量（连接串、CAP、Redis、Elasticsearch 等）
+├── docker-compose.middleware.yml             # 中间件：MySQL/Redis/RabbitMQ/Elasticsearch/Kibana/Logstash/OpenObserve
+├── docker-compose.override.agile.yml         # AgileConfig 配置中心（可选）
+├── Directory.Build.props  Directory.Packages.props  NuGet.Config  common.props  # 统一构建与包版本管理
+└── README.md  README.en.md  RELEASE.md  LICENSE  # 文档与许可
 ```
 
-### 更改配置文件
+## 启动项目
 
+本项目提供三种启动方式，按需选择：
 
-修改开发环境用于代理的服务器地址,以下提供了三个分别为IdentityServer、SignalR、ApiService地址
-如果自己变更了端口，需要改成自己的地址
+| 方式 | 说明 | 中间件 | 前端 |
+| --- | --- | --- | --- |
+| 方式一：微服务 | 完整微服务架构，后端全部以容器运行 | 需**先启动** `docker-compose.middleware.yml` | 单独启动 vben5 |
+| 方式二：Aspire | AppHost 编排本地微服务开发环境 | AppHost 自动创建容器（PostgreSQL/Redis/RabbitMQ/Elasticsearch/Kibana） | AppHost 自动启动 |
+| 方式三：单体 | 网关、认证与业务模块合并为一个进程 | 需**先启动** `docker-compose.middleware.yml` | 单独启动 vben5 |
 
-```bash
+### 通用前提
 
-VITE_PROXY = [["/connect","http://127.0.0.1:44385"],["/api","http://127.0.0.1:30000"],["/signalr-hubs","ws://127.0.0.1:30000"]]
+- **.NET SDK 10**（`dotnet --version`）
+- **Docker / Docker Compose**（方式一、三的中间件；方式二的中间件容器同样由 Docker 提供）
+- **Node.js 20+ 与 pnpm**（前端位于 `apps/vben5`，为 pnpm monorepo，`preinstall` 会执行 `only-allow pnpm`）
+- **hosts**：Windows 修改 `C:\Windows\System32\drivers\etc\hosts`，Linux 修改 `/etc/hosts`，增加如下配置
+  ```
+  127.0.0.1 host.docker.internal
+  ```
+  （容器内通过 `extra_hosts: host.docker.internal:host-gateway` 访问宿主机上的中间件）
 
+---
+
+### 方式一：微服务启动
+
+#### 1) 一键启动：deploy/deploy.ps1
+
+```powershell
+cd ./deploy
+powershell -ExecutionPolicy Bypass -File .\deploy.ps1
 ```
 
-修改生产环境真实地址,如上
+脚本依次完成（见 `deploy/deploy.ps1`）：
 
-```bash
+1. 启动中间件：`docker-compose -f .\docker-compose.middleware.yml -p labp up -d --build`（MySQL、Redis、RabbitMQ、Elasticsearch、Kibana、Logstash、OpenObserve）
+2. 等待 30 秒，等 MySQL 初始化完成
+3. 依次执行 8 个数据库迁移项目（`dotnet run --no-build`，**因此执行脚本前必须先构建过后端**）
+4. 构建 12 个后端镜像（`labp-*-service:10.6.0`）
+5. 启动后端：`docker-compose -f .\docker-compose.yml -f .\docker-compose.override.yml -f .\docker-compose.override.configuration.yml -p labp up -d`
+6. 在 `apps/vben5` 下执行 `pnpm dev:app` 启动前端
 
-# STS Connect
-# token签发地址
-VITE_GLOB_AUTHORITY='http://127.0.0.1:44385'
-# 客户端标识
-VITE_GLOB_CLIENT_ID='vue-admin-element'
-# 客户端密钥
-VITE_GLOB_CLIENT_SECRET='1q2w3e*'
+注意：
 
+- 必须在 **deploy 目录**下执行脚本（脚本内部使用相对路径）。
+- 脚本调用的是 `docker-compose`（Compose V1 命令）；本机只安装 Compose V2 插件时，请把脚本中的 `docker-compose` 改为 `docker compose`。
+- 脚本不包含 AgileConfig（`docker-compose.override.agile.yml`），配置均来自 `docker-compose.override.configuration.yml`。
 
+#### 2) 手动启动（与脚本等价，务必先启动中间件）
+
+```powershell
+# ① 启动中间件（务必先启动）
+docker-compose -f .\docker-compose.middleware.yml -p labp up -d
+# 首次启动请等待 30 秒以上，让 MySQL 执行 deploy/mysql/docker-entrypoint-initdb.d 下的初始化脚本
+
+# ② 数据库迁移：使用迁移脚本（内部对 aspnet-core/migrations 下的 8 个 *.DbMigrator 依次执行 dotnet run，会自动构建）
+cd .\build
+.\build-aspnetcore-ef-update.ps1
+
+# ③ 构建后端镜像：生成 12 个 labp-*-service:10.6.0（标签必须与 docker-compose.override.yml 中的 image 一致）
+.\build-aspnetcore-docker-build.ps1
+
+# ④ 启动后端（三个 compose 文件缺一不可）
+docker-compose -f .\docker-compose.yml -f .\docker-compose.override.yml -f .\docker-compose.override.configuration.yml -p labp up -d
+
+# ⑤ 启动前端
+cd .\apps\vben5
+pnpm install
+pnpm dev:app
 ```
 
-### EntityFramework 迁移
+手动步骤说明：
 
-请切换到服务项目启动目录, 执行 **dotnet ef** 命令进行数据库迁移
+- ②③ 两个脚本都必须在 **build 目录**下执行（脚本内部相对引用 `./build-aspnetcore-common.ps1`）。
+- `build-aspnetcore-ef-update.ps1` 内部使用 `dotnet run`（会先构建再运行），因此手动流程**不需要**预先构建后端；而一键脚本 `deploy.ps1` 使用 `dotnet run --no-build`，所以走一键脚本前必须先构建过后端。
+- 只想迁移某个服务时，可直接进入对应目录执行，例如：
 
-例如：
-``` shell
+  ```powershell
+  cd .\aspnet-core\migrations\LINGYUN.Abp.MicroService.AuthServer.DbMigrator
+  dotnet run
+  ```
 
-cd aspnet-core/services/admin/LINGYUN.BackendAdminApp.Host
+#### 3) 访问地址
 
-dotnet ef database update
+| 组件 | 地址 |
+| --- | --- |
+| 前端（vben5，`@abp/app-antd`） | http://localhost:5666 |
+| API 网关 | http://localhost:30000 |
+| 认证服务（STS） | http://localhost:44385 |
+| 身份 / 管理 / 平台 / 消息 / 本地化 | 30015 / 30010 / 30025 / 30020 / 30030 |
+| 任务 / Webhook / 工作流 / 微信 / AI | 30040 / 30045 / 30050 / 30060 / 30070 |
+| Kibana | http://localhost:5601 |
+| RabbitMQ 管理台 | http://localhost:15672 （admin / 123456） |
+| MySQL | localhost:3306 （root / 123456，数据库 `abp`） |
+| Redis | localhost:6379 |
+| OpenObserve 管理台 | http://localhost:5080 （admin@abp.io / ww1Z5L%6） |
 
+### 方式二：Aspire 启动
+
+AppHost 会自动拉起它自己的中间件容器（PostgreSQL、Redis、RabbitMQ、Elasticsearch、Kibana），在 Development 环境下自动执行各服务的数据库迁移项目，并自动以 `pnpm dev:app` 启动 vben5 前端，**不需要**再启动 `docker-compose.middleware.yml`。
+
+```powershell
+cd ./aspnet-core/aspire/LINGYUN.Abp.MicroService.AppHost
+aspire run
 ```
 
-- 也可以使用快速迁移脚本文件: **./build/build-aspnetcore-ef-update.ps1**
+- 需要安装 Aspire CLI（版本需与 AppHost 的 `Aspire.AppHost.Sdk` 13.x 匹配）：`dotnet tool install --global Aspire.Cli`；不使用 CLI 时也可以直接 `dotnet run --project .\LINGYUN.Abp.MicroService.AppHost.csproj`。
+- 需要 Docker 处于运行状态，且 `apps/vben5` 已经执行过 `pnpm install`（AppHost 会运行 `pnpm dev:app`，前端端口固定 5666）。
+- 启动后终端会输出 Aspire Dashboard 地址，可在面板中查看资源状态、日志与链路。
+- AppHost 占用的宿主机端口与方式一的中间件完全重叠（6379/9200/5601/5672/15672/5432 等），**请勿与方式一的中间件同时运行**。
 
+### 方式三：单体服务启动
 
-### 配置RabbitMQ
+单体服务把网关、认证与各业务模块合并到一个进程，但**仍然依赖中间件，必须先启动中间件**：
 
-因此项目设计为微服务架构，服务间通讯采用分布式事件的方式，项目采用的是[DotNetCore/CAP](https://github.com/dotnetcore/CAP)
-通讯方式为**RabbitMQ Server**，所以您需要事先安装**RabbitMQ**，具体安装方式请查阅官网
+```powershell
+# ① 启动中间件
+docker-compose -f .\docker-compose.middleware.yml -p labp up -d
+# 首次启动请等待 30 秒以上
 
-然后您需要更改配置文件中的**CAP:RabbitMQ**配置项,设置为您自己定义的配置,推荐使用**rabbitmq_management**插件便于快速管理**RabbitMQ**
+# ② 启动单体服务
+cd .\aspnet-core\services\LY.MicroService.Applications.Single
+dotnet run --launch-profile Single.MySql.Dev
 
-
-### 启动后台服务
-
-```shell
-cd aspnet-core/services
-
-start-all-service.bat
-
+# ③ 启动前端
+cd .\apps\vben5
+pnpm install
+pnpm dev:app
 ```
 
-### 启动本地开发环境
+- 默认地址 **http://localhost:30000**：`App:SelfUrl` 与 `AuthServer:Authority` 均指向它，认证端点与 API 同端口。
+- **建议显式指定 Profile**：不指定时 `dotnet run` 使用 `launchSettings.json` 中的第一个 Profile（当前为 `Single.PostgreSql.Dev`）。使用默认数据库（MySQL）请用 `Single.MySql.Dev`，其它可选 `Single.PostgreSql.Dev`、`Single.SqlServer.Dev`。
+- 各数据库连接串见 `appsettings.Development.MySql.json` / `appsettings.Development.PostgreSql.json` / `appsettings.Development.SqlServer.json`。
 
-```shell
+### 常见问题
 
-cd apps/vue
+- **`docker-compose` 命令不存在**：脚本使用的是 Compose V1 命令；仅安装 Compose V2 时请改用 `docker compose`。
+- **提示找不到镜像 `labp-*-service:10.6.0`**：`docker-compose.override.yml` 通过 `image:` 引用预构建镜像，请先执行 `build/build-aspnetcore-docker-build.ps1`（方式一·手动启动 步骤 ③）。
+- **一键脚本迁移报错（`dotnet run --no-build`）**：`deploy.ps1` 内部使用 `--no-build`，执行脚本前需先构建后端（`dotnet build .\aspnet-core\LINGYUN.MicroService.All.slnx`）；手动迁移请改用 **build/build-aspnetcore-ef-update.ps1**（内部 `dotnet run`，会自动构建）。
+- **前端依赖安装失败**：`apps/vben5` 强制使用 pnpm（`preinstall` 会执行 `only-allow pnpm`），请使用 `pnpm install` / `pnpm dev:app`。
+- **容器内连不上宿主机中间件**：确认 hosts 文件包含 `127.0.0.1 host.docker.internal`。
 
-yarn dev
-
-```
-
-### 构建生产环境
-
-```bash
-yarn build
-```
-
-### 关于docker容器部署
-
-**第一步**: 构建后台服务, powershell脚本:**./build/build-aspnetcore-release.ps1**, **注意:发布后的服务需要 appsettings.Production.json 文件**
-
-**第二步**: 构建前端, **./build/build-vue-apps.ps1**
-
-**第三步**: 构建后的发布地址默认在**cd ./aspnet-core/services/Publish** ,变更nginx代理服务器地址: **./client/docker/nginx/default.conf**
-
-**第四步**: 运行此命令 **sudo docker-compose down && sudo docker-compose -f docker-compose.yml -f docker-compose.override.yml up --build -d**
-
-**推荐使用 jenkins 之类的ci工具,可以将此简化为一个步骤**
-
+---
 
 ### 代码格式检查以及自动修复
 
+在 `apps/vben5` 下执行（vben5 强制使用 pnpm）：
+
 ```bash
-yarn lint:eslint
+cd apps/vben5
+
+# 代码检查
+pnpm lint
+
+# 自动修复
+pnpm format
+
+# 类型检查
+pnpm check:type
 ```
 
 ### 运行单元测试
 
 ```bash
-yarn test:unit
+cd apps/vben5
+
+pnpm test:unit
 ```
 
 ## 如何贡献
