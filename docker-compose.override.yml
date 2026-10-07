@@ -2,18 +2,14 @@ version: '3.4'
 
 services:
   auth-server:
-    build:
-      context: .
-      dockerfile: aspnet-core/services/LINGYUN.Abp.MicroService.AuthServer/Dockerfile
+    image: labp-auth-server:10.6.0
     volumes:
       - ./deploy/framework/auth-server/logs:/app/Logs
       - ./deploy/framework/auth-server/modules:/app/Modules
     restart: always
 
   identity-service:
-    build:
-      context: .
-      dockerfile: aspnet-core/services/LINGYUN.Abp.MicroService.IdentityService/Dockerfile
+    image: labp-identity-service:10.6.0
     volumes:
       - ./deploy/framework/identity-service/logs:/app/Logs
       - ./deploy/framework/identity-service/modules:/app/Modules
@@ -22,9 +18,7 @@ services:
       - auth-server
 
   admin-service:
-    build:
-      context: .
-      dockerfile: aspnet-core/services/LINGYUN.Abp.MicroService.AdminService/Dockerfile
+    image: labp-admin-service:10.6.0
     volumes:
       - ./deploy/framework/admin-service/logs:/app/Logs
       - ./deploy/framework/admin-service/modules:/app/Modules
@@ -33,9 +27,7 @@ services:
       - auth-server
 
   localization-service:
-    build:
-      context: .
-      dockerfile: aspnet-core/services/LINGYUN.Abp.MicroService.LocalizationService/Dockerfile
+    image: labp-localization-service:10.6.0
     volumes:
       - ./deploy/framework/localization-service/logs:/app/Logs
       - ./deploy/framework/localization-service/modules:/app/Modules
@@ -44,9 +36,7 @@ services:
       - auth-server
 
   platform-service:
-    build:
-      context: .
-      dockerfile: aspnet-core/services/LINGYUN.Abp.MicroService.PlatformService/Dockerfile
+    image: labp-platform-service:10.6.0
     volumes:
       - ./deploy/framework/platform-service/logs:/app/Logs
       - ./deploy/framework/platform-service/modules:/app/Modules
@@ -56,9 +46,7 @@ services:
       - auth-server
 
   message-service:
-    build:
-      context: .
-      dockerfile: aspnet-core/services/LINGYUN.Abp.MicroService.MessageService/Dockerfile
+    image: labp-message-service:10.6.0
     volumes:
       - ./deploy/framework/message-service/logs:/app/Logs
       - ./deploy/framework/message-service/modules:/app/Modules
@@ -67,9 +55,7 @@ services:
       - auth-server
 
   task-service:
-    build:
-      context: .
-      dockerfile: aspnet-core/services/LINGYUN.Abp.MicroService.TaskService/Dockerfile
+    image: labp-task-service:10.6.0
     volumes:
       - ./deploy/framework/task-service/logs:/app/Logs
       - ./deploy/framework/task-service/modules:/app/Modules
@@ -78,9 +64,7 @@ services:
       - auth-server
 
   webhook-service:
-    build:
-      context: .
-      dockerfile: aspnet-core/services/LINGYUN.Abp.MicroService.WebhookService/Dockerfile
+    image: labp-webhook-service:10.6.0
     volumes:
       - ./deploy/framework/webhook-service/logs:/app/Logs
       - ./deploy/framework/webhook-service/modules:/app/Modules
@@ -89,9 +73,7 @@ services:
       - auth-server
 
   workflow-service:
-    build:
-      context: .
-      dockerfile: aspnet-core/services/LINGYUN.Abp.MicroService.WorkflowService/Dockerfile
+    image: labp-workflow-service:10.6.0
     volumes:
       - ./deploy/framework/workflow-service/logs:/app/Logs
       - ./deploy/framework/workflow-service/modules:/app/Modules
@@ -100,9 +82,7 @@ services:
       - auth-server
 
   wechat-service:
-    build:
-      context: .
-      dockerfile: aspnet-core/services/LINGYUN.Abp.MicroService.WeChatService/Dockerfile
+    image: labp-wechat-service:10.6.0
     volumes:
       - ./deploy/framework/wechat-service/logs:/app/Logs
       - ./deploy/framework/wechat-service/modules:/app/Modules
@@ -110,10 +90,17 @@ services:
     depends_on:
       - auth-server
 
+  ai-service:
+    image: labp-ai-service:10.6.0
+    volumes:
+      - ./deploy/framework/ai-service/logs:/app/Logs
+      - ./deploy/framework/ai-service/modules:/app/Modules
+    restart: always
+    depends_on:
+      - auth-server
+
   internal-apigateway:
-    build:
-      context: .
-      dockerfile: gateways/internal/LINGYUN.MicroService.Internal.ApiGateway/src/LINGYUN.MicroService.Internal.Gateway/Dockerfile
+    image: labp-internal-apigateway:10.6.0
     volumes:
       - ./deploy/framework/internal-apigateway/logs:/app/Logs
       - ./deploy/framework/internal-apigateway/modules:/app/Modules

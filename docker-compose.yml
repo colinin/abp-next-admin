@@ -201,6 +201,26 @@ services:
       - "host.docker.internal:host-gateway"
       - "auth-server:host-gateway"
 
+  ai-service:
+    hostname: ai-service
+    container_name: ai-service
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=80
+      - TZ=Asia/Shanghai
+    ports:
+      - "30070:80"
+    networks:
+      - abp-next-admin
+    healthcheck:
+      test: ["CMD-SHELL", "wget --spider http://localhost/healthz || exit"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+      - "auth-server:host-gateway"
+
   internal-apigateway:
     hostname: apigateway
     container_name: apigateway

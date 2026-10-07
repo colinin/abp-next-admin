@@ -87,6 +87,10 @@
             "X-Forwarded": "Append"
           },
           {
+            "RequestHeader": "Host",
+            "Set": "localhost:44385"
+          },
+          {
             "ResponseHeadersAllowed": "_AbpWrapResult;_AbpDontWrapResult;_AbpErrorFormat"
           }
         ]
@@ -102,6 +106,10 @@
             "X-Forwarded": "Append"
           },
           {
+            "RequestHeader": "Host",
+            "Set": "localhost:44385"
+          },
+          {
             "ResponseHeadersAllowed": "_AbpWrapResult;_AbpDontWrapResult;_AbpErrorFormat"
           }
         ]
@@ -115,6 +123,10 @@
           {
             "HeaderPrefix": "X-Forwarded-",
             "X-Forwarded": "Append"
+          },
+          {
+            "RequestHeader": "Host",
+            "Set": "localhost:44385"
           },
           {
             "ResponseHeadersAllowed": "_AbpWrapResult;_AbpDontWrapResult;_AbpErrorFormat"

@@ -13,7 +13,7 @@ Write-host "root: " + $rootFolder
 ## 部署中间件
 Write-host "deploy middleware..."
 Set-Location $rootFolder
-docker-compose -f .\docker-compose.middleware.yml up -d --build
+docker-compose -f .\docker-compose.middleware.yml -p labp up -d --build
 
 ## 等待30秒, 数据库初始化完成
 Write-host "initial database..."
@@ -24,23 +24,25 @@ Start-Sleep -Seconds 30
 # cmd.exe /c create-database.bat
 
 ## 执行数据库迁移
-Start-Sleep -Seconds 5
 Write-host "migrate database..."
-Set-Location $buildPath
+Set-Location $rootFolder
 foreach ($solution in $migrationArray) {  
     Set-Location $solution.Path
     dotnet run --no-build
 }
 
-## 删除bin/obj目录
-Write-host "delete bin/obj path..."
-Set-Location $aspnetcorePath
-cmd.exe /c delete-bin-obj.bat
-
-## 构建并运行应用程序
-Write-host "build&running backend application..."
+## 构建后端docker镜像
+Write-host "publish backend docker image..."
 Set-Location $rootFolder
-docker-compose -f .\docker-compose.yml -f .\docker-compose.override.yml -f .\docker-compose.override.configuration.yml up -d --build
+foreach ($docker in $dockerArray) {    
+    $image = $docker.Image + ":" + $docker.Version
+    Write-host "docker build -f " $docker.Dockerfile " -t " $image " ."
+    docker build -f $docker.Dockerfile -t $image .
+}
+## 运行后端应用程序
+Write-host "running backend application..."
+Set-Location $rootFolder
+docker-compose -f .\docker-compose.yml -f .\docker-compose.override.yml -f .\docker-compose.override.configuration.yml -p labp up -d
 
 ## 构建前端项目
 Write-host "build front project..."

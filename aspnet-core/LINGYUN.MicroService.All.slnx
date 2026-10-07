@@ -50,7 +50,11 @@
     <Project Path="migrations/LINGYUN.Abp.MicroService.WebhookService.DbMigrator/LINGYUN.Abp.MicroService.WebhookService.DbMigrator.csproj" />
     <Project Path="migrations/LINGYUN.Abp.MicroService.WebhookService.EntityFrameworkCore/LINGYUN.Abp.MicroService.WebhookService.EntityFrameworkCore.csproj" />
   </Folder>
-  <Folder Name="/00 migrations/06 auth-server/">
+  <Folder Name="/00 migrations/06 ai-service/">
+    <Project Path="migrations/LINGYUN.Abp.MicroService.AIService.DbMigrator/LINGYUN.Abp.MicroService.AIService.DbMigrator.csproj" Id="c62969e7-044d-44f7-997b-09031d7a9bd4" />
+    <Project Path="migrations/LINGYUN.Abp.MicroService.AIService.EntityFrameworkCore/LINGYUN.Abp.MicroService.AIService.EntityFrameworkCore.csproj" Id="b6180ed9-2917-44b2-b470-101a8de061d1" />
+  </Folder>
+  <Folder Name="/00 migrations/07 auth-server/">
     <Project Path="migrations/LINGYUN.Abp.MicroService.AuthServer.DbMigrator/LINGYUN.Abp.MicroService.AuthServer.DbMigrator.csproj" />
     <Project Path="migrations/LINGYUN.Abp.MicroService.AuthServer.EntityFrameworkCore/LINGYUN.Abp.MicroService.AuthServer.EntityFrameworkCore.csproj" />
   </Folder>
@@ -84,6 +88,9 @@
   </Folder>
   <Folder Name="/01 services/09 workflow-service/">
     <Project Path="services/LINGYUN.Abp.MicroService.WorkflowService/LINGYUN.Abp.MicroService.WorkflowService.csproj" />
+  </Folder>
+  <Folder Name="/01 services/10 ai-service/">
+    <Project Path="services/LINGYUN.Abp.MicroService.AIService/LINGYUN.Abp.MicroService.AIService.csproj" Id="6e71205c-6ce5-48cd-95f1-25a3a0de6775" />
   </Folder>
   <Folder Name="/02 gateways/" />
   <Folder Name="/02 gateways/00 internal/">
@@ -306,6 +313,21 @@
     <Project Path="modules/account/LINGYUN.Abp.Account.Web.OpenIddict/LINGYUN.Abp.Account.Web.OpenIddict.csproj" />
     <Project Path="modules/account/LINGYUN.Abp.Account.Web.TencentCaptcha/LINGYUN.Abp.Account.Web.TencentCaptcha.csproj" />
     <Project Path="modules/account/LINGYUN.Abp.Account.Web/LINGYUN.Abp.Account.Web.csproj" />
+  </Folder>
+  <Folder Name="/modules/ai/">
+    <Project Path="modules/ai/LINGYUN.Abp.AI.Agent/LINGYUN.Abp.AI.Agent.csproj" />
+    <Project Path="modules/ai/LINGYUN.Abp.AI.Core/LINGYUN.Abp.AI.Core.csproj" />
+    <Project Path="modules/ai/LINGYUN.Abp.AI.Ollama/LINGYUN.Abp.AI.Ollama.csproj" />
+    <Project Path="modules/ai/LINGYUN.Abp.AI.Tools.Http/LINGYUN.Abp.AI.Tools.Http.csproj" />
+    <Project Path="modules/ai/LINGYUN.Abp.AI.Tools.Mcp/LINGYUN.Abp.AI.Tools.Mcp.csproj" />
+    <Project Path="modules/ai/LINGYUN.Abp.AI.Tools/LINGYUN.Abp.AI.Tools.csproj" />
+    <Project Path="modules/ai/LINGYUN.Abp.AIManagement.Application.Contracts/LINGYUN.Abp.AIManagement.Application.Contracts.csproj" />
+    <Project Path="modules/ai/LINGYUN.Abp.AIManagement.Application/LINGYUN.Abp.AIManagement.Application.csproj" />
+    <Project Path="modules/ai/LINGYUN.Abp.AIManagement.Domain.Shared/LINGYUN.Abp.AIManagement.Domain.Shared.csproj" />
+    <Project Path="modules/ai/LINGYUN.Abp.AIManagement.Domain/LINGYUN.Abp.AIManagement.Domain.csproj" />
+    <Project Path="modules/ai/LINGYUN.Abp.AIManagement.EntityFrameworkCore/LINGYUN.Abp.AIManagement.EntityFrameworkCore.csproj" />
+    <Project Path="modules/ai/LINGYUN.Abp.AIManagement.HttpApi.Client/LINGYUN.Abp.AIManagement.HttpApi.Client.csproj" />
+    <Project Path="modules/ai/LINGYUN.Abp.AIManagement.HttpApi/LINGYUN.Abp.AIManagement.HttpApi.csproj" />
   </Folder>
   <Folder Name="/modules/auditing/">
     <Project Path="modules/auditing/LINGYUN.Abp.Auditing.Application.Contracts/LINGYUN.Abp.Auditing.Application.Contracts.csproj" />
