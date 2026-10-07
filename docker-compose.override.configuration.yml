@@ -61,6 +61,12 @@ services:
       - AuthServer__ValidIssuers__0=http://localhost:44385/
       - AuthServer__ValidIssuers__1=http://auth-server:44385/
       - AuthServer__ValidIssuers__2=http://host.docker.internal:44385/
+      - OpenTelemetry__IsEnabled=true
+      - OpenTelemetry__Otlp__IsEnabled=true
+      - OpenTelemetry__Otlp__Endpoint=http://host.docker.internal:4318
+      - OpenTelemetry__Otlp__Protocol=HttpProtobuf
+      - Serilog__WriteTo__2__Name=OpenTelemetry
+      - Serilog__WriteTo__2__Args__endpoint=http://host.docker.internal:4318
 
   identity-service:
     environment:
@@ -116,6 +122,12 @@ services:
       - AuthServer__ValidIssuers__0=http://localhost:44385/
       - AuthServer__ValidIssuers__1=http://auth-server:44385/
       - AuthServer__ValidIssuers__2=http://host.docker.internal:44385/
+      - OpenTelemetry__IsEnabled=true
+      - OpenTelemetry__Otlp__IsEnabled=true
+      - OpenTelemetry__Otlp__Endpoint=http://host.docker.internal:4318
+      - OpenTelemetry__Otlp__Protocol=HttpProtobuf
+      - Serilog__WriteTo__2__Name=OpenTelemetry
+      - Serilog__WriteTo__2__Args__endpoint=http://host.docker.internal:4318
 
   admin-service:
     environment:
@@ -174,6 +186,12 @@ services:
       - AuthServer__ValidIssuers__0=http://localhost:44385/
       - AuthServer__ValidIssuers__1=http://auth-server:44385/
       - AuthServer__ValidIssuers__2=http://host.docker.internal:44385/
+      - OpenTelemetry__IsEnabled=true
+      - OpenTelemetry__Otlp__IsEnabled=true
+      - OpenTelemetry__Otlp__Endpoint=http://host.docker.internal:4318
+      - OpenTelemetry__Otlp__Protocol=HttpProtobuf
+      - Serilog__WriteTo__2__Name=OpenTelemetry
+      - Serilog__WriteTo__2__Args__endpoint=http://host.docker.internal:4318
 
   localization-service:
     environment:
@@ -229,6 +247,12 @@ services:
       - AuthServer__ValidIssuers__0=http://localhost:44385/
       - AuthServer__ValidIssuers__1=http://auth-server:44385/
       - AuthServer__ValidIssuers__2=http://host.docker.internal:44385/
+      - OpenTelemetry__IsEnabled=true
+      - OpenTelemetry__Otlp__IsEnabled=true
+      - OpenTelemetry__Otlp__Endpoint=http://host.docker.internal:4318
+      - OpenTelemetry__Otlp__Protocol=HttpProtobuf
+      - Serilog__WriteTo__2__Name=OpenTelemetry
+      - Serilog__WriteTo__2__Args__endpoint=http://host.docker.internal:4318
 
   platform-service:
     environment:
@@ -294,6 +318,12 @@ services:
       - AuthServer__ValidIssuers__0=http://localhost:44385/
       - AuthServer__ValidIssuers__1=http://auth-server:44385/
       - AuthServer__ValidIssuers__2=http://host.docker.internal:44385/
+      - OpenTelemetry__IsEnabled=true
+      - OpenTelemetry__Otlp__IsEnabled=true
+      - OpenTelemetry__Otlp__Endpoint=http://host.docker.internal:4318
+      - OpenTelemetry__Otlp__Protocol=HttpProtobuf
+      - Serilog__WriteTo__2__Name=OpenTelemetry
+      - Serilog__WriteTo__2__Args__endpoint=http://host.docker.internal:4318
 
   message-service:
     environment:
@@ -351,6 +381,12 @@ services:
       - AuthServer__ValidIssuers__0=http://localhost:44385/
       - AuthServer__ValidIssuers__1=http://auth-server:44385/
       - AuthServer__ValidIssuers__2=http://host.docker.internal:44385/
+      - OpenTelemetry__IsEnabled=true
+      - OpenTelemetry__Otlp__IsEnabled=true
+      - OpenTelemetry__Otlp__Endpoint=http://host.docker.internal:4318
+      - OpenTelemetry__Otlp__Protocol=HttpProtobuf
+      - Serilog__WriteTo__2__Name=OpenTelemetry
+      - Serilog__WriteTo__2__Args__endpoint=http://host.docker.internal:4318
 
   task-service:
     environment:
@@ -406,6 +442,12 @@ services:
       - AuthServer__ValidIssuers__0=http://localhost:44385/
       - AuthServer__ValidIssuers__1=http://auth-server:44385/
       - AuthServer__ValidIssuers__2=http://host.docker.internal:44385/
+      - OpenTelemetry__IsEnabled=true
+      - OpenTelemetry__Otlp__IsEnabled=true
+      - OpenTelemetry__Otlp__Endpoint=http://host.docker.internal:4318
+      - OpenTelemetry__Otlp__Protocol=HttpProtobuf
+      - Serilog__WriteTo__2__Name=OpenTelemetry
+      - Serilog__WriteTo__2__Args__endpoint=http://host.docker.internal:4318
 
   webhook-service:
     environment:
@@ -461,6 +503,12 @@ services:
       - AuthServer__ValidIssuers__0=http://localhost:44385/
       - AuthServer__ValidIssuers__1=http://auth-server:44385/
       - AuthServer__ValidIssuers__2=http://host.docker.internal:44385/
+      - OpenTelemetry__IsEnabled=true
+      - OpenTelemetry__Otlp__IsEnabled=true
+      - OpenTelemetry__Otlp__Endpoint=http://host.docker.internal:4318
+      - OpenTelemetry__Otlp__Protocol=HttpProtobuf
+      - Serilog__WriteTo__2__Name=OpenTelemetry
+      - Serilog__WriteTo__2__Args__endpoint=http://host.docker.internal:4318
 
   workflow-service:
     environment:
@@ -526,6 +574,12 @@ services:
       - AuthServer__ValidIssuers__0=http://localhost:44385/
       - AuthServer__ValidIssuers__1=http://auth-server:44385/
       - AuthServer__ValidIssuers__2=http://host.docker.internal:44385/
+      - OpenTelemetry__IsEnabled=true
+      - OpenTelemetry__Otlp__IsEnabled=true
+      - OpenTelemetry__Otlp__Endpoint=http://host.docker.internal:4318
+      - OpenTelemetry__Otlp__Protocol=HttpProtobuf
+      - Serilog__WriteTo__2__Name=OpenTelemetry
+      - Serilog__WriteTo__2__Args__endpoint=http://host.docker.internal:4318
 
   wechat-service:
     environment:
@@ -591,6 +645,12 @@ services:
       - AuthServer__ValidIssuers__0=http://localhost:44385/
       - AuthServer__ValidIssuers__1=http://auth-server:44385/
       - AuthServer__ValidIssuers__2=http://host.docker.internal:44385/
+      - OpenTelemetry__IsEnabled=true
+      - OpenTelemetry__Otlp__IsEnabled=true
+      - OpenTelemetry__Otlp__Endpoint=http://host.docker.internal:4318
+      - OpenTelemetry__Otlp__Protocol=HttpProtobuf
+      - Serilog__WriteTo__2__Name=OpenTelemetry
+      - Serilog__WriteTo__2__Args__endpoint=http://host.docker.internal:4318
 
   ai-service:
     environment:
@@ -656,6 +716,12 @@ services:
       - AuthServer__ValidIssuers__0=http://localhost:44385/
       - AuthServer__ValidIssuers__1=http://auth-server:44385/
       - AuthServer__ValidIssuers__2=http://host.docker.internal:44385/
+      - OpenTelemetry__IsEnabled=true
+      - OpenTelemetry__Otlp__IsEnabled=true
+      - OpenTelemetry__Otlp__Endpoint=http://host.docker.internal:4318
+      - OpenTelemetry__Otlp__Protocol=HttpProtobuf
+      - Serilog__WriteTo__2__Name=OpenTelemetry
+      - Serilog__WriteTo__2__Args__endpoint=http://host.docker.internal:4318
 
   internal-apigateway:
     environment:
@@ -677,3 +743,9 @@ services:
       - AuthServer__ValidIssuers__0=http://localhost:44385/
       - AuthServer__ValidIssuers__1=http://auth-server:44385/
       - AuthServer__ValidIssuers__2=http://host.docker.internal:44385/
+      - OpenTelemetry__IsEnabled=true
+      - OpenTelemetry__Otlp__IsEnabled=true
+      - OpenTelemetry__Otlp__Endpoint=http://host.docker.internal:4318
+      - OpenTelemetry__Otlp__Protocol=HttpProtobuf
+      - Serilog__WriteTo__2__Name=OpenTelemetry
+      - Serilog__WriteTo__2__Args__endpoint=http://host.docker.internal:4318

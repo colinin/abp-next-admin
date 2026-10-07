@@ -110,6 +110,40 @@ services:
     networks:
       - abp-next-admin 
 
+  abp-openobserve:
+    image: openobserve/openobserve:v1.0.4
+    container_name: abp-openobserve
+    restart: always
+    environment:
+      - "ZO_DATA_DIR=/data"
+      - "ZO_ROOT_USER_EMAIL=admin@abp.io"
+      - "ZO_ROOT_USER_PASSWORD=ww1Z5L%6"
+      - "TZ=Asia/Shanghai"
+    volumes:
+      - ./deploy/openobserve/data:/data
+    ports:
+      - 5080:5080
+      - 5081:5081
+    networks:
+      - abp-next-admin 
+
+  abp-otel-collector:
+    image: otel/opentelemetry-collector-contrib:0.162.0
+    container_name: abp-otel-collector
+    restart: always
+    volumes:
+      - ./deploy/openobserve/otel-collector-config.yaml:/etc/otelcol-contrib/config.yaml
+    ports:
+      - 1888:1888 # pprof
+      - 8888:8888 # Collector Prometheus
+      - 8889:8889 # Prometheus
+      - 13133:13133 # health_check
+      - 4317:4317 # OTLP gRPC
+      - 4318:4318 # OTLP http
+      - 55679:55679
+    networks:
+      - abp-next-admin 
+
 networks:
   abp-next-admin:
     driver: bridge
