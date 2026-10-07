@@ -1,0 +1,182 @@
+using LINGYUN.Abp.Account;
+using LINGYUN.Abp.AspNetCore.HttpOverrides;
+using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
+using LINGYUN.Abp.AspNetCore.Session;
+using LINGYUN.Abp.AuditLogging.Elasticsearch;
+using LINGYUN.Abp.Authorization.OrganizationUnits;
+using LINGYUN.Abp.BlobStoring.BlobManagement;
+using LINGYUN.Abp.Claims.Mapping;
+using LINGYUN.Abp.Dynamic.Definitions;
+using LINGYUN.Abp.Emailing.Platform;
+using LINGYUN.Abp.EntityFrameworkCore.MySQL;
+using LINGYUN.Abp.EventBus.CAP;
+using LINGYUN.Abp.ExceptionHandling.Emailing;
+using LINGYUN.Abp.Exporter.MiniSoftware;
+using LINGYUN.Abp.Gdpr;
+using LINGYUN.Abp.Gdpr.EntityFrameworkCore;
+using LINGYUN.Abp.Gdpr.Identity;
+using LINGYUN.Abp.Identity;
+using LINGYUN.Abp.Identity.EntityFrameworkCore;
+using LINGYUN.Abp.Localization.CultureMap;
+using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
+using LINGYUN.Abp.OpenIddict;
+using LINGYUN.Abp.Saas.EntityFrameworkCore;
+using LINGYUN.Abp.Serilog.Enrichers.Application;
+using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
+using LINGYUN.Abp.Sms.Platform;
+using LINGYUN.Abp.Telemetry.OpenTelemetry;
+using LINGYUN.Abp.Telemetry.SkyWalking;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Volo.Abp;
+using Volo.Abp.AspNetCore.Authentication.JwtBearer;
+using Volo.Abp.AspNetCore.MultiTenancy;
+using Volo.Abp.AspNetCore.Serilog;
+using Volo.Abp.Autofac;
+using Volo.Abp.Caching.StackExchangeRedis;
+using Volo.Abp.FeatureManagement.EntityFrameworkCore;
+using Volo.Abp.Http.Client.IdentityModel.Web;
+using Volo.Abp.Modularity;
+using Volo.Abp.OpenIddict.EntityFrameworkCore;
+using Volo.Abp.PermissionManagement.EntityFrameworkCore;
+using Volo.Abp.SettingManagement.EntityFrameworkCore;
+using Volo.Abp.Swashbuckle;
+
+namespace LINGYUN.Abp.MicroService.IdentityService;
+
+[DependsOn(
+    typeof(AbpSerilogEnrichersApplicationModule),
+    typeof(AbpSerilogEnrichersUniqueIdModule),
+    typeof(AbpAspNetCoreSerilogModule),
+    typeof(AbpAspNetCoreMultiTenancyModule),
+    typeof(AbpAccountApplicationModule),
+    typeof(AbpAccountHttpApiModule),
+    typeof(AbpIdentityApplicationModule),
+    typeof(AbpIdentityHttpApiModule),
+    typeof(AbpIdentityEntityFrameworkCoreModule),
+    typeof(AbpOpenIddictApplicationModule),
+    typeof(AbpOpenIddictHttpApiModule),
+    typeof(AbpOpenIddictEntityFrameworkCoreModule),
+    typeof(AbpGdprApplicationModule),
+    typeof(AbpGdprHttpApiModule),
+    typeof(AbpGdprDomainIdentityModule),
+    typeof(AbpGdprEntityFrameworkCoreModule),
+    typeof(AbpEntityFrameworkCoreMySQLMicrotingModule),
+    typeof(AbpSaasEntityFrameworkCoreModule),
+    typeof(AbpFeatureManagementEntityFrameworkCoreModule),
+    typeof(AbpSettingManagementEntityFrameworkCoreModule),
+    typeof(AbpPermissionManagementEntityFrameworkCoreModule),
+    typeof(AbpLocalizationManagementEntityFrameworkCoreModule),
+    typeof(AbpAuthorizationOrganizationUnitsModule),
+    typeof(AbpAuditLoggingElasticsearchModule),
+    typeof(AbpEmailingExceptionHandlingModule),
+    typeof(AbpBlobStoringBlobManagementModule),
+    typeof(AbpCAPEventBusModule),
+    typeof(AbpSmsPlatformModule),
+    typeof(AbpEmailingPlatformModule),
+    typeof(AbpCachingStackExchangeRedisModule),
+    typeof(AbpLocalizationCultureMapModule),
+    typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
+    typeof(AbpHttpClientIdentityModelWebModule),
+    typeof(AbpAspNetCoreSessionModule),
+    typeof(AbpAspNetCoreHttpOverridesModule),
+    typeof(AbpDynamicDefinitionsModule),
+    typeof(AbpAspNetCoreMvcWrapperModule),
+    typeof(AbpTelemetryOpenTelemetryModule),
+    typeof(AbpTelemetrySkyWalkingModule),
+    typeof(AbpExporterMiniSoftwareModule),
+    typeof(AbpClaimsMappingModule),
+    typeof(AbpSwashbuckleModule),
+    typeof(AbpAutofacModule)
+    )]
+public partial class IdentityServiceModule : AbpModule
+{
+    public override void PreConfigureServices(ServiceConfigurationContext context)
+    {
+        var configuration = context.Services.GetConfiguration();
+
+        PreConfigureWrapper();
+        PreConfigureFeature();
+        PreForwardedHeaders();
+        PreConfigureApp(configuration);
+        PreConfigureCAP(configuration);
+        PreConfigureIdentity();
+    }
+
+    public override void ConfigureServices(ServiceConfigurationContext context)
+    {
+        var hostingEnvironment = context.Services.GetHostingEnvironment();
+        var configuration = context.Services.GetConfiguration();
+
+        ConfigureWrapper();
+        ConfigureIdentity();
+        ConfigureDbContext();
+        ConfigureLocalization();
+        ConfigureExceptionHandling();
+        ConfigureVirtualFileSystem();
+        ConfigureFeatureManagement();
+        ConfigurePermissionManagement();
+        ConfigureBlobStoring(configuration);
+        ConfigureUrls(configuration);
+        ConfigureCaching(configuration);
+        ConfigureTiming(configuration);
+        ConfigureAuditing(configuration);
+        ConfigureMultiTenancy(configuration);
+        ConfigureJsonSerializer(configuration);
+        ConfigureMvc(context.Services, configuration);
+        ConfigureCors(context.Services, configuration);
+        if (hostingEnvironment.IsDevelopment())
+        {
+            ConfigureSwagger(context.Services, configuration);
+        }
+        ConfigureDistributedLocking(context.Services, configuration);
+        ConfigureSecurity(context.Services, configuration, hostingEnvironment.IsDevelopment());
+    }
+
+    public override void OnApplicationInitialization(ApplicationInitializationContext context)
+    {
+        var app = context.GetApplicationBuilder();
+        var env = context.GetEnvironment();
+
+        app.UseForwardedHeaders();
+        // 本地化
+        app.UseMapRequestLocalization();
+        // http调用链
+        app.UseCorrelationId();
+        // 虚拟文件系统
+        app.MapAbpStaticAssets();
+        // 路由
+        app.UseRouting();
+        // 跨域
+        app.UseCors();
+        // 认证
+        app.UseAuthentication();
+        // 多租户
+        app.UseMultiTenancy();
+        // 动态身份
+        app.UseDynamicClaims();
+        // 授权
+        app.UseAuthorization();
+        if (env.IsDevelopment())
+        {
+            // Swagger
+            app.UseSwagger();
+            // Swagger可视化界面
+            app.UseAbpSwaggerUI(options =>
+            {
+                options.SwaggerEndpoint("/swagger/v1/swagger.json", "Support Identity Service API");
+
+                var configuration = context.GetConfiguration();
+                options.OAuthClientId(configuration["AuthServer:SwaggerClientId"]);
+                options.OAuthScopes(configuration["AuthServer:Audience"]);
+            });
+        }
+        // 审计日志
+        app.UseAuditing();
+        app.UseAbpSerilogEnrichers();
+        // 路由
+        app.UseConfiguredEndpoints();
+    }
+}

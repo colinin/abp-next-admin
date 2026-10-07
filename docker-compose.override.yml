@@ -1,134 +1,112 @@
 version: '3.4'
 
 services:
-  sts-server:
-    build:
-      context: ./aspnet-core/services/Publish/identityserver
+  auth-server:
+    image: labp-auth-server:10.6.0
     volumes:
-      - ./deploy/framework/ids-sts/logs:/app/Logs
-      - ./deploy/framework/ids-sts/modules:/app/Modules
+      - ./deploy/framework/auth-server/logs:/app/Logs
+      - ./deploy/framework/auth-server/modules:/app/Modules
     restart: always
 
-  sts-api:
-    build:
-      context: ./aspnet-core/services/Publish/identityserver4-admin
+  identity-service:
+    image: labp-identity-service:10.6.0
     volumes:
-      - ./deploy/framework/ids-admin/logs:/app/Logs
-      - ./deploy/framework/ids-admin/modules:/app/Modules
+      - ./deploy/framework/identity-service/logs:/app/Logs
+      - ./deploy/framework/identity-service/modules:/app/Modules
     restart: always
     depends_on:
-      - sts-server
+      - auth-server
 
-  # 取消注释以使用openiddict
-  # sts-server:
-  #   build:
-  #     context: ./aspnet-core/services/Publish/authserver
-  #   volumes:
-  #     - ./deploy/framework/ids-sts/logs:/app/Logs
-  #     - ./deploy/framework/ids-sts/modules:/app/Modules
-  #   restart: always
-
-  # 取消注释以使用openiddict
-  # sts-api:
-  #   build:
-  #     context: ./aspnet-core/services/Publish/authserver-api
-  #   volumes:
-  #     - ./deploy/framework/ids-admin/logs:/app/Logs
-  #     - ./deploy/framework/ids-admin/modules:/app/Modules
-  #   restart: always
-  #   depends_on:
-  #     - sts-server
-
-  admin-api:
-    build:
-      context: ./aspnet-core/services/Publish/admin
+  admin-service:
+    image: labp-admin-service:10.6.0
     volumes:
-      - ./deploy/framework/ids-admin/logs:/app/Logs
-      - ./deploy/framework/ids-admin/modules:/app/Modules
+      - ./deploy/framework/admin-service/logs:/app/Logs
+      - ./deploy/framework/admin-service/modules:/app/Modules
     restart: always
     depends_on:
-      - sts-server
+      - auth-server
 
-  localization-api:
-    build:
-      context: ./aspnet-core/services/Publish/localization
+  localization-service:
+    image: labp-localization-service:10.6.0
     volumes:
-      - ./deploy/framework/localization/logs:/app/Logs
-      - ./deploy/framework/localization/modules:/app/Modules
+      - ./deploy/framework/localization-service/logs:/app/Logs
+      - ./deploy/framework/localization-service/modules:/app/Modules
     restart: always
     depends_on:
-      - sts-server
+      - auth-server
 
-  platform-api:
-    build:
-      context: ./aspnet-core/services/Publish/platform
+  platform-service:
+    image: labp-platform-service:10.6.0
     volumes:
-      - ./deploy/framework/platform/logs:/app/Logs
-      - ./deploy/framework/platform/modules:/app/Modules
-      - ./deploy/framework/platform/blobs:/app/file-blob-storing
+      - ./deploy/framework/platform-service/logs:/app/Logs
+      - ./deploy/framework/platform-service/modules:/app/Modules
+      - ./deploy/framework/platform-service/blobs:/app/file-blob-storing
     restart: always
     depends_on:
-      - sts-server
+      - auth-server
 
-  messages-api:
-    build:
-      context: ./aspnet-core/services/Publish/messages
+  message-service:
+    image: labp-message-service:10.6.0
     volumes:
-      - ./deploy/framework/messages/logs:/app/Logs
-      - ./deploy/framework/messages/modules:/app/Modules
+      - ./deploy/framework/message-service/logs:/app/Logs
+      - ./deploy/framework/message-service/modules:/app/Modules
     restart: always
     depends_on:
-      - sts-server
+      - auth-server
 
-  task-api:
-    build:
-      context: ./aspnet-core/services/Publish/task-management
+  task-service:
+    image: labp-task-service:10.6.0
     volumes:
-      - ./deploy/framework/task/logs:/app/Logs
-      - ./deploy/framework/task/modules:/app/Modules
+      - ./deploy/framework/task-service/logs:/app/Logs
+      - ./deploy/framework/task-service/modules:/app/Modules
     restart: always
     depends_on:
-      - sts-server
+      - auth-server
 
-  webhook-api:
-    build:
-      context: ./aspnet-core/services/Publish/webhooks
+  webhook-service:
+    image: labp-webhook-service:10.6.0
     volumes:
-      - ./deploy/framework/webhook/logs:/app/Logs
-      - ./deploy/framework/webhook/modules:/app/Modules
+      - ./deploy/framework/webhook-service/logs:/app/Logs
+      - ./deploy/framework/webhook-service/modules:/app/Modules
     restart: always
     depends_on:
-      - sts-server
+      - auth-server
 
-  workflow-api:
-    build:
-      context: ./aspnet-core/services/Publish/workflow
+  workflow-service:
+    image: labp-workflow-service:10.6.0
     volumes:
-      - ./deploy/framework/workflow/logs:/app/Logs
-      - ./deploy/framework/workflow/modules:/app/Modules
+      - ./deploy/framework/workflow-service/logs:/app/Logs
+      - ./deploy/framework/workflow-service/modules:/app/Modules
     restart: always
     depends_on:
-      - sts-server
+      - auth-server
 
-  wechat-api:
-    build:
-      context: ./aspnet-core/services/Publish/wechat
+  wechat-service:
+    image: labp-wechat-service:10.6.0
     volumes:
-      - ./deploy/framework/wechat/logs:/app/Logs
-      - ./deploy/framework/wechat/modules:/app/Modules
+      - ./deploy/framework/wechat-service/logs:/app/Logs
+      - ./deploy/framework/wechat-service/modules:/app/Modules
     restart: always
     depends_on:
-      - sts-server
+      - auth-server
+
+  ai-service:
+    image: labp-ai-service:10.6.0
+    volumes:
+      - ./deploy/framework/ai-service/logs:/app/Logs
+      - ./deploy/framework/ai-service/modules:/app/Modules
+    restart: always
+    depends_on:
+      - auth-server
 
   internal-apigateway:
-    build:
-      context: ./aspnet-core/services/Publish/internal-apigateway
+    image: labp-internal-apigateway:10.6.0
     volumes:
-      - ./deploy/framework/apigateway/logs:/app/Logs
-      - ./deploy/framework/apigateway/modules:/app/Modules
+      - ./deploy/framework/internal-apigateway/logs:/app/Logs
+      - ./deploy/framework/internal-apigateway/modules:/app/Modules
     restart: always
 
-  ui:
-    build:
-      context: ./apps/vue
-    restart: always
+  # ui:
+  #   build:
+  #     context: ./apps/vue
+  #   restart: always

@@ -27,63 +27,70 @@
   </Folder>
   <Folder Name="/00 migrations/" />
   <Folder Name="/00 migrations/00 admin-service/">
-    <Project Path="migrations/LY.MicroService.BackendAdmin.DbMigrator/LY.MicroService.BackendAdmin.DbMigrator.csproj" />
-    <Project Path="migrations/LY.MicroService.BackendAdmin.EntityFrameworkCore/LY.MicroService.BackendAdmin.EntityFrameworkCore.csproj" />
+    <Project Path="migrations/LINGYUN.Abp.MicroService.AdminService.DbMigrator/LINGYUN.Abp.MicroService.AdminService.DbMigrator.csproj" />
+    <Project Path="migrations/LINGYUN.Abp.MicroService.AdminService.EntityFrameworkCore/LINGYUN.Abp.MicroService.AdminService.EntityFrameworkCore.csproj" />
   </Folder>
   <Folder Name="/00 migrations/01 platform-service/">
-    <Project Path="migrations/LY.MicroService.Platform.DbMigrator/LY.MicroService.Platform.DbMigrator.csproj" />
-    <Project Path="migrations/LY.MicroService.Platform.EntityFrameworkCore/LY.MicroService.Platform.EntityFrameworkCore.csproj" />
+    <Project Path="migrations/LINGYUN.Abp.MicroService.PlatformService.DbMigrator/LINGYUN.Abp.MicroService.PlatformService.DbMigrator.csproj" />
+    <Project Path="migrations/LINGYUN.Abp.MicroService.PlatformService.EntityFrameworkCore/LINGYUN.Abp.MicroService.PlatformService.EntityFrameworkCore.csproj" />
   </Folder>
   <Folder Name="/00 migrations/02 localization-service/">
-    <Project Path="migrations/LY.MicroService.LocalizationManagement.DbMigrator/LY.MicroService.LocalizationManagement.DbMigrator.csproj" />
-    <Project Path="migrations/LY.MicroService.LocalizationManagement.EntityFrameworkCore/LY.MicroService.LocalizationManagement.EntityFrameworkCore.csproj" />
+    <Project Path="migrations/LINGYUN.Abp.MicroService.LocalizationService.DbMigrator/LINGYUN.Abp.MicroService.LocalizationService.DbMigrator.csproj" />
+    <Project Path="migrations/LINGYUN.Abp.MicroService.LocalizationService.EntityFrameworkCore/LINGYUN.Abp.MicroService.LocalizationService.EntityFrameworkCore.csproj" />
   </Folder>
   <Folder Name="/00 migrations/03 task-service/">
-    <Project Path="migrations/LY.MicroService.TaskManagement.DbMigrator/LY.MicroService.TaskManagement.DbMigrator.csproj" />
-    <Project Path="migrations/LY.MicroService.TaskManagement.EntityFrameworkCore/LY.MicroService.TaskManagement.EntityFrameworkCore.csproj" />
+    <Project Path="migrations/LINGYUN.Abp.MicroService.TaskService.DbMigrator/LINGYUN.Abp.MicroService.TaskService.DbMigrator.csproj" />
+    <Project Path="migrations/LINGYUN.Abp.MicroService.TaskService.EntityFrameworkCore/LINGYUN.Abp.MicroService.TaskService.EntityFrameworkCore.csproj" />
   </Folder>
   <Folder Name="/00 migrations/04 message-service/">
-    <Project Path="migrations/LY.MicroService.RealtimeMessage.DbMigrator/LY.MicroService.RealtimeMessage.DbMigrator.csproj" />
-    <Project Path="migrations/LY.MicroService.RealtimeMessage.EntityFrameworkCore/LY.MicroService.RealtimeMessage.EntityFrameworkCore.csproj" />
+    <Project Path="migrations/LINGYUN.Abp.MicroService.MessageService.DbMigrator/LINGYUN.Abp.MicroService.MessageService.DbMigrator.csproj" />
+    <Project Path="migrations/LINGYUN.Abp.MicroService.MessageService.EntityFrameworkCore/LINGYUN.Abp.MicroService.MessageService.EntityFrameworkCore.csproj" />
   </Folder>
   <Folder Name="/00 migrations/05 webhook-service/">
-    <Project Path="migrations/LY.MicroService.WebhooksManagement.DbMigrator/LY.MicroService.WebhooksManagement.DbMigrator.csproj" />
-    <Project Path="migrations/LY.MicroService.WebhooksManagement.EntityFrameworkCore/LY.MicroService.WebhooksManagement.EntityFrameworkCore.csproj" />
+    <Project Path="migrations/LINGYUN.Abp.MicroService.WebhookService.DbMigrator/LINGYUN.Abp.MicroService.WebhookService.DbMigrator.csproj" />
+    <Project Path="migrations/LINGYUN.Abp.MicroService.WebhookService.EntityFrameworkCore/LINGYUN.Abp.MicroService.WebhookService.EntityFrameworkCore.csproj" />
   </Folder>
-  <Folder Name="/00 migrations/06 auth-server/">
-    <Project Path="migrations/LY.MicroService.AuthServer.DbMigrator/LY.MicroService.AuthServer.DbMigrator.csproj" />
-    <Project Path="migrations/LY.MicroService.AuthServer.EntityFrameworkCore/LY.MicroService.AuthServer.EntityFrameworkCore.csproj" />
+  <Folder Name="/00 migrations/06 ai-service/">
+    <Project Path="migrations/LINGYUN.Abp.MicroService.AIService.DbMigrator/LINGYUN.Abp.MicroService.AIService.DbMigrator.csproj" Id="c62969e7-044d-44f7-997b-09031d7a9bd4" />
+    <Project Path="migrations/LINGYUN.Abp.MicroService.AIService.EntityFrameworkCore/LINGYUN.Abp.MicroService.AIService.EntityFrameworkCore.csproj" Id="b6180ed9-2917-44b2-b470-101a8de061d1" />
+  </Folder>
+  <Folder Name="/00 migrations/07 auth-server/">
+    <Project Path="migrations/LINGYUN.Abp.MicroService.AuthServer.DbMigrator/LINGYUN.Abp.MicroService.AuthServer.DbMigrator.csproj" />
+    <Project Path="migrations/LINGYUN.Abp.MicroService.AuthServer.EntityFrameworkCore/LINGYUN.Abp.MicroService.AuthServer.EntityFrameworkCore.csproj" />
   </Folder>
   <Folder Name="/01 services/" />
   <Folder Name="/01 services/00 localization-service/">
-    <Project Path="services/LY.MicroService.LocalizationManagement.HttpApi.Host/LY.MicroService.LocalizationManagement.HttpApi.Host.csproj" />
+    <Project Path="services/LINGYUN.Abp.MicroService.LocalizationService/LINGYUN.Abp.MicroService.LocalizationService.csproj" />
   </Folder>
   <Folder Name="/01 services/01 auth-server/">
-    <Project Path="services/LY.MicroService.AuthServer/LY.MicroService.AuthServer.csproj" />
+    <Project Path="services/LINGYUN.Abp.MicroService.AuthServer/LINGYUN.Abp.MicroService.AuthServer.csproj" />
   </Folder>
   <Folder Name="/01 services/02 admin-service/">
-    <Project Path="services/LY.MicroService.BackendAdmin.HttpApi.Host/LY.MicroService.BackendAdmin.HttpApi.Host.csproj" />
+    <Project Path="services/LINGYUN.Abp.MicroService.AdminService/LINGYUN.Abp.MicroService.AdminService.csproj" />
   </Folder>
   <Folder Name="/01 services/03 identity-service/">
-    <Project Path="services/LY.MicroService.AuthServer.HttpApi.Host/LY.MicroService.AuthServer.HttpApi.Host.csproj" />
+    <Project Path="services/LINGYUN.Abp.MicroService.IdentityService/LINGYUN.Abp.MicroService.IdentityService.csproj" />
   </Folder>
   <Folder Name="/01 services/04 platform-service/">
-    <Project Path="services/LY.MicroService.PlatformManagement.HttpApi.Host/LY.MicroService.PlatformManagement.HttpApi.Host.csproj" />
+    <Project Path="services/LINGYUN.Abp.MicroService.PlatformService/LINGYUN.Abp.MicroService.PlatformService.csproj" />
   </Folder>
   <Folder Name="/01 services/05 task-service/">
-    <Project Path="services/LY.MicroService.TaskManagement.HttpApi.Host/LY.MicroService.TaskManagement.HttpApi.Host.csproj" />
+    <Project Path="services/LINGYUN.Abp.MicroService.TaskService/LINGYUN.Abp.MicroService.TaskService.csproj" />
   </Folder>
   <Folder Name="/01 services/06 message-service/">
-    <Project Path="services/LY.MicroService.RealtimeMessage.HttpApi.Host/LY.MicroService.RealtimeMessage.HttpApi.Host.csproj" />
+    <Project Path="services/LINGYUN.Abp.MicroService.MessageService/LINGYUN.Abp.MicroService.MessageService.csproj" />
   </Folder>
   <Folder Name="/01 services/07 webhook-service/">
-    <Project Path="services/LY.MicroService.WebhooksManagement.HttpApi.Host/LY.MicroService.WebhooksManagement.HttpApi.Host.csproj" />
+    <Project Path="services/LINGYUN.Abp.MicroService.WebhookService/LINGYUN.Abp.MicroService.WebhookService.csproj" />
   </Folder>
   <Folder Name="/01 services/08 wechat-service/">
-    <Project Path="services/LY.MicroService.WechatManagement.HttpApi.Host/LY.MicroService.WechatManagement.HttpApi.Host.csproj" />
+    <Project Path="services/LINGYUN.Abp.MicroService.WeChatService/LINGYUN.Abp.MicroService.WeChatService.csproj" />
   </Folder>
   <Folder Name="/01 services/09 workflow-service/">
-    <Project Path="services/LY.MicroService.WorkflowManagement.HttpApi.Host/LY.MicroService.WorkflowManagement.HttpApi.Host.csproj" />
+    <Project Path="services/LINGYUN.Abp.MicroService.WorkflowService/LINGYUN.Abp.MicroService.WorkflowService.csproj" />
+  </Folder>
+  <Folder Name="/01 services/10 ai-service/">
+    <Project Path="services/LINGYUN.Abp.MicroService.AIService/LINGYUN.Abp.MicroService.AIService.csproj" Id="6e71205c-6ce5-48cd-95f1-25a3a0de6775" />
   </Folder>
   <Folder Name="/02 gateways/" />
   <Folder Name="/02 gateways/00 internal/">
@@ -307,6 +314,21 @@
     <Project Path="modules/account/LINGYUN.Abp.Account.Web.TencentCaptcha/LINGYUN.Abp.Account.Web.TencentCaptcha.csproj" />
     <Project Path="modules/account/LINGYUN.Abp.Account.Web/LINGYUN.Abp.Account.Web.csproj" />
   </Folder>
+  <Folder Name="/modules/ai/">
+    <Project Path="modules/ai/LINGYUN.Abp.AI.Agent/LINGYUN.Abp.AI.Agent.csproj" />
+    <Project Path="modules/ai/LINGYUN.Abp.AI.Core/LINGYUN.Abp.AI.Core.csproj" />
+    <Project Path="modules/ai/LINGYUN.Abp.AI.Ollama/LINGYUN.Abp.AI.Ollama.csproj" />
+    <Project Path="modules/ai/LINGYUN.Abp.AI.Tools.Http/LINGYUN.Abp.AI.Tools.Http.csproj" />
+    <Project Path="modules/ai/LINGYUN.Abp.AI.Tools.Mcp/LINGYUN.Abp.AI.Tools.Mcp.csproj" />
+    <Project Path="modules/ai/LINGYUN.Abp.AI.Tools/LINGYUN.Abp.AI.Tools.csproj" />
+    <Project Path="modules/ai/LINGYUN.Abp.AIManagement.Application.Contracts/LINGYUN.Abp.AIManagement.Application.Contracts.csproj" />
+    <Project Path="modules/ai/LINGYUN.Abp.AIManagement.Application/LINGYUN.Abp.AIManagement.Application.csproj" />
+    <Project Path="modules/ai/LINGYUN.Abp.AIManagement.Domain.Shared/LINGYUN.Abp.AIManagement.Domain.Shared.csproj" />
+    <Project Path="modules/ai/LINGYUN.Abp.AIManagement.Domain/LINGYUN.Abp.AIManagement.Domain.csproj" />
+    <Project Path="modules/ai/LINGYUN.Abp.AIManagement.EntityFrameworkCore/LINGYUN.Abp.AIManagement.EntityFrameworkCore.csproj" />
+    <Project Path="modules/ai/LINGYUN.Abp.AIManagement.HttpApi.Client/LINGYUN.Abp.AIManagement.HttpApi.Client.csproj" />
+    <Project Path="modules/ai/LINGYUN.Abp.AIManagement.HttpApi/LINGYUN.Abp.AIManagement.HttpApi.csproj" />
+  </Folder>
   <Folder Name="/modules/auditing/">
     <Project Path="modules/auditing/LINGYUN.Abp.Auditing.Application.Contracts/LINGYUN.Abp.Auditing.Application.Contracts.csproj" />
     <Project Path="modules/auditing/LINGYUN.Abp.Auditing.Application/LINGYUN.Abp.Auditing.Application.csproj" />
@@ -383,6 +405,7 @@
     <Project Path="modules/identity/LINGYUN.Abp.Identity.Application.Contracts/LINGYUN.Abp.Identity.Application.Contracts.csproj" />
     <Project Path="modules/identity/LINGYUN.Abp.Identity.Application/LINGYUN.Abp.Identity.Application.csproj" />
     <Project Path="modules/identity/LINGYUN.Abp.Identity.AspNetCore.QrCode/LINGYUN.Abp.Identity.AspNetCore.QrCode.csproj" />
+    <Project Path="modules/identity/LINGYUN.Abp.Identity.AspNetCore/LINGYUN.Abp.Identity.AspNetCore.csproj" />
     <Project Path="modules/identity/LINGYUN.Abp.Identity.Domain.Shared/LINGYUN.Abp.Identity.Domain.Shared.csproj" />
     <Project Path="modules/identity/LINGYUN.Abp.Identity.Domain/LINGYUN.Abp.Identity.Domain.csproj" />
     <Project Path="modules/identity/LINGYUN.Abp.Identity.EntityFrameworkCore/LINGYUN.Abp.Identity.EntityFrameworkCore.csproj" />

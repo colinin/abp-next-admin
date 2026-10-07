@@ -1,0 +1,176 @@
+﻿using LINGYUN.Abp.AspNetCore.HttpOverrides;
+using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
+using LINGYUN.Abp.AspNetCore.Session;
+using LINGYUN.Abp.AuditLogging.Elasticsearch;
+using LINGYUN.Abp.Authorization.OrganizationUnits;
+using LINGYUN.Abp.BackgroundTasks.DistributedLocking;
+using LINGYUN.Abp.BackgroundTasks.Quartz;
+using LINGYUN.Abp.BlobStoring.BlobManagement;
+using LINGYUN.Abp.Claims.Mapping;
+using LINGYUN.Abp.Data.DbMigrator;
+using LINGYUN.Abp.Dynamic.Definitions;
+using LINGYUN.Abp.Elsa;
+using LINGYUN.Abp.Elsa.Activities;
+using LINGYUN.Abp.Elsa.EntityFrameworkCore.MySql;
+using LINGYUN.Abp.Elsa.Notifications;
+using LINGYUN.Abp.EventBus.CAP;
+using LINGYUN.Abp.ExceptionHandling.Emailing;
+using LINGYUN.Abp.Http.Client.Wrapper;
+using LINGYUN.Abp.Localization.CultureMap;
+using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
+using LINGYUN.Abp.Quartz.MySqlInstaller;
+using LINGYUN.Abp.Saas.EntityFrameworkCore;
+using LINGYUN.Abp.Serilog.Enrichers.Application;
+using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
+using LINGYUN.Abp.TaskManagement.EntityFrameworkCore;
+using LINGYUN.Abp.Telemetry.OpenTelemetry;
+using LINGYUN.Abp.Telemetry.SkyWalking;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Volo.Abp;
+using Volo.Abp.AspNetCore.Authentication.JwtBearer;
+using Volo.Abp.AspNetCore.MultiTenancy;
+using Volo.Abp.AspNetCore.Mvc;
+using Volo.Abp.AspNetCore.Mvc.NewtonsoftJson;
+using Volo.Abp.AspNetCore.Serilog;
+using Volo.Abp.Autofac;
+using Volo.Abp.Caching.StackExchangeRedis;
+using Volo.Abp.FeatureManagement.EntityFrameworkCore;
+using Volo.Abp.Http.Client.IdentityModel.Web;
+using Volo.Abp.MailKit;
+using Volo.Abp.Modularity;
+using Volo.Abp.PermissionManagement.EntityFrameworkCore;
+using Volo.Abp.SettingManagement.EntityFrameworkCore;
+using Volo.Abp.Swashbuckle;
+using Volo.Abp.TextTemplating.Scriban;
+
+namespace LINGYUN.Abp.MicroService.WorkflowService;
+
+[DependsOn(
+    typeof(AbpSerilogEnrichersApplicationModule),
+    typeof(AbpSerilogEnrichersUniqueIdModule),
+    typeof(AbpAuditLoggingElasticsearchModule),
+    typeof(AbpAspNetCoreSerilogModule),
+    typeof(AbpBlobStoringBlobManagementModule),
+    typeof(AbpElsaModule),
+    typeof(AbpElsaServerModule),
+    typeof(AbpElsaActivitiesModule),
+    typeof(AbpElsaNotificationsModule),
+    typeof(AbpEmailingExceptionHandlingModule),
+    typeof(AbpHttpClientIdentityModelWebModule),
+    typeof(AbpAspNetCoreMultiTenancyModule),
+    typeof(AbpBackgroundTasksQuartzModule),
+    typeof(AbpBackgroundTasksDistributedLockingModule),
+    typeof(AbpQuartzMySqlInstallerModule),
+    typeof(TaskManagementEntityFrameworkCoreModule),
+    typeof(AbpFeatureManagementEntityFrameworkCoreModule),
+    typeof(AbpPermissionManagementEntityFrameworkCoreModule),
+    typeof(AbpSettingManagementEntityFrameworkCoreModule),
+    typeof(AbpSaasEntityFrameworkCoreModule),
+    typeof(AbpLocalizationManagementEntityFrameworkCoreModule),
+    typeof(AbpElsaEntityFrameworkCoreMySqlModule),
+    typeof(AbpAuthorizationOrganizationUnitsModule),
+    typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
+    typeof(AbpTextTemplatingScribanModule),
+    typeof(AbpDataDbMigratorModule),
+    typeof(AbpCachingStackExchangeRedisModule),
+    typeof(AbpAspNetCoreMvcModule),
+    typeof(AbpSwashbuckleModule),
+    typeof(AbpCAPEventBusModule),
+    typeof(AbpLocalizationCultureMapModule),
+    typeof(AbpHttpClientWrapperModule),
+    typeof(AbpAspNetCoreMvcWrapperModule),
+    typeof(AbpMailKitModule),
+    typeof(AbpClaimsMappingModule),
+    typeof(AbpTelemetryOpenTelemetryModule),
+    typeof(AbpTelemetrySkyWalkingModule),
+    typeof(AbpAspNetCoreSessionModule),
+    typeof(AbpAspNetCoreMvcNewtonsoftModule),
+    typeof(AbpAspNetCoreHttpOverridesModule),
+    typeof(AbpDynamicDefinitionsModule),
+    typeof(AbpAutofacModule)
+    )]
+public partial class WorkflowServiceModule : AbpModule
+{
+    public override void PreConfigureServices(ServiceConfigurationContext context)
+    {
+        var configuration = context.Services.GetConfiguration();
+        
+        PreConfigureFeature();
+        PreConfigureForwardedHeaders();
+        PreConfigureApp(configuration);
+        PreConfigureCAP(configuration);
+        PreConfigureQuartz(configuration);
+        PreConfigureElsa(context.Services, configuration);
+    }
+
+    public override void ConfigureServices(ServiceConfigurationContext context)
+    {
+        var hostingEnvironment = context.Services.GetHostingEnvironment();
+        var configuration = context.Services.GetConfiguration();
+
+        ConfigureDbContext();
+        ConfigureLocalization();
+        ConfigureExceptionHandling();
+        ConfigureVirtualFileSystem();
+        ConfigureTiming(configuration);
+        ConfigureCaching(configuration);
+        ConfigureAuditing(configuration);
+        ConfigureIdentity(configuration);
+        ConfigureMultiTenancy(configuration);
+        ConfigureBackgroundTasks(configuration);
+        ConfigureEndpoints(context.Services);
+        ConfigureMvc(context.Services, configuration);
+        ConfigureCors(context.Services, configuration);
+        if (hostingEnvironment.IsDevelopment())
+        {
+            ConfigureSwagger(context.Services, configuration);
+        }
+        ConfigureBlobStoring(context.Services, configuration);
+        ConfigureDistributedLock(context.Services, configuration);
+        ConfigureSecurity(context.Services, configuration, hostingEnvironment.IsDevelopment());
+
+        context.Services.AddRazorPages();
+    }
+
+    public override void OnApplicationInitialization(ApplicationInitializationContext context)
+    {
+        var app = context.GetApplicationBuilder();
+        var env = context.GetEnvironment();
+
+        app.UseForwardedHeaders();
+        // 本地化
+        app.UseMapRequestLocalization();
+        if (env.IsDevelopment())
+        {
+            app.UseDeveloperExceptionPage();
+        }
+        app.UseCorrelationId();
+        app.MapAbpStaticAssets();
+        app.UseRouting();
+        app.UseCors();
+        app.UseAuthentication();
+        app.UseJwtTokenMiddleware();
+        app.UseMultiTenancy();
+        app.UseDynamicClaims();
+        app.UseAuthorization();
+        if (env.IsDevelopment())
+        {
+            app.UseSwagger();
+            app.UseAbpSwaggerUI(options =>
+            {
+                options.SwaggerEndpoint("/swagger/v1/swagger.json", "Support APP API");
+
+                var configuration = context.GetConfiguration();
+                options.OAuthClientId(configuration["AuthServer:SwaggerClientId"]);
+                options.OAuthScopes(configuration["AuthServer:Audience"]);
+            });
+        }
+        app.UseAuditing();
+        app.UseAbpSerilogEnrichers();
+        app.UseConfiguredEndpoints();
+        app.UseHttpActivities();
+    }
+}
