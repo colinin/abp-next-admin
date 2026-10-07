@@ -1,5 +1,4 @@
 ﻿using LINGYUN.Abp.SettingManagement;
-using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using System.Linq;
 using Volo.Abp;
@@ -19,15 +18,12 @@ public class SystemGroupSettingDefinitionProvider : SettingDefinitionProvider
 
     protected ITimezoneProvider TimezoneProvider { get; }
     protected AbpLocalizationOptions LocalizationOptions { get; }
-    protected IStringLocalizerFactory StringLocalizerFactory { get; }
 
     public SystemGroupSettingDefinitionProvider(
         ITimezoneProvider timezoneProvider,
-        IStringLocalizerFactory stringLocalizerFactory,
         IOptions<AbpLocalizationOptions> localizationOptions)
     {
         TimezoneProvider = timezoneProvider;
-        StringLocalizerFactory = stringLocalizerFactory;
         LocalizationOptions = localizationOptions.Value;
     }
 
@@ -48,13 +44,8 @@ public class SystemGroupSettingDefinitionProvider : SettingDefinitionProvider
         var timezoneSetting = context.GetOrNull(TimingSettingNames.TimeZone);
         if (timezoneSetting != null)
         {
-            var stringLocalizer = StringLocalizerFactory.Create<AbpSettingManagementResource>();
+            var resourceName = LocalizationResourceNameAttribute.GetName(typeof(AbpSettingManagementResource));
             var timezones = TimeZoneHelper.GetTimezones(TimezoneProvider.GetIanaTimezones());
-            timezones.Insert(0, new NameValue
-            {
-                Name = stringLocalizer["DefaultTimeZone"],
-                Value = "Unspecified"
-            });
 
             timezoneSetting
                 .WithGroup(
@@ -63,8 +54,9 @@ public class SystemGroupSettingDefinitionProvider : SettingDefinitionProvider
                     order: 0,
                     requiredPermissions: [Volo.Abp.SettingManagement.SettingManagementPermissions.TimeZone])
                 .WithParent("Timing", L("Settings:System.Timing"), order: 0)
-                .WithOrder(1)
-                .WithOptions(timezones);
+                .WithOrder(1);
+            timezoneSetting.WithOptions([new LocalizableValue<string>(resourceName, "DefaultTimeZone", "Unspecified")]);
+            timezoneSetting.WithOptions(timezones);
         }
     }
 
