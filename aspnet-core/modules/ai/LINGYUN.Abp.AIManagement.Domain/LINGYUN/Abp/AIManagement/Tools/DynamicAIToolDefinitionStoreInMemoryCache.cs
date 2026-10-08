@@ -1,4 +1,5 @@
 ﻿using LINGYUN.Abp.AI.Tools;
+using LINGYUN.Abp.AIManagement.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -59,7 +60,7 @@ public class DynamicAIToolDefinitionStoreInMemoryCache : IDynamicAIToolDefinitio
             {
                 if (property.Value != null)
                 {
-                    toolDef.WithProperty(property.Key, property.Value);
+                    toolDef.WithProperty(property.Key, PropertyValueNormalizer.Normalize(property.Value));
                 }
             }
 
