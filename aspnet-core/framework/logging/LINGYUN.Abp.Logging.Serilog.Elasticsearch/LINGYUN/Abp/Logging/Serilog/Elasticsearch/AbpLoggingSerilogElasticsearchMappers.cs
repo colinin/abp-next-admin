@@ -1,11 +1,9 @@
-﻿using LINGYUN.Abp.Logging;
-using LINGYUN.Abp.Logging.Serilog.Elasticsearch;
-using Riok.Mapperly.Abstractions;
+﻿using Riok.Mapperly.Abstractions;
 using Serilog.Events;
 using System.Collections.Generic;
 using Volo.Abp.Mapperly;
 
-namespace LINGYUN.Abp.AuditLogging.Serilog.Elasticsearch;
+namespace LINGYUN.Abp.Logging.Serilog.Elasticsearch;
 
 [Mapper(RequiredMappingStrategy = RequiredMappingStrategy.Target)]
 public partial class SerilogExceptionToLogExceptionMapper : MapperBase<SerilogException, LogException>

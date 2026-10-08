@@ -212,6 +212,7 @@
   </Folder>
   <Folder Name="/framework/logging/">
     <Project Path="framework/logging/LINGYUN.Abp.Logging.Serilog.Elasticsearch/LINGYUN.Abp.Logging.Serilog.Elasticsearch.csproj" />
+    <Project Path="framework/logging/LINGYUN.Abp.Logging.Serilog.OpenObserve/LINGYUN.Abp.Logging.Serilog.OpenObserve.csproj" Id="950ee158-78b7-4303-9bfe-6bcb1f3dc129" />
     <Project Path="framework/logging/LINGYUN.Abp.Logging/LINGYUN.Abp.Logging.csproj" />
     <Project Path="framework/logging/LINGYUN.Abp.Serilog.Enrichers.Application/LINGYUN.Abp.Serilog.Enrichers.Application.csproj" />
     <Project Path="framework/logging/LINGYUN.Abp.Serilog.Enrichers.UniqueId/LINGYUN.Abp.Serilog.Enrichers.UniqueId.csproj" />
@@ -581,6 +582,7 @@
     <Project Path="tests/LINGYUN.Abp.Location.Baidu.Tests/LINGYUN.Abp.Location.Baidu.Tests.csproj" />
     <Project Path="tests/LINGYUN.Abp.Location.Tencent.Tests/LINGYUN.Abp.Location.Tencent.Tests.csproj" />
     <Project Path="tests/LINGYUN.Abp.Logging.Serilog.Elasticsearch.Tests/LINGYUN.Abp.Logging.Serilog.Elasticsearch.Tests.csproj" Id="d9b9a706-000c-4344-8eac-27ee78fcbb2a" />
+    <Project Path="tests/LINGYUN.Abp.Logging.Serilog.OpenObserve.Tests/LINGYUN.Abp.Logging.Serilog.OpenObserve.Tests.csproj" Id="77e77e27-9b11-43bf-b39d-af9e62484d67" />
     <Project Path="tests/LINGYUN.Abp.Logging.Tests/LINGYUN.Abp.Logging.Tests.csproj" Id="1e05270f-6652-443d-b76f-5d4360f2722e" />
     <Project Path="tests/LINGYUN.Abp.Rules.RulesEngine.Tests/LINGYUN.Abp.Rules.RulesEngine.Tests.csproj" />
     <Project Path="tests/LINGYUN.Abp.Sms.Platform.Tests/LINGYUN.Abp.Sms.Platform.Tests.csproj" />

@@ -1,12 +1,12 @@
-# LINGYUN.Abp.Logging.Serilog.Elasticsearch
+# LINGYUN.Abp.Logging.Serilog.OpenObserve
 
 简体中文 | [English](./README.EN.md)
 
-ILoggingProvider 接口的ES实现, 从ES中检索日志信息  
+ILoggingProvider 接口的OpenObserve实现, 从OpenObserve中检索日志信息  
 
 ## 功能特性
 
-* 基于Elasticsearch的日志存储和检索
+* 基于OpenObserve的日志存储和检索
 * 支持多种日志级别（Debug、Information、Warning、Error、Critical）
 * 支持Serilog和Microsoft.Extensions.Logging日志级别的自动映射
 * 支持丰富的查询条件（时间范围、日志级别、机器名称、环境名称等）
@@ -16,7 +16,7 @@ ILoggingProvider 接口的ES实现, 从ES中检索日志信息
 ## 模块引用
 
 ```csharp
-[DependsOn(typeof(AbpLoggingSerilogElasticsearchModule))]
+[DependsOn(typeof(AbpLoggingSerilogOpenObserveModule))]
 public class YouProjectModule : AbpModule
 {
   // other
@@ -25,17 +25,23 @@ public class YouProjectModule : AbpModule
 
 ## 配置项
 
-*  AbpLoggingSerilogElasticsearchOptions.IndexFormat	必须和Serilog配置项中的IndexFormat相同,否则无法定位到正确的索引  
+*  AbpLoggingSerilogOpenObserveOptions.Endpoint	  部署的OpenObserve服务器地址
+*  AbpLoggingSerilogOpenObserveOptions.Stream	  存储日志的stream名称
+*  AbpLoggingSerilogOpenObserveOptions.Organization	  存储日志的organization名称
+*  AbpLoggingSerilogOpenObserveOptions.AccessToken	  调用接口的访问令牌,可在OpenObserve控制台/IAM/服务账号中获取,格式: Basic XXXXXXXXXXX
 
 ## appsettings.json
 
 ```json
 {
   "Logging": {
-    "Provider": "ElasticsearchLoggingProvider",
+    "Provider": "OpenObserveLoggingProvider",
     "Serilog": {
-      "Elasticsearch": {
-        "IndexFormat": "logstash-{0:yyyy.MM.dd}"
+      "OpenObserve": {
+        "Endpoint": "http://localhost:5080",
+        "Stream": "default",
+        "Organization": "default",
+        "AccessToken": "Basic XXXXXXXXXXX"
       }
     }
   }
@@ -95,9 +101,3 @@ var log = await _loggingManager.GetAsync(id);
 * 是否包含异常（hasException）
 
 ## 注意事项
-
-1. IndexFormat配置必须与Serilog配置保持一致，默认格式为"logstash-{0:yyyy.MM.dd}"
-2. 支持多租户，会自动根据当前租户ID过滤日志
-3. 查询结果支持分页和排序
-4. 支持请求路径的模糊匹配
-5. 支持异常信息的存在性查询

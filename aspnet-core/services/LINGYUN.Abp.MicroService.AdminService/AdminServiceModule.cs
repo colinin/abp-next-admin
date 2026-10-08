@@ -20,6 +20,7 @@ using LINGYUN.Abp.Identity.EntityFrameworkCore;
 using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
 using LINGYUN.Abp.Logging.Serilog.Elasticsearch;
+using LINGYUN.Abp.Logging.Serilog.OpenObserve;
 using LINGYUN.Abp.MicroService.AdminService.EntityFrameworkCore;
 using LINGYUN.Abp.PermissionManagement;
 using LINGYUN.Abp.PermissionManagement.HttpApi;
@@ -65,6 +66,7 @@ namespace LINGYUN.Abp.MicroService.AdminService;
     typeof(AbpSerilogEnrichersUniqueIdModule),
     typeof(AbpAspNetCoreSerilogModule),
     typeof(AbpLoggingSerilogElasticsearchModule),
+    typeof(AbpLoggingSerilogOpenObserveModule),
     typeof(AbpAuditLoggingElasticsearchModule),
     typeof(AbpAspNetCoreMvcUiMultiTenancyModule),
 
