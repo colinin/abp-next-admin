@@ -4,19 +4,18 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Volo.Abp.DependencyInjection;
 using Volo.Abp.Specifications;
 
 namespace LINGYUN.Abp.Logging;
 
-[Dependency(TryRegister = true)]
-public class DefaultLoggingManager : ILoggingManager, ISingletonDependency
+public class DefaultLoggingProvider : ILoggingProvider
 {
-    public ILogger<DefaultLoggingManager> Logger { protected get; set; }
+    public const string ProviderName = "DefaultLoggingProvider";
+    public ILogger<DefaultLoggingProvider> Logger { protected get; set; }
 
-    public DefaultLoggingManager()
+    public DefaultLoggingProvider()
     {
-        Logger = NullLogger<DefaultLoggingManager>.Instance;
+        Logger = NullLogger<DefaultLoggingProvider>.Instance;
     }
 
     public Task<LogInfo?> GetAsync(string id, CancellationToken cancellationToken = default)
@@ -27,17 +26,17 @@ public class DefaultLoggingManager : ILoggingManager, ISingletonDependency
     }
 
     public Task<long> GetCountAsync(
-        DateTime? startTime = null, 
+        DateTime? startTime = null,
         DateTime? endTime = null,
         LogLevel? level = null,
         string? machineName = null,
         string? environment = null,
         string? application = null,
-        string? context = null, 
+        string? context = null,
         string? requestId = null,
-        string? requestPath = null, 
-        string? correlationId = null, 
-        int? processId = null, 
+        string? requestPath = null,
+        string? correlationId = null,
+        int? processId = null,
         int? threadId = null,
         bool? hasException = null,
         CancellationToken cancellationToken = default)
@@ -48,8 +47,8 @@ public class DefaultLoggingManager : ILoggingManager, ISingletonDependency
 
     public Task<List<LogInfo>> GetListAsync(
         string? sorting = null,
-        int maxResultCount = 50, 
-        int skipCount = 0, 
+        int maxResultCount = 50,
+        int skipCount = 0,
         DateTime? startTime = null,
         DateTime? endTime = null,
         LogLevel? level = null,
@@ -57,13 +56,13 @@ public class DefaultLoggingManager : ILoggingManager, ISingletonDependency
         string? environment = null,
         string? application = null,
         string? context = null,
-        string? requestId = null, 
+        string? requestId = null,
         string? requestPath = null,
-        string? correlationId = null, 
-        int? processId = null, 
+        string? correlationId = null,
+        int? processId = null,
         int? threadId = null,
         bool? hasException = null,
-        bool includeDetails = false, 
+        bool includeDetails = false,
         CancellationToken cancellationToken = default)
     {
         Logger.LogDebug("No logging manager is available!");

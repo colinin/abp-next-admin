@@ -11,6 +11,8 @@ public class AbpLoggingModule : AbpModule
     {
         var configuration = context.Services.GetConfiguration();
 
-        Configure<AbpLoggingEnricherPropertyNames>(configuration.GetSection("Logging"));
+        Configure<AbpLoggingOptions>(configuration.GetSection("Logging"));
+
+        context.Services.AddKeyedTransient<ILoggingProvider, DefaultLoggingProvider>(DefaultLoggingProvider.ProviderName);
     }
 }

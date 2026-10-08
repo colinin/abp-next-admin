@@ -1,5 +1,4 @@
 ﻿using Elastic.Clients.Elasticsearch;
-using Elastic.Transport.Diagnostics.Auditing;
 using LINGYUN.Abp.Elasticsearch;
 using LINGYUN.Linq.Dynamic.Queryable;
 using Microsoft.Extensions.Logging;
@@ -14,7 +13,6 @@ using System.Linq.Expressions;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
-using Volo.Abp.DependencyInjection;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.ObjectMapping;
 using Volo.Abp.Specifications;
@@ -22,8 +20,7 @@ using Volo.Abp.Timing;
 
 namespace LINGYUN.Abp.Logging.Serilog.Elasticsearch;
 
-[Dependency(ReplaceServices = true)]
-public class SerilogElasticsearchLoggingManager : ILoggingManager, ISingletonDependency
+public class SerilogElasticsearchLoggingProvider : ILoggingProvider
 {
     private readonly static Regex _indexFormatRegex = new Regex(@"^(.*)(?:\{0\:.+\})(.*)$");
     private readonly static Dictionary<Type, Type> _defaultTypeMap = new Dictionary<Type, Type>
@@ -41,9 +38,9 @@ public class SerilogElasticsearchLoggingManager : ILoggingManager, ISingletonDep
     private readonly IExpressionQueryService _expressionQueryService;
     private readonly IObjectMapper<AbpLoggingSerilogElasticsearchModule> _objectMapper;
 
-    public ILogger<SerilogElasticsearchLoggingManager> Logger { protected get; set; }
+    public ILogger<SerilogElasticsearchLoggingProvider> Logger { protected get; set; }
 
-    public SerilogElasticsearchLoggingManager(
+    public SerilogElasticsearchLoggingProvider(
         IClock clock,
         ICurrentTenant currentTenant,
         IOptions<AbpLoggingSerilogElasticsearchOptions> options,
@@ -58,7 +55,7 @@ public class SerilogElasticsearchLoggingManager : ILoggingManager, ISingletonDep
         _expressionQueryService = expressionQueryService;
         _options = options.Value;
 
-        Logger = NullLogger<SerilogElasticsearchLoggingManager>.Instance;
+        Logger = NullLogger<SerilogElasticsearchLoggingProvider>.Instance;
     }
 
     public async virtual Task<long> GetCountAsync(

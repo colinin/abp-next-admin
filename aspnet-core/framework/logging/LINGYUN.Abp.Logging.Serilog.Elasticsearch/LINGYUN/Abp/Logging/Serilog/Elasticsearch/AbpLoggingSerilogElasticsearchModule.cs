@@ -20,5 +20,7 @@ public class AbpLoggingSerilogElasticsearchModule : AbpModule
         Configure<AbpLoggingSerilogElasticsearchOptions>(configuration.GetSection("Logging:Serilog:Elasticsearch"));
 
         context.Services.AddMapperlyObjectMapper<AbpLoggingSerilogElasticsearchModule>();
+
+        context.Services.AddKeyedSingleton<ILoggingProvider, SerilogElasticsearchLoggingProvider>("ElasticsearchLoggingProvider");
     }
 }

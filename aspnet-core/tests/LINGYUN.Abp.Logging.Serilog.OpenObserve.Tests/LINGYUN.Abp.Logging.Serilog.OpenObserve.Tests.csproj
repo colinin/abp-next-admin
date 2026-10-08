@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net10.0</TargetFramework>
+		<RootNamespace />
+		<IsPackable>false</IsPackable>
+		<Platforms>AnyCPU</Platforms>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.NET.Test.Sdk" />
+		<PackageReference Include="Moq.AutoMock" />
+		<PackageReference Include="Serilog.Sinks.OpenTelemetry" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\framework\logging\LINGYUN.Abp.Logging.Serilog.OpenObserve\LINGYUN.Abp.Logging.Serilog.OpenObserve.csproj" />
+		<ProjectReference Include="..\LINGYUN.Abp.Logging.Tests\LINGYUN.Abp.Logging.Tests.csproj" />
+	</ItemGroup>
+</Project>
