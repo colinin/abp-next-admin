@@ -230,6 +230,9 @@
     <Project Path="framework/open-api/LINGYUN.Abp.OpenApi.OpenIddict/LINGYUN.Abp.OpenApi.OpenIddict.csproj" />
     <Project Path="framework/open-api/LINGYUN.Abp.OpenApi/LINGYUN.Abp.OpenApi.csproj" />
   </Folder>
+  <Folder Name="/framework/open-observe/">
+    <Project Path="framework/open-observe/LINGYUN.Abp.OpenObserve/LINGYUN.Abp.OpenObserve.csproj" Id="15498427-1b1e-4fe4-bc6d-09dfd8e547a2" />
+  </Folder>
   <Folder Name="/framework/pushplus/">
     <Project Path="framework/pushplus/LINGYUN.Abp.PushPlus.SettingManagement/LINGYUN.Abp.PushPlus.SettingManagement.csproj" />
     <Project Path="framework/pushplus/LINGYUN.Abp.PushPlus/LINGYUN.Abp.PushPlus.csproj" />
@@ -584,6 +587,7 @@
     <Project Path="tests/LINGYUN.Abp.Logging.Serilog.Elasticsearch.Tests/LINGYUN.Abp.Logging.Serilog.Elasticsearch.Tests.csproj" Id="d9b9a706-000c-4344-8eac-27ee78fcbb2a" />
     <Project Path="tests/LINGYUN.Abp.Logging.Serilog.OpenObserve.Tests/LINGYUN.Abp.Logging.Serilog.OpenObserve.Tests.csproj" Id="77e77e27-9b11-43bf-b39d-af9e62484d67" />
     <Project Path="tests/LINGYUN.Abp.Logging.Tests/LINGYUN.Abp.Logging.Tests.csproj" Id="1e05270f-6652-443d-b76f-5d4360f2722e" />
+    <Project Path="tests/LINGYUN.Abp.OpenObserve.Tests/LINGYUN.Abp.OpenObserve.Tests.csproj" />
     <Project Path="tests/LINGYUN.Abp.Rules.RulesEngine.Tests/LINGYUN.Abp.Rules.RulesEngine.Tests.csproj" />
     <Project Path="tests/LINGYUN.Abp.Sms.Platform.Tests/LINGYUN.Abp.Sms.Platform.Tests.csproj" />
     <Project Path="tests/LINGYUN.Abp.TestBase/LINGYUN.Abp.TestsBase.csproj" />
