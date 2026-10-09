@@ -8,7 +8,7 @@ using LINGYUN.Abp.BackgroundTasks.Jobs;
 using LINGYUN.Abp.BackgroundTasks.Notifications;
 using LINGYUN.Abp.BackgroundTasks.Quartz;
 using LINGYUN.Abp.BlobManagement;
-using LINGYUN.Abp.Claims.Mapping;
+using LINGYUN.Abp.AspNetCore.Authentication;
 using LINGYUN.Abp.Data.DbMigrator;
 using LINGYUN.Abp.Dynamic.Definitions;
 using LINGYUN.Abp.Elasticsearch.Jobs;
@@ -94,7 +94,7 @@ namespace LINGYUN.Abp.MicroService.TaskService;
     typeof(AbpDynamicDefinitionsModule),
     typeof(AbpTelemetryOpenTelemetryModule),
     typeof(AbpTelemetrySkyWalkingModule),
-    typeof(AbpClaimsMappingModule),
+    typeof(AbpAspNetCoreAuthenticationModule),
     typeof(AbpCAPEventBusModule),
     typeof(AbpAutofacModule)
     )]

@@ -5,7 +5,7 @@ using LINGYUN.Abp.AspNetCore.Session;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
 using LINGYUN.Abp.Authorization.OrganizationUnits;
 using LINGYUN.Abp.BlobStoring.BlobManagement;
-using LINGYUN.Abp.Claims.Mapping;
+using LINGYUN.Abp.AspNetCore.Authentication;
 using LINGYUN.Abp.Dynamic.Definitions;
 using LINGYUN.Abp.Emailing.Platform;
 using LINGYUN.Abp.EventBus.CAP;
@@ -84,7 +84,7 @@ namespace LINGYUN.Abp.MicroService.IdentityService;
     typeof(AbpAspNetCoreMvcWrapperModule),
     typeof(AbpDynamicDefinitionsModule),
     typeof(AbpExporterMiniSoftwareModule),
-    typeof(AbpClaimsMappingModule),
+    typeof(AbpAspNetCoreAuthenticationModule),
     typeof(AbpSwashbuckleModule),
     typeof(AbpAutofacModule)
     )]

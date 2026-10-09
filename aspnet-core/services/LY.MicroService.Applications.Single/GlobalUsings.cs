@@ -41,7 +41,7 @@ global using LINGYUN.Abp.BlobManagement.Tencent;
 global using LINGYUN.Abp.BlobStoring.BlobManagement;
 global using LINGYUN.Abp.CachingManagement;
 global using LINGYUN.Abp.CachingManagement.StackExchangeRedis;
-global using LINGYUN.Abp.Claims.Mapping;
+global using LINGYUN.Abp.AspNetCore.Authentication;
 global using LINGYUN.Abp.Dapr.Client;
 global using LINGYUN.Abp.Data.DbMigrator;
 global using LINGYUN.Abp.DataProtectionManagement;

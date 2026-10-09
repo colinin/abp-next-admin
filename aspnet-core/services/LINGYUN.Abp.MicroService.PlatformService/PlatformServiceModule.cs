@@ -11,7 +11,7 @@ using LINGYUN.Abp.BlobManagement.Minio;
 using LINGYUN.Abp.BlobManagement.SettingManagement;
 using LINGYUN.Abp.BlobManagement.Tencent;
 using LINGYUN.Abp.BlobStoring.BlobManagement;
-using LINGYUN.Abp.Claims.Mapping;
+using LINGYUN.Abp.AspNetCore.Authentication;
 using LINGYUN.Abp.Data.DbMigrator;
 using LINGYUN.Abp.Dynamic.Definitions;
 using LINGYUN.Abp.EventBus.CAP;
@@ -109,7 +109,7 @@ namespace LINGYUN.Abp.MicroService.PlatformService;
     typeof(AbpAliyunSmsModule),
     typeof(AbpAspNetCoreSessionModule),
     typeof(AbpAspNetCoreMvcWrapperModule),
-    typeof(AbpClaimsMappingModule),
+    typeof(AbpAspNetCoreAuthenticationModule),
     typeof(AbpAspNetCoreHttpOverridesModule),
     typeof(AbpDynamicDefinitionsModule),
     typeof(AbpSwashbuckleModule),

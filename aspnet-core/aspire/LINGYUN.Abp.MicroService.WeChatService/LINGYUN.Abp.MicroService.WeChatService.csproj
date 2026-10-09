@@ -53,7 +53,7 @@
 		<ProjectReference Include="..\..\framework\logging\LINGYUN.Abp.Serilog.Enrichers.Application\LINGYUN.Abp.Serilog.Enrichers.Application.csproj" />
 		<ProjectReference Include="..\..\framework\logging\LINGYUN.Abp.Serilog.Enrichers.UniqueId\LINGYUN.Abp.Serilog.Enrichers.UniqueId.csproj" />
 		<ProjectReference Include="..\..\framework\localization\LINGYUN.Abp.Localization.CultureMap\LINGYUN.Abp.Localization.CultureMap.csproj" />
-		<ProjectReference Include="..\..\framework\security\LINGYUN.Abp.Claims.Mapping\LINGYUN.Abp.Claims.Mapping.csproj" />
+		<ProjectReference Include="..\..\framework\common\LINGYUN.Abp.AspNetCore.Authentication\LINGYUN.Abp.AspNetCore.Authentication.csproj" />
 		<ProjectReference Include="..\..\framework\tenants\LINGYUN.Abp.MultiTenancy.Editions\LINGYUN.Abp.MultiTenancy.Editions.csproj" />
 		<ProjectReference Include="..\..\framework\wechat\LINGYUN.Abp.Identity.WeChat.Work\LINGYUN.Abp.Identity.WeChat.Work.csproj" />
 		<ProjectReference Include="..\..\framework\wechat\LINGYUN.Abp.WeChat.MiniProgram\LINGYUN.Abp.WeChat.MiniProgram.csproj" />

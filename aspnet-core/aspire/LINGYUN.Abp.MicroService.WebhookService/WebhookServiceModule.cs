@@ -5,7 +5,7 @@ using LINGYUN.Abp.AuditLogging.Elasticsearch;
 using LINGYUN.Abp.Authorization.OrganizationUnits;
 using LINGYUN.Abp.BackgroundTasks.DistributedLocking;
 using LINGYUN.Abp.BackgroundTasks.Quartz;
-using LINGYUN.Abp.Claims.Mapping;
+using LINGYUN.Abp.AspNetCore.Authentication;
 using LINGYUN.Abp.Dapr.Client.Wrapper;
 using LINGYUN.Abp.Dynamic.Definitions;
 using LINGYUN.Abp.Emailing.Platform;
@@ -58,7 +58,7 @@ namespace LINGYUN.Abp.MicroService.WebhookService;
     typeof(AbpSwashbuckleModule),
     typeof(AbpHttpClientWrapperModule),
     typeof(AbpDaprClientWrapperModule),
-    typeof(AbpClaimsMappingModule),
+    typeof(AbpAspNetCoreAuthenticationModule),
     typeof(AbpEmailingPlatformModule),
     typeof(AbpSmsPlatformModule),
     typeof(AbpAspNetCoreSessionModule),

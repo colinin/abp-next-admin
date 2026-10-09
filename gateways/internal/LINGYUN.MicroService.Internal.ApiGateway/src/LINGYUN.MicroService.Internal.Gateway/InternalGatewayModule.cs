@@ -1,6 +1,6 @@
 ﻿using Autofac.Core;
 using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
-using LINGYUN.Abp.Claims.Mapping;
+using LINGYUN.Abp.AspNetCore.Authentication;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -12,6 +12,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
 using StackExchange.Redis;
@@ -34,7 +35,7 @@ namespace LINGYUN.MicroService.Internal.Gateway;
 [DependsOn(
     typeof(AbpSerilogEnrichersApplicationModule),
     typeof(AbpSerilogEnrichersUniqueIdModule),
-    typeof(AbpClaimsMappingModule),
+    typeof(AbpAspNetCoreAuthenticationModule),
     typeof(AbpAutofacModule),
     typeof(AbpDataModule),
     typeof(AbpSwashbuckleModule),
@@ -46,6 +47,7 @@ public class InternalGatewayModule : AbpModule
     public static string ApplicationName { get; set; } = "InternalApiGateway";
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
+        var configuration = context.Services.GetConfiguration();
         AbpSerilogEnrichersConsts.ApplicationName = ApplicationName;
 
         PreConfigure<AbpSerilogEnrichersUniqueIdOptions>(options =>
@@ -55,6 +57,12 @@ public class InternalGatewayModule : AbpModule
             options.SnowflakeIdOptions.WorkerIdBits = 5;
             options.SnowflakeIdOptions.DatacenterId = 1;
         });
+
+        if (configuration.GetValue<bool>("App:ShowPii"))
+        {
+            IdentityModelEventSource.ShowPII = true;
+            IdentityModelEventSource.LogCompleteSecurityArtifact = true;
+        }
     }
 
     public override void ConfigureServices(ServiceConfigurationContext context)
@@ -70,25 +78,29 @@ public class InternalGatewayModule : AbpModule
             options.ControllersToRemove.Add(typeof(AbpApplicationConfigurationScriptController));
         });
 
-        context.Services.AddAbpSwaggerGenWithOAuth(
-            authority: configuration["AuthServer:Authority"],
-            scopes: new Dictionary<string, string>
-            {
-                {"identity-service", "Identity Service API"},
-                {"admin-service", "Admin Service API"},
-                {"localization-service", "Localization Service API"},
-                {"platform-service", "Platform Service API"},
-                {"message-service", "Message Service API"},
-                {"task-service", "Task Service API"},
-                {"webhook-service", "Webhook Service API"},
-                {"wechat-service", "WeChat Service API"},
-            },
-            options =>
-            {
-                options.SwaggerDoc("v1", new OpenApiInfo { Title = "ApiGateway", Version = "v1" });
-                options.DocInclusionPredicate((docName, description) => true);
-                options.CustomSchemaIds(type => type.FullName);
-            });
+        if (hostingEnvironment.IsDevelopment())
+        {
+            context.Services.AddAbpSwaggerGenWithOAuth(
+                authority: configuration["AuthServer:Authority"],
+                scopes: new Dictionary<string, string>
+                {
+                    {"identity-service", "Identity Service API"},
+                    {"admin-service", "Admin Service API"},
+                    {"localization-service", "Localization Service API"},
+                    {"platform-service", "Platform Service API"},
+                    {"message-service", "Message Service API"},
+                    {"task-service", "Task Service API"},
+                    {"webhook-service", "Webhook Service API"},
+                    {"wechat-service", "WeChat Service API"},
+                },
+                options =>
+                {
+                    options.SwaggerDoc("v1", new OpenApiInfo { Title = "ApiGateway", Version = "v1" });
+                    options.DocInclusionPredicate((docName, description) => true);
+                    options.CustomSchemaIds(type => type.FullName);
+                });
+        }
+        
         context.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
             {
@@ -175,49 +187,52 @@ public class InternalGatewayModule : AbpModule
         // 授权
         app.UseAuthorization();
 
-        app.UseSwagger();
-        app.UseSwaggerUI(options =>
+        if (env.IsDevelopment())
         {
-            options.SwaggerEndpoint("/swagger/v1/swagger.json", "Open API Document");
-
-            var configuration = context.ServiceProvider.GetRequiredService<IConfiguration>();
-            var logger = context.ServiceProvider.GetRequiredService<ILogger<ApplicationInitializationContext>>();
-            var proxyConfigProvider = context.ServiceProvider.GetRequiredService<IProxyConfigProvider>();
-            var yarpConfig = proxyConfigProvider.GetConfig();
-
-            var routedClusters = yarpConfig.Clusters
-                .SelectMany(t => t.Destinations,
-                    (clusterId, destination) => new { clusterId.ClusterId, destination.Value });
-
-            var groupedClusters = routedClusters
-                .GroupBy(q => q.Value.Address)
-                .Select(t => t.First())
-                .Distinct()
-                .ToList();
-
-            foreach (var clusterGroup in groupedClusters)
+            app.UseSwagger();
+            app.UseSwaggerUI(options =>
             {
-                var routeConfig = yarpConfig.Routes.FirstOrDefault(q =>
-                    q.ClusterId == clusterGroup.ClusterId);
-                if (routeConfig == null)
-                {
-                    logger.LogWarning($"Swagger UI: Couldn't find route configuration for {clusterGroup.ClusterId}...");
-                    continue;
-                }
+                options.SwaggerEndpoint("/swagger/v1/swagger.json", "Open API Document");
 
-                var swaggerEndpoint = clusterGroup.Value.Address;
-                if (clusterGroup.Value.Metadata != null &&
-                    clusterGroup.Value.Metadata.TryGetValue("SwaggerEndpoint", out var address) &&
-                    !address.IsNullOrWhiteSpace())
-                {
-                    swaggerEndpoint = address;
-                }
+                var configuration = context.ServiceProvider.GetRequiredService<IConfiguration>();
+                var logger = context.ServiceProvider.GetRequiredService<ILogger<ApplicationInitializationContext>>();
+                var proxyConfigProvider = context.ServiceProvider.GetRequiredService<IProxyConfigProvider>();
+                var yarpConfig = proxyConfigProvider.GetConfig();
 
-                options.SwaggerEndpoint($"{swaggerEndpoint}/swagger/v1/swagger.json", $"{routeConfig.RouteId} API");
-                options.OAuthClientId(configuration["AuthServer:SwaggerClientId"]);
-                options.OAuthClientSecret(configuration["AuthServer:SwaggerClientSecret"]);
-            }
-        });
+                var routedClusters = yarpConfig.Clusters
+                    .SelectMany(t => t.Destinations,
+                        (clusterId, destination) => new { clusterId.ClusterId, destination.Value });
+
+                var groupedClusters = routedClusters
+                    .GroupBy(q => q.Value.Address)
+                    .Select(t => t.First())
+                    .Distinct()
+                    .ToList();
+
+                foreach (var clusterGroup in groupedClusters)
+                {
+                    var routeConfig = yarpConfig.Routes.FirstOrDefault(q =>
+                        q.ClusterId == clusterGroup.ClusterId);
+                    if (routeConfig == null)
+                    {
+                        logger.LogWarning($"Swagger UI: Couldn't find route configuration for {clusterGroup.ClusterId}...");
+                        continue;
+                    }
+
+                    var swaggerEndpoint = clusterGroup.Value.Address;
+                    if (clusterGroup.Value.Metadata != null &&
+                        clusterGroup.Value.Metadata.TryGetValue("SwaggerEndpoint", out var address) &&
+                        !address.IsNullOrWhiteSpace())
+                    {
+                        swaggerEndpoint = address;
+                    }
+
+                    options.SwaggerEndpoint($"{swaggerEndpoint}/swagger/v1/swagger.json", $"{routeConfig.RouteId} API");
+                    options.OAuthClientId(configuration["AuthServer:SwaggerClientId"]);
+                    options.OAuthClientSecret(configuration["AuthServer:SwaggerClientSecret"]);
+                }
+            });
+        }
 
         // app.UseRewriter(new RewriteOptions().AddRedirect("^(|\\|\\s+)$", "/swagger"));
 
@@ -225,10 +240,10 @@ public class InternalGatewayModule : AbpModule
         app.UseAuditing();
         app.UseWebSockets();
         app.UseWebSocketsTelemetry();
+        app.UseAbpSerilogEnrichers();
         app.UseConfiguredEndpoints(endpoints =>
         {
             endpoints.MapReverseProxy();
         });
-        app.UseAbpSerilogEnrichers();
     }
 }

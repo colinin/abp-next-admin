@@ -15,6 +15,7 @@
     <Project Path="framework/common/LINGYUN.Abp.Sms.Aliyun/LINGYUN.Abp.Sms.Aliyun.csproj" />
   </Folder>
   <Folder Name="/framework/aspnetcore/">
+    <Project Path="framework/common/LINGYUN.Abp.AspNetCore.Authentication/LINGYUN.Abp.AspNetCore.Authentication.csproj" />
     <Project Path="framework/common/LINGYUN.Abp.AspNetCore.HttpOverrides/LINGYUN.Abp.AspNetCore.HttpOverrides.csproj" />
     <Project Path="framework/common/LINGYUN.Abp.AspNetCore.Session/LINGYUN.Abp.AspNetCore.Session.csproj" />
   </Folder>
@@ -115,9 +116,6 @@
   <Folder Name="/framework/saas/">
     <Project Path="framework/tenants/LINGYUN.Abp.MultiTenancy.Editions/LINGYUN.Abp.MultiTenancy.Editions.csproj" />
     <Project Path="modules/saas/LINGYUN.Abp.MultiTenancy.Saas/LINGYUN.Abp.MultiTenancy.Saas.csproj" />
-  </Folder>
-  <Folder Name="/framework/security/">
-    <Project Path="framework/security/LINGYUN.Abp.Claims.Mapping/LINGYUN.Abp.Claims.Mapping.csproj" />
   </Folder>
   <Folder Name="/framework/settings/">
     <Project Path="framework/settings/LINGYUN.Abp.SettingManagement.Application.Contracts/LINGYUN.Abp.SettingManagement.Application.Contracts.csproj" />

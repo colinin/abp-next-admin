@@ -403,7 +403,7 @@ namespace LY.MicroService.Applications.Single;
     typeof(AbpAspNetCoreMultiTenancyModule),
     typeof(AbpAspNetCoreMvcUiMultiTenancyModule),
     typeof(AbpDynamicDefinitionsModule),
-    typeof(AbpClaimsMappingModule),
+    typeof(AbpAspNetCoreAuthenticationModule),
     typeof(AbpSwashbuckleModule),
     typeof(AbpMailKitModule),
     typeof(AbpAutofacModule),
