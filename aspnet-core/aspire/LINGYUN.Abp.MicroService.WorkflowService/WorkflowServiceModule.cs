@@ -6,7 +6,7 @@ using LINGYUN.Abp.Authorization.OrganizationUnits;
 using LINGYUN.Abp.BackgroundTasks.DistributedLocking;
 using LINGYUN.Abp.BackgroundTasks.Quartz;
 using LINGYUN.Abp.BlobStoring.BlobManagement;
-using LINGYUN.Abp.Claims.Mapping;
+using LINGYUN.Abp.AspNetCore.Authentication;
 using LINGYUN.Abp.Data.DbMigrator;
 using LINGYUN.Abp.Dynamic.Definitions;
 using LINGYUN.Abp.Elsa;
@@ -82,7 +82,7 @@ namespace LINGYUN.Abp.MicroService.WorkflowService;
     typeof(AbpAspNetCoreMvcWrapperModule),
     typeof(AbpSmsPlatformModule),
     typeof(AbpEmailingPlatformModule),
-    typeof(AbpClaimsMappingModule),
+    typeof(AbpAspNetCoreAuthenticationModule),
     typeof(AbpAspNetCoreSessionModule),
     typeof(AbpAspNetCoreMvcNewtonsoftModule),
     typeof(AbpAspNetCoreHttpOverridesModule),

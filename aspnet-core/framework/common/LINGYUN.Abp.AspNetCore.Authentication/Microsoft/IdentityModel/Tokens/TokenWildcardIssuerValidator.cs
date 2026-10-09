@@ -128,4 +128,3 @@ public static class TokenWildcardIssuerValidator
         return first ? Utility.Empty : sb.ToString();
     }
 }
-

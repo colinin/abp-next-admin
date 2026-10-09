@@ -15,7 +15,7 @@
 		<PackageReference Include="DotNetCore.CAP.PostgreSql" Condition="'$(PostgreSql)'=='true'" />
 		<PackageReference Include="DotNetCore.CAP.Sqlite" Condition="'$(Sqlite)'=='true'" />
 		<PackageReference Include="DotNetCore.CAP.RabbitMQ" />
-		<PackageReference Include="LINGYUN.Abp.Claims.Mapping" />
+		<PackageReference Include="LINGYUN.Abp.AspNetCore.Authentication" />
 		<PackageReference Include="LINGYUN.Abp.AspNetCore.HttpOverrides" />
 		<PackageReference Include="LINGYUN.Abp.AspNetCore.Mvc.Wrapper" />
 		<PackageReference Include="LINGYUN.Abp.AspNetCore.Session" />

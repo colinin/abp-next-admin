@@ -3,7 +3,7 @@ using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
 using LINGYUN.Abp.AspNetCore.Session;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
 using LINGYUN.Abp.Authorization.OrganizationUnits;
-using LINGYUN.Abp.Claims.Mapping;
+using LINGYUN.Abp.AspNetCore.Authentication;
 using LINGYUN.Abp.Dynamic.Definitions;
 using LINGYUN.Abp.EntityFrameworkCore.MySQL;
 using LINGYUN.Abp.EventBus.CAP;
@@ -79,7 +79,7 @@ namespace LINGYUN.Abp.MicroService.WeChatService;
     typeof(AbpSwashbuckleModule),
     typeof(AbpHttpClientWrapperModule),
     typeof(AbpMailKitModule),
-    typeof(AbpClaimsMappingModule),
+    typeof(AbpAspNetCoreAuthenticationModule),
     typeof(AbpTelemetryOpenTelemetryModule),
     typeof(AbpTelemetrySkyWalkingModule),
     typeof(AbpAspNetCoreSessionModule),

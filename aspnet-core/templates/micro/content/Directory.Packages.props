@@ -12,7 +12,7 @@
 
 	<!-- LINGYUN Abp Framework -->
 	<ItemGroup>
-		<PackageVersion Include="LINGYUN.Abp.Claims.Mapping" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageVersion Include="LINGYUN.Abp.AspNetCore.Authentication" Version="$(LINGYUNAbpPackageVersion)" />
 		<PackageVersion Include="LINGYUN.Abp.AspNetCore.HttpOverrides" Version="$(LINGYUNAbpPackageVersion)" />
 		<PackageVersion Include="LINGYUN.Abp.AspNetCore.Mvc.Localization" Version="$(LINGYUNAbpPackageVersion)" />
 		<PackageVersion Include="LINGYUN.Abp.AspNetCore.Mvc.Wrapper" Version="$(LINGYUNAbpPackageVersion)" />
