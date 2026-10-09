@@ -15,7 +15,7 @@ exporters:
   otlphttp:
     endpoint: http://host.docker.internal:5080/api/default
     headers:
-      Authorization: Basic YWRtaW5AYWJwLmlvOm8yb2lfbG5MMkdOT3ZOSFVNaDhqYVpLSDFNdk10d0taTHBKWnQ=
+      Authorization: Basic YWRtaW5AYWJwLmlvOnd3MVo1TCU2
       stream-name: default
 
 extensions:

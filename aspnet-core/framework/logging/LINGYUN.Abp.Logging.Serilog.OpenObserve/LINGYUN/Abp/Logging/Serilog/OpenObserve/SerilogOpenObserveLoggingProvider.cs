@@ -1,6 +1,7 @@
 ﻿using LINGYUN.Abp.Logging.Serilog.OpenObserve.Models;
-using LINGYUN.Abp.Logging.Serilog.OpenObserve.Models.Search;
 using LINGYUN.Abp.Logging.Serilog.OpenObserve.Utils;
+using LINGYUN.Abp.OpenObserve;
+using LINGYUN.Abp.OpenObserve.Models.Search;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
@@ -38,7 +39,8 @@ public class SerilogOpenObserveLoggingProvider : ILoggingProvider
         }
 
         var response = await Client.SearchAsync<SerilogInfo>(
-            new Models.Search.SearchQuery(
+            Options.Organization,
+            new SearchQuery(
                 $"select * from {Options.Stream} where uniqueid = {uniqueId}",
                 GetOrDefaultStartTime(),
                 Clock.Now),
@@ -85,8 +87,9 @@ public class SerilogOpenObserveLoggingProvider : ILoggingProvider
                 threadId,
                 hasException));
 
-        var response = await Client.SearchAsync<SearchTotal>(
-            new Models.Search.SearchQuery(
+        var response = await Client.SearchAsync<SerilogTotal>(
+            Options.Organization,
+            new SearchQuery(
                 sqlBuilder.ToString(),
                 GetOrDefaultStartTime(startTime),
                 endTime ?? Clock.Now),
@@ -120,8 +123,9 @@ public class SerilogOpenObserveLoggingProvider : ILoggingProvider
                 && (x.Op == ComparisonOp.LessThanOrEqual || x.Op == ComparisonOp.LessThan))
             ?.Value as DateTime?;
 
-        var response = await Client.SearchAsync<SearchTotal>(
-            new Models.Search.SearchQuery(
+        var response = await Client.SearchAsync<SerilogTotal>(
+            Options.Organization,
+            new SearchQuery(
                 sqlBuilder.ToString(),
                 GetOrDefaultStartTime(startTime),
                 endTime ?? Clock.Now),
@@ -177,7 +181,8 @@ public class SerilogOpenObserveLoggingProvider : ILoggingProvider
         }
 
         var response = await Client.SearchAsync<SerilogInfo>(
-            new Models.Search.SearchQuery(
+            Options.Organization,
+            new SearchQuery(
                 sqlBuilder.ToString(),
                 GetOrDefaultStartTime(startTime),
                 endTime ?? Clock.Now,
@@ -217,7 +222,8 @@ public class SerilogOpenObserveLoggingProvider : ILoggingProvider
             ?.Value as DateTime?;
 
         var response = await Client.SearchAsync<SerilogInfo>(
-            new Models.Search.SearchQuery(
+            Options.Organization,
+            new SearchQuery(
                 sqlBuilder.ToString(),
                 GetOrDefaultStartTime(startTime),
                 endTime ?? Clock.Now,

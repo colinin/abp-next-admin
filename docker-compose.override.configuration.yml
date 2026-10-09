@@ -192,8 +192,8 @@ services:
       - OpenTelemetry__Otlp__Protocol=HttpProtobuf
       - Serilog__WriteTo__2__Name=OpenTelemetry
       - Serilog__WriteTo__2__Args__endpoint=http://host.docker.internal:4318
-      - Logging__Serilog__OpenObserve__Endpoint=http://host.docker.internal:5080
-      - Logging__Serilog__OpenObserve__AccessToken=Basic YWJwLW1jcC5kZWZhdWx0QHNhLmludGVybmFsOkh6bXFzWlNTWXc4YVdMVXA=
+      - OpenObserve__Endpoint=http://host.docker.internal:5080
+      - OpenObserve__AccessToken=Basic YWRtaW5AYWJwLmlvOnd3MVo1TCU2
 
   localization-service:
     environment:

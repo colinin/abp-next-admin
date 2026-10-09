@@ -25,10 +25,8 @@ public class YouProjectModule : AbpModule
 
 ## 配置项
 
-*  AbpLoggingSerilogOpenObserveOptions.Endpoint	  部署的OpenObserve服务器地址
 *  AbpLoggingSerilogOpenObserveOptions.Stream	  存储日志的stream名称
 *  AbpLoggingSerilogOpenObserveOptions.Organization	  存储日志的organization名称
-*  AbpLoggingSerilogOpenObserveOptions.AccessToken	  调用接口的访问令牌,可在OpenObserve控制台/IAM/服务账号中获取,格式: Basic XXXXXXXXXXX
 
 ## appsettings.json
 
@@ -38,12 +36,14 @@ public class YouProjectModule : AbpModule
     "Provider": "OpenObserveLoggingProvider",
     "Serilog": {
       "OpenObserve": {
-        "Endpoint": "http://localhost:5080",
         "Stream": "default",
-        "Organization": "default",
-        "AccessToken": "Basic XXXXXXXXXXX"
+        "Organization": "default"
       }
     }
+  },
+  "OpenObserve": {
+    "Endpoint": "http://localhost:5080",
+    "AccessToken": "Basic XXXXXXXXXXX"
   }
 }
 ```
