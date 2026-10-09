@@ -1,8 +1,8 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace LINGYUN.Abp.Logging.Serilog.OpenObserve.Models.Search;
+namespace LINGYUN.Abp.Logging.Serilog.OpenObserve.Models;
 
-public class SearchTotal
+public class SerilogTotal
 {
     [JsonPropertyName("total")]
     public long Total { get; set; }
