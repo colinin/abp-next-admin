@@ -63,11 +63,16 @@ namespace LINGYUN.Abp.MicroService.AllInOne;
     typeof(AbpAuditingApplicationModule),
     // 审计日志模块 控制器
     typeof(AbpAuditingHttpApiModule),
-    // 审计日志模块 IP 地址定位
+    // 审计日志模块 IP地址定位
     typeof(AbpAuditLoggingIPLocationModule),
+    // IP地址定位 MaxMindGeoIP2集成
     typeof(AbpMaxMindGeoIP2Module),
     // 审计日志模块 实体框架
     typeof(AbpAuditLoggingEntityFrameworkCoreModule),
+    // 系统日志模块 Elasticsearch
+    typeof(AbpLoggingSerilogElasticsearchModule),
+    // 系统日志模块 OpenObserve
+    typeof(AbpLoggingSerilogOpenObserveModule),
 
     // 缓存模块 Redis集成
     typeof(AbpCachingStackExchangeRedisModule),

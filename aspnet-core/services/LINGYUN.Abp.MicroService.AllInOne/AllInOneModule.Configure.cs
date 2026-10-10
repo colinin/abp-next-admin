@@ -885,10 +885,16 @@ public partial class AllInOneModule
                 configuration.GetSection("AuthServer").Bind(options);
 
                 var validIssuers = configuration.GetSection("AuthServer:ValidIssuers").Get<List<string>>();
+                var validAudiences = configuration.GetSection("AuthServer:ValidAudiences").Get<List<string>>();
                 if (validIssuers?.Count > 0)
                 {
                     options.TokenValidationParameters.ValidIssuers = validIssuers;
                     options.TokenValidationParameters.IssuerValidator = TokenWildcardIssuerValidator.IssuerValidator;
+                    options.TokenValidationParameters.IssuerValidatorUsingConfiguration = TokenWildcardIssuerValidator.IssuerValidatorUsingConfiguration;
+                }
+                if (validAudiences?.Count > 0)
+                {
+                    options.TokenValidationParameters.ValidAudiences = validAudiences;
                 }
 
                 options.Events ??= new JwtBearerEvents();
