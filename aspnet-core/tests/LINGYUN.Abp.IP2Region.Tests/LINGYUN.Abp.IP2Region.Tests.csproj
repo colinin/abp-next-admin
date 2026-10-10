@@ -21,6 +21,14 @@
 	  <None Update="LINGYUN\Abp\IP2Region\ip.merge.txt">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </None>
+	  <None Update="LINGYUN\Abp\IP2Region\ipv4_source.txt">
+	    <Link>ipv4_source.txt</Link>
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="LINGYUN\Abp\IP2Region\ipv6_source.txt">
+	    <Link>ipv6_source.txt</Link>
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
 	</ItemGroup>
 
 </Project>

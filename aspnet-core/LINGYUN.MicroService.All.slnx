@@ -144,6 +144,7 @@
     <Project Path="framework/common/LINGYUN.Abp.IdGenerator/LINGYUN.Abp.IdGenerator.csproj" />
     <Project Path="framework/common/LINGYUN.Abp.IP.Location/LINGYUN.Abp.IP.Location.csproj" />
     <Project Path="framework/common/LINGYUN.Abp.IP2Region/LINGYUN.Abp.IP2Region.csproj" />
+    <Project Path="framework/common/LINGYUN.Abp.MaxMindGeoIP2/LINGYUN.Abp.MaxMindGeoIP2.csproj" Id="289d6f3a-e27c-4fae-960b-3c206fdf1453" />
   </Folder>
   <Folder Name="/framework/dapr/">
     <Project Path="framework/dapr/LINGYUN.Abp.Dapr.Actors.AspNetCore.Wrapper/LINGYUN.Abp.Dapr.Actors.AspNetCore.Wrapper.csproj" />
@@ -580,6 +581,8 @@
     <Project Path="tests/LINGYUN.Abp.Features.LimitValidation.Redis.Tests/LINGYUN.Abp.Features.LimitValidation.Redis.Tests.csproj" />
     <Project Path="tests/LINGYUN.Abp.Features.LimitValidation.Tests/LINGYUN.Abp.Features.LimitValidation.Tests.csproj" />
     <Project Path="tests/LINGYUN.Abp.IdGenerator.Tests/LINGYUN.Abp.IdGenerator.Tests.csproj" />
+    <Project Path="tests/LINGYUN.Abp.IP2Region.Tests/LINGYUN.Abp.IP2Region.Tests.csproj" />
+    <Project Path="tests/LINGYUN.Abp.MaxMindGeoIP2.Tests/LINGYUN.Abp.MaxMindGeoIP2.Tests.csproj" />
     <Project Path="tests/LINGYUN.Abp.Localization.Xml.Tests/LINGYUN.Abp.Localization.Xml.Tests.csproj" />
     <Project Path="tests/LINGYUN.Abp.Location.Baidu.Tests/LINGYUN.Abp.Location.Baidu.Tests.csproj" />
     <Project Path="tests/LINGYUN.Abp.Location.Tencent.Tests/LINGYUN.Abp.Location.Tencent.Tests.csproj" />

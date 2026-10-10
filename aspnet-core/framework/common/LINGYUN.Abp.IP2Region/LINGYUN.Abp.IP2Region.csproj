@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
 	<Import Project="..\..\..\..\configureawait.props" />
 	<Import Project="..\..\..\..\common.props" />
@@ -14,9 +14,18 @@
 		<RootNamespace />
 	</PropertyGroup>
 
+	<PropertyGroup>
+		<!--
+			IPv6 离线库(ip2region_v6.xdb)约 35MB, 可通过 -p:IncludeIPv6Database=false 排除以减小打包体积,
+			排除后运行时 IPv6 查询返回 null(i2region 的 IPv4 离线库无法解析 IPv6 地址)
+		-->
+		<IncludeIPv6Database Condition="'$(IncludeIPv6Database)' == ''">true</IncludeIPv6Database>
+	</PropertyGroup>
+
 	<ItemGroup>
-		<None Remove="LINGYUN\Abp\IP2Region\Resources\ip2region_v4.xdb" />
+		<None Remove="LINGYUN\Abp\IP2Region\Resources\*.xdb" />
 		<EmbeddedResource Include="LINGYUN\Abp\IP2Region\Resources\ip2region_v4.xdb" />
+		<EmbeddedResource Include="LINGYUN\Abp\IP2Region\Resources\ip2region_v6.xdb" Condition="'$(IncludeIPv6Database)' == 'true'" />
 	</ItemGroup>
 
 	<ItemGroup>
