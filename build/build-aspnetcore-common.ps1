@@ -35,7 +35,7 @@ $dockerArray += [PsObject]@{ Dockerfile = $rootFolder + "/../gateways/internal/L
 [PsObject[]]$solutionArray = @()
 $solutionArray += [PsObject]@{ File = $rootFolder + "/../aspnet-core/LINGYUN.MicroService.All.slnx" }
 $solutionArray += [PsObject]@{ File = $rootFolder + "/../aspnet-core/LINGYUN.MicroService.Aspire.slnx" }
-$solutionArray += [PsObject]@{ File = $rootFolder + "/../aspnet-core/LINGYUN.MicroService.SingleProject.slnx" }
+$solutionArray += [PsObject]@{ File = $rootFolder + "/../aspnet-core/LINGYUN.MicroService.AllInOne.slnx" }
 $solutionArray += [PsObject]@{ File = $rootFolder + "/../gateways/internal/LINGYUN.MicroService.Internal.ApiGateway/LINGYUN.MicroService.Internal.ApiGateway.slnx" }
 
 [PsObject[]]$migrationArray = @()

@@ -196,7 +196,7 @@ apps/vben5/
 │   │   ├── LINGYUN.Abp.MicroService.WorkflowService/   # 工作流服务（30050）
 │   │   ├── LINGYUN.Abp.MicroService.WeChatService/     # 微信服务（30060）
 │   │   ├── LINGYUN.Abp.MicroService.AIService/         # AI 服务（30070）
-│   │   ├── LY.MicroService.Applications.Single/        # 单体应用（30000，合并网关与全部模块）
+│   │   ├── LINGYUN.Abp.MicroService.AllInOne/        # 单体应用（30000，合并网关与全部模块）
 │   │   ├── LY.MicroService.IdentityServer/             # IdentityServer 版本服务与宿主
 │   │   ├── LINGYUN.Abp.Applications/  LY.AIO.Applications.Single/  # 其它宿主
 │   │   └── Publish/             # 发布输出目录（容器镜像构建使用）
@@ -231,7 +231,7 @@ apps/vben5/
 │   ├── tests/                   # 单元测试项目
 │   ├── LINGYUN.MicroService.All.slnx            # 全量解决方案
 │   ├── LINGYUN.MicroService.Aspire.slnx         # Aspire 解决方案
-│   └── LINGYUN.MicroService.SingleProject.slnx  # 单体解决方案
+│   └── LINGYUN.MicroService.AllInOne.slnx  # 单体解决方案
 ├── gateways/
 │   ├── internal/                # 内部网关（YARP）：Internal.Gateway / OpenApi.Gateway + yarp*.json 路由
 │   └── web/                     # Web 网关：LY.MicroService.ApiGateway
@@ -368,7 +368,7 @@ docker-compose -f .\docker-compose.middleware.yml -p labp up -d
 # 首次启动请等待 30 秒以上
 
 # ② 启动单体服务
-cd .\aspnet-core\services\LY.MicroService.Applications.Single
+cd .\aspnet-core\services\LINGYUN.Abp.MicroService.AllInOne
 dotnet run --launch-profile Single.MySql.Dev
 
 # ③ 启动前端

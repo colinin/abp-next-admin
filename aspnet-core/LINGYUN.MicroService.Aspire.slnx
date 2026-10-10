@@ -118,6 +118,7 @@
     <Project Path="framework/common/LINGYUN.Abp.IdGenerator/LINGYUN.Abp.IdGenerator.csproj" />
     <Project Path="framework/common/LINGYUN.Abp.IP.Location/LINGYUN.Abp.IP.Location.csproj" />
     <Project Path="framework/common/LINGYUN.Abp.IP2Region/LINGYUN.Abp.IP2Region.csproj" />
+    <Project Path="framework/common/LINGYUN.Abp.MaxMindGeoIP2/LINGYUN.Abp.MaxMindGeoIP2.csproj" />
   </Folder>
   <Folder Name="/framework/dapr/">
     <Project Path="framework/dapr/LINGYUN.Abp.Dapr.Actors.AspNetCore.Wrapper/LINGYUN.Abp.Dapr.Actors.AspNetCore.Wrapper.csproj" />

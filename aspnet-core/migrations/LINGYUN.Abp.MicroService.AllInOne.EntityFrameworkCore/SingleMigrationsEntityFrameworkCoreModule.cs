@@ -1,0 +1,58 @@
+using LINGYUN.Abp.AIManagement.EntityFrameworkCore;
+using LINGYUN.Abp.AuditLogging.EntityFrameworkCore;
+using LINGYUN.Abp.BlobManagement.EntityFrameworkCore;
+using LINGYUN.Abp.Data.DbMigrator;
+using LINGYUN.Abp.Gdpr.EntityFrameworkCore;
+using LINGYUN.Abp.Identity.EntityFrameworkCore;
+using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
+using LINGYUN.Abp.MessageService.EntityFrameworkCore;
+using LINGYUN.Abp.Notifications.EntityFrameworkCore;
+using LINGYUN.Abp.PermissionManagement.EntityFrameworkCore;
+using LINGYUN.Abp.Saas.EntityFrameworkCore;
+using LINGYUN.Abp.TaskManagement.EntityFrameworkCore;
+using LINGYUN.Abp.TextTemplating.EntityFrameworkCore;
+using LINGYUN.Abp.UI.Navigation.VueVbenAdmin5;
+using LINGYUN.Abp.WebhooksManagement.EntityFrameworkCore;
+using LINGYUN.Abp.WeChat;
+using LINGYUN.Platform.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.Data;
+using Volo.Abp.FeatureManagement.EntityFrameworkCore;
+using Volo.Abp.Modularity;
+using Volo.Abp.OpenIddict.EntityFrameworkCore;
+using Volo.Abp.SettingManagement.EntityFrameworkCore;
+
+namespace LINGYUN.Abp.MicroService.AllInOne.EntityFrameworkCore;
+
+[DependsOn(
+    typeof(AbpSaasEntityFrameworkCoreModule),
+    typeof(AbpAuditLoggingEntityFrameworkCoreModule),
+    typeof(AbpSettingManagementEntityFrameworkCoreModule),
+    typeof(AbpPermissionManagementEntityFrameworkCoreModule),
+    typeof(AbpFeatureManagementEntityFrameworkCoreModule),
+    typeof(AbpNotificationsEntityFrameworkCoreModule),
+    typeof(AbpMessageServiceEntityFrameworkCoreModule),
+    typeof(AbpAIManagementEntityFrameworkCoreModule),
+    typeof(AbpBlobManagementEntityFrameworkCoreModule),
+    typeof(PlatformEntityFrameworkCoreModule),
+    typeof(AbpLocalizationManagementEntityFrameworkCoreModule),
+    typeof(AbpIdentityEntityFrameworkCoreModule),
+    typeof(AbpOpenIddictEntityFrameworkCoreModule),
+    typeof(AbpTextTemplatingEntityFrameworkCoreModule),
+    typeof(WebhooksManagementEntityFrameworkCoreModule),
+    typeof(TaskManagementEntityFrameworkCoreModule),
+    typeof(AbpGdprEntityFrameworkCoreModule),
+    typeof(AbpUINavigationVueVbenAdmin5Module),
+    typeof(AbpWeChatModule),
+    typeof(AbpDataDbMigratorModule)
+    )]
+public class SingleMigrationsEntityFrameworkCoreModule : AbpModule
+{
+    public override void ConfigureServices(ServiceConfigurationContext context)
+    {
+        if (context.Services.IsDataMigrationEnvironment())
+        {
+            context.Services.AddAbpDbContext<SingleMigrationsDbContext>();
+        }
+    }
+}
