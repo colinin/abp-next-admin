@@ -1,3 +1,4 @@
+using LINGYUN.Abp.IP.Location;
 using LINGYUN.Abp.Tests;
 using Volo.Abp.Modularity;
 
@@ -10,7 +11,7 @@ public class AbpIP2RegionTestModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
-        Configure<AbpIP2RegionLocationResolveOptions>(options =>
+        Configure<AbpIPLocationResolveOptions>(options =>
         {
             // 仅中国IP不显示国家
             options.UseCountry = (localtion) =>
