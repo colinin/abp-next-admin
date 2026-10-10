@@ -17,7 +17,7 @@ del .\aspire\LINGYUN.Abp.MicroService.WebhookService\Logs /Q
 del .\aspire\LINGYUN.Abp.MicroService.WeChatService\Logs /Q
 del .\aspire\LINGYUN.Abp.MicroService.WorkflowService\Logs /Q
 
-del .\services\LY.MicroService.Applications.Single\Logs /Q
+del .\services\LINGYUN.Abp.MicroService.AllInOne\Logs /Q
 del .\services\LINGYUN.Abp.MicroService.LocalizationService\Logs /Q
 del .\services\LINGYUN.Abp.MicroService.AuthServer\Logs /Q
 del .\services\LINGYUN.Abp.MicroService.AdminService\Logs /Q

@@ -85,7 +85,7 @@ dotnet run --launch-profile "YourPackageName.YourCompanyName.YourProjectName.Dev
 ./build/build-aspnetcore-release.ps1
 ```
 
-3. Open the `LY.MicroService.Applications.Single` solution in your IDE for debugging or publishing
+3. Open the `LINGYUN.Abp.MicroService.AllInOne` solution in your IDE for debugging or publishing
 
 ### Environment Configuration
 
@@ -137,8 +137,8 @@ docker run -d --name sqlserver \
 
 Modify the database connection strings in the following configuration files according to your chosen database:
 
-- `migrations/LY.MicroService.Applications.Single.DbMigrator/appsettings.json`
-- `LY.MicroService.Applications.Single/appsettings.Development.json`
+- `migrations/LINGYUN.Abp.MicroService.AllInOne.DbMigrator/appsettings.json`
+- `LINGYUN.Abp.MicroService.AllInOne/appsettings.Development.json`
 
 Database connection string examples:
 
@@ -249,23 +249,23 @@ Follow the command line prompts to generate migration files and SQL scripts, the
 Option 2:
 Taking PostgreSQL as an example:
 
-- Modify database connection information in `LY.MicroService.Applications.Single.DbMigrator/appsettings.PostgreSql.json`
-- Navigate to `LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql` project
+- Modify database connection information in `LINGYUN.Abp.MicroService.AllInOne.DbMigrator/appsettings.PostgreSql.json`
+- Navigate to `LINGYUN.Abp.MicroService.AllInOne.EntityFrameworkCore.PostgreSql` project
 - Run `dotnet ef database update`
 - Wait for migration completion
 
 2. Configure data initialization:
 
-   - Modify database connection information in `LY.MicroService.Applications.Single.DbMigrator/appsettings.json`
+   - Modify database connection information in `LINGYUN.Abp.MicroService.AllInOne.DbMigrator/appsettings.json`
    - Ensure the correct database provider is selected
 
 3. Execute data migration:
-   - Run the `LY.MicroService.Applications.Single.DbMigrator` project
+   - Run the `LINGYUN.Abp.MicroService.AllInOne.DbMigrator` project
    - Wait for migration to complete, basic table data will be initialized
 
 ### Service Startup
 
-1. Run the `LY.MicroService.Applications.Single` project
+1. Run the `LINGYUN.Abp.MicroService.AllInOne` project
 2. Access Swagger API documentation in your browser:
    - URL: http://127.0.0.1:30000/swagger
 

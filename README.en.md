@@ -197,7 +197,7 @@ apps/vben5/
 │   │   ├── LINGYUN.Abp.MicroService.WorkflowService/   # Workflow service (30050)
 │   │   ├── LINGYUN.Abp.MicroService.WeChatService/     # WeChat service (30060)
 │   │   ├── LINGYUN.Abp.MicroService.AIService/         # AI service (30070)
-│   │   ├── LY.MicroService.Applications.Single/        # Monolith (30000, gateway and all modules merged)
+│   │   ├── LINGYUN.Abp.MicroService.AllInOne/        # Monolith (30000, gateway and all modules merged)
 │   │   ├── LY.MicroService.IdentityServer/             # IdentityServer based services and hosts
 │   │   ├── LINGYUN.Abp.Applications/  LY.AIO.Applications.Single/  # Other hosts
 │   │   └── Publish/             # Publish output directory (used by the container image builds)
@@ -232,7 +232,7 @@ apps/vben5/
 │   ├── tests/                   # Unit test projects
 │   ├── LINGYUN.MicroService.All.slnx            # Full solution
 │   ├── LINGYUN.MicroService.Aspire.slnx         # Aspire solution
-│   └── LINGYUN.MicroService.SingleProject.slnx  # Monolith solution
+│   └── LINGYUN.MicroService.AllInOne.slnx  # Monolith solution
 ├── gateways/
 │   ├── internal/                # Internal gateway (YARP): Internal.Gateway / OpenApi.Gateway + yarp*.json routes
 │   └── web/                     # Web gateway: LY.MicroService.ApiGateway
@@ -369,7 +369,7 @@ docker-compose -f .\docker-compose.middleware.yml -p labp up -d
 # On the first run, wait at least 30 seconds
 
 # 2) Start the monolith
-cd .\aspnet-core\services\LY.MicroService.Applications.Single
+cd .\aspnet-core\services\LINGYUN.Abp.MicroService.AllInOne
 dotnet run --launch-profile Single.MySql.Dev
 
 # 3) Start the frontend
