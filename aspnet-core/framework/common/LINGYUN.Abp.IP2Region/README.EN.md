@@ -119,6 +119,42 @@ Configure<AbpIP2RegionOptions>(options =>
 > concurrent queries interrupt each other's stream positioning, so use them only when queries are serialized.
 > Memory footprint reference: IPv4 database ~10MB, IPv6 database ~35MB.
 
+## Remarks rules
+
+The remarks rules are handled by `LINGYUN.Abp.IP.Location` (shared with other location providers such as MaxMind):
+
+```csharp
+Configure<AbpIPLocationResolveOptions>(options =>
+{
+    // country names removed from the remarks (hide the country for Chinese IPs)
+    options.RemoveCountry = new[] { "中国" };
+    // province names removed from the remarks
+    // options.RemoveProvince = new[] { "香港特别行政区" };
+});
+```
+
+The options can also come from configuration (the `LINGYUN.Abp.IP.Location` module binds the `IPLocation` section):
+
+```json
+{
+  "IPLocation": {
+    "RemoveCountry": [ "中国" ]
+  }
+}
+```
+
+```yaml
+# docker-compose environment
+- IPLocation__RemoveCountry__0=中国
+```
+
+* when the country name matches `RemoveCountry`, the remarks use province and city (e.g. `浙江省杭州市`; city only when
+  province equals city, e.g. `重庆市`; province only, e.g. `香港特别行政区`);
+* when the province name matches `RemoveProvince`, the remarks use the city only (e.g. `杭州市`);
+* when nothing matches, the remarks contain the country name only (e.g. `中国`, `Japan`); when everything is removed,
+  the remarks are empty;
+* name matching ignores case and surrounding whitespace, and applies to the IPs of every country.
+
 ## Special Addresses
 
 * **Invalid, loopback and unspecified addresses** (such as `not-an-ip`, `127.0.0.1`, `::1`, `0.0.0.0`, `::`) are handled
