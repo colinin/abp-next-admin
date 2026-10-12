@@ -157,9 +157,9 @@ public class EfCoreAuditLogManager : IAuditLogManager, ITransientDependency
         bool includeDetails = false,
         CancellationToken cancellationToken = default)
     {
-        var auditLog = await AuditLogRepository.GetAsync(id, includeDetails, cancellationToken);
+        var auditLog = await AuditLogRepository.FindAsync(id, includeDetails, cancellationToken);
 
-        return ObjectMapper.Map<VoloAuditLog, AuditLog>(auditLog);
+        return ObjectMapper.Map<VoloAuditLog?, AuditLog?>(auditLog);
     }
 
     public async virtual Task DeleteAsync(Guid id, CancellationToken cancellationToken = default)
