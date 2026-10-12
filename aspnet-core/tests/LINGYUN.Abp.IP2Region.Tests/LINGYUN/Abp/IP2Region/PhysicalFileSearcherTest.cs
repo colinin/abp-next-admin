@@ -39,7 +39,7 @@ public class PhysicalFileSearcherTest : AbpIP2RegionPhysicalFileTestBase
     }
 
     /// <summary>
-    /// 位置解析使用默认备注规则(国家+省份)
+    /// 位置解析使用默认备注规则(未配置移除列表时仅显示国家名称)
     /// </summary>
     [Fact]
     public async Task TestResolveLocationFromPhysicalFile()
@@ -52,6 +52,6 @@ public class PhysicalFileSearcherTest : AbpIP2RegionPhysicalFileTestBase
         result.Location.Country.ShouldBe("中国");
         result.Location.Province.ShouldBe("浙江省");
         result.Location.City.ShouldBe("杭州市");
-        result.Location.Remarks.ShouldBe("中国浙江省");
+        result.Location.Remarks.ShouldBe("中国");
     }
 }

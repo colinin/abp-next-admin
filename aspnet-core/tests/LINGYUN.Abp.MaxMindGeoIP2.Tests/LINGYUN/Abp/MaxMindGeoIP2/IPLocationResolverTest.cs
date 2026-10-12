@@ -54,8 +54,6 @@ public class IPLocationResolverTest : AbpMaxMindGeoIP2TestBase
     [InlineData("2001:4860:4860::8888", "美国")]
     [InlineData("223.5.5.5", "浙江杭州")]
     [InlineData("2400:3200::1", "浙江杭州")]
-    [InlineData("114.114.114.114", "中国")]
-    [InlineData("180.76.76.76", "中国")]
     [InlineData("103.151.173.211", "日本")]
     [InlineData("2a00:1450:4001:81b::200e", "德国")]
     [InlineData("220.246.0.1", "香港")]
@@ -70,6 +68,25 @@ public class IPLocationResolverTest : AbpMaxMindGeoIP2TestBase
         result.Location.ShouldNotBeNull();
         result.Location.Remarks.ShouldBe(shouldBeRemarks);
         result.AppliedResolvers.ShouldContain(MaxMindGeoIP2IPLocationResolveContributor.ContributorName);
+    }
+
+    /// <summary>
+    /// 国家名称匹配到移除列表(RemoveCountry)时从备注中移除, 仅有国家数据时备注为空
+    /// </summary>
+    [Theory]
+    [InlineData("114.114.114.114")]
+    [InlineData("180.76.76.76")]
+    public async Task TestSearchRemovedCountryOnly(string ip)
+    {
+        UseCulture("zh-CN");
+
+        var resolver = GetRequiredService<IIPLocationResolver>();
+
+        var result = await resolver.ResolveAsync(ip);
+
+        result.Location.ShouldNotBeNull();
+        result.Location.Country.ShouldBe("中国");
+        result.Location.Remarks.ShouldBeNullOrEmpty();
     }
 
     /// <summary>
