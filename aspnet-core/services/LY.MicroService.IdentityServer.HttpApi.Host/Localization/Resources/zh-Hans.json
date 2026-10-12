@@ -1,9 +1,0 @@
-﻿{
-  "culture": "zh-Hans",
-  "texts": {
-    "DisplayName:Abp.Identity.SignIn.EnablePhoneNumberConfirmation": "启用电话号码确认",
-    "Description:Abp.Identity.SignIn.EnablePhoneNumberConfirmation": "用户是否可以确认电话号码.",
-    "Identity.OrganizationUnit.MaxUserMembershipCount": "最大组织机构数",
-    "Description:Abp.Identity.OrganizationUnit.MaxUserMembershipCount": "单个用户允许加入的最大组织机构数."
-  }
-}
