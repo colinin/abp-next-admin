@@ -13,10 +13,8 @@ public class AbpMaxMindGeoIP2TestModule : AbpModule
     {
         Configure<AbpIPLocationResolveOptions>(options =>
         {
-            // 仅中国IP不显示国家
-            options.UseCountry = (location) => !string.Equals("中国", location.Country);
-            // 仅中国IP显示省份
-            options.UseProvince = (location) => string.Equals("中国", location.Country);
+            // 中国IP不显示国家(从备注中移除)
+            options.RemoveCountry = new[] { "中国" };
         });
     }
 }

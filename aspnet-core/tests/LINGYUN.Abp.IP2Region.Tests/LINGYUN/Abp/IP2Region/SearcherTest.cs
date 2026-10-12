@@ -41,7 +41,7 @@ public class SearcherTest : AbpIP2RegionTestBase
     [InlineData("8.8.8.8", "United States")]
     [InlineData("36.133.108.1", "重庆市")]
     [InlineData("111.26.31.1", "吉林省吉林市")]
-    [InlineData("220.246.0.1", "中国香港特别行政区")]
+    [InlineData("220.246.0.1", "香港特别行政区")]
     [InlineData("103.151.173.211", "Japan")]
     [InlineData("103.151.191.5", "Indonesia")]
     public async Task TestSearchLocation(string ip, string shouldBeRemarks)
