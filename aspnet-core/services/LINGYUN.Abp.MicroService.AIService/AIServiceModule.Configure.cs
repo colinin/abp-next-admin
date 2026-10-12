@@ -398,6 +398,7 @@ public partial class AIServiceModule
                 {
                     options.TokenValidationParameters.ValidIssuers = validIssuers;
                     options.TokenValidationParameters.IssuerValidator = TokenWildcardIssuerValidator.IssuerValidator;
+                    options.TokenValidationParameters.IssuerValidatorUsingConfiguration = TokenWildcardIssuerValidator.IssuerValidatorUsingConfiguration;
                 }
                 var validAudiences = configuration.GetSection("AuthServer:ValidAudiences").Get<List<string>>();
                 if (validAudiences?.Count > 0)

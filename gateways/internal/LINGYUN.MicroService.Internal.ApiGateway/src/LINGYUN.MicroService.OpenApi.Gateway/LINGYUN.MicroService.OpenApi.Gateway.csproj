@@ -50,4 +50,9 @@
 	  </None>
 	</ItemGroup>
 
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\..\..\..\aspnet-core\framework\auditing\LINGYUN.Abp.AuditLogging.IP.Location\LINGYUN.Abp.AuditLogging.IP.Location.csproj" />
+		<ProjectReference Include="..\..\..\..\..\aspnet-core\framework\common\LINGYUN.Abp.MaxMindGeoIP2\LINGYUN.Abp.MaxMindGeoIP2.csproj" />
+	</ItemGroup>
 </Project>

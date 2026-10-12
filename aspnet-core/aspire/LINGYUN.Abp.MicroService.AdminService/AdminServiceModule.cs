@@ -2,6 +2,7 @@
 using LINGYUN.Abp.AspNetCore.HttpOverrides;
 using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
 using LINGYUN.Abp.AspNetCore.Session;
+using LINGYUN.Abp.AuditLogging.IP.Location;
 using LINGYUN.Abp.Auditing;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
 using LINGYUN.Abp.BlobManagement.SettingManagement;
@@ -18,6 +19,7 @@ using LINGYUN.Abp.FeatureManagement;
 using LINGYUN.Abp.FeatureManagement.HttpApi;
 using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.Logging.Serilog.Elasticsearch;
+using LINGYUN.Abp.MaxMindGeoIP2;
 using LINGYUN.Abp.PermissionManagement;
 using LINGYUN.Abp.PermissionManagement.HttpApi;
 using LINGYUN.Abp.PermissionManagement.OrganizationUnits;
@@ -51,6 +53,8 @@ namespace LINGYUN.Abp.MicroService.AdminService;
     typeof(AbpAspNetCoreSerilogModule),
     typeof(AbpLoggingSerilogElasticsearchModule),
     typeof(AbpAuditLoggingElasticsearchModule),
+    typeof(AbpAuditLoggingIPLocationModule),
+    typeof(AbpMaxMindGeoIP2Module),
     typeof(AbpAspNetCoreMvcUiMultiTenancyModule),
 
     // 设置管理

@@ -1,5 +1,7 @@
 ﻿using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
 using LINGYUN.Abp.AspNetCore.Session;
+using LINGYUN.Abp.AuditLogging.IP.Location;
+using LINGYUN.Abp.MaxMindGeoIP2;
 using LINGYUN.Abp.OpenApi.Authorization;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
@@ -37,7 +39,9 @@ namespace LINGYUN.MicroService.OpenApi.Gateway;
     typeof(AbpAspNetCoreSessionModule),
     typeof(AbpAspNetCoreMvcWrapperModule),
     typeof(AbpOpenApiAuthorizationModule),
-    typeof(AbpCachingStackExchangeRedisModule)
+    typeof(AbpCachingStackExchangeRedisModule),
+    typeof(AbpAuditLoggingIPLocationModule),
+    typeof(AbpMaxMindGeoIP2Module)
 )]
 public class OpenApiGatewayModule : AbpModule
 {

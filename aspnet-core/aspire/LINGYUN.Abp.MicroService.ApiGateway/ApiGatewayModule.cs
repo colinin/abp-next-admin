@@ -1,4 +1,6 @@
 ﻿using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
+using LINGYUN.Abp.AuditLogging.IP.Location;
+using LINGYUN.Abp.MaxMindGeoIP2;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -30,7 +32,9 @@ namespace LINGYUN.Abp.MicroService.ApiGateway;
     typeof(AbpDataModule),
     typeof(AbpSwashbuckleModule),
     typeof(AbpAspNetCoreSerilogModule),
-    typeof(AbpAspNetCoreMvcWrapperModule)
+    typeof(AbpAspNetCoreMvcWrapperModule),
+    typeof(AbpAuditLoggingIPLocationModule),
+    typeof(AbpMaxMindGeoIP2Module)
 )]
 public class ApiGatewayModule : AbpModule
 {
