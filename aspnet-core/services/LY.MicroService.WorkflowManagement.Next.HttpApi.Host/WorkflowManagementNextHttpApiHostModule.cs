@@ -17,7 +17,9 @@ using Elsa.Studio.Translations;
 using Elsa.Studio.Workflows.Designer.Extensions;
 using Elsa.Studio.Workflows.Extensions;
 using Elsa.Workflows;
+using LINGYUN.Abp.AuditLogging.IP.Location;
 using LINGYUN.Abp.ElsaNext.Server;
+using LINGYUN.Abp.MaxMindGeoIP2;
 using Microsoft.OpenApi.Models;
 using Volo.Abp.AspNetCore.Authentication.JwtBearer;
 using Volo.Abp.AspNetCore.MultiTenancy;
@@ -30,7 +32,7 @@ using Volo.Abp.Swashbuckle;
 
 namespace LY.MicroService.WorkflowManagement.Next;
 
-[DependsOn(typeof(AbpElsaNextServerModule))]
+[DependsOn(typeof(AbpElsaNextServerModule), typeof(AbpAuditLoggingIPLocationModule), typeof(AbpMaxMindGeoIP2Module))]
 [DependsOn(typeof(AbpAspNetCoreSerilogModule))]
 [DependsOn(typeof(AbpAspNetCoreMultiTenancyModule))]
 [DependsOn(typeof(AbpAspNetCoreAuthenticationJwtBearerModule))]

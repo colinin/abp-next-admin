@@ -3,6 +3,7 @@ using LINGYUN.Abp.AspNetCore.HttpOverrides;
 using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
 using LINGYUN.Abp.AspNetCore.Session;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
+using LINGYUN.Abp.AuditLogging.IP.Location;
 using LINGYUN.Abp.Authorization.OrganizationUnits;
 using LINGYUN.Abp.BlobStoring.BlobManagement;
 using LINGYUN.Abp.AspNetCore.Authentication;
@@ -19,6 +20,7 @@ using LINGYUN.Abp.Identity.AspNetCore;
 using LINGYUN.Abp.Identity.EntityFrameworkCore;
 using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
+using LINGYUN.Abp.MaxMindGeoIP2;
 using LINGYUN.Abp.OpenIddict;
 using LINGYUN.Abp.Saas.EntityFrameworkCore;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
@@ -70,6 +72,8 @@ namespace LINGYUN.Abp.MicroService.IdentityService;
     typeof(AbpLocalizationManagementEntityFrameworkCoreModule),
     typeof(AbpAuthorizationOrganizationUnitsModule),
     typeof(AbpAuditLoggingElasticsearchModule),
+    typeof(AbpAuditLoggingIPLocationModule),
+    typeof(AbpMaxMindGeoIP2Module),
     typeof(AbpEmailingExceptionHandlingModule),
     typeof(AbpBlobStoringBlobManagementModule),
     typeof(AbpHttpClientIdentityModelWebModule),

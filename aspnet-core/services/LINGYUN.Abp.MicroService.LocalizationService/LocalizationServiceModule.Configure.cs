@@ -353,6 +353,7 @@ public partial class LocalizationServiceModule
                 {
                     options.TokenValidationParameters.ValidIssuers = validIssuers;
                     options.TokenValidationParameters.IssuerValidator = TokenWildcardIssuerValidator.IssuerValidator;
+                    options.TokenValidationParameters.IssuerValidatorUsingConfiguration = TokenWildcardIssuerValidator.IssuerValidatorUsingConfiguration;
                 }
                 if (validAudiences?.Count > 0)
                 {

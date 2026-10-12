@@ -2,6 +2,7 @@
 using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
 using LINGYUN.Abp.AspNetCore.Session;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
+using LINGYUN.Abp.AuditLogging.IP.Location;
 using LINGYUN.Abp.Authorization.OrganizationUnits;
 using LINGYUN.Abp.BackgroundTasks.DistributedLocking;
 using LINGYUN.Abp.BackgroundTasks.Jobs;
@@ -19,6 +20,7 @@ using LINGYUN.Abp.Identity.EntityFrameworkCore;
 using LINGYUN.Abp.Identity.Jobs;
 using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
+using LINGYUN.Abp.MaxMindGeoIP2;
 using LINGYUN.Abp.Saas.EntityFrameworkCore;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
@@ -50,6 +52,8 @@ namespace LINGYUN.Abp.MicroService.TaskService;
     typeof(AbpSerilogEnrichersApplicationModule),
     typeof(AbpSerilogEnrichersUniqueIdModule),
     typeof(AbpAuditLoggingElasticsearchModule),
+    typeof(AbpAuditLoggingIPLocationModule),
+    typeof(AbpMaxMindGeoIP2Module),
     typeof(AbpAspNetCoreSerilogModule),
     typeof(AbpDistributedLockingModule),
     typeof(AbpAspNetCoreAuthenticationJwtBearerModule),

@@ -86,4 +86,9 @@
 		<ProjectReference Include="..\..\modules\saas\LINGYUN.Abp.Saas.EntityFrameworkCore\LINGYUN.Abp.Saas.EntityFrameworkCore.csproj" />
 	</ItemGroup>
 
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\framework\auditing\LINGYUN.Abp.AuditLogging.IP.Location\LINGYUN.Abp.AuditLogging.IP.Location.csproj" />
+		<ProjectReference Include="..\..\framework\common\LINGYUN.Abp.MaxMindGeoIP2\LINGYUN.Abp.MaxMindGeoIP2.csproj" />
+	</ItemGroup>
 </Project>

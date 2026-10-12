@@ -2,6 +2,7 @@
 using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
 using LINGYUN.Abp.AspNetCore.Session;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
+using LINGYUN.Abp.AuditLogging.IP.Location;
 using LINGYUN.Abp.Authorization.OrganizationUnits;
 using LINGYUN.Abp.AspNetCore.Authentication;
 using LINGYUN.Abp.Data.DbMigrator;
@@ -11,6 +12,7 @@ using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.LocalizationManagement;
 using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
+using LINGYUN.Abp.MaxMindGeoIP2;
 using LINGYUN.Abp.Saas.EntityFrameworkCore;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
@@ -37,6 +39,8 @@ namespace LINGYUN.Abp.MicroService.LocalizationService;
     typeof(AbpSerilogEnrichersUniqueIdModule),
     typeof(AbpAspNetCoreSerilogModule),
     typeof(AbpAuditLoggingElasticsearchModule),
+    typeof(AbpAuditLoggingIPLocationModule),
+    typeof(AbpMaxMindGeoIP2Module),
     typeof(AbpAspNetCoreMultiTenancyModule),
     typeof(AbpLocalizationManagementApplicationModule),
     typeof(AbpLocalizationManagementHttpApiModule),

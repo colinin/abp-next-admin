@@ -1,6 +1,8 @@
 ﻿using Autofac.Core;
 using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
 using LINGYUN.Abp.AspNetCore.Authentication;
+using LINGYUN.Abp.AuditLogging.IP.Location;
+using LINGYUN.Abp.MaxMindGeoIP2;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -40,7 +42,9 @@ namespace LINGYUN.MicroService.Internal.Gateway;
     typeof(AbpDataModule),
     typeof(AbpSwashbuckleModule),
     typeof(AbpAspNetCoreSerilogModule),
-    typeof(AbpAspNetCoreMvcWrapperModule)
+    typeof(AbpAspNetCoreMvcWrapperModule),
+    typeof(AbpAuditLoggingIPLocationModule),
+    typeof(AbpMaxMindGeoIP2Module)
 )]
 public class InternalGatewayModule : AbpModule
 {
@@ -112,6 +116,7 @@ public class InternalGatewayModule : AbpModule
                 {
                     options.TokenValidationParameters.ValidIssuers = validIssuers;
                     options.TokenValidationParameters.IssuerValidator = TokenWildcardIssuerValidator.IssuerValidator;
+                    options.TokenValidationParameters.IssuerValidatorUsingConfiguration = TokenWildcardIssuerValidator.IssuerValidatorUsingConfiguration;
                 }
                 if (validAudiences?.Count > 0)
                 {
