@@ -92,7 +92,7 @@ public class MaxMindGeoIP2IPLocationResolveContributor : IPLocationResolveContri
 
         foreach (var item in entity.Names)
         {
-            if (string.Equals(item.Key, culture, StringComparison.OrdinalIgnoreCase))
+            if (item.Key.Contains(culture, StringComparison.OrdinalIgnoreCase))
             {
                 return item.Value;
             }

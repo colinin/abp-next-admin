@@ -103,19 +103,38 @@ The remarks rules are handled by `LINGYUN.Abp.IP.Location` and shared with `LING
 ```csharp
 Configure<AbpIPLocationResolveOptions>(options =>
 {
-    // hide the country for Chinese IPs
-    options.UseCountry = location => !string.Equals("中国", location.Country);
-    // show the province for Chinese IPs
-    options.UseProvince = location => string.Equals("中国", location.Country);
+    // country names removed from the remarks (hide the country for Chinese IPs)
+    options.RemoveCountry = new[] { "中国" };
+    // province names removed from the remarks
+    // options.RemoveProvince = new[] { "香港特别行政区" };
 });
+```
+
+The options can also come from configuration (the `LINGYUN.Abp.IP.Location` module binds the `IPLocation` section):
+
+```json
+{
+  "IPLocation": {
+    "RemoveCountry": [ "中国" ]
+  }
+}
+```
+
+```yaml
+# docker-compose environment
+- IPLocation__RemoveCountry__0=中国
 ```
 
 | Scenario | `Remarks` example |
 |---|---|
-| China with province and city | `浙江杭州` (city only when province equals city) |
-| China with country only | `中国` |
-| Other countries | `美国`, `日本`, `德国` |
+| Country matches `RemoveCountry`, province and city present | `浙江杭州` (city only when province equals city) |
+| Country matches `RemoveCountry`, province only | `香港特别行政区` |
+| Country matches `RemoveCountry`, country data only | empty |
+| Province matches `RemoveProvince` | `杭州` (city only) |
+| Nothing matches | `美国`, `日本`, `德国` (country only) |
 | Loopback / private / reserved / not in database | empty |
+
+> Name matching ignores case and surrounding whitespace, and applies to the IPs of every country.
 
 ## Performance
 

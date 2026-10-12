@@ -101,19 +101,38 @@ Configure<AbpMaxMindGeoIP2Options>(options =>
 ```csharp
 Configure<AbpIPLocationResolveOptions>(options =>
 {
-    // 仅中国IP不显示国家
-    options.UseCountry = location => !string.Equals("中国", location.Country);
-    // 仅中国IP显示省份
-    options.UseProvince = location => string.Equals("中国", location.Country);
+    // 匹配到的国家名称从备注中移除(仅中国IP不显示国家)
+    options.RemoveCountry = new[] { "中国" };
+    // 匹配到的省份名称从备注中移除
+    // options.RemoveProvince = new[] { "香港特别行政区" };
 });
+```
+
+也可以直接使用配置节(`LINGYUN.Abp.IP.Location` 模块绑定 `IPLocation` 节)：
+
+```json
+{
+  "IPLocation": {
+    "RemoveCountry": [ "中国" ]
+  }
+}
+```
+
+```yaml
+# docker-compose environment
+- IPLocation__RemoveCountry__0=中国
 ```
 
 | 场景 | `Remarks` 示例 |
 |---|---|
-| 中国且有省份与城市 | `浙江杭州`(省市同名时仅显示市) |
-| 中国且仅有国家 | `中国` |
-| 其它国家 | `美国`、`日本`、`德国` |
+| 国家名称匹配 `RemoveCountry`，且有省份与城市 | `浙江杭州`(省市同名时仅显示市，如 `重庆市`) |
+| 国家名称匹配 `RemoveCountry`，且仅有省份 | `香港特别行政区` |
+| 国家名称匹配 `RemoveCountry`，且仅有国家数据 | 空 |
+| 省份名称匹配 `RemoveProvince` | `杭州`(仅使用城市) |
+| 都未匹配 | `美国`、`日本`、`德国`(仅国家名称) |
 | 本地回环 / 内网 / 保留 / 离线库未收录 | 空 |
+
+> 名称匹配忽略大小写与首尾空白，适用于所有国家的 IP 地址解析。
 
 ## 性能基准
 

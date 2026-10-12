@@ -124,14 +124,32 @@ Configure<AbpIP2RegionOptions>(options =>
 ```csharp
 Configure<AbpIPLocationResolveOptions>(options =>
 {
-    // 仅中国IP不显示国家
-    options.UseCountry = location => !string.Equals("中国", location.Country);
-    // 仅中国IP显示省份
-    options.UseProvince = location => string.Equals("中国", location.Country);
+    // 匹配到的国家名称从备注中移除(仅中国IP不显示国家)
+    options.RemoveCountry = new[] { "中国" };
+    // 匹配到的省份名称从备注中移除
+    // options.RemoveProvince = new[] { "香港特别行政区" };
 });
 ```
 
-默认(两者均为 `true`)时：有省份与城市则显示"省份+城市"(如 `浙江杭州`)，否则显示国家(如 `中国`、`日本`)。
+也可以直接使用配置节(`LINGYUN.Abp.IP.Location` 模块绑定 `IPLocation` 节)：
+
+```json
+{
+  "IPLocation": {
+    "RemoveCountry": [ "中国" ]
+  }
+}
+```
+
+```yaml
+# docker-compose environment
+- IPLocation__RemoveCountry__0=中国
+```
+
+* 国家名称匹配到 `RemoveCountry` 时，备注使用省份与城市(如 `浙江省杭州市`；省市同名时仅显示市，如 `重庆市`；仅有省份时为 `香港特别行政区`)；
+* 省份名称匹配到 `RemoveProvince` 时，备注仅使用城市(如 `杭州市`)；
+* 都未匹配时，备注仅显示国家名称(如 `中国`、`Japan`)；匹配到的名称被移除后没有可显示的层级时备注为空；
+* 名称匹配忽略大小写与首尾空白，适用于所有国家的 IP 地址解析。
 
 ## 特殊地址处理
 
