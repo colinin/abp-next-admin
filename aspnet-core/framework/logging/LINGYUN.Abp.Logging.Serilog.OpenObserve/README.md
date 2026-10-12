@@ -100,4 +100,10 @@ var log = await _loggingManager.GetAsync(id);
 * 线程ID（threadId）
 * 是否包含异常（hasException）
 
+## 依赖的公共组件
+
+* 连接与序列化: `LINGYUN.Abp.OpenObserve`（`OpenObserveClient`、`IOpenObserveSerializer`、`AbpOpenObserveOptions`）
+* 查询条件与 SQL 构建: `LINGYUN.Abp.OpenObserve.Utils` 下的 `ExpressionParser`、`Condition`、`ComparisonOp`
+  以及 `OpenObserveSqlBuilder`
+
 ## 注意事项
