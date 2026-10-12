@@ -1,4 +1,4 @@
-﻿using Moq.AutoMock;
+using Moq.AutoMock;
 using Newtonsoft.Json;
 using Shouldly;
 using System;
@@ -40,7 +40,7 @@ public abstract class AuditLogManager_Tests<TStartupModule> : AbpIntegratedTest<
         auditLog.ShouldNotBeNull();
         auditLog.Id.ShouldBe(findId);
 
-        await _manager.DeleteAsync(findId);
+        await DeleteAsync(findId);
     }
 
     [Fact]
@@ -89,7 +89,7 @@ public abstract class AuditLogManager_Tests<TStartupModule> : AbpIntegratedTest<
         logs[0].BrowserInfo.ShouldBe("_browser_5");
         logs[0].ApplicationName.ShouldBe("_app_5");
 
-        await _manager.DeleteManyAsync(logs.Select(x => x.Id).ToList());
+        await DeleteManyAsync(logs.Select(x => x.Id).ToList());
     }
 
     [Fact]
@@ -140,7 +140,7 @@ public abstract class AuditLogManager_Tests<TStartupModule> : AbpIntegratedTest<
         logs[0].BrowserInfo.ShouldBe("_browser_5");
         logs[0].ApplicationName.ShouldBe("_app_5");
 
-        await _manager.DeleteManyAsync(logs.Select(x => x.Id).ToList());
+        await DeleteManyAsync(logs.Select(x => x.Id).ToList());
     }
 
     protected async virtual Task<List<string>> MockcAsync(int count)
@@ -194,5 +194,24 @@ public abstract class AuditLogManager_Tests<TStartupModule> : AbpIntegratedTest<
         }
 
         return auditLogIds;
+    }
+
+    /// <summary>
+    /// 删除单条审计日志
+    /// </summary>
+    /// <remarks>
+    /// 存储实现不支持删除时可覆写(例如断言抛出的业务异常)
+    /// </remarks>
+    protected virtual Task DeleteAsync(Guid id)
+    {
+        return _manager.DeleteAsync(id);
+    }
+
+    /// <summary>
+    /// 批量删除审计日志
+    /// </summary>
+    protected virtual Task DeleteManyAsync(List<Guid> ids)
+    {
+        return _manager.DeleteManyAsync(ids);
     }
 }
