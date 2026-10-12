@@ -1,4 +1,6 @@
 ﻿using LINGYUN.Abp.Elasticsearch;
+using LINGYUN.Abp.Serilog.Enrichers.Application;
+using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Json;
 using Volo.Abp.Mapperly;
@@ -7,6 +9,8 @@ using Volo.Abp.Modularity;
 namespace LINGYUN.Abp.Logging.Serilog.Elasticsearch;
 
 [DependsOn(
+    typeof(AbpSerilogEnrichersApplicationModule),
+    typeof(AbpSerilogEnrichersUniqueIdModule),
     typeof(AbpLoggingModule),
     typeof(AbpElasticsearchModule),
     typeof(AbpMapperlyModule),
