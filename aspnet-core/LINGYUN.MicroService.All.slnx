@@ -111,6 +111,7 @@
     <Project Path="framework/auditing/LINGYUN.Abp.AuditLogging.Elasticsearch/LINGYUN.Abp.AuditLogging.Elasticsearch.csproj" />
     <Project Path="framework/auditing/LINGYUN.Abp.AuditLogging.EntityFrameworkCore/LINGYUN.Abp.AuditLogging.EntityFrameworkCore.csproj" />
     <Project Path="framework/auditing/LINGYUN.Abp.AuditLogging.IP.Location/LINGYUN.Abp.AuditLogging.IP.Location.csproj" />
+    <Project Path="framework/auditing/LINGYUN.Abp.AuditLogging.OpenObserve/LINGYUN.Abp.AuditLogging.OpenObserve.csproj" Id="200a389b-12a2-4739-bbac-1bd4453c82bb" />
     <Project Path="framework/auditing/LINGYUN.Abp.AuditLogging/LINGYUN.Abp.AuditLogging.csproj" />
   </Folder>
   <Folder Name="/framework/authorization/">
@@ -569,6 +570,7 @@
   <Folder Name="/tests/">
     <Project Path="tests/LINGYUN.Abp.Aliyun.Tests/LINGYUN.Abp.Aliyun.Tests.csproj" />
     <Project Path="tests/LINGYUN.Abp.AuditLogging.Elasticsearch.Tests/LINGYUN.Abp.AuditLogging.Elasticsearch.Tests.csproj" />
+    <Project Path="tests/LINGYUN.Abp.AuditLogging.OpenObserve.Tests/LINGYUN.Abp.AuditLogging.OpenObserve.Tests.csproj" Id="f50b2bf9-6a77-4ee7-9da7-a60a4a4023a3" />
     <Project Path="tests/LINGYUN.Abp.AuditLogging.Tests/LINGYUN.Abp.AuditLogging.Tests.csproj" Id="a360d3e3-0cef-433c-a866-77abd64d8a52" />
     <Project Path="tests/LINGYUN.Abp.BlobStoring.Aliyun.Tests/LINGYUN.Abp.BlobStoring.Aliyun.Tests.csproj" />
     <Project Path="tests/LINGYUN.Abp.BlobStoring.Nexus.Tests/LINGYUN.Abp.BlobStoring.Nexus.Tests.csproj" />

@@ -1,5 +1,8 @@
-﻿namespace LINGYUN.Abp.Logging.Serilog.OpenObserve.Utils;
+namespace LINGYUN.Abp.OpenObserve.Utils;
 
+/// <summary>
+/// 比较操作符
+/// </summary>
 public enum ComparisonOp
 {
     Equal,

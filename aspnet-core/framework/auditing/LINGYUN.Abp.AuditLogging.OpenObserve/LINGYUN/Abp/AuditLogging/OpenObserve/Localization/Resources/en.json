@@ -1,0 +1,6 @@
+{
+  "culture": "en",
+  "texts": {
+    "AuditLoggingOpenObserve:010001": "The current logging facility does not support deleting records!"
+  }
+}

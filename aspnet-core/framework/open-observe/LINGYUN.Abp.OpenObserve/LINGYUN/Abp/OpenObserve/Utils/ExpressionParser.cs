@@ -1,8 +1,19 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
-namespace LINGYUN.Abp.Logging.Serilog.OpenObserve.Utils;
 
+namespace LINGYUN.Abp.OpenObserve.Utils;
+
+/// <summary>
+/// 从 <see cref="Expression{TDelegate}"/> 中提取查询条件
+/// </summary>
+/// <remarks>
+/// 支持的操作:
+/// * 比较: ==, !=, &gt;, &gt;=, &lt;, &lt;=
+/// * 逻辑: &amp;&amp;, ||, !(取反时忽略操作符)
+/// * 方法: Contains / StartsWith / EndsWith / Enumerable.Contains / Any(集合成员)
+/// * null 判断: == null, != null
+/// </remarks>
 public static class ExpressionParser
 {
     public static List<Condition> ExtractFields<T>(Expression<Func<T, bool>> expression)
@@ -86,27 +97,29 @@ public static class ExpressionParser
 
     private static void ParseMethodCall(MethodCallExpression methodCall, List<Condition> result)
     {
+        // 集合成员查询: x.Actions.Any(a => a.Parameters.Contains(".."))
+        // Enumerable.Any 是静态扩展方法, Object 为 null, 需要在此处处理
+        if (methodCall.Method.Name == "Any" && methodCall.Arguments.Count == 2)
+        {
+            var collectionPath = GetMemberPath(methodCall.Arguments[0]);
+            var predicate = (LambdaExpression)StripQuote(methodCall.Arguments[1]);
+            var innerConditions = new List<Condition>();
+            ParseNode(predicate.Body, innerConditions);
+
+            foreach (var inner in innerConditions)
+            {
+                var fullField = string.IsNullOrEmpty(collectionPath)
+                    ? inner.Field
+                    : $"{collectionPath}.{inner.Field}";
+                result.Add(new Condition(fullField, inner.Op, inner.Value));
+            }
+            return;
+        }
+
         if (methodCall.Object != null && IsMemberAccess(methodCall.Object))
         {
             var fieldName = GetMemberPath(methodCall.Object);
             var methodName = methodCall.Method.Name;
-
-            if (methodCall.Method.Name == "Any" && methodCall.Arguments.Count == 2)
-            {
-                var collectionPath = GetMemberPath(methodCall.Arguments[0]);
-                var predicate = (LambdaExpression)StripQuote(methodCall.Arguments[1]);
-                var innerConditions = new List<Condition>();
-                ParseNode(predicate.Body, innerConditions);
-
-                foreach (var inner in innerConditions)
-                {
-                    var fullField = string.IsNullOrEmpty(collectionPath)
-                        ? inner.Field
-                        : $"{collectionPath}.{inner.Field}";
-                    result.Add(new Condition(fullField, inner.Op, inner.Value));
-                }
-                return;
-            }
 
             if (methodCall.Arguments.Count == 1)
             {
