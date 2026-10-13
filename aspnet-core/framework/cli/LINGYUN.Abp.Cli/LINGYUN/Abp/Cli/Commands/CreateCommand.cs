@@ -177,7 +177,7 @@ namespace LINGYUN.Abp.Cli.Commands
             return "Generate a new solution based on the customed ABP startup templates.";
         }
 
-        public string GetUsageInfo()
+        public virtual string GetUsageInfo()
         {
             var sb = new StringBuilder();
 

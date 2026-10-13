@@ -20,11 +20,13 @@
 
 	<ItemGroup>
 		<None Include="README.md" Pack="true" PackagePath="\" />
+		<None Remove="ClientProxies\*.json" />
 		<None Remove="LINGYUN\Abp\Cli\UI\Vben\Templates\*.tpl" />
-		<EmbeddedResource Include="LINGYUN\Abp\Cli\UI\Vben\Templates\*.tpl" />
 		<None Remove="LINGYUN\Abp\Cli\UI\Flutter\GetX\Templates\*.tpl" />
-		<EmbeddedResource Include="LINGYUN\Abp\Cli\UI\Flutter\GetX\Templates\*.tpl" />
 		<EmbeddedResource Include="README.md" />
+		<EmbeddedResource Include="ClientProxies\*.json" />
+		<EmbeddedResource Include="LINGYUN\Abp\Cli\UI\Vben\Templates\*.tpl" />
+		<EmbeddedResource Include="LINGYUN\Abp\Cli\UI\Flutter\GetX\Templates\*.tpl" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -37,6 +39,8 @@
 		<PackageReference Include="Microsoft.Extensions.Configuration.Binder" />
 		<PackageReference Include="Volo.Abp.Autofac" />
 		<PackageReference Include="Volo.Abp.Cli.Core" />
+		<PackageReference Include="Volo.Abp.Ddd.Application.Contracts" />
+		<PackageReference Include="Volo.Abp.Http.Client" />
 		<PackageReference Include="Volo.Abp.TextTemplating.Scriban" />
 	</ItemGroup>
 
