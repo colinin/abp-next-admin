@@ -1,4 +1,4 @@
-﻿using JetBrains.Annotations;
+using JetBrains.Annotations;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -54,7 +54,7 @@ public class Blob : AuditedAggregateRoot<Guid>, IMultiTenant
         Guid? parentId = null) : base(id)
     {
         ContainerId = containerId;
-        Name = Check.NotNullOrWhiteSpace(name, nameof(name), BlobConsts.MaxNameLength);
+        SetName(name);
         Type = type;
         Size = size ?? 0L;
         ParentId = parentId;
@@ -68,6 +68,17 @@ public class Blob : AuditedAggregateRoot<Guid>, IMultiTenant
         this.SetDefaultsForExtraProperties();
     }
 
+    /// <summary>
+    /// 设置文件/目录名称
+    /// </summary>
+    public void SetName([NotNull] string name)
+    {
+        Name = Check.NotNullOrWhiteSpace(name, nameof(name), BlobConsts.MaxNameLength);
+
+        // 名称是当前目录下的单一路径段, 会参与 FullName 组合
+        BlobManagementNameValidator.CheckName(Name, BlobManagementErrorCodes.Blob.InvalidName);
+    }
+
     public void MoveTo(Blob parentBlob)
     {
         ValidateSubBlob(parentBlob, Name);
@@ -76,9 +87,14 @@ public class Blob : AuditedAggregateRoot<Guid>, IMultiTenant
         parentBlob.CalculateSize();
     }
 
+    /// <summary>
+    /// 设置全名(相对容器根目录的路径)
+    /// </summary>
     public void SetFullName(string fullName)
     {
         FullName = Check.NotNullOrWhiteSpace(fullName, nameof(fullName), BlobConsts.MaxFullNameLength);
+
+        BlobManagementNameValidator.CheckPath(FullName, BlobManagementErrorCodes.Blob.InvalidName);
     }
 
     public void SetProvider(string provider)
