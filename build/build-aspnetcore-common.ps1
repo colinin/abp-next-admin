@@ -19,18 +19,18 @@ $serviceArray += [PsObject]@{ Path = $rootFolder + "/../gateways/internal/LINGYU
 $serviceArray += [PsObject]@{ Path = $rootFolder + "/../gateways/internal/LINGYUN.MicroService.Internal.ApiGateway/src/LINGYUN.MicroService.OpenApi.Gateway/"; Service = "openapi-apigateway" }
 
 [PsObject[]]$dockerArray = @()
-$dockerArray += [PsObject]@{ Dockerfile = $rootFolder + "/../aspnet-core/services/LINGYUN.Abp.MicroService.LocalizationService/Dockerfile"; Image = "labp-localization-service"; Version = "10.6.0" }
-$dockerArray += [PsObject]@{ Dockerfile = $rootFolder + "/../aspnet-core/services/LINGYUN.Abp.MicroService.AuthServer/Dockerfile"; Image = "labp-auth-server"; Version = "10.6.0" }
-$dockerArray += [PsObject]@{ Dockerfile = $rootFolder + "/../aspnet-core/services/LINGYUN.Abp.MicroService.AdminService/Dockerfile"; Image = "labp-admin-service"; Version = "10.6.0" }
-$dockerArray += [PsObject]@{ Dockerfile = $rootFolder + "/../aspnet-core/services/LINGYUN.Abp.MicroService.IdentityService/Dockerfile"; Image = "labp-identity-service"; Version = "10.6.0" }
-$dockerArray += [PsObject]@{ Dockerfile = $rootFolder + "/../aspnet-core/services/LINGYUN.Abp.MicroService.PlatformService/Dockerfile"; Image = "labp-platform-service"; Version = "10.6.0" }
-$dockerArray += [PsObject]@{ Dockerfile = $rootFolder + "/../aspnet-core/services/LINGYUN.Abp.MicroService.TaskService/Dockerfile"; Image = "labp-task-service"; Version = "10.6.0" }
-$dockerArray += [PsObject]@{ Dockerfile = $rootFolder + "/../aspnet-core/services/LINGYUN.Abp.MicroService.MessageService/Dockerfile"; Image = "labp-message-service"; Version = "10.6.0" }
-$dockerArray += [PsObject]@{ Dockerfile = $rootFolder + "/../aspnet-core/services/LINGYUN.Abp.MicroService.WebhookService/Dockerfile"; Image = "labp-webhook-service"; Version = "10.6.0" }
-$dockerArray += [PsObject]@{ Dockerfile = $rootFolder + "/../aspnet-core/services/LINGYUN.Abp.MicroService.WeChatService/Dockerfile"; Image = "labp-wechat-service"; Version = "10.6.0" }
-$dockerArray += [PsObject]@{ Dockerfile = $rootFolder + "/../aspnet-core/services/LINGYUN.Abp.MicroService.WorkflowService/Dockerfile"; Image = "labp-workflow-service"; Version = "10.6.0" }
-$dockerArray += [PsObject]@{ Dockerfile = $rootFolder + "/../aspnet-core/services/LINGYUN.Abp.MicroService.AIService/Dockerfile"; Image = "labp-ai-service"; Version = "10.6.0" }
-$dockerArray += [PsObject]@{ Dockerfile = $rootFolder + "/../gateways/internal/LINGYUN.MicroService.Internal.ApiGateway/src/LINGYUN.MicroService.Internal.Gateway/Dockerfile"; Image = "labp-internal-apigateway"; Version = "10.6.0" }
+$dockerArray += [PsObject]@{ Dockerfile = $rootFolder + "/../aspnet-core/services/LINGYUN.Abp.MicroService.LocalizationService/Dockerfile"; Image = "labp-localization-service"; Version = "10.7.0" }
+$dockerArray += [PsObject]@{ Dockerfile = $rootFolder + "/../aspnet-core/services/LINGYUN.Abp.MicroService.AuthServer/Dockerfile"; Image = "labp-auth-server"; Version = "10.7.0" }
+$dockerArray += [PsObject]@{ Dockerfile = $rootFolder + "/../aspnet-core/services/LINGYUN.Abp.MicroService.AdminService/Dockerfile"; Image = "labp-admin-service"; Version = "10.7.0" }
+$dockerArray += [PsObject]@{ Dockerfile = $rootFolder + "/../aspnet-core/services/LINGYUN.Abp.MicroService.IdentityService/Dockerfile"; Image = "labp-identity-service"; Version = "10.7.0" }
+$dockerArray += [PsObject]@{ Dockerfile = $rootFolder + "/../aspnet-core/services/LINGYUN.Abp.MicroService.PlatformService/Dockerfile"; Image = "labp-platform-service"; Version = "10.7.0" }
+$dockerArray += [PsObject]@{ Dockerfile = $rootFolder + "/../aspnet-core/services/LINGYUN.Abp.MicroService.TaskService/Dockerfile"; Image = "labp-task-service"; Version = "10.7.0" }
+$dockerArray += [PsObject]@{ Dockerfile = $rootFolder + "/../aspnet-core/services/LINGYUN.Abp.MicroService.MessageService/Dockerfile"; Image = "labp-message-service"; Version = "10.7.0" }
+$dockerArray += [PsObject]@{ Dockerfile = $rootFolder + "/../aspnet-core/services/LINGYUN.Abp.MicroService.WebhookService/Dockerfile"; Image = "labp-webhook-service"; Version = "10.7.0" }
+$dockerArray += [PsObject]@{ Dockerfile = $rootFolder + "/../aspnet-core/services/LINGYUN.Abp.MicroService.WeChatService/Dockerfile"; Image = "labp-wechat-service"; Version = "10.7.0" }
+$dockerArray += [PsObject]@{ Dockerfile = $rootFolder + "/../aspnet-core/services/LINGYUN.Abp.MicroService.WorkflowService/Dockerfile"; Image = "labp-workflow-service"; Version = "10.7.0" }
+$dockerArray += [PsObject]@{ Dockerfile = $rootFolder + "/../aspnet-core/services/LINGYUN.Abp.MicroService.AIService/Dockerfile"; Image = "labp-ai-service"; Version = "10.7.0" }
+$dockerArray += [PsObject]@{ Dockerfile = $rootFolder + "/../gateways/internal/LINGYUN.MicroService.Internal.ApiGateway/src/LINGYUN.MicroService.Internal.Gateway/Dockerfile"; Image = "labp-internal-apigateway"; Version = "10.7.0" }
 
 [PsObject[]]$solutionArray = @()
 $solutionArray += [PsObject]@{ File = $rootFolder + "/../aspnet-core/LINGYUN.MicroService.All.slnx" }
