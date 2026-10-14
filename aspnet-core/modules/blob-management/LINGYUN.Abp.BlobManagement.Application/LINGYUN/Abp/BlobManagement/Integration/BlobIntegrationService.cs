@@ -83,7 +83,8 @@ public class BlobIntegrationService : BlobAppServiceBase, IBlobIntegrationServic
         try
         {
             var blobName = HttpUtility.UrlDecode(input.BlobName);
-            return await BlobRepository.ExistsAsync(input.ContainerName, blobName);
+            var blobContainer = await BlobContainerRepository.GetByNameAsync(BlobManager.GetBlobProvider(), input.ContainerName);
+            return await BlobRepository.ExistsAsync(blobName, blobContainer.Id);
         }
         catch (Exception ex)
         {

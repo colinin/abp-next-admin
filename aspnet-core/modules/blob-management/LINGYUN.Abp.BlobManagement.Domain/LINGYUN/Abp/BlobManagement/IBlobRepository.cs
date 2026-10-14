@@ -10,8 +10,8 @@ namespace LINGYUN.Abp.BlobManagement;
 public interface IBlobRepository : IBasicRepository<Blob, Guid>
 {
     Task<bool> ExistsAsync(
-        string containerName,
         string fullName,
+        Guid? containerId = null,
         CancellationToken cancellationToken = default);
 
     Task<Blob?> FindByNameAsync(
