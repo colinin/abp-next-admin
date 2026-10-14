@@ -46,6 +46,11 @@ public class BlobMigrationCommand : IConsoleCommand, ITransientDependency
         {
             Logger.LogInformation("Working Directory: {workingDirectory}", workingDirectory);
         }
+        if (!Directory.Exists(workingDirectory))
+        {
+            Logger.LogWarning("The working directory: {workingDirectory} does not exist. Please check if the input is valid!", workingDirectory);
+            return;
+        }
 
         var searchOption = SearchOption.TopDirectoryOnly;
         var searchOptionArg = commandLineArgs.Options.GetOrNull(BlobCommandOptions.SearchOption.Short, BlobCommandOptions.SearchOption.Long)
@@ -129,25 +134,25 @@ public class BlobMigrationCommand : IConsoleCommand, ITransientDependency
             else
             {
                 Logger.LogInformation("Starting to upload file: {blobName}.", blobName);
-                using (var fs = File.OpenRead(file))
+                try
                 {
-                    try
+                    if (!overwrite)
                     {
-                        if (!overwrite)
-                        {
-                            var blobExists = await BlobIntegrationService.ExistsAsync(
-                                new BlobManagement.Integration.Dtos.BlobFileGetByNameIntegrationDto
-                                {
-                                    ContainerName = bucketName,
-                                    BlobName = HttpUtility.UrlEncode(blobName),
-                                });
-                            if (blobExists)
+                        var blobExists = await BlobIntegrationService.ExistsAsync(
+                            new BlobManagement.Integration.Dtos.BlobFileGetByNameIntegrationDto
                             {
-                                ignored += 1;
-                                Logger.LogInformation("File: {blobName} already exists. Skipping the upload of this file!", blobName);
-                                continue;
-                            }
+                                ContainerName = bucketName,
+                                BlobName = HttpUtility.UrlEncode(blobName),
+                            });
+                        if (blobExists)
+                        {
+                            ignored += 1;
+                            Logger.LogInformation("File: {blobName} already exists. Skipping the upload of this file!", blobName);
+                            continue;
                         }
+                    }
+                    using (var fs = File.OpenRead(file))
+                    {
                         var blobDto = await BlobIntegrationService.CreateAsync(
                             new BlobManagement.Integration.Dtos.BlobFileCreateIntegrationDto
                             {
@@ -168,16 +173,16 @@ public class BlobMigrationCommand : IConsoleCommand, ITransientDependency
                             Logger.LogWarning("File: {blobName} upload failed!", blobName);
                         }
                     }
-                    catch (AbpRemoteCallException cex)
-                    {
-                        failed += 1;
-                        Logger.LogWarning("File: {blobName} upload error, Code: {code}, message: {message}", blobName, cex.Code, cex.Message);
-                    }
-                    catch (Exception ex)
-                    {
-                        failed += 1;
-                        Logger.LogWarning("File: {blobName} upload error, message: {message}", blobName, ex.Message);
-                    }
+                }
+                catch (AbpRemoteCallException cex)
+                {
+                    failed += 1;
+                    Logger.LogWarning("File: {blobName} upload error, Code: {code}, message: {message}", blobName, cex.Code, cex.Message);
+                }
+                catch (Exception ex)
+                {
+                    failed += 1;
+                    Logger.LogWarning("File: {blobName} upload error, message: {message}", blobName, ex.Message);
                 }
             }
         }
@@ -214,8 +219,9 @@ public class BlobMigrationCommand : IConsoleCommand, ITransientDependency
         sb.AppendLine("-bn|--bucket <bucket-name>                   (default: blobs) Storage container name");
         sb.AppendLine("-pn|--path <path-name>                       Storage file path. The path is parsed from the current file by default.");
         sb.AppendLine("-on|--object <object-name>                   Store file name. The default is to use the current file name.");
-        sb.AppendLine("-u|--url <url>                               (default: http://localhost:8080) BlobManagement service URL from.");
+        sb.AppendLine("-u |--url <url>                               (default: http://localhost:8080) BlobManagement service URL from.");
         sb.AppendLine("-ls|--list-file                              Only list the files without uploading them. This is for confirming before uploading.");
+        sb.AppendLine("-ow|--overwrite                              If this parameter is carried, it will forcibly overwrite the existing file in the target storage.");
         sb.AppendLine("");
         sb.AppendLine("Examples:");
         sb.AppendLine("");
@@ -226,7 +232,7 @@ public class BlobMigrationCommand : IConsoleCommand, ITransientDependency
         sb.AppendLine("  labp blob-migration -wd D:\\\\Blobs\\\\ -bn users -pn 8e12e0ce-8534-41d2-af49-da1ff828005a -on a.jpg");
         sb.AppendLine("  labp blob-migration -wd D:\\\\Blobs\\\\ -bn users -pn 8e12e0ce-8534-41d2-af49-da1ff828005a -on a.jpg -ls");
         sb.AppendLine("  labp blob-migration -wd D:\\\\Blobs\\\\ -bn users -pn 8e12e0ce-8534-41d2-af49-da1ff828005a -on a.jpg -u https://localhost:8443");
-        sb.AppendLine("  labp blob-migration -wd D:\\\\Blobs\\\\ -bn users -pn 8e12e0ce-8534-41d2-af49-da1ff828005a -on a.jpg -u https://localhost:8443 -t 3a21eaee-36d2-12ad-3f3a-332d7e6e5ac4");
+        sb.AppendLine("  labp blob-migration -wd D:\\\\Blobs\\\\ -bn users -pn 8e12e0ce-8534-41d2-af49-da1ff828005a -on a.jpg -u https://localhost:8443 -t 3a21eaee-36d2-12ad-3f3a-332d7e6e5ac4 -ow");
         sb.AppendLine("");
 
         return sb.ToString();
