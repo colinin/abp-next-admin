@@ -3,13 +3,14 @@
 ## 介绍
 
 `LINGYUN.Abp.MaxMindGeoIP2` 是一个基于 [MaxMind.GeoIP2](https://github.com/maxmind/GeoIP2-dotnet) 的 ABP 框架模块，
-通过 mmdb 离线库(默认内置 GeoLite2-City)解析 IP 地理位置，并注册 `LINGYUN.Abp.IP.Location` 的位置解析贡献者，
+通过 mmdb 离线库(需由使用方提供, 见下文)解析 IP 地理位置，并注册 `LINGYUN.Abp.IP.Location` 的位置解析贡献者，
 可与 `LINGYUN.Abp.IP2Region` 互换使用(备注规则保持一致)。
 
 ## 功能
 
 * 通过 mmdb 离线库解析 IP 地理位置(国家/省份/城市)
-* 内置 `GeoLite2-City.mmdb`，也可指向物理文件以替换/更新离线库
+* **不内置离线库**：GeoLite2 受 MaxMind 许可约束、不得随包分发，需通过 `MaxMindGeoIP2:DatabaseFile` 指向使用方自行下载的 mmdb 文件
+* 离线库文件不存在时使用 `EmptyGeoIP2DatabaseReader`(解析空内容，位置为空并记录警告日志)，不会阻断业务
 * 同时支持 IPv4 与 IPv6(取决于离线库)
 * 按当前文化解析地理名称(从 `Names` 获取，缺失时回退 `Name`)
 * 本地回环、内网、保留地址等无记录地址不返回数据(备注为空)
@@ -60,9 +61,9 @@ public class YourService
 ```csharp
 Configure<AbpMaxMindGeoIP2Options>(options =>
 {
-    // 物理文件优先(便于替换/更新离线库)，默认使用内置的 GeoLite2-City.mmdb 资源
+    // 离线库文件路径(必填): 需自行从 MaxMind 下载并接受其许可协议
     options.DatabaseFile = "/data/GeoLite2-City.mmdb";
-    // 仅对物理文件生效，默认内存映射
+    // 文件打开方式，默认内存映射
     options.FileAccessMode = FileAccessMode.MemoryMapped;
 });
 ```
@@ -83,7 +84,7 @@ Configure<AbpMaxMindGeoIP2Options>(options =>
 
 * 先按完整文化名称匹配(如 `zh-CN`)，未命中再按语言名称匹配(如 `es-MX` → `es`)；
 * 仍未命中时回退到 `Name`(离线库默认语言，通常为英语)；
-* 内置 GeoLite2-City 提供 `de,en,es,fr,ja,pt-BR,ru,zh-CN` 语言，部分实体只提供少数语言(此时按上述规则回退)。
+* GeoLite2-City 离线库提供 `de,en,es,fr,ja,pt-BR,ru,zh-CN` 语言，部分实体只提供少数语言(此时按上述规则回退)。
 
 因此同一个单例查询器可为所有文化提供服务，无需按语言创建多个查询器。
 
@@ -156,18 +157,23 @@ GC=Concurrent Workstation, Toolchain=InProcessEmitToolchain (IterationCount=15)
 * `TryCity(IPAddress)` 与 `TryCity(string)` 无差异，字符串解析开销可忽略；
 * 经 `IIPLocationResolver` 的**完整链路**（DI Scope + 贡献者 + 按当前文化解析名称）仅增加约 **9%~11%**；
 * 每次查询分配约 **8.15 KB**（`CityResponse` 模型对象图），完整链路约 8.73 KB —— 高并发场景建议关注 GC（例如对热点 IP 做结果缓存）；
-* 测量场景：`TryCity` 使用**物理 mmdb + 内存映射**（`FileAccessMode.MemoryMapped`，推荐的部署方式）；`ResolveAsync` 使用模块默认配置（内置资源 + `IIPLocationResolver`）；
+* 测量场景：`TryCity` 使用**物理 mmdb + 内存映射**（`FileAccessMode.MemoryMapped`，推荐的部署方式）；`ResolveAsync` 使用模块默认配置（配置的离线库 + `IIPLocationResolver`）；
 * 基准使用 in-process 工具链（当前环境无法派生独立基准进程），数值会略优于独立进程模式，仅用于横向对比。
 
 ## mmdb 离线库说明
 
-* 内置的 `GeoLite2-City.mmdb` 为打包时的快照数据；GeoLite2 需要 [MaxMind 账号](https://www.maxmind.com/en/geolite2/signup)
-  与 License Key 才能定期更新，生产环境建议下载最新 mmdb 并通过 `DatabaseFile` 指向物理文件；
-* 离线 mmdb 文件可从 [wp-statistics/GeoLite2-City](https://github.com/wp-statistics/GeoLite2-City) 仓库下载：
+* **本模块不内置离线库**：GeoLite2 数据库受 [MaxMind 最终用户许可协议(EULA)](https://www.maxmind.com/en/geolite2/eula)
+  约束，不得随包分发，因此需要由使用方自行下载并通过 `MaxMindGeoIP2:DatabaseFile` 指定文件路径；
+* 未配置(或文件不存在)时，模块注册 `EmptyGeoIP2DatabaseReader`——相当于解析一份空内容：
+  `TryCity`/`TryCountry` 等返回 `false`、`City`/`Country` 等抛出 `AddressNotFoundException`
+  (与真实解读器未命中时一致)，位置解析结果为空并记录一条警告日志，不影响业务流程；
+* GeoLite2 需要 [MaxMind 账号](https://www.maxmind.com/en/geolite2/signup) 与 License Key 才能下载与定期更新，
+  生产环境建议通过 `DatabaseFile` 指向物理文件并定期替换；
+* 离线 mmdb 文件也可从 [wp-statistics/GeoLite2-City](https://github.com/wp-statistics/GeoLite2-City) 仓库下载：
   仓库中提供的是压缩包 `GeoLite2-City.mmdb.gz`，解压后得到 `GeoLite2-City.mmdb`，
   再通过 `MaxMindGeoIP2:DatabaseFile` 指向该文件；
   直接下载地址：<https://raw.githubusercontent.com/wp-statistics/GeoLite2-City/master/GeoLite2-City.mmdb.gz>
-* GeoLite2-City 同时支持 IPv4 与 IPv6，并内置
+* GeoLite2-City 同时支持 IPv4 与 IPv6，并提供
   `de,en,es,fr,ja,pt-BR,ru,zh-CN` 语言；
 * 非法地址、本地回环与未指定地址由 `IIPLocationResolver` 统一处理(返回空结果，不进入位置解析模块)；
 * 离线库没有记录的地址(内网、保留、未收录)返回空的 `IPLocation`(国家/省份/城市与备注均为空)；
