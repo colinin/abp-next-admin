@@ -15,7 +15,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.Json" />
-		<PackageReference Include="Volo.Abp.AspNetCore.SignalR"  />
+		<PackageReference Include="Volo.Abp.AspNetCore.SignalR" />
 	</ItemGroup>
 
 </Project>

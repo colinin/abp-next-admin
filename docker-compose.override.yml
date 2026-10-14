@@ -2,14 +2,14 @@ version: '3.4'
 
 services:
   auth-server:
-    image: labp-auth-server:10.6.0
+    image: labp-auth-server:10.7.0
     volumes:
       - ./deploy/framework/auth-server/logs:/app/Logs
       - ./deploy/framework/auth-server/modules:/app/Modules
     restart: always
 
   identity-service:
-    image: labp-identity-service:10.6.0
+    image: labp-identity-service:10.7.0
     volumes:
       - ./deploy/framework/identity-service/logs:/app/Logs
       - ./deploy/framework/identity-service/modules:/app/Modules
@@ -18,7 +18,7 @@ services:
       - auth-server
 
   admin-service:
-    image: labp-admin-service:10.6.0
+    image: labp-admin-service:10.7.0
     volumes:
       - ./deploy/framework/admin-service/logs:/app/Logs
       - ./deploy/framework/admin-service/modules:/app/Modules
@@ -27,7 +27,7 @@ services:
       - auth-server
 
   localization-service:
-    image: labp-localization-service:10.6.0
+    image: labp-localization-service:10.7.0
     volumes:
       - ./deploy/framework/localization-service/logs:/app/Logs
       - ./deploy/framework/localization-service/modules:/app/Modules
@@ -36,7 +36,7 @@ services:
       - auth-server
 
   platform-service:
-    image: labp-platform-service:10.6.0
+    image: labp-platform-service:10.7.0
     volumes:
       - ./deploy/framework/platform-service/logs:/app/Logs
       - ./deploy/framework/platform-service/modules:/app/Modules
@@ -46,7 +46,7 @@ services:
       - auth-server
 
   message-service:
-    image: labp-message-service:10.6.0
+    image: labp-message-service:10.7.0
     volumes:
       - ./deploy/framework/message-service/logs:/app/Logs
       - ./deploy/framework/message-service/modules:/app/Modules
@@ -55,7 +55,7 @@ services:
       - auth-server
 
   task-service:
-    image: labp-task-service:10.6.0
+    image: labp-task-service:10.7.0
     volumes:
       - ./deploy/framework/task-service/logs:/app/Logs
       - ./deploy/framework/task-service/modules:/app/Modules
@@ -64,7 +64,7 @@ services:
       - auth-server
 
   webhook-service:
-    image: labp-webhook-service:10.6.0
+    image: labp-webhook-service:10.7.0
     volumes:
       - ./deploy/framework/webhook-service/logs:/app/Logs
       - ./deploy/framework/webhook-service/modules:/app/Modules
@@ -73,7 +73,7 @@ services:
       - auth-server
 
   workflow-service:
-    image: labp-workflow-service:10.6.0
+    image: labp-workflow-service:10.7.0
     volumes:
       - ./deploy/framework/workflow-service/logs:/app/Logs
       - ./deploy/framework/workflow-service/modules:/app/Modules
@@ -82,7 +82,7 @@ services:
       - auth-server
 
   wechat-service:
-    image: labp-wechat-service:10.6.0
+    image: labp-wechat-service:10.7.0
     volumes:
       - ./deploy/framework/wechat-service/logs:/app/Logs
       - ./deploy/framework/wechat-service/modules:/app/Modules
@@ -91,7 +91,7 @@ services:
       - auth-server
 
   ai-service:
-    image: labp-ai-service:10.6.0
+    image: labp-ai-service:10.7.0
     volumes:
       - ./deploy/framework/ai-service/logs:/app/Logs
       - ./deploy/framework/ai-service/modules:/app/Modules
@@ -100,7 +100,7 @@ services:
       - auth-server
 
   internal-apigateway:
-    image: labp-internal-apigateway:10.6.0
+    image: labp-internal-apigateway:10.7.0
     volumes:
       - ./deploy/framework/internal-apigateway/logs:/app/Logs
       - ./deploy/framework/internal-apigateway/modules:/app/Modules

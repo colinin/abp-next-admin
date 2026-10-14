@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<Import Project="..\..\..\..\configureawait.props" />
 	<Import Project="..\..\..\..\common.props" />
@@ -14,7 +14,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="HangFire.SqlServer"/>
+		<PackageReference Include="HangFire.SqlServer" />
 		<PackageReference Include="Volo.Abp.HangFire" />
 	</ItemGroup>
 
