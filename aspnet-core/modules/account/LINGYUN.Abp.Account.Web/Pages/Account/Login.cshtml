@@ -31,6 +31,14 @@
 }
 
 <div class="account-module-form">
+    @if (Model.ShowRequireMigrateSeedMessage)
+    {
+        <div class="alert alert-danger">
+            <h4 class="alert-heading">@L["RequireMigrateSeedTitle"]</h4>
+            <p>@L["RequireMigrateSeedMessage"]</p>
+        </div>
+    }
+
     @if (Model.IsLinkLogin)
     {
         <abp-alert alert-type="Warning">

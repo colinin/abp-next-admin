@@ -59,21 +59,6 @@ namespace LINGYUN.Abp.MicroService.AllInOne;
     // MVC Theme
     typeof(AbpAspNetCoreMvcUiLeptonXLiteThemeModule),
 
-    // 审计日志模块 应用服务
-    typeof(AbpAuditingApplicationModule),
-    // 审计日志模块 控制器
-    typeof(AbpAuditingHttpApiModule),
-    // 审计日志模块 IP地址定位
-    typeof(AbpAuditLoggingIPLocationModule),
-    // IP地址定位 MaxMindGeoIP2集成
-    typeof(AbpMaxMindGeoIP2Module),
-    // 审计日志模块 实体框架
-    typeof(AbpAuditLoggingEntityFrameworkCoreModule),
-    // 系统日志模块 Elasticsearch
-    typeof(AbpLoggingSerilogElasticsearchModule),
-    // 系统日志模块 OpenObserve
-    typeof(AbpLoggingSerilogOpenObserveModule),
-
     // 缓存模块 Redis集成
     typeof(AbpCachingStackExchangeRedisModule),
     // 缓存管理模块 Redis集成
@@ -410,6 +395,7 @@ namespace LINGYUN.Abp.MicroService.AllInOne;
     typeof(AbpAspNetCoreMvcUiMultiTenancyModule),
     typeof(AbpDynamicDefinitionsModule),
     typeof(AbpAspNetCoreAuthenticationModule),
+    typeof(AbpTelemetryOpenTelemetryModule),
     typeof(AbpSwashbuckleModule),
     typeof(AbpMailKitModule),
     typeof(AbpAutofacModule),
@@ -422,7 +408,24 @@ namespace LINGYUN.Abp.MicroService.AllInOne;
     // SqlServer
     typeof(SingleMigrationsEntityFrameworkCoreSqlServerModule),
     // PostgreSql
-    typeof(SingleMigrationsEntityFrameworkCorePostgreSqlModule)
+    typeof(SingleMigrationsEntityFrameworkCorePostgreSqlModule),
+
+    // 审计日志模块 应用服务
+    typeof(AbpAuditingApplicationModule),
+    // 审计日志模块 控制器
+    typeof(AbpAuditingHttpApiModule),
+    // 审计日志模块 IP地址定位
+    typeof(AbpAuditLoggingIPLocationModule),
+    // 审计日志模块 实体框架实现
+    typeof(AbpAuditLoggingEntityFrameworkCoreModule),
+    // 审计日志模块 Elasticsearch实现
+    // typeof(AbpAuditLoggingElasticsearchModule),
+    // 审计日志模块 OpenObserve实现
+    // typeof(AbpAuditLoggingOpenObserveModule),
+    // 系统日志模块 Elasticsearch
+    typeof(AbpLoggingSerilogElasticsearchModule),
+    // 系统日志模块 OpenObserve
+    typeof(AbpLoggingSerilogOpenObserveModule)
     )]
 public partial class AllInOneModule : AbpModule
 {

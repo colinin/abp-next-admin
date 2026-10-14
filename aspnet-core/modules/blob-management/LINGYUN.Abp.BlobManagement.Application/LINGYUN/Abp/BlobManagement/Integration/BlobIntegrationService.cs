@@ -65,11 +65,12 @@ public class BlobIntegrationService : BlobAppServiceBase, IBlobIntegrationServic
     {
         var blobContainer = await BlobContainerRepository.GetByNameAsync(BlobManager.GetBlobProvider(), input.ContainerName);
 
-        var blob = await FindBlobByNameAsync(blobContainer, input.BlobName)
+        var blobName = HttpUtility.UrlDecode(input.BlobName);
+        var blob = await FindBlobByNameAsync(blobContainer, blobName)
             ?? throw new BusinessException(
                 BlobManagementErrorCodes.Blob.NameNotFound,
-                $"There is no file/directory named {input.BlobName}!")
-                .WithData("Name", input.BlobName);
+                $"There is no file/directory named {blobName}!")
+                .WithData("Name", blobName);
 
         await CheckDeletePolicyAsync(blobContainer.Name, blob);
 
@@ -81,7 +82,8 @@ public class BlobIntegrationService : BlobAppServiceBase, IBlobIntegrationServic
     {
         try
         {
-            return await BlobRepository.ExistsAsync(input.ContainerName, input.BlobName);
+            var blobName = HttpUtility.UrlDecode(input.BlobName);
+            return await BlobRepository.ExistsAsync(input.ContainerName, blobName);
         }
         catch (Exception ex)
         {
@@ -94,8 +96,9 @@ public class BlobIntegrationService : BlobAppServiceBase, IBlobIntegrationServic
     {
         try
         {
+            var blobName = HttpUtility.UrlDecode(input.BlobName);
             var blobContainer = await BlobContainerRepository.GetByNameAsync(BlobManager.GetBlobProvider(), input.ContainerName);
-            return await DownloadByNameAsync(blobContainer, input.BlobName);
+            return await DownloadByNameAsync(blobContainer, blobName);
         }
         catch (Exception ex)
         {

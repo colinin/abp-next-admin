@@ -13,6 +13,7 @@ using LINGYUN.Abp.Emailing.Platform;
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.ExceptionHandling.Notifications;
 using LINGYUN.Abp.Features.LimitValidation.Redis;
+using LINGYUN.Abp.IP2Region;
 using LINGYUN.Abp.Identity.EntityFrameworkCore;
 using LINGYUN.Abp.Identity.Notifications;
 using LINGYUN.Abp.Identity.WeChat;
@@ -20,7 +21,6 @@ using LINGYUN.Abp.Identity.WeChat.Work;
 using LINGYUN.Abp.IM.SignalR;
 using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
-using LINGYUN.Abp.MaxMindGeoIP2;
 using LINGYUN.Abp.MessageService;
 using LINGYUN.Abp.MessageService.EntityFrameworkCore;
 using LINGYUN.Abp.MicroService.MessageService.EntityFrameworkCore;
@@ -73,7 +73,7 @@ namespace LINGYUN.Abp.MicroService.MessageService;
     typeof(AbpAspNetCoreSerilogModule),
     typeof(AbpAuditLoggingElasticsearchModule),
     typeof(AbpAuditLoggingIPLocationModule),
-    typeof(AbpMaxMindGeoIP2Module),
+    typeof(AbpIP2RegionModule),
     typeof(AbpAspNetCoreMultiTenancyModule),
     typeof(AbpMessageServiceApplicationModule),
     typeof(AbpMessageServiceHttpApiModule),

@@ -17,9 +17,9 @@ using LINGYUN.Abp.Elsa.Notifications;
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
 using LINGYUN.Abp.Http.Client.Wrapper;
+using LINGYUN.Abp.IP2Region;
 using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
-using LINGYUN.Abp.MaxMindGeoIP2;
 using LINGYUN.Abp.Quartz.MySqlInstaller;
 using LINGYUN.Abp.Saas.EntityFrameworkCore;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
@@ -55,7 +55,7 @@ namespace LINGYUN.Abp.MicroService.WorkflowService;
     typeof(AbpSerilogEnrichersUniqueIdModule),
     typeof(AbpAuditLoggingElasticsearchModule),
     typeof(AbpAuditLoggingIPLocationModule),
-    typeof(AbpMaxMindGeoIP2Module),
+    typeof(AbpIP2RegionModule),
     typeof(AbpAspNetCoreSerilogModule),
     typeof(AbpBlobStoringBlobManagementModule),
     typeof(AbpElsaModule),

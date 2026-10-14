@@ -102,6 +102,9 @@
     <Project Path="framework/open-api/LINGYUN.Abp.OpenApi.Authorization/LINGYUN.Abp.OpenApi.Authorization.csproj" />
     <Project Path="framework/open-api/LINGYUN.Abp.OpenApi/LINGYUN.Abp.OpenApi.csproj" />
   </Folder>
+  <Folder Name="/framework/open-observe/">
+    <Project Path="framework/open-observe/LINGYUN.Abp.OpenObserve/LINGYUN.Abp.OpenObserve.csproj" />
+  </Folder>
   <Folder Name="/framework/realtime/">
     <Project Path="framework/common/LINGYUN.Abp.RealTime/LINGYUN.Abp.RealTime.csproj" />
     <Project Path="modules/realtime-message/LINGYUN.Abp.IM.SignalR/LINGYUN.Abp.IM.SignalR.csproj" />
@@ -121,6 +124,9 @@
   <Folder Name="/framework/settings/">
     <Project Path="framework/settings/LINGYUN.Abp.SettingManagement.Application.Contracts/LINGYUN.Abp.SettingManagement.Application.Contracts.csproj" />
     <Project Path="framework/settings/LINGYUN.Abp.Settings/LINGYUN.Abp.Settings.csproj" />
+  </Folder>
+  <Folder Name="/framework/telemetry/">
+    <Project Path="framework/telemetry/LINGYUN.Abp.Telemetry.OpenTelemetry/LINGYUN.Abp.Telemetry.OpenTelemetry.csproj" />
   </Folder>
   <Folder Name="/framework/tenants/">
     <Project Path="framework/tenants/LINGYUN.Abp.AspNetCore.MultiTenancy/LINGYUN.Abp.AspNetCore.MultiTenancy.csproj" />
@@ -210,6 +216,7 @@
     <Project Path="framework/auditing/LINGYUN.Abp.AuditLogging.Elasticsearch/LINGYUN.Abp.AuditLogging.Elasticsearch.csproj" />
     <Project Path="framework/auditing/LINGYUN.Abp.AuditLogging.EntityFrameworkCore/LINGYUN.Abp.AuditLogging.EntityFrameworkCore.csproj" />
     <Project Path="framework/auditing/LINGYUN.Abp.AuditLogging.IP.Location/LINGYUN.Abp.AuditLogging.IP.Location.csproj" />
+    <Project Path="framework/auditing/LINGYUN.Abp.AuditLogging.OpenObserve/LINGYUN.Abp.AuditLogging.OpenObserve.csproj" />
     <Project Path="framework/auditing/LINGYUN.Abp.AuditLogging/LINGYUN.Abp.AuditLogging.csproj" />
     <Project Path="modules/auditing/LINGYUN.Abp.Auditing.Application.Contracts/LINGYUN.Abp.Auditing.Application.Contracts.csproj" />
     <Project Path="modules/auditing/LINGYUN.Abp.Auditing.Application/LINGYUN.Abp.Auditing.Application.csproj" />

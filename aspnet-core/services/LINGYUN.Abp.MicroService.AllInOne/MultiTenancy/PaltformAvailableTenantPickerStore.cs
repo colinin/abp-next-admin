@@ -14,7 +14,7 @@ public class PaltformAvailableTenantPickerStore : IAvailableTenantPickerStore, I
         var enterprises = await _enterpriseRepository.GetEnterprisesInTenantListAsync(maxResultCount: 25);
 
         return enterprises
-            .Select(enterprise => new NameValue<string>(enterprise.Name, enterprise.TenantId?.ToString()))
+            .Select(enterprise => new NameValue<string>(enterprise.Name, enterprise.TenantId!.Value.ToString()))
             .ToList();
     }
 }

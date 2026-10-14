@@ -17,12 +17,12 @@ using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
 using LINGYUN.Abp.FeatureManagement;
 using LINGYUN.Abp.FeatureManagement.HttpApi;
+using LINGYUN.Abp.IP2Region;
 using LINGYUN.Abp.Identity.EntityFrameworkCore;
 using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
 using LINGYUN.Abp.Logging.Serilog.Elasticsearch;
 using LINGYUN.Abp.Logging.Serilog.OpenObserve;
-using LINGYUN.Abp.MaxMindGeoIP2;
 using LINGYUN.Abp.MicroService.AdminService.EntityFrameworkCore;
 using LINGYUN.Abp.PermissionManagement;
 using LINGYUN.Abp.PermissionManagement.HttpApi;
@@ -71,7 +71,7 @@ namespace LINGYUN.Abp.MicroService.AdminService;
     typeof(AbpLoggingSerilogOpenObserveModule),
     typeof(AbpAuditLoggingElasticsearchModule),
     typeof(AbpAuditLoggingIPLocationModule),
-    typeof(AbpMaxMindGeoIP2Module),
+    typeof(AbpIP2RegionModule),
     typeof(AbpAspNetCoreMvcUiMultiTenancyModule),
 
     // 设置管理

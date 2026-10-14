@@ -28,7 +28,7 @@ public class NotificationPublishJob : AsyncBackgroundJob<NotificationPublishJobA
 
     public override async Task ExecuteAsync(NotificationPublishJobArgs args)
     {
-        var providerType = Type.GetType(args.ProviderType);
+        var providerType = Type.GetType(args.ProviderType)!;
         using (var scope = ServiceScopeFactory.CreateScope())
         {
             if (scope.ServiceProvider.GetRequiredService(providerType) is INotificationPublishProvider publishProvider)

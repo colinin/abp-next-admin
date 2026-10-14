@@ -36,7 +36,7 @@ public class WebhooksEventHandler :
                 eventData.TenantIds,
                 eventData.WebhookName);
 
-        await PublishAsync(eventData.WebhookName, eventData.Data, subscriptions, eventData.SendExactSameData, eventData.Headers);
+        await PublishAsync(eventData.WebhookName, eventData.Data!, subscriptions, eventData.SendExactSameData, eventData.Headers);
     }
 
     protected async virtual Task PublishAsync(
@@ -44,7 +44,7 @@ public class WebhooksEventHandler :
         string data,
         List<WebhookSubscriptionInfo> webhookSubscriptions,
         bool sendExactSameData = false,
-        WebhookHeader headers = null)
+        WebhookHeader? headers = null)
     {
         if (webhookSubscriptions.IsNullOrEmpty())
         {

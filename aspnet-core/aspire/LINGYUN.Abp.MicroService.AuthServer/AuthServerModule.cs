@@ -19,10 +19,10 @@ using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.Exporter.MiniSoftware;
 using LINGYUN.Abp.Gdpr;
 using LINGYUN.Abp.Gdpr.Web;
+using LINGYUN.Abp.IP2Region;
 using LINGYUN.Abp.Identity.AspNetCore;
 using LINGYUN.Abp.Identity.OrganizaztionUnits;
 using LINGYUN.Abp.Localization.CultureMap;
-using LINGYUN.Abp.MaxMindGeoIP2;
 using LINGYUN.Abp.OpenIddict.Impersonation;
 using LINGYUN.Abp.OpenIddict.LinkUser;
 using LINGYUN.Abp.OpenIddict.Portal;
@@ -79,7 +79,7 @@ namespace LINGYUN.Abp.MicroService.AuthServer;
     typeof(AbpDataDbMigratorModule),
     typeof(AbpAuditLoggingElasticsearchModule), // 放在 AbpIdentity 模块之后,避免被覆盖,
     typeof(AbpAuditLoggingIPLocationModule),
-    typeof(AbpMaxMindGeoIP2Module),
+    typeof(AbpIP2RegionModule),
     typeof(AbpLocalizationCultureMapModule),
     typeof(AbpAspNetCoreMultiTenancyModule),
     typeof(AbpAspNetCoreSessionModule),

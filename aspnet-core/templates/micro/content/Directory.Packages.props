@@ -56,6 +56,7 @@
 		<PackageVersion Include="LINGYUN.Abp.IdGenerator" Version="$(LINGYUNAbpPackageVersion)" />
 		<PackageVersion Include="LINGYUN.Abp.Identity.Session" Version="$(LINGYUNAbpPackageVersion)" />
 		<PackageVersion Include="LINGYUN.Abp.IP2Region" Version="$(LINGYUNAbpPackageVersion)" />
+		<PackageVersion Include="LINGYUN.Abp.MaxMindGeoIP2" Version="$(LINGYUNAbpPackageVersion)" />
 		<PackageVersion Include="LINGYUN.Abp.Localization.CultureMap" Version="$(LINGYUNAbpPackageVersion)" />
 		<PackageVersion Include="LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore" Version="$(LINGYUNAbpPackageVersion)" />
 		<PackageVersion Include="LINGYUN.Abp.MultiTenancy" Version="$(LINGYUNAbpPackageVersion)" />
@@ -505,5 +506,6 @@
 		<PackageVersion Include="Tencent.QCloud.Cos.Sdk" Version="5.4.37" />
 		<PackageVersion Include="TencentCloudSDK" Version="3.0.1273" />
 		<PackageVersion Include="Yarp.ReverseProxy" Version="2.3.0" />
-	</ItemGroup>
+			<PackageVersion Include="LINGYUN.Abp.AuditLogging.IP.Location" Version="$(LINGYUNAbpPackageVersion)" />
+</ItemGroup>
 </Project>

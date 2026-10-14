@@ -239,7 +239,7 @@ namespace LINGYUN.Abp.MicroService.AllInOne.EventBus.Distributed
                         {
                             // 模板不支持 $ 字符, 改为普通关键字
                             { NotificationKeywords.Name, notification.Name },
-                            { NotificationKeywords.FormUser, eventData.Data.FormUser },
+                            { NotificationKeywords.FormUser, eventData.Data.FormUser ?? "" },
                             { NotificationKeywords.Id, eventData.Id },
                             { NotificationKeywords.Title, title.ToString() },
                             { NotificationKeywords.CreationTime, eventData.CreationTime.ToString(Options.DateTimeFormat) },
@@ -256,7 +256,7 @@ namespace LINGYUN.Abp.MicroService.AllInOne.EventBus.Distributed
                     title: title.ToString(),
                     message: message,
                     createTime: eventData.CreationTime,
-                    formUser: eventData.Data.FormUser);
+                    formUser: eventData.Data.FormUser ?? "");
                 notificationData.ExtraProperties.AddIfNotContains(eventData.Data.ExtraProperties);
 
                 notificationInfo.Data = notificationData;
@@ -489,7 +489,7 @@ namespace LINGYUN.Abp.MicroService.AllInOne.EventBus.Distributed
                 await BackgroundJobManager.EnqueueAsync(
                     new NotificationPublishJobArgs(
                         notificationInfo.GetId(),
-                        provider.GetType().AssemblyQualifiedName,
+                        provider.GetType().AssemblyQualifiedName!,
                         subscriptionUsers.ToList(),
                         notificationInfo.TenantId));
             }

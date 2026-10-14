@@ -15,6 +15,7 @@ using Volo.Abp.Roles;
 using Volo.Abp.Security.Claims;
 using Volo.Abp.Settings;
 using Volo.Abp.Threading;
+using Volo.Abp.Uow;
 using Volo.Abp.Users;
 
 namespace LINGYUN.Abp.Identity;
@@ -48,7 +49,8 @@ public class AbpIdentityUserManager : IdentityUserManager
         IDistributedCache<AbpDynamicClaimCacheItem> dynamicClaimCache,
         IOptions<AbpMultiTenancyOptions> multiTenancyOptions,
         ICurrentTenant currentTenant,
-        IDataFilter dataFilter)
+        IDataFilter dataFilter,
+        IUnitOfWorkManager unitOfWorkManager)
       : base(
         store,
         roleRepository,
@@ -69,7 +71,8 @@ public class AbpIdentityUserManager : IdentityUserManager
         dynamicClaimCache,
         multiTenancyOptions,
         currentTenant,
-        dataFilter)
+        dataFilter,
+        unitOfWorkManager)
     {
         IdentityTwoFactorManager = identityTwoFactorManager;
     }
