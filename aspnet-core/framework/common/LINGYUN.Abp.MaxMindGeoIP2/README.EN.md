@@ -3,14 +3,17 @@
 ## Introduction
 
 `LINGYUN.Abp.MaxMindGeoIP2` is an ABP framework module based on [MaxMind.GeoIP2](https://github.com/maxmind/GeoIP2-dotnet).
-It resolves IP geolocation from an mmdb database (the embedded GeoLite2-City by default) and registers an IP location
+It resolves IP geolocation from an mmdb database (supplied by the consumer, see below) and registers an IP location
 resolve contributor for `LINGYUN.Abp.IP.Location`, so it can be used interchangeably with `LINGYUN.Abp.IP2Region`
 (the remarks rules are identical).
 
 ## Features
 
 * Resolves IP geolocation (country / province / city) from an mmdb database
-* Ships `GeoLite2-City.mmdb`, and can point to a physical file to replace or update the database
+* **Ships no database**: GeoLite2 is licensed by MaxMind and must not be redistributed, so point
+  `MaxMindGeoIP2:DatabaseFile` at an mmdb file you downloaded yourself
+* When the database file is missing an `EmptyGeoIP2DatabaseReader` is used (an empty database: empty location plus a
+  warning log) and the request flow is never interrupted
 * Supports both IPv4 and IPv6 (depending on the database)
 * Resolves geo names for the current culture (from `Names`, falling back to `Name`)
 * Loopback, private and reserved addresses return no data (empty remarks)
@@ -61,9 +64,9 @@ public class YourService
 ```csharp
 Configure<AbpMaxMindGeoIP2Options>(options =>
 {
-    // physical files take precedence (easy to replace/update); the embedded GeoLite2-City.mmdb is used by default
+    // path to the database file (required): download it from MaxMind and accept their license first
     options.DatabaseFile = "/data/GeoLite2-City.mmdb";
-    // applies to physical files only, memory mapped by default
+    // how the file is opened, memory mapped by default
     options.FileAccessMode = FileAccessMode.MemoryMapped;
 });
 ```
@@ -84,7 +87,7 @@ MaxMind's `Names` dictionary using the **current culture** (`CultureInfo.Current
 
 * the full culture name is tried first (e.g. `zh-CN`), then the language name (e.g. `es-MX` → `es`);
 * if neither matches, `Name` (the database default language, usually English) is used;
-* the embedded GeoLite2-City provides `de,en,es,fr,ja,pt-BR,ru,zh-CN`; some entities only provide a few languages and
+* the GeoLite2-City database provides `de,en,es,fr,ja,pt-BR,ru,zh-CN`; some entities only provide a few languages and
   fall back as described above.
 
 That means a single singleton reader serves every culture — no need for one reader per language.
@@ -161,7 +164,7 @@ GC=Concurrent Workstation, Toolchain=InProcessEmitToolchain (IterationCount=15)
 * each lookup allocates ~**8.15 KB** (the `CityResponse` object graph), ~8.73 KB through the full pipeline — watch GC
   under high concurrency (e.g. cache results for hot IPs);
 * measurement setup: `TryCity` uses a **physical mmdb with memory mapping** (`FileAccessMode.MemoryMapped`, the
-  recommended deployment); `ResolveAsync` uses the module defaults (embedded resource + `IIPLocationResolver`);
+  recommended deployment); `ResolveAsync` uses the module defaults (the configured database + `IIPLocationResolver`);
 * benchmarks ran with the in-process toolchain (this environment cannot spawn dedicated benchmark processes), which is
   slightly faster than out-of-process mode — use the numbers for relative comparison only.
 
@@ -170,14 +173,20 @@ GC=Concurrent Workstation, Toolchain=InProcessEmitToolchain (IterationCount=15)
 
 ## mmdb Database
 
-* The embedded `GeoLite2-City.mmdb` is a snapshot taken at packaging time. Updating GeoLite2 requires a
-  [MaxMind account](https://www.maxmind.com/en/geolite2/signup) and license key, so production deployments should
-  download a fresh mmdb and point `DatabaseFile` to the physical file;
-* Offline mmdb files can be downloaded from the [wp-statistics/GeoLite2-City](https://github.com/wp-statistics/GeoLite2-City)
+* **This module ships no database**: GeoLite2 is bound by the
+  [MaxMind end user license agreement (EULA)](https://www.maxmind.com/en/geolite2/eula) and must not be redistributed,
+  so you download it yourself and point `MaxMindGeoIP2:DatabaseFile` at the file;
+* when the option is unset (or the file does not exist) the module registers `EmptyGeoIP2DatabaseReader` — an empty
+  database: `TryCity`/`TryCountry` return `false`, `City`/`Country` throw `AddressNotFoundException` (exactly like a real
+  reader on a miss), the resolved location is empty and a warning is logged; the request flow is unaffected;
+* downloading and periodically updating GeoLite2 requires a
+  [MaxMind account](https://www.maxmind.com/en/geolite2/signup) and license key, so production deployments should point
+  `DatabaseFile` at a physical file and replace it on a schedule;
+* Offline mmdb files can also be downloaded from the [wp-statistics/GeoLite2-City](https://github.com/wp-statistics/GeoLite2-City)
   repository: it ships a compressed `GeoLite2-City.mmdb.gz`, which you extract to `GeoLite2-City.mmdb` and point
   `MaxMindGeoIP2:DatabaseFile` at;
   direct download: <https://raw.githubusercontent.com/wp-statistics/GeoLite2-City/master/GeoLite2-City.mmdb.gz>
-* GeoLite2-City supports both IPv4 and IPv6 and bundles the
+* GeoLite2-City supports both IPv4 and IPv6 and provides the
   `de,en,es,fr,ja,pt-BR,ru,zh-CN` locales;
 * invalid, loopback and unspecified addresses are handled by `IIPLocationResolver` (empty result, no contributor runs);
 * addresses missing from the database (private, reserved, not covered) return an empty `IPLocation`
