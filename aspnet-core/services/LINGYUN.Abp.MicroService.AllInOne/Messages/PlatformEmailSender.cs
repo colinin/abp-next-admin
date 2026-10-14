@@ -14,27 +14,27 @@ public class PlatformEmailSender : IEmailSender
         _service = service;
     }
 
-    public virtual Task QueueAsync(string to, string subject, string body, bool isBodyHtml = true, AdditionalEmailSendingArgs additionalEmailSendingArgs = null)
+    public virtual Task QueueAsync(string to, string subject, string body, bool isBodyHtml = true, AdditionalEmailSendingArgs? additionalEmailSendingArgs = null)
     {
-        return SendAsync(from: null, to, subject, body, isBodyHtml, additionalEmailSendingArgs);
+        return SendAsync(from: "", to, subject, body, isBodyHtml, additionalEmailSendingArgs);
     }
 
-    public virtual Task QueueAsync(string from, string to, string subject, string body, bool isBodyHtml = true, AdditionalEmailSendingArgs additionalEmailSendingArgs = null)
+    public virtual Task QueueAsync(string from, string to, string subject, string body, bool isBodyHtml = true, AdditionalEmailSendingArgs? additionalEmailSendingArgs = null)
     {
         return SendAsync(from, to, subject, body, isBodyHtml, additionalEmailSendingArgs);
     }
 
-    public virtual Task SendAsync(string to, string subject, string body, bool isBodyHtml = true, AdditionalEmailSendingArgs additionalEmailSendingArgs = null)
+    public virtual Task SendAsync(string to, string? subject, string? body, bool isBodyHtml = true, AdditionalEmailSendingArgs? additionalEmailSendingArgs = null)
     {
-        return SendAsync(from: null, to, subject, body, isBodyHtml, additionalEmailSendingArgs);
+        return SendAsync(from: "", to, subject, body, isBodyHtml, additionalEmailSendingArgs);
     }
 
-    public async virtual Task SendAsync(string from, string to, string subject, string body, bool isBodyHtml = true, AdditionalEmailSendingArgs additionalEmailSendingArgs = null)
+    public async virtual Task SendAsync(string from, string to, string? subject, string? body, bool isBodyHtml = true, AdditionalEmailSendingArgs? additionalEmailSendingArgs = null)
     {
         var createInput = new EmailMessageCreateDto(
             to,
             body,
-            from,
+            from.IsNullOrWhiteSpace() ? null : from,
             subject,
             isBodyHtml,
             additionalEmailSendingArgs?.CC?.JoinAsString(","))
@@ -48,6 +48,10 @@ public class PlatformEmailSender : IEmailSender
 
             foreach (var attachment in additionalEmailSendingArgs.Attachments)
             {
+                if (attachment.File == null)
+                {
+                    continue;
+                }
                 var stream = new MemoryStream(attachment.File.Length);
 
                 await stream.WriteAsync(attachment.File, 0, attachment.File.Length);
@@ -111,7 +115,7 @@ public class PlatformEmailSender : IEmailSender
                 var value = mail.Headers.Get(key);
                 if (!value.IsNullOrWhiteSpace())
                 {
-                    headers.Add(new EmailMessageHeaderDto(key, value));
+                    headers.Add(new EmailMessageHeaderDto(key!, value));
                 }
             }
             createInput.Headers = headers;

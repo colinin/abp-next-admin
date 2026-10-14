@@ -47,7 +47,9 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\framework\auditing\LINGYUN.Abp.AuditLogging.Elasticsearch\LINGYUN.Abp.AuditLogging.Elasticsearch.csproj" />
+		<ProjectReference Include="..\..\framework\auditing\LINGYUN.Abp.AuditLogging.IP.Location\LINGYUN.Abp.AuditLogging.IP.Location.csproj" />
 		<ProjectReference Include="..\..\framework\authorization\LINGYUN.Abp.Authorization.OrganizationUnits\LINGYUN.Abp.Authorization.OrganizationUnits.csproj" />
+		<ProjectReference Include="..\..\framework\common\LINGYUN.Abp.AspNetCore.Authentication\LINGYUN.Abp.AspNetCore.Authentication.csproj" />
 		<ProjectReference Include="..\..\framework\common\LINGYUN.Abp.AspNetCore.HttpOverrides\LINGYUN.Abp.AspNetCore.HttpOverrides.csproj" />
 		<ProjectReference Include="..\..\framework\common\LINGYUN.Abp.AspNetCore.Session\LINGYUN.Abp.AspNetCore.Session.csproj" />
 		<ProjectReference Include="..\..\framework\common\LINGYUN.Abp.EventBus.CAP\LINGYUN.Abp.EventBus.CAP.csproj" />
@@ -81,11 +83,5 @@
 		<ProjectReference Include="..\..\modules\platform\LINGYUN.Abp.Emailing.Platform\LINGYUN.Abp.Emailing.Platform.csproj" />
 		<ProjectReference Include="..\..\modules\platform\LINGYUN.Abp.Sms.Platform\LINGYUN.Abp.Sms.Platform.csproj" />
 		<ProjectReference Include="..\..\modules\saas\LINGYUN.Abp.Saas.EntityFrameworkCore\LINGYUN.Abp.Saas.EntityFrameworkCore.csproj" />
-	</ItemGroup>
-
-
-	<ItemGroup>
-		<ProjectReference Include="..\..\framework\auditing\LINGYUN.Abp.AuditLogging.IP.Location\LINGYUN.Abp.AuditLogging.IP.Location.csproj" />
-		<ProjectReference Include="..\..\framework\common\LINGYUN.Abp.MaxMindGeoIP2\LINGYUN.Abp.MaxMindGeoIP2.csproj" />
 	</ItemGroup>
 </Project>

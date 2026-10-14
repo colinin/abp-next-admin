@@ -17,9 +17,9 @@ using LINGYUN.Abp.Dynamic.Definitions;
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
 using LINGYUN.Abp.Features.LimitValidation.Redis;
+using LINGYUN.Abp.IP2Region;
 using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
-using LINGYUN.Abp.MaxMindGeoIP2;
 using LINGYUN.Abp.MicroService.PlatformService.BackgroundWorkers;
 using LINGYUN.Abp.Notifications;
 using LINGYUN.Abp.Saas.EntityFrameworkCore;
@@ -57,7 +57,7 @@ namespace LINGYUN.Abp.MicroService.PlatformService;
     typeof(AbpAspNetCoreSerilogModule),
     typeof(AbpAuditLoggingElasticsearchModule),
     typeof(AbpAuditLoggingIPLocationModule),
-    typeof(AbpMaxMindGeoIP2Module),
+    typeof(AbpIP2RegionModule),
     typeof(AbpAspNetCoreMultiTenancyModule),
 
     typeof(AbpBlobManagementApplicationModule),

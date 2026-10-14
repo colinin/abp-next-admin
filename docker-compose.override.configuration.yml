@@ -11,6 +11,8 @@ services:
       - Auditing__AllEntitiesSelector=true
       - ConnectionStrings__Default=Server=host.docker.internal;Database=abp;User Id=root;Password=123456
       - ConnectionStrings__AbpAuditLogging=Server=host.docker.internal;Database=abp;User Id=root;Password=123456
+      - AuditLogging__IPLocation__IsEnabled=true
+      - IPLocation__RemoveCountry__0=中国
       - ConnectionStrings__AbpOpenIddict=Server=host.docker.internal;Database=abp;User Id=root;Password=123456
       - ConnectionStrings__AbpIdentity=Server=host.docker.internal;Database=abp;User Id=root;Password=123456
       - ConnectionStrings__AbpIdentityServer=Server=host.docker.internal;Database=abp;User Id=root;Password=123456
@@ -75,6 +77,8 @@ services:
       - App__CorsOrigins=http://localhost:3100,http://localhost:5666,http://localhost:30000,http://internal-apigateway:30000
       - ConnectionStrings__Default=Server=host.docker.internal;Database=abp;User Id=root;Password=123456
       - ConnectionStrings__AbpAuditLogging=Server=host.docker.internal;Database=abp;User Id=root;Password=123456
+      - AuditLogging__IPLocation__IsEnabled=true
+      - IPLocation__RemoveCountry__0=中国
       - ConnectionStrings__AbpOpenIddict=Server=host.docker.internal;Database=abp;User Id=root;Password=123456
       - ConnectionStrings__AbpIdentity=Server=host.docker.internal;Database=abp;User Id=root;Password=123456
       - ConnectionStrings__AbpIdentityServer=Server=host.docker.internal;Database=abp;User Id=root;Password=123456
@@ -136,6 +140,8 @@ services:
       - App__CorsOrigins=http://localhost:3100,http://localhost:5666,http://localhost:30000,http://internal-apigateway:30000
       - ConnectionStrings__Default=Server=host.docker.internal;Database=abp;User Id=root;Password=123456
       - ConnectionStrings__AbpAuditLogging=Server=host.docker.internal;Database=abp;User Id=root;Password=123456
+      - AuditLogging__IPLocation__IsEnabled=true
+      - IPLocation__RemoveCountry__0=中国
       - ConnectionStrings__AbpOpenIddict=Server=host.docker.internal;Database=abp;User Id=root;Password=123456
       - ConnectionStrings__AbpIdentity=Server=host.docker.internal;Database=abp;User Id=root;Password=123456
       - ConnectionStrings__AbpIdentityServer=Server=host.docker.internal;Database=abp;User Id=root;Password=123456
@@ -202,6 +208,8 @@ services:
       - App__CorsOrigins=http://localhost:3100,http://localhost:5666,http://localhost:30000,http://internal-apigateway:30000
       - ConnectionStrings__Default=Server=host.docker.internal;Database=abp;User Id=root;Password=123456
       - ConnectionStrings__AbpAuditLogging=Server=host.docker.internal;Database=abp;User Id=root;Password=123456
+      - AuditLogging__IPLocation__IsEnabled=true
+      - IPLocation__RemoveCountry__0=中国
       - ConnectionStrings__AbpOpenIddict=Server=host.docker.internal;Database=abp;User Id=root;Password=123456
       - ConnectionStrings__AbpIdentity=Server=host.docker.internal;Database=abp;User Id=root;Password=123456
       - ConnectionStrings__AbpIdentityServer=Server=host.docker.internal;Database=abp;User Id=root;Password=123456
@@ -263,6 +271,8 @@ services:
       - App__CorsOrigins=http://localhost:3100,http://localhost:5666,http://localhost:30000,http://internal-apigateway:30000
       - ConnectionStrings__Default=Server=host.docker.internal;Database=abp;User Id=root;Password=123456
       - ConnectionStrings__AbpAuditLogging=Server=host.docker.internal;Database=abp;User Id=root;Password=123456
+      - AuditLogging__IPLocation__IsEnabled=true
+      - IPLocation__RemoveCountry__0=中国
       - ConnectionStrings__AbpOpenIddict=Server=host.docker.internal;Database=abp;User Id=root;Password=123456
       - ConnectionStrings__AbpIdentity=Server=host.docker.internal;Database=abp;User Id=root;Password=123456
       - ConnectionStrings__AbpIdentityServer=Server=host.docker.internal;Database=abp;User Id=root;Password=123456
@@ -334,6 +344,8 @@ services:
       - Auditing__AllEntitiesSelector=true
       - ConnectionStrings__Default=Server=host.docker.internal;Database=abp;User Id=root;Password=123456
       - ConnectionStrings__AbpAuditLogging=Server=host.docker.internal;Database=abp;User Id=root;Password=123456
+      - AuditLogging__IPLocation__IsEnabled=true
+      - IPLocation__RemoveCountry__0=中国
       - ConnectionStrings__AbpOpenIddict=Server=host.docker.internal;Database=abp;User Id=root;Password=123456
       - ConnectionStrings__AbpIdentity=Server=host.docker.internal;Database=abp;User Id=root;Password=123456
       - ConnectionStrings__AbpIdentityServer=Server=host.docker.internal;Database=abp;User Id=root;Password=123456
@@ -397,6 +409,8 @@ services:
       - App__CorsOrigins=http://localhost:3100,http://localhost:5666,http://localhost:30000,http://internal-apigateway:30000
       - ConnectionStrings__Default=Server=host.docker.internal;Database=abp;User Id=root;Password=123456
       - ConnectionStrings__AbpAuditLogging=Server=host.docker.internal;Database=abp;User Id=root;Password=123456
+      - AuditLogging__IPLocation__IsEnabled=true
+      - IPLocation__RemoveCountry__0=中国
       - ConnectionStrings__AbpOpenIddict=Server=host.docker.internal;Database=abp;User Id=root;Password=123456
       - ConnectionStrings__AbpIdentity=Server=host.docker.internal;Database=abp;User Id=root;Password=123456
       - ConnectionStrings__AbpIdentityServer=Server=host.docker.internal;Database=abp;User Id=root;Password=123456
@@ -458,6 +472,8 @@ services:
       - App__CorsOrigins=http://localhost:3100,http://localhost:5666,http://localhost:30000,http://internal-apigateway:30000
       - ConnectionStrings__Default=Server=host.docker.internal;Database=abp;User Id=root;Password=123456
       - ConnectionStrings__AbpAuditLogging=Server=host.docker.internal;Database=abp;User Id=root;Password=123456
+      - AuditLogging__IPLocation__IsEnabled=true
+      - IPLocation__RemoveCountry__0=中国
       - ConnectionStrings__AbpOpenIddict=Server=host.docker.internal;Database=abp;User Id=root;Password=123456
       - ConnectionStrings__AbpIdentity=Server=host.docker.internal;Database=abp;User Id=root;Password=123456
       - ConnectionStrings__AbpIdentityServer=Server=host.docker.internal;Database=abp;User Id=root;Password=123456
@@ -519,6 +535,8 @@ services:
       - App__CorsOrigins=http://localhost:3100,http://localhost:5666,http://localhost:30000,http://internal-apigateway:30000
       - ConnectionStrings__Default=Server=host.docker.internal;Database=abp;User Id=root;Password=123456
       - ConnectionStrings__AbpAuditLogging=Server=host.docker.internal;Database=abp;User Id=root;Password=123456
+      - AuditLogging__IPLocation__IsEnabled=true
+      - IPLocation__RemoveCountry__0=中国
       - ConnectionStrings__AbpOpenIddict=Server=host.docker.internal;Database=abp;User Id=root;Password=123456
       - ConnectionStrings__AbpIdentity=Server=host.docker.internal;Database=abp;User Id=root;Password=123456
       - ConnectionStrings__AbpIdentityServer=Server=host.docker.internal;Database=abp;User Id=root;Password=123456
@@ -590,6 +608,8 @@ services:
       - App__CorsOrigins=http://localhost:3100,http://localhost:5666,http://localhost:30000,http://internal-apigateway:30000
       - ConnectionStrings__Default=Server=host.docker.internal;Database=abp;User Id=root;Password=123456
       - ConnectionStrings__AbpAuditLogging=Server=host.docker.internal;Database=abp;User Id=root;Password=123456
+      - AuditLogging__IPLocation__IsEnabled=true
+      - IPLocation__RemoveCountry__0=中国
       - ConnectionStrings__AbpOpenIddict=Server=host.docker.internal;Database=abp;User Id=root;Password=123456
       - ConnectionStrings__AbpIdentity=Server=host.docker.internal;Database=abp;User Id=root;Password=123456
       - ConnectionStrings__AbpIdentityServer=Server=host.docker.internal;Database=abp;User Id=root;Password=123456
@@ -661,6 +681,8 @@ services:
       - App__CorsOrigins=http://localhost:3100,http://localhost:5666,http://localhost:30000,http://internal-apigateway:30000
       - ConnectionStrings__Default=Server=host.docker.internal;Database=abp;User Id=root;Password=123456
       - ConnectionStrings__AbpAuditLogging=Server=host.docker.internal;Database=abp;User Id=root;Password=123456
+      - AuditLogging__IPLocation__IsEnabled=true
+      - IPLocation__RemoveCountry__0=中国
       - ConnectionStrings__AbpOpenIddict=Server=host.docker.internal;Database=abp;User Id=root;Password=123456
       - ConnectionStrings__AbpIdentity=Server=host.docker.internal;Database=abp;User Id=root;Password=123456
       - ConnectionStrings__AbpIdentityServer=Server=host.docker.internal;Database=abp;User Id=root;Password=123456
@@ -729,6 +751,9 @@ services:
     environment:
       - AgileConfig__IsEnabled=false
       - Auditing__AllEntitiesSelector=true
+      - AuditLogging__IPLocation__IsEnabled=true
+      - IPLocation__RemoveCountry__0=中国
+      - App__ShowPii=true
       - App__CorsOrigins=http://localhost:3100,http://localhost:5666,http://localhost:30000,http://internal-apigateway:30000
       - Encryption__PassPhrase=s46c5q55nxpeS8Ra
       - Encryption__InitVector=s83ng0abvd02js84

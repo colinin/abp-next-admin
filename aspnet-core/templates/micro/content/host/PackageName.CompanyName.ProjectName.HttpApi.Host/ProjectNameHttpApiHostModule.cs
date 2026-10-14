@@ -2,6 +2,7 @@ using LINGYUN.Abp.AspNetCore.HttpOverrides;
 using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
 using LINGYUN.Abp.AspNetCore.Session;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
+using LINGYUN.Abp.AuditLogging.IP.Location;
 using LINGYUN.Abp.BlobStoring.BlobManagement;
 using LINGYUN.Abp.AspNetCore.Authentication;
 using LINGYUN.Abp.Dynamic.Definitions;
@@ -44,6 +45,7 @@ namespace PackageName.CompanyName.ProjectName;
     typeof(AbpSerilogEnrichersApplicationModule),
     typeof(AbpSerilogEnrichersUniqueIdModule),
     typeof(AbpAuditLoggingElasticsearchModule),
+    typeof(AbpAuditLoggingIPLocationModule),
     typeof(AbpAspNetCoreSerilogModule),
     typeof(AbpCAPEventBusModule),
 

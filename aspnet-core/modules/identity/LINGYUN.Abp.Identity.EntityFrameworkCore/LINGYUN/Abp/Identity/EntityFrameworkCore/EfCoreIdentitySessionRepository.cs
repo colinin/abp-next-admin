@@ -9,13 +9,16 @@ using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.Identity;
 using Volo.Abp.Identity.EntityFrameworkCore;
 using Volo.Abp.Specifications;
+using Volo.Abp.Timing;
 
 namespace LINGYUN.Abp.Identity.EntityFrameworkCore;
 
 public class EfCoreIdentitySessionRepository : Volo.Abp.Identity.EntityFrameworkCore.EfCoreIdentitySessionRepository, IIdentitySessionRepository
 {
     public EfCoreIdentitySessionRepository(
-        IDbContextProvider<IIdentityDbContext> dbContextProvider) : base(dbContextProvider)
+        IDbContextProvider<IIdentityDbContext> dbContextProvider, 
+        IClock clock) 
+        : base(dbContextProvider, clock)
     {
     }
 

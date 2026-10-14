@@ -1,20 +1,39 @@
-﻿FROM mcr.microsoft.com/dotnet/aspnet:10.0
-LABEL maintainer="colin.in@foxmail.com"
+﻿FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
+WORKDIR /src
+
+# copy props
+COPY common.props ./
+COPY common.secrets.props ./
+COPY configureawait.props ./
+COPY Directory.Build.props ./
+COPY Directory.Packages.props ./
+COPY NuGet.Config ./
+
+# copy csproj
+COPY aspnet-core/services/LINGYUN.Abp.MicroService.AllInOne/ ./aspnet-core/services/LINGYUN.Abp.MicroService.AllInOne/
+
+# framework
+COPY aspnet-core/framework/ ./aspnet-core/framework/
+
+# migrations
+COPY aspnet-core/migrations/LINGYUN.Abp.MicroService.AllInOne.EntityFrameworkCore/ ./aspnet-core/migrations/LINGYUN.Abp.MicroService.AllInOne.EntityFrameworkCore/
+COPY aspnet-core/migrations/LINGYUN.Abp.MicroService.AllInOne.EntityFrameworkCore.MySql/ ./aspnet-core/migrations/LINGYUN.Abp.MicroService.AllInOne.EntityFrameworkCore.MySql/
+COPY aspnet-core/migrations/LINGYUN.Abp.MicroService.AllInOne.EntityFrameworkCore.PostgreSql/ ./aspnet-core/migrations/LINGYUN.Abp.MicroService.AllInOne.EntityFrameworkCore.PostgreSql/
+COPY aspnet-core/migrations/LINGYUN.Abp.MicroService.AllInOne.EntityFrameworkCore.SqlServer/ ./aspnet-core/migrations/LINGYUN.Abp.MicroService.AllInOne.EntityFrameworkCore.SqlServer/
+
+# modules
+COPY aspnet-core/modules/ ./aspnet-core/modules/
+
+# dotnet restore
+RUN dotnet restore aspnet-core/services/LINGYUN.Abp.MicroService.AllInOne/LINGYUN.Abp.MicroService.AllInOne.csproj
+
+# dotnet publish
+WORKDIR /src/aspnet-core/services/LINGYUN.Abp.MicroService.AllInOne
+RUN dotnet publish -c Release -o /app/publish --no-restore
+
+# dotnet run
+FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS final
 WORKDIR /app
-
-COPY . /app
-
-#东8区
-ENV TZ=Asia/Shanghai
-RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo '$TZ' > /etc/timezone
-
-EXPOSE 80/tcp
-VOLUME [ "./app/blobs" ]
-VOLUME [ "./app/certs" ]
-VOLUME [ "./app/Logs" ]
-VOLUME [ "./app/Modules" ]
-
-RUN apt update
-RUN apt install wget -y
+COPY --from=build /app/publish .
 
 ENTRYPOINT ["dotnet", "LINGYUN.Abp.MicroService.AllInOne.dll"]

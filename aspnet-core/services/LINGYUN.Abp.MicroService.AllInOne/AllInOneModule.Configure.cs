@@ -1,10 +1,11 @@
+using Savorboard.CAP.InMemoryMessageQueue;
 using VoloAbpExceptionHandlingOptions = Volo.Abp.AspNetCore.ExceptionHandling.AbpExceptionHandlingOptions;
 
 namespace LINGYUN.Abp.MicroService.AllInOne;
 
 public partial class AllInOneModule
 {
-    public static string ApplicationName { get; set; } = "MicroService-Applications-Single";
+    public static string ApplicationName { get; set; } = "AllInOneService";
     private readonly static OneTimeRunner OneTimeRunner = new();
 
     private void PreConfigureFeature()
@@ -42,7 +43,7 @@ public partial class AllInOneModule
             {
                 options
                     .UseInMemoryStorage()
-                    .UseRedis(configuration["CAP:Redis:Configuration"]);
+                    .UseInMemoryMessageQueue();
                 return;
             }
             options.UseRabbitMQ(rabbitMQOptions =>
@@ -320,7 +321,7 @@ public partial class AllInOneModule
                 options.ConfigureHttpsDefaults(https =>
                 {
                     https.ServerCertificate = X509CertificateLoader.LoadPkcs12FromFile(
-                        configuration["App:SslFile"], 
+                        configuration["App:SslFile"]!, 
                         configuration["App:SslPassword"]);
                 });
             });
@@ -502,8 +503,11 @@ public partial class AllInOneModule
         var distributedLockEnabled = configuration["DistributedLock:IsEnabled"];
         if (distributedLockEnabled.IsNullOrEmpty() || bool.Parse(distributedLockEnabled))
         {
-            var redis = ConnectionMultiplexer.Connect(configuration["DistributedLock:Redis:Configuration"]);
-            services.AddSingleton<IDistributedLockProvider>(_ => new RedisDistributedSynchronizationProvider(redis.GetDatabase()));
+            services.AddSingleton<IDistributedLockProvider>(_ =>
+            {
+                return new RedisDistributedSynchronizationProvider(
+                    ConnectionMultiplexer.Connect(configuration["DistributedLock:Redis:Configuration"]!).GetDatabase());
+            });
         }
     }
 
@@ -588,12 +592,12 @@ public partial class AllInOneModule
 
         Configure<RedisCacheOptions>(options =>
         {
-            var redisConfig = ConfigurationOptions.Parse(options.Configuration);
+            var redisConfig = ConfigurationOptions.Parse(options.Configuration!);
             options.ConfigurationOptions = redisConfig;
             options.InstanceName = configuration["Redis:InstanceName"];
         });
 
-        services.AddSingleton<IConnectionMultiplexer>(sp => ConnectionMultiplexer.Connect(configuration["Redis:Configuration"]));
+        services.AddSingleton<IConnectionMultiplexer>(sp => ConnectionMultiplexer.Connect(configuration["Redis:Configuration"]!));
     }
 
     private void ConfigureMultiTenancy(IConfiguration configuration)
@@ -609,10 +613,10 @@ public partial class AllInOneModule
         {
             Configure<AbpTenantResolveOptions>(options =>
             {
-                var domains = tenantResolveCfg.Get<string[]>();
+                var domains = tenantResolveCfg.Get<string[]>() ?? [];
                 foreach (var domain in domains)
                 {
-                    options.AddDomainTenantResolver(domain);
+                    options.AddOnlyDomainTenantResolver(domain);
                 }
             });
         }
@@ -637,10 +641,10 @@ public partial class AllInOneModule
     {
         // Swagger
         services.AddAbpSwaggerGenWithOAuth(
-            configuration["AuthServer:Authority"],
+            configuration["AuthServer:Authority"]!,
             new Dictionary<string, string>
             {
-                { configuration["AuthServer:Audience"], "Single APP"}
+                { configuration["AuthServer:Audience"]!, "Single APP"}
             },
             options =>
             {
@@ -864,7 +868,7 @@ public partial class AllInOneModule
                 options.Applications[appConfig.Key].RootUrl = appConfig["RootUrl"];
                 foreach (var urlsConfig in appConfig.GetSection("Urls").GetChildren())
                 {
-                    options.Applications[appConfig.Key].Urls[urlsConfig.Key] = urlsConfig.Value;
+                    options.Applications[appConfig.Key].Urls[urlsConfig.Key] = urlsConfig.Value!;
                 }
             }
         });
@@ -915,15 +919,16 @@ public partial class AllInOneModule
         {
             options.Events.OnRedirectToLogin = (ctx) =>
             {
-                if (ctx.Request.Path.Value.StartsWith("/api") ||
-                    ctx.Request.Path.Value.StartsWith("/connect/token"))
+                if (ctx.Request.Path.HasValue && 
+                    (ctx.Request.Path.Value.StartsWith("/api") ||
+                    ctx.Request.Path.Value.StartsWith("/connect/token")))
                 {
                     ctx.Response.Clear();
                     ctx.Response.StatusCode = 401;
                     return Task.FromResult(0);
                 }
 
-                string authorization = ctx.Request.Headers.Authorization;
+                string authorization = ctx.Request.Headers.Authorization.ToString();
                 if (!authorization.IsNullOrWhiteSpace() &&
                     authorization.StartsWith("Bearer ", StringComparison.InvariantCultureIgnoreCase))
                 {

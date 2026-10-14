@@ -15,12 +15,12 @@ using LINGYUN.Abp.Exporter.MiniSoftware;
 using LINGYUN.Abp.Gdpr;
 using LINGYUN.Abp.Gdpr.EntityFrameworkCore;
 using LINGYUN.Abp.Gdpr.Identity;
+using LINGYUN.Abp.IP2Region;
 using LINGYUN.Abp.Identity;
 using LINGYUN.Abp.Identity.AspNetCore;
 using LINGYUN.Abp.Identity.EntityFrameworkCore;
 using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
-using LINGYUN.Abp.MaxMindGeoIP2;
 using LINGYUN.Abp.OpenIddict;
 using LINGYUN.Abp.Saas.EntityFrameworkCore;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
@@ -73,7 +73,7 @@ namespace LINGYUN.Abp.MicroService.IdentityService;
     typeof(AbpAuthorizationOrganizationUnitsModule),
     typeof(AbpAuditLoggingElasticsearchModule),
     typeof(AbpAuditLoggingIPLocationModule),
-    typeof(AbpMaxMindGeoIP2Module),
+    typeof(AbpIP2RegionModule),
     typeof(AbpEmailingExceptionHandlingModule),
     typeof(AbpBlobStoringBlobManagementModule),
     typeof(AbpHttpClientIdentityModelWebModule),

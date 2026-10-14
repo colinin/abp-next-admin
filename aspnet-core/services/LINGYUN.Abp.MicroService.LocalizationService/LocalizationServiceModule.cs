@@ -10,10 +10,10 @@ using LINGYUN.Abp.Dynamic.Definitions;
 using LINGYUN.Abp.Emailing.Platform;
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
+using LINGYUN.Abp.IP2Region;
 using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.LocalizationManagement;
 using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
-using LINGYUN.Abp.MaxMindGeoIP2;
 using LINGYUN.Abp.MicroService.LocalizationService.EntityFrameworkCore;
 using LINGYUN.Abp.Saas.EntityFrameworkCore;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
@@ -45,7 +45,7 @@ namespace LINGYUN.Abp.MicroService.LocalizationService;
     typeof(AbpAspNetCoreSerilogModule),
     typeof(AbpAuditLoggingElasticsearchModule),
     typeof(AbpAuditLoggingIPLocationModule),
-    typeof(AbpMaxMindGeoIP2Module),
+    typeof(AbpIP2RegionModule),
     typeof(AbpAspNetCoreMultiTenancyModule),
     typeof(AbpLocalizationManagementApplicationModule),
     typeof(AbpLocalizationManagementHttpApiModule),

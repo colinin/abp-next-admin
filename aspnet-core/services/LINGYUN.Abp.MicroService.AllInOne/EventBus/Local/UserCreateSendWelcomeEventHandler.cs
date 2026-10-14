@@ -30,7 +30,7 @@ namespace LINGYUN.Abp.MicroService.AllInOne.EventBus
                     new NotificationTemplate(
                         UserNotificationNames.WelcomeToApplication,
                         formUser: eventData.Entity.UserName,
-                        data: new Dictionary<string, object>
+                        data: new Dictionary<string, object?>
                         {
                             { "name", eventData.Entity.UserName },
                         }),

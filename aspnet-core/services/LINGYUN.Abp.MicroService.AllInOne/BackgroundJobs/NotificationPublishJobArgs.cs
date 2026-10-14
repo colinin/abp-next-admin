@@ -6,7 +6,7 @@ public class NotificationPublishJobArgs
 {
     public Guid? TenantId { get; set; }
     public long NotificationId { get; set; }
-    public string ProviderType { get; set; }
+    public string ProviderType { get; set; } = default!;
     public List<UserIdentifier> UserIdentifiers { get; set; }
     public NotificationPublishJobArgs()
     {

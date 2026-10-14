@@ -70,4 +70,7 @@
 	  <ProjectReference Include="..\..\src\PackageName.CompanyName.ProjectName.SettingManagement\PackageName.CompanyName.ProjectName.SettingManagement.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+		<PackageReference Include="LINGYUN.Abp.AuditLogging.IP.Location" />
+	</ItemGroup>
 </Project>
