@@ -13,14 +13,18 @@ namespace LINGYUN.Abp.MaxMindGeoIP2;
 public class IPLocationResolverTest : AbpMaxMindGeoIP2TestBase
 {
     /// <summary>
-    /// 默认选项: 使用内置 GeoLite2-City.mmdb、内存映射模式
+    /// 默认选项: 数据库文件需由使用方提供(不再内置离线库)、内存映射模式
     /// </summary>
     [Fact]
     public void TestDefaultOptions()
     {
-        var options = GetRequiredService<IOptions<AbpMaxMindGeoIP2Options>>().Value;
+        var defaultOptions = new AbpMaxMindGeoIP2Options();
+        defaultOptions.DatabaseFile.ShouldBeNullOrEmpty();
+        defaultOptions.DatabaseFileExists().ShouldBeFalse();
+        defaultOptions.FileAccessMode.ShouldBe(FileAccessMode.MemoryMapped);
 
-        options.DatabaseFile.ShouldBe(AbpMaxMindGeoIP2Module.DefaultDatabaseFile);
+        // 测试宿主: 离线库路径由配置提供(未配置时回退到本地离线库文件)
+        var options = GetRequiredService<IOptions<AbpMaxMindGeoIP2Options>>().Value;
         options.FileAccessMode.ShouldBe(FileAccessMode.MemoryMapped);
     }
 
