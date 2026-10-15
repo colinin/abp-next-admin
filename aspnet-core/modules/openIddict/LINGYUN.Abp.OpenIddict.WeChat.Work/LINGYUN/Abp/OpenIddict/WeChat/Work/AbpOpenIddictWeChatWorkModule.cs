@@ -30,8 +30,12 @@ public class AbpOpenIddictWeChatWorkModule : AbpModule
         Configure<AbpOpenIddictExtensionGrantsOptions>(options =>
         {
             options.Grants.TryAdd(
-                AbpWeChatWorkGlobalConsts.GrantType,
-                new WeChatWorkTokenExtensionGrant());
+                AbpWeChatWorkGlobalConsts.OAuthGrantType,
+                new WeChatWorkOAuthTokenExtensionGrant());
+
+            options.Grants.TryAdd(
+                AbpWeChatWorkGlobalConsts.MiniProgramGrantType,
+                new WeChatWorkMiniProgramTokenExtensionGrant());
         });
 
         Configure<AbpVirtualFileSystemOptions>(options =>
