@@ -12,6 +12,10 @@ public interface IWeChatWorkUserFinder
         string code,
         CancellationToken cancellationToken = default);
 
+    Task<WeChatWorkCode2Session> GetCode2SessionAsync(
+        string code,
+        CancellationToken cancellationToken = default);
+
     Task<WeChatWorkUserDetail> GetUserDetailAsync(
         string userTicket,
         CancellationToken cancellationToken = default);
