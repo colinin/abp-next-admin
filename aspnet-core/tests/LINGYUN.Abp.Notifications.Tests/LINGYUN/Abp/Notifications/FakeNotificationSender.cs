@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
@@ -212,8 +212,21 @@ public class FakeNotificationSender : INotificationSender, ITransientDependency
         //     notificationInfo.Data = notifacationDataMapping.MappingFunc(notificationInfo.Data);
         // }
         // 发布
-        await provider.PublishAsync(notificationInfo, subscriptionUserIdentifiers);
+        // 契约已迁移为 NotificationPublishContext(见 INotificationPublishProvider)
+        var context = new NotificationPublishContext(notificationInfo, subscriptionUserIdentifiers);
+        await provider.PublishAsync(context);
 
-        Logger.LogDebug($"Send notification {notificationInfo.Name} with provider {provider.Name} was successful");
+        if (!context.Reason.IsNullOrWhiteSpace())
+        {
+            Logger.LogWarning(
+                "Send notification {Name} with provider {Provider} was cancelled: {Reason}",
+                notificationInfo.Name,
+                provider.Name,
+                context.Reason);
+        }
+        else
+        {
+            Logger.LogDebug($"Send notification {notificationInfo.Name} with provider {provider.Name} was successful");
+        }
     }
 }

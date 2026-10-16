@@ -1,4 +1,4 @@
-﻿using LINGYUN.Abp.WeChat.MiniProgram;
+using LINGYUN.Abp.WeChat.MiniProgram;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Modularity;
 
@@ -21,6 +21,12 @@ public class AbpNotificationsWeChatMiniProgramModule : AbpModule
         Configure<AbpNotificationsPublishOptions>(options =>
         {
             options.PublishProviders.Add<WeChatMiniProgramNotificationPublishProvider>();
+        });
+
+        // 声明本渠道支持的载荷形态(注册期即校验存在性契约)
+        Configure<AbpNotificationChannelDataOptions>(options =>
+        {
+            options.Add<WeChatMiniProgramSubscribeChannelData>();
         });
     }
 }

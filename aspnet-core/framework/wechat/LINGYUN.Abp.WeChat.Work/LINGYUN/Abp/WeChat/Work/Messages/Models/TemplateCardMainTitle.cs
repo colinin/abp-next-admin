@@ -8,6 +8,8 @@ namespace LINGYUN.Abp.WeChat.Work.Messages.Models;
 /// </summary>
 public class TemplateCardMainTitle
 {
+    [Newtonsoft.Json.JsonConstructor]
+    [System.Text.Json.Serialization.JsonConstructor]
     public TemplateCardMainTitle(
         string title = "", 
         string description = "")
@@ -22,12 +24,12 @@ public class TemplateCardMainTitle
     [CanBeNull]
     [JsonProperty("title")]
     [JsonPropertyName("title")]
-    public string Title { get; set; }
+    public string? Title { get; set; }
     /// <summary>
     /// 标题辅助信息，建议不超过44个字，（支持id转译）
     /// </summary>
     [CanBeNull]
     [JsonProperty("desc")]
     [JsonPropertyName("desc")]
-    public string Description { get; set; }
+    public string? Description { get; set; }
 }

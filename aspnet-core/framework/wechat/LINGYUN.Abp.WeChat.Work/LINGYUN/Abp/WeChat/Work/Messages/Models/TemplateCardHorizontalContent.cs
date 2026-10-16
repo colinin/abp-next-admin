@@ -32,6 +32,8 @@ public class TemplateCardHorizontalContent
             keyName, 3, value, userId: userId);
     }
 
+    [Newtonsoft.Json.JsonConstructor]
+    [System.Text.Json.Serialization.JsonConstructor]
     public TemplateCardHorizontalContent(
         string keyName,
         byte type = 0, 
@@ -61,7 +63,7 @@ public class TemplateCardHorizontalContent
     [NotNull]
     [JsonProperty("keyname")]
     [JsonPropertyName("keyname")]
-    public string KeyName { get; set; }
+    public string KeyName { get; set; } = default!;
     /// <summary>
     /// 二级文本，如果horizontal_content_list.type是2，该字段代表文件名称（要包含文件类型），建议不超过30个字，（支持id转译）
     /// </summary>
