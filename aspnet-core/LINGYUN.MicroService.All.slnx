@@ -596,7 +596,10 @@
     <Project Path="tests/LINGYUN.Abp.Logging.Tests/LINGYUN.Abp.Logging.Tests.csproj" Id="1e05270f-6652-443d-b76f-5d4360f2722e" />
     <Project Path="tests/LINGYUN.Abp.MaxMindGeoIP2.Tests/LINGYUN.Abp.MaxMindGeoIP2.Tests.csproj" />
     <Project Path="tests/LINGYUN.Abp.Notifications.Tests/LINGYUN.Abp.Notifications.Tests.csproj" />
+    <Project Path="tests/LINGYUN.Abp.Notifications.ChannelData.Tests/LINGYUN.Abp.Notifications.ChannelData.Tests.csproj" />
+    <Project Path="tests/LINGYUN.Abp.Notifications.Webhook.WeChat.Work.Tests/LINGYUN.Abp.Notifications.Webhook.WeChat.Work.Tests.csproj" />
     <Project Path="tests/LINGYUN.Abp.Notifications.WeChat.MiniProgram.Tests/LINGYUN.Abp.Notifications.WeChat.MiniProgram.Tests.csproj" />
+    <Project Path="tests/LINGYUN.Abp.Notifications.WeChat.Work.Tests/LINGYUN.Abp.Notifications.WeChat.Work.Tests.csproj" />
     <Project Path="tests/LINGYUN.Abp.OpenObserve.Tests/LINGYUN.Abp.OpenObserve.Tests.csproj" />
     <Project Path="tests/LINGYUN.Abp.Rules.RulesEngine.Tests/LINGYUN.Abp.Rules.RulesEngine.Tests.csproj" />
     <Project Path="tests/LINGYUN.Abp.Sms.Platform.Tests/LINGYUN.Abp.Sms.Platform.Tests.csproj" />

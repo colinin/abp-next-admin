@@ -8,6 +8,8 @@ namespace LINGYUN.Abp.WeChat.Work.Messages.Models;
 /// </summary>
 public class TemplateCardQuoteArea
 {
+    [Newtonsoft.Json.JsonConstructor]
+    [System.Text.Json.Serialization.JsonConstructor]
     public TemplateCardQuoteArea(string url, string title = "", string text = "")
     {
         Type = 1;
@@ -29,7 +31,7 @@ public class TemplateCardQuoteArea
     [CanBeNull]
     [JsonProperty("type")]
     [JsonPropertyName("type")]
-    public byte Type { get; }
+    public byte? Type { get; }
     /// <summary>
     /// 点击跳转的url，quote_area.type是1时必填
     /// </summary>
@@ -57,12 +59,12 @@ public class TemplateCardQuoteArea
     [CanBeNull]
     [JsonProperty("title")]
     [JsonPropertyName("title")]
-    public string Title { get; set; }
+    public string? Title { get; set; }
     /// <summary>
     /// 引用文献样式的引用文案
     /// </summary>
     [CanBeNull]
     [JsonProperty("quote_text")]
     [JsonPropertyName("quote_text")]
-    public string Text { get; set; }
+    public string? Text { get; set; }
 }

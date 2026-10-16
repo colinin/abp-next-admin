@@ -15,7 +15,7 @@ public class TemplateCardActionMenu
     [CanBeNull]
     [JsonProperty("desc")]
     [JsonPropertyName("desc")]
-    public string Description { get; set; }
+    public string? Description { get; set; }
     /// <summary>
     /// 操作列表，列表长度取值范围为 [1, 3]
     /// </summary>
@@ -23,6 +23,9 @@ public class TemplateCardActionMenu
     [JsonProperty("action_list")]
     [JsonPropertyName("action_list")]
     public List<TemplateCardAction> Actions { get; set;}
+
+    [Newtonsoft.Json.JsonConstructor]
+    [System.Text.Json.Serialization.JsonConstructor]
     public TemplateCardActionMenu(List<TemplateCardAction> actions, string description = "")
     {
         Actions = actions;

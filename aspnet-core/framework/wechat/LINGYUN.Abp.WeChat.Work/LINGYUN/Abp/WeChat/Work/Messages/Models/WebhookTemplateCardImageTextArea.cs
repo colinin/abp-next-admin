@@ -1,4 +1,4 @@
-﻿using JetBrains.Annotations;
+using JetBrains.Annotations;
 using Newtonsoft.Json;
 using System.Text.Json.Serialization;
 using Volo.Abp;
@@ -58,7 +58,8 @@ public class WebhookTemplateCardImageTextArea
     [JsonProperty("desc")]
     [JsonPropertyName("desc")]
     public string? Description { get; set; }
-    private WebhookTemplateCardImageTextArea(
+    [System.Text.Json.Serialization.JsonConstructor]
+    public WebhookTemplateCardImageTextArea(
         string imageUrl,
         int? type = null, 
         string? url = null,

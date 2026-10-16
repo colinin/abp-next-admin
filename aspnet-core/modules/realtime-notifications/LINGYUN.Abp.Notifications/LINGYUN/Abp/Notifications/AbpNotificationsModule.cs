@@ -3,6 +3,7 @@ using LINGYUN.Abp.Notifications.Localization;
 using Volo.Abp.BackgroundJobs;
 using Volo.Abp.BackgroundWorkers;
 using Volo.Abp.EventBus;
+using Volo.Abp.Json;
 using Volo.Abp.Localization;
 using Volo.Abp.Modularity;
 using Volo.Abp.TextTemplating;
@@ -17,6 +18,7 @@ namespace LINGYUN.Abp.Notifications;
     typeof(AbpIdGeneratorModule),
     typeof(AbpLocalizationModule),
     typeof(AbpEventBusModule),
+    typeof(AbpJsonModule),
     typeof(AbpTextTemplatingCoreModule))]
 public class AbpNotificationsModule : AbpModule
 {
