@@ -1,4 +1,4 @@
-﻿using LINGYUN.Abp.RealTime.Localization;
+using LINGYUN.Abp.RealTime.Localization;
 using LINGYUN.Abp.TuiJuhe.Features;
 using LINGYUN.Abp.TuiJuhe.Messages;
 using Microsoft.Extensions.Localization;
@@ -58,6 +58,21 @@ public class TuiJuheNotificationPublishProvider : NotificationPublishProvider
     }
 
     protected async override Task PublishAsync(
+        NotificationPublishContext context,
+        CancellationToken cancellationToken = default)
+    {
+        // 契约已迁移为 NotificationPublishContext(与其他渠道保持一致)
+        await SendAsync(context.Notification, context.Users, cancellationToken);
+    }
+
+    /// <summary>
+    /// 发送推送聚合消息
+    /// </summary>
+    /// <param name="notification">通知信息</param>
+    /// <param name="identifiers">订阅用户列表</param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    protected async virtual Task SendAsync(
         NotificationInfo notification,
         IEnumerable<UserIdentifier> identifiers,
         CancellationToken cancellationToken = default)
