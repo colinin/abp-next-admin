@@ -5,6 +5,7 @@ using Shouldly;
 using System;
 using System.Linq;
 using System.Text.Json;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace LINGYUN.Abp.Notifications.ChannelData.Tests;
@@ -256,7 +257,58 @@ public class NotificationChannelData_Tests
         payload.Payload.Count.ShouldBe(3);
     }
 
-    // ---------- 5. 测试用载荷 ----------
+    // ---------- 5. 属性元数据缓存的并发行为 ----------
+
+    /// <remarks>
+    /// 投递路径上每个载荷都会读取属性元数据缓存, 而缓存首次构建要做反射与
+    /// 表达式编译, 因此"高并发下只构建一次且读路径无锁"是必须保证的属性。
+    /// </remarks>
+    [Fact]
+    public void Should_Build_Property_Metadata_Once_Under_Concurrency()
+    {
+        var payloadTypes = new[]
+        {
+            typeof(JsonPayloadStub),
+            typeof(PriorityStubA),
+            typeof(PriorityStubB),
+            typeof(AnyDeclaredPropertyStub),
+            typeof(AlwaysPresentStub)
+        };
+
+        // 每个类型并发取多次, 覆盖"多线程同时首次构建同一类型"的竞争
+        var results = new NotificationChannelDataProperty[payloadTypes.Length * 64][];
+
+        Parallel.For(0, results.Length, index =>
+        {
+            results[index] = NotificationChannelDataPropertyCache.GetProperties(
+                payloadTypes[index % payloadTypes.Length]);
+        });
+
+        foreach (var payloadType in payloadTypes)
+        {
+            var expected = NotificationChannelDataPropertyCache.GetProperties(payloadType);
+
+            var observed = results
+                .Where(x => x.Length == expected.Length)
+                .Where(x => x.Select(p => p.Key).SequenceEqual(expected.Select(p => p.Key)))
+                .ToArray();
+
+            // 所有并发调用必须看到同一份元数据(同一实例), 证明只构建了一次
+            observed.ShouldNotBeEmpty();
+            observed.ShouldAllBe(x => ReferenceEquals(x, expected));
+        }
+    }
+
+    [Fact]
+    public void Should_Return_Same_Instance_On_Repeated_Calls()
+    {
+        var first = NotificationChannelDataPropertyCache.GetProperties(typeof(JsonPayloadStub));
+        var second = NotificationChannelDataPropertyCache.GetProperties(typeof(JsonPayloadStub));
+
+        ReferenceEquals(first, second).ShouldBeTrue();
+    }
+
+    // ---------- 6. 测试用载荷 ----------
 
     private const string TestProvider = "stub";
 
