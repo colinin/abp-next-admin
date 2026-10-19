@@ -14,6 +14,7 @@
     "OpenIddict:001001": "应用标识 {ClientId} 已经存在!",
     "OpenIddict:002001": "范围名称 {Name} 已经存在!",
     "DisplayName:ClientId": "客户端标识",
+    "DisplayName:ClientSecretType": "密钥类型",
     "DisplayName:ClientSecret": "客户端密钥",
     "Description:ClientSecret": "请在保存之前复制密钥信息,数据提交后将只能重置密钥.",
     "DisplayName:JsonWebKeySet": "JSON Web 密钥集",

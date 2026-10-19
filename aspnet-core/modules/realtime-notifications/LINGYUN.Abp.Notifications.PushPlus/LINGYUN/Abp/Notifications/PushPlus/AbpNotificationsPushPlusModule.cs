@@ -1,4 +1,4 @@
-﻿using LINGYUN.Abp.PushPlus;
+using LINGYUN.Abp.PushPlus;
 using Volo.Abp.Modularity;
 
 namespace LINGYUN.Abp.Notifications.PushPlus;
@@ -13,6 +13,12 @@ public class AbpNotificationsPushPlusModule : AbpModule
         Configure<AbpNotificationsPublishOptions>(options =>
         {
             options.PublishProviders.Add<PushPlusNotificationPublishProvider>();
+        });
+
+        // 声明本渠道支持的载荷形态(注册期即校验存在性契约)
+        Configure<AbpNotificationChannelDataOptions>(options =>
+        {
+            options.Add<PushPlusChannelData>();
         });
     }
 }

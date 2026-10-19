@@ -105,7 +105,6 @@ internal static class OpenIddictApplicationExtensions
             ApplicationType = entity.ApplicationType,
             ClientUri = entity.ClientUri,
             LogoUri = entity.LogoUri,
-            JsonWebKeySet = entity.JsonWebKeySet,
             ConcurrencyStamp = entity.ConcurrencyStamp,
             FrontChannelLogoutUri = entity.FrontChannelLogoutUri,
         };

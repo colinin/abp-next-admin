@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<Import Project="..\..\..\..\configureawait.props" />
+	<Import Project="..\..\..\..\common.props" />
+
+	<PropertyGroup>
+		<TargetFrameworks>net10.0</TargetFrameworks>
+		<AssemblyName>LINGYUN.Abp.AuditLogging.OpenObserve</AssemblyName>
+		<PackageId>LINGYUN.Abp.AuditLogging.OpenObserve</PackageId>
+		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+		<RootNamespace />
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.Json" />
+		<PackageReference Include="Volo.Abp.Localization" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Remove="LINGYUN\Abp\AuditLogging\OpenObserve\Localization\Resources\*.json" />
+		<EmbeddedResource Include="LINGYUN\Abp\AuditLogging\OpenObserve\Localization\Resources\*.json" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\open-observe\LINGYUN.Abp.OpenObserve\LINGYUN.Abp.OpenObserve.csproj" />
+		<ProjectReference Include="..\LINGYUN.Abp.AuditLogging\LINGYUN.Abp.AuditLogging.csproj" />
+	</ItemGroup>
+
+</Project>

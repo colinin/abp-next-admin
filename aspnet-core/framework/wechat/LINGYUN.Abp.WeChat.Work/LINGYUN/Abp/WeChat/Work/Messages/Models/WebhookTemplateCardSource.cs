@@ -1,4 +1,4 @@
-﻿using JetBrains.Annotations;
+using JetBrains.Annotations;
 using Newtonsoft.Json;
 using System.Text.Json.Serialization;
 
@@ -29,7 +29,8 @@ public class WebhookTemplateCardSource
     [JsonProperty("desc_color")]
     [JsonPropertyName("desc_color")]
     public int? DescriptionColor { get; set; }
-    private WebhookTemplateCardSource(
+    [System.Text.Json.Serialization.JsonConstructor]
+    public WebhookTemplateCardSource(
         string? iconUrl = null,
         string? description = null,
         int? descriptionColor = 0)

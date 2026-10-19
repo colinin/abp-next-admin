@@ -1,5 +1,5 @@
 ﻿using LINGYUN.Abp.WeChat.Work;
-using LINGYUN.Abp.WeChat.Work.Authorize;
+using LINGYUN.Abp.WeChat.Work.Authorize.Models;
 using LINGYUN.Abp.WeChat.Work.Security.Claims;
 using LINGYUN.Abp.WeChat.Work.Settings;
 using Microsoft.AspNetCore.Authentication;
@@ -28,9 +28,11 @@ using SignInResult = Microsoft.AspNetCore.Mvc.SignInResult;
 
 namespace LINGYUN.Abp.OpenIddict.WeChat.Work;
 
-public class WeChatWorkTokenExtensionGrant : ITokenExtensionGrant
+public abstract class WeChatWorkTokenExtensionGrant : ITokenExtensionGrant
 {
-    public string Name => AbpWeChatWorkGlobalConsts.GrantType;
+    public abstract string Name { get; }
+
+    protected abstract Task<WeChatWorkUserInfo> FindUserInfoAsync(ExtensionGrantContext context, string code);
 
     public async virtual Task<IActionResult> HandleAsync(ExtensionGrantContext context)
     {
@@ -58,11 +60,9 @@ public class WeChatWorkTokenExtensionGrant : ITokenExtensionGrant
             return Forbid(properties, OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
         }
 
-        var userFinder = GetRequiredService<IWeChatWorkUserFinder>(context);
-
         try
         {
-            var userInfo = await userFinder.GetUserInfoAsync(code);
+            var userInfo = await FindUserInfoAsync(context, code);
 
             var userManager = GetRequiredService<IdentityUserManager>(context);
             var currentUser = await userManager.FindByLoginAsync(AbpWeChatWorkGlobalConsts.ProviderName, userInfo.UserId);

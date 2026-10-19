@@ -1,4 +1,4 @@
-import type { PagedResultDto } from '@abp/core';
+import type { ListResultDto, PagedResultDto } from '@abp/core';
 
 import type {
   OpenIddictScopeCreateDto,
@@ -78,11 +78,27 @@ export function useScopesApi() {
     );
   }
 
+  /**
+   * 查询可用范围列表
+   * @returns 可用范围实体数据传输对象列表
+   */
+  function getAssignableScopesApi(): Promise<
+    ListResultDto<OpenIddictScopeDto>
+  > {
+    return request<ListResultDto<OpenIddictScopeDto>>(
+      `/api/openiddict/scopes/assignable-scopes`,
+      {
+        method: 'GET',
+      },
+    );
+  }
+
   return {
     cancel,
     createApi,
     deleteApi,
     getApi,
+    getAssignableScopesApi,
     getPagedListApi,
     updateApi,
   };

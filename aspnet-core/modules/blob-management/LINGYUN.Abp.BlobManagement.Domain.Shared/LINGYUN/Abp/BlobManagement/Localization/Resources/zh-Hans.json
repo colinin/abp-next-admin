@@ -1,4 +1,4 @@
-﻿{
+{
   "culture": "zh-Hans",
   "texts": {
     "Permission:BlobManagement": "对象存储",
@@ -36,6 +36,7 @@
     "BlobManagement:001002": "存储容器非空,不可删除!",
     "BlobManagement:001003": "存储容器为系统容器,不可删除!",
     "BlobManagement:001004": "不存在名为 {Name} 的存储容器!",
+    "BlobManagement:001005": "不被允许的存储容器名称: {Name}!",
     "BlobManagement:002001": "非目录类型不可添加子文件/目录!",
     "BlobManagement:002002": "当前目录中已存在名为 {Name} 的文件/目录!",
     "BlobManagement:002003": "当前目录非空,不可删除!",
@@ -43,6 +44,7 @@
     "BlobManagement:002005": "文件指纹验证失败,请检查文件合法性!",
     "BlobManagement:002006": "上传文件大小不能超过 {Limit} MB!",
     "BlobManagement:002007": "不被允许的文件扩展名: {Name}!",
+    "BlobManagement:002008": "不被允许的文件/目录名称: {Name}!",
     "BlobContainers": "存储容器",
     "BlobContainers:Create": "新增容器",
     "Blobs:Files": "文件列表",

@@ -96,7 +96,7 @@ dotnet run --launch-profile "YourPackageName.YourCompanyName.YourProjectName.Dev
 ./build/build-aspnetcore-release.ps1
 ```
 
-3. 使用 IDE 打开 `LY.MicroService.Applications.Single` 解决方案进行调试或发布
+3. 使用 IDE 打开 `LINGYUN.Abp.MicroService.AllInOne` 解决方案进行调试或发布
 
 ### 环境配置
 
@@ -146,7 +146,7 @@ docker run -d --name sqlserver \
 
 PostgreSQL:
 
-- `LY.MicroService.Applications.Single/appsettings.Development.PostgreSql.json`
+- `LINGYUN.Abp.MicroService.AllInOne/appsettings.Development.PostgreSql.json`
 ```json
 {
   "ConnectionStrings": {
@@ -157,7 +157,7 @@ PostgreSQL:
 
 MySQL:
 
-- `LY.MicroService.Applications.Single/appsettings.Development.MySql.json`
+- `LINGYUN.Abp.MicroService.AllInOne/appsettings.Development.MySql.json`
 ```json
 {
   "ConnectionStrings": {
@@ -168,7 +168,7 @@ MySQL:
 
 SQL Server:
 
-- `LY.MicroService.Applications.Single/appsettings.Development.SqlServer.json`
+- `LINGYUN.Abp.MicroService.AllInOne/appsettings.Development.SqlServer.json`
 ```json
 {
   "ConnectionStrings": {
@@ -255,20 +255,20 @@ Redis 配置示例：
 以 pgsql 为例
 
 1. 选择启动配置
-   - 选择 `LY.MicroService.Applications.Single.DbMigrator/Properties/launchSettings.json` 中的 `Single.PostgreSql.Dev`
+   - 选择 `LINGYUN.Abp.MicroService.AllInOne.DbMigrator/Properties/launchSettings.json` 中的 `Single.PostgreSql.Dev`
 
 2. 配置数据初始化：
 
-   - 修改 `LY.MicroService.Applications.Single.DbMigrator/appsettings.PostgreSql.json` 中的数据库连接信息
+   - 修改 `LINGYUN.Abp.MicroService.AllInOne.DbMigrator/appsettings.PostgreSql.json` 中的数据库连接信息
 
 3. 执行数据迁移：
-   - 运行 `LY.MicroService.Applications.Single.DbMigrator` 项目
+   - 运行 `LINGYUN.Abp.MicroService.AllInOne.DbMigrator` 项目
    - 等待数据迁移完成，基础表数据将被初始化
 
 ### 服务启动
 1. 选择启动配置
-   - 选择 `LY.MicroService.Applications.Single/Properties/launchSettings.json` 中的 `Single.PostgreSql.Dev`
-1. 运行 `LY.MicroService.Applications.Single` 项目
+   - 选择 `LINGYUN.Abp.MicroService.AllInOne/Properties/launchSettings.json` 中的 `Single.PostgreSql.Dev`
+1. 运行 `LINGYUN.Abp.MicroService.AllInOne` 项目
 2. 在浏览器中访问 Swagger 接口文档：
    - URL: http://127.0.0.1:30000/swagger
 

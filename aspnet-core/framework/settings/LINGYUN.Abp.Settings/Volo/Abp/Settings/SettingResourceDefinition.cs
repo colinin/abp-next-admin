@@ -53,7 +53,7 @@ public class SettingResourceDefinition
         {
             if (!string.IsNullOrWhiteSpace(ResourceType))
             {
-                return new LocalizableString(DisplayName!, ResourceType).Localize(stringLocalizerFactory);
+                return new LocalizableString(Type.GetType(ResourceType)!, DisplayName!).Localize(stringLocalizerFactory);
             }
             return new LocalizableString(DisplayName!, ResourceName).Localize(stringLocalizerFactory);
         }

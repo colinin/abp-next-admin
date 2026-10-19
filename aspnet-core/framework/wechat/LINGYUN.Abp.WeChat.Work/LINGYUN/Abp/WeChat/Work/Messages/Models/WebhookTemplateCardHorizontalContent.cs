@@ -1,4 +1,4 @@
-﻿using JetBrains.Annotations;
+using JetBrains.Annotations;
 using Newtonsoft.Json;
 using System.Text.Json.Serialization;
 using Volo.Abp;
@@ -51,7 +51,8 @@ public class WebhookTemplateCardHorizontalContent
     [JsonProperty("userid")]
     [JsonPropertyName("userid")]
     public string? UserId { get; set; }
-    private WebhookTemplateCardHorizontalContent(
+    [System.Text.Json.Serialization.JsonConstructor]
+    public WebhookTemplateCardHorizontalContent(
         string keyName,
         int? type = null,
         string? value = null,

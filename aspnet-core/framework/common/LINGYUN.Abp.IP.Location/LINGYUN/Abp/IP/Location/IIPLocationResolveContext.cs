@@ -1,9 +1,10 @@
-﻿using Volo.Abp.DependencyInjection;
+﻿using System.Net;
+using Volo.Abp.DependencyInjection;
 
 namespace LINGYUN.Abp.IP.Location;
 public interface IIPLocationResolveContext : IServiceProviderAccessor
 {
-    string IpAddress { get; }
+    IPAddress IpAddress { get; }
 
     IPLocation? Location { get; set; }
 

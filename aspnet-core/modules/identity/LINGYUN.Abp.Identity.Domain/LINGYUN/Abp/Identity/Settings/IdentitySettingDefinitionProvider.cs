@@ -10,17 +10,9 @@ public class IdentitySettingDefinitionProvider : SettingDefinitionProvider
 {
     private const string GroupName = "Identity";
     private const int GroupOrder = 10;
-
-    protected IStringLocalizerFactory StringLocalizerFactory { get; }
-
-    public IdentitySettingDefinitionProvider(IStringLocalizerFactory stringLocalizerFactory)
-    {
-        StringLocalizerFactory = stringLocalizerFactory;
-    }
-
     public override void Define(ISettingDefinitionContext context)
     {
-        var stringLocalizer = StringLocalizerFactory.Create<IdentityResource>();
+        var resourceName = LocalizationResourceNameAttribute.GetName(typeof(IdentityResource));
 
         context.Add(
             new SettingDefinition(
@@ -129,9 +121,9 @@ public class IdentitySettingDefinitionProvider : SettingDefinitionProvider
             .WithParent("Security", L("Settings:Identity.Security"), order: 5)
             .WithOrder(0)
             .WithOptions([
-                new NameValue<string>(stringLocalizer["IdentityTwoFactorBehaviour:Optional"].Value, IdentityTwoFactorBehaviour.Optional.ToString()),
-                new NameValue<string>(stringLocalizer["IdentityTwoFactorBehaviour:Disabled"].Value, IdentityTwoFactorBehaviour.Disabled.ToString()),
-                new NameValue<string>(stringLocalizer["IdentityTwoFactorBehaviour:Forced"].Value, IdentityTwoFactorBehaviour.Forced.ToString()),
+                new LocalizableValue<string>(resourceName,"IdentityTwoFactorBehaviour:Optional",IdentityTwoFactorBehaviour.Optional.ToString()),
+                new LocalizableValue<string>(resourceName,"IdentityTwoFactorBehaviour:Disabled",IdentityTwoFactorBehaviour.Disabled.ToString()),
+                new LocalizableValue<string>(resourceName,"IdentityTwoFactorBehaviour:Forced",IdentityTwoFactorBehaviour.Forced.ToString()),
             ]),
             new SettingDefinition(
                 name: IdentitySettingNames.Security.UsersCanChangeTwoFactor,
@@ -194,10 +186,10 @@ public class IdentitySettingDefinitionProvider : SettingDefinitionProvider
             .WithParent("Session", L("Settings:Identity.Session"), order: 6)
             .WithOrder(0)
             .WithOptions([
-                new NameValue<string>(stringLocalizer["ConcurrentLoginStrategy:None"].Value, ConcurrentLoginStrategy.None.ToString()),
-                new NameValue<string>(stringLocalizer["ConcurrentLoginStrategy:LogoutFromSameTypeDevicesLimit"].Value, ConcurrentLoginStrategy.LogoutFromSameTypeDevicesLimit.ToString()),
-                new NameValue<string>(stringLocalizer["ConcurrentLoginStrategy:LogoutFromSameTypeDevices"].Value, ConcurrentLoginStrategy.LogoutFromSameTypeDevices.ToString()),
-                new NameValue<string>(stringLocalizer["ConcurrentLoginStrategy:LogoutFromAllDevices"].Value, ConcurrentLoginStrategy.LogoutFromAllDevices.ToString()),
+                new LocalizableValue<string>(resourceName,"ConcurrentLoginStrategy:None",ConcurrentLoginStrategy.None.ToString()),
+                new LocalizableValue<string>(resourceName,"ConcurrentLoginStrategy:LogoutFromSameTypeDevicesLimit",ConcurrentLoginStrategy.LogoutFromSameTypeDevicesLimit.ToString()),
+                new LocalizableValue<string>(resourceName,"ConcurrentLoginStrategy:LogoutFromSameTypeDevices",ConcurrentLoginStrategy.LogoutFromSameTypeDevices.ToString()),
+                new LocalizableValue<string>(resourceName,"ConcurrentLoginStrategy:LogoutFromAllDevices",ConcurrentLoginStrategy.LogoutFromAllDevices.ToString()),
             ]),
             new SettingDefinition(
                 name: IdentitySettingNames.Session.LogoutFromSameTypeDevicesLimit,

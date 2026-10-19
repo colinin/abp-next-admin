@@ -2,6 +2,8 @@
 
 public class IdentitySecurityLogExtendActionConsts
 {
+    public static string QrCodeLoginSucceeded { get; set; } = "QrCodeLoginSucceeded";
+    public static string QrCodeLoginFailed { get; set; } = "QrCodeLoginFailed";
     public static string CaptchaSucceeded { get; set; } = "CaptchaSucceeded";
     public static string CaptchaFailed { get; set; } = "CaptchaFailed";
     public static string CaptchaError { get; set; } = "CaptchaError";

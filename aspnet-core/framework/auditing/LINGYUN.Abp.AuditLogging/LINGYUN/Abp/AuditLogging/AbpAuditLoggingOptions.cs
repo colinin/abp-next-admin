@@ -1,4 +1,6 @@
-﻿namespace LINGYUN.Abp.AuditLogging;
+﻿using System.Collections.Generic;
+
+namespace LINGYUN.Abp.AuditLogging;
 public class AbpAuditLoggingOptions
 {
     /// <summary>
@@ -21,6 +23,10 @@ public class AbpAuditLoggingOptions
     /// </summary>
     public int BatchAuditLogSize { get; set; }
     /// <summary>
+    /// 审计日志贡献者列表,用于写入前修改自定义属性
+    /// </summary>
+    public List<IAuditLogInfoContributor> AuditLogInfoContributors { get; }
+    /// <summary>
     /// 是否启用安全日志记录
     /// </summary>
     public bool IsSecurityLogEnabled { get; set; }
@@ -39,16 +45,22 @@ public class AbpAuditLoggingOptions
     /// 一次处理安全日志队列大小
     /// </summary>
     public int BatchSecurityLogSize { get; set; }
+    /// <summary>
+    /// 安全日志贡献者列表,用于写入前修改自定义属性
+    /// </summary>
+    public List<ISecurityLogInfoContributor> SecurityLogInfoContributors { get; }
     public AbpAuditLoggingOptions()
     {
         IsAuditLogEnabled = true;
         UseAuditLogQueue = true;
         BatchAuditLogSize = 100;
         MaxAuditLogQueueSize = 10000;
+        AuditLogInfoContributors = new List<IAuditLogInfoContributor>();
 
         IsSecurityLogEnabled = true;
         UseSecurityLogQueue = true;
         BatchSecurityLogSize = 100;
         MaxSecurityLogQueueSize = 10000;
+        SecurityLogInfoContributors = new List<ISecurityLogInfoContributor>();
     }
 }

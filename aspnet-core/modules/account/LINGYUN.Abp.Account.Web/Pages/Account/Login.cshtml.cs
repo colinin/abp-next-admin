@@ -4,11 +4,13 @@ using LINGYUN.Abp.Account.Web.ExternalProviders;
 using LINGYUN.Abp.Account.Web.Models;
 using LINGYUN.Abp.Identity.QrCode;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MyCSharp.HttpUserAgentParser.Providers;
@@ -52,6 +54,7 @@ public class LoginModel : AccountPageModel
     public PasswordLoginInputModel Input { get; set; } = default!;
 
     public bool ShowCancelButton { get; set; }
+    public bool ShowRequireMigrateSeedMessage { get; set; }
     public bool EnableLocalLogin { get; set; }
     public bool EnableQrCodeLogin { get; set; }
     public bool EnableCaptcha { get; set; }
@@ -69,6 +72,7 @@ public class LoginModel : AccountPageModel
     protected IExternalProviderService ExternalProviderService => LazyServiceProvider.LazyGetRequiredService<IExternalProviderService>();
     protected IAuthenticationSchemeProvider SchemeProvider => LazyServiceProvider.LazyGetRequiredService<IAuthenticationSchemeProvider>();
     protected AbpAccountOptions AccountOptions => LazyServiceProvider.LazyGetRequiredService<IOptions<AbpAccountOptions>>().Value;
+    protected IWebHostEnvironment WebHostEnvironment => LazyServiceProvider.LazyGetRequiredService<IWebHostEnvironment>();
 
     #region LinkUser
 
@@ -516,10 +520,23 @@ public class LoginModel : AccountPageModel
         await HttpContext.SignInAsync(AbpAccountAuthenticationTypes.ConfirmUserScheme, new ClaimsPrincipal(identity));
     }
 
-    protected virtual Task<IActionResult> HandleUserNameOrPasswordInvalid()
+    protected async virtual Task<IActionResult> HandleUserNameOrPasswordInvalid()
     {
+        if (WebHostEnvironment.IsDevelopment() &&
+            (Input.UserNameOrEmailAddress == IdentityDataSeedContributor.AdminUserNameDefaultValue ||
+            Input.UserNameOrEmailAddress == IdentityDataSeedContributor.AdminEmailDefaultValue))
+        {
+            var adminUser = await UserManager.FindByNameAsync(IdentityDataSeedContributor.AdminUserNameDefaultValue) ??
+                await UserManager.FindByEmailAsync(IdentityDataSeedContributor.AdminEmailDefaultValue);
+            if (adminUser == null)
+            {
+                ShowRequireMigrateSeedMessage = true;
+                return Page();
+            }
+        }
+
         Alerts.Danger(L["InvalidUserNameOrPassword"]);
-        return Task.FromResult<IActionResult>(Page());
+        return Page();
     }
 
     protected virtual void AllowQrCodeLoginIfNotMobileDevice()

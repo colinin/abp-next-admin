@@ -19,6 +19,7 @@
 		<PackageReference Include="Volo.Abp.Ddd.Domain" />
 		<PackageReference Include="Volo.Abp.Mapperly" />
 		<PackageReference Include="LINGYUN.Abp.DataProtection" />
+		<PackageReference Include="LINGYUN.Abp.Settings" />
 	</ItemGroup>
 
 	<ItemGroup>

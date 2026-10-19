@@ -45,4 +45,25 @@ public class OAuthAccountController : AbpController
                 workWeixinUser.UserId,
                 WorkWeixinAuthenticationDefaults.DisplayName))).CheckErrors();
     }
+
+    [HttpPost]
+    [Authorize]
+    [Route("work-weixin/miniprogram/bind")]
+    public virtual async Task WorkWeixinMiniProgramLoginBindAsync(WorkWeixinLoginBindInput input)
+    {
+        var weChatWorkCode2Session = await WeChatWorkUserFinder.GetCode2SessionAsync(input.Code);
+        var currentUser = await UserManager.GetByIdAsync(CurrentUser.GetId());
+        var userLogins = await UserManager.GetLoginsAsync(currentUser);
+        var workWexinLogin = userLogins.FirstOrDefault(x => x.LoginProvider == WorkWeixinAuthenticationDefaults.AuthenticationScheme);
+        if (workWexinLogin != null)
+        {
+            (await UserManager.RemoveLoginAsync(currentUser, workWexinLogin.LoginProvider, workWexinLogin.ProviderKey)).CheckErrors();
+        }
+        (await UserManager.AddLoginAsync(
+            currentUser,
+            new UserLoginInfo(
+                WorkWeixinAuthenticationDefaults.AuthenticationScheme,
+                weChatWorkCode2Session.UserId,
+                WorkWeixinAuthenticationDefaults.DisplayName))).CheckErrors();
+    }
 }

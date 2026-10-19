@@ -14,14 +14,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<None Remove="ClientProxies\auditing-generate-proxy.json" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<EmbeddedResource Include="ClientProxies\auditing-generate-proxy.json" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<PackageReference Include="Volo.Abp.Http.Client" />
 	</ItemGroup>
 

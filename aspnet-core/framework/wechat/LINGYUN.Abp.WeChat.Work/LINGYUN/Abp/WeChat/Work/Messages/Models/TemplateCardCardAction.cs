@@ -8,11 +8,14 @@ namespace LINGYUN.Abp.WeChat.Work.Messages.Models;
 /// </summary>
 public class TemplateCardCardAction
 {
+    [Newtonsoft.Json.JsonConstructor]
+    [System.Text.Json.Serialization.JsonConstructor]
     public TemplateCardCardAction(string url)
     {
         Type = 1;
         Url = url;
     }
+
     public TemplateCardCardAction(string appid, string pagePath)
     {
         Type = 2;

@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Options;
 using Shouldly;
 using System;
 using Xunit;
@@ -8,11 +8,11 @@ namespace LINGYUN.Abp.Notifications.Sms
     public class SmsNotificationDataMapping_Tests : AbpNotificationsSmsTestsBase
     {
         private readonly NotificationData _notificationData;
-        protected AbpNotificationOptions NotificationOptions { get; }
+        protected AbpNotificationsPublishOptions NotificationOptions { get; }
         protected AbpNotificationsSmsOptions NotificationSmsOptions { get; }
         public SmsNotificationDataMapping_Tests()
         {
-            NotificationOptions = GetRequiredService<IOptions<AbpNotificationOptions>>().Value;
+            NotificationOptions = GetRequiredService<IOptions<AbpNotificationsPublishOptions>>().Value;
             NotificationSmsOptions = GetRequiredService<IOptions<AbpNotificationsSmsOptions>>().Value;
 
             _notificationData = new NotificationData();

@@ -1,4 +1,4 @@
-﻿using JetBrains.Annotations;
+using JetBrains.Annotations;
 using Newtonsoft.Json;
 using System.Text.Json.Serialization;
 using Volo.Abp;
@@ -44,7 +44,8 @@ public class WebhookTemplateCardJump
     [JsonProperty("pagepath")]
     [JsonPropertyName("pagepath")]
     public string? PagePath { get; set; }
-    private WebhookTemplateCardJump(
+    [System.Text.Json.Serialization.JsonConstructor]
+    public WebhookTemplateCardJump(
         string title,
         int? type = null,
         string? url = null,
