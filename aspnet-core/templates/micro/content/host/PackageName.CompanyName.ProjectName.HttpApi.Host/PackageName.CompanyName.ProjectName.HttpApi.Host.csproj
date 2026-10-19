@@ -20,6 +20,7 @@
 		<PackageReference Include="LINGYUN.Abp.AspNetCore.Mvc.Wrapper" />
 		<PackageReference Include="LINGYUN.Abp.AspNetCore.Session" />
 		<PackageReference Include="LINGYUN.Abp.AuditLogging.Elasticsearch" />
+		<PackageReference Include="LINGYUN.Abp.AuditLogging.IP.Location" />
 		<PackageReference Include="LINGYUN.Abp.BlobStoring.BlobManagement" />
 		<PackageReference Include="LINGYUN.Abp.Data.DbMigrator" />
 		<PackageReference Include="LINGYUN.Abp.Dapr.Client.Wrapper" />
@@ -48,8 +49,10 @@
 		<PackageReference Include="Serilog.Enrichers.Thread" />
 		<PackageReference Include="Serilog.Settings.Configuration" />
 		<PackageReference Include="Serilog.Sinks.Async" />
+		<PackageReference Include="Serilog.Sinks.Console" />
 		<PackageReference Include="Serilog.Sinks.Elasticsearch" />
 		<PackageReference Include="Serilog.Sinks.File" />
+		<PackageReference Include="Serilog.Sinks.OpenTelemetry" />
 		<PackageReference Include="Volo.Abp.AspNetCore.Serilog" />
 		<PackageReference Include="Volo.Abp.Caching.StackExchangeRedis" />
 		<PackageReference Include="Volo.Abp.AspNetCore.MultiTenancy" />
@@ -68,9 +71,5 @@
 	  <ProjectReference Include="..\..\src\PackageName.CompanyName.ProjectName.Application\PackageName.CompanyName.ProjectName.Application.csproj" />
 	  <ProjectReference Include="..\..\src\PackageName.CompanyName.ProjectName.HttpApi\PackageName.CompanyName.ProjectName.HttpApi.csproj" />
 	  <ProjectReference Include="..\..\src\PackageName.CompanyName.ProjectName.SettingManagement\PackageName.CompanyName.ProjectName.SettingManagement.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<PackageReference Include="LINGYUN.Abp.AuditLogging.IP.Location" />
 	</ItemGroup>
 </Project>
