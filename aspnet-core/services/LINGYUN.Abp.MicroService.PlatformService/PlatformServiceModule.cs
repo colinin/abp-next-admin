@@ -1,4 +1,5 @@
-﻿using LINGYUN.Abp.AspNetCore.HttpOverrides;
+﻿using LINGYUN.Abp.AspNetCore.Authentication;
+using LINGYUN.Abp.AspNetCore.HttpOverrides;
 using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
 using LINGYUN.Abp.AspNetCore.Session;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
@@ -12,7 +13,6 @@ using LINGYUN.Abp.BlobManagement.Minio;
 using LINGYUN.Abp.BlobManagement.SettingManagement;
 using LINGYUN.Abp.BlobManagement.Tencent;
 using LINGYUN.Abp.BlobStoring.BlobManagement;
-using LINGYUN.Abp.AspNetCore.Authentication;
 using LINGYUN.Abp.Data.DbMigrator;
 using LINGYUN.Abp.Dynamic.Definitions;
 using LINGYUN.Abp.EventBus.CAP;
@@ -34,7 +34,6 @@ using LINGYUN.Abp.UI.Navigation.VueVbenAdmin5;
 using LINGYUN.Platform;
 using LINGYUN.Platform.EntityFrameworkCore;
 using LINGYUN.Platform.HttpApi;
-using LINGYUN.Platform.Theme.VueVbenAdmin;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -72,7 +71,6 @@ namespace LINGYUN.Abp.MicroService.PlatformService;
     typeof(AbpIP2RegionModule),
     typeof(AbpAspNetCoreMultiTenancyModule),
     typeof(AbpUINavigationVueVbenAdmin5Module),
-    typeof(PlatformThemeVueVbenAdminModule),
     typeof(AbpBlobManagementAliyunModule),    // 阿里云存储提供者模块
     typeof(AbpBlobManagementTencentModule),   // 腾讯云存储提供者模块
     typeof(AbpBlobManagementMinioModule),     // Minio存储提供者模块
