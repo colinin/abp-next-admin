@@ -15,6 +15,20 @@ internal static class WeChatWorkResponseExtensions
         };
     }
 
+    public static WeChatWorkCode2Session ToCode2Session(
+        this WeChatWorkCode2SessionResponse response)
+    {
+        response.ThrowIfNotSuccess();
+
+        return new WeChatWorkCode2Session
+        {
+            CorpId = response.CorpId,
+            UserId = response.UserId,
+            DeviceId = response.DeviceId,
+            SessionKey = response.SessionKey,
+        };
+    }
+
     public static WeChatWorkUserDetail ToUserDetail(
         this WeChatWorkUserDetailResponse response)
     {

@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "LINGYUN.Abp.MicroService.AdminService.DbMigrator": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}

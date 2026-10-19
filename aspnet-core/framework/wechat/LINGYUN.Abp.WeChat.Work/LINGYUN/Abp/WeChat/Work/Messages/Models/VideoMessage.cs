@@ -8,6 +8,8 @@ namespace LINGYUN.Abp.WeChat.Work.Messages.Models;
 /// </summary>
 public class VideoMessage
 {
+    [Newtonsoft.Json.JsonConstructor]
+    [System.Text.Json.Serialization.JsonConstructor]
     public VideoMessage(
         string mediaId,
         string title = "",

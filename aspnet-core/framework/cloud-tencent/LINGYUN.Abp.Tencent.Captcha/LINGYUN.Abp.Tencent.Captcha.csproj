@@ -5,8 +5,8 @@
 
 	<PropertyGroup>
 		<TargetFrameworks>net8.0;net9.0;net10.0</TargetFrameworks>
-		<AssemblyName>LINGYUN.Abp.Captcha.Tencent</AssemblyName>
-		<PackageId>LINGYUN.Abp.Captcha.Tencent</PackageId>
+		<AssemblyName>LINGYUN.Abp.Tencent.Captcha</AssemblyName>
+		<PackageId>LINGYUN.Abp.Tencent.Captcha</PackageId>
 		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
 		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
 		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>

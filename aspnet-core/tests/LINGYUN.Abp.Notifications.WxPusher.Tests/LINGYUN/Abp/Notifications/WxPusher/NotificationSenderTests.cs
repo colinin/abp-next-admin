@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 
 namespace LINGYUN.Abp.Notifications.WxPusher;
@@ -26,7 +26,9 @@ public class NotificationSenderTests : AbpNotificationsWxPusherTestBase
             message,
             DateTime.Now,
             "xUnit Test");
-        notificationData.SetUrl("https://www.baidu.com/");
+        notificationData.TrySetData(
+            WxPusherNotificationDataKeys.Url,
+            "https://www.baidu.com/");
 
         await NotificationSender.SendNofiterAsync(
             NotificationsTestsNames.Test1,
@@ -47,7 +49,9 @@ public class NotificationSenderTests : AbpNotificationsWxPusherTestBase
             message,
             DateTime.Now,
             "xUnit Test");
-        notificationData.SetUrl("https://www.baidu.com/");
+        notificationData.TrySetData(
+            WxPusherNotificationDataKeys.Url,
+            "https://www.baidu.com/");
 
         await NotificationSender.SendNofiterAsync(
             NotificationsTestsNames.Test2,
@@ -68,7 +72,9 @@ public class NotificationSenderTests : AbpNotificationsWxPusherTestBase
             message,
             DateTime.Now,
             "xUnit Test");
-        notificationData.SetUrl("https://www.baidu.com/");
+        notificationData.TrySetData(
+            WxPusherNotificationDataKeys.Url,
+            "https://www.baidu.com/");
 
         await NotificationSender.SendNofiterAsync(
             NotificationsTestsNames.Test3,

@@ -1,6 +1,7 @@
 using LINGYUN.Abp.Account.Dto;
 using LINGYUN.Abp.Account.Web.ExternalProviders;
 using LINGYUN.Abp.Account.Web.Models;
+using LINGYUN.Abp.Identity;
 using LINGYUN.Abp.Identity.QrCode;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
@@ -123,6 +124,12 @@ namespace LINGYUN.Abp.Account.Web.Pages.Account
 
                 if (!await UserManager.VerifyUserTokenAsync(user, QrCodeLoginProviderConsts.Name, QrCodeLoginProviderConsts.Purpose, qrCodeInfo.Token))
                 {
+                    await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext()
+                    {
+                        Identity = QrCodeLoginProviderConsts.Purpose,
+                        Action = IdentitySecurityLogExtendActionConsts.QrCodeLoginFailed,
+                        UserName = user.UserName
+                    });
                     Alerts.Danger(L["QrCode:Invalid"]);
                     return Page();
                 }
@@ -140,7 +147,7 @@ namespace LINGYUN.Abp.Account.Web.Pages.Account
                 await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext()
                 {
                     Identity = QrCodeLoginProviderConsts.Purpose,
-                    Action = IdentitySecurityLogActionConsts.LoginSucceeded,
+                    Action = IdentitySecurityLogExtendActionConsts.QrCodeLoginSucceeded,
                     UserName = user.UserName
                 });
 

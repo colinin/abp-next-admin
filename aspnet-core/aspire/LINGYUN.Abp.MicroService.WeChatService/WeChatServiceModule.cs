@@ -2,12 +2,14 @@
 using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
 using LINGYUN.Abp.AspNetCore.Session;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
+using LINGYUN.Abp.AuditLogging.IP.Location;
 using LINGYUN.Abp.Authorization.OrganizationUnits;
-using LINGYUN.Abp.Claims.Mapping;
+using LINGYUN.Abp.AspNetCore.Authentication;
 using LINGYUN.Abp.Dynamic.Definitions;
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
 using LINGYUN.Abp.Http.Client.Wrapper;
+using LINGYUN.Abp.IP2Region;
 using LINGYUN.Abp.Identity.WeChat.Work;
 using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
 using LINGYUN.Abp.Saas.EntityFrameworkCore;
@@ -47,6 +49,8 @@ namespace LINGYUN.Abp.MicroService.WeChatService;
     typeof(AbpSerilogEnrichersApplicationModule),
     typeof(AbpSerilogEnrichersUniqueIdModule),
     typeof(AbpAuditLoggingElasticsearchModule),
+    typeof(AbpAuditLoggingIPLocationModule),
+    typeof(AbpIP2RegionModule),
     typeof(AbpAspNetCoreSerilogModule),
     typeof(AbpWeChatWorkApplicationModule),
     typeof(AbpWeChatWorkHttpApiModule),
@@ -77,7 +81,7 @@ namespace LINGYUN.Abp.MicroService.WeChatService;
     typeof(AbpSwashbuckleModule),
     typeof(AbpHttpClientWrapperModule),
     typeof(AbpMailKitModule),
-    typeof(AbpClaimsMappingModule),
+    typeof(AbpAspNetCoreAuthenticationModule),
     typeof(AbpAspNetCoreSessionModule),
     typeof(AbpAspNetCoreMvcWrapperModule),
     typeof(AbpAspNetCoreHttpOverridesModule),

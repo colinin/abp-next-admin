@@ -192,6 +192,19 @@ public static class SettingDefinitionExtensions
             .WithProperty(OptionValueKey, optionValues);
     }
 
+    public static SettingDefinition WithOptions<TValue>(
+        this SettingDefinition definition,
+        IEnumerable<LocalizableValue<TValue>> options)
+    {
+        var optionNames = options.Select(x => $"N:{x.Name};L:{x.ResourceName}").JoinAsString(",");
+        var optionValues = options.Select(x => x.Value).JoinAsString(",");
+
+        return definition
+            .WithValueType(ValueType.Option)
+            .WithProperty(OptionNameKey, optionNames)
+            .WithProperty(OptionValueKey, optionValues);
+    }
+
     public static SettingDefinition ReplaceProviders(
         this SettingDefinition definition, 
         params string[] providers)

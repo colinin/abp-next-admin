@@ -16,7 +16,6 @@
 * 安全日志
   * 记录登录尝试
   * 记录登录失败
-  * 记录密码修改
 
 ## 安装
 
@@ -47,10 +46,8 @@ public override void PreConfigureServices(ServiceConfigurationContext context)
 POST /connect/token
 Content-Type: application/x-www-form-urlencoded
 
-grant_type=qr_code_&
-username=admin&
-password=1q2w3E*&
-enterpriseId=your-enterprise-id&
+grant_type=qr_code&
+qrcode_key=a73faf8936f649868223a9287317d8d1&
 scope=openid profile
 ```
 
@@ -65,32 +62,7 @@ scope=openid profile
 * qrcode_key_ (必填)
   * 二维码Key
 
-* password (必填)
-  * 用户密码
-
-* enterpriseId (必填)
-  * 企业ID，必须是有效的GUID格式
-
-* TwoFactorProvider (可选)
-  * 双因素认证提供程序名称
-  * 仅在启用双因素认证时需要
-
-* TwoFactorCode (可选)
-  * 双因素认证码
-  * 仅在启用双因素认证时需要
-
-* ChangePasswordToken (可选)
-  * 修改密码令牌
-  * 仅在需要修改密码时需要
-
-* NewPassword (可选)
-  * 新密码
-  * 仅在需要修改密码时需要
-
 ## 注意事项
 
-* 企业ID必须是有效的GUID格式
-* 密码必须符合系统配置的密码策略
-* 双因素认证码有效期有限
 * 所有认证操作都会记录安全日志
 * 建议在生产环境中使用 HTTPS

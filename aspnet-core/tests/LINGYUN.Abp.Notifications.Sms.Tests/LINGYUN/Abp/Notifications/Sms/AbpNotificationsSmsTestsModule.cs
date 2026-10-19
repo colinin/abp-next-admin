@@ -11,7 +11,7 @@ namespace LINGYUN.Abp.Notifications.Sms
     {
         public override void PreConfigureServices(ServiceConfigurationContext context)
         {
-            // �ı�Ĭ������ǰ׺����
+            // 改变默认参数前缀设置
             PreConfigure<AbpNotificationsSmsOptions>(options =>
             {
                 options.TemplateParamsPrefix = "[sms-override]";
@@ -20,8 +20,8 @@ namespace LINGYUN.Abp.Notifications.Sms
 
         public override void ConfigureServices(ServiceConfigurationContext context)
         {
-            // �Զ������ݴ�������
-            Configure<AbpNotificationOptions>(options =>
+            // 自定义数据处理器设置
+            Configure<AbpNotificationsPublishOptions>(options =>
             {
             });
         }

@@ -1,4 +1,4 @@
-﻿using LINGYUN.Abp.WxPusher.Features;
+using LINGYUN.Abp.WxPusher.Features;
 using LINGYUN.Abp.WxPusher.Messages;
 using LINGYUN.Abp.WxPusher.User;
 using Microsoft.Extensions.Logging;
@@ -18,6 +18,7 @@ public class WxPusherNotificationPublishProvider : NotificationPublishProvider
     protected IWxPusherMessageSender WxPusherMessageSender => ServiceProvider.LazyGetRequiredService<IWxPusherMessageSender>();
     protected INotificationDataSerializer NotificationDataSerializer => ServiceProvider.LazyGetRequiredService<INotificationDataSerializer>();
     protected INotificationDefinitionManager NotificationDefinitionManager => ServiceProvider.LazyGetRequiredService<INotificationDefinitionManager>();
+    protected INotificationChannelDataResolver ChannelDataResolver => ServiceProvider.LazyGetRequiredService<INotificationChannelDataResolver>();
 
     protected async override Task<bool> CanPublishAsync(NotificationInfo notification, CancellationToken cancellationToken = default)
     {
@@ -44,7 +45,8 @@ public class WxPusherNotificationPublishProvider : NotificationPublishProvider
         var uids = await WxPusherUserStore.GetBindUidsAsync(subscribeUserIds, cancellationToken);
 
         var notificationDefine = await NotificationDefinitionManager.GetOrNullAsync(context.Notification.Name);
-        var url = context.Notification.Data.GetUrlOrNull() ?? notificationDefine?.GetUrlOrNull();
+        var channelData = ChannelDataResolver.Resolve<WxPusherChannelData>(context.Notification.Data);
+        var url = channelData?.Url ?? notificationDefine?.GetUrlOrNull();
         topics ??= notificationDefine?.GetTopics();
         var contentType = notificationDefine?.GetContentTypeOrDefault(MessageContentType.Text)
              ?? MessageContentType.Text;

@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Localization;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Services;
 using Volo.Abp.EventBus.Distributed;
 using Volo.Abp.Features;
+using Volo.Abp.Localization;
 using Volo.Abp.SettingManagement;
 using Volo.Abp.SettingManagement.Localization;
 using Volo.Abp.Settings;
@@ -132,7 +134,24 @@ public abstract class SettingV2AppServiceBase : ApplicationService
                     if (valueType == ValueType.Option)
                     {
                         var options = setting.GetOptions();
-                        settingDetailsDto?.AddOptions(options.Select(option => new OptionDto(option.Name, option.Value)));
+                        foreach (var option in options)
+                        {
+                            // 本地化选项列表
+                            var optionNameChars = option.Name.Split(';');
+                            if (optionNameChars.Length == 2 &&
+                                optionNameChars[0].StartsWith("N:") &&
+                                optionNameChars[1].StartsWith("L:"))
+                            {
+                                var optionName = optionNameChars[0].RemovePreFix("N:");
+                                var optionResourceName = optionNameChars[1].RemovePreFix("L:");
+                                var optionLocalizeName = new LocalizableString(optionName, optionResourceName).Localize(StringLocalizerFactory);
+                                settingDetailsDto?.AddOption(optionLocalizeName.Value, option.Value);
+                            }
+                            else
+                            {
+                                settingDetailsDto?.AddOption(option.Name, option.Value);
+                            }
+                        }
                     }
 
                     var slot = setting.GetSlotOrNull();

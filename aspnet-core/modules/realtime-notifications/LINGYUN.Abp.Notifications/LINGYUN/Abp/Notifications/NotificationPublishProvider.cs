@@ -73,7 +73,15 @@ public abstract class NotificationPublishProvider : INotificationPublishProvider
             context.Notification.Type == NotificationType.ServiceCallback)
         {
             Logger.LogDebug(
-                "System or service callback notification {NotificationName}, skip all interceptors.",
+                "System or service callback notification: {NotificationName}, skip all interceptors.",
+                context.Notification.Name);
+            return true;
+        }
+
+        if (context.Notification.Severity >= NotificationSeverity.Warn)
+        {
+            Logger.LogDebug(
+                "Notifications above the warning level: {NotificationName}, skip all interceptors.",
                 context.Notification.Name);
             return true;
         }

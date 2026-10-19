@@ -20,17 +20,13 @@ public class EfCoreBlobRepository : EfCoreRepository<IBlobManagementDbContext, B
     }
 
     public async virtual Task<bool> ExistsAsync(
-        string containerName,
         string fullName,
+        Guid? containerId = null,
         CancellationToken cancellationToken = default)
     {
-        var dbContext = await GetDbContextAsync();
-
-        return await (from container in dbContext.Set<BlobContainer>()
-                      join blob in dbContext.Set<Blob>()
-                          on container.Id equals blob.ContainerId
-                      where container.Name == containerName && blob.FullName == fullName
-                      select blob)
+        return await (await GetQueryableAsync())
+            .Where(x => x.FullName == fullName)
+            .WhereIf(containerId.HasValue, x => x.ContainerId == containerId)
                 .AnyAsync(GetCancellationToken(cancellationToken));
     }
 

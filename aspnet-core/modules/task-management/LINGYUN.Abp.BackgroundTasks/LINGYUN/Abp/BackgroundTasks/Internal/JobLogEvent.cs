@@ -18,7 +18,7 @@ public class JobLogEvent : JobEventBase<JobLogEvent>, ITransientDependency
     {
         if (context.EventData.Type.IsDefined(typeof(DisableAuditingAttribute), true))
         {
-            Logger.LogWarning("The job change event could not be processed because the job marked the DisableAuditing attribute!");
+            Logger.LogDebug("The job change event could not be processed because the job marked the DisableAuditing attribute!");
             return Task.FromResult(false);
         }
         return base.CanAfterExecuted(context);

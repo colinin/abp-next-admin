@@ -10,6 +10,7 @@ using LINGYUN.Abp.AspNetCore.Mvc.UI.MultiTenancy;
 using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
 using LINGYUN.Abp.AspNetCore.Session;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
+using LINGYUN.Abp.AuditLogging.IP.Location;
 using LINGYUN.Abp.BlobStoring.BlobManagement;
 using LINGYUN.Abp.Data.DbMigrator;
 using LINGYUN.Abp.Dynamic.Definitions;
@@ -18,6 +19,7 @@ using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.Exporter.MiniSoftware;
 using LINGYUN.Abp.Gdpr;
 using LINGYUN.Abp.Gdpr.Web;
+using LINGYUN.Abp.IP2Region;
 using LINGYUN.Abp.Identity.AspNetCore;
 using LINGYUN.Abp.Identity.OrganizaztionUnits;
 using LINGYUN.Abp.Localization.CultureMap;
@@ -75,7 +77,9 @@ namespace LINGYUN.Abp.MicroService.AuthServer;
     typeof(AbpPermissionManagementDomainIdentityModule),
     typeof(AuthServerMigrationsEntityFrameworkCoreModule),
     typeof(AbpDataDbMigratorModule),
-    typeof(AbpAuditLoggingElasticsearchModule), // 放在 AbpIdentity 模块之后,避免被覆盖
+    typeof(AbpAuditLoggingElasticsearchModule), // 放在 AbpIdentity 模块之后,避免被覆盖,
+    typeof(AbpAuditLoggingIPLocationModule),
+    typeof(AbpIP2RegionModule),
     typeof(AbpLocalizationCultureMapModule),
     typeof(AbpAspNetCoreMultiTenancyModule),
     typeof(AbpAspNetCoreSessionModule),

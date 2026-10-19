@@ -2,11 +2,12 @@
 using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
 using LINGYUN.Abp.AspNetCore.Session;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
+using LINGYUN.Abp.AuditLogging.IP.Location;
 using LINGYUN.Abp.Authorization.OrganizationUnits;
 using LINGYUN.Abp.BackgroundTasks.DistributedLocking;
 using LINGYUN.Abp.BackgroundTasks.Quartz;
 using LINGYUN.Abp.BlobStoring.BlobManagement;
-using LINGYUN.Abp.Claims.Mapping;
+using LINGYUN.Abp.AspNetCore.Authentication;
 using LINGYUN.Abp.Data.DbMigrator;
 using LINGYUN.Abp.Dynamic.Definitions;
 using LINGYUN.Abp.Elsa;
@@ -17,6 +18,7 @@ using LINGYUN.Abp.Emailing.Platform;
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
 using LINGYUN.Abp.Http.Client.Wrapper;
+using LINGYUN.Abp.IP2Region;
 using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
 using LINGYUN.Abp.Quartz.PostgresSqlInstaller;
@@ -50,6 +52,8 @@ namespace LINGYUN.Abp.MicroService.WorkflowService;
     typeof(AbpSerilogEnrichersApplicationModule),
     typeof(AbpSerilogEnrichersUniqueIdModule),
     typeof(AbpAuditLoggingElasticsearchModule),
+    typeof(AbpAuditLoggingIPLocationModule),
+    typeof(AbpIP2RegionModule),
     typeof(AbpAspNetCoreSerilogModule),
     typeof(AbpBlobStoringBlobManagementModule),
     typeof(AbpElsaModule),
@@ -82,7 +86,7 @@ namespace LINGYUN.Abp.MicroService.WorkflowService;
     typeof(AbpAspNetCoreMvcWrapperModule),
     typeof(AbpSmsPlatformModule),
     typeof(AbpEmailingPlatformModule),
-    typeof(AbpClaimsMappingModule),
+    typeof(AbpAspNetCoreAuthenticationModule),
     typeof(AbpAspNetCoreSessionModule),
     typeof(AbpAspNetCoreMvcNewtonsoftModule),
     typeof(AbpAspNetCoreHttpOverridesModule),

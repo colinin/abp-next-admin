@@ -15,7 +15,7 @@
 
 	<ItemGroup>
 	  <PackageReference Include="JetBrains.Annotations" />
-	  <PackageReference Include="System.ComponentModel.Annotations"/>
+	  <PackageReference Include="System.ComponentModel.Annotations" />
 	</ItemGroup>
 
 </Project>

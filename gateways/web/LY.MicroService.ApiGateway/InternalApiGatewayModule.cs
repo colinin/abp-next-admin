@@ -1,4 +1,6 @@
 ﻿using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
+using LINGYUN.Abp.AuditLogging.IP.Location;
+using LINGYUN.Abp.IP2Region;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Rewrite;
@@ -26,7 +28,9 @@ namespace LY.MicroService.ApiGateway;
     typeof(AbpDataModule),
     typeof(AbpSwashbuckleModule),
     typeof(AbpAspNetCoreSerilogModule),
-    typeof(AbpAspNetCoreMvcWrapperModule)
+    typeof(AbpAspNetCoreMvcWrapperModule),
+    typeof(AbpAuditLoggingIPLocationModule),
+    typeof(AbpIP2RegionModule)
 )]
 public class InternalApiGatewayModule : AbpModule
 {

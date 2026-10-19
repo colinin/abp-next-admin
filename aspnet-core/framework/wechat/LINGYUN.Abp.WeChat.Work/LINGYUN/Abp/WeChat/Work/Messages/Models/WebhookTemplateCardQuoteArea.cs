@@ -1,4 +1,4 @@
-﻿using JetBrains.Annotations;
+using JetBrains.Annotations;
 using Newtonsoft.Json;
 using System.Text.Json.Serialization;
 using Volo.Abp;
@@ -51,7 +51,8 @@ public class WebhookTemplateCardQuoteArea
     [JsonProperty("quote_text")]
     [JsonPropertyName("quote_text")]
     public string? QuoteText { get; set; }
-    private WebhookTemplateCardQuoteArea(
+    [System.Text.Json.Serialization.JsonConstructor]
+    public WebhookTemplateCardQuoteArea(
         string title,
         int? type = null,
         string? url = null,

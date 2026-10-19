@@ -17,6 +17,7 @@
 
 - EntityFrameworkCore 实现  
 - Elasticsearch 实现  
+- OpenObserve 实现
 
 > 注意: Elastic库限制, 兼容8.x; 9.x版本, 如需使用10.x版本, 请切换 **Elastic.Clients.Elasticsearch** 为9.x版本 
 > 参考: https://www.nuget.org/packages/Elastic.Clients.Elasticsearch#readme-body-tab  
@@ -47,6 +48,16 @@ public class YouProjectModule : AbpModule
 
 ```csharp
 [DependsOn(typeof(AbpAuditLoggingElasticsearchModule))]
+public class YouProjectModule : AbpModule
+{
+  // other
+}
+```
+
+### OpenObserve 模块
+
+```csharp
+[DependsOn(typeof(AbpAuditLoggingOpenObserveModule))]
 public class YouProjectModule : AbpModule
 {
   // other
@@ -93,6 +104,32 @@ public class YouProjectModule : AbpModule
 }
 ```
 
+### OpenObserve 配置
+
+```json
+{
+  "OpenObserve": {
+    "Endpoint": "http://localhost:5080", // OpenObserve 服务地址
+    "Organization": "default", // 组织名称
+    "AccessToken": "Basic XXXXXXXXXXX" // 授权头, 或使用 UserName/Password
+  },
+  "AuditLogging": {
+    "OpenObserve": {
+      "Organization": null, // 数据流所属组织, 为空时使用 OpenObserve:Organization
+      "AuditLogStream": "audit_log", // 审计日志主数据流(根)
+      "SecurityLogStream": "security_log", // 安全日志数据流
+      "WriteEntityChanges": true, // 是否把实体变更展平写入 {AuditLogStream}_entity_changes
+      "WriteActions": true, // 是否把操作展平写入 {AuditLogStream}_actions
+      "DefaultQueryDays": 365, // 未指定时间范围时的默认查询跨度(天)
+      "UseLogTimeAsTimestamp": true, // 是否用日志业务时间覆盖 _timestamp
+      "TimestampAllowedUptoHours": 5 // 覆盖 _timestamp 的最大回溯小时数, 需与服务端 ZO_INGEST_ALLOWED_UPTO 一致
+    }
+  }
+}
+```
+
+> 子数据流名称由 `AuditLogStream` 计算(实体变更 = `{AuditLogStream}_entity_changes`, 操作 = `{AuditLogStream}_actions`), 无需单独配置。
+
 ## 数据库连接配置
 
 ```json
@@ -126,3 +163,7 @@ Configure<AbpAuditingOptions>(options =>
 
 - Elasticsearch 实现支持跨租户，将根据租户自动切换索引
 - EntityFrameworkCore 实现主要作为桥梁，具体实现交由 Abp 官方模块管理
+- OpenObserve 实现同样按租户隔离数据流，租户数据流形如 `audit_log_{tenantId:N}`：写入按日志自身的租户，查询按当前租户，命名规则可通过 `IOpenObserveStreamNameNormalizer` 覆写
+- OpenObserve 为 append-only 存储且不支持 SQL `DELETE`/`UPDATE`，因此 `IAuditLogManager.DeleteAsync`/`DeleteManyAsync` 会抛出业务异常 `AuditLoggingOpenObserve:010001`（"当前日志设施不支持删除记录!"），数据清理请在 OpenObserve 侧配置保留策略或使用其按时间范围删除接口
+- OpenObserve 会把嵌套数组保存为 JSON 字符串列（列名即字段名），因此实体变更与操作分别展平写入独立数据流；操作的 `Actions.*` 条件采用两段式查询（先在操作数据流匹配 `auditlogid`，再回主数据流按 `id in (...)` 过滤）
+- 数据流由 OpenObserve 在首次写入时自动创建，模块不探测、不创建、不修改数据流设置；查询尚未创建的数据流时返回空结果并记录警告日志

@@ -3,9 +3,10 @@ using LINGYUN.Abp.AspNetCore.HttpOverrides;
 using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
 using LINGYUN.Abp.AspNetCore.Session;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
+using LINGYUN.Abp.AuditLogging.IP.Location;
 using LINGYUN.Abp.Authorization.OrganizationUnits;
 using LINGYUN.Abp.BlobStoring.BlobManagement;
-using LINGYUN.Abp.Claims.Mapping;
+using LINGYUN.Abp.AspNetCore.Authentication;
 using LINGYUN.Abp.Dynamic.Definitions;
 using LINGYUN.Abp.Emailing.Platform;
 using LINGYUN.Abp.EventBus.CAP;
@@ -14,6 +15,7 @@ using LINGYUN.Abp.Exporter.MiniSoftware;
 using LINGYUN.Abp.Gdpr;
 using LINGYUN.Abp.Gdpr.EntityFrameworkCore;
 using LINGYUN.Abp.Gdpr.Identity;
+using LINGYUN.Abp.IP2Region;
 using LINGYUN.Abp.Identity;
 using LINGYUN.Abp.Identity.AspNetCore;
 using LINGYUN.Abp.Identity.EntityFrameworkCore;
@@ -70,6 +72,8 @@ namespace LINGYUN.Abp.MicroService.IdentityService;
     typeof(AbpLocalizationManagementEntityFrameworkCoreModule),
     typeof(AbpAuthorizationOrganizationUnitsModule),
     typeof(AbpAuditLoggingElasticsearchModule),
+    typeof(AbpAuditLoggingIPLocationModule),
+    typeof(AbpIP2RegionModule),
     typeof(AbpEmailingExceptionHandlingModule),
     typeof(AbpBlobStoringBlobManagementModule),
     typeof(AbpHttpClientIdentityModelWebModule),
@@ -84,7 +88,7 @@ namespace LINGYUN.Abp.MicroService.IdentityService;
     typeof(AbpAspNetCoreMvcWrapperModule),
     typeof(AbpDynamicDefinitionsModule),
     typeof(AbpExporterMiniSoftwareModule),
-    typeof(AbpClaimsMappingModule),
+    typeof(AbpAspNetCoreAuthenticationModule),
     typeof(AbpSwashbuckleModule),
     typeof(AbpAutofacModule)
     )]

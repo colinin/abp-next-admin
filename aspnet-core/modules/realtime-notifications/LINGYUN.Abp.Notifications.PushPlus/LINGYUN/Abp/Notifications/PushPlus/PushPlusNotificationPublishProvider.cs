@@ -1,4 +1,4 @@
-﻿using LINGYUN.Abp.PushPlus.Channel;
+using LINGYUN.Abp.PushPlus.Channel;
 using LINGYUN.Abp.PushPlus.Features;
 using LINGYUN.Abp.PushPlus.Message;
 using Microsoft.Extensions.Logging;
@@ -20,6 +20,7 @@ public class PushPlusNotificationPublishProvider : NotificationPublishProvider
     protected IPushPlusMessageSender PushPlusMessageSender => ServiceProvider.LazyGetRequiredService<IPushPlusMessageSender>();
     protected INotificationDataSerializer NotificationDataSerializer => ServiceProvider.LazyGetRequiredService<INotificationDataSerializer>();
     protected INotificationDefinitionManager NotificationDefinitionManager => ServiceProvider.LazyGetRequiredService<INotificationDefinitionManager>();
+    protected INotificationChannelDataResolver ChannelDataResolver => ServiceProvider.LazyGetRequiredService<INotificationChannelDataResolver>();
 
     protected async override Task<bool> CanPublishAsync(NotificationInfo notification, CancellationToken cancellationToken = default)
     {
@@ -50,8 +51,9 @@ public class PushPlusNotificationPublishProvider : NotificationPublishProvider
              ?? PushPlusChannelType.Email;
         var template = notificationDefine?.GetTemplateOrDefault(PushPlusMessageTemplate.Text)
              ?? PushPlusMessageTemplate.Text;
-        var webhook = context.Notification.Data.GetWebhookOrNull() ?? "";
-        var callbackUrl = context.Notification.Data.GetCallbackUrlOrNull() ?? "";
+        var channelData = ChannelDataResolver.Resolve<PushPlusChannelData>(context.Notification.Data);
+        var webhook = channelData?.Webhook ?? "";
+        var callbackUrl = channelData?.CallbackUrl ?? "";
         var notificationData = await NotificationDataSerializer.ToStandard(context.Notification.Data);
 
         await PushPlusMessageSender.SendWithChannelAsync(

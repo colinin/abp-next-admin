@@ -22,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\modules\common\LINGYUN.Abp.Notifications.Sms\LINGYUN.Abp.Notifications.Sms.csproj" />
+    <ProjectReference Include="..\..\modules\realtime-notifications\LINGYUN.Abp.Notifications.Sms\LINGYUN.Abp.Notifications.Sms.csproj" />
     <ProjectReference Include="..\LINGYUN.Abp.Notifications.Tests\LINGYUN.Abp.Notifications.Tests.csproj" />
     <ProjectReference Include="..\LINGYUN.Abp.TestBase\LINGYUN.Abp.TestsBase.csproj" />
   </ItemGroup>

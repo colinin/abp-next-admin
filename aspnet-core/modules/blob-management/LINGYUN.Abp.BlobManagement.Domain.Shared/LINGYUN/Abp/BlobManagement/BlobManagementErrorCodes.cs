@@ -1,4 +1,4 @@
-﻿namespace LINGYUN.Abp.BlobManagement;
+namespace LINGYUN.Abp.BlobManagement;
 
 public static class BlobManagementErrorCodes
 {
@@ -11,6 +11,7 @@ public static class BlobManagementErrorCodes
         public const string DeleteWithNotEmpty = Prefix + "002";
         public const string DeleteWithStatic = Prefix + "003";
         public const string NameNotFound = Prefix + "004";
+        public const string InvalidName = Prefix + "005";
     }
 
     public static class Blob
@@ -23,5 +24,6 @@ public static class BlobManagementErrorCodes
         public const string BlobHashValidFailed = Prefix + "005";
         public const string UploadFileSizeTooLong = Prefix + "006";
         public const string UploadFileExtendCanNotBeMatch = Prefix + "007";
+        public const string InvalidName = Prefix + "008";
     }
 }

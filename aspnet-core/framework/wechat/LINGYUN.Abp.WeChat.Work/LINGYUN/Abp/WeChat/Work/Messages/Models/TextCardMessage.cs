@@ -8,6 +8,8 @@ namespace LINGYUN.Abp.WeChat.Work.Messages.Models;
 /// </summary>
 public class TextCardMessage
 {
+    [Newtonsoft.Json.JsonConstructor]
+    [System.Text.Json.Serialization.JsonConstructor]
     public TextCardMessage(
         string title,
         string description,

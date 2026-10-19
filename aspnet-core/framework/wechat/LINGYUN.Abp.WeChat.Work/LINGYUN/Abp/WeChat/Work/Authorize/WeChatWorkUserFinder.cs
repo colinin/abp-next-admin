@@ -38,6 +38,18 @@ public class WeChatWorkUserFinder : IWeChatWorkUserFinder, ISingletonDependency
         return wechatWorkResponse.ToUserInfo();
     }
 
+    public async virtual Task<WeChatWorkCode2Session> GetCode2SessionAsync(
+        string code,
+        CancellationToken cancellationToken = default)
+    {
+        var token = await WeChatWorkTokenProvider.GetTokenAsync(cancellationToken);
+        var client = HttpClientFactory.CreateWeChatWorkApiClient();
+
+        var wechatWorkResponse = await client.Code2SessionAsync(token.AccessToken, code, cancellationToken: cancellationToken);
+
+        return wechatWorkResponse.ToCode2Session();
+    }
+
     public async virtual Task<WeChatWorkUserDetail> GetUserDetailAsync(
         string userTicket,
         CancellationToken cancellationToken = default)

@@ -1,4 +1,4 @@
-﻿using JetBrains.Annotations;
+using JetBrains.Annotations;
 using Newtonsoft.Json;
 using System.Text.Json.Serialization;
 
@@ -6,7 +6,7 @@ namespace LINGYUN.Abp.WeChat.Work.Messages.Models;
 /// <summary>
 /// 企业微信Webhook图文消息
 /// </summary>
-internal class WeChatWorkWebhookNewsMessage : WeChatWorkWebhookMessage
+public class WeChatWorkWebhookNewsMessage : WeChatWorkWebhookMessage
 {
     /// <summary>
     /// 图文消息体

@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<Import Project="..\..\..\configureawait.props" />
+	<Import Project="..\..\..\common.props" />
+	
+	<PropertyGroup>
+		<TargetFramework>net10.0</TargetFramework>
+	</PropertyGroup>
+	
+	<ItemGroup>
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Volo.Abp.EntityFrameworkCore.SqlServer" />
+		<PackageReference Include="DotNetCore.CAP.SqlServer" />
+	</ItemGroup>
+	
+	<ItemGroup>
+	  <!--<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.Elsa.EntityFrameworkCore.SqlServer\LINGYUN.Abp.Elsa.EntityFrameworkCore.SqlServer.csproj" />-->
+	  <ProjectReference Include="..\..\modules\task-management\LINGYUN.Abp.Quartz.SqlServerInstaller\LINGYUN.Abp.Quartz.SqlServerInstaller.csproj" />
+	  <ProjectReference Include="..\LINGYUN.Abp.MicroService.AllInOne.EntityFrameworkCore\LINGYUN.Abp.MicroService.AllInOne.EntityFrameworkCore.csproj" />
+	</ItemGroup>
+</Project>

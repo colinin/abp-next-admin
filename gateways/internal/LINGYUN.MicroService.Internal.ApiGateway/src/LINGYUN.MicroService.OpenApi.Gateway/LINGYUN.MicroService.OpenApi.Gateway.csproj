@@ -20,8 +20,11 @@
 		<PackageReference Include="Serilog.Enrichers.Process" />
 		<PackageReference Include="Serilog.Enrichers.Thread" />
 		<PackageReference Include="Serilog.Settings.Configuration" />
+		<PackageReference Include="Serilog.Sinks.Async" />
+		<PackageReference Include="Serilog.Sinks.Console" />
 		<PackageReference Include="Serilog.Sinks.Elasticsearch" />
 		<PackageReference Include="Serilog.Sinks.File" />
+		<PackageReference Include="Serilog.Sinks.OpenTelemetry" />
 		<PackageReference Include="Swashbuckle.AspNetCore" />
 		<PackageReference Include="Volo.Abp.AspNetCore.Serilog" />
 		<PackageReference Include="Volo.Abp.Autofac" />
@@ -32,8 +35,10 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\..\..\..\aspnet-core\framework\auditing\LINGYUN.Abp.AuditLogging.Elasticsearch\LINGYUN.Abp.AuditLogging.Elasticsearch.csproj" />
+		<ProjectReference Include="..\..\..\..\..\aspnet-core\framework\auditing\LINGYUN.Abp.AuditLogging.IP.Location\LINGYUN.Abp.AuditLogging.IP.Location.csproj" />
 		<ProjectReference Include="..\..\..\..\..\aspnet-core\framework\common\LINGYUN.Abp.AspNetCore.Session\LINGYUN.Abp.AspNetCore.Session.csproj" />
 		<!--<ProjectReference Include="..\..\..\..\..\aspnet-core\framework\common\LINGYUN.Abp.AspNetCore.HttpOverrides\LINGYUN.Abp.AspNetCore.HttpOverrides.csproj" />-->
+		<ProjectReference Include="..\..\..\..\..\aspnet-core\framework\common\LINGYUN.Abp.IP2Region\LINGYUN.Abp.IP2Region.csproj" />
 		<ProjectReference Include="..\..\..\..\..\aspnet-core\framework\localization\LINGYUN.Abp.Localization.CultureMap\LINGYUN.Abp.Localization.CultureMap.csproj" />
 		<ProjectReference Include="..\..\..\..\..\aspnet-core\framework\logging\LINGYUN.Abp.Serilog.Enrichers.Application\LINGYUN.Abp.Serilog.Enrichers.Application.csproj" />
 		<ProjectReference Include="..\..\..\..\..\aspnet-core\framework\logging\LINGYUN.Abp.Serilog.Enrichers.UniqueId\LINGYUN.Abp.Serilog.Enrichers.UniqueId.csproj" />
@@ -42,9 +47,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Update="Dockerfile">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </None>
+		<None Update="Dockerfile">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
 	</ItemGroup>
-
 </Project>

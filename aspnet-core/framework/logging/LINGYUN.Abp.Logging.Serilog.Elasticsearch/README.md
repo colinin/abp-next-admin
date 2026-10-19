@@ -2,7 +2,7 @@
 
 简体中文 | [English](./README.EN.md)
 
-ILoggingManager 接口的ES实现, 从ES中检索日志信息  
+ILoggingProvider 接口的ES实现, 从ES中检索日志信息  
 
 ## 功能特性
 
@@ -32,6 +32,7 @@ public class YouProjectModule : AbpModule
 ```json
 {
   "Logging": {
+    "Provider": "ElasticsearchLoggingProvider",
     "Serilog": {
       "Elasticsearch": {
         "IndexFormat": "logstash-{0:yyyy.MM.dd}"

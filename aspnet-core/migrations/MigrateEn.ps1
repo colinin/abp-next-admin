@@ -12,17 +12,17 @@ $projectPath = Resolve-Path (Join-Path $PSScriptRoot "..")
 # Define available DbContexts
 $dbContexts = @{
     "1" = @{
-        Name = "LY.MicroService.Applications.Single.EntityFrameworkCore.MySql"
+        Name = "LINGYUN.Abp.MicroService.AllInOne.EntityFrameworkCore.MySql"
         Context = "SingleMigrationsDbContext"
         Factory = "SingleMigrationsDbContextFactory"
     }
     "2" = @{
-        Name = "LY.MicroService.Applications.Single.EntityFrameworkCore.PostgreSql"
+        Name = "LINGYUN.Abp.MicroService.AllInOne.EntityFrameworkCore.PostgreSql"
         Context = "SingleMigrationsDbContext"
         Factory = "SingleMigrationsDbContextFactory"
     }
     "3" = @{
-        Name = "LY.MicroService.Applications.Single.EntityFrameworkCore.SqlServer"
+        Name = "LINGYUN.Abp.MicroService.AllInOne.EntityFrameworkCore.SqlServer"
         Context = "SingleMigrationsDbContext"
         Factory = "SingleMigrationsDbContextFactory"
     }

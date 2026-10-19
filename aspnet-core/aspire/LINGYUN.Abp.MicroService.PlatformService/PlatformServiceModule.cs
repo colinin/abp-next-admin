@@ -2,6 +2,7 @@
 using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
 using LINGYUN.Abp.AspNetCore.Session;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
+using LINGYUN.Abp.AuditLogging.IP.Location;
 using LINGYUN.Abp.Authorization.OrganizationUnits;
 using LINGYUN.Abp.BlobManagement;
 using LINGYUN.Abp.BlobManagement.Aliyun;
@@ -10,12 +11,13 @@ using LINGYUN.Abp.BlobManagement.MimeCheck;
 using LINGYUN.Abp.BlobManagement.Minio;
 using LINGYUN.Abp.BlobManagement.Tencent;
 using LINGYUN.Abp.BlobStoring.BlobManagement;
-using LINGYUN.Abp.Claims.Mapping;
+using LINGYUN.Abp.AspNetCore.Authentication;
 using LINGYUN.Abp.Data.DbMigrator;
 using LINGYUN.Abp.Dynamic.Definitions;
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
 using LINGYUN.Abp.Features.LimitValidation.Redis;
+using LINGYUN.Abp.IP2Region;
 using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
 using LINGYUN.Abp.MicroService.PlatformService.BackgroundWorkers;
@@ -54,6 +56,8 @@ namespace LINGYUN.Abp.MicroService.PlatformService;
     typeof(AbpSerilogEnrichersUniqueIdModule),
     typeof(AbpAspNetCoreSerilogModule),
     typeof(AbpAuditLoggingElasticsearchModule),
+    typeof(AbpAuditLoggingIPLocationModule),
+    typeof(AbpIP2RegionModule),
     typeof(AbpAspNetCoreMultiTenancyModule),
 
     typeof(AbpBlobManagementApplicationModule),
@@ -92,7 +96,7 @@ namespace LINGYUN.Abp.MicroService.PlatformService;
     typeof(AbpHttpClientModule),
     typeof(AbpMailKitModule),
     typeof(AbpAliyunSmsModule),
-    typeof(AbpClaimsMappingModule),
+    typeof(AbpAspNetCoreAuthenticationModule),
     typeof(AbpAspNetCoreSessionModule),
     typeof(AbpAspNetCoreMvcWrapperModule),
     typeof(AbpAspNetCoreHttpOverridesModule),

@@ -18,7 +18,8 @@ public class AbpIdentityServerWeChatWorkModule : AbpModule
     {
         PreConfigure<IIdentityServerBuilder>(builder =>
         {
-            builder.AddExtensionGrantValidator<WeChatWorkGrantValidator>();
+            builder.AddExtensionGrantValidator<WeChatWorkOAuthGrantValidator>();
+            builder.AddExtensionGrantValidator<WeChatWorkMiniProgramGrantValidator>();
         });
     }
 

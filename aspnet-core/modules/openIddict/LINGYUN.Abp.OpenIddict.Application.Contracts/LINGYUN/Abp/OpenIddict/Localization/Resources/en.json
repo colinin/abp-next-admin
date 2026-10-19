@@ -14,6 +14,7 @@
     "OpenIddict:001001": "The application client id {ClientId} already exists!",
     "OpenIddict:002001": "The scope name {Name} already exists!",
     "DisplayName:ClientId": "Client Id",
+    "DisplayName:ClientSecretType": "Secret Type",
     "DisplayName:ClientSecret": "Client Secret",
     "Description:ClientSecret": "Please copy the key information before saving. You can only reset the key after the data is submitted.",
     "DisplayName:JsonWebKeySet": "Json web key set",
