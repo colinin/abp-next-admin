@@ -1,4 +1,5 @@
-﻿using LINGYUN.Abp.Identity.QrCode;
+﻿using LINGYUN.Abp.Identity;
+using LINGYUN.Abp.Identity.QrCode;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -61,17 +62,10 @@ public class QrCodeTokenExtensionGrant : ITokenExtensionGrant
             return Forbid(properties, OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
         }
 
-        Guid? tenantId = null;
-        var tenantIdValue = context.Request.GetParameter("tenant_id")?.ToString();
-        if (!tenantIdValue.IsNullOrWhiteSpace() && Guid.TryParse(tenantIdValue, out var tenantGuid))
-        {
-            tenantId = tenantGuid;
-        }
-
         var userManager = GetRequiredService<IdentityUserManager>(context);
         var currentTenant = GetRequiredService<ICurrentTenant>(context);
 
-        using (currentTenant.Change(tenantId))
+        using (currentTenant.Change(qrCodeInfo.TenantId))
         {
             var user = await userManager.FindByIdAsync(qrCodeInfo.UserId!);
             if (user == null)
@@ -96,7 +90,7 @@ public class QrCodeTokenExtensionGrant : ITokenExtensionGrant
                     [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] = OpenIddictResources.GetResourceString(OpenIddictResources.ID2019),
                 });
 
-                await SaveSecurityLogAsync(context, user, OpenIddictSecurityLogActionConsts.LoginLockedout);
+                await SaveSecurityLogAsync(context, user, IdentitySecurityLogExtendActionConsts.QrCodeLoginFailed);
 
                 return Forbid(properties, OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
             }
@@ -149,7 +143,7 @@ public class QrCodeTokenExtensionGrant : ITokenExtensionGrant
         await SaveSecurityLogAsync(
             context,
             user,
-            OpenIddictSecurityLogActionConsts.LoginSucceeded);
+            IdentitySecurityLogExtendActionConsts.QrCodeLoginSucceeded);
 
         return new SignInResult(OpenIddictServerAspNetCoreDefaults.AuthenticationScheme, principal);
     }

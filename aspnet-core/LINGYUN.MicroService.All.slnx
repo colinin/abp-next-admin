@@ -441,6 +441,7 @@
     <Project Path="modules/openIddict/LINGYUN.Abp.OpenIddict.Impersonation/LINGYUN.Abp.OpenIddict.Impersonation.csproj" />
     <Project Path="modules/openIddict/LINGYUN.Abp.OpenIddict.LinkUser/LINGYUN.Abp.OpenIddict.LinkUser.csproj" />
     <Project Path="modules/openIddict/LINGYUN.Abp.OpenIddict.Portal/LINGYUN.Abp.OpenIddict.Portal.csproj" />
+    <Project Path="modules/openIddict/LINGYUN.Abp.OpenIddict.QrCode/LINGYUN.Abp.OpenIddict.QrCode.csproj" />
     <Project Path="modules/openIddict/LINGYUN.Abp.OpenIddict.Sms/LINGYUN.Abp.OpenIddict.Sms.csproj" />
     <Project Path="modules/openIddict/LINGYUN.Abp.OpenIddict.WeChat.Work/LINGYUN.Abp.OpenIddict.WeChat.Work.csproj" />
     <Project Path="modules/openIddict/LINGYUN.Abp.OpenIddict.WeChat/LINGYUN.Abp.OpenIddict.WeChat.csproj" />
@@ -595,8 +596,8 @@
     <Project Path="tests/LINGYUN.Abp.Logging.Serilog.OpenObserve.Tests/LINGYUN.Abp.Logging.Serilog.OpenObserve.Tests.csproj" Id="77e77e27-9b11-43bf-b39d-af9e62484d67" />
     <Project Path="tests/LINGYUN.Abp.Logging.Tests/LINGYUN.Abp.Logging.Tests.csproj" Id="1e05270f-6652-443d-b76f-5d4360f2722e" />
     <Project Path="tests/LINGYUN.Abp.MaxMindGeoIP2.Tests/LINGYUN.Abp.MaxMindGeoIP2.Tests.csproj" />
-    <Project Path="tests/LINGYUN.Abp.Notifications.Tests/LINGYUN.Abp.Notifications.Tests.csproj" />
     <Project Path="tests/LINGYUN.Abp.Notifications.ChannelData.Tests/LINGYUN.Abp.Notifications.ChannelData.Tests.csproj" />
+    <Project Path="tests/LINGYUN.Abp.Notifications.Tests/LINGYUN.Abp.Notifications.Tests.csproj" />
     <Project Path="tests/LINGYUN.Abp.Notifications.Webhook.WeChat.Work.Tests/LINGYUN.Abp.Notifications.Webhook.WeChat.Work.Tests.csproj" />
     <Project Path="tests/LINGYUN.Abp.Notifications.WeChat.MiniProgram.Tests/LINGYUN.Abp.Notifications.WeChat.MiniProgram.Tests.csproj" />
     <Project Path="tests/LINGYUN.Abp.Notifications.WeChat.Work.Tests/LINGYUN.Abp.Notifications.WeChat.Work.Tests.csproj" />
