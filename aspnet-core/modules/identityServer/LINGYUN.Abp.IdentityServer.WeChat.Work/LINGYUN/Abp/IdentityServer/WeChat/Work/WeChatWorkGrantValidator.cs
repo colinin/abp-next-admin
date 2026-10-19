@@ -5,6 +5,7 @@ using IdentityServer4.Services;
 using IdentityServer4.Validation;
 using LINGYUN.Abp.WeChat.Work;
 using LINGYUN.Abp.WeChat.Work.Authorize;
+using LINGYUN.Abp.WeChat.Work.Authorize.Models;
 using LINGYUN.Abp.WeChat.Work.Localization;
 using LINGYUN.Abp.WeChat.Work.Settings;
 using Microsoft.AspNetCore.Identity;
@@ -24,10 +25,8 @@ using Volo.Abp.Uow;
 using IdentityUser = Volo.Abp.Identity.IdentityUser;
 
 namespace LINGYUN.Abp.IdentityServer.WeChat.Work;
-public class WeChatWorkGrantValidator : IExtensionGrantValidator
+public abstract class WeChatWorkGrantValidator : IExtensionGrantValidator
 {
-    public string GrantType => AbpWeChatWorkGlobalConsts.GrantType;
-
     protected ILogger<WeChatWorkGrantValidator> Logger { get; }
     protected IEventService EventService { get; }
     protected UserManager<IdentityUser> UserManager { get; }
@@ -38,7 +37,7 @@ public class WeChatWorkGrantValidator : IExtensionGrantValidator
     protected IStringLocalizer<WeChatWorkResource> WeChatWorkLocalizer { get; }
     protected IWeChatWorkUserFinder WeChatWorkUserFinder { get; }
 
-    public WeChatWorkGrantValidator(
+    protected WeChatWorkGrantValidator(
         IEventService eventService,
         ICurrentTenant currentTenant,
         IGuidGenerator guidGenerator,
@@ -59,6 +58,10 @@ public class WeChatWorkGrantValidator : IExtensionGrantValidator
         WeChatWorkLocalizer = weChatWorkLocalizer;
         WeChatWorkUserFinder = weChatWorkUserFinder;
     }
+
+    public abstract string GrantType { get; }
+
+    protected abstract Task<WeChatWorkUserInfo> FindUserInfoAsync(ExtensionGrantValidationContext context, string code);
 
     [UnitOfWork]
     public async virtual Task ValidateAsync(ExtensionGrantValidationContext context)
@@ -83,7 +86,7 @@ public class WeChatWorkGrantValidator : IExtensionGrantValidator
 
         try
         {
-            var userInfo = await WeChatWorkUserFinder.GetUserInfoAsync(code);
+            var userInfo = await FindUserInfoAsync(context, code);
             var currentUser = await UserManager.FindByLoginAsync(AbpWeChatWorkGlobalConsts.ProviderName, userInfo.UserId);
 
             if (currentUser == null)
