@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using System;
+using System.Net;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 
@@ -20,9 +21,21 @@ public class IPLocationResolver : IIPLocationResolver, ITransientDependency
     {
         var result = new IPLocationResolveResult();
 
+        if (!IPAddress.TryParse(ipAddress, out var ip))
+        {
+            // 非法地址不解析
+            return result;
+        }
+
+        // 本地回环与未指定地址(离线库无记录, 例如 127.0.0.1、::1、::)
+        if (IPAddress.IsLoopback(ip) || ip.Equals(IPAddress.Any) || ip.Equals(IPAddress.IPv6Any))
+        {
+            return result;
+        }
+
         using (var serviceScope = _serviceProvider.CreateScope())
         {
-            var context = new IPLocationResolveContext(ipAddress, serviceScope.ServiceProvider);
+            var context = new IPLocationResolveContext(ip, serviceScope.ServiceProvider);
 
             foreach (var ipLocationResolver in _options.IPLocationResolvers)
             {

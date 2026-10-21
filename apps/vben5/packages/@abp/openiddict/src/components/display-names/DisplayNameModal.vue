@@ -61,7 +61,7 @@ const [Modal, modalApi] = useVbenModal({
   onConfirm: async () => {
     await formApi.validateAndSubmitForm();
   },
-  title: $t('AbpOpenIddict.DisplayName.DisplayNames'),
+  title: $t('AbpOpenIddict.DisplayName:DisplayNames'),
 });
 function onSubmit(input: Record<string, any>) {
   emits('change', {

@@ -42,7 +42,7 @@
     <div class="mb-3">
         <label asp-for="Email" class="form-label"></label>
         <div class="input-group">
-            <input type="email" class="form-control" autocomplete="off" readonly="!isEmailUpdateEnabled" asp-for="Email" />
+            <input type="email" class="form-control" autocomplete="off" readonly="!@isEmailUpdateEnabled" asp-for="Email" />
 
             @if (CurrentUser.EmailVerified)
             {

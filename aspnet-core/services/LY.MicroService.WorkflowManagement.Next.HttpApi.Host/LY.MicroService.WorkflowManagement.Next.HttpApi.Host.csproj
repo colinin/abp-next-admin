@@ -58,4 +58,9 @@
 		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.ElsaNext.Server\LINGYUN.Abp.ElsaNext.Server.csproj" />
 	</ItemGroup>
 
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\framework\auditing\LINGYUN.Abp.AuditLogging.IP.Location\LINGYUN.Abp.AuditLogging.IP.Location.csproj" />
+		<ProjectReference Include="..\..\framework\common\LINGYUN.Abp.IP2Region\LINGYUN.Abp.IP2Region.csproj" />
+	</ItemGroup>
 </Project>

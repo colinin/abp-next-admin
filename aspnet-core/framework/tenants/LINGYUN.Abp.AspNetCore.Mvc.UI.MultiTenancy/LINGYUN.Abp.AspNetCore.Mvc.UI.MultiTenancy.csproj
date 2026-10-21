@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+	<Import Project="..\..\..\..\configureawait.props" />
+	<Import Project="..\..\..\..\common.props" />
+
+	<PropertyGroup>
+		<TargetFramework>net10.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<WarningsAsErrors>Nullable</WarningsAsErrors>
+		<AddRazorSupportForMvc>true</AddRazorSupportForMvc>
+		<AssemblyName>LINGYUN.Abp.AspNetCore.Mvc.UI.MultiTenancy</AssemblyName>
+		<PackageId>LINGYUN.Abp.AspNetCore.Mvc.UI.MultiTenancy</PackageId>
+		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+		<IsPackable>true</IsPackable>
+		<OutputType>Library</OutputType>
+		<RootNamespace />
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Content Remove="Pages\**\*.js" />
+		<Content Remove="LINGYUN\Abp\AspNetCore\Mvc\UI\MultiTenancy\Localization\**\*.json" />
+		<EmbeddedResource Include="Pages\**\*.js" />
+		<EmbeddedResource Include="LINGYUN\Abp\AspNetCore\Mvc\UI\MultiTenancy\Localization\**\*.json" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy" />
+	</ItemGroup>
+
+</Project>

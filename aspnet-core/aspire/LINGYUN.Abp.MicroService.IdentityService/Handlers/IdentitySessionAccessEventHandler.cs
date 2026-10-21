@@ -4,6 +4,7 @@ using LINGYUN.Abp.Identity.Settings;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.DistributedLocking;
@@ -128,7 +129,10 @@ public class IdentitySessionAccessEventHandler :
             {
                 if (!eventData.IpAddresses.IsNullOrWhiteSpace())
                 {
-                    idetitySession.SetIpAddresses(eventData.IpAddresses.Split(","));
+                    var ipAddresses = idetitySession.GetIpAddresses().ToList();
+                    ipAddresses.RemoveAll(x => x == eventData.IpAddresses);
+                    ipAddresses.Add(eventData.IpAddresses);
+                    idetitySession.SetIpAddresses(ipAddresses);
                 }
                 idetitySession.UpdateLastAccessedTime(eventData.LastAccessed);
 

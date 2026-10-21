@@ -1,20 +1,15 @@
-﻿using LINGYUN.Abp.Account.Web.ExternalProviders;
-using LINGYUN.Abp.Account.Web.Pages.Account;
+﻿using LINGYUN.Abp.Account.Web.Pages.Account;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
 using OpenIddict.Server;
 using OpenIddict.Server.AspNetCore;
 using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Volo.Abp.Account.Web;
 using Volo.Abp.DependencyInjection;
-using Volo.Abp.Identity;
 using Volo.Abp.MultiTenancy;
 using Volo.Abp.OpenIddict;
-using IdentityOptions = Microsoft.AspNetCore.Identity.IdentityOptions;
 
 namespace LINGYUN.Abp.Account.Web.OpenIddict.Pages.Account
 {
@@ -25,21 +20,14 @@ namespace LINGYUN.Abp.Account.Web.OpenIddict.Pages.Account
     public class OpenIddictLoginModel : LINGYUN.Abp.Account.Web.Pages.Account.LoginModel
     {
         protected AbpOpenIddictRequestHelper OpenIddictRequestHelper { get; }
-        public OpenIddictLoginModel(
-            IExternalProviderService externalProviderService,
-            IAuthenticationSchemeProvider schemeProvider,
-            IOptions<AbpAccountOptions> accountOptions,
-            IOptions<IdentityOptions> identityOptions,
-            IdentityDynamicClaimsPrincipalContributorCache identityDynamicClaimsPrincipalContributorCache,
-            AbpOpenIddictRequestHelper openIddictRequestHelper)
-            : base(externalProviderService, schemeProvider, accountOptions, identityOptions, identityDynamicClaimsPrincipalContributorCache)
+        public OpenIddictLoginModel(AbpOpenIddictRequestHelper openIddictRequestHelper)
         {
             OpenIddictRequestHelper = openIddictRequestHelper;
         }
 
         public async override Task<IActionResult> OnGetAsync()
         {
-            PasswordLoginInput = new PasswordLoginInputModel();
+            Input = new PasswordLoginInputModel();
 
             var request = await OpenIddictRequestHelper.GetFromReturnUrlAsync(ReturnUrl);
             if (request?.ClientId != null)
@@ -47,7 +35,7 @@ namespace LINGYUN.Abp.Account.Web.OpenIddict.Pages.Account
                 // TODO: Find a proper cancel way.
                 // ShowCancelButton = true;
 
-                PasswordLoginInput.UserNameOrEmailAddress = request.LoginHint!;
+                Input.UserNameOrEmailAddress = request.LoginHint!;
 
                 //TODO: Reference AspNetCore MultiTenancy module and use options to get the tenant key!
                 var tenant = request.GetParameter(TenantResolverConsts.DefaultTenantKey)?.ToString();
@@ -61,34 +49,14 @@ namespace LINGYUN.Abp.Account.Web.OpenIddict.Pages.Account
             return await base.OnGetAsync();
         }
 
-        public async override Task<IActionResult> OnPostPasswordLogin(string action)
+        public async override Task<IActionResult> OnPostAsync(string action)
         {
             if (action == "Cancel")
             {
                 return await OnCancelLogin(action);
             }
 
-            return await base.OnPostPasswordLogin(action);
-        }
-
-        public async override Task<IActionResult> OnPostPhoneNumberLogin(string action)
-        {
-            if (action == "Cancel")
-            {
-                return await OnCancelLogin(action);
-            }
-
-            return await base.OnPostPhoneNumberLogin(action);
-        }
-
-        public async override Task<IActionResult> OnPostQrCodeLogin(string action)
-        {
-            if (action == "Cancel")
-            {
-                return await OnCancelLogin(action);
-            }
-
-            return await base.OnPostQrCodeLogin(action);
+            return await base.OnPostAsync(action);
         }
 
         public async override Task<IActionResult> OnPostExternalLogin(string provider)

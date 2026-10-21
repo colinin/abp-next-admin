@@ -1,17 +1,21 @@
 <Project>
 	<PropertyGroup>
 		<LangVersion>latest</LangVersion>
-		<Version>10.6.0</Version>
+		<Version>10.7.0</Version>
 		<Authors>colin</Authors>
 		<NoWarn>$(NoWarn);CS1591;CS0436;NU1803</NoWarn>
 		<PackageProjectUrl>https://github.com/colinin/abp-next-admin</PackageProjectUrl>
 		<PackageOutputPath>$(SolutionDir)LocalNuget</PackageOutputPath>
-		<PackageVersion>10.6.0</PackageVersion>
+		<PackageVersion>10.7.0</PackageVersion>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<RepositoryType>git</RepositoryType>
 		<RepositoryUrl>https://github.com/colinin/abp-next-admin</RepositoryUrl>
 		<Nullable>enable</Nullable>
-		<GeneratePackageOnBuild Condition="$(AssemblyName.StartsWith('LINGYUN'))">true</GeneratePackageOnBuild>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="$(AssemblyName.StartsWith('LINGYUN')) AND !$(AssemblyName.StartsWith('LINGYUN.Abp.MicroService'))">
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<OutputPath>$(SolutionDir)LocalNuget</OutputPath>
 	</PropertyGroup>
 	
 	<PropertyGroup Condition="$(AssemblyName.EndsWith('HttpApi.Client'))">
@@ -20,28 +24,42 @@
 	
 	<ItemGroup>
 		<Compile Remove="LocalNuget\**" />
+		<Content Remove="LocalNuget\**" />
 		<EmbeddedResource Remove="LocalNuget\**" />
 		<None Remove="LocalNuget\**" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<Compile Remove="Logs\**" />
+		<Content Remove="Logs\**" />
 		<EmbeddedResource Remove="Logs\**" />
 		<None Remove="Logs\**" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<Compile Remove="Modules\**" />
+		<Content Remove="Modules\**" />
 		<EmbeddedResource Remove="Modules\**" />
 		<None Remove="Modules\**" />
 	</ItemGroup>
 
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-		<OutputPath>$(SolutionDir)LocalNuget</OutputPath>
-	</PropertyGroup>
-	
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-		<OutputPath>$(SolutionDir)LocalNuget</OutputPath>
-	</PropertyGroup>
+	<ItemGroup Condition="'$(UsingMicrosoftNETSdkWeb)' != 'true' AND '$(UsingMicrosoftNETSdkRazor)' != 'true'">
+		<None Remove="*.abppkg.analyze.json" />
+		<Content Include="*.abppkg.analyze.json">
+			<Pack>true</Pack>
+			<PackagePath>content\</PackagePath>
+		</Content>
+	</ItemGroup>
+	<ItemGroup>
+		<None Remove="*.abppkg" />
+		<Content Include="*.abppkg">
+			<Pack>true</Pack>
+			<PackagePath>content\</PackagePath>
+		</Content>
+	</ItemGroup>
+	<ItemGroup Condition="$(AssemblyName.EndsWith('HttpApi.Client'))">
+		<EmbeddedResource Include="**\*generate-proxy.json" />
+		<Content Remove="**\*generate-proxy.json" />
+	</ItemGroup>
 
 </Project>

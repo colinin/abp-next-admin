@@ -2,7 +2,7 @@
 
 [简体中文](./README.md) | English
 
-Elasticsearch implementation of the ILoggingManager interface, retrieving log information from Elasticsearch.
+Elasticsearch implementation of the ILoggingProvider interface, retrieving log information from Elasticsearch.
 
 ## Features
 
@@ -32,6 +32,7 @@ public class YouProjectModule : AbpModule
 ```json
 {
   "Logging": {
+    "Provider": "ElasticsearchLoggingProvider",
     "Serilog": {
       "Elasticsearch": {
         "IndexFormat": "logstash-{0:yyyy.MM.dd}"

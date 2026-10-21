@@ -1,5 +1,7 @@
 ﻿using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
-using LINGYUN.Abp.Identity.Session.AspNetCore;
+using LINGYUN.Abp.AspNetCore.Session;
+using LINGYUN.Abp.AuditLogging.IP.Location;
+using LINGYUN.Abp.IP2Region;
 using LINGYUN.Abp.OpenApi.Authorization;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
@@ -34,10 +36,12 @@ namespace LINGYUN.MicroService.OpenApi.Gateway;
     typeof(AbpDataModule),
     typeof(AbpSwashbuckleModule),
     typeof(AbpAspNetCoreSerilogModule),
+    typeof(AbpAspNetCoreSessionModule),
     typeof(AbpAspNetCoreMvcWrapperModule),
     typeof(AbpOpenApiAuthorizationModule),
     typeof(AbpCachingStackExchangeRedisModule),
-    typeof(AbpIdentitySessionAspNetCoreModule)
+    typeof(AbpAuditLoggingIPLocationModule),
+    typeof(AbpIP2RegionModule)
 )]
 public class OpenApiGatewayModule : AbpModule
 {
@@ -114,6 +118,17 @@ public class OpenApiGatewayModule : AbpModule
                 .AddJwtBearer(options =>
                 {
                     configuration.GetSection("AuthServer").Bind(options);
+
+                    var validIssuers = configuration.GetSection("AuthServer:ValidIssuers").Get<List<string>>();
+                    var validAudiences = configuration.GetSection("AuthServer:ValidAudiences").Get<List<string>>();
+                    if (validIssuers?.Count > 0)
+                    {
+                        options.TokenValidationParameters.ValidIssuers = validIssuers;
+                    }
+                    if (validAudiences?.Count > 0)
+                    {
+                        options.TokenValidationParameters.ValidAudiences = validAudiences;
+                    }
                 });
 
         if (hostingEnvironment.IsProduction())
@@ -177,8 +192,6 @@ public class OpenApiGatewayModule : AbpModule
         app.UseOpenApiAuthorization();
         // 认证
         app.UseAuthentication();
-        // 会话
-        app.UseAbpSession();
         // 令牌
         app.UseDynamicClaims();
         // 授权

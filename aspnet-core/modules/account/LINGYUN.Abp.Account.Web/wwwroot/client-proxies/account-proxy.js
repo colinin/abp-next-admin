@@ -38,6 +38,24 @@
       }, ajaxParams));
     };
 
+    labp.account.account.sendEmailRegisterCode = function(input, ajaxParams) {
+      return abp.ajax($.extend(true, {
+        url: abp.appPath + 'api/account/email/send-register-code',
+        type: 'POST',
+        dataType: null,
+        data: JSON.stringify(input)
+      }, ajaxParams));
+    };
+
+    labp.account.account.verifyEmailRegisterCode = function(input, ajaxParams) {
+      return abp.ajax($.extend(true, {
+        url: abp.appPath + 'api/account/email/verify-register-code',
+        type: 'POST',
+        dataType: null,
+        data: JSON.stringify(input)
+      }, ajaxParams));
+    };
+
     labp.account.account.sendEmailSigninCode = function(input, ajaxParams) {
       return abp.ajax($.extend(true, {
         url: abp.appPath + 'api/account/email/send-signin-code',

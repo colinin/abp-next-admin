@@ -1,6 +1,4 @@
-﻿using Elsa.Extensions;
-using LINGYUN.Abp.Identity.Session.AspNetCore;
-using LINGYUN.Abp.MicroService.WorkflowService;
+﻿using LINGYUN.Abp.MicroService.WorkflowService;
 using LINGYUN.Abp.MicroService.WorkflowService.Components;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using Microsoft.AspNetCore.Builder;
@@ -63,7 +61,6 @@ app.MapAbpStaticAssets();
 app.UseAuthentication();
 app.UseJwtTokenMiddleware();
 app.UseMultiTenancy();
-app.UseAbpSession();
 app.UseDynamicClaims();
 app.UseAuthorization();
 app.UseAntiforgery();

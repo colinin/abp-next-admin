@@ -68,6 +68,6 @@ public class YouProjectModule : AbpModule
 ## 更多资源
 
 * [GitHub仓库](https://github.com/colinin/abp-next-admin)
-* [示例应用程序](https://github.com/colinin/abp-next-admin/tree/master/aspnet-core/services/LY.MicroService.Applications.Single)
+* [示例应用程序](https://github.com/colinin/abp-next-admin/tree/master/aspnet-core/services/LINGYUN.Abp.MicroService.AllInOne)
 
 [English](./README.EN.md)

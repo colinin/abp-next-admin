@@ -1,10 +1,11 @@
 ﻿@using Microsoft.AspNetCore.Mvc.Localization
 @using Volo.Abp.Account.Localization
-@using Volo.Abp.Localization
 
 @inject IHtmlLocalizer<AccountResource> L
 
 @model LINGYUN.Abp.Account.Web.Pages.Account.Components.ProfileManagementGroup.Authenticator.AccountProfileAuthenticatorManagementGroupViewComponent.AuthenticatorModel
+
+<link rel="stylesheet" href="/Pages/Account/Components/ProfileManagementGroup/Authenticator/Index.css" />
 
 <abp-card>
     <abp-card-header>
@@ -14,4 +15,109 @@
             </abp-column>
         </abp-row>
     </abp-card-header>
+    <abp-card-body>
+        <input type="hidden" id="hdnAuthenticatorUri" value="@Model.AuthenticatorUri" />
+        <input type="hidden" id="hdnIsAuthenticated" value="@Model.IsAuthenticated.ToString().ToLower()" />
+
+        @if (Model.IsAuthenticated)
+        {
+            <div id="authenticated-panel">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="mb-1">@L["ResetAuthenticator"]</h6>
+                        <p class="text-muted mb-0">@L["ResetAuthenticatorDesc"]</p>
+                    </div>
+                    <button class="btn btn-primary" id="btnResetAuthenticator">@L["ResetAuthenticator"]</button>
+                </div>
+            </div>
+        }
+
+        @if (!Model.IsAuthenticated)
+        {
+            <div id="setup-panel">
+                <div class="step-indicator">
+                    <div class="step-item active" id="step1-indicator">
+                        <div class="step-circle">1</div> @L["Authenticator"]
+                    </div>
+                    <div class="step-line"></div>
+                    <div class="step-item" id="step2-indicator">
+                        <div class="step-circle">2</div> @L["ValidAuthenticator"]
+                    </div>
+                    <div class="step-line"></div>
+                    <div class="step-item" id="step3-indicator">
+                        <div class="step-circle">3</div> @L["RecoveryCode"]
+                    </div>
+                </div>
+
+                <div id="step1-content" style="display: block;">
+                    <h5>@L["Authenticator"]</h5>
+                    <p class="text-muted">@L["AuthenticatorDesc"]</p>
+
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <div class="qr-container">
+                                <h6 class="mb-3 text-start">@L["Authenticator:UseQrCode"]</h6>
+                                <div id="qrCodeContainer"></div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="p-3 border rounded h-100">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <h6 class="mb-0">@L["Authenticator:InputCode"]</h6>
+                                    <button class="btn btn-primary btn-sm" id="btnCopyKey">@L["Authenticator:CopyToClipboard"]</button>
+                                </div>
+                                <div class="code-box mt-4" id="sharedKeyText">
+                                    @Model.SharedKey
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 text-end">
+                        <button class="btn btn-primary" id="btnGoToStep2">@L["Steps:NextStep"]</button>
+                    </div>
+                </div>
+
+                <div id="step2-content" style="display: none;">
+                    <h5>@L["ValidAuthenticator"]</h5>
+                    <p class="text-muted">@L["ValidAuthenticatorDesc"]</p>
+
+                    <form id="verifyForm">
+                        <div class="mb-3 row">
+                            <label class="col-sm-2 col-form-label text-danger">@L["DisplayName:AuthenticatorCode"]</label>
+                            <div class="col-sm-6">
+                                <input asp-for="AuthenticatorCode" type="text" class="form-control" id="AuthenticatorCode" name="AuthenticatorCode" maxlength="6" autocomplete="off" required>
+                            </div>
+                            <div class="col-sm-4">
+                                <button type="submit" class="btn btn-primary" id="btnVerify">@L["ValidAuthenticator:Valid"]</button>
+                            </div>
+                        </div>
+                    </form>
+
+                    <div class="mt-4 text-end">
+                        <button class="btn btn-outline-secondary" id="btnBackToStep1">@L["Steps:PreStep"]</button>
+                        <button class="btn btn-primary" id="btnGoToStep3" disabled>@L["Steps:NextStep"]</button>
+                    </div>
+                </div>
+
+                <div id="step3-content" style="display: none;">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div>
+                            <h5>@L["RecoveryCode"]</h5>
+                            <p class="text-muted mb-0">@L["RecoveryCodeDesc"]</p>
+                        </div>
+                        <button class="btn btn-primary" id="btnCopyRecovery">@L["Authenticator:CopyToClipboard"]</button>
+                    </div>
+
+                    <div id="recoveryCode" class="bg-light rounded px-3 py-2 mt-4">
+                        <code class="fs-4 lh-lg"></code>
+                    </div>
+
+                    <div class="mt-4 text-end">
+                        <button class="btn btn-primary" id="btnFinish">@L["Steps:Done"]</button>
+                    </div>
+                </div>
+            </div>
+        }
+    </abp-card-body>
 </abp-card>

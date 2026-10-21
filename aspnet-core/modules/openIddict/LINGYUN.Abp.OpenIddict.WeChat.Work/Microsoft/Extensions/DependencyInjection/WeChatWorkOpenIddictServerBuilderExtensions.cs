@@ -8,7 +8,8 @@ public static class WeChatWorkOpenIddictServerBuilderExtensions
     public static OpenIddictServerBuilder AllowWeChatWorkFlow(this OpenIddictServerBuilder builder)
     {
         return builder
-            .AllowCustomFlow(AbpWeChatWorkGlobalConsts.GrantType);
+            .AllowCustomFlow(AbpWeChatWorkGlobalConsts.OAuthGrantType)
+            .AllowCustomFlow(AbpWeChatWorkGlobalConsts.MiniProgramGrantType);
     }
 
     public static OpenIddictServerBuilder RegisterWeChatWorkScopes(this OpenIddictServerBuilder builder)

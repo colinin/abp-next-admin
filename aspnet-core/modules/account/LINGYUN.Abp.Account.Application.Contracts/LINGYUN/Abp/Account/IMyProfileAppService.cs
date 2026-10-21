@@ -63,7 +63,7 @@ public interface IMyProfileAppService : IApplicationService
     /// </remarks>
     Task ChangePhoneNumberAsync(ChangePhoneNumberInput input);
     /// <summary>
-    /// 发送确认邮件验证码
+    /// 发送确认邮件链接
     /// </summary>
     /// <param name="input"></param>
     /// <returns></returns>

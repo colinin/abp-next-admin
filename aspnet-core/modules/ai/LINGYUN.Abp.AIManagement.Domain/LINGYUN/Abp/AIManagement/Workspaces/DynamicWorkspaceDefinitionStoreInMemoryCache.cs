@@ -1,4 +1,5 @@
 ﻿using LINGYUN.Abp.AI.Workspaces;
+using LINGYUN.Abp.AIManagement.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -82,7 +83,11 @@ public class DynamicWorkspaceDefinitionStoreInMemoryCache : IDynamicWorkspaceDef
             {
                 if (property.Value != null)
                 {
-                    workspaceDef.WithProperty(property.Key, property.Value);
+                    var value = PropertyValueNormalizer.Normalize(property.Value);
+                    if (value != null)
+                    {
+                        workspaceDef.WithProperty(property.Key, value);
+                    }
                 }
             }
 

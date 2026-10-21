@@ -1,13 +1,15 @@
 ﻿using LINGYUN.Abp.AspNetCore.HttpOverrides;
 using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
+using LINGYUN.Abp.AspNetCore.Session;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
+using LINGYUN.Abp.AuditLogging.IP.Location;
 using LINGYUN.Abp.Authorization.OrganizationUnits;
-using LINGYUN.Abp.Claims.Mapping;
+using LINGYUN.Abp.AspNetCore.Authentication;
 using LINGYUN.Abp.Data.DbMigrator;
 using LINGYUN.Abp.Dynamic.Definitions;
 using LINGYUN.Abp.Emailing.Platform;
 using LINGYUN.Abp.EventBus.CAP;
-using LINGYUN.Abp.Identity.Session.AspNetCore;
+using LINGYUN.Abp.IP2Region;
 using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.LocalizationManagement;
 using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
@@ -37,6 +39,8 @@ namespace LINGYUN.Abp.MicroService.LocalizationService;
     typeof(AbpSerilogEnrichersUniqueIdModule),
     typeof(AbpAspNetCoreSerilogModule),
     typeof(AbpAuditLoggingElasticsearchModule),
+    typeof(AbpAuditLoggingIPLocationModule),
+    typeof(AbpIP2RegionModule),
     typeof(AbpAspNetCoreMultiTenancyModule),
     typeof(AbpLocalizationManagementApplicationModule),
     typeof(AbpLocalizationManagementHttpApiModule),
@@ -52,14 +56,14 @@ namespace LINGYUN.Abp.MicroService.LocalizationService;
     typeof(AbpCAPEventBusModule),
     typeof(AbpCachingStackExchangeRedisModule),
     typeof(AbpLocalizationCultureMapModule),
-    typeof(AbpIdentitySessionAspNetCoreModule),
     typeof(AbpHttpClientModule),
     typeof(AbpSmsPlatformModule),
     typeof(AbpEmailingPlatformModule),
+    typeof(AbpAspNetCoreSessionModule),
     typeof(AbpAspNetCoreMvcWrapperModule),
     typeof(AbpAspNetCoreHttpOverridesModule),
     typeof(AbpDynamicDefinitionsModule),
-    typeof(AbpClaimsMappingModule),
+    typeof(AbpAspNetCoreAuthenticationModule),
     typeof(AbpSwashbuckleModule),
     typeof(AbpAutofacModule)
     )]

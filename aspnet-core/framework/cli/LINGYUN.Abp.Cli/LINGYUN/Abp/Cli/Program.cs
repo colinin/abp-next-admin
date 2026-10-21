@@ -15,6 +15,7 @@ namespace LINGYUN.Abp.Cli
         {
             Console.OutputEncoding = System.Text.Encoding.UTF8;
 
+            var loggerOutputTemplate = "{Message:lj}{NewLine}{Exception}";
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Information()
                 .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
@@ -29,7 +30,7 @@ namespace LINGYUN.Abp.Cli
                 .MinimumLevel.Override("LINGYUN.Abp.Cli", LogEventLevel.Information)
 #endif
                 .Enrich.FromLogContext()
-                .WriteTo.File(Path.Combine(CliPaths.Log, "lingyun-abp-cli-logs.txt"))
+                .WriteTo.File(Path.Combine(CliPaths.Log, "lingyun-abp-cli-logs.txt"), outputTemplate: loggerOutputTemplate)
                 .WriteTo.Console()
                 .CreateLogger();
 

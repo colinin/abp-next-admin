@@ -7,4 +7,8 @@ public static class UserTwoFactorTokenProviderConsts
     public const string PhoneNumberRegisterPurpose = "PhoneNumberRegister";
 
     public const string PhoneResetPasswordPurpose = "PhoneResetPassword";
+
+    public const string EmailAddressRegisterTokenProvider = "EmailAddressRegister";
+
+    public const string EmailAddressRegisterPurpose = "EmailAddressRegister";
 }

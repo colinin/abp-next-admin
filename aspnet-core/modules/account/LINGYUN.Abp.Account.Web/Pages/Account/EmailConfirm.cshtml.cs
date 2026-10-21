@@ -1,9 +1,7 @@
-using LINGYUN.Abp.Account;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
-using Volo.Abp.Account.Localization;
 using Volo.Abp.Account.Web.Pages.Account;
 using Volo.Abp.Identity;
 using Volo.Abp.Validation;
@@ -30,11 +28,11 @@ namespace LINGYUN.Abp.Account.Web.Pages.Account
         [BindProperty(SupportsGet = true)]
         public string? ReturnUrlHash { get; set; }
 
-        public IMyProfileAppService MyProfileAppService => LazyServiceProvider.LazyGetRequiredService<IMyProfileAppService>();
+        protected IAccountAppService LAbpAccountAppService { get; }
 
-        public EmailConfirmModel()
+        public EmailConfirmModel(IAccountAppService accountAppService)
         {
-            LocalizationResourceType = typeof(AccountResource);
+            LAbpAccountAppService = accountAppService;
         }
 
         public async virtual Task<IActionResult> OnPostAsync()
@@ -43,9 +41,10 @@ namespace LINGYUN.Abp.Account.Web.Pages.Account
             {
                 ValidateModel();
 
-                await MyProfileAppService.ConfirmEmailAsync(
-                    new ConfirmEmailInput
+                await LAbpAccountAppService.ConfirmEmailAsync(
+                    new ConfirmUserEmailInput
                     {
+                        UserId = UserId,
                         ConfirmToken = ConfirmToken,
                     });
             }
@@ -64,7 +63,7 @@ namespace LINGYUN.Abp.Account.Web.Pages.Account
                 return Page();
             }
 
-            return RedirectToPage("./ConfirmEmailConfirmation", new
+            return RedirectToPage("./EmailConfirmConfirmation", new
             {
                 returnUrl = ReturnUrl,
                 returnUrlHash = ReturnUrlHash

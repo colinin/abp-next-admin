@@ -15,6 +15,9 @@ public class MediaMessage
     [JsonProperty("media_id")]
     [JsonPropertyName("media_id")]
     public string MediaId { get; set; }
+
+    [Newtonsoft.Json.JsonConstructor]
+    [System.Text.Json.Serialization.JsonConstructor]
     public MediaMessage(string mediaId)
     {
         MediaId = mediaId;

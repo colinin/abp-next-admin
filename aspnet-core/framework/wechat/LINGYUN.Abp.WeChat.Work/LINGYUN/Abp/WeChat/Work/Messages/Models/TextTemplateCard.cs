@@ -9,6 +9,8 @@ namespace LINGYUN.Abp.WeChat.Work.Messages.Models;
 /// </summary>
 public class TextTemplateCard : TemplateCard
 {
+    [Newtonsoft.Json.JsonConstructor]
+    [System.Text.Json.Serialization.JsonConstructor]
     public TextTemplateCard(TemplateCardCardAction cardAction, string taskId = "")
         : base("template_card", taskId)
     {
@@ -77,5 +79,5 @@ public class TextTemplateCard : TemplateCard
     [NotNull]
     [JsonProperty("TemplateCardCardAction")]
     [JsonPropertyName("TemplateCardCardAction")]
-    public TemplateCardCardAction CardAction { get; set; }
+    public TemplateCardCardAction CardAction { get; set; } = default!;
 }

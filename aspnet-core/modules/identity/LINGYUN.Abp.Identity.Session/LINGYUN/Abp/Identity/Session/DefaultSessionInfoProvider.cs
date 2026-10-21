@@ -7,6 +7,7 @@ using Volo.Abp.DependencyInjection;
 namespace LINGYUN.Abp.Identity.Session;
 
 [Dependency(ServiceLifetime.Singleton, TryRegister = true)]
+[Obsolete("The ISessionInfoProvider has been deprecated. Please use ICurrentUser.FindSessionId() instead.")]
 public class DefaultSessionInfoProvider : ISessionInfoProvider
 {
     private readonly AsyncLocal<string?> _currentSessionId = new AsyncLocal<string?>();

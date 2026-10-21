@@ -1,4 +1,5 @@
 ﻿using DotNetCore.CAP;
+using LINGYUN.Abp.AspNetCore.Session;
 using LINGYUN.Abp.Dapr.Client.ClientProxying;
 using LINGYUN.Abp.ExceptionHandling;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
@@ -326,8 +327,12 @@ public partial class ProjectNameHttpApiHostModule
         }
     }
 
-    private void ConfigureSwagger(IServiceCollection services, IConfiguration configuration)
+    private void ConfigureSwagger(IServiceCollection services, IConfiguration configuration, bool isDevelopment = false)
     {
+        if (!isDevelopment)
+        {
+            return;
+        }
         // Swagger
         services.AddAbpSwaggerGenWithOAuth(
             configuration["AuthServer:Authority"],
@@ -428,6 +433,11 @@ public partial class ProjectNameHttpApiHostModule
             configuration.GetSection("AntiForgery").Bind(options);
             // options.AutoValidate = false;
             // options.AutoValidateFilter = (type) => !type.Namespace.Contains("elsa", StringComparison.CurrentCultureIgnoreCase);
+        });
+
+        Configure<AbpAspNetCoreSessionOptions>(options =>
+        {
+            options.IsParseIpLocation = true;
         });
 
         if (isDevelopment)

@@ -26,8 +26,7 @@ interface OpenIddictApplicationSettingsDto {
   tokenLifetime: OpenIddictApplicationTokenLifetimesDto;
 }
 
-interface OpenIddictApplicationGetListInput
-  extends PagedAndSortedResultRequestDto {
+interface OpenIddictApplicationGetListInput extends PagedAndSortedResultRequestDto {
   filter?: string;
 }
 
@@ -42,6 +41,7 @@ interface OpenIddictApplicationCreateOrUpdateDto extends ExtensibleObject {
   displayNames?: Dictionary<string, string>;
   endpoints?: string[];
   grantTypes?: string[];
+  jsonWebKeySet?: string;
   logoUri?: string;
   postLogoutRedirectUris?: string[];
   properties?: Dictionary<string, string>;
@@ -67,6 +67,7 @@ interface OpenIddictApplicationDto extends ExtensibleAuditedEntityDto<string> {
   displayNames?: Dictionary<string, string>;
   endpoints?: string[];
   grantTypes?: string[];
+  jsonWebKeySet?: string;
   logoUri?: string;
   postLogoutRedirectUris?: string[];
   properties?: Dictionary<string, string>;

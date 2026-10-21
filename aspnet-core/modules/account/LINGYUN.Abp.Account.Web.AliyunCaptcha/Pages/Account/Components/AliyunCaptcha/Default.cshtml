@@ -1,0 +1,9 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@using Volo.Abp.Account.Localization
+
+@inject IHtmlLocalizer<AccountResource> L
+
+<div class="mb-3">
+    <input type="hidden" name="Action" id="LoginAction" value="Login" />
+    <div id="captcha-element"></div>
+</div>

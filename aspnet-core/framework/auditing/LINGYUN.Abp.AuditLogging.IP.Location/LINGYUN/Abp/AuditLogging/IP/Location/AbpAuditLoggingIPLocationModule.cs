@@ -1,9 +1,6 @@
 ﻿using LINGYUN.Abp.IP.Location;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-using Volo.Abp.Auditing;
 using Volo.Abp.Modularity;
-using Volo.Abp.SecurityLog;
 
 namespace LINGYUN.Abp.AuditLogging.IP.Location;
 
@@ -18,9 +15,11 @@ public class AbpAuditLoggingIPLocationModule : AbpModule
 
         Configure<AbpAuditLoggingIPLocationOptions>(configuration.GetSection("AuditLogging:IPLocation"));
 
-        context.Services.Replace(
-            ServiceDescriptor.Transient<IAuditingStore, IPLocationAuditingStore>());
-        context.Services.Replace(
-            ServiceDescriptor.Transient<ISecurityLogStore, IPLocationSecurityLogStore>());
+        Configure<AbpAuditLoggingOptions>(options =>
+        {
+            options.AuditLogInfoContributors.Add(new IPLocationAuditLogInfoContributor());
+
+            options.SecurityLogInfoContributors.Add(new IPLocationSecurityLogInfoContributor());
+        });
     }
 }

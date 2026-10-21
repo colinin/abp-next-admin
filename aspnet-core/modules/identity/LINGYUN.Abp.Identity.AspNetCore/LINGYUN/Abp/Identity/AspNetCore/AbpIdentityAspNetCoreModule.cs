@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Volo.Abp.Modularity;
-
 using VoloAbpIdentityAspNetCoreModule = Volo.Abp.Identity.AspNetCore.AbpIdentityAspNetCoreModule;
 
 namespace LINGYUN.Abp.Identity.AspNetCore;
@@ -12,7 +11,10 @@ public class AbpIdentityAspNetCoreModule : AbpModule
     {
         PreConfigure<IdentityBuilder>(builder =>
         {
-            builder.AddTokenProvider<AbpPhoneNumberRegisterTokenProvider>(AbpPhoneNumberRegisterTokenProvider.ProviderName);
+            builder
+                .AddTokenProvider<AbpEmailAddressRegisterTokenProvider>(AbpEmailAddressRegisterTokenProvider.ProviderName)
+                .AddTokenProvider<AbpPhoneNumberRegisterTokenProvider>(AbpPhoneNumberRegisterTokenProvider.ProviderName)
+                .AddSignInManager<AbpSignInManager>();
         });
     }
 }

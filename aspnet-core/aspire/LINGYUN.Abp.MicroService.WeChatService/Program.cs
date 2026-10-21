@@ -1,5 +1,4 @@
-﻿using LINGYUN.Abp.Identity.Session.AspNetCore;
-using LINGYUN.Abp.MicroService.WeChatService;
+﻿using LINGYUN.Abp.MicroService.WeChatService;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -57,7 +56,6 @@ app.UseCors();
 app.UseAuthentication();
 app.UseJwtTokenMiddleware();
 app.UseMultiTenancy();
-app.UseAbpSession();
 app.UseDynamicClaims();
 app.UseAuthorization();
 app.UseSwagger();

@@ -38,17 +38,41 @@ public interface IAccountAppService : IApplicationService
     /// <returns></returns>
     Task SendPhoneSigninCodeAsync(SendPhoneSigninCodeDto input);
     /// <summary>
+    /// 发送手机重置密码验证码短信
+    /// </summary>
+    /// <param name="input"></param>
+    /// <returns></returns>
+    Task SendPhoneResetPasswordCodeAsync(SendPhoneResetPasswordCodeDto input);
+    /// <summary>
+    /// 发送邮件注册验证码
+    /// </summary>
+    /// <param name="input"></param>
+    /// <returns></returns>
+    Task SendEmailRegisterCodeAsync(SendEmailRegisterCodeDto input);
+    /// <summary>
+    /// 验证邮件注册验证码
+    /// </summary>
+    /// <param name="input"></param>
+    /// <returns></returns>
+    Task<bool> VerifyEmailRegisterCodeAsync(VerifyEmailRegisterCodeInput input);
+    /// <summary>
     /// 发送邮件登录验证码
     /// </summary>
     /// <param name="input"></param>
     /// <returns></returns>
     Task SendEmailSigninCodeAsync(SendEmailSigninCodeDto input);
     /// <summary>
-    /// 发送手机重置密码验证码短信
+    /// 发送确认邮件链接
     /// </summary>
     /// <param name="input"></param>
     /// <returns></returns>
-    Task SendPhoneResetPasswordCodeAsync(SendPhoneResetPasswordCodeDto input);
+    Task SendEmailConfirmLinkAsync(SendUserEmailConfirmCodeDto input);
+    /// <summary>
+    /// 确认邮件地址
+    /// </summary>
+    /// <param name="input"></param>
+    /// <returns></returns>
+    Task ConfirmEmailAsync(ConfirmUserEmailInput input);
     /// <summary>
     /// 获取用户二次认证提供者列表
     /// </summary>

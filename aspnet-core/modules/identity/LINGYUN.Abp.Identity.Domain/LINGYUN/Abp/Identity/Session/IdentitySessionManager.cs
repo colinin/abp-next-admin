@@ -35,6 +35,17 @@ public class IdentitySessionManager : DomainService, IIdentitySessionManager
         ClaimsPrincipal claimsPrincipal,
         CancellationToken cancellationToken = default)
     {
+        var clientId = claimsPrincipal.FindClientId();
+
+        await SaveSessionAsync(clientId, claimsPrincipal, cancellationToken);
+    }
+
+    [DisableAuditing]
+    public async virtual Task SaveSessionAsync(
+        string? clientId,
+        ClaimsPrincipal claimsPrincipal,
+        CancellationToken cancellationToken = default)
+    {
         if (claimsPrincipal != null)
         {
             var userId = claimsPrincipal.FindUserId();
@@ -59,9 +70,7 @@ public class IdentitySessionManager : DomainService, IIdentitySessionManager
                 var clientIpAddress = deviceInfo.ClientIpAddress;
                 var userName = claimsPrincipal.FindFirstValue(AbpClaimTypes.UserName);
 
-                var clientId = claimsPrincipal.FindClientId();
-
-                Logger.LogDebug($"Save user session for user: {userId}, session: {sessionId}");
+                Logger.LogDebug("Save user session for user: {userId}, session: {sessionId}", userId, sessionId);
 
                 await IdentitySessionStore.CreateAsync(
                     sessionId,
@@ -77,7 +86,7 @@ public class IdentitySessionManager : DomainService, IIdentitySessionManager
                     tenantId,
                     cancellationToken);
 
-                Logger.LogDebug($"Remove dynamic claims cache for user: {userId}");
+                Logger.LogDebug("Remove dynamic claims cache for user: {userId}", userId);
 
                 await IdentityDynamicClaimsPrincipalContributorCache.ClearAsync(userId.Value, tenantId);
 
@@ -102,7 +111,7 @@ public class IdentitySessionManager : DomainService, IIdentitySessionManager
         string sessionId,
         CancellationToken cancellationToken = default)
     {
-        Logger.LogDebug($"Revoke user session for: {sessionId}");
+        Logger.LogDebug("Revoke user session for: {sessionId}", sessionId);
         await IdentitySessionStore.RevokeAsync(sessionId, cancellationToken: cancellationToken);
     }
 }

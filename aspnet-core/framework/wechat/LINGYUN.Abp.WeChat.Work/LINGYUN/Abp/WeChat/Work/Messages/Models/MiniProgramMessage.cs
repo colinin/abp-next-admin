@@ -51,10 +51,9 @@ public class MiniProgramMessage
     [JsonProperty("content_item")]
     [JsonPropertyName("content_item")]
     public List<MiniProgramContent>? ContentItems { get; set; }
-    public MiniProgramMessage()
-    {
-    }
 
+    [Newtonsoft.Json.JsonConstructor]
+    [System.Text.Json.Serialization.JsonConstructor]
     public MiniProgramMessage(
         string appId,
         string title,
@@ -86,4 +85,12 @@ public class MiniProgramContent
     [JsonProperty("value")]
     [JsonPropertyName("value")]
     public string Value { get; set; } = default!;
+
+    [Newtonsoft.Json.JsonConstructor]
+    [System.Text.Json.Serialization.JsonConstructor]
+    public MiniProgramContent(string key, string value)
+    {
+        Key = key;
+        Value = value;
+    }
 }

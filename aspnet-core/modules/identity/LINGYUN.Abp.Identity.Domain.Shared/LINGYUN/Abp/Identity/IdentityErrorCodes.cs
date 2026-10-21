@@ -42,4 +42,8 @@ public class IdentityErrorCodes
     /// 关联用户Token无效
     /// </summary>
     public const string LinkUserTokenInValid = "Volo.Abp.Identity:020014";
+    /// <summary>
+    /// 禁止将管理员角色设置为默认角色
+    /// </summary>
+    public const string ProhibitSetDefaultAdminRole = "Volo.Abp.Identity:020015";
 }

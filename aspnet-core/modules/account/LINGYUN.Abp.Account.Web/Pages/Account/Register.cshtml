@@ -1,39 +1,81 @@
 ﻿@page
+@using LINGYUN.Abp.Account.Web.Pages.Account
 @using Microsoft.AspNetCore.Mvc.Localization
 @using Volo.Abp.Account.Localization
+@using Volo.Abp.AspNetCore.Mvc.UI.Layout
+@using Volo.Abp.AspNetCore.Mvc.UI.Theming;
 @model LINGYUN.Abp.Account.Web.Pages.Account.RegisterModel
 @inject IHtmlLocalizer<AccountResource> L
+@inject IThemeManager ThemeManager
+@inject IPageLayout PageLayout
+
+@{
+    Layout = ThemeManager.CurrentTheme.GetAccountLayout();
+    PageLayout.Content.Title = L["Register"].Value;
+}
+
+@section styles
+{
+    <abp-style-bundle name="@typeof(RegisterModel).FullName" />
+}
+
+@section scripts
+{
+    <abp-script-bundle name="@typeof(RegisterModel).FullName">
+        <abp-script src="/client-proxies/account-proxy.js" />
+        <abp-script src="/Pages/Account/Register.js" />
+    </abp-script-bundle>
+}
 
 <div class="card mt-3 shadow-sm rounded">
     <div class="card-body p-5">
-        <h4>@L["Register"]</h4>
-        <form method="post" class="mt-4">
+        <form method="post" class="mt-4" id="InputForm">
             <input asp-for="ReturnUrl" />
             <input asp-for="ReturnUrlHash" />
             @if (Model.EnableLocalRegister || Model.IsExternalLogin)
             {
                 <abp-input asp-for="Input.UserName" auto-focus="true" />
-            }
+                <abp-input asp-for="Input.EmailAddress" id="EmailAddressInput" />
 
-            @if (Model.EnableLocalRegister || Model.IsExternalLogin)
-            {
-                <abp-input asp-for="Input.EmailAddress" />
+                @if (Model.RequireEmailVerificationToRegister)
+                {
+                    <div class="mb-3">
+                        <input asp-for="SendEmailVerifyCodeInternal" id="SendEmailVerifyCodeInternal" />
+                        <label asp-for="Input.VerifyCode" class="form-label"></label>
+                        <div class="input-group">
+                            <input asp-for="Input.VerifyCode" class="form-control" required />
+                            <button class="btn btn-secondary" type="button" id="SendVerifyCodeButton">@L["SendVerifyCode"]</button>
+                        </div>
+                        <span asp-validation-for="Input.VerifyCode" class="text-danger"></span>
+                    </div>
+                }
             }
 
             @if (!Model.IsExternalLogin && Model.EnableLocalRegister)
             {
                 <abp-input asp-for="Input.Password" />
+
+                @if (Model.EnableCaptcha)
+                {
+                    @await Component.InvokeAsync(Model.CaptchaComponent.ComponentType)
+                }
             }
 
             <strong>
                 @L["AlreadyRegistered"]
-                <a href="@Url.Page("./Login", new {returnUrl = Model.ReturnUrl, returnUrlHash = Model.ReturnUrlHash})" class="text-decoration-none">@L["Login"]</a>
+                <a href="@Url.Page("./Login", new {
+                       returnUrl = Model.ReturnUrl, 
+                       returnUrlHash = Model.ReturnUrlHash,
+                       linkUserId = Model.LinkUserId?.ToString(),
+                       linkTenantId = Model.LinkTenantId?.ToString(),
+                       linkToken = Model.LinkToken,
+                })" class="text-decoration-none">@L["Login"]</a>
             </strong>
 
             @if (Model.EnableLocalRegister || Model.IsExternalLogin)
             {
                 <div class="d-grid gap-2">
-                    <abp-button button-type="Primary" type="submit" class="btn-lg mt-4">@L["Register"]</abp-button>
+                    <abp-button button-type="Primary" type="submit" class="btn-lg mt-4" id="SubmitButton">@L["Register"]</abp-button>
                 </div>
             }
 
@@ -43,7 +85,13 @@
         {
             <div class="mt-2">
                 <h5>@L["OrRegisterWith"]</h5>
-                <form asp-page="./Login" asp-page-handler="ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" asp-route-returnUrlHash="@Model.ReturnUrlHash" method="post">
+                <form asp-page="./Login" asp-page-handler="ExternalLogin" asp-all-route-data="@(new Dictionary<string, string?> {
+                        { "returnUrl", Model.ReturnUrl },
+                        { "returnUrlHash", Model.ReturnUrlHash } ,
+                        { "linkUserId", Model.LinkUserId?.ToString() },
+                        { "linkTenantId", Model.LinkTenantId?.ToString() },
+                        { "linkToken", Model.LinkToken }
+                    })" method="post">
                     @foreach (var provider in Model.VisibleExternalProviders)
                     {
                         @await Component.InvokeAsync(provider.ComponentType, provider);

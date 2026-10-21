@@ -58,6 +58,7 @@
 		<ProjectReference Include="..\..\framework\auditing\LINGYUN.Abp.AuditLogging.Elasticsearch\LINGYUN.Abp.AuditLogging.Elasticsearch.csproj" />
 		<ProjectReference Include="..\..\framework\authorization\LINGYUN.Abp.Authorization.OrganizationUnits\LINGYUN.Abp.Authorization.OrganizationUnits.csproj" />
 		<ProjectReference Include="..\..\framework\common\LINGYUN.Abp.AspNetCore.HttpOverrides\LINGYUN.Abp.AspNetCore.HttpOverrides.csproj" />
+		<ProjectReference Include="..\..\framework\common\LINGYUN.Abp.AspNetCore.Session\LINGYUN.Abp.AspNetCore.Session.csproj" />
 		<ProjectReference Include="..\..\framework\common\LINGYUN.Abp.EventBus.CAP\LINGYUN.Abp.EventBus.CAP.csproj" />
 		<ProjectReference Include="..\..\framework\common\LINGYUN.Abp.Data.DbMigrator\LINGYUN.Abp.Data.DbMigrator.csproj" />
 		<ProjectReference Include="..\..\framework\common\LINGYUN.Abp.ExceptionHandling.Emailing\LINGYUN.Abp.ExceptionHandling.Emailing.csproj" />
@@ -67,13 +68,14 @@
 		<ProjectReference Include="..\..\framework\logging\LINGYUN.Abp.Serilog.Enrichers.Application\LINGYUN.Abp.Serilog.Enrichers.Application.csproj" />
 		<ProjectReference Include="..\..\framework\logging\LINGYUN.Abp.Serilog.Enrichers.UniqueId\LINGYUN.Abp.Serilog.Enrichers.UniqueId.csproj" />
 		<ProjectReference Include="..\..\framework\mvc\LINGYUN.Abp.AspNetCore.Mvc.Wrapper\LINGYUN.Abp.AspNetCore.Mvc.Wrapper.csproj" />
-		<ProjectReference Include="..\..\framework\security\LINGYUN.Abp.Claims.Mapping\LINGYUN.Abp.Claims.Mapping.csproj" />
+		<ProjectReference Include="..\..\framework\common\LINGYUN.Abp.AspNetCore.Authentication\LINGYUN.Abp.AspNetCore.Authentication.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\modules\blob-management\LINGYUN.Abp.BlobStoring.BlobManagement\LINGYUN.Abp.BlobStoring.BlobManagement.csproj" />
 		<ProjectReference Include="..\..\modules\identity\LINGYUN.Abp.Identity.Session.AspNetCore\LINGYUN.Abp.Identity.Session.AspNetCore.csproj" />
 		<ProjectReference Include="..\..\modules\realtime-notifications\LINGYUN.Abp.Notifications.EntityFrameworkCore\LINGYUN.Abp.Notifications.EntityFrameworkCore.csproj" />
+		<ProjectReference Include="..\..\modules\identity\LINGYUN.Abp.Identity.Session.AspNetCore\LINGYUN.Abp.Identity.Session.AspNetCore.csproj" />
 		<ProjectReference Include="..\..\modules\saas\LINGYUN.Abp.Saas.EntityFrameworkCore\LINGYUN.Abp.Saas.EntityFrameworkCore.csproj" />
 		<ProjectReference Include="..\..\modules\localization-management\LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore\LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore.csproj" />
 		<ProjectReference Include="..\..\modules\platform\LINGYUN.Abp.Emailing.Platform\LINGYUN.Abp.Emailing.Platform.csproj" />
@@ -116,4 +118,9 @@
 		<ProjectReference Include="..\LINGYUN.Abp.MicroService.ServiceDefaults\LINGYUN.Abp.MicroService.ServiceDefaults.csproj" />
 	</ItemGroup>
 
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\framework\auditing\LINGYUN.Abp.AuditLogging.IP.Location\LINGYUN.Abp.AuditLogging.IP.Location.csproj" />
+		<ProjectReference Include="..\..\framework\common\LINGYUN.Abp.IP2Region\LINGYUN.Abp.IP2Region.csproj" />
+	</ItemGroup>
 </Project>

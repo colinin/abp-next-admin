@@ -1,0 +1,7 @@
+﻿{
+  "culture": "zh-Hans",
+  "texts": {
+    "SelectTenantHint": "请选择其中一个租户",
+    "InputTenantName": "手动输入"
+  }
+}

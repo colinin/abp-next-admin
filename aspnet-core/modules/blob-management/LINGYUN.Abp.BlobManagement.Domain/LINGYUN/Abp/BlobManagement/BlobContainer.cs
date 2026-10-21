@@ -1,4 +1,4 @@
-﻿using JetBrains.Annotations;
+using JetBrains.Annotations;
 using System;
 using Volo.Abp;
 using Volo.Abp.Data;
@@ -28,9 +28,15 @@ public class BlobContainer : AuditedAggregateRoot<Guid>, IMultiTenant
         TenantId = tenantId;
     }
 
+    /// <summary>
+    /// 设置容器名称
+    /// </summary>
     public void SetName([NotNull] string name)
     {
         Name = Check.NotNullOrWhiteSpace(name, nameof(name), BlobContainerConsts.MaxNameLength);
+
+        // 容器名作为一级目录名参与路径组合
+        BlobManagementNameValidator.CheckName(Name, BlobManagementErrorCodes.Container.InvalidName);
     }
 
     public void SetProvider(string provider)

@@ -1,4 +1,4 @@
-﻿{
+{
   "culture": "en",
   "texts": {
     "Permission:BlobManagement": "Blob Management",
@@ -36,6 +36,7 @@
     "BlobManagement:001002": "The blob container is not empty and cannot be deleted!",
     "BlobManagement:001003": "The blob container is the system container and cannot be deleted!",
     "BlobManagement:001004": "There is no blob container named {Name}!",
+    "BlobManagement:001005": "Not allowed blob container name: {Name}!",
     "BlobManagement:002001": "Sub-files/directories cannot be added to non-directory types!",
     "BlobManagement:002002": "There is already a file/directory named {Name} in the current directory!",
     "BlobManagement:002003": "The current directory is not empty and cannot be deleted!",
@@ -43,7 +44,7 @@
     "BlobManagement:002005": "File fingerprint verification failed. Please check the file's legitimacy!",
     "BlobManagement:002006": "Upload file size cannot exceed {Limit} MB!",
     "BlobManagement:002007": "Not allowed file extension: {Name}!",
-    "BlobContainers": "Blob Containers",
+    "BlobManagement:002008": "Not allowed file/directory name: {Name}!",    "BlobContainers": "Blob Containers",
     "BlobContainers:Create": "New Container",
     "Blobs:Files": "Files",
     "Blobs:Folder": "Folder",

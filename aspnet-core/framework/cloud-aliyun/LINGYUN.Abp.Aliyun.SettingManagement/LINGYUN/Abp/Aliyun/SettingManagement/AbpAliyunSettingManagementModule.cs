@@ -1,4 +1,5 @@
-﻿using LINGYUN.Abp.Aliyun.Localization;
+﻿using LINGYUN.Abp.Aliyun.Captcha;
+using LINGYUN.Abp.Aliyun.Localization;
 using Localization.Resources.AbpUi;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc;
@@ -10,6 +11,7 @@ namespace LINGYUN.Abp.Aliyun.SettingManagement;
 
 [DependsOn(
     typeof(AbpAliyunModule),
+    typeof(AbpAliyunCaptchaModule),
     typeof(AbpAspNetCoreMvcModule))]
 public class AbpAliyunSettingManagementModule : AbpModule
 {

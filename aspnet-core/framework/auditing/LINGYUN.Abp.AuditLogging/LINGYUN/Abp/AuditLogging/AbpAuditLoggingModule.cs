@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System.Collections.Generic;
 using System.Threading;
@@ -43,13 +44,16 @@ public class AbpAuditLoggingModule : AbpModule
     {
         var rootServiceProvider = context.ServiceProvider.GetRequiredService<IRootServiceProvider>();
         var options = context.ServiceProvider.GetRequiredService<IOptions<AbpAuditLoggingOptions>>();
+        var logger = context.ServiceProvider.GetRequiredService<ILogger<AbpAuditLoggingModule>>();
 
         if (options.Value.UseAuditLogQueue)
         {
             var auditLogQueue = rootServiceProvider.GetRequiredService<IAuditLogQueue>();
             if (auditLogQueue is AuditLogQueue queue1)
             {
+                logger.LogInformation("Prepare to start the audit log queue.");
                 await queue1.StartAsync(_cancellationTokenSource.Token);
+                logger.LogInformation("The audit log queue is ready.");
             }
         }
 
@@ -58,7 +62,9 @@ public class AbpAuditLoggingModule : AbpModule
             var securityLogQueue = rootServiceProvider.GetRequiredService<ISecurityLogQueue>();
             if (securityLogQueue is SecurityLogQueue queue2)
             {
+                logger.LogInformation("Prepare to start the security log queue.");
                 await queue2.StartAsync(_cancellationTokenSource.Token);
+                logger.LogInformation("The security log queue is ready.");
             }
         }
     }
@@ -67,13 +73,16 @@ public class AbpAuditLoggingModule : AbpModule
     {
         var rootServiceProvider = context.ServiceProvider.GetRequiredService<IRootServiceProvider>();
         var options = context.ServiceProvider.GetRequiredService<IOptions<AbpAuditLoggingOptions>>();
+        var logger = context.ServiceProvider.GetRequiredService<ILogger<AbpAuditLoggingModule>>();
 
         if (options.Value.UseAuditLogQueue)
         {
             var auditLogQueue = rootServiceProvider.GetRequiredService<IAuditLogQueue>();
             if (auditLogQueue is AuditLogQueue queue1)
             {
+                logger.LogInformation("Prepare to stop the audit log queue.");
                 await queue1.StopAsync(_cancellationTokenSource.Token);
+                logger.LogInformation("The audit log queue has been stopped.");
             }
         }
 
@@ -82,7 +91,9 @@ public class AbpAuditLoggingModule : AbpModule
             var securityLogQueue = rootServiceProvider.GetRequiredService<ISecurityLogQueue>();
             if (securityLogQueue is SecurityLogQueue queue2)
             {
+                logger.LogInformation("Prepare to stop the security log queue.");
                 await queue2.StopAsync(_cancellationTokenSource.Token);
+                logger.LogInformation("The security log queue has been stopped.");
             }
         }
 

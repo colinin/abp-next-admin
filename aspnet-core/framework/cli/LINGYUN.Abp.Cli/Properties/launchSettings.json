@@ -1,10 +1,24 @@
 {
   "profiles": {
-    "LINGYUN.Abp.Cli": {
+    "Commands.Help": {
       "commandName": "Project",
-      //"commandLineArgs": "generate-view -t vben-view -m auditing -o D:\\Projects\\Development\\view-script -url http://127.0.0.1:30000/"
-//      "commandLineArgs": "generate-proxy -t flutter -asp rest-service -u http://127.0.0.1:30000 -m notifications -o D:\\Projects\\Development\\flutter-script -skip-cli-version-check"
+      "commandLineArgs": "help"
+    },
+    "Commands.Create": {
+      "commandName": "Project",
       "commandLineArgs": "create MyCompanyName.MyProjectName -t lam -pk MyPackageName -o /Users/feijie/Projects/Tests --dbms MySql --cs \"Server=127.0.0.1;Database=Platform-V70;User Id=root;Password=123456;SslMode=None\" --no-random-port"
+    },
+    "Commands.GenerateView": {
+      "commandName": "Project",
+      "commandLineArgs": "generate-view -t vben-view -m auditing -o D:\\Projects\\Development\\view-script -url http://127.0.0.1:30000/"
+    },
+    "Commands.GenerateProxy": {
+      "commandName": "Project",
+      "commandLineArgs": "generate-proxy -t flutter -asp rest-service -u http://127.0.0.1:30000 -m notifications -o D:\\Projects\\Development\\flutter-script -skip-cli-version-check"
+    },
+    "Commands.BlobMigration": {
+      "commandName": "Project",
+      "commandLineArgs": "blob-migration -so all -sp *.jpg -ls"
     }
   }
 }

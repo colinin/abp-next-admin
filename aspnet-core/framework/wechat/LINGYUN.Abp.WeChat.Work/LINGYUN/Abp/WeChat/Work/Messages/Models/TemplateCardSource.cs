@@ -18,6 +18,8 @@ public enum DescriptionColor
 /// </summary>
 public class TemplateCardSource
 {
+    [Newtonsoft.Json.JsonConstructor]
+    [System.Text.Json.Serialization.JsonConstructor]
     public TemplateCardSource(
         string iconUrl = "", 
         string description = "",

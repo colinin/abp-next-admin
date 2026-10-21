@@ -1,5 +1,4 @@
-﻿using LINGYUN.Abp.Identity.Session.AspNetCore;
-using LINGYUN.Abp.MicroService.MessageService;
+﻿using LINGYUN.Abp.MicroService.MessageService;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -66,8 +65,6 @@ try
     app.UseJwtTokenMiddleware();
     // 多租户
     app.UseMultiTenancy();
-    // 会话
-    app.UseAbpSession();
     app.UseDynamicClaims();
     // 授权
     app.UseAuthorization();

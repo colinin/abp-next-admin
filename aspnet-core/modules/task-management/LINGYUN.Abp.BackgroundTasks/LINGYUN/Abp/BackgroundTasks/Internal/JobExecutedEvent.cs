@@ -13,7 +13,7 @@ public class JobExecutedEvent : JobEventBase<JobExecutedEvent>, ITransientDepend
     {
         if (context.EventData.Type.IsDefined(typeof(DisableJobStatusAttribute), true))
         {
-            Logger.LogWarning("The job change event could not be processed because the job marked the DisableJobStatus attribute!");
+            Logger.LogDebug("The job change event could not be processed because the job marked the DisableJobStatus attribute!");
             return Task.FromResult(false);
         }
         return base.CanAfterExecuted(context);

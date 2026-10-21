@@ -1,12 +1,14 @@
 ﻿using LINGYUN.Abp.Aliyun.SettingManagement;
 using LINGYUN.Abp.AspNetCore.HttpOverrides;
 using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
+using LINGYUN.Abp.AspNetCore.Session;
+using LINGYUN.Abp.AuditLogging.IP.Location;
 using LINGYUN.Abp.Auditing;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
 using LINGYUN.Abp.BlobManagement.SettingManagement;
 using LINGYUN.Abp.CachingManagement;
 using LINGYUN.Abp.CachingManagement.StackExchangeRedis;
-using LINGYUN.Abp.Claims.Mapping;
+using LINGYUN.Abp.AspNetCore.Authentication;
 using LINGYUN.Abp.Data.DbMigrator;
 using LINGYUN.Abp.DataProtectionManagement;
 using LINGYUN.Abp.Dynamic.Definitions;
@@ -15,7 +17,7 @@ using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
 using LINGYUN.Abp.FeatureManagement;
 using LINGYUN.Abp.FeatureManagement.HttpApi;
-using LINGYUN.Abp.Identity.Session.AspNetCore;
+using LINGYUN.Abp.IP2Region;
 using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.Logging.Serilog.Elasticsearch;
 using LINGYUN.Abp.PermissionManagement;
@@ -51,6 +53,8 @@ namespace LINGYUN.Abp.MicroService.AdminService;
     typeof(AbpAspNetCoreSerilogModule),
     typeof(AbpLoggingSerilogElasticsearchModule),
     typeof(AbpAuditLoggingElasticsearchModule),
+    typeof(AbpAuditLoggingIPLocationModule),
+    typeof(AbpIP2RegionModule),
     typeof(AbpAspNetCoreMvcUiMultiTenancyModule),
 
     // 设置管理
@@ -86,8 +90,6 @@ namespace LINGYUN.Abp.MicroService.AdminService;
     // 重写模板引擎支持外部本地化
     typeof(AbpTextTemplatingScribanModule),
 
-    typeof(AbpIdentitySessionAspNetCoreModule),
-
     typeof(AdminServiceMigrationsEntityFrameworkCoreModule),
     typeof(AbpDataDbMigratorModule),
     typeof(AbpAspNetCoreAuthenticationJwtBearerModule),
@@ -97,10 +99,11 @@ namespace LINGYUN.Abp.MicroService.AdminService;
     typeof(AbpEmailingPlatformModule),
     typeof(AbpCachingStackExchangeRedisModule),
     typeof(AbpLocalizationCultureMapModule),
+    typeof(AbpAspNetCoreSessionModule),
     typeof(AbpAspNetCoreMvcWrapperModule),
     typeof(AbpAspNetCoreHttpOverridesModule),
     typeof(AbpDynamicDefinitionsModule),
-    typeof(AbpClaimsMappingModule),
+    typeof(AbpAspNetCoreAuthenticationModule),
     typeof(AbpSwashbuckleModule),
     typeof(AbpAutofacModule)
     )]

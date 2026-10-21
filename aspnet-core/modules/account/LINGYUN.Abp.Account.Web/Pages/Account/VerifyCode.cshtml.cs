@@ -1,20 +1,19 @@
 using LINGYUN.Abp.Account.Dto;
+using LINGYUN.Abp.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
-using Volo.Abp.Account.Localization;
 using Volo.Abp.Account.Web.Pages.Account;
 using Volo.Abp.Identity;
+using Volo.Abp.Identity.AspNetCore;
 using Volo.Abp.Security.Claims;
 
 namespace LINGYUN.Abp.Account.Web.Pages.Account
 {
     public class VerifyCodeModel : AccountPageModel
     {
-        protected IdentityDynamicClaimsPrincipalContributorCache IdentityDynamicClaimsPrincipalContributorCache { get; }
-
         [BindProperty]
         public VerifyCodeInputModel Input { get; set; } = default!;
         /// <summary>
@@ -42,7 +41,6 @@ namespace LINGYUN.Abp.Account.Web.Pages.Account
         [BindProperty(SupportsGet = true)]
         public bool RememberMe { get; set; }
 
-        #region LinkUser
         [HiddenInput]
         [BindProperty(SupportsGet = true)]
         public Guid? LinkUserId { get; set; }
@@ -55,18 +53,18 @@ namespace LINGYUN.Abp.Account.Web.Pages.Account
         [BindProperty(SupportsGet = true)]
         public string? LinkToken { get; set; }
 
-        protected ICurrentPrincipalAccessor CurrentPrincipalAccessor => LazyServiceProvider.LazyGetRequiredService<ICurrentPrincipalAccessor>();
-
-        public IIdentityLinkUserAppService IdentityLinkUserAppService => LazyServiceProvider.LazyGetRequiredService<IIdentityLinkUserAppService>();
-
-        #endregion
+        protected ICurrentPrincipalAccessor CurrentPrincipalAccessor { get; }
+        protected IIdentityLinkUserAppService IdentityLinkUserAppService { get; }
+        protected IdentityDynamicClaimsPrincipalContributorCache IdentityDynamicClaimsPrincipalContributorCache { get; }
 
         public VerifyCodeModel(
+            ICurrentPrincipalAccessor currentPrincipalAccessor,
+            IIdentityLinkUserAppService identityLinkUserAppService,
             IdentityDynamicClaimsPrincipalContributorCache identityDynamicClaimsPrincipalContributorCache)
         {
+            CurrentPrincipalAccessor = currentPrincipalAccessor;
+            IdentityLinkUserAppService = identityLinkUserAppService;
             IdentityDynamicClaimsPrincipalContributorCache = identityDynamicClaimsPrincipalContributorCache;
-
-            LocalizationResourceType = typeof(AccountResource);
         }
 
         public virtual IActionResult OnGet()
@@ -96,8 +94,22 @@ namespace LINGYUN.Abp.Account.Web.Pages.Account
                 // Clear the dynamic claims cache.
                 await IdentityDynamicClaimsPrincipalContributorCache.ClearAsync(user.Id, user.TenantId);
 
+                await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext()
+                {
+                    Identity = IdentitySecurityLogIdentityConsts.Identity,
+                    Action = IdentitySecurityLogExtendActionConsts.LoginTwoFactorSucceeded,
+                    UserName = user.UserName
+                });
+
                 return await RedirectSafelyAsync(ReturnUrl!, ReturnUrlHash);
             }
+
+            await IdentitySecurityLogManager.SaveAsync(new IdentitySecurityLogContext()
+            {
+                Identity = IdentitySecurityLogIdentityConsts.Identity,
+                Action = result.ToIdentitySecurityLogAction(),
+                UserName = user.UserName
+            });
             if (result.IsLockedOut)
             {
                 Logger.LogWarning(7, "User account locked out.");
@@ -129,10 +141,10 @@ namespace LINGYUN.Abp.Account.Web.Pages.Account
                     UserName = user.UserName,
                     Action = "LinkUser",
                     ExtraProperties =
-                {
-                    { "LinkTenantId",  LinkTenantId },
-                    { "LinkUserId", LinkUserId }
-                }
+                    {
+                        { "LinkTenantId",  LinkTenantId },
+                        { "LinkUserId", LinkUserId }
+                    }
                 });
 
                 using (CurrentTenant.Change(LinkTenantId))
@@ -146,10 +158,10 @@ namespace LINGYUN.Abp.Account.Web.Pages.Account
                             UserName = targetUser.UserName,
                             Action = "LinkUser",
                             ExtraProperties =
-                        {
-                            { "LinkTenantId",  LinkTenantId },
-                            { "LinkUserId", LinkUserId }
-                        }
+                            {
+                                { "LinkTenantId",  LinkTenantId },
+                                { "LinkUserId", LinkUserId }
+                            }
                         });
                     }
                 }

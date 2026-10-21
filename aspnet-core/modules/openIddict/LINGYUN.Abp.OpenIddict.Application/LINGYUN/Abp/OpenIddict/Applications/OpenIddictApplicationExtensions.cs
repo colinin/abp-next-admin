@@ -27,6 +27,7 @@ internal static class OpenIddictApplicationExtensions
         entity.ClientType = dto.ClientType;
         entity.LogoUri = dto.LogoUri;
         entity.FrontChannelLogoutUri = dto.FrontChannelLogoutUri;
+        //entity.JsonWebKeySet = dto.JsonWebKeySet;
 
         TrySetSettings(jsonSerializer, dto, entity);
         TrySetRequirements(jsonSerializer, dto, entity);
@@ -104,7 +105,6 @@ internal static class OpenIddictApplicationExtensions
             ApplicationType = entity.ApplicationType,
             ClientUri = entity.ClientUri,
             LogoUri = entity.LogoUri,
-            JsonWebKeySet = entity.JsonWebKeySet,
             ConcurrencyStamp = entity.ConcurrencyStamp,
             FrontChannelLogoutUri = entity.FrontChannelLogoutUri,
         };

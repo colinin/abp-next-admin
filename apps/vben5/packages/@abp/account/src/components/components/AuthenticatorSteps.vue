@@ -67,6 +67,7 @@ async function onValidCode() {
   try {
     loading.value = true;
     const dto = await verifyAuthenticatorCodeApi(toValue(validCodeInput));
+    message.success($t('AbpAccount.AuthenticatorCodeValidSuccessfully'));
     recoveryCodes.value = dto.recoveryCodes;
     codeValidated.value = true;
     onNextStep();
@@ -152,7 +153,7 @@ async function onValidCode() {
         </div>
         <div class="ml-4 basis-2/3">
           <Button :loading="loading" type="primary" @click="onValidCode">
-            {{ $t('AbpAccount.Validation') }}
+            {{ $t('AbpAccount.ValidAuthenticator:Valid') }}
           </Button>
         </div>
       </div>

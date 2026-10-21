@@ -1,0 +1,14 @@
+﻿{
+  "culture": "en",
+  "texts": {
+    "Settings:TenantCloud.Captcha": "Captcha",
+    "DisplayName:CaptchaAppId": "Captcha AppId",
+    "Description:CaptchaAppId": "Captcha AppId. Login to the Verification Code Console, and in the \"Key\" column of the verification list, you can view the CaptchaAppId.",
+    "DisplayName:CaptchaSecretKey": "Captcha Secret Key",
+    "Description:CaptchaSecretKey": "Captcha Secret Key.Log in to the verification code console, and in the \"Key\" column of the verification list, you can view the AppSecretKey.",
+    "DisplayName:CaptchaAppIdEncryptedType": "Captcha AppId Encrypted Type",
+    "Description:CaptchaAppIdEncryptedType": "If a specific encryption method is specified, the CaptchaAppid authentication transmits the encryption key through the front end, which can effectively prevent the risk of resource fraud caused by the leakage of CaptchaAppid.",
+    "DisplayName:CaptchaAppIdEncryptedExpireTime": "Validity period of the encrypted text",
+    "Description:CaptchaAppIdEncryptedExpireTime": "Cipher validity period, unit: seconds, maximum 86400 seconds, which is 24 hours."
+  }
+}

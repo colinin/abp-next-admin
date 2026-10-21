@@ -7,9 +7,13 @@ public class AbpWeChatWorkGlobalConsts
     /// </summary>
     public static string ProviderName { get; set; } = "WorkWeixin";
     /// <summary>
-    /// 企业微信授权类型
+    /// 企业微信OAuth授权类型
     /// </summary>
-    public static string GrantType { get; set; } = "wecom";
+    public static string OAuthGrantType { get; set; } = "wecom_oauth";
+    /// <summary>
+    /// 企业微信小程序授权类型
+    /// </summary>
+    public static string MiniProgramGrantType { get; set; } = "wecom_mp";
     /// <summary>
     /// 企业微信个人信息标识
     /// </summary>

@@ -1,15 +1,15 @@
 version: '3.4'
 
 services:
-  admin-api:
-    hostname: admin-api
-    container_name: admin-api
+  auth-server:
+    hostname: auth-server
+    container_name: auth-server
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=80
       - TZ=Asia/Shanghai
     ports:
-      - "30010:80"
+      - "44385:80"
     networks:
       - abp-next-admin
     healthcheck:
@@ -21,9 +21,9 @@ services:
       - "host.docker.internal:host-gateway"
       - "auth-server:host-gateway"
 
-  sts-api:
-    hostname: auth-server-api
-    container_name: auth-server-api
+  identity-service:
+    hostname: identity-service
+    container_name: identity-service
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=80
@@ -41,9 +41,29 @@ services:
       - "host.docker.internal:host-gateway"
       - "auth-server:host-gateway"
 
-  localization-api:
-    hostname: localization-api
-    container_name: localization-api
+  admin-service:
+    hostname: admin-service
+    container_name: admin-service
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=80
+      - TZ=Asia/Shanghai
+    ports:
+      - "30010:80"
+    networks:
+      - abp-next-admin
+    healthcheck:
+      test: ["CMD-SHELL", "wget --spider http://localhost/healthz || exit"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+      - "auth-server:host-gateway"
+
+  localization-service:
+    hostname: localization-service
+    container_name: localization-service
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=80
@@ -61,9 +81,9 @@ services:
       - "host.docker.internal:host-gateway"
       - "auth-server:host-gateway"
 
-  platform-api:
-    hostname: platform-api
-    container_name: platform-api
+  platform-service:
+    hostname: platform-service
+    container_name: platform-service
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=80
@@ -81,9 +101,9 @@ services:
       - "host.docker.internal:host-gateway"
       - "auth-server:host-gateway"
 
-  messages-api:
-    hostname: messages-api
-    container_name: messages-api
+  message-service:
+    hostname: message-service
+    container_name: message-service
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=80
@@ -101,9 +121,9 @@ services:
       - "host.docker.internal:host-gateway"
       - "auth-server:host-gateway"
 
-  task-api:
-    hostname: tasks-api
-    container_name: tasks-api
+  task-service:
+    hostname: tasks-service
+    container_name: tasks-service
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=80
@@ -121,9 +141,9 @@ services:
       - "host.docker.internal:host-gateway"
       - "auth-server:host-gateway"
 
-  webhook-api:
-    hostname: webhooks-api
-    container_name: webhooks-api
+  webhook-service:
+    hostname: webhooks-service
+    container_name: webhooks-service
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=80
@@ -141,9 +161,9 @@ services:
       - "host.docker.internal:host-gateway"
       - "auth-server:host-gateway"
 
-  workflow-api:
-    hostname: workflow-api
-    container_name: workflow-api
+  workflow-service:
+    hostname: workflow-service
+    container_name: workflow-service
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=80
@@ -161,9 +181,9 @@ services:
       - "host.docker.internal:host-gateway"
       - "auth-server:host-gateway"
 
-  wechat-api:
-    hostname: wechat-api
-    container_name: wechat-api
+  wechat-service:
+    hostname: wechat-service
+    container_name: wechat-service
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=80
@@ -181,15 +201,15 @@ services:
       - "host.docker.internal:host-gateway"
       - "auth-server:host-gateway"
 
-  sts-server:
-    hostname: auth-server
-    container_name: auth-server
+  ai-service:
+    hostname: ai-service
+    container_name: ai-service
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=80
       - TZ=Asia/Shanghai
     ports:
-      - "44385:80"
+      - "30070:80"
     networks:
       - abp-next-admin
     healthcheck:
@@ -225,18 +245,18 @@ services:
       - "tasks-api:host-gateway"
       - "admin-api:host-gateway"
 
-  ui:
-    restart: always
-    environment:
-      - VITE_GLOB_AUTHORITY=http://apigateway:44385
-    ports:
-      - "40080:80"
-    networks:
-      - abp-next-admin
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
-      - "apigateway:host-gateway"
-      - "auth-server:host-gateway"
+  # ui:
+  #   restart: always
+  #   environment:
+  #     - VITE_GLOB_AUTHORITY=http://internal-apigateway:44385
+  #   ports:
+  #     - "40080:80"
+  #   networks:
+  #     - abp-next-admin
+  #   extra_hosts:
+  #     - "host.docker.internal:host-gateway"
+  #     - "apigateway:host-gateway"
+  #     - "auth-server:host-gateway"
 
 networks:
   abp-next-admin:

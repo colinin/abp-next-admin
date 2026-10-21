@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<Import Project="..\..\..\..\configureawait.props" />
+	<Import Project="..\..\..\..\common.props" />
+
+	<PropertyGroup>
+		<TargetFrameworks>netstandard2.0;netstandard2.1;net8.0;net9.0;net10.0</TargetFrameworks>
+		<AssemblyName>LINGYUN.Abp.Captcha.LazyCaptcha</AssemblyName>
+		<PackageId>LINGYUN.Abp.Captcha.LazyCaptcha</PackageId>
+		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+		<RootNamespace />
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.Caching" />
+		<PackageReference Include="Volo.Abp.MultiTenancy.Abstractions" />
+		<PackageReference Include="Volo.Abp.Settings" />
+		<PackageReference Include="Lazy.Captcha.Core" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\LINGYUN.Abp.Captcha.Abstractions\LINGYUN.Abp.Captcha.Abstractions.csproj" />
+	</ItemGroup>
+</Project>

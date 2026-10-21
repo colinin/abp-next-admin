@@ -1,19 +1,21 @@
 ﻿using LINGYUN.Abp.AspNetCore.HttpOverrides;
 using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
+using LINGYUN.Abp.AspNetCore.Session;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
+using LINGYUN.Abp.AuditLogging.IP.Location;
 using LINGYUN.Abp.Authorization.OrganizationUnits;
 using LINGYUN.Abp.BackgroundTasks.DistributedLocking;
 using LINGYUN.Abp.BackgroundTasks.Quartz;
-using LINGYUN.Abp.Claims.Mapping;
+using LINGYUN.Abp.AspNetCore.Authentication;
 using LINGYUN.Abp.Data.DbMigrator;
 using LINGYUN.Abp.Dynamic.Definitions;
 using LINGYUN.Abp.Emailing.Platform;
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.ExceptionHandling.Notifications;
 using LINGYUN.Abp.Features.LimitValidation.Redis;
+using LINGYUN.Abp.IP2Region;
 using LINGYUN.Abp.Identity.EntityFrameworkCore;
 using LINGYUN.Abp.Identity.Notifications;
-using LINGYUN.Abp.Identity.Session.AspNetCore;
 using LINGYUN.Abp.Identity.WeChat;
 using LINGYUN.Abp.Identity.WeChat.Work;
 using LINGYUN.Abp.IM.SignalR;
@@ -65,6 +67,8 @@ namespace LINGYUN.Abp.MicroService.MessageService;
     typeof(AbpSerilogEnrichersUniqueIdModule),
     typeof(AbpAspNetCoreSerilogModule),
     typeof(AbpAuditLoggingElasticsearchModule),
+    typeof(AbpAuditLoggingIPLocationModule),
+    typeof(AbpIP2RegionModule),
     typeof(AbpAspNetCoreMultiTenancyModule),
     typeof(AbpMessageServiceApplicationModule),
     typeof(AbpMessageServiceHttpApiModule),
@@ -112,11 +116,11 @@ namespace LINGYUN.Abp.MicroService.MessageService;
     typeof(AbpFeaturesValidationRedisModule),
     typeof(AbpCachingStackExchangeRedisModule),
     typeof(AbpLocalizationCultureMapModule),
-    typeof(AbpIdentitySessionAspNetCoreModule),
     typeof(AbpEmailingPlatformModule),
     typeof(AbpSmsPlatformModule),
     typeof(AbpHttpClientModule),
-    typeof(AbpClaimsMappingModule),
+    typeof(AbpAspNetCoreAuthenticationModule),
+    typeof(AbpAspNetCoreSessionModule),
     typeof(AbpAspNetCoreMvcWrapperModule),
     typeof(AbpAspNetCoreHttpOverridesModule),
     typeof(AbpDynamicDefinitionsModule),

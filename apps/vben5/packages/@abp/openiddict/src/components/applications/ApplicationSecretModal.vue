@@ -6,6 +6,7 @@ import { ref } from 'vue';
 import { useVbenForm, useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
+import { CodeEditor } from '@abp/components/codeeditor';
 import { message } from 'ant-design-vue';
 
 import { useApplicationsApi } from '../../api/useApplicationsApi';
@@ -26,14 +27,52 @@ const [Form, formApi] = useVbenForm({
     componentProps: {
       class: 'w-full',
     },
+    labelWidth: 130,
   },
   handleSubmit: onSubmit,
   schema: [
+    {
+      component: 'Select',
+      componentProps: {
+        options: [
+          {
+            label: $t('AbpOpenIddict.DisplayName:ClientSecret'),
+            value: 'ClientSecret',
+          },
+          {
+            label: $t('AbpOpenIddict.DisplayName:JsonWebKeySet'),
+            value: 'JsonWebKeySet',
+          },
+        ],
+      },
+      defaultValue: 'ClientSecret',
+      fieldName: 'keyType',
+      label: $t('AbpOpenIddict.DisplayName:ClientSecretType'),
+      rules: 'required',
+    },
     {
       component: 'InputPassword',
       fieldName: 'clientSecret',
       label: $t('AbpOpenIddict.DisplayName:ClientSecret'),
       rules: 'required',
+      dependencies: {
+        triggerFields: ['keyType'],
+        show(values) {
+          return values.keyType === 'ClientSecret';
+        },
+      },
+    },
+    {
+      component: 'Input',
+      fieldName: 'jsonWebKeySet',
+      label: $t('AbpOpenIddict.DisplayName:JsonWebKeySet'),
+      rules: 'required',
+      dependencies: {
+        triggerFields: ['keyType'],
+        show(values) {
+          return values.keyType === 'JsonWebKeySet';
+        },
+      },
     },
   ],
   showDefaultActions: false,
@@ -76,6 +115,7 @@ async function onSubmit(input: Record<string, any>) {
     const dto = await updateApi(applicationModel.value!.id, {
       ...applicationModel.value!,
       clientSecret: input.clientSecret,
+      jsonWebKeySet: input.jsonWebKeySet,
     });
     message.success($t('AbpUi.SavedSuccessfully'));
     emits('change', dto);
@@ -84,11 +124,25 @@ async function onSubmit(input: Record<string, any>) {
     modalApi.setState({ submitting: false });
   }
 }
+
+function onJsonWebKeySetChange(val?: string) {
+  formApi.setFieldValue('jsonWebKeySet', val);
+}
 </script>
 
 <template>
   <Modal>
-    <Form />
+    <Form>
+      <template #jsonWebKeySet="{ modelValue }">
+        <div class="w-full overflow-hidden rounded-md border border-gray-200">
+          <CodeEditor
+            :value="modelValue"
+            :options="{ lineNumbers: false }"
+            @change="onJsonWebKeySetChange"
+          />
+        </div>
+      </template>
+    </Form>
   </Modal>
 </template>
 

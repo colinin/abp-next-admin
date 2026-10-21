@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Sinks.InMemory;
 using Shouldly;
+using System;
 using System.Threading.Tasks;
 using Volo.Abp.Modularity;
 using Volo.Abp.Specifications;
@@ -45,6 +46,7 @@ public abstract class LoggingManager_Tests<TStartupModule> : AbpIntegratedTest<T
     [Fact]
     public async Task Should_Get_List()
     {
+        var startTime = DateTime.Now;
         _logger.LogDebug("xunit test debug log");
         _logger.LogInformation("xunit test information log");
         _logger.LogWarning("xunit test warning log");
@@ -54,11 +56,13 @@ public abstract class LoggingManager_Tests<TStartupModule> : AbpIntegratedTest<T
 
         await Task.Delay(5000);
 
-        (await _manager.GetCountAsync(context: _context)).ShouldBe(4);
+        var endTime = DateTime.Now;
 
-        (await _manager.GetCountAsync(level: LogLevel.Information, context: _context)).ShouldBe(1);
+        (await _manager.GetCountAsync(startTime, endTime, context: _context)).ShouldBe(4);
 
-        var logs = await _manager.GetListAsync(level: LogLevel.Information, context: _context);
+        (await _manager.GetCountAsync(startTime, endTime, level: LogLevel.Information, context: _context)).ShouldBe(1);
+
+        var logs = await _manager.GetListAsync(startTime: startTime, endTime: endTime, level: LogLevel.Information, context: _context);
         logs.Count.ShouldBe(1);
         logs[0].Level.ShouldBe(LogLevel.Information);
         logs[0].Message.ShouldBe("xunit test information log");
@@ -77,6 +81,7 @@ public abstract class LoggingManager_Tests<TStartupModule> : AbpIntegratedTest<T
     [Fact]
     public async Task Should_Get_List_With_Specification()
     {
+        var startTime = DateTime.Now;
         _logger.LogDebug("xunit test debug log");
         _logger.LogInformation("xunit test information log");
         _logger.LogWarning("xunit test warning log");
@@ -85,9 +90,11 @@ public abstract class LoggingManager_Tests<TStartupModule> : AbpIntegratedTest<T
         await Log.CloseAndFlushAsync();
 
         await Task.Delay(5000);
+        var endTime = DateTime.Now;
 
         var specification = new ExpressionSpecification<LogInfo>(
-            x => x.Level == LogLevel.Information && x.Fields.Context == _context);
+            x => x.TimeStamp >= startTime && x.TimeStamp <= endTime &&
+                x.Level == LogLevel.Information && x.Fields.Context == _context);
 
         var logs = await _manager.GetListAsync(specification);
         logs.Count.ShouldBe(1);

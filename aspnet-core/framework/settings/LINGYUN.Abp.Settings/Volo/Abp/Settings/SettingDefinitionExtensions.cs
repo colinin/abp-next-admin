@@ -17,6 +17,14 @@ public static class SettingDefinitionExtensions
     private const string RequiredFeaturesKey = "RequiredFeatures";
     private const string RequiredPermissionsKey = "RequiredPermissions";
 
+    public static SettingDefinition Replace(
+        this SettingDefinition definition,
+        Action<SettingDefinition> configure)
+    {
+        configure.Invoke(definition);
+        return definition;
+    }
+
     public static SettingDefinition RequiredFeatures(
         this SettingDefinition definition,
         IEnumerable<string> requiredFeatures)
@@ -176,6 +184,19 @@ public static class SettingDefinitionExtensions
         IEnumerable<NameValue<string>> options)
     {
         var optionNames = options.Select(x => x.Name).JoinAsString(",");
+        var optionValues = options.Select(x => x.Value).JoinAsString(",");
+
+        return definition
+            .WithValueType(ValueType.Option)
+            .WithProperty(OptionNameKey, optionNames)
+            .WithProperty(OptionValueKey, optionValues);
+    }
+
+    public static SettingDefinition WithOptions<TValue>(
+        this SettingDefinition definition,
+        IEnumerable<LocalizableValue<TValue>> options)
+    {
+        var optionNames = options.Select(x => $"N:{x.Name};L:{x.ResourceName}").JoinAsString(",");
         var optionValues = options.Select(x => x.Value).JoinAsString(",");
 
         return definition
