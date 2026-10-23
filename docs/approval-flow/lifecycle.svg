@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1240" height="880" viewBox="0 0 1240 880" font-family="Microsoft YaHei, Segoe UI, PingFang SC, sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#5b6573"/>
+    </marker>
+    <marker id="arrowGreen" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#389e0d"/>
+    </marker>
+    <marker id="arrowRed" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#cf1322"/>
+    </marker>
+    <style>
+      .title { font-size: 24px; font-weight: 700; fill: #1f2937; }
+      .subtitle { font-size: 13px; fill: #6b7280; }
+      .box { fill: #ffffff; stroke: #8c9bab; stroke-width: 1.5; rx: 10; }
+      .box-blue { fill: #e6f4ff; stroke: #1677ff; }
+      .box-orange { fill: #fff7e6; stroke: #fa8c16; }
+      .box-green { fill: #f6ffed; stroke: #52c41a; }
+      .box-red { fill: #fff1f0; stroke: #cf1322; }
+      .box-gray { fill: #f5f5f5; stroke: #8c8c8c; }
+      .text { font-size: 14px; fill: #1f2937; }
+      .text-sm { font-size: 12px; fill: #4b5563; }
+      .label { font-size: 12px; fill: #1677ff; font-weight: 600; }
+      .label-red { font-size: 12px; fill: #cf1322; font-weight: 600; }
+      .edge { stroke: #5b6573; stroke-width: 1.6; fill: none; marker-end: url(#arrow); }
+      .edge-green { stroke: #389e0d; stroke-width: 1.6; fill: none; marker-end: url(#arrowGreen); }
+      .edge-red { stroke: #cf1322; stroke-width: 1.6; fill: none; marker-end: url(#arrowRed); }
+      .diamond { fill: #fffbe6; stroke: #d4b106; stroke-width: 1.5; }
+    </style>
+  </defs>
+
+  <rect width="1240" height="880" fill="#fbfcfe"/>
+  <text x="40" y="44" class="title">审批流实例生命周期（基于 Elsa UserTasks）</text>
+  <text x="40" y="68" class="subtitle">ApprovalFlow 负责业务单据与记录，任务与恢复动作完全交给 Elsa UserTasks / Workflow Runtime</text>
+
+  <!-- main flow -->
+  <rect x="470" y="92" width="300" height="48" rx="24" class="box box-blue"/>
+  <text x="620" y="121" class="text" text-anchor="middle">发起审批（提交表单）</text>
+
+  <rect x="440" y="172" width="360" height="54" class="box box-blue"/>
+  <text x="620" y="196" class="text" text-anchor="middle">创建 ApprovalInstance</text>
+  <text x="620" y="214" class="text-sm" text-anchor="middle">Status = Running，写入 ApprovalRecord(Start)</text>
+
+  <rect x="390" y="258" width="460" height="54" class="box box-blue"/>
+  <text x="620" y="282" class="text" text-anchor="middle">派发 Elsa 工作流</text>
+  <text x="620" y="300" class="text-sm" text-anchor="middle">ApprovalInstanceId / ApprovalInitiator / ApprovalFormReference</text>
+
+  <rect x="350" y="344" width="540" height="66" class="box box-blue"/>
+  <text x="620" y="367" class="text" text-anchor="middle">ApprovalTask 节点</text>
+  <text x="620" y="386" class="text-sm" text-anchor="middle">解析审批人规则 → 为每位审批人创建 Elsa UserTask（TaskType = approval）</text>
+  <text x="620" y="402" class="text-sm" text-anchor="middle">UserTaskCreated → 登记 ApprovalNodeTask；任务投影到「我的待办」</text>
+
+  <!-- decision: action -->
+  <polygon points="620,442 760,500 620,558 480,500" class="diamond"/>
+  <text x="620" y="496" class="text" text-anchor="middle">审批动作</text>
+  <text x="620" y="514" class="text-sm" text-anchor="middle">Approve / Reject</text>
+
+  <!-- decision: next node -->
+  <polygon points="620,600 760,654 620,708 480,654" class="diamond"/>
+  <text x="620" y="650" class="text" text-anchor="middle">还有下一节点？</text>
+  <text x="620" y="668" class="text-sm" text-anchor="middle">由流程定义决定</text>
+
+  <!-- terminals -->
+  <rect x="500" y="790" width="200" height="52" class="box box-green"/>
+  <text x="600" y="821" class="text" text-anchor="middle">Approved</text>
+
+  <rect x="740" y="790" width="200" height="52" class="box box-red"/>
+  <text x="840" y="821" class="text" text-anchor="middle">Rejected</text>
+
+  <!-- side actions -->
+  <rect x="50" y="430" width="190" height="44" class="box box-orange"/>
+  <text x="145" y="457" class="text" text-anchor="middle">发起人撤回</text>
+
+  <rect x="50" y="494" width="190" height="44" class="box box-orange"/>
+  <text x="145" y="521" class="text" text-anchor="middle">审批人退回</text>
+
+  <rect x="1000" y="430" width="200" height="44" class="box box-orange"/>
+  <text x="1100" y="457" class="text" text-anchor="middle">超时 / 流程取消</text>
+
+  <rect x="50" y="620" width="190" height="46" class="box box-gray"/>
+  <text x="145" y="648" class="text" text-anchor="middle">Withdrawn</text>
+
+  <rect x="50" y="680" width="190" height="46" class="box box-gray"/>
+  <text x="145" y="708" class="text" text-anchor="middle">Returned</text>
+
+  <rect x="1000" y="620" width="200" height="46" class="box box-gray"/>
+  <text x="1100" y="648" class="text" text-anchor="middle">TimedOut / Cancelled</text>
+
+  <!-- edges: main -->
+  <line x1="620" y1="140" x2="620" y2="170" class="edge"/>
+  <line x1="620" y1="226" x2="620" y2="256" class="edge"/>
+  <line x1="620" y1="312" x2="620" y2="342" class="edge"/>
+  <line x1="620" y1="410" x2="620" y2="440" class="edge"/>
+  <line x1="620" y1="558" x2="620" y2="598" class="edge"/>
+  <text x="632" y="580" class="label">同意</text>
+
+  <line x1="620" y1="708" x2="620" y2="788" class="edge-green"/>
+  <text x="632" y="752" class="label">否</text>
+
+  <!-- loop back -->
+  <path d="M 480 654 L 300 654 L 300 377 L 348 377" class="edge-green"/>
+  <text x="308" y="640" class="label">是</text>
+
+  <!-- reject branch -->
+  <path d="M 760 500 L 900 500 L 900 786" class="edge-red"/>
+  <text x="812" y="490" class="label-red">拒绝</text>
+
+  <!-- withdraw / return entry -->
+  <path d="M 440 199 L 265 199 L 265 452 L 242 452" class="edge"/>
+  <path d="M 280 452 L 280 516 L 242 516" class="edge"/>
+  <line x1="145" y1="474" x2="145" y2="618" class="edge"/>
+  <line x1="145" y1="538" x2="145" y2="678" class="edge"/>
+
+  <!-- timeout entry -->
+  <path d="M 890 377 L 1100 377 L 1100 428" class="edge"/>
+  <line x1="1100" y1="474" x2="1100" y2="618" class="edge"/>
+
+  <!-- notes -->
+  <rect x="960" y="790" width="240" height="52" class="box box-gray" stroke-dasharray="4 3"/>
+  <text x="1080" y="812" class="text-sm" text-anchor="middle">终态由 WorkflowFinishedHandler</text>
+  <text x="1080" y="830" class="text-sm" text-anchor="middle">按工作流输出 ApprovalOutcome 落库</text>
+
+  <text x="40" y="860" class="subtitle">说明：虚线框为处理方式说明；撤回 / 退回由 ApprovalInstanceTerminationHandler 直接结束实例；超时/取消由 Elsa 超时策略或流程取消触发。</text>
+</svg>
