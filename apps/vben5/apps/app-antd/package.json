@@ -28,6 +28,7 @@
   "dependencies": {
     "@abp/account": "workspace:*",
     "@abp/ai-management": "workspace:*",
+    "@abp/approval-flow": "workspace:*",
     "@abp/auditing": "workspace:*",
     "@abp/blob-management": "workspace:*",
     "@abp/cache-management": "workspace:*",
