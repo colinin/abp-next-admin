@@ -23,7 +23,7 @@ public class TemplateController : AbpControllerBase, ITemplateAppService
         TemplateAppService = templateAppService;
     }
 
-    [HttpGet("/api/approval-flow/available-templates")]
+    [HttpGet("available-templates")]
     public virtual Task<ListResultDto<TemplateDto>> GetListAsync([FromQuery] bool onlyPublished = false)
     {
         return TemplateAppService.GetListAsync(onlyPublished);
