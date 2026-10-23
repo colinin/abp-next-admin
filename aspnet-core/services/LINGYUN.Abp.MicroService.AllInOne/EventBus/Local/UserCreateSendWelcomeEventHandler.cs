@@ -1,4 +1,4 @@
-﻿using LINGYUN.Abp.Notifications;
+using LINGYUN.Abp.Notifications;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Entities.Events;
 using Volo.Abp.EventBus;

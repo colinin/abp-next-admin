@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+	<Import Project="..\..\..\..\configureawait.props" />
+	<Import Project="..\..\..\..\common.props" />
+
+	<PropertyGroup>
+		<TargetFramework>net10.0</TargetFramework>
+		<AssemblyName>LINGYUN.Abp.ElsaNext.Studio.Saas.Blazor</AssemblyName>
+		<PackageId>LINGYUN.Abp.ElsaNext.Studio.Saas.Blazor</PackageId>
+		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\saas\LINGYUN.Abp.Saas.Domain\LINGYUN.Abp.Saas.Domain.csproj" />
+		<ProjectReference Include="..\LINGYUN.Abp.ElsaNext.Studio.Blazor\LINGYUN.Abp.ElsaNext.Studio.Blazor.csproj" />
+	</ItemGroup>
+
+</Project>

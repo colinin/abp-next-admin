@@ -1,0 +1,34 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+	<Import Project="..\..\..\..\configureawait.props" />
+	<Import Project="..\..\..\..\common.props" />
+
+	<PropertyGroup>
+		<TargetFramework>net10.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<AssemblyName>LINGYUN.Abp.ElsaNext.Studio.Diagnostics.OpenTelemetry.Blazor</AssemblyName>
+		<PackageId>LINGYUN.Abp.ElsaNext.Studio.Diagnostics.OpenTelemetry.Blazor</PackageId>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.AspNetCore" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="OpenTelemetry.Extensions.Hosting" />
+		<PackageReference Include="Elsa.OpenTelemetry" />
+		<PackageReference Include="Elsa.Diagnostics.OpenTelemetry" />
+		<PackageReference Include="Elsa.Studio.Diagnostics.OpenTelemetry.Dashboard" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\LINGYUN.Abp.ElsaNext.Studio.Blazor\LINGYUN.Abp.ElsaNext.Studio.Blazor.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Content Remove="Localization\**\*.json" />
+		<EmbeddedResource Include="Localization\**\*.json" />
+	</ItemGroup>
+
+</Project>

@@ -1,4 +1,4 @@
-﻿using Volo.Abp.AspNetCore.Mvc.UI.Packages.JQuery;
+using Volo.Abp.AspNetCore.Mvc.UI.Packages.JQuery;
 
 namespace LINGYUN.Abp.MicroService.AllInOne.Bundling;
 

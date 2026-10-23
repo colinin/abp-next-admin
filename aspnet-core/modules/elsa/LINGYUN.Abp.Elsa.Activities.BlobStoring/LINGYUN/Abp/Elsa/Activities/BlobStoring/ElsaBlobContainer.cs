@@ -2,7 +2,7 @@
 
 namespace LINGYUN.Abp.Elsa.Activities.BlobStoring;
 
-[BlobContainerName("elsa")]
+[BlobContainerName("workflow")]
 public class ElsaBlobContainer
 {
 }

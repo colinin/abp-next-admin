@@ -1,0 +1,12 @@
+{
+  "culture": "en",
+  "texts": {
+    "Webhooks": "Webhooks",
+    "Publish Webhook": "Publish Webhook",
+    "Send webhooks to subscriptions.": "Send webhooks to subscriptions.",
+    "Data to send.": "Data to send.",
+    "If true, It sends the exact same data as the parameter to clients.": "If true, It sends the exact same data as the parameter to clients.",
+    "If true, webhook will only contain given headers. If false given headers will be added to predefined headers in subscription.": "If true, webhook will only contain given headers. If false given headers will be added to predefined headers in subscription.",
+    "That headers will be sent with the webhook.": "That headers will be sent with the webhook."
+  }
+}

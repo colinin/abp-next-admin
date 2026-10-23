@@ -1,0 +1,40 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<Import Project="..\..\..\..\configureawait.props" />
+	<Import Project="..\..\..\..\common.props" />
+
+	<PropertyGroup>
+		<TargetFramework>net10.0</TargetFramework>
+		<AssemblyName>LINGYUN.Abp.ElsaNext.ApprovalFlow.Domain</AssemblyName>
+		<PackageId>LINGYUN.Abp.ElsaNext.ApprovalFlow.Domain</PackageId>
+		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+		<RootNamespace />
+
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Elsa.Expressions.JavaScript" />
+		<PackageReference Include="Elsa.Mediator" />
+		<PackageReference Include="Elsa.UserTasks" />
+		<PackageReference Include="Elsa.Workflows.Core" />
+		<PackageReference Include="Elsa.Workflows.Management" />
+		<PackageReference Include="Elsa.Workflows.Runtime" />
+		<PackageReference Include="Volo.Abp.Ddd.Domain" />
+		<PackageReference Include="Volo.Abp.Security" />
+		<PackageReference Include="Volo.Abp.Timing" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\LINGYUN.Abp.ElsaNext.ApprovalFlow.Activities\LINGYUN.Abp.ElsaNext.ApprovalFlow.Activities.csproj" />
+		<ProjectReference Include="..\LINGYUN.Abp.ElsaNext.ApprovalFlow.Domain.Shared\LINGYUN.Abp.ElsaNext.ApprovalFlow.Domain.Shared.csproj" />
+		<ProjectReference Include="..\LINGYUN.Abp.ElsaNext.UserTasks\LINGYUN.Abp.ElsaNext.UserTasks.csproj" />
+	</ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Elsa.Expressions.JavaScript">
+      <HintPath>$(NuGetPackageRoot)elsa.expressions.javascript\$(ElsaNextPackageVersion)\lib\net10.0\Elsa.Expressions.JavaScript.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+</Project>

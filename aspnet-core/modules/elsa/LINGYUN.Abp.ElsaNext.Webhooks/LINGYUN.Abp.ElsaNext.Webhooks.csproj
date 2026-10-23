@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<Import Project="..\..\..\..\configureawait.props" />
+	<Import Project="..\..\..\..\common.props" />
+
+	<PropertyGroup>
+		<TargetFramework>net10.0</TargetFramework>
+		<AssemblyName>LINGYUN.Abp.ElsaNext.Webhooks</AssemblyName>
+		<PackageId>LINGYUN.Abp.ElsaNext.Webhooks</PackageId>
+		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+		<RootNamespace />
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <Content Remove="LINGYUN\Abp\ElsaNext\Webhooks\Localization\**\*.json" />
+	  <EmbeddedResource Include="LINGYUN\Abp\ElsaNext\Webhooks\Localization\**\*.json" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\webhooks\LINGYUN.Abp.Webhooks\LINGYUN.Abp.Webhooks.csproj" />
+		<ProjectReference Include="..\LINGYUN.Abp.ElsaNext\LINGYUN.Abp.ElsaNext.csproj" />
+	</ItemGroup>
+
+</Project>

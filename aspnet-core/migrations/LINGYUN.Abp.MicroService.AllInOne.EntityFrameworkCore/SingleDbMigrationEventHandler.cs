@@ -1,4 +1,4 @@
-﻿using LINGYUN.Abp.BackgroundTasks;
+using LINGYUN.Abp.BackgroundTasks;
 using LINGYUN.Abp.BackgroundTasks.Internal;
 using LINGYUN.Abp.Saas.Tenants;
 using Microsoft.Extensions.Logging;

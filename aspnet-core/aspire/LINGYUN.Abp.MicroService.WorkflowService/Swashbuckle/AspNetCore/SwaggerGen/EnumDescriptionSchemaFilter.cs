@@ -1,4 +1,4 @@
-﻿using Microsoft.OpenApi;
+using Microsoft.OpenApi;
 using System;
 using System.ComponentModel;
 using System.Reflection;

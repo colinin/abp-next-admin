@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Emailing;
 using SendTestEmailInput = Volo.Abp.SettingManagement.SendTestEmailInput;
 using SettingManagementPermissions = Volo.Abp.SettingManagement.SettingManagementPermissions;

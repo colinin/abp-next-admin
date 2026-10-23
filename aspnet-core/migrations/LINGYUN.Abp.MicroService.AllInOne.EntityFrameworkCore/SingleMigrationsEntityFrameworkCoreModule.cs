@@ -3,6 +3,7 @@ using LINGYUN.Abp.AuditLogging.EntityFrameworkCore;
 using LINGYUN.Abp.BlobManagement.EntityFrameworkCore;
 using LINGYUN.Abp.Data.DbMigrator;
 using LINGYUN.Abp.Gdpr.EntityFrameworkCore;
+using LINGYUN.Abp.ElsaNext.ApprovalFlow.EntityFrameworkCore;
 using LINGYUN.Abp.Identity.EntityFrameworkCore;
 using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
 using LINGYUN.Abp.MessageService.EntityFrameworkCore;
@@ -44,6 +45,7 @@ namespace LINGYUN.Abp.MicroService.AllInOne.EntityFrameworkCore;
     typeof(AbpGdprEntityFrameworkCoreModule),
     typeof(AbpUINavigationVueVbenAdmin5Module),
     typeof(AbpWeChatModule),
+    typeof(AbpElsaNextApprovalFlowEntityFrameworkCoreModule),
     typeof(AbpDataDbMigratorModule)
     )]
 public class SingleMigrationsEntityFrameworkCoreModule : AbpModule

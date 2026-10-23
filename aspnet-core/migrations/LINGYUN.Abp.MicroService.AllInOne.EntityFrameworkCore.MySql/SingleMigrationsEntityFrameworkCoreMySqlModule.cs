@@ -1,4 +1,6 @@
 ﻿using DotNetCore.CAP;
+using LINGYUN.Abp.ElsaNext.EntityFrameworkCore.MySQL;
+using LINGYUN.Abp.ElsaNext.UserTasks.EntityFrameworkCore.MySQL;
 using LINGYUN.Abp.EntityFrameworkCore.MySQL;
 using LINGYUN.Abp.Quartz.MySqlInstaller;
 using Microsoft.EntityFrameworkCore;
@@ -18,7 +20,8 @@ namespace LINGYUN.Abp.MicroService.AllInOne.EntityFrameworkCore.MySql;
     // Quartz MySql数据库初始化模块
     typeof(AbpQuartzMySqlInstallerModule),
     // Elsa工作流模块 MySql集成
-    //typeof(AbpElsaEntityFrameworkCoreMySqlModule),
+    typeof(AbpElsaNextEntityFrameworkCoreMySQLModule),
+    typeof(AbpElsaNextUserTasksEntityFrameworkCoreMySQLModule),
     typeof(SingleMigrationsEntityFrameworkCoreModule)
     )]
 public class SingleMigrationsEntityFrameworkCoreMySqlModule : AbpModule

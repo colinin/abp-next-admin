@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="900" viewBox="0 0 1280 900" font-family="Microsoft YaHei, Segoe UI, PingFang SC, sans-serif">
+  <defs>
+    <marker id="seqArrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#374151"/>
+    </marker>
+    <marker id="seqArrowBlue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#1677ff"/>
+    </marker>
+    <style>
+      .title { font-size: 24px; font-weight: 700; fill: #1f2937; }
+      .subtitle { font-size: 13px; fill: #6b7280; }
+      .lifeline { stroke: #cbd5e1; stroke-width: 1.2; stroke-dasharray: 6 5; }
+      .head { fill: #eef2f7; stroke: #94a3b8; stroke-width: 1.4; }
+      .head-text { font-size: 13px; fill: #1f2937; font-weight: 600; }
+      .msg { stroke: #374151; stroke-width: 1.5; fill: none; marker-end: url(#seqArrow); }
+      .msg-blue { stroke: #1677ff; stroke-width: 1.6; fill: none; marker-end: url(#seqArrowBlue); }
+      .msg-dash { stroke: #64748b; stroke-width: 1.4; stroke-dasharray: 5 4; fill: none; marker-end: url(#seqArrow); }
+      .label { font-size: 12.5px; fill: #1f2937; }
+      .label-sm { font-size: 11.5px; fill: #64748b; }
+      .note { fill: #fffbeb; stroke: #f59e0b; stroke-width: 1.2; stroke-dasharray: 4 3; }
+      .note-text { font-size: 12px; fill: #92400e; }
+      .phase { font-size: 12px; fill: #94a3b8; font-weight: 700; letter-spacing: 1px; }
+    </style>
+  </defs>
+
+  <rect width="1280" height="900" fill="#fbfcfe"/>
+  <text x="40" y="44" class="title">审批流转时序图</text>
+  <text x="40" y="68" class="subtitle">发起 → 节点任务 → 审批决策 → 工作流恢复 → 实例终态</text>
+
+  <!-- lifelines -->
+  <rect x="40" y="90" width="120" height="34" class="head"/>
+  <text x="100" y="112" class="head-text" text-anchor="middle">发起人/审批人</text>
+
+  <rect x="240" y="90" width="120" height="34" class="head"/>
+  <text x="300" y="112" class="head-text" text-anchor="middle">vben5 前端</text>
+
+  <rect x="450" y="90" width="140" height="34" class="head"/>
+  <text x="520" y="112" class="head-text" text-anchor="middle">Approval API</text>
+
+  <rect x="680" y="90" width="120" height="34" class="head"/>
+  <text x="740" y="112" class="head-text" text-anchor="middle">Elsa 工作流</text>
+
+  <rect x="880" y="90" width="140" height="34" class="head"/>
+  <text x="950" y="112" class="head-text" text-anchor="middle">UserTasks 存储</text>
+
+  <rect x="1090" y="90" width="150" height="34" class="head"/>
+  <text x="1165" y="112" class="head-text" text-anchor="middle">ApprovalFlow DB</text>
+
+  <line x1="100" y1="124" x2="100" y2="860" class="lifeline"/>
+  <line x1="300" y1="124" x2="300" y2="860" class="lifeline"/>
+  <line x1="520" y1="124" x2="520" y2="860" class="lifeline"/>
+  <line x1="740" y1="124" x2="740" y2="860" class="lifeline"/>
+  <line x1="950" y1="124" x2="950" y2="860" class="lifeline"/>
+  <line x1="1165" y1="124" x2="1165" y2="860" class="lifeline"/>
+
+  <text x="40" y="152" class="phase">① 发起</text>
+
+  <line x1="100" y1="170" x2="298" y2="170" class="msg"/>
+  <text x="120" y="164" class="label">填写表单，发起审批</text>
+
+  <line x1="300" y1="205" x2="518" y2="205" class="msg-blue"/>
+  <text x="320" y="199" class="label">POST /api/approval-flow/instances</text>
+
+  <line x1="520" y1="240" x2="1163" y2="240" class="msg"/>
+  <text x="560" y="234" class="label">保存 ApprovalInstance（Running）+ ApprovalRecord(Start)</text>
+
+  <line x1="520" y1="275" x2="738" y2="275" class="msg-blue"/>
+  <text x="540" y="269" class="label">DispatchWorkflow（ApprovalInstanceId / ApprovalFormReference）</text>
+
+  <text x="40" y="312" class="phase">② 节点任务</text>
+
+  <line x1="740" y1="330" x2="948" y2="330" class="msg"/>
+  <text x="760" y="324" class="label">ApprovalTask 创建 UserTask（TaskType=approval）</text>
+
+  <line x1="950" y1="365" x2="1163" y2="365" class="msg-dash"/>
+  <text x="968" y="359" class="label-sm">UserTaskCreated → 登记 ApprovalNodeTask</text>
+
+  <line x1="950" y1="400" x2="302" y2="400" class="msg-dash"/>
+  <text x="700" y="394" class="label-sm">待办投影到「我的审批」</text>
+
+  <text x="40" y="438" class="phase">③ 审批决策</text>
+
+  <line x1="100" y1="458" x2="298" y2="458" class="msg"/>
+  <text x="120" y="452" class="label">打开待办，填写意见，同意 / 拒绝</text>
+
+  <line x1="300" y1="493" x2="518" y2="493" class="msg-blue"/>
+  <text x="320" y="487" class="label">POST /instances/{id}/decide</text>
+
+  <line x1="520" y1="528" x2="948" y2="528" class="msg"/>
+  <text x="540" y="522" class="label">IUserTaskManager.CompleteAsync(actionKey, comment)</text>
+
+  <line x1="950" y1="563" x2="742" y2="563" class="msg"/>
+  <text x="760" y="557" class="label">ResumeWorkflow(bookmarkId, UserTaskStimulus)</text>
+
+  <text x="40" y="600" class="phase">④ 流转 / 结束</text>
+
+  <path d="M 740 620 L 800 620 L 800 642 L 742 642" class="msg"/>
+  <text x="812" y="636" class="label">下一节点 / 结束</text>
+
+  <line x1="740" y1="680" x2="1163" y2="680" class="msg"/>
+  <text x="760" y="674" class="label">WorkflowFinished → 实例终态 + ApprovalRecord(End)</text>
+
+  <text x="40" y="718" class="phase">⑤ 返回</text>
+
+  <line x1="520" y1="738" x2="302" y2="738" class="msg-blue"/>
+  <text x="340" y="732" class="label">返回决策结果</text>
+
+  <line x1="300" y1="773" x2="102" y2="773" class="msg"/>
+  <text x="120" y="767" class="label">刷新待办 / 我的审批</text>
+
+  <!-- notes -->
+  <rect x="880" y="720" width="360" height="96" class="note"/>
+  <text x="896" y="744" class="note-text">• UserTask 是唯一任务源，审批记录只追加不修改</text>
+  <text x="896" y="766" class="note-text">• CompleteAsync 由 UserTask.revision 保证乐观并发</text>
+  <text x="896" y="788" class="note-text">• 失败/冲突由 API 转换为业务错误返回</text>
+  <text x="896" y="810" class="note-text">• 撤回、退回不经过 UserTask，直接结束实例</text>
+</svg>

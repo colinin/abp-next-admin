@@ -17,11 +17,6 @@
 		<PackageReference Include="DotNetCore.CAP.RabbitMQ" />
 		<PackageReference Include="DotNetCore.CAP.InMemoryStorage" />
 		<PackageReference Include="Savorboard.CAP.InMemoryMessageQueue " />
-		<PackageReference Include="Elsa.Activities.Email" />
-		<PackageReference Include="Elsa.Activities.Http" />
-		<PackageReference Include="Elsa.Activities.UserTask" />
-		<PackageReference Include="Elsa.Activities.Temporal.Quartz" />
-		<PackageReference Include="Elsa.Webhooks.Api" />
 		<PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" />
 		<PackageReference Include="Microsoft.AspNetCore.SignalR.StackExchangeRedis" />
 		<PackageReference Include="OpenIddict.Validation.DataProtection" />
@@ -181,17 +176,6 @@
 		<ProjectReference Include="..\..\modules\demo\LINGYUN.Abp.Demo.Application\LINGYUN.Abp.Demo.Application.csproj" />
 		<ProjectReference Include="..\..\modules\demo\LINGYUN.Abp.Demo.EntityFrameworkCore\LINGYUN.Abp.Demo.EntityFrameworkCore.csproj" />
 		<ProjectReference Include="..\..\modules\demo\LINGYUN.Abp.Demo.HttpApi\LINGYUN.Abp.Demo.HttpApi.csproj" />
-		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.Elsa.Activities.BlobStoring\LINGYUN.Abp.Elsa.Activities.BlobStoring.csproj" />
-		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.Elsa.Activities.Emailing\LINGYUN.Abp.Elsa.Activities.Emailing.csproj" />
-		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.Elsa.Activities.IM\LINGYUN.Abp.Elsa.Activities.IM.csproj" />
-		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.Elsa.Activities.Notifications\LINGYUN.Abp.Elsa.Activities.Notifications.csproj" />
-		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.Elsa.Activities.Sms\LINGYUN.Abp.Elsa.Activities.Sms.csproj" />
-		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.Elsa.Activities.Webhooks\LINGYUN.Abp.Elsa.Activities.Webhooks.csproj" />
-		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.Elsa.Activities\LINGYUN.Abp.Elsa.Activities.csproj" />
-		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.Elsa.Designer\LINGYUN.Abp.Elsa.Designer.csproj" />
-		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.Elsa.EntityFrameworkCore\LINGYUN.Abp.Elsa.EntityFrameworkCore.csproj" />
-		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.Elsa.Server\LINGYUN.Abp.Elsa.Server.csproj" />
-		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.Elsa\LINGYUN.Abp.Elsa.csproj" />
 		<ProjectReference Include="..\..\modules\feature-management\LINGYUN.Abp.FeatureManagement.Application\LINGYUN.Abp.FeatureManagement.Application.csproj" />
 		<ProjectReference Include="..\..\modules\feature-management\LINGYUN.Abp.FeatureManagement.HttpApi\LINGYUN.Abp.FeatureManagement.HttpApi.csproj" />
 		<ProjectReference Include="..\..\modules\gdpr\LINGYUN.Abp.Gdpr.Application\LINGYUN.Abp.Gdpr.Application.csproj" />
@@ -300,4 +284,20 @@
 		<ProjectReference Include="..\..\modules\webhooks\LINGYUN.Abp.WebhooksManagement.HttpApi\LINGYUN.Abp.WebhooksManagement.HttpApi.csproj" />
 		<ProjectReference Include="..\..\modules\webhooks\LINGYUN.Abp.Webhooks\LINGYUN.Abp.Webhooks.csproj" />
 	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.ElsaNext.Server\LINGYUN.Abp.ElsaNext.Server.csproj" />
+		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.ElsaNext.UserTasks\LINGYUN.Abp.ElsaNext.UserTasks.csproj" />
+		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.ElsaNext.UserTasks.EntityFrameworkCore\LINGYUN.Abp.ElsaNext.UserTasks.EntityFrameworkCore.csproj" />
+		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.ElsaNext.ApprovalFlow.Activities\LINGYUN.Abp.ElsaNext.ApprovalFlow.Activities.csproj" />
+		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.ElsaNext.ApprovalFlow.Domain.AntFlowDesign\LINGYUN.Abp.ElsaNext.ApprovalFlow.Domain.AntFlowDesign.csproj" />
+		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.ElsaNext.ApprovalFlow.EntityFrameworkCore\LINGYUN.Abp.ElsaNext.ApprovalFlow.EntityFrameworkCore.csproj" />
+		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.ElsaNext.ApprovalFlow.HttpApi\LINGYUN.Abp.ElsaNext.ApprovalFlow.HttpApi.csproj" />
+		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.ElsaNext.ApprovalFlow.Domain.Identity\LINGYUN.Abp.ElsaNext.ApprovalFlow.Domain.Identity.csproj" />
+		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.ElsaNext.BlobStoring\LINGYUN.Abp.ElsaNext.BlobStoring.csproj" />
+		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.ElsaNext.Email\LINGYUN.Abp.ElsaNext.Email.csproj" />
+		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.ElsaNext.Labels\LINGYUN.Abp.ElsaNext.Labels.csproj" />
+		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.ElsaNext.Notifications\LINGYUN.Abp.ElsaNext.Notifications.csproj" />
+		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.ElsaNext.Webhooks\LINGYUN.Abp.ElsaNext.Webhooks.csproj" />
+	</ItemGroup>
+
 </Project>

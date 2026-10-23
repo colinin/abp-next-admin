@@ -1,3 +1,5 @@
+using Elsa.Extensions;
+using Elsa.Http;
 using LINGYUN.Abp.MicroService.AllInOne;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -70,6 +72,8 @@ if (app.Environment.IsDevelopment())
 }
 app.UseAuditing();
 app.UseAbpSerilogEnrichers();
+app.UseWorkflowsApi(); // Elsa 3 API endpoints.
+app.UseWorkflows(); // Elsa 3 HTTP endpoint activities.
 app.UseConfiguredEndpoints();
 // app.UseHttpActivities();
 

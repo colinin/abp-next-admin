@@ -1,0 +1,12 @@
+{
+  "culture": "en",
+  "texts": {
+    "The sender's email address.": "The sender's email address.",
+    "The recipients email addresses.": "The recipients email addresses.",
+    "The CC recipient email addresses.": "The CC recipient email addresses.",
+    "The BCC recipients email addresses.": "The BCC recipients email addresses.",
+    "The subject of the email message.": "The subject of the email message.",
+    "The attachments to send with the email message. Can be (an array of) a fully-qualified file path, URL, stream, byte array or instances of EmailAttachment.": "The attachments to send with the email message. Can be (an array of) a fully-qualified file path, URL, stream, byte array or instances of EmailAttachment.",
+    "The body of the email message.": "The body of the email message."
+  }
+}

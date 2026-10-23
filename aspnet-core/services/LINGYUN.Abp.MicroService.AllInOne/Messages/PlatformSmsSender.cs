@@ -1,4 +1,4 @@
-﻿using LINGYUN.Platform.Messages;
+using LINGYUN.Platform.Messages;
 using LINGYUN.Platform.Messages.Integration;
 using Volo.Abp.Sms;
 using SmsMessage = Volo.Abp.Sms.SmsMessage;

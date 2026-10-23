@@ -1,4 +1,4 @@
-﻿using LINGYUN.Abp.MicroService.AllInOne.BackgroundJobs;
+using LINGYUN.Abp.MicroService.AllInOne.BackgroundJobs;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;

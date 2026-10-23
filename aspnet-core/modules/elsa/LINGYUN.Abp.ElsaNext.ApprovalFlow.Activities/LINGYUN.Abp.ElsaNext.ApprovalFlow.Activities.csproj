@@ -1,0 +1,39 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<Import Project="..\..\..\..\configureawait.props" />
+	<Import Project="..\..\..\..\common.props" />
+
+	<PropertyGroup>
+		<TargetFramework>net10.0</TargetFramework>
+		<AssemblyName>LINGYUN.Abp.ElsaNext.ApprovalFlow.Activities</AssemblyName>
+		<PackageId>LINGYUN.Abp.ElsaNext.ApprovalFlow.Activities</PackageId>
+		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+		<RootNamespace />
+	</PropertyGroup>
+
+	<ItemGroup>
+		<EmbeddedResource Include="LINGYUN\Abp\ElsaNext\ApprovalFlow\Activities\Localization\Resources\*.json" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Elsa.Common" />
+		<PackageReference Include="Volo.Abp.Core" />
+		<PackageReference Include="Volo.Abp.Timing" />
+		<PackageReference Include="Elsa.Expressions" />
+		<PackageReference Include="Elsa.Features" />
+		<PackageReference Include="Elsa.UserTasks" />
+		<PackageReference Include="Elsa.Workflows.Core" />
+		<PackageReference Include="Elsa.Workflows.Management" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\LINGYUN.Abp.ElsaNext\LINGYUN.Abp.ElsaNext.csproj" />
+		<ProjectReference Include="..\LINGYUN.Abp.ElsaNext.UserTasks\LINGYUN.Abp.ElsaNext.UserTasks.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\LINGYUN.Abp.ElsaNext.ApprovalFlow.Domain.Shared\LINGYUN.Abp.ElsaNext.ApprovalFlow.Domain.Shared.csproj" />
+	</ItemGroup>
+</Project>

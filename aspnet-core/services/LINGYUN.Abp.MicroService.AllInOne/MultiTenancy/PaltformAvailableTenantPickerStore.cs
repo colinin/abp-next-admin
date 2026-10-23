@@ -1,4 +1,4 @@
-﻿namespace LINGYUN.Abp.MicroService.AllInOne.MultiTenancy;
+namespace LINGYUN.Abp.MicroService.AllInOne.MultiTenancy;
 
 [Dependency(ReplaceServices = true)]
 public class PaltformAvailableTenantPickerStore : IAvailableTenantPickerStore, ITransientDependency
