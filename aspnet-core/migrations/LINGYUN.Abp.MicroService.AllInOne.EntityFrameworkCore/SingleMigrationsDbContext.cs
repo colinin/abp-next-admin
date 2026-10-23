@@ -10,6 +10,16 @@ using LINGYUN.Abp.DataProtectionManagement.EntityFrameworkCore;
 using LINGYUN.Abp.Demo.Authors;
 using LINGYUN.Abp.Demo.Books;
 using LINGYUN.Abp.Demo.EntityFrameworkCore;
+using LINGYUN.Abp.ElsaNext.ApprovalFlow.CarbonCopies;
+using LINGYUN.Abp.ElsaNext.ApprovalFlow.Delegations;
+using LINGYUN.Abp.ElsaNext.ApprovalFlow.EntityFrameworkCore;
+using LINGYUN.Abp.ElsaNext.ApprovalFlow.Instances;
+using LINGYUN.Abp.ElsaNext.ApprovalFlow.Nodes;
+using LINGYUN.Abp.ElsaNext.ApprovalFlow.Records;
+using LINGYUN.Abp.ElsaNext.ApprovalFlow.Templates;
+using LINGYUN.Abp.ElsaNext.ApprovalFlow.FormDatas;
+using LINGYUN.Abp.ElsaNext.ApprovalFlow.FormDefinitions;
+using LINGYUN.Abp.ElsaNext.ApprovalFlow.OrganizationUnitManagers;
 using LINGYUN.Abp.Gdpr;
 using LINGYUN.Abp.Gdpr.EntityFrameworkCore;
 using LINGYUN.Abp.Identity.EntityFrameworkCore;
@@ -100,8 +110,18 @@ public class SingleMigrationsDbContext :
     IGdprDbContext,
     IDemoDbContext,
     IAIManagementDbContext,
-    IBlobManagementDbContext
+    IBlobManagementDbContext,
+    IElsaNextApprovalFlowDbContext
 {
+    public DbSet<ApprovalTemplate> ApprovalTemplates { get; set; }
+    public DbSet<ApprovalInstance> ApprovalInstances { get; set; }
+    public DbSet<ApprovalRecord> ApprovalRecords { get; set; }
+    public DbSet<ApprovalCc> ApprovalCcs { get; set; }
+    public DbSet<ApprovalNodeTask> ApprovalNodeTasks { get; set; }
+    public DbSet<ApprovalDelegation> ApprovalDelegations { get; set; }
+    public DbSet<FormDefinition> FormDefinitions { get; set; }
+    public DbSet<FormData> FormDatas { get; set; }
+    public DbSet<OrganizationUnitManagerAssignment> OrganizationUnitManagerAssignments { get; set; }
     public SingleMigrationsDbContext(DbContextOptions<SingleMigrationsDbContext> options)
         : base(options)
     {
@@ -186,8 +206,6 @@ public class SingleMigrationsDbContext :
 
     public DbSet<UserFavoriteMenu> UserFavoriteMenus { get; set; }
 
-    // 本项目命名空间位于 LINGYUN.Abp 之下, 而框架存在 LINGYUN.Abp.Data.* 命名空间,
-    // 简单名 Data 会被解析为命名空间, 因此这里使用完全限定名
     public DbSet<LINGYUN.Platform.Datas.Data> Datas { get; set; }
 
     public DbSet<DataItem> DataItems { get; set; }
@@ -288,6 +306,8 @@ public class SingleMigrationsDbContext :
 
         modelBuilder.ConfigureBlobManagement();
 
+        modelBuilder.ConfigureElsaNextApprovalFlow();
+
         modelBuilder.ConfigureIdentityUserInactive();
 
         modelBuilder.Entity<ResourcePermissionGrant>(b =>
@@ -299,4 +319,5 @@ public class SingleMigrationsDbContext :
             b.Property(x => x.ResourceKey).HasMaxLength(maxResourceKeyLength).IsRequired();
         });
     }
+
 }

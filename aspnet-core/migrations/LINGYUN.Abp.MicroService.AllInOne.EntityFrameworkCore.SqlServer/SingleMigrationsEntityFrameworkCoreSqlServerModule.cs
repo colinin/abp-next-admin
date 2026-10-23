@@ -1,4 +1,6 @@
 using DotNetCore.CAP;
+using LINGYUN.Abp.ElsaNext.EntityFrameworkCore.SqlServer;
+using LINGYUN.Abp.ElsaNext.UserTasks.EntityFrameworkCore.SqlServer;
 using LINGYUN.Abp.Quartz.SqlServerInstaller;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,10 +15,11 @@ namespace LINGYUN.Abp.MicroService.AllInOne.EntityFrameworkCore.SqlServer;
 
 [DependsOn(
     typeof(AbpEntityFrameworkCoreSqlServerModule),
-    // Quartz SqlServer���ݿ��ʼ��ģ��
+    // Quartz SqlServer数据库初始化模块
     typeof(AbpQuartzSqlServerInstallerModule),
-    // Elsa������ģ�� SqlServer����
-    //typeof(AbpElsaEntityFrameworkCoreSqlServerModule),
+    // Elsa工作流模块 SqlServer集成
+    typeof(AbpElsaNextEntityFrameworkCoreSqlServerModule),
+    typeof(AbpElsaNextUserTasksEntityFrameworkCoreSqlServerModule),
     typeof(SingleMigrationsEntityFrameworkCoreModule)
     )]
 public class SingleMigrationsEntityFrameworkCoreSqlServerModule : AbpModule

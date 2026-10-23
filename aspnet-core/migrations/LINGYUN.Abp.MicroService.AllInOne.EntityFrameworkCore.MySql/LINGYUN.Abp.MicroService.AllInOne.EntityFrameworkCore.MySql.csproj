@@ -21,7 +21,8 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\framework\efcore\LINGYUN.Abp.EntityFrameworkCore.MySQL.Microting\LINGYUN.Abp.EntityFrameworkCore.MySQL.Microting.csproj" />
-		<!--<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.Elsa.EntityFrameworkCore.MySql\LINGYUN.Abp.Elsa.EntityFrameworkCore.MySql.csproj" />-->
+		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.ElsaNext.EntityFrameworkCore.MySQL\LINGYUN.Abp.ElsaNext.EntityFrameworkCore.MySQL.csproj" />
+		<ProjectReference Include="..\..\modules\elsa\LINGYUN.Abp.ElsaNext.UserTasks.EntityFrameworkCore.MySQL\LINGYUN.Abp.ElsaNext.UserTasks.EntityFrameworkCore.MySQL.csproj" />
 		<ProjectReference Include="..\..\modules\task-management\LINGYUN.Abp.Quartz.MySqlInstaller\LINGYUN.Abp.Quartz.MySqlInstaller.csproj" />
 		<ProjectReference Include="..\LINGYUN.Abp.MicroService.AllInOne.EntityFrameworkCore\LINGYUN.Abp.MicroService.AllInOne.EntityFrameworkCore.csproj" />
 	</ItemGroup>

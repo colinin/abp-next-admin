@@ -1,4 +1,4 @@
-﻿using LINGYUN.Abp.SettingManagement;
+using LINGYUN.Abp.SettingManagement;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Volo.Abp.DependencyInjection;

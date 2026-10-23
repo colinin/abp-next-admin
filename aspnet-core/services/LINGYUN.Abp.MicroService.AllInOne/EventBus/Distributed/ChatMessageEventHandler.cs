@@ -1,4 +1,4 @@
-﻿using LINGYUN.Abp.IM;
+using LINGYUN.Abp.IM;
 using LINGYUN.Abp.IM.Messages;
 using LINGYUN.Abp.RealTime;
 using Microsoft.Extensions.Logging.Abstractions;

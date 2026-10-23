@@ -1,4 +1,4 @@
-﻿using LINGYUN.Abp.Notifications;
+using LINGYUN.Abp.Notifications;
 
 namespace LINGYUN.Abp.MicroService.AllInOne.BackgroundJobs;
 

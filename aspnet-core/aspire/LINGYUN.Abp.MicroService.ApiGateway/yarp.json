@@ -1,6 +1,36 @@
 ﻿{
   "ReverseProxy": {
     "Routes": {
+      "approval-flow-route": {
+        "ClusterId": "workflow-service-cluster",
+        "Match": {
+          "Path": "/api/approval-flow/{**everything}"
+        },
+        "Transforms": [
+          {
+            "HeaderPrefix": "X-Forwarded-",
+            "X-Forwarded": "Append"
+          },
+          {
+            "ResponseHeadersAllowed": "_AbpWrapResult;_AbpDontWrapResult;_AbpErrorFormat;Content-Type;Cache-Control"
+          }
+        ]
+      },
+      "form-definitions-route": {
+        "ClusterId": "workflow-service-cluster",
+        "Match": {
+          "Path": "/api/form-definitions/{**everything}"
+        },
+        "Transforms": [
+          {
+            "HeaderPrefix": "X-Forwarded-",
+            "X-Forwarded": "Append"
+          },
+          {
+            "ResponseHeadersAllowed": "_AbpWrapResult;_AbpDontWrapResult;_AbpErrorFormat;Content-Type;Cache-Control"
+          }
+        ]
+      },
       "ai-management-route": {
         "ClusterId": "ai-management-cluster",
         "Match": {

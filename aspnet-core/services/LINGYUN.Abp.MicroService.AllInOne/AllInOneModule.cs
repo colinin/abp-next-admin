@@ -368,16 +368,26 @@ namespace LINGYUN.Abp.MicroService.AllInOne;
     // 自定义导航模块
     typeof(AbpUINavigationModule),
 
-    // Elsa工作流模块
-    typeof(AbpElsaModule),
-    // Elsa工作流模块 工作流服务器
-    typeof(AbpElsaServerModule),
-    // Elsa工作流模块 活动
-    typeof(AbpElsaActivitiesModule),
-    // Elsa工作流模块 实体框架
-    typeof(AbpElsaEntityFrameworkCoreModule),
-    // Elsa工作流设计器模块
-    typeof(AbpElsaDesignerModule),
+    // Elsa 3 工作流服务器
+    typeof(AbpElsaNextServerModule),
+    // Elsa 3 人机任务
+    typeof(AbpElsaNextUserTasksModule),
+    typeof(AbpElsaNextUserTasksEntityFrameworkCoreModule),
+    // Elsa 3 审批流
+    typeof(AbpElsaNextApprovalFlowActivitiesModule),
+    typeof(AbpElsaNextApprovalFlowEntityFrameworkCoreModule),
+    typeof(AbpElsaNextApprovalFlowHttpApiModule),
+    // Elsa 3 表单
+
+
+    // Elsa 3 人员部门（身份标识集成）
+    typeof(AbpElsaNextApprovalFlowDomainIdentityModule),
+    // Elsa 3 内置扩展
+    typeof(AbpElsaNextBlobStoringModule),
+    typeof(AbpElsaNextEmailModule),
+    typeof(AbpElsaNextLabelsModule),
+    typeof(AbpElsaNextNotificationsModule),
+    typeof(AbpElsaNextWebhooksModule),
 
     // 数据导出模块 MiniSoftware集成
     typeof(AbpExporterMiniSoftwareModule),
@@ -442,7 +452,6 @@ public partial class AllInOneModule : AbpModule
         PreConfigureQuartz(configuration);
         PreConfigureSignalR(configuration);
         PreConfigureAuthServer(configuration);
-        PreConfigureElsa(context.Services, configuration);
         PreConfigureCertificate(configuration, hostingEnvironment);
     }
 

@@ -1,4 +1,4 @@
-﻿using LINGYUN.Abp.BlobManagement.Permissions;
+using LINGYUN.Abp.BlobManagement.Permissions;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.Domain.Entities.Events;
 using Volo.Abp.Users;

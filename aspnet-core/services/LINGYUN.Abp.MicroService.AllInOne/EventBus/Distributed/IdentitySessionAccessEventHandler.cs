@@ -1,4 +1,4 @@
-﻿using LINGYUN.Abp.Identity.Settings;
+using LINGYUN.Abp.Identity.Settings;
 using Microsoft.Extensions.Logging.Abstractions;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.DistributedLocking;
