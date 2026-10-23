@@ -1,21 +1,20 @@
-﻿using LINGYUN.Abp.AspNetCore.HttpOverrides;
+using LINGYUN.Abp.AspNetCore.Authentication;
+using LINGYUN.Abp.AspNetCore.HttpOverrides;
 using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
 using LINGYUN.Abp.AspNetCore.Session;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
 using LINGYUN.Abp.AuditLogging.IP.Location;
 using LINGYUN.Abp.Authorization.OrganizationUnits;
 using LINGYUN.Abp.BlobStoring.BlobManagement;
-using LINGYUN.Abp.AspNetCore.Authentication;
 using LINGYUN.Abp.Data.DbMigrator;
 using LINGYUN.Abp.Dynamic.Definitions;
 using LINGYUN.Abp.ElsaNext.Agents.Blazor;
+using LINGYUN.Abp.ElsaNext.ApprovalFlow;
+using LINGYUN.Abp.ElsaNext.ApprovalFlow.Activities;
+using LINGYUN.Abp.ElsaNext.ApprovalFlow.EntityFrameworkCore;
 using LINGYUN.Abp.ElsaNext.BlobStoring;
 using LINGYUN.Abp.ElsaNext.Email;
-using LINGYUN.Abp.ElsaNext.EntityFrameworkCore;
-using LINGYUN.Abp.ElsaNext.EntityFrameworkCore.MySQL;
-using LINGYUN.Abp.ElsaNext.EntityFrameworkCore.PostgreSql;
-using LINGYUN.Abp.ElsaNext.EntityFrameworkCore.Sqlite;
-using LINGYUN.Abp.ElsaNext.EntityFrameworkCore.SqlServer;
+using LINGYUN.Abp.ElsaNext.ApprovalFlow.FormDefinitions;
 using LINGYUN.Abp.ElsaNext.Labels;
 using LINGYUN.Abp.ElsaNext.Notifications;
 using LINGYUN.Abp.ElsaNext.Secrets.Blazor;
@@ -31,11 +30,14 @@ using LINGYUN.Abp.ElsaNext.Studio.Labels.Blazor;
 using LINGYUN.Abp.ElsaNext.Studio.Notifications.Blazor;
 using LINGYUN.Abp.ElsaNext.Studio.Saas.Blazor;
 using LINGYUN.Abp.ElsaNext.Studio.Webhooks.Blazor;
+using LINGYUN.Abp.ElsaNext.UserTasks;
+using LINGYUN.Abp.ElsaNext.UserTasks.EntityFrameworkCore;
 using LINGYUN.Abp.ElsaNext.Webhooks;
 using LINGYUN.Abp.Emailing.Platform;
 using LINGYUN.Abp.EventBus.CAP;
 using LINGYUN.Abp.ExceptionHandling.Emailing;
 using LINGYUN.Abp.Http.Client.Wrapper;
+using LINGYUN.Abp.Identity.EntityFrameworkCore;
 using LINGYUN.Abp.IP2Region;
 using LINGYUN.Abp.Localization.CultureMap;
 using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
@@ -59,7 +61,6 @@ using Volo.Abp.Autofac;
 using Volo.Abp.Caching.StackExchangeRedis;
 using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.Http.Client.IdentityModel.Web;
-using Volo.Abp.Identity.EntityFrameworkCore;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
@@ -78,10 +79,19 @@ namespace LINGYUN.Abp.MicroService.WorkflowService;
     typeof(AbpBlobStoringBlobManagementModule),
 
     typeof(AbpElsaNextBlobStoringModule),
+    typeof(AbpElsaNextApprovalFlowActivitiesModule),
+    typeof(AbpElsaNextApprovalFlowEntityFrameworkCoreModule),
+    typeof(WorkflowServiceMigrationsEntityFrameworkCoreModule),
+    typeof(AbpElsaNextApprovalFlowHttpApiModule),
     typeof(AbpElsaNextEmailModule),
     typeof(AbpElsaNextLabelsModule),
     typeof(AbpElsaNextNotificationsModule),
     typeof(AbpElsaNextWebhooksModule),
+
+
+    typeof(AbpElsaNextApprovalFlowDomainIdentityModule),
+    typeof(AbpElsaNextUserTasksModule),
+    typeof(AbpElsaNextUserTasksEntityFrameworkCoreModule),
     typeof(AbpElsaNextServerModule),
     typeof(AbpElsaNextStudioBlazorModule),
     typeof(AbpElsaNextAgentsBlazorModule),
@@ -96,10 +106,6 @@ namespace LINGYUN.Abp.MicroService.WorkflowService;
     typeof(AbpElsaNextStudioNotificationsBlazorModule),
     typeof(AbpElsaNextStudioSaasBlazorModule),
     typeof(AbpElsaNextStudioWebhooksBlazorModule),
-    typeof(AbpElsaNextEntityFrameworkCoreMySQLModule),
-    typeof(AbpElsaNextEntityFrameworkCorePostgreSqlModule),
-    typeof(AbpElsaNextEntityFrameworkCoreSqliteModule),
-    typeof(AbpElsaNextEntityFrameworkCoreSqlServerModule),
     typeof(AbpEmailingExceptionHandlingModule),
     typeof(AbpHttpClientIdentityModelWebModule),
     typeof(AbpAspNetCoreMultiTenancyModule),
@@ -132,7 +138,6 @@ namespace LINGYUN.Abp.MicroService.WorkflowService;
     typeof(AbpEmailingPlatformModule),
     typeof(AbpAspNetCoreAuthenticationModule),
     typeof(AbpAspNetCoreSessionModule),
-    typeof(AbpAspNetCoreMvcNewtonsoftModule),
     typeof(AbpAspNetCoreHttpOverridesModule),
     typeof(AbpDynamicDefinitionsModule),
     typeof(AbpAutofacModule)

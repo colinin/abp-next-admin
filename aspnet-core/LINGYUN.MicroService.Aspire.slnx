@@ -73,6 +73,8 @@
     <Project Path="aspire/LINGYUN.Abp.MicroService.WeChatService/LINGYUN.Abp.MicroService.WeChatService.csproj" />
   </Folder>
   <Folder Name="/aspire/workflow-service/">
+    <Project Path="aspire/LINGYUN.Abp.MicroService.WorkflowService.DbMigrator/LINGYUN.Abp.MicroService.WorkflowService.DbMigrator.csproj" />
+    <Project Path="aspire/LINGYUN.Abp.MicroService.WorkflowService.EntityFrameworkCore/LINGYUN.Abp.MicroService.WorkflowService.EntityFrameworkCore.csproj" />
     <Project Path="aspire/LINGYUN.Abp.MicroService.WorkflowService/LINGYUN.Abp.MicroService.WorkflowService.csproj" />
   </Folder>
   <Folder Name="/framework/" />
@@ -572,6 +574,19 @@
   <Folder Name="/modules/workflow/elsa3/alterations/">
     <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.Alterations/LINGYUN.Abp.ElsaNext.Alterations.csproj" Id="1e5e1733-8c5c-4ede-9ee8-7f6ae1e85bb6" />
     <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.Studio.Alterations.Blazor/LINGYUN.Abp.ElsaNext.Studio.Alterations.Blazor.csproj" Id="eb1220d6-31cf-4f73-a9fc-494d30de61df" />
+  </Folder>
+  <Folder Name="/modules/workflow/elsa3/approval-flow/">
+    <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.ApprovalFlow.Activities/LINGYUN.Abp.ElsaNext.ApprovalFlow.Activities.csproj" />
+    <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.ApprovalFlow.Application.Contracts/LINGYUN.Abp.ElsaNext.ApprovalFlow.Application.Contracts.csproj" />
+    <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.ApprovalFlow.Application/LINGYUN.Abp.ElsaNext.ApprovalFlow.Application.csproj" />
+    <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.ApprovalFlow.Domain.Shared/LINGYUN.Abp.ElsaNext.ApprovalFlow.Domain.Shared.csproj" />
+    <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.ApprovalFlow.Domain/LINGYUN.Abp.ElsaNext.ApprovalFlow.Domain.csproj" />
+    <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.ApprovalFlow.Domain.AntFlowDesign/LINGYUN.Abp.ElsaNext.ApprovalFlow.Domain.AntFlowDesign.csproj" />
+    <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.ApprovalFlow.Domain.Identity/LINGYUN.Abp.ElsaNext.ApprovalFlow.Domain.Identity.csproj" />
+    <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.ApprovalFlow.EntityFrameworkCore/LINGYUN.Abp.ElsaNext.ApprovalFlow.EntityFrameworkCore.csproj" />
+    <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.ApprovalFlow.HttpApi/LINGYUN.Abp.ElsaNext.ApprovalFlow.HttpApi.csproj" />
+  </Folder>
+  <Folder Name="/modules/workflow/elsa3/form-definitions/">
   </Folder>
   <Folder Name="/modules/workflow/elsa3/blob-storing/">
     <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.BlobStoring/LINGYUN.Abp.ElsaNext.BlobStoring.csproj" Id="ab3ed7c4-918e-40ae-84d6-f98d9ff9c6b1" />

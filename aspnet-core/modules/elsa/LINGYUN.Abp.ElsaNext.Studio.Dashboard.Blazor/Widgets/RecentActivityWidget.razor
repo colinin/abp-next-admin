@@ -4,7 +4,7 @@
 
 @if (Context.Snapshot != null)
 {
-    var items = Context.Snapshot.RecentActivity.Items;
+    var items = Context.Snapshot.RecentActivity!.Items;
 
     <MudPaper Outlined="true" Elevation="0" Class="dashboard-panel dashboard-section" Style="@DashboardStyles.Panel">
         <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween" Class="dashboard-section-header" Style="@DashboardStyles.SectionHeader">

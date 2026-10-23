@@ -35,6 +35,7 @@
 		<ProjectReference Include="..\LINGYUN.Abp.MicroService.WebhookService.DbMigrator\LINGYUN.Abp.MicroService.WebhookService.DbMigrator.csproj" />
 		<ProjectReference Include="..\LINGYUN.Abp.MicroService.WebhookService\LINGYUN.Abp.MicroService.WebhookService.csproj" />
 		<ProjectReference Include="..\LINGYUN.Abp.MicroService.WeChatService\LINGYUN.Abp.MicroService.WeChatService.csproj" />
+		<ProjectReference Include="..\LINGYUN.Abp.MicroService.WorkflowService.DbMigrator\LINGYUN.Abp.MicroService.WorkflowService.DbMigrator.csproj" />
 		<ProjectReference Include="..\LINGYUN.Abp.MicroService.WorkflowService\LINGYUN.Abp.MicroService.WorkflowService.csproj" />
 		<ProjectReference Include="..\LINGYUN.Abp.MicroService.ApiGateway\LINGYUN.Abp.MicroService.ApiGateway.csproj" />
 	</ItemGroup>

@@ -4,7 +4,7 @@
 
 @if (Context.Snapshot != null)
 {
-    var response = Context.Snapshot.Trend;
+    var response = Context.Snapshot.Trend!;
 
     <MudPaper Outlined="true" Elevation="0" Class="dashboard-panel dashboard-section dashboard-chart-panel" Style="@DashboardStyles.ChartPanel">
         <MudStack Row="true" AlignItems="AlignItems.Center" Justify="Justify.SpaceBetween" Class="dashboard-section-header" Style="@DashboardStyles.SectionHeader">

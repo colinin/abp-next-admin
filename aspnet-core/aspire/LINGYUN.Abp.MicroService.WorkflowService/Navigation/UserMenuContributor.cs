@@ -1,4 +1,4 @@
-﻿using Localization.Resources.AbpUi;
+using Localization.Resources.AbpUi;
 using System.Threading.Tasks;
 using Volo.Abp.UI.Navigation;
 

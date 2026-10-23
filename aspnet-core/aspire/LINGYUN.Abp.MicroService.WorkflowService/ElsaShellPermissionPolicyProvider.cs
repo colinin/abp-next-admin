@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+#nullable enable
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
 using System;
 using System.Threading.Tasks;
@@ -35,7 +36,7 @@ public sealed class ElsaShellPermissionPolicyProvider : IAuthorizationPolicyProv
     }
 
     /// <inheritdoc />
-    public Task<AuthorizationPolicy?> GetDefaultPolicyAsync() => Task.FromResult<AuthorizationPolicy?>(AllowAll);
+    public Task<AuthorizationPolicy> GetDefaultPolicyAsync() => Task.FromResult(AllowAll);
 
     /// <inheritdoc />
     public Task<AuthorizationPolicy?> GetFallbackPolicyAsync() => Task.FromResult<AuthorizationPolicy?>(AllowAll);

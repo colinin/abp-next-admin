@@ -1,4 +1,4 @@
-<Project>
+﻿<Project>
 	<PropertyGroup>
 		<DotNetCoreCAPPackageVersion>10.0.0</DotNetCoreCAPPackageVersion>
 		<ElsaPackageVersion>2.17.0</ElsaPackageVersion>
@@ -267,14 +267,17 @@
 		<PackageVersion Include="Elsa.Diagnostics.OpenTelemetry" Version="$(ElsaNextPackageVersion)" />
 		<PackageVersion Include="Elsa.Diagnostics.StructuredLogs" Version="$(ElsaNextPackageVersion)" />
 		<PackageVersion Include="Elsa.Diagnostics.StructuredLogs.Dashboard" Version="$(ElsaNextPackageVersion)" />
+		<PackageVersion Include="Elsa.Expressions" Version="$(ElsaNextPackageVersion)" />
 		<PackageVersion Include="Elsa.Expressions.CSharp" Version="$(ElsaNextPackageVersion)" />
 		<PackageVersion Include="Elsa.Expressions.JavaScript" Version="$(ElsaNextPackageVersion)" />
 		<PackageVersion Include="Elsa.Expressions.Liquid" Version="$(ElsaNextPackageVersion)" />
 		<PackageVersion Include="Elsa.ExternalAuthentication.OpenIdConnect" Version="$(ElsaNextPackageVersion)" />
 		<PackageVersion Include="Elsa.ExternalAuthentication.Persistence.EFCore.Sqlite" Version="$(ElsaNextPackageVersion)" />
+		<PackageVersion Include="Elsa.Features" Version="$(ElsaNextPackageVersion)" />
 		<PackageVersion Include="Elsa.Http" Version="$(ElsaNextPackageVersion)" />
 		<PackageVersion Include="Elsa.Identity" Version="$(ElsaNextPackageVersion)" />
 		<PackageVersion Include="Elsa.Labels" Version="$(ElsaNextPackageVersion)" />
+		<PackageVersion Include="Elsa.Mediator" Version="$(ElsaNextPackageVersion)" />
 		<PackageVersion Include="Elsa.OpenTelemetry" Version="$(ElsaNextPackageVersion)" />
 		<PackageVersion Include="Elsa.Scheduling" Version="$(ElsaNextPackageVersion)" />
 		<PackageVersion Include="Elsa.Scheduling.Quartz" Version="$(ElsaNextPackageVersion)" />
@@ -339,6 +342,8 @@
 		<PackageVersion Include="Elsa.UserTasks.Persistence.EFCore.PostgreSql" Version="$(ElsaNextPackageVersion)" />
 		<PackageVersion Include="Elsa.UserTasks.Persistence.EFCore.Sqlite" Version="$(ElsaNextPackageVersion)" />
 		<PackageVersion Include="Elsa.UserTasks.Persistence.EFCore.SqlServer" Version="$(ElsaNextPackageVersion)" />
+		<PackageVersion Include="Elsa.Workflows.Core" Version="$(ElsaNextPackageVersion)" />
+		<PackageVersion Include="Elsa.Workflows.Management" Version="$(ElsaNextPackageVersion)" />
 		<PackageVersion Include="Elsa.Workflows.Runtime" Version="$(ElsaNextPackageVersion)" />
 		<PackageVersion Include="Elsa.Workflows.Runtime.Dashboard" Version="$(ElsaNextPackageVersion)" />
 	</ItemGroup>
@@ -483,7 +488,7 @@
 		<PackageVersion Include="OpenIddict.Validation.DataProtection" Version="7.7.0" />
 		<PackageVersion Include="Polly" Version="8.6.3" />
 		<PackageVersion Include="QRCoder" Version="1.8.0" />
-		<PackageVersion Include="Quartz.Serialization.Json" Version="3.15.0" />
+		<PackageVersion Include="Quartz.Serialization.Json" Version="3.15.1" />
 		<PackageVersion Include="RulesEngine" Version="6.0.0" />
 		<PackageVersion Include="Scriban" Version="7.2.5" />
 		<PackageVersion Include="Senparc.Weixin.MP" Version="16.18.9" />

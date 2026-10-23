@@ -1,4 +1,5 @@
-﻿using Elsa.UserTasks.Persistence.EFCore.Features;
+﻿using Elsa.Persistence.EFCore;
+using Elsa.UserTasks.Persistence.EFCore.Features;
 using Elsa.UserTasks.Persistence.EFCore.PostgreSql.Extensions;
 using LINGYUN.Abp.ElsaNext.EntityFrameworkCore.Extensions;
 using Microsoft.Extensions.Configuration;
@@ -26,6 +27,14 @@ public class AbpElsaNextUserTasksEntityFrameworkCorePostgreSqlModule : AbpModule
                         ?? DefaultConnectionString;
                 });
             });
+        }
+    }
+
+    public override void ConfigureServices(ServiceConfigurationContext context)
+    {
+        if (context.IsElsaFeatureEnabled("UserTasks:EfCore:PostgreSql"))
+        {
+            context.Services.AddScoped<IEntityModelCreatingHandler, UserTaskPostgreSqlModelConfigurator>();
         }
     }
 }
