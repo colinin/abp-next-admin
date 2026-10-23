@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<Import Project="..\..\..\..\configureawait.props" />
+	<Import Project="..\..\..\..\common.props" />
+
+	<PropertyGroup>
+		<TargetFramework>net10.0</TargetFramework>
+		<AssemblyName>LINGYUN.Abp.ElsaNext.ApprovalFlow.Domain.AntFlowDesign</AssemblyName>
+		<PackageId>LINGYUN.Abp.ElsaNext.ApprovalFlow.Domain.AntFlowDesign</PackageId>
+		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+		<RootNamespace />
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Elsa.Expressions.JavaScript" />
+		<PackageReference Include="Elsa.UserTasks" />
+		<PackageReference Include="Elsa.Workflows.Core" />
+		<PackageReference Include="Volo.Abp.Ddd.Domain" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\LINGYUN.Abp.ElsaNext.ApprovalFlow.Activities\LINGYUN.Abp.ElsaNext.ApprovalFlow.Activities.csproj" />
+		<ProjectReference Include="..\LINGYUN.Abp.ElsaNext.ApprovalFlow.Domain\LINGYUN.Abp.ElsaNext.ApprovalFlow.Domain.csproj" />
+	</ItemGroup>
+
+</Project>
