@@ -36,7 +36,12 @@ export function createNode(
     expression: null,
     condition:
       kind === 'condition'
-        ? { fieldKey: null, operator: '=', compareValue: null, expression: null }
+        ? {
+            fieldKey: null,
+            operator: '=',
+            compareValue: null,
+            expression: null,
+          }
         : undefined,
     branches:
       kind === 'condition'
@@ -132,10 +137,7 @@ function normalizeNode(node: ApprovalFlowNode): ApprovalFlowNode {
       branches = [createBranch(0, '条件1')];
     }
     while (branches.length < 2) {
-      branches = [
-        ...branches,
-        createBranch(branches.length, '其他条件'),
-      ];
+      branches = [...branches, createBranch(branches.length, '其他条件')];
     }
 
     normalized.branches = branches.map((branch, index) => {
@@ -145,7 +147,7 @@ function normalizeNode(node: ApprovalFlowNode): ApprovalFlowNode {
         name: isDefault ? '其他条件' : `条件${index + 1}`,
         expression: isDefault
           ? null
-          : branch.expression ?? (index === 0 ? condition.expression : null),
+          : (branch.expression ?? (index === 0 ? condition.expression : null)),
         nodes: (branch.nodes ?? []).map((child) => normalizeNode(child)),
       };
     });
@@ -157,7 +159,8 @@ function normalizeNode(node: ApprovalFlowNode): ApprovalFlowNode {
         onlyNode?.kind === 'approval' &&
         onlyNode.name === '审批人' &&
         onlyNode.rules.every(
-          (rule) => rule.kind === 'Participant' && rule.participants.length === 0,
+          (rule) =>
+            rule.kind === 'Participant' && rule.participants.length === 0,
         );
       if (isAutoDefault) {
         defaultBranch.nodes = [];
@@ -202,10 +205,18 @@ export function summarizeNode(node: ApprovalFlowNode): string {
       .filter(Boolean);
 
     if (names.length > 0) {
-      if (node.kind === 'approval' && node.signMode === 'All' && names.length > 1) {
+      if (
+        node.kind === 'approval' &&
+        node.signMode === 'All' &&
+        names.length > 1
+      ) {
         return `${names.length}人(${names.join(',')})会签`;
       }
-      if (node.kind === 'approval' && node.signMode === 'Sequential' && names.length > 1) {
+      if (
+        node.kind === 'approval' &&
+        node.signMode === 'Sequential' &&
+        names.length > 1
+      ) {
         return `${names.length}人(${names.join('→')})依次审批`;
       }
       return names.join('、');
@@ -214,15 +225,16 @@ export function summarizeNode(node: ApprovalFlowNode): string {
     const summaries = node.rules
       .map((rule) => summarizeRule(rule))
       .filter(Boolean);
-    return summaries.length > 0
-      ? summaries.join(' / ')
-      : node.kind === 'cc'
-        ? '待选择抄送人'
-        : '待配置审批人';
+    if (summaries.length > 0) {
+      return summaries.join(' / ');
+    }
+    return node.kind === 'cc' ? '待选择抄送人' : '待配置审批人';
   }
 
   if (node.kind === 'condition') {
-    return node.condition?.expression ? `条件：${node.condition.expression}` : '未设置条件';
+    return node.condition?.expression
+      ? `条件：${node.condition.expression}`
+      : '未设置条件';
   }
 
   return '';
@@ -242,20 +254,22 @@ export function summarizeRule(rule: ApproverRule): string {
     case 'OrganizationUnit': {
       return '部门成员';
     }
-    case 'Supervisor': {
-      return rule.supervisorLevel === 'TopMost' ? '最高层级主管' : '部门主管';
-    }
-    case 'Role': {
-      const roleNames = rule.participants
-        .map((participant) => participant.displayName ?? participant.id)
-        .filter(Boolean);
-      return roleNames.length > 0 ? `角色：${roleNames.join(',')}` : '未选择角色';
-    }
     case 'Participant': {
       const names = rule.participants
         .map((participant) => participant.displayName ?? participant.id)
         .filter(Boolean);
       return names.length > 0 ? names.join(',') : '未选择人员';
+    }
+    case 'Role': {
+      const roleNames = rule.participants
+        .map((participant) => participant.displayName ?? participant.id)
+        .filter(Boolean);
+      return roleNames.length > 0
+        ? `角色：${roleNames.join(',')}`
+        : '未选择角色';
+    }
+    case 'Supervisor': {
+      return rule.supervisorLevel === 'TopMost' ? '最高层级主管' : '部门主管';
     }
     default: {
       return '';

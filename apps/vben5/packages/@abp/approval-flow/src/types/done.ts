@@ -1,20 +1,20 @@
 import type { PagedResultDto } from '@abp/core';
 
 export interface DoneDto {
+  actionKey: string;
+  actionLabel?: null | string;
+  actorDisplayName?: null | string;
+  comment?: null | string;
+  completedAt?: null | string;
+  decidedAt: string;
+  effect: string;
+  firstViewedAt?: null | string;
   id: string;
   instanceId: string;
   instanceTitle: string;
-  templateName?: null | string;
   nodeId?: null | string;
   nodeName?: null | string;
-  actionKey: string;
-  actionLabel?: null | string;
-  effect: string;
-  comment?: null | string;
-  actorDisplayName?: null | string;
-  decidedAt: string;
-  firstViewedAt?: null | string;
-  completedAt?: null | string;
+  templateName?: null | string;
 }
 
 export interface DoneGetPagedListInput {

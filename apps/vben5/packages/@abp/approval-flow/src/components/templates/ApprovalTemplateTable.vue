@@ -10,7 +10,7 @@ import { ref } from 'vue';
 import { useVbenVxeGrid } from '@abp/ui';
 import { Button, message, Modal, Space, Tag } from 'ant-design-vue';
 
-import { useApprovalTemplatesApi } from '../../api/useApprovalFlowApi';
+import { useApprovalTemplatesApi } from '../../api/useApprovalTemplatesApi';
 import ApprovalFlowWizard from '../antflow/ApprovalWizard.vue';
 import StartApprovalModal from './StartApprovalModal.vue';
 

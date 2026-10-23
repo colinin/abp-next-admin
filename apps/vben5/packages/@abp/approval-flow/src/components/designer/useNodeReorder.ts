@@ -12,7 +12,7 @@ export function useNodeReorder() {
   let maxIndex = Number.MAX_SAFE_INTEGER;
   let startX = 0;
   let startY = 0;
-  let timer: ReturnType<typeof setTimeout> | null = null;
+  let timer: null | ReturnType<typeof setTimeout> = null;
   let moveHandler: ((event: PointerEvent) => void) | null = null;
   let upHandler: (() => void) | null = null;
 
@@ -46,9 +46,12 @@ export function useNodeReorder() {
 
     event.preventDefault();
 
-    const element = (document.elementFromPoint(event.clientX, event.clientY) as HTMLElement | null)?.closest('[data-node-id]') as
-      | HTMLElement
-      | null;
+    const element = (
+      document.elementFromPoint(
+        event.clientX,
+        event.clientY,
+      ) as HTMLElement | null
+    )?.closest('[data-node-id]') as HTMLElement | null;
     const targetId = element?.dataset.nodeId;
     if (!element || !targetId || targetId === draggingId.value) {
       return;
@@ -56,7 +59,7 @@ export function useNodeReorder() {
 
     const from = list.findIndex((item) => item.id === draggingId.value);
     const to = list.findIndex((item) => item.id === targetId);
-    if (from < 0 || to < 0 || from === to) {
+    if (from === -1 || to === -1 || from === to) {
       return;
     }
 

@@ -32,9 +32,9 @@ import { useApprovalParticipantsApi } from '../../api/useApprovalParticipantsApi
 import { createRule } from './model';
 
 const props = defineProps<{
-  open: boolean;
-  node: ApprovalFlowNode | null;
   formFields?: FormFieldDto[];
+  node: ApprovalFlowNode | null;
+  open: boolean;
 }>();
 
 const emit = defineEmits<{
@@ -82,7 +82,7 @@ const signModeOptions = [
 watch(
   () => props.node,
   (node) => {
-    local.value = node ? (JSON.parse(JSON.stringify(node)) as ApprovalFlowNode) : null;
+    local.value = node ? (structuredClone(node) as ApprovalFlowNode) : null;
     hydrateCondition(local.value);
   },
   { immediate: true },
@@ -98,8 +98,13 @@ function decodeParticipant(value: string): null | ParticipantRef {
     return null;
   }
 
-  const candidate = [...users.value, ...organizationUnits.value, ...roles.value].find(
-    (item) => item.provider === provider && item.type === type && item.id === id,
+  const candidate = [
+    ...users.value,
+    ...organizationUnits.value,
+    ...roles.value,
+  ].find(
+    (item) =>
+      item.provider === provider && item.type === type && item.id === id,
   );
 
   return {
@@ -179,14 +184,14 @@ function valueKind(): string {
     case 'date-range': {
       return 'date';
     }
-    case 'number': {
-      return 'number';
-    }
     case 'multiple-select':
     case 'radio':
     case 'select':
     case 'switch': {
       return 'select';
+    }
+    case 'number': {
+      return 'number';
     }
     default: {
       return 'text';
@@ -249,9 +254,10 @@ function composeExpression(condition: any): null | string {
   const field = findField(key);
   const isNumber = field?.type === 'number';
   const isBoolean = field?.type === 'switch';
-  const literal = isNumber || isBoolean
-    ? raw
-    : `'${String(raw).replace(/'/g, "\\'")}'`;
+  const literal =
+    isNumber || isBoolean
+      ? raw
+      : `'${String(raw).replaceAll("'", String.raw`\'`)}'`;
 
   if (operator === 'contains') {
     return `String(form.${key} ?? '').includes(${literal})`;
@@ -302,7 +308,7 @@ function updateCondition(partial: Partial<ApprovalFlowCondition>) {
     return;
   }
 
-  const condition = { ...(local.value.condition ?? {}), ...partial };
+  const condition = { ...local.value.condition, ...partial };
   condition.expression = composeExpression(condition);
 
   const branches = (local.value.branches ?? []).map((branch, index) => ({
@@ -356,7 +362,9 @@ function removeRule(index: number) {
 function onParticipantsChange(index: number, values: string[]) {
   const participants = values
     .map((value) => decodeParticipant(value))
-    .filter((participant): participant is ParticipantRef => participant !== null);
+    .filter(
+      (participant): participant is ParticipantRef => participant !== null,
+    );
 
   updateRule(index, { participants });
 }
@@ -369,7 +377,11 @@ function addAction() {
   patch({
     actions: [
       ...local.value.actions,
-      { key: `Action${local.value.actions.length + 1}`, label: '同意', effect: 'Approve' },
+      {
+        key: `Action${local.value.actions.length + 1}`,
+        label: '同意',
+        effect: 'Approve',
+      },
     ],
   });
 }
@@ -436,26 +448,42 @@ loadParticipants();
               :value="rule.kind"
               :options="ruleKindOptions"
               class="w-full"
-              @update:value="(value: any) => updateRule(index, { kind: value as ApproverKind })"
+              @update:value="
+                (value: any) =>
+                  updateRule(index, { kind: value as ApproverKind })
+              "
             />
             <Select
               v-if="rule.kind === 'Participant'"
               mode="multiple"
               :filter-option="false"
               :options="participantOptions"
-              :value="rule.participants.map((participant) => encodeParticipant(participant))"
+              :value="
+                rule.participants.map((participant) =>
+                  encodeParticipant(participant),
+                )
+              "
               class="w-full"
               placeholder="搜索并选择人员或部门"
               @search="searchUsers"
-              @update:value="(values: any) => onParticipantsChange(index, values as string[])"
-            />            <Select
+              @update:value="
+                (values: any) => onParticipantsChange(index, values as string[])
+              "
+            />
+            <Select
               v-if="rule.kind === 'Role'"
               mode="multiple"
               :options="roleOptions"
-              :value="rule.participants.map((participant) => encodeParticipant(participant))"
+              :value="
+                rule.participants.map((participant) =>
+                  encodeParticipant(participant),
+                )
+              "
               class="w-full"
               placeholder="选择角色"
-              @update:value="(values: any) => onParticipantsChange(index, values as string[])"
+              @update:value="
+                (values: any) => onParticipantsChange(index, values as string[])
+              "
             />
             <div v-if="rule.kind === 'Supervisor'" class="flex gap-2">
               <Select
@@ -466,23 +494,39 @@ loadParticipants();
                   { label: '最高层级', value: 'TopMost' },
                 ]"
                 class="flex-1"
-                @update:value="(value: any) => updateRule(index, { supervisorLevel: value as SupervisorLevel })"
+                @update:value="
+                  (value: any) =>
+                    updateRule(index, {
+                      supervisorLevel: value as SupervisorLevel,
+                    })
+                "
               />
               <InputNumber
                 v-if="rule.supervisorLevel === 'LevelN'"
                 :value="rule.level ?? 1"
                 :min="1"
                 :max="20"
-                @update:value="(value: any) => updateRule(index, { level: Number(value) || 1 })"
+                @update:value="
+                  (value: any) =>
+                    updateRule(index, { level: Number(value) || 1 })
+                "
               />
             </div>
             <Select
               v-if="rule.kind === 'FormField'"
               :value="rule.formFieldKey ?? undefined"
-              :options="(formFields ?? []).map((field) => ({ label: field.label, value: field.key }))"
+              :options="
+                (formFields ?? []).map((field) => ({
+                  label: field.label,
+                  value: field.key,
+                }))
+              "
               class="w-full"
               placeholder="选择表单字段"
-              @update:value="(value: any) => updateRule(index, { formFieldKey: String(value ?? '') })"
+              @update:value="
+                (value: any) =>
+                  updateRule(index, { formFieldKey: String(value ?? '') })
+              "
             />
           </Space>
           <Button danger size="small" type="link" @click="removeRule(index)">
@@ -500,7 +544,9 @@ loadParticipants();
             { label: '升级到部门主管', value: 'EscalateToManager' },
           ]"
           class="w-full"
-          @update:value="(value: any) => patch({ onEmpty: value as EmptyApproverPolicy })"
+          @update:value="
+            (value: any) => patch({ onEmpty: value as EmptyApproverPolicy })
+          "
         />
 
         <Divider orientation="left">审批动作</Divider>
@@ -533,11 +579,17 @@ loadParticipants();
             mode="multiple"
             :filter-option="false"
             :options="participantOptions"
-            :value="rule.participants.map((participant) => encodeParticipant(participant))"
+            :value="
+              rule.participants.map((participant) =>
+                encodeParticipant(participant),
+              )
+            "
             class="w-full"
             placeholder="搜索并选择人员或部门"
             @search="searchUsers"
-            @update:value="(values: any) => onParticipantsChange(index, values as string[])"
+            @update:value="
+              (values: any) => onParticipantsChange(index, values as string[])
+            "
           />
           <Button danger size="small" type="link" @click="removeRule(index)">
             删除抄送
@@ -563,21 +615,34 @@ loadParticipants();
               @update:value="(value: any) => setConditionOperator(value)"
             />
             <Select
-              v-if="!isEmptyOperator(local.condition?.operator) && valueOptions().length > 0"
+              v-if="
+                !isEmptyOperator(local.condition?.operator) &&
+                valueOptions().length > 0
+              "
               :options="valueOptions()"
               :value="local.condition?.compareValue ?? undefined"
               placeholder="选择比较值"
               @update:value="(value: any) => setConditionValue(value)"
             />
             <InputNumber
-              v-else-if="!isEmptyOperator(local.condition?.operator) && valueKind() === 'number'"
-              :value="local.condition?.compareValue ? Number(local.condition.compareValue) : undefined"
+              v-else-if="
+                !isEmptyOperator(local.condition?.operator) &&
+                valueKind() === 'number'
+              "
+              :value="
+                local.condition?.compareValue
+                  ? Number(local.condition.compareValue)
+                  : undefined
+              "
               class="flex-1"
               placeholder="输入数字"
               @update:value="(value: any) => setConditionValue(value)"
             />
             <DatePicker
-              v-else-if="!isEmptyOperator(local.condition?.operator) && valueKind() === 'date'"
+              v-else-if="
+                !isEmptyOperator(local.condition?.operator) &&
+                valueKind() === 'date'
+              "
               :value="local.condition?.compareValue ?? undefined"
               class="flex-1"
               placeholder="选择日期"
@@ -605,7 +670,9 @@ loadParticipants();
           <Tag :color="index === 0 ? 'green' : 'default'">
             {{ index === 0 ? '符合条件（true）' : '不符合条件（false）' }}
           </Tag>
-          <span class="ml-2 text-xs text-gray-500">{{ branch.nodes.length }} 个节点</span>
+          <span class="ml-2 text-xs text-gray-500">
+            {{ branch.nodes.length }} 个节点
+          </span>
           <div
             v-for="child in branch.nodes"
             :key="child.id"

@@ -11,7 +11,11 @@ import { useVbenVxeGrid } from '@abp/ui';
 import { Button } from 'ant-design-vue';
 
 import { useApprovalTasksApi } from '../../api/useApprovalTasksApi';
-import { actionText, formatDateTime, formatDuration } from './approval-table-utils';
+import {
+  actionText,
+  formatDateTime,
+  formatDuration,
+} from './approval-table-utils';
 import ApprovalInstanceDetailModal from './ApprovalInstanceDetailModal.vue';
 
 const tasksApi = useApprovalTasksApi();

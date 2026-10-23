@@ -28,7 +28,7 @@ import {
 } from 'ant-design-vue';
 import { VxeGrid } from 'vxe-table';
 
-import { useApprovalFormsApi } from '../../api/useApprovalParticipantsApi';
+import { useApprovalFormsApi } from '../../api/useApprovalFormsApi';
 
 const formFieldTypes = [
   { label: '单行文本', value: 'single-line-text' },

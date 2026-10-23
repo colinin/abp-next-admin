@@ -1,10 +1,7 @@
 import type { ListResultDto } from '@abp/core';
 
 import type { ApprovalPendingTaskDto } from '../types/approval-flow';
-import type {
-  DoneGetPagedListInput,
-  DonePagedResult,
-} from '../types/done';
+import type { DoneGetPagedListInput, DonePagedResult } from '../types/done';
 
 import { useRequest } from '@abp/request';
 
@@ -13,9 +10,7 @@ const taskUrl = '/api/approval-flow/tasks';
 export function useApprovalTasksApi() {
   const { request } = useRequest();
 
-  function getPendingListApi(): Promise<
-    ListResultDto<ApprovalPendingTaskDto>
-  > {
+  function getPendingListApi(): Promise<ListResultDto<ApprovalPendingTaskDto>> {
     return request<ListResultDto<ApprovalPendingTaskDto>>(taskUrl, {
       method: 'GET',
     });

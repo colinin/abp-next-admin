@@ -20,8 +20,8 @@ import {
   Switch,
 } from 'ant-design-vue';
 
-import { useApprovalInstancesApi } from '../../api/useApprovalFlowApi';
-import { useApprovalFormsApi } from '../../api/useApprovalParticipantsApi';
+import { useApprovalFormsApi } from '../../api/useApprovalFormsApi';
+import { useApprovalInstancesApi } from '../../api/useApprovalInstancesApi';
 import { calculateFormula, parseFormula } from '../designer/formula';
 
 const props = defineProps<{

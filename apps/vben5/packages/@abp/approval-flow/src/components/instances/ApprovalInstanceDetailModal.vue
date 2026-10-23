@@ -28,11 +28,9 @@ import {
   Timeline,
 } from 'ant-design-vue';
 
-import { useApprovalInstancesApi } from '../../api/useApprovalFlowApi';
-import {
-  useApprovalFormsApi,
-  useApprovalParticipantsApi,
-} from '../../api/useApprovalParticipantsApi';
+import { useApprovalFormsApi } from '../../api/useApprovalFormsApi';
+import { useApprovalInstancesApi } from '../../api/useApprovalInstancesApi';
+import { useApprovalParticipantsApi } from '../../api/useApprovalParticipantsApi';
 import { formatDuration } from './approval-table-utils';
 import ApprovalFlowViewer from './ApprovalFlowViewer.vue';
 

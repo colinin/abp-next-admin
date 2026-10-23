@@ -27,8 +27,8 @@ import {
   Tag,
 } from 'ant-design-vue';
 
-import { useApprovalTemplatesApi } from '../../api/useApprovalFlowApi';
-import { useApprovalFormsApi } from '../../api/useApprovalParticipantsApi';
+import { useApprovalFormsApi } from '../../api/useApprovalFormsApi';
+import { useApprovalTemplatesApi } from '../../api/useApprovalTemplatesApi';
 import FormDesigner from '../designer/FormDesigner.vue';
 import BasicSetting from './BasicSetting.vue';
 import { oldToAntFlow } from './model';

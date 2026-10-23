@@ -10,7 +10,7 @@ import { ref } from 'vue';
 import { useVbenVxeGrid } from '@abp/ui';
 import { Button, Tag } from 'ant-design-vue';
 
-import { useApprovalCarbonCopiesApi } from '../../api/useApprovalFlowApi';
+import { useApprovalCarbonCopiesApi } from '../../api/useApprovalCarbonCopiesApi';
 import { formatDateTime } from './approval-table-utils';
 import ApprovalInstanceDetailModal from './ApprovalInstanceDetailModal.vue';
 

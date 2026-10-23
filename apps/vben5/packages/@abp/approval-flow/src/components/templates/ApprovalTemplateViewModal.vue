@@ -19,7 +19,7 @@ import {
 } from 'ant-design-vue';
 import { VxeGrid } from 'vxe-table';
 
-import { useApprovalFormsApi } from '../../api/useApprovalParticipantsApi';
+import { useApprovalFormsApi } from '../../api/useApprovalFormsApi';
 import ApprovalFlowDesigner from '../designer/ApprovalFlowDesigner.vue';
 
 const props = defineProps<{

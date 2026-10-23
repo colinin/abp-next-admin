@@ -15,10 +15,8 @@ import { useVbenVxeGrid } from '@abp/ui';
 import { Button, message, Modal, Space, Tag } from 'ant-design-vue';
 import { VxeGrid } from 'vxe-table';
 
-import {
-  useApprovalInstancesApi,
-  useApprovalTemplatesApi,
-} from '../../api/useApprovalFlowApi';
+import { useApprovalInstancesApi } from '../../api/useApprovalInstancesApi';
+import { useApprovalTemplatesApi } from '../../api/useApprovalTemplatesApi';
 import StartApprovalModal from '../templates/StartApprovalModal.vue';
 import {
   actionText,
@@ -189,8 +187,8 @@ async function onRestarted() {
 
 async function openRecords(instance: ApprovalInstanceDto) {
   try {
-    records.value =
-      (await instancesApi.getRecordsApi(instance.id))?.items ?? [];
+    const result = await instancesApi.getRecordsApi(instance.id);
+    records.value = result?.items ?? [];
     recordsOpen.value = true;
   } catch {
     message.error('审批记录加载失败');

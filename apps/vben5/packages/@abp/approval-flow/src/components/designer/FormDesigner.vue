@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { FormFieldDto } from '../../types/approval-flow';
+import type { FormulaConfig } from './formula';
 
 import { computed, ref, watch } from 'vue';
 
@@ -15,8 +16,7 @@ import {
   Tag,
 } from 'ant-design-vue';
 
-import { useApprovalFormsApi } from '../../api/useApprovalParticipantsApi';
-import type { FormulaConfig } from './formula';
+import { useApprovalFormsApi } from '../../api/useApprovalFormsApi';
 import {
   formulaModeOptions,
   formulaOperatorOptions,
@@ -129,7 +129,9 @@ const supportsOptions = computed(() => {
   return type === 'multiple-select' || type === 'radio' || type === 'select';
 });
 
-const supportsFormula = computed(() => selectedField.value?.type === 'calculated');
+const supportsFormula = computed(
+  () => selectedField.value?.type === 'calculated',
+);
 
 const numberFields = computed(() =>
   fields.value.filter((field) => field.type === 'number'),
@@ -189,7 +191,9 @@ function onDragStart(event: DragEvent, type: string) {
 function onDrop(event: DragEvent) {
   event.preventDefault();
   const type =
-    dragType.value ?? event.dataTransfer?.getData('text/plain') ?? 'single-line-text';
+    dragType.value ??
+    event.dataTransfer?.getData('text/plain') ??
+    'single-line-text';
   addField(type);
   dragType.value = null;
 }
@@ -254,12 +258,12 @@ function updateFormula(patch: Partial<FormulaConfig>) {
 
 const formulaFieldOptions = computed(() => {
   const mode = selectedField.value?.formula?.mode ?? 'number';
-  const source =
-    mode === 'number'
-      ? numberFields.value
-      : mode === 'date-diff'
-        ? dateFields.value
-        : rangeFields.value;
+  let source = rangeFields.value;
+  if (mode === 'number') {
+    source = numberFields.value;
+  } else if (mode === 'date-diff') {
+    source = dateFields.value;
+  }
   return source.map((field) => ({ label: field.label, value: field.key }));
 });
 function optionsJson(field: DesignField): null | string {
@@ -302,7 +306,6 @@ function typeLabel(type: string): string {
   return palette.find((item) => item.type === type)?.label ?? type;
 }
 
-
 async function createNewVersion(version: number): Promise<string> {
   const created = await formsApi.createApi({
     code: formCode.value.trim(),
@@ -343,9 +346,7 @@ async function save(publishForm = true): Promise<null | string> {
   try {
     let formId = props.formId ?? null;
 
-    if (!formId) {
-      formId = await createNewVersion(1);
-    } else {
+    if (formId) {
       const current = await formsApi.getApi(formId);
       if (current.isPublished) {
         // Published definitions are immutable: edits create a new version so existing
@@ -363,15 +364,20 @@ async function save(publishForm = true): Promise<null | string> {
         }
 
         for (const [index, field] of fields.value.entries()) {
-          const exists = field.id && current.fields?.some((item) => item.id === field.id);
-          if (exists) {
-            await formsApi.updateFieldApi(formId, field.id!, toUpdatePayload(field, index));
-          } else {
-            await formsApi.addFieldApi(formId, toAddPayload(field, index));
-          }
+          const exists =
+            field.id && current.fields?.some((item) => item.id === field.id);
+          await (exists
+            ? formsApi.updateFieldApi(
+                formId,
+                field.id!,
+                toUpdatePayload(field, index),
+              )
+            : formsApi.addFieldApi(formId, toAddPayload(field, index)));
         }
         loadedFormId.value = null;
       }
+    } else {
+      formId = await createNewVersion(1);
     }
 
     await formsApi.publishApi(formId);
@@ -442,7 +448,10 @@ defineExpose({ getFields, loadForm, save });
 
       <Card class="min-h-72 flex-1" size="small" title="表单画布">
         <div class="drop-canvas" @dragover.prevent @drop="onDrop">
-          <Empty v-if="fields.length === 0" description="从左侧拖动控件到此处" />
+          <Empty
+            v-if="fields.length === 0"
+            description="从左侧拖动控件到此处"
+          />
           <div
             v-for="(field, index) in fields"
             :key="field.id ?? `${field.key}-${index}`"
@@ -460,9 +469,26 @@ defineExpose({ getFields, loadForm, save });
                 <div class="mt-1 text-xs text-gray-500">{{ field.key }}</div>
               </div>
               <Space size="small">
-                <Button size="small" type="text" @click.stop="moveField(index, -1)">↑</Button>
-                <Button size="small" type="text" @click.stop="moveField(index, 1)">↓</Button>
-                <Button danger size="small" type="text" @click.stop="removeField(index)">
+                <Button
+                  size="small"
+                  type="text"
+                  @click.stop="moveField(index, -1)"
+                >
+                  ↑
+                </Button>
+                <Button
+                  size="small"
+                  type="text"
+                  @click.stop="moveField(index, 1)"
+                >
+                  ↓
+                </Button>
+                <Button
+                  danger
+                  size="small"
+                  type="text"
+                  @click.stop="removeField(index)"
+                >
                   删除
                 </Button>
               </Space>
@@ -479,7 +505,9 @@ defineExpose({ getFields, loadForm, save });
               <div class="mb-1 text-xs text-gray-500">显示名</div>
               <Input
                 :value="selectedField.label"
-                @update:value="(value: string) => updateSelected({ label: value })"
+                @update:value="
+                  (value: string) => updateSelected({ label: value })
+                "
               />
             </div>
             <div>
@@ -487,14 +515,18 @@ defineExpose({ getFields, loadForm, save });
               <Input
                 :disabled="!!selectedField.id"
                 :value="selectedField.key"
-                @update:value="(value: string) => updateSelected({ key: value })"
+                @update:value="
+                  (value: string) => updateSelected({ key: value })
+                "
               />
             </div>
             <div class="flex items-center justify-between">
               <span class="text-xs text-gray-500">必填</span>
               <Switch
                 :checked="selectedField.isRequired"
-                @update:checked="(value: any) => updateSelected({ isRequired: Boolean(value) })"
+                @update:checked="
+                  (value: any) => updateSelected({ isRequired: Boolean(value) })
+                "
               />
             </div>
             <div>
@@ -503,14 +535,18 @@ defineExpose({ getFields, loadForm, save });
                 :options="permissions"
                 :value="selectedField.permission"
                 class="w-full"
-                @update:value="(value: any) => updateSelected({ permission: String(value) })"
+                @update:value="
+                  (value: any) => updateSelected({ permission: String(value) })
+                "
               />
             </div>
             <div>
               <div class="mb-1 text-xs text-gray-500">提示</div>
               <Input
                 :value="selectedField.hint ?? ''"
-                @update:value="(value: string) => updateSelected({ hint: value || null })"
+                @update:value="
+                  (value: string) => updateSelected({ hint: value || null })
+                "
               />
             </div>
             <div v-if="supportsOptions">
@@ -518,7 +554,9 @@ defineExpose({ getFields, loadForm, save });
               <Input.TextArea
                 :rows="4"
                 :value="selectedField.optionsText ?? ''"
-                @update:value="(value: string) => updateSelected({ optionsText: value })"
+                @update:value="
+                  (value: string) => updateSelected({ optionsText: value })
+                "
               />
             </div>
             <template v-if="supportsFormula">
@@ -533,13 +571,19 @@ defineExpose({ getFields, loadForm, save });
               </div>
               <div>
                 <div class="mb-1 text-xs text-gray-500">
-                  {{ selectedField.formula?.mode === 'date-range' ? '日期区间' : '字段A' }}
+                  {{
+                    selectedField.formula?.mode === 'date-range'
+                      ? '日期区间'
+                      : '字段A'
+                  }}
                 </div>
                 <Select
                   :options="formulaFieldOptions"
                   :value="selectedField.formula?.left ?? ''"
                   class="w-full"
-                  @update:value="(value: any) => updateFormula({ left: String(value) })"
+                  @update:value="
+                    (value: any) => updateFormula({ left: String(value) })
+                  "
                 />
               </div>
               <div v-if="selectedField.formula?.mode === 'number'">
@@ -548,7 +592,9 @@ defineExpose({ getFields, loadForm, save });
                   :options="formulaOperatorOptions"
                   :value="selectedField.formula?.operator ?? '+'"
                   class="w-full"
-                  @update:value="(value: any) => updateFormula({ operator: value })"
+                  @update:value="
+                    (value: any) => updateFormula({ operator: value })
+                  "
                 />
               </div>
               <div v-if="selectedField.formula?.mode !== 'date-range'">
@@ -557,7 +603,9 @@ defineExpose({ getFields, loadForm, save });
                   :options="formulaFieldOptions"
                   :value="selectedField.formula?.right ?? ''"
                   class="w-full"
-                  @update:value="(value: any) => updateFormula({ right: String(value) })"
+                  @update:value="
+                    (value: any) => updateFormula({ right: String(value) })
+                  "
                 />
               </div>
               <div v-if="selectedField.formula?.mode !== 'number'">

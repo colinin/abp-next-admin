@@ -68,8 +68,8 @@ export function formatDuration(
   }
 
   let seconds = Math.floor((end - start) / 1000);
-  const days = Math.floor(seconds / 86400);
-  seconds %= 86400;
+  const days = Math.floor(seconds / 86_400);
+  seconds %= 86_400;
   const hours = Math.floor(seconds / 3600);
   seconds %= 3600;
   const minutes = Math.floor(seconds / 60);

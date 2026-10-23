@@ -6,7 +6,6 @@ import type {
   FormFieldDto,
 } from '../../types/approval-flow';
 
-
 import AddNode from './AddNode.vue';
 import { summarizeNode } from './model';
 
@@ -20,13 +19,17 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   add: [nodes: ApprovalFlowNode[], kind: ApprovalFlowNodeKind];
-  'add-condition': [node: ApprovalFlowNode];
-  'edit-branch': [node: ApprovalFlowNode, branch: ApprovalFlowBranch];
+  addCondition: [node: ApprovalFlowNode];
+  editBranch: [node: ApprovalFlowNode, branch: ApprovalFlowBranch];
   remove: [node: ApprovalFlowNode];
   select: [id: string];
 }>();
 
-const addActions: Array<{ color?: string; key: ApprovalFlowNodeKind; label: string }> = [
+const addActions: Array<{
+  color?: string;
+  key: ApprovalFlowNodeKind;
+  label: string;
+}> = [
   { key: 'approval', label: '审批人', color: '#f2994a' },
   { key: 'cc', label: '抄送人', color: '#2f80ed' },
   { key: 'condition', label: '条件分支', color: '#27ae60' },
@@ -50,7 +53,10 @@ function nodeIcon(kind: ApprovalFlowNodeKind): string {
 }
 
 function summary(node: ApprovalFlowNode): string {
-  return summarizeNode(node) || (node.kind === 'cc' ? '待选择抄送人' : '待配置审批人');
+  return (
+    summarizeNode(node) ||
+    (node.kind === 'cc' ? '待选择抄送人' : '待配置审批人')
+  );
 }
 
 function statusClass(id: string): string {
@@ -62,25 +68,29 @@ function conditionTitle(index: number): string {
   return `条件${index + 1}`;
 }
 
-function conditionExpression(expression: null | string | undefined, index: number, total: number): string {
+function conditionExpression(
+  expression: null | string | undefined,
+  index: number,
+  total: number,
+): string {
   if (expression?.trim()) {
     return expression
-      .replace(/\bform\./g, '')
-      .replace(/>=/g, '≥')
-      .replace(/<=/g, '≤')
-      .replace(/===/g, '=')
-      .replace(/!==/g, '≠')
-      .replace(/==/g, '=');
+      .replaceAll(/\bform\./g, '')
+      .replaceAll('>=', '≥')
+      .replaceAll('<=', '≤')
+      .replaceAll('===', '=')
+      .replaceAll('!==', '≠')
+      .replaceAll('==', '=');
   }
   return index === total - 1 ? '其他条件进入此流程' : '请设置条件';
 }
 
 function onAddCondition(node: ApprovalFlowNode) {
-  emit('add-condition', node);
+  emit('addCondition', node);
 }
 
 function onEditBranch(node: ApprovalFlowNode, branch: ApprovalFlowBranch) {
-  emit('edit-branch', node, branch);
+  emit('editBranch', node, branch);
 }
 function onAdd(info: any) {
   emit('add', props.nodes, info.key as ApprovalFlowNodeKind);
@@ -105,8 +115,16 @@ function onRemove(node: ApprovalFlowNode) {
         <div class="arrow"></div>
       </div>
 
-      <div v-if="node.kind === 'condition'" class="nested-condition" :class="statusClass(node.id)">
-        <div v-if="!readonly" class="nested-add-condition" @click="onAddCondition(node)">
+      <div
+        v-if="node.kind === 'condition'"
+        class="nested-condition"
+        :class="statusClass(node.id)"
+      >
+        <div
+          v-if="!readonly"
+          class="nested-add-condition"
+          @click="onAddCondition(node)"
+        >
           添加条件
         </div>
         <div class="nested-branches">
@@ -118,17 +136,31 @@ function onRemove(node: ApprovalFlowNode) {
             <div
               class="node-card nested-condition-card"
               :class="[statusClass(node.id)]"
-              @click="index < (node.branches ?? []).length - 1 && onEditBranch(node, branch)"
+              @click="
+                index < (node.branches ?? []).length - 1 &&
+                onEditBranch(node, branch)
+              "
             >
               <span class="node-priority">优先级{{ index + 1 }}</span>
-              <button v-if="!readonly" class="node-delete" type="button" @click.stop="onRemove(node)">
+              <button
+                v-if="!readonly"
+                class="node-delete"
+                type="button"
+                @click.stop="onRemove(node)"
+              >
                 ×
               </button>
               <div class="node-header hd-condition">
                 <span class="title">{{ conditionTitle(index) }}</span>
               </div>
               <div class="node-content">
-                <span class="content">{{ conditionExpression(branch.expression, index, (node.branches ?? []).length) }}</span>
+                <span class="content">{{
+                  conditionExpression(
+                    branch.expression,
+                    index,
+                    (node.branches ?? []).length,
+                  )
+                }}</span>
                 <span class="arrow-right">›</span>
               </div>
             </div>
@@ -155,7 +187,12 @@ function onRemove(node: ApprovalFlowNode) {
         class="node-card branch-card"
         :class="[statusClass(node.id), { 'is-active': node.id === selectedId }]"
       >
-        <button v-if="!readonly" class="node-delete" type="button" @click.stop="onRemove(node)">
+        <button
+          v-if="!readonly"
+          class="node-delete"
+          type="button"
+          @click.stop="onRemove(node)"
+        >
           ×
         </button>
         <div class="node-header" :class="`hd-${node.kind}`">
@@ -176,6 +213,7 @@ function onRemove(node: ApprovalFlowNode) {
 </template>
 
 <style scoped>
+/* stylelint-disable no-duplicate-selectors */
 .branch-flow {
   display: flex;
   flex-direction: column;
@@ -276,8 +314,8 @@ function onRemove(node: ApprovalFlowNode) {
 .title {
   max-width: 8em;
   overflow: hidden;
-  font-size: 14px;
   text-overflow: ellipsis;
+  font-size: 14px;
   white-space: nowrap;
 }
 
@@ -299,9 +337,9 @@ function onRemove(node: ApprovalFlowNode) {
   min-width: 0;
   max-height: 54px;
   overflow: hidden;
-  line-height: 18px;
   text-overflow: ellipsis;
   -webkit-line-clamp: 3;
+  line-height: 18px;
   -webkit-box-orient: vertical;
 }
 
@@ -357,6 +395,7 @@ function onRemove(node: ApprovalFlowNode) {
 .node-card.status-pending .node-header {
   background: #8c8c8c;
 }
+
 .nested-condition {
   position: relative;
   display: flex;
@@ -399,7 +438,7 @@ function onRemove(node: ApprovalFlowNode) {
   left: 50%;
   width: calc(100% - 299px);
   height: 1px;
-  content: "";
+  content: '';
   background: #cacaca;
   transform: translateX(-50%);
 }
@@ -428,7 +467,7 @@ function onRemove(node: ApprovalFlowNode) {
   left: 50%;
   width: 1px;
   height: 16px;
-  content: "";
+  content: '';
   background: #cacaca;
   transform: translateX(-50%);
 }
@@ -454,7 +493,9 @@ function onRemove(node: ApprovalFlowNode) {
   width: 1px;
   min-height: 16px;
   background: #cacaca;
-}.nested-column {
+}
+
+.nested-column {
   flex: 0 0 auto;
   min-width: 260px;
 }
@@ -468,7 +509,9 @@ function onRemove(node: ApprovalFlowNode) {
   left: 0;
   width: 100%;
   transform: none;
-}.nested-column {
+}
+
+.nested-column {
   padding: 16px 0;
 }
 
@@ -493,7 +536,9 @@ function onRemove(node: ApprovalFlowNode) {
   width: 1px;
   min-height: 16px;
   background: #cacaca;
-}.nested-branches {
+}
+
+.nested-branches {
   padding: 16px 0;
 }
 
@@ -523,11 +568,14 @@ function onRemove(node: ApprovalFlowNode) {
 
 .nested-column::after {
   bottom: -16px;
-}.node-card {
+}
+
+.node-card {
   cursor: grab;
 }
 
 .node-card.is-dragging {
   cursor: grabbing;
   opacity: 0.45;
-}</style>
+}
+</style>

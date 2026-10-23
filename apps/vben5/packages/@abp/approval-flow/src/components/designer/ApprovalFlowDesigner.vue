@@ -11,8 +11,8 @@ import { computed, onMounted, ref } from 'vue';
 
 import { Button, Empty, message, Modal, Space } from 'ant-design-vue';
 
-import { useApprovalTemplatesApi } from '../../api/useApprovalFlowApi';
-import { useApprovalFormsApi } from '../../api/useApprovalParticipantsApi';
+import { useApprovalFormsApi } from '../../api/useApprovalFormsApi';
+import { useApprovalTemplatesApi } from '../../api/useApprovalTemplatesApi';
 import AddNode from './AddNode.vue';
 import BranchConditionDrawer from './BranchConditionDrawer.vue';
 import BranchFlow from './BranchFlow.vue';
@@ -662,6 +662,7 @@ onMounted(() => {
 </template>
 
 <style scoped>
+/* stylelint-disable no-duplicate-selectors */
 .approval-designer {
   display: flex;
   flex-direction: column;

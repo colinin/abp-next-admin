@@ -1,16 +1,11 @@
 export type FormulaMode = 'date-diff' | 'date-range' | 'number';
 export type FormulaUnit =
-  | 'day'
-  | 'hour'
-  | 'minute'
-  | 'month'
-  | 'second'
-  | 'year';
+  'day' | 'hour' | 'minute' | 'month' | 'second' | 'year';
 
 export interface FormulaConfig {
   left: string;
   mode: FormulaMode;
-  operator: '+' | '-' | '*' | '/';
+  operator: '*' | '+' | '-' | '/';
   right?: string;
   unit?: FormulaUnit;
 }
@@ -41,7 +36,9 @@ export function isFormulaMode(value: unknown): value is FormulaMode {
   return value === 'number' || value === 'date-diff' || value === 'date-range';
 }
 
-export function parseFormula(optionsJson?: null | string): FormulaConfig | null {
+export function parseFormula(
+  optionsJson?: null | string,
+): FormulaConfig | null {
   if (!optionsJson) {
     return null;
   }
@@ -65,7 +62,9 @@ export function parseFormula(optionsJson?: null | string): FormulaConfig | null 
   }
 }
 
-export function serializeFormula(formula?: FormulaConfig | null): null | string {
+export function serializeFormula(
+  formula?: FormulaConfig | null,
+): null | string {
   return formula ? JSON.stringify({ formula }) : null;
 }
 
@@ -136,22 +135,18 @@ function toDate(value: unknown): Date | null {
   if (!value) {
     return null;
   }
-  const date = new Date(value as string | number | Date);
+  const date = new Date(value as Date | number | string);
   return Number.isNaN(date.getTime()) ? null : date;
 }
 
 function diffDate(start: Date, end: Date, unit: FormulaUnit): number {
   const millis = end.getTime() - start.getTime();
   switch (unit) {
-    case 'year': {
-      let years = end.getFullYear() - start.getFullYear();
-      if (
-        end.getMonth() < start.getMonth() ||
-        (end.getMonth() === start.getMonth() && end.getDate() < start.getDate())
-      ) {
-        years -= 1;
-      }
-      return years;
+    case 'hour': {
+      return Math.floor(millis / 3_600_000);
+    }
+    case 'minute': {
+      return Math.floor(millis / 60_000);
     }
     case 'month': {
       let months =
@@ -162,16 +157,19 @@ function diffDate(start: Date, end: Date, unit: FormulaUnit): number {
       }
       return months;
     }
-    case 'hour': {
-      return Math.floor(millis / 3_600_000);
-    }
-    case 'minute': {
-      return Math.floor(millis / 60_000);
-    }
     case 'second': {
       return Math.floor(millis / 1000);
     }
-    case 'day':
+    case 'year': {
+      let years = end.getFullYear() - start.getFullYear();
+      if (
+        end.getMonth() < start.getMonth() ||
+        (end.getMonth() === start.getMonth() && end.getDate() < start.getDate())
+      ) {
+        years -= 1;
+      }
+      return years;
+    }
     default: {
       return Math.floor(millis / 86_400_000);
     }

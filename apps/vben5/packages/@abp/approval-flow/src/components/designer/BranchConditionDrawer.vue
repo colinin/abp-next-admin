@@ -7,14 +7,7 @@ import type {
 
 import { ref, watch } from 'vue';
 
-import {
-  Button,
-  Drawer,
-  Input,
-  message,
-  Select,
-  Space,
-} from 'ant-design-vue';
+import { Button, Drawer, Input, message, Select, Space } from 'ant-design-vue';
 
 const props = defineProps<{
   branch: ApprovalFlowBranch | null;
@@ -23,8 +16,8 @@ const props = defineProps<{
 }>();
 
 const emit = defineEmits<{
-  'update:open': [boolean];
   'update:branch': [ApprovalFlowBranch];
+  'update:open': [boolean];
 }>();
 
 const conditionOperators = [
@@ -55,18 +48,17 @@ watch(
       return;
     }
 
-    if (branch.conditions && branch.conditions.length > 0) {
-      conditions.value = branch.conditions.map((condition) => ({ ...condition }));
-    } else {
-      conditions.value = [
-        {
-          compareValue: branch.compareValue ?? null,
-          expression: branch.expression ?? null,
-          fieldKey: branch.fieldKey ?? null,
-          operator: branch.operator ?? '=',
-        },
-      ];
-    }
+    conditions.value =
+      branch.conditions && branch.conditions.length > 0
+        ? branch.conditions.map((condition) => ({ ...condition }))
+        : [
+            {
+              compareValue: branch.compareValue ?? null,
+              expression: branch.expression ?? null,
+              fieldKey: branch.fieldKey ?? null,
+              operator: branch.operator ?? '=',
+            },
+          ];
     logic.value = branch.logic ?? 'and';
   },
   { immediate: true },
@@ -123,9 +115,10 @@ function composeCondition(condition: ApprovalFlowCondition): null | string {
   const type = fieldType(key);
   const isNumber = type === 'number';
   const isBoolean = type === 'switch';
-  const literal = isNumber || isBoolean
-    ? raw
-    : `'${String(raw).replace(/'/g, "\\'")}'`;
+  const literal =
+    isNumber || isBoolean
+      ? raw
+      : `'${String(raw).replaceAll("'", String.raw`\'`)}'`;
 
   if (operator === 'contains') {
     return `String(form.${key} ?? '').includes(${literal})`;
@@ -152,11 +145,12 @@ function save() {
     return;
   }
 
-  const expression = expressions.length === 1
-    ? expressions[0]!
-    : expressions
-        .map((item) => `(${item})`)
-        .join(logic.value === 'and' ? ' && ' : ' || ');
+  const expression =
+    expressions.length === 1
+      ? expressions[0]!
+      : expressions
+          .map((item) => `(${item})`)
+          .join(logic.value === 'and' ? ' && ' : ' || ');
 
   const first = conditions.value[0];
   emit('update:branch', {
@@ -203,13 +197,17 @@ function save() {
             :value="condition.fieldKey ?? undefined"
             class="w-full"
             placeholder="选择字段"
-            @update:value="(value) => (condition.fieldKey = value ? String(value) : null)"
+            @update:value="
+              (value) => (condition.fieldKey = value ? String(value) : null)
+            "
           />
           <Select
             :options="conditionOperators"
             :value="condition.operator ?? undefined"
             class="w-full"
-            @update:value="(value) => (condition.operator = value ? String(value) : '=')"
+            @update:value="
+              (value) => (condition.operator = value ? String(value) : '=')
+            "
           />
           <Input
             v-if="!isValueHidden(condition.operator)"

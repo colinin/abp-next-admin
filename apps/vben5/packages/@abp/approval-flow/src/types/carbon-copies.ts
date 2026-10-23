@@ -1,17 +1,17 @@
 import type { PagedResultDto } from '@abp/core';
 
 export interface CarbonCopyDto {
+  dataJson?: null | string;
   id: string;
   instanceId?: null | string;
   instanceReference?: null | string;
-  nodeId?: null | string;
-  title: string;
-  summary?: null | string;
-  senderDisplayName?: null | string;
-  dataJson?: null | string;
-  notifiedAt: string;
   isRead: boolean;
+  nodeId?: null | string;
+  notifiedAt: string;
   readAt?: null | string;
+  senderDisplayName?: null | string;
+  summary?: null | string;
+  title: string;
 }
 
 export interface CarbonCopyGetPagedListInput {

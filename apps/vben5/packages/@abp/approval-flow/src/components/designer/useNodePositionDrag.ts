@@ -9,12 +9,12 @@ export function useNodePositionDrag() {
   const suppressClick = ref(false);
 
   let active = false;
-  let item: Positionable | null = null;
+  let item: null | Positionable = null;
   let startX = 0;
   let startY = 0;
   let baseX = 0;
   let baseY = 0;
-  let timer: ReturnType<typeof setTimeout> | null = null;
+  let timer: null | ReturnType<typeof setTimeout> = null;
   let moveHandler: ((event: PointerEvent) => void) | null = null;
   let upHandler: (() => void) | null = null;
 
@@ -69,7 +69,9 @@ export function useNodePositionDrag() {
 
     moveHandler = (moveEvent: PointerEvent) => {
       if (!active || !item) {
-        if (Math.hypot(moveEvent.clientX - startX, moveEvent.clientY - startY) > 8) {
+        if (
+          Math.hypot(moveEvent.clientX - startX, moveEvent.clientY - startY) > 8
+        ) {
           cleanup();
         }
         return;

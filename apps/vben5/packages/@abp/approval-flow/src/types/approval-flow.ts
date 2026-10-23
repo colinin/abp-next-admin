@@ -13,106 +13,102 @@ export type SupervisorLevel = 'LevelN' | 'Nearest' | 'TopMost';
 export type EmptyApproverPolicy = 'EscalateToManager' | 'Skip';
 export type ApprovalActionEffect = 'Approve' | 'Neutral' | 'Reject';
 export type ApprovalFlowNodeKind =
-  | 'approval'
-  | 'cc'
-  | 'condition'
-  | 'end'
-  | 'start';
+  'approval' | 'cc' | 'condition' | 'end' | 'start';
 
 export interface ParticipantRef {
+  displayName?: null | string;
+  id: string;
   provider: string;
   type: 'Group' | 'User';
-  id: string;
-  displayName?: null | string;
 }
 
 export interface ApproverRule {
-  kind: ApproverKind;
-  participants: ParticipantRef[];
-  level?: number;
-  supervisorLevel?: SupervisorLevel;
   formFieldKey?: null | string;
+  kind: ApproverKind;
+  level?: number;
+  participants: ParticipantRef[];
+  supervisorLevel?: SupervisorLevel;
 }
 
 export interface ApprovalAction {
+  effect: ApprovalActionEffect;
   key: string;
   label: string;
-  effect: ApprovalActionEffect;
 }
 
 export interface ApprovalFlowCondition {
-  fieldKey?: null | string;
-  operator?: null | string;
   compareValue?: null | string;
   expression?: null | string;
+  fieldKey?: null | string;
+  operator?: null | string;
 }
 
 export interface ApprovalFlowBranch {
-  id: string;
-  name: string;
-  fieldKey?: null | string;
-  operator?: null | string;
   compareValue?: null | string;
-  expression?: null | string;
   conditions?: ApprovalFlowCondition[];
+  expression?: null | string;
+  fieldKey?: null | string;
+  id: string;
   logic?: 'and' | 'or';
-  position?: { x: number; y: number };
+  name: string;
   nodes: ApprovalFlowNode[];
+  operator?: null | string;
+  position?: { x: number; y: number };
 }
 
 export interface ApprovalFlowNode {
+  actions: ApprovalAction[];
+  branches?: ApprovalFlowBranch[];
+  condition?: ApprovalFlowCondition;
+  conditionExpression?: null | string;
+  expression?: null | string;
   id: string;
   kind: ApprovalFlowNodeKind;
   name: string;
-  signMode: ApprovalSignMode;
-  rules: ApproverRule[];
   onEmpty: EmptyApproverPolicy;
-  actions: ApprovalAction[];
-  conditionExpression?: null | string;
-  condition?: ApprovalFlowCondition;
-  branches?: ApprovalFlowBranch[];
   position?: { x: number; y: number };
-  expression?: null | string;
+  rules: ApproverRule[];
+  signMode: ApprovalSignMode;
 }
 
 export interface ApprovalFlowModel {
-  version: number;
   formDefinitionId?: null | string;
   nodes: ApprovalFlowNode[];
+  version: number;
 }
 
 export interface ApprovalTemplateDto {
-  id: string;
-  name: string;
-  displayName: string;
-  description?: null | string;
-  category?: null | string;
-  icon?: null | string;
   businessKeyHint?: null | string;
-  isPublished: boolean;
-  isEnabled: boolean;
+  category?: null | string;
+  description?: null | string;
+  displayName: string;
   elsaDefinitionId?: null | string;
   elsaDefinitionKey?: null | string;
   elsaDefinitionVersion?: null | number;
-  formDefinitionId?: null | string;
   flowDefinitionJson?: null | string;
+  formDefinitionId?: null | string;
+  icon?: null | string;
+  id: string;
+  isEnabled: boolean;
+  isPublished: boolean;
+  name: string;
 }
 
 export interface CreateApprovalTemplateDto {
-  name: string;
-  displayName: string;
-  description?: null | string;
-  category?: null | string;
-  icon?: null | string;
   businessKeyHint?: null | string;
+  category?: null | string;
+  description?: null | string;
+  displayName: string;
+  icon?: null | string;
+  name: string;
 }
 
 export interface UpdateApprovalTemplateDto {
-  displayName: string;
-  description?: null | string;
-  category?: null | string;
-  icon?: null | string;
   businessKeyHint?: null | string;
+  category?: null | string;
+  description?: null | string;
+  displayName: string;
+  icon?: null | string;
 }
 
 export interface PublishApprovalTemplateDto {
@@ -125,147 +121,147 @@ export interface SaveApprovalDesignDto {
 }
 
 export interface ApprovalInstanceDto {
-  id: string;
-  templateId: string;
-  templateName: string;
-  templateCategory?: null | string;
   businessKey?: null | string;
-  title: string;
-  status: string;
   currentNodeId?: null | string;
   currentNodeName?: null | string;
-  initiatorId?: null | string;
-  initiatorDisplayName?: null | string;
   elsaWorkflowInstanceId?: null | string;
+  finishedAt?: null | string;
   formDataJson?: null | string;
+  id: string;
+  initiatorDisplayName?: null | string;
+  initiatorId?: null | string;
   outcome?: null | string;
   startedAt: string;
-  finishedAt?: null | string;
+  status: string;
+  templateCategory?: null | string;
+  templateId: string;
+  templateName: string;
+  title: string;
 }
 
 export interface StartApprovalDto {
-  templateId: string;
-  title: string;
   businessKey?: null | string;
   formDataJson?: null | string;
+  templateId: string;
+  title: string;
 }
 
 export interface GetApprovalInstancesDto {
-  templateId?: null | string;
-  status?: null | string;
   filter?: null | string;
-  onlyMine?: boolean;
   maxResultCount?: number;
+  onlyMine?: boolean;
   skipCount?: number;
+  status?: null | string;
+  templateId?: null | string;
 }
 
 export interface ApprovalPendingTaskDto {
-  taskId: string;
+  allowedActions: string[];
+  createdAt: string;
+  dueAt?: null | string;
   instanceId: string;
   instanceTitle: string;
-  templateName?: null | string;
   nodeId?: null | string;
   nodeName?: null | string;
-  title: string;
-  summary?: null | string;
   priority: number;
-  dueAt?: null | string;
-  createdAt: string;
   revision: number;
-  allowedActions: string[];
+  summary?: null | string;
+  taskId: string;
+  templateName?: null | string;
+  title: string;
 }
 
 export interface ApprovalDecisionDto {
-  taskId: string;
   actionKey: string;
   comment?: null | string;
   dataJson?: null | string;
   operationId?: null | string;
+  taskId: string;
 }
 
 export interface ApprovalParticipantDto {
-  id: string;
   displayName?: null | string;
+  id: string;
   provider?: null | string;
   type?: 'Group' | 'User';
 }
 
 export interface ReturnApprovalDto {
-  taskId?: null | string;
   comment?: null | string;
+  taskId?: null | string;
 }
 
 export interface TransferApprovalDto {
+  comment?: null | string;
   taskId?: null | string;
   transferee: ApprovalParticipantDto;
-  comment?: null | string;
 }
 
 export interface AddApprovalDto {
-  taskId?: null | string;
   approver: ApprovalParticipantDto;
-  title?: null | string;
   comment?: null | string;
+  taskId?: null | string;
+  title?: null | string;
 }
 export interface ApprovalDecisionResultDto {
-  recordId?: null | string;
   ignored: boolean;
+  recordId?: null | string;
 }
 
 export interface ApprovalRecordDto {
+  actionKey: string;
+  actionLabel?: null | string;
+  actorDisplayName?: null | string;
+  comment?: null | string;
+  completedAt?: null | string;
+  effect: string;
+  firstViewedAt?: null | string;
   id: string;
   instanceId: string;
   nodeId?: null | string;
   nodeName?: null | string;
-  taskId?: null | string;
-  actionKey: string;
-  actionLabel?: null | string;
-  effect: string;
-  comment?: null | string;
-  actorDisplayName?: null | string;
   occurredAt: string;
-  firstViewedAt?: null | string;
-  completedAt?: null | string;
+  taskId?: null | string;
 }
 
 export interface ApprovalNodeTaskDto {
+  approverDisplayName?: null | string;
   nodeId?: null | string;
   nodeName?: null | string;
-  taskId: string;
-  status: string;
-  approverDisplayName?: null | string;
   signMode: string;
+  status: string;
+  taskId: string;
 }
 
 export interface ApprovalInstanceDetailDto {
-  instance: ApprovalInstanceDto;
-  records: ApprovalRecordDto[];
-  nodeTasks: ApprovalNodeTaskDto[];
   flowDefinitionJson?: null | string;
   formDefinitionId?: null | string;
+  instance: ApprovalInstanceDto;
+  nodeTasks: ApprovalNodeTaskDto[];
+  records: ApprovalRecordDto[];
 }
 
 export interface FormFieldDto {
+  hint?: null | string;
   id: string;
+  isRequired: boolean;
   key: string;
   label: string;
-  type: string;
-  permission: string;
-  order: number;
-  isRequired: boolean;
-  hint?: null | string;
   optionsJson?: null | string;
+  order: number;
+  permission: string;
+  type: string;
 }
 
 export interface FormDefinitionDto {
-  id: string;
-  name: string;
   code: string;
-  version: number;
   description?: null | string;
-  isPublished: boolean;
-  publishedTime?: null | string;
   fields: FormFieldDto[];
+  id: string;
+  isPublished: boolean;
+  name: string;
+  publishedTime?: null | string;
+  version: number;
 }
 
 export type FormDefinitionPagedResult = PagedResultDto<FormDefinitionDto>;
