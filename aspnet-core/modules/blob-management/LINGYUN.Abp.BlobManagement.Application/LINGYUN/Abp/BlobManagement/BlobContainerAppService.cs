@@ -1,4 +1,6 @@
 ﻿using LINGYUN.Abp.BlobManagement.Dtos;
+using LINGYUN.Abp.BlobManagement.Permissions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
@@ -7,10 +9,12 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Authorization;
 using Volo.Abp.Specifications;
 
 namespace LINGYUN.Abp.BlobManagement;
 
+[Authorize]
 public class BlobContainerAppService : BlobManagementApplicationService, IBlobContainerAppService
 {
     private readonly AbpBlobManagementOptions _options;
@@ -27,6 +31,7 @@ public class BlobContainerAppService : BlobManagementApplicationService, IBlobCo
         _options = options.Value;
     }
 
+    [Authorize(BlobManagementPermissionNames.BlobContainer.Create)]
     public async virtual Task<BlobContainerDto> CreateAsync(BlobContainerCreateDto input)
     {
         var blobContainer = await _blobManager.CreateContainerAsync(input.Name);
@@ -34,6 +39,7 @@ public class BlobContainerAppService : BlobManagementApplicationService, IBlobCo
         return ObjectMapper.Map<BlobContainer, BlobContainerDto>(blobContainer);
     }
 
+    [Authorize(BlobManagementPermissionNames.BlobContainer.Delete)]
     public async virtual Task DeleteAsync(Guid id)
     {
         var blobContainer = await _blobContainerRepository.GetAsync(id);
@@ -50,6 +56,8 @@ public class BlobContainerAppService : BlobManagementApplicationService, IBlobCo
 
     public async virtual Task<BlobContainerDto> GetAsync(Guid id)
     {
+        await CheckReadPolicyAsync();
+
         var blobContainer = await _blobContainerRepository.GetAsync(id);
 
         return ObjectMapper.Map<BlobContainer, BlobContainerDto>(blobContainer);
@@ -57,6 +65,8 @@ public class BlobContainerAppService : BlobManagementApplicationService, IBlobCo
 
     public async virtual Task<PagedResultDto<BlobContainerDto>> GetListAsync(BlobContainerGetPagedListInput input)
     {
+        await CheckReadPolicyAsync();
+
         Expression<Func<BlobContainer, bool>> expression = x => x.Provider == _blobManager.GetBlobProvider();
 
         if (!input.Filter.IsNullOrWhiteSpace())
@@ -72,5 +82,17 @@ public class BlobContainerAppService : BlobManagementApplicationService, IBlobCo
 
         return new PagedResultDto<BlobContainerDto>(totalCount,
             ObjectMapper.Map<List<BlobContainer>, List<BlobContainerDto>>(blobContainers));
+    }
+
+    protected virtual async Task CheckReadPolicyAsync()
+    {
+        // File selection reads current-tenant containers without granting container administration.
+        // Blob.Default carries the native feature requirement; check the effective policies.
+        if (!await AuthorizationService.IsGrantedAnyAsync(
+                BlobManagementPermissionNames.BlobContainer.Default,
+                BlobManagementPermissionNames.Blob.Default))
+        {
+            throw new AbpAuthorizationException();
+        }
     }
 }
