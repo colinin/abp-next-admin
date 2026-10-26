@@ -1,4 +1,4 @@
-namespace LINGYUN.Abp.MicroService.AllInOne;
+﻿namespace LINGYUN.Abp.MicroService.AllInOne;
 
 [DependsOn(
     // CAP事件总线模块
@@ -470,21 +470,8 @@ public partial class AllInOneModule : AbpModule
         PreConfigureSignalR(configuration);
         PreConfigureAuthServer(configuration);
         PreConfigureCertificate(configuration, hostingEnvironment);
-        PreConfigure<Volo.Abp.AspNetCore.Components.Web.AbpAspNetCoreComponentsWebOptions>(options =>
-        {
-            options.IsBlazorWebApp = true;
-        });
-
         // Studio and the Elsa API share this host. Studio is protected by the host login cookie, but Elsa uses its own permission claim format; disable Elsa endpoint permission evaluation for the in-process Studio backend.
         Elsa.EndpointSecurityOptions.DisableSecurity();
-
-        PreConfigure<LINGYUN.Abp.ElsaNext.Studio.Blazor.AbpElsaNextStudioBlazorOptions>(options =>
-        {
-            options.BackendApiConfig.ConfigureHttpClientBuilder = builder =>
-            {
-                builder.AuthenticationHandler = typeof(StudioBackendCookieHandler);
-            };
-        });
     }
 
     public override void ConfigureServices(ServiceConfigurationContext context)
