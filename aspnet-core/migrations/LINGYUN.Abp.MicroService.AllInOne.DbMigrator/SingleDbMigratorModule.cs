@@ -1,16 +1,18 @@
+﻿using Elsa.Agents.Persistence.EFCore;
+using Elsa.AI.Persistence.EFCore;
 using Elsa.Extensions;
 using Elsa.Persistence.EFCore;
-using Elsa.Scheduling.Quartz.EFCore.MySql;
-using Elsa.Scheduling.Quartz.EFCore.PostgreSql;
-using Elsa.Scheduling.Quartz.EFCore.SqlServer;
+using Elsa.Persistence.EFCore.Modules.Alterations;
+using Elsa.Persistence.EFCore.Modules.Labels;
+using Elsa.Persistence.EFCore.Modules.Management;
+using Elsa.Persistence.EFCore.Modules.Runtime;
+using Elsa.Secrets.Persistence.EFCore;
+using Elsa.UserTasks.Persistence.EFCore;
 using LINGYUN.Abp.MicroService.AllInOne.EntityFrameworkCore.MySql;
 using LINGYUN.Abp.MicroService.AllInOne.EntityFrameworkCore.PostgreSql;
 using LINGYUN.Abp.MicroService.AllInOne.EntityFrameworkCore.SqlServer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using Volo.Abp;
 using Volo.Abp.Autofac;
 using Volo.Abp.Modularity;
 
@@ -28,45 +30,28 @@ public partial class SingleDbMigratorModule : AbpModule
     {
         var configuration = context.Services.GetConfiguration();
         ConfigureTiming(configuration);
-        ConfigureElsaQuartzMigrations(context, configuration);
+        ConfigureElsaMigrations(context.Services);
     }
 
-    private static void ConfigureElsaQuartzMigrations(
-        ServiceConfigurationContext context,
-        IConfiguration configuration)
+    private static void ConfigureElsaMigrations(IServiceCollection services)
     {
-        var provider = Environment.GetEnvironmentVariable("APPLICATION_DATABASE_PROVIDER");
-        var connectionString = configuration.GetConnectionString("Default");
-        if (connectionString.IsNullOrWhiteSpace())
-        {
-            return;
-        }
+        AddElsaMigration<ManagementElsaDbContext>(services);
+        AddElsaMigration<RuntimeElsaDbContext>(services);
+        AddElsaMigration<AlterationsElsaDbContext>(services);
+        AddElsaMigration<LabelsElsaDbContext>(services);
+        AddElsaMigration<AgentsDbContext>(services);
+        AddElsaMigration<AIDbContext>(services);
+        AddElsaMigration<SecretsElsaDbContext>(services);
+        AddElsaMigration<UserTasksElsaDbContext>(services);
+    }
 
-        switch (provider?.ToLowerInvariant())
+    private static void AddElsaMigration<TDbContext>(IServiceCollection services)
+        where TDbContext : DbContext
+    {
+        services.Configure<MigrationOptions>(options =>
         {
-            case "mysql":
-                context.Services.AddDbContextFactory<MySqlQuartzDbContext>(
-                    options => options.UseMySql(
-                        connectionString,
-                        new MySqlServerVersion(new Version(8, 0, 0))));
-                context.Services.Configure<MigrationOptions>(
-                    options => options.RunMigrations[typeof(MySqlQuartzDbContext)] = true);
-                context.Services.AddStartupTask<RunMigrationsStartupTask<MySqlQuartzDbContext>>();
-                break;
-            case "postgresql":
-                context.Services.AddDbContextFactory<PostgreSqlQuartzDbContext>(
-                    options => options.UseNpgsql(connectionString));
-                context.Services.Configure<MigrationOptions>(
-                    options => options.RunMigrations[typeof(PostgreSqlQuartzDbContext)] = true);
-                context.Services.AddStartupTask<RunMigrationsStartupTask<PostgreSqlQuartzDbContext>>();
-                break;
-            case "sqlserver":
-                context.Services.AddDbContextFactory<SqlServerQuartzDbContext>(
-                    options => options.UseSqlServer(connectionString));
-                context.Services.Configure<MigrationOptions>(
-                    options => options.RunMigrations[typeof(SqlServerQuartzDbContext)] = true);
-                context.Services.AddStartupTask<RunMigrationsStartupTask<SqlServerQuartzDbContext>>();
-                break;
-        }
+            options.RunMigrations[typeof(TDbContext)] = true;
+        });
+        services.AddStartupTask<RunMigrationsStartupTask<TDbContext>>();
     }
 }

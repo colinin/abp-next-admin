@@ -1,4 +1,5 @@
-﻿using LINGYUN.Abp.MicroService.AllInOne.EntityFrameworkCore;
+﻿using Elsa.Common.Multitenancy;
+using LINGYUN.Abp.MicroService.AllInOne.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -37,6 +38,12 @@ public class SingleDbMigratorHostedService : IHostedService
             .ServiceProvider
             .GetRequiredService<SingleDbMigrationService>()
             .CheckAndApplyDatabaseMigrationsAsync();
+
+        // Elsa 3.0自动迁移
+        await application
+            .ServiceProvider
+            .GetRequiredService<ITenantService>()
+            .ActivateTenantsAsync(cancellationToken);
 
         await application.ShutdownAsync();
 
