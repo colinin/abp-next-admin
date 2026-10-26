@@ -31,10 +31,4 @@
 		<ProjectReference Include="..\LINGYUN.Abp.ElsaNext.ApprovalFlow.Domain.Shared\LINGYUN.Abp.ElsaNext.ApprovalFlow.Domain.Shared.csproj" />
 		<ProjectReference Include="..\LINGYUN.Abp.ElsaNext.UserTasks\LINGYUN.Abp.ElsaNext.UserTasks.csproj" />
 	</ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="Elsa.Expressions.JavaScript">
-      <HintPath>$(NuGetPackageRoot)elsa.expressions.javascript\$(ElsaNextPackageVersion)\lib\net10.0\Elsa.Expressions.JavaScript.dll</HintPath>
-    </Reference>
-  </ItemGroup>
 </Project>

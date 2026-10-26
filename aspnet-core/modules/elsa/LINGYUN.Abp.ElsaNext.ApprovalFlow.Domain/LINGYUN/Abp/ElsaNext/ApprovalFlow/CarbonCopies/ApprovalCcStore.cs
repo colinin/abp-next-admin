@@ -31,8 +31,8 @@ public class ApprovalCcStore : DomainService, IApprovalCcSink
 	{
 		var instanceId = Guid.TryParse(request.Reference, out var parsed) ? new Guid?(parsed) : null;
 		var instance = instanceId.HasValue
-			? await InstanceRepository.FindAsync(instanceId.Value)
-			: await InstanceRepository.FindByElsaWorkflowInstanceIdAsync(request.NodeInstanceId);
+			? await InstanceRepository.FindAsync(instanceId.Value, cancellationToken: cancellationToken)
+			: await InstanceRepository.FindByElsaWorkflowInstanceIdAsync(request.NodeInstanceId, cancellationToken: cancellationToken);
 
 		if (instance != null)
 		{
@@ -50,7 +50,7 @@ public class ApprovalCcStore : DomainService, IApprovalCcSink
 
 			// Older workflow definitions may still execute the CC node before the approval
 			// branch. Require at least one decided approval node so CC is never sent early.
-			var nodeTasks = await NodeTaskRepository.GetListByInstanceAsync(instance.Id);
+			var nodeTasks = await NodeTaskRepository.GetListByInstanceAsync(instance.Id, cancellationToken: cancellationToken);
 			if (nodeTasks.All(x => x.Status != ApprovalNodeTaskStatus.Decided))
 			{
 				return;
