@@ -568,7 +568,6 @@
     <Project Path="modules/webhooks/LINGYUN.Abp.WebhooksManagement.HttpApi/LINGYUN.Abp.WebhooksManagement.HttpApi.csproj" />
   </Folder>
   <Folder Name="/tests/">
-    <Project Path="tests/LINGYUN.Abp.Account.Web.OpenIddict.Tests/LINGYUN.Abp.Account.Web.OpenIddict.Tests.csproj" />
     <Project Path="tests/LINGYUN.Abp.Aliyun.Tests/LINGYUN.Abp.Aliyun.Tests.csproj" />
     <Project Path="tests/LINGYUN.Abp.AuditLogging.Elasticsearch.Tests/LINGYUN.Abp.AuditLogging.Elasticsearch.Tests.csproj" />
     <Project Path="tests/LINGYUN.Abp.AuditLogging.OpenObserve.Tests/LINGYUN.Abp.AuditLogging.OpenObserve.Tests.csproj" Id="f50b2bf9-6a77-4ee7-9da7-a60a4a4023a3" />
