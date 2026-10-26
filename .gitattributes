@@ -1,0 +1,28 @@
+# Normalize text files for Windows/Visual Studio.
+# Git stores LF in the repository and checks out CRLF in the working tree.
+* text=auto eol=crlf
+
+# Scripts and container files must keep LF.
+*.sh text eol=lf
+*.bash text eol=lf
+Dockerfile text eol=lf
+*.dockerfile text eol=lf
+docker-compose*.yml text eol=lf
+*.yaml text eol=lf
+*.yml text eol=lf
+
+# Binary assets.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.eot binary
+*.pfx binary
+*.snk binary
+*.zip binary
+*.7z binary
+*.gz binary
