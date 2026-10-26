@@ -51,6 +51,8 @@ Configure<AbpDistributedCacheOptions>(options =>
 * 有租户时的键格式：`{InstanceName}t:{TenantId}:{KeyPrefix}:{Key}`
 * 无租户时的键格式：`{InstanceName}c:{KeyPrefix}:{Key}`
 
+读取、设置、刷新和删除操作都会校验键的 Redis 实例前缀；租户请求还必须匹配完整的租户键前缀。批量删除先校验全部键，再执行删除。平台管理员仍可管理当前实例范围内的缓存。
+
 ## 更多
 
 有关更多信息，请参阅以下资源：

@@ -72,7 +72,7 @@ public class StackExchangeRedisCacheManager : ICacheManager, ISingletonDependenc
         // 缓存键名规则: InstanceName + (t + TenantId)(CurrentTenant.IsAvailable) + CacheItemName + KeyPrefix + Key
         // 缓存键名规则: InstanceName + (c:)(!CurrentTenant.IsAvailable) + CacheItemName + KeyPrefix + Key
 
-        var match = "*";
+        var match = RedisCacheOptions.InstanceName ?? string.Empty;
         // abp*
         if (!RedisCacheOptions.InstanceName.IsNullOrWhiteSpace())
         {
@@ -82,7 +82,7 @@ public class StackExchangeRedisCacheManager : ICacheManager, ISingletonDependenc
         // abp*c:*
         if (CurrentTenant.IsAvailable)
         {
-            match += "t:" + CurrentTenant.Id.ToString() + "*";
+            match += "t:" + CurrentTenant.Id.ToString() + ",c:*";
         }
         else
         {
@@ -152,6 +152,7 @@ public class StackExchangeRedisCacheManager : ICacheManager, ISingletonDependenc
 
     public async virtual Task<CacheValueResponse> GetValueAsync(string key, CancellationToken cancellationToken = default)
     {
+        CheckKey(key);
         long size = 0;
         var values = new Dictionary<string, object>();
 
@@ -210,6 +211,7 @@ public class StackExchangeRedisCacheManager : ICacheManager, ISingletonDependenc
 
     public async virtual Task SetAsync(SetCacheRequest request, CancellationToken cancellationToken = default)
     {
+        CheckKey(request.Key);
         var cacheKey = request.Key;
         if (!RedisCacheOptions.InstanceName.IsNullOrWhiteSpace() && cacheKey.StartsWith(RedisCacheOptions.InstanceName))
         {
@@ -231,6 +233,7 @@ public class StackExchangeRedisCacheManager : ICacheManager, ISingletonDependenc
 
     public async virtual Task RefreshAsync(RefreshCacheRequest request, CancellationToken cancellationToken = default)
     {
+        CheckKey(request.Key);
         var cacheKey = request.Key;
         if (!RedisCacheOptions.InstanceName.IsNullOrWhiteSpace() && cacheKey.StartsWith(RedisCacheOptions.InstanceName))
         {
@@ -259,6 +262,11 @@ public class StackExchangeRedisCacheManager : ICacheManager, ISingletonDependenc
 
     public async virtual Task RemoveAsync(RemoveCacheRequest request, CancellationToken cancellationToken = default)
     {
+        foreach (var key in request.Keys)
+        {
+            CheckKey(key);
+        }
+
         var cacheKeys = request.Keys.Select((cacheKey) =>
         {
             if (!RedisCacheOptions.InstanceName.IsNullOrWhiteSpace() && cacheKey.StartsWith(RedisCacheOptions.InstanceName))
@@ -268,6 +276,20 @@ public class StackExchangeRedisCacheManager : ICacheManager, ISingletonDependenc
             return cacheKey;
         });
         await RedisCache.RemoveManyAsync(cacheKeys, cancellationToken);
+    }
+
+    protected virtual void CheckKey(string key)
+    {
+        var prefix = RedisCacheOptions.InstanceName ?? string.Empty;
+        if (CurrentTenant.IsAvailable)
+        {
+            prefix += $"t:{CurrentTenant.Id},c:";
+        }
+
+        if (string.IsNullOrEmpty(key) || !key.StartsWith(prefix, StringComparison.Ordinal))
+        {
+            throw new Volo.Abp.Authorization.AbpAuthorizationException("Cache key is outside the current scope.");
+        }
     }
 
     protected virtual ValueTask<IDatabase> ConnectAsync(CancellationToken token = default)
