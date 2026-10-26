@@ -438,10 +438,19 @@
     <Project Path="modules/elsa/LINGYUN.Abp.Elsa/LINGYUN.Abp.Elsa.csproj" />
   </Folder>
   <Folder Name="/modules/workflow/elsa3/">
+    <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.Server/LINGYUN.Abp.ElsaNext.Server.csproj" />
+    <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.Studio.Blazor/LINGYUN.Abp.ElsaNext.Studio.Blazor.csproj" />
+    <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext/LINGYUN.Abp.ElsaNext.csproj" />
+  </Folder>
+  <Folder Name="/modules/workflow/elsa3/agents/">
     <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.Agents.Blazor/LINGYUN.Abp.ElsaNext.Agents.Blazor.csproj" />
     <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.Agents/LINGYUN.Abp.ElsaNext.Agents.csproj" />
-    <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.AI/LINGYUN.Abp.ElsaNext.AI.csproj" />
+  </Folder>
+  <Folder Name="/modules/workflow/elsa3/alterations/">
     <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.Alterations/LINGYUN.Abp.ElsaNext.Alterations.csproj" />
+    <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.Studio.Alterations.Blazor/LINGYUN.Abp.ElsaNext.Studio.Alterations.Blazor.csproj" />
+  </Folder>
+  <Folder Name="/modules/workflow/elsa3/approval-flow/">
     <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.ApprovalFlow.Activities/LINGYUN.Abp.ElsaNext.ApprovalFlow.Activities.csproj" />
     <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.ApprovalFlow.Application.Contracts/LINGYUN.Abp.ElsaNext.ApprovalFlow.Application.Contracts.csproj" />
     <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.ApprovalFlow.Application/LINGYUN.Abp.ElsaNext.ApprovalFlow.Application.csproj" />
@@ -451,38 +460,61 @@
     <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.ApprovalFlow.Domain/LINGYUN.Abp.ElsaNext.ApprovalFlow.Domain.csproj" />
     <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.ApprovalFlow.EntityFrameworkCore/LINGYUN.Abp.ElsaNext.ApprovalFlow.EntityFrameworkCore.csproj" />
     <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.ApprovalFlow.HttpApi/LINGYUN.Abp.ElsaNext.ApprovalFlow.HttpApi.csproj" />
+  </Folder>
+  <Folder Name="/modules/workflow/elsa3/blob-storing/">
     <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.BlobStoring/LINGYUN.Abp.ElsaNext.BlobStoring.csproj" />
-    <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.Email/LINGYUN.Abp.ElsaNext.Email.csproj" />
+  </Folder>
+  <Folder Name="/modules/workflow/elsa3/dashboard/">
+    <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.Studio.Dashboard.Blazor/LINGYUN.Abp.ElsaNext.Studio.Dashboard.Blazor.csproj" />
+  </Folder>
+  <Folder Name="/modules/workflow/elsa3/diagnostics/">
+    <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.Studio.Diagnostics.OpenTelemetry.Blazor/LINGYUN.Abp.ElsaNext.Studio.Diagnostics.OpenTelemetry.Blazor.csproj" />
+    <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.Studio.Diagnostics.StructuredLogs.Blazor/LINGYUN.Abp.ElsaNext.Studio.Diagnostics.StructuredLogs.Blazor.csproj" />
+  </Folder>
+  <Folder Name="/modules/workflow/elsa3/efcore/">
     <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.EntityFrameworkCore.MySQL/LINGYUN.Abp.ElsaNext.EntityFrameworkCore.MySQL.csproj" />
     <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.EntityFrameworkCore.PostgreSql/LINGYUN.Abp.ElsaNext.EntityFrameworkCore.PostgreSql.csproj" />
     <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.EntityFrameworkCore.Sqlite/LINGYUN.Abp.ElsaNext.EntityFrameworkCore.Sqlite.csproj" />
     <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.EntityFrameworkCore.SqlServer/LINGYUN.Abp.ElsaNext.EntityFrameworkCore.SqlServer.csproj" />
     <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.EntityFrameworkCore/LINGYUN.Abp.ElsaNext.EntityFrameworkCore.csproj" />
+  </Folder>
+  <Folder Name="/modules/workflow/elsa3/email/">
+    <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.Email/LINGYUN.Abp.ElsaNext.Email.csproj" />
+  </Folder>
+  <Folder Name="/modules/workflow/elsa3/identity/">
+    <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.Studio.Identity.Blazor/LINGYUN.Abp.ElsaNext.Studio.Identity.Blazor.csproj" />
+  </Folder>
+  <Folder Name="/modules/workflow/elsa3/labels/">
     <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.Labels/LINGYUN.Abp.ElsaNext.Labels.csproj" />
+    <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.Studio.Labels.Blazor/LINGYUN.Abp.ElsaNext.Studio.Labels.Blazor.csproj" />
+  </Folder>
+  <Folder Name="/modules/workflow/elsa3/notifications/">
     <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.Notifications/LINGYUN.Abp.ElsaNext.Notifications.csproj" />
+    <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.Studio.Notifications.Blazor/LINGYUN.Abp.ElsaNext.Studio.Notifications.Blazor.csproj" />
+  </Folder>
+  <Folder Name="/modules/workflow/elsa3/saas/">
+    <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.Studio.Saas.Blazor/LINGYUN.Abp.ElsaNext.Studio.Saas.Blazor.csproj" />
+  </Folder>
+  <Folder Name="/modules/workflow/elsa3/secrets/">
     <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.Secrets.Blazor/LINGYUN.Abp.ElsaNext.Secrets.Blazor.csproj" />
     <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.Secrets/LINGYUN.Abp.ElsaNext.Secrets.csproj" />
-    <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.Server/LINGYUN.Abp.ElsaNext.Server.csproj" />
-    <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.Studio.AI.Blazor/LINGYUN.Abp.ElsaNext.Studio.AI.Blazor.csproj" />
-    <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.Studio.Alterations.Blazor/LINGYUN.Abp.ElsaNext.Studio.Alterations.Blazor.csproj" />
-    <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.Studio.Blazor/LINGYUN.Abp.ElsaNext.Studio.Blazor.csproj" />
-    <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.Studio.Dashboard.Blazor/LINGYUN.Abp.ElsaNext.Studio.Dashboard.Blazor.csproj" />
-    <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.Studio.Diagnostics.OpenTelemetry.Blazor/LINGYUN.Abp.ElsaNext.Studio.Diagnostics.OpenTelemetry.Blazor.csproj" />
-    <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.Studio.Diagnostics.StructuredLogs.Blazor/LINGYUN.Abp.ElsaNext.Studio.Diagnostics.StructuredLogs.Blazor.csproj" />
-    <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.Studio.Identity.Blazor/LINGYUN.Abp.ElsaNext.Studio.Identity.Blazor.csproj" />
-    <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.Studio.Labels.Blazor/LINGYUN.Abp.ElsaNext.Studio.Labels.Blazor.csproj" />
-    <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.Studio.Notifications.Blazor/LINGYUN.Abp.ElsaNext.Studio.Notifications.Blazor.csproj" />
-    <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.Studio.Saas.Blazor/LINGYUN.Abp.ElsaNext.Studio.Saas.Blazor.csproj" />
+  </Folder>
+  <Folder Name="/modules/workflow/elsa3/user-tasks/">
     <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.Studio.UserTasks.Blazor/LINGYUN.Abp.ElsaNext.Studio.UserTasks.Blazor.csproj" />
-    <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.Studio.Webhooks.Blazor/LINGYUN.Abp.ElsaNext.Studio.Webhooks.Blazor.csproj" />
     <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.UserTasks.EntityFrameworkCore.MySQL/LINGYUN.Abp.ElsaNext.UserTasks.EntityFrameworkCore.MySQL.csproj" />
     <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.UserTasks.EntityFrameworkCore.PostgreSql/LINGYUN.Abp.ElsaNext.UserTasks.EntityFrameworkCore.PostgreSql.csproj" />
     <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.UserTasks.EntityFrameworkCore.Sqlite/LINGYUN.Abp.ElsaNext.UserTasks.EntityFrameworkCore.Sqlite.csproj" />
     <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.UserTasks.EntityFrameworkCore.SqlServer/LINGYUN.Abp.ElsaNext.UserTasks.EntityFrameworkCore.SqlServer.csproj" />
     <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.UserTasks.EntityFrameworkCore/LINGYUN.Abp.ElsaNext.UserTasks.EntityFrameworkCore.csproj" />
     <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.UserTasks/LINGYUN.Abp.ElsaNext.UserTasks.csproj" />
+  </Folder>
+  <Folder Name="/modules/workflow/elsa3/weaver/">
+    <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.AI/LINGYUN.Abp.ElsaNext.AI.csproj" />
+    <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.Studio.AI.Blazor/LINGYUN.Abp.ElsaNext.Studio.AI.Blazor.csproj" />
+  </Folder>
+  <Folder Name="/modules/workflow/elsa3/webhooks/">
+    <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.Studio.Webhooks.Blazor/LINGYUN.Abp.ElsaNext.Studio.Webhooks.Blazor.csproj" />
     <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.Webhooks/LINGYUN.Abp.ElsaNext.Webhooks.csproj" />
-    <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext/LINGYUN.Abp.ElsaNext.csproj" />
   </Folder>
   <Folder Name="/Solution Items/">
     <File Path="../common.props" />
