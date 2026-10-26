@@ -1,4 +1,4 @@
-﻿using Elsa.Scheduling.Quartz.EFCore.MySql;
+using Elsa.Scheduling.Quartz.EFCore.MySql;
 using Elsa.Scheduling.Quartz.Features;
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
@@ -37,8 +37,6 @@ public static class MySqlQuartzExtensions
                     store.UseClustering();
             });
         };
-
-        feature.Module.ConfigureHostedService<RunMigrationsHostedService<MySqlQuartzDbContext>>(-100);
 
         return feature;
     }

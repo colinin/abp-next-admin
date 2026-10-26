@@ -154,8 +154,6 @@ public partial class AbpElsaNextEntityFrameworkCoreMySQLModule
                 ServiceLifetime.Scoped);
 
             context.Services.Decorate<IDbContextFactory<AIDbContext>, TenantAwareDbContextFactory<AIDbContext>>();
-            context.Services.Configure<MigrationOptions>(o => o.RunMigrations[typeof(AIDbContext)] = true);
-            context.Services.AddStartupTask<RunMigrationsStartupTask<AIDbContext>>();
             context.Services.AddAIPersistenceStores();
         }
     }
