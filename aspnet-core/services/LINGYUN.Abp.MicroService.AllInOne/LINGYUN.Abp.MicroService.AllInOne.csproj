@@ -37,6 +37,9 @@
 		<PackageReference Include="Volo.Abp.AspNetCore.Serilog" />
 		<PackageReference Include="Volo.Abp.AspNetCore.Mvc.UI.MultiTenancy" />
 		<PackageReference Include="Volo.Abp.AspNetCore.Mvc.UI.Theme.LeptonXLite" />
+		<PackageReference Include="Volo.Abp.AspNetCore.Components.Server.MudBlazorBasicTheme" />
+		<PackageReference Include="Volo.Abp.Identity.Blazor.MudBlazor.Server" />
+		<PackageReference Include="Volo.Abp.SettingManagement.Blazor.MudBlazor.Server" />
 		<!--<PackageReference Include="Volo.Abp.AspNetCore.Mvc.UI.Theme.Basic" />-->
 		<PackageReference Include="Volo.Abp.AspNetCore.Authentication.JwtBearer" />
 		<PackageReference Include="Volo.Abp.Autofac" />
@@ -52,11 +55,9 @@
 		<PackageReference Include="Volo.Abp.PermissionManagement.EntityFrameworkCore" />
 		<PackageReference Include="Volo.Abp.PermissionManagement.Web" />
 		<PackageReference Include="Volo.Abp.SettingManagement.EntityFrameworkCore" />
-		<PackageReference Include="Volo.Abp.SettingManagement.Web" />
 		<PackageReference Include="Volo.Abp.Swashbuckle" />
 		<PackageReference Include="Volo.Abp.Http.Client.IdentityModel.Web" />
 		<PackageReference Include="Volo.Abp.Identity.AspNetCore" />
-		<PackageReference Include="Volo.Abp.Identity.Web" />
 		<PackageReference Include="Volo.Abp.VirtualFileExplorer.Web" />
 		<PackageReference Include="Volo.Abp.Imaging.ImageSharp" />
 		<PackageReference Include="Volo.Abp.MailKit" />

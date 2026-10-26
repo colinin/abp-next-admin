@@ -32,6 +32,8 @@
 		<PackageVersion Include="Volo.Abp.AspNetCore.Authentication.OpenIdConnect" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.AspNetCore.Components.Server.Theming.MudBlazor" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.AspNetCore.Components.Server.MudBlazorBasicTheme" Version="$(VoloAbpPackageVersion)" />
+		<PackageVersion Include="Volo.Abp.Identity.Blazor.MudBlazor.Server" Version="$(VoloAbpPackageVersion)" />
+		<PackageVersion Include="Volo.Abp.SettingManagement.Blazor.MudBlazor.Server" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.AspNetCore.Components.Web.Theming" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.AspNetCore.Components.Web.Theming.MudBlazor" Version="$(VoloAbpPackageVersion)" />
 		<PackageVersion Include="Volo.Abp.AspNetCore.Components.WebAssembly" Version="$(VoloAbpPackageVersion)" />
