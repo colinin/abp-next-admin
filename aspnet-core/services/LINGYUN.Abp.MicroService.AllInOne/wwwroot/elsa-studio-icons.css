@@ -1,0 +1,41 @@
+/* Fallback icon web-fonts for Elsa Studio rendered inside an embedding host.
+   The studio app normally loads these from Google Fonts; this host may be offline, so we bind the
+   common icon/body font families to the fonts bundled with the Radzen/studio static assets. */
+@font-face {
+    font-family: 'Material Icons';
+    src: url(/_content/Radzen.Blazor/fonts/MaterialSymbolsOutlined.woff2) format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: block;
+}
+@font-face {
+    font-family: 'Material Symbols Outlined';
+    src: url(/_content/Radzen.Blazor/fonts/MaterialSymbolsOutlined.woff2) format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: block;
+}
+@font-face {
+    font-family: 'Roboto';
+    src: url(/_content/Radzen.Blazor/fonts/RobotoFlex.woff2) format('woff2');
+    font-weight: 100 900;
+    font-style: normal;
+    font-display: swap;
+}
+
+.material-icons,
+.material-symbols-outlined {
+    font-family: 'Material Symbols Outlined';
+    font-weight: normal;
+    font-style: normal;
+    font-size: 24px;
+    line-height: 1;
+    letter-spacing: normal;
+    text-transform: none;
+    display: inline-block;
+    white-space: nowrap;
+    word-wrap: normal;
+    direction: ltr;
+    font-feature-settings: 'liga';
+    -webkit-font-smoothing: antialiased;
+}
