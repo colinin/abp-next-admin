@@ -370,6 +370,18 @@ namespace LINGYUN.Abp.MicroService.AllInOne;
 
     // Elsa 3 工作流服务器
     typeof(AbpElsaNextServerModule),
+    typeof(AbpElsaNextStudioAIBlazorModule),
+    typeof(AbpElsaNextStudioAlterationsBlazorModule),
+    typeof(AbpElsaNextStudioBlazorModule),
+    typeof(AbpElsaNextStudioDashboardBlazorModule),
+    typeof(AbpElsaNextStudioDiagnosticsOpenTelemetryBlazorModule),
+    typeof(AbpElsaNextStudioDiagnosticsStructuredLogsBlazorModule),
+    typeof(AbpElsaNextStudioIdentityBlazorModule),
+    typeof(AbpElsaNextStudioLabelsBlazorModule),
+    typeof(AbpElsaNextStudioNotificationsBlazorModule),
+    typeof(AbpElsaNextStudioSaasBlazorModule),
+    typeof(AbpElsaNextStudioUserTasksBlazorModule),
+    typeof(AbpElsaNextStudioWebhooksBlazorModule),
     // Elsa 3 人机任务
     typeof(AbpElsaNextUserTasksModule),
     typeof(AbpElsaNextUserTasksEntityFrameworkCoreModule),

@@ -473,6 +473,7 @@
     <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.Studio.Labels.Blazor/LINGYUN.Abp.ElsaNext.Studio.Labels.Blazor.csproj" />
     <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.Studio.Notifications.Blazor/LINGYUN.Abp.ElsaNext.Studio.Notifications.Blazor.csproj" />
     <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.Studio.Saas.Blazor/LINGYUN.Abp.ElsaNext.Studio.Saas.Blazor.csproj" />
+    <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.Studio.UserTasks.Blazor/LINGYUN.Abp.ElsaNext.Studio.UserTasks.Blazor.csproj" />
     <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.Studio.Webhooks.Blazor/LINGYUN.Abp.ElsaNext.Studio.Webhooks.Blazor.csproj" />
     <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.UserTasks.EntityFrameworkCore.MySQL/LINGYUN.Abp.ElsaNext.UserTasks.EntityFrameworkCore.MySQL.csproj" />
     <Project Path="modules/elsa/LINGYUN.Abp.ElsaNext.UserTasks.EntityFrameworkCore.PostgreSql/LINGYUN.Abp.ElsaNext.UserTasks.EntityFrameworkCore.PostgreSql.csproj" />

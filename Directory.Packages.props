@@ -330,6 +330,7 @@
 		<PackageVersion Include="Elsa.Studio.Workflows" Version="$(ElsaNextPackageVersion)" />
 		<PackageVersion Include="Elsa.Studio.Workflows.Dashboard" Version="$(ElsaNextPackageVersion)" />
 		<PackageVersion Include="Elsa.Studio.Workflows.Designer" Version="$(ElsaNextPackageVersion)" />
+		<PackageVersion Include="Elsa.Studio.UserTasks" Version="$(ElsaNextPackageVersion)" />
 		<PackageVersion Include="Elsa.Persistence.EFCore" Version="$(ElsaNextPackageVersion)" />
 		<PackageVersion Include="Elsa.Persistence.EFCore.Common" Version="$(ElsaNextPackageVersion)" />
 		<PackageVersion Include="Elsa.Persistence.EFCore.MySQL" Version="$(ElsaNextPackageVersion)" />
