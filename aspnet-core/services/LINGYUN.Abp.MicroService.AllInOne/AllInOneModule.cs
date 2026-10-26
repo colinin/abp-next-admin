@@ -386,16 +386,13 @@
     typeof(AbpElsaNextStudioSaasBlazorModule),
     typeof(AbpElsaNextStudioUserTasksBlazorModule),
     typeof(AbpElsaNextStudioWebhooksBlazorModule),
-    // Elsa 3 人机任务
+    // Elsa 3 UserTasks
     typeof(AbpElsaNextUserTasksModule),
     typeof(AbpElsaNextUserTasksEntityFrameworkCoreModule),
     // Elsa 3 审批流
     typeof(AbpElsaNextApprovalFlowActivitiesModule),
     typeof(AbpElsaNextApprovalFlowEntityFrameworkCoreModule),
     typeof(AbpElsaNextApprovalFlowHttpApiModule),
-    // Elsa 3 表单
-
-
     // Elsa 3 人员部门（身份标识集成）
     typeof(AbpElsaNextApprovalFlowDomainIdentityModule),
     // Elsa 3 内置扩展
