@@ -37,7 +37,7 @@ public class TokenValidationLoggingTests
 
         await handler.HandleAsync(context);
 
-        AssertSafeLog(logger, LogLevel.Information, path);
+        AssertSafeLog(logger, LogLevel.Debug, path);
         Assert.Equal(!validSession, context.IsRejected);
         await checker.Received(1).ValidateSessionAsync(principal);
     }

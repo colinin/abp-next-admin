@@ -34,7 +34,7 @@ public class ValidationTokenCheckIdentitySession : IOpenIddictValidationHandler<
 
     public async virtual ValueTask HandleAsync(OpenIddictValidationEvents.ValidateTokenContext context)
     {
-        Logger.LogInformation("Validate Token: {endpointType} - {requestPath}", context.EndpointType, context.RequestUri?.AbsolutePath);
+        Logger.LogDebug("Validate Token: {endpointType} - {requestPath}", context.EndpointType, context.RequestUri?.AbsolutePath);
 
         var tenantId = context.Principal?.FindTenantId();
         using (CurrentTenant.Change(tenantId))
