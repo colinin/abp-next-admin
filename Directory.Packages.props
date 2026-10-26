@@ -395,7 +395,7 @@
 	</ItemGroup>
 	<!-- AI -->
 	<ItemGroup>
-		<PackageVersion Include="Microsoft.Agents.AI" Version="1.0.0-preview.260108.1" />
+		<PackageVersion Include="Microsoft.Agents.AI" Version="1.0.0-preview.260212.1" />
 	</ItemGroup>
 	<!-- Rebus-->
 	<ItemGroup>

@@ -1,4 +1,4 @@
-﻿using LINGYUN.Abp.AI.Chats;
+using LINGYUN.Abp.AI.Chats;
 using LINGYUN.Abp.AI.Localization;
 using LINGYUN.Abp.AI.Models;
 using LINGYUN.Abp.AI.Tokens;
@@ -173,7 +173,7 @@ public class AgentService : IAgentService, IScopedDependency
         await _tokenUsageStore.SaveTokenUsageAsync(tokenUsageInfo);
     }
 
-    private static void UpdateTokenUsageInfo(TokenUsageInfo tokenUsageInfo, AgentRunResponseUpdate response)
+    private static void UpdateTokenUsageInfo(TokenUsageInfo tokenUsageInfo, AgentResponseUpdate response)
     {
         if (response.RawRepresentation != null &&
             response.RawRepresentation is ChatResponseUpdate update)
