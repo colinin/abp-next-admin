@@ -1,4 +1,4 @@
-using LINGYUN.Abp.AIManagement.Chats;
+﻿using LINGYUN.Abp.AIManagement.Chats;
 using LINGYUN.Abp.AIManagement.EntityFrameworkCore;
 using LINGYUN.Abp.AIManagement.Tokens;
 using LINGYUN.Abp.AIManagement.Tools;
@@ -122,11 +122,6 @@ public class SingleMigrationsDbContext :
     public DbSet<FormDefinition> FormDefinitions { get; set; }
     public DbSet<FormData> FormDatas { get; set; }
     public DbSet<OrganizationUnitManagerAssignment> OrganizationUnitManagerAssignments { get; set; }
-    public SingleMigrationsDbContext(DbContextOptions<SingleMigrationsDbContext> options)
-        : base(options)
-    {
-
-    }
 
     public DbSet<AuditLog> AuditLogs { get; set; }
 
@@ -277,6 +272,12 @@ public class SingleMigrationsDbContext :
     public DbSet<BlobContainer> BlobContainers { get; set; }
 
     public DbSet<Blob> Blobs { get; set; }
+
+    public SingleMigrationsDbContext(DbContextOptions<SingleMigrationsDbContext> options)
+        : base(options)
+    {
+
+    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
