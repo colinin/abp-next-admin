@@ -1,9 +1,9 @@
+using LINGYUN.Abp.ElsaNext.ApprovalFlow.Instances;
 using LINGYUN.Abp.ElsaNext.ApprovalFlow.CarbonCopies.Dtos;
 using LINGYUN.Abp.ElsaNext.ApprovalFlow.Permissions;
 using Microsoft.AspNetCore.Authorization;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Volo.Abp;
@@ -16,8 +16,17 @@ namespace LINGYUN.Abp.ElsaNext.ApprovalFlow.CarbonCopies;
 [Authorize]
 public class CarbonCopyAppService : ApprovalFlowAppServiceBase, ICarbonCopyAppService
 {
-    protected IApprovalCcRepository CarbonCopyRepository
-        => LazyServiceProvider.LazyGetRequiredService<IApprovalCcRepository>();
+    protected IApprovalCcRepository CarbonCopyRepository { get; }
+
+    protected IApprovalInstanceRepository InstanceRepository { get; }
+
+    public CarbonCopyAppService(
+        IApprovalCcRepository carbonCopyRepository,
+        IApprovalInstanceRepository instanceRepository)
+    {
+        CarbonCopyRepository = carbonCopyRepository;
+        InstanceRepository = instanceRepository;
+    }
 
     [Authorize(ElsaNextApprovalFlowPermissions.Instances.Default)]
     public virtual async Task<PagedResultDto<CarbonCopyDto>> GetListAsync(CarbonCopyGetPagedListInput input)
@@ -68,7 +77,11 @@ public class CarbonCopyAppService : ApprovalFlowAppServiceBase, ICarbonCopyAppSe
                 title = instance.Title;
             }
 
-            result.Add(Map(carbonCopy, title, instanceId));
+            var dto = ObjectMapper.Map<ApprovalCc, CarbonCopyDto>(carbonCopy);
+            dto.InstanceId = instanceId ?? dto.InstanceId;
+            dto.InstanceReference = instanceId?.ToString("D") ?? dto.InstanceReference;
+            dto.Title = title;
+            result.Add(dto);
         }
 
         return new PagedResultDto<CarbonCopyDto>(totalCount, result);
@@ -86,24 +99,6 @@ public class CarbonCopyAppService : ApprovalFlowAppServiceBase, ICarbonCopyAppSe
 
         carbonCopy.MarkRead(new DateTimeOffset(Clock.Now));
         await CarbonCopyRepository.UpdateAsync(carbonCopy, autoSave: true);
-        return Map(carbonCopy);
-    }
-
-    protected virtual CarbonCopyDto Map(ApprovalCc carbonCopy, string? title = null, Guid? instanceId = null)
-    {
-        return new CarbonCopyDto
-        {
-            Id = carbonCopy.Id,
-            InstanceId = instanceId ?? carbonCopy.InstanceId,
-            InstanceReference = instanceId?.ToString("D") ?? carbonCopy.InstanceReference,
-            NodeId = carbonCopy.NodeId,
-            Title = title ?? carbonCopy.Title,
-            Summary = carbonCopy.Summary,
-            SenderDisplayName = carbonCopy.SenderDisplayName,
-            DataJson = carbonCopy.DataJson,
-            NotifiedAt = carbonCopy.NotifiedAt,
-            IsRead = carbonCopy.IsRead,
-            ReadAt = carbonCopy.ReadAt,
-        };
+        return ObjectMapper.Map<ApprovalCc, CarbonCopyDto>(carbonCopy);
     }
 }

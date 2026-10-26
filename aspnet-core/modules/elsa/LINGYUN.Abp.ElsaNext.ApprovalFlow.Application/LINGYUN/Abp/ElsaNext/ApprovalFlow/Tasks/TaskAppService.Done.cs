@@ -68,7 +68,7 @@ public partial class TaskAppService
                 ActionLabel = record.ActionLabel,
                 Effect = record.Effect.ToString(),
                 Comment = record.Comment,
-                ActorDisplayName = record.ActorDisplayName ?? "系统",
+                ActorDisplayName = record.ActorDisplayName,
                 DecidedAt = record.OccurredAt,
                 FirstViewedAt = nodeTask?.FirstViewedAt,
                 CompletedAt = record.OccurredAt,

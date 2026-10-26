@@ -16,7 +16,17 @@ namespace LINGYUN.Abp.ElsaNext.ApprovalFlow.Templates;
 [Authorize]
 public class TemplateAppService : ApprovalFlowAppServiceBase, ITemplateAppService
 {
-    protected IApprovalWorkflowCompiler WorkflowCompiler => LazyServiceProvider.LazyGetRequiredService<IApprovalWorkflowCompiler>();
+    protected IApprovalTemplateRepository TemplateRepository { get; }
+
+    protected IApprovalWorkflowCompiler WorkflowCompiler { get; }
+
+    public TemplateAppService(
+        IApprovalTemplateRepository templateRepository,
+        IApprovalWorkflowCompiler workflowCompiler)
+    {
+        TemplateRepository = templateRepository;
+        WorkflowCompiler = workflowCompiler;
+    }
 
     [Authorize(ElsaNextApprovalFlowPermissions.Templates.Default)]
     public virtual async Task<ListResultDto<TemplateDto>> GetListAsync(bool onlyPublished = false)
@@ -30,7 +40,7 @@ public class TemplateAppService : ApprovalFlowAppServiceBase, ITemplateAppServic
 
         var totalCount = await TemplateRepository.GetCountAsync(specification);
         var templates = await TemplateRepository.GetListAsync(specification, maxResultCount: totalCount);
-        return new ListResultDto<TemplateDto>(templates.Select(MapTemplate).ToList());
+        return new ListResultDto<TemplateDto>(templates.Select(template => ObjectMapper.Map<ApprovalTemplate, TemplateDto>(template)).ToList());
     }
 
     [Authorize(ElsaNextApprovalFlowPermissions.Templates.Default)]
@@ -64,14 +74,14 @@ public class TemplateAppService : ApprovalFlowAppServiceBase, ITemplateAppServic
             maxResultCount: input.MaxResultCount,
             skipCount: input.SkipCount);
 
-        return new PagedResultDto<TemplateDto>(totalCount, templates.Select(MapTemplate).ToList());
+        return new PagedResultDto<TemplateDto>(totalCount, templates.Select(template => ObjectMapper.Map<ApprovalTemplate, TemplateDto>(template)).ToList());
     }
 
     [Authorize(ElsaNextApprovalFlowPermissions.Templates.Default)]
     public virtual async Task<TemplateDto> GetAsync(Guid id)
     {
         var template = await TemplateRepository.GetAsync(id);
-        return MapTemplate(template);
+        return ObjectMapper.Map<ApprovalTemplate, TemplateDto>(template);
     }
 
     [Authorize(ElsaNextApprovalFlowPermissions.Templates.Create)]
@@ -87,7 +97,7 @@ public class TemplateAppService : ApprovalFlowAppServiceBase, ITemplateAppServic
             input.BusinessKeyHint);
 
         await TemplateRepository.InsertAsync(template, autoSave: true);
-        return MapTemplate(template);
+        return ObjectMapper.Map<ApprovalTemplate, TemplateDto>(template);
     }
 
     [Authorize(ElsaNextApprovalFlowPermissions.Templates.Update)]
@@ -96,7 +106,7 @@ public class TemplateAppService : ApprovalFlowAppServiceBase, ITemplateAppServic
         var template = await TemplateRepository.GetAsync(id);
         template.Update(input.DisplayName, input.Description, input.Category, input.Icon, input.BusinessKeyHint);
         await TemplateRepository.UpdateAsync(template, autoSave: true);
-        return MapTemplate(template);
+        return ObjectMapper.Map<ApprovalTemplate, TemplateDto>(template);
     }
 
     [Authorize(ElsaNextApprovalFlowPermissions.Templates.Publish)]
@@ -110,7 +120,7 @@ public class TemplateAppService : ApprovalFlowAppServiceBase, ITemplateAppServic
         template.Publish(definition.Id, definition.DefinitionId, definition.Version);
         template.BindFormDefinition(input.FormDefinitionId);
         await TemplateRepository.UpdateAsync(template, autoSave: true);
-        return MapTemplate(template);
+        return ObjectMapper.Map<ApprovalTemplate, TemplateDto>(template);
     }
 
     [Authorize(ElsaNextApprovalFlowPermissions.Templates.Update)]
@@ -123,7 +133,7 @@ public class TemplateAppService : ApprovalFlowAppServiceBase, ITemplateAppServic
             template.BindFormDefinition(input.FormDefinitionId);
         }
         await TemplateRepository.UpdateAsync(template, autoSave: true);
-        return MapTemplate(template);
+        return ObjectMapper.Map<ApprovalTemplate, TemplateDto>(template);
     }
 
     [Authorize(ElsaNextApprovalFlowPermissions.Templates.Delete)]

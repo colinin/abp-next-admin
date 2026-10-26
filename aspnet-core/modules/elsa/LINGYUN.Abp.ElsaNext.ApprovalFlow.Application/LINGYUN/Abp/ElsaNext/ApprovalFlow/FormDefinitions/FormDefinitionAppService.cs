@@ -69,28 +69,28 @@ public class FormDefinitionAppService : ApplicationService, IFormDefinitionAppSe
             maxResultCount: input.MaxResultCount,
             skipCount: input.SkipCount);
 
-        return new PagedResultDto<FormDefinitionDto>(totalCount, definitions.Select(Map).ToList());
+        return new PagedResultDto<FormDefinitionDto>(totalCount, definitions.Select(MapDefinition).ToList());
     }
 
     [Authorize(ElsaNextApprovalFlowPermissions.FormDefinitions.Definitions.Default)]
     public virtual async Task<FormDefinitionDto> GetAsync(Guid id)
     {
         var definition = await DefinitionRepository.GetAsync(id);
-        return Map(definition);
+        return MapDefinition(definition);
     }
 
     [Authorize(ElsaNextApprovalFlowPermissions.FormDefinitions.Definitions.Create)]
     public virtual async Task<FormDefinitionDto> CreateAsync(FormDefinitionCreateDto input)
     {
         var definition = await DefinitionManager.CreateAsync(input.Name, input.Code, input.Version, input.Description);
-        return Map(definition);
+        return MapDefinition(definition);
     }
 
     [Authorize(ElsaNextApprovalFlowPermissions.FormDefinitions.Definitions.Update)]
     public virtual async Task<FormDefinitionDto> UpdateAsync(Guid id, FormDefinitionUpdateDto input)
     {
         var definition = await DefinitionManager.UpdateAsync(id, input.Name, input.Description);
-        return Map(definition);
+        return MapDefinition(definition);
     }
 
     [Authorize(ElsaNextApprovalFlowPermissions.FormDefinitions.Definitions.Delete)]
@@ -103,7 +103,7 @@ public class FormDefinitionAppService : ApplicationService, IFormDefinitionAppSe
     public virtual async Task<FormDefinitionDto> PublishAsync(Guid id)
     {
         var definition = await DefinitionManager.PublishAsync(id);
-        return Map(definition);
+        return MapDefinition(definition);
     }
 
     [Authorize(ElsaNextApprovalFlowPermissions.FormDefinitions.Definitions.Update)]
@@ -120,7 +120,7 @@ public class FormDefinitionAppService : ApplicationService, IFormDefinitionAppSe
             input.Hint,
             input.OptionsJson);
 
-        return Map(definition);
+        return MapDefinition(definition);
     }
 
     [Authorize(ElsaNextApprovalFlowPermissions.FormDefinitions.Definitions.Update)]
@@ -136,71 +136,42 @@ public class FormDefinitionAppService : ApplicationService, IFormDefinitionAppSe
             input.Hint,
             input.OptionsJson);
 
-        return Map(definition);
+        return MapDefinition(definition);
     }
 
     [Authorize(ElsaNextApprovalFlowPermissions.FormDefinitions.Definitions.Update)]
     public virtual async Task<FormDefinitionDto> RemoveFieldAsync(Guid id, Guid fieldId)
     {
         var definition = await DefinitionManager.RemoveFieldAsync(id, fieldId);
-        return Map(definition);
+        return MapDefinition(definition);
     }
 
     [Authorize(ElsaNextApprovalFlowPermissions.FormDefinitions.Data.Edit)]
     public virtual async Task<FormDataDto> SaveDataAsync(Guid id, string instanceId, FormDataSaveDto input)
     {
         var data = await DataManager.SaveAsync(id, instanceId, input.DataJson);
-        return Map(data);
+        return MapData(data);
     }
 
     [Authorize(ElsaNextApprovalFlowPermissions.FormDefinitions.Data.Default)]
     public virtual async Task<FormDataDto?> GetDataAsync(Guid id, string instanceId)
     {
         var data = await DataManager.FindAsync(id, instanceId);
-        return data == null ? null : Map(data);
+        return data == null ? null : MapData(data);
     }
 
-    protected virtual FormDefinitionDto Map(FormDefinition definition)
+    protected virtual FormDefinitionDto MapDefinition(FormDefinition definition)
     {
-        return new FormDefinitionDto
-        {
-            Id = definition.Id,
-            Name = definition.Name,
-            Code = definition.Code,
-            Version = definition.Version,
-            Description = definition.Description,
-            IsPublished = definition.IsPublished,
-            PublishedTime = definition.PublishedTime,
-            Fields = definition.Fields.OrderBy(x => x.Order).Select(Map).ToList(),
-        };
+        var dto = ObjectMapper.Map<FormDefinition, FormDefinitionDto>(definition);
+        dto.Fields = definition.Fields
+            .OrderBy(x => x.Order)
+            .Select(field => ObjectMapper.Map<FormFieldDefinition, FormFieldDto>(field))
+            .ToList();
+        return dto;
     }
 
-    protected virtual FormFieldDto Map(FormFieldDefinition field)
+    protected virtual FormDataDto MapData(FormData data)
     {
-        return new FormFieldDto
-        {
-            Id = field.Id,
-            Key = field.Key,
-            Label = field.Label,
-            Type = field.Type,
-            Permission = field.Permission,
-            Order = field.Order,
-            IsRequired = field.IsRequired,
-            Hint = field.Hint,
-            OptionsJson = field.OptionsJson,
-        };
-    }
-
-    protected virtual FormDataDto Map(FormData data)
-    {
-        return new FormDataDto
-        {
-            Id = data.Id,
-            FormDefinitionId = data.FormDefinitionId,
-            FormCode = data.FormCode,
-            FormVersion = data.FormVersion,
-            InstanceId = data.InstanceId,
-            DataJson = data.DataJson,
-        };
+        return ObjectMapper.Map<FormData, FormDataDto>(data);
     }
 }
