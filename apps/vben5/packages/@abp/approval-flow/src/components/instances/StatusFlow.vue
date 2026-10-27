@@ -7,6 +7,7 @@ import type {
 
 import { $t } from '@vben/locales';
 
+import { formatToDateTime } from '@abp/core';
 import { Tag } from 'ant-design-vue';
 
 const props = defineProps<{
@@ -138,7 +139,7 @@ function onChildSelect() {
               }}
             </span>
             <span v-if="latestRecord(node.id)?.occurredAt" class="status-time">
-              {{ new Date(latestRecord(node.id)!.occurredAt).toLocaleString() }}
+              {{ formatToDateTime(latestRecord(node.id)!.occurredAt) }}
             </span>
           </div>
           <div v-if="node.kind === 'cc'" class="status-line status-muted">

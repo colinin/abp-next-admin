@@ -1,5 +1,7 @@
 import { $t } from '@vben/locales';
 
+import { formatToDateTime, toDate } from '@abp/core';
+
 export function actionText(actionKey?: null | string): string {
   if (!actionKey) {
     return '-';
@@ -8,7 +10,7 @@ export function actionText(actionKey?: null | string): string {
 }
 
 export function formatDateTime(value?: null | string): string {
-  return value ? new Date(value).toLocaleString() : '-';
+  return value ? formatToDateTime(value) : '-';
 }
 
 export function statusColor(status: string): string {
@@ -61,8 +63,8 @@ export function formatDuration(
   if (!firstViewedAt || !completedAt) {
     return '-';
   }
-  const start = new Date(firstViewedAt).getTime();
-  const end = new Date(completedAt).getTime();
+  const start = toDate(firstViewedAt).valueOf();
+  const end = toDate(completedAt).valueOf();
   if (Number.isNaN(start) || Number.isNaN(end) || end < start) {
     return '-';
   }

@@ -10,6 +10,7 @@ import { computed, ref, watch } from 'vue';
 
 import { $t } from '@vben/locales';
 
+import { formatToDateTime } from '@abp/core';
 import {
   Button,
   Descriptions,
@@ -320,10 +321,6 @@ function actionText(actionKey?: null | string): string {
   }
   return $t(`ElsaNextApprovalFlow.ApprovalRecordAction:${actionKey}`);
 }
-
-function format(value?: null | string): string {
-  return value ? new Date(value).toLocaleString() : '-';
-}
 </script>
 
 <template>
@@ -499,14 +496,14 @@ function format(value?: null | string): string {
             <DescriptionsItem
               :label="$t('ElsaNextApprovalFlow.ApprovalFlow:Common:StartedAt')"
             >
-              {{ format(detail.instance.startedAt) }}
+              {{ formatToDateTime(detail.instance.startedAt) }}
             </DescriptionsItem>
             <DescriptionsItem
               :label="
                 $t('ElsaNextApprovalFlow.ApprovalFlow:Instance:FinishedAt')
               "
             >
-              {{ format(detail.instance.finishedAt) }}
+              {{ formatToDateTime(detail.instance.finishedAt) }}
             </DescriptionsItem>
           </Descriptions>
         </Tabs.TabPane>
@@ -532,7 +529,7 @@ function format(value?: null | string): string {
                   }}
                 </span>
                 <span class="ml-2 text-xs text-gray-400">
-                  {{ format(record.occurredAt) }}
+                  {{ formatToDateTime(record.occurredAt) }}
                 </span>
               </div>
               <div
@@ -544,12 +541,12 @@ function format(value?: null | string): string {
                     $t(
                       'ElsaNextApprovalFlow.ApprovalFlow:Instance:FirstViewed',
                     )
-                  }}：{{ format(record.firstViewedAt) }}
+                  }}：{{ formatToDateTime(record.firstViewedAt) }}
                 </span>
                 <span v-if="record.completedAt" class="ml-3">
                   {{
                     $t('ElsaNextApprovalFlow.ApprovalFlow:Instance:Completed')
-                  }}：{{ format(record.completedAt) }}
+                  }}：{{ formatToDateTime(record.completedAt) }}
                 </span>
                 <span
                   v-if="record.firstViewedAt && record.completedAt"
