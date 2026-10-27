@@ -1,14 +1,11 @@
-using Elsa.Persistence.EFCore.Modules.Runtime;
-using Microsoft.EntityFrameworkCore.Infrastructure;
+﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
-using System;
 
 #nullable disable
 
 namespace Elsa.Persistence.EFCore.MySql.Migrations.Runtime
 {
-    [DbContext(typeof(RuntimeElsaDbContext))]
-    [Migration("20260520121632_V3_8")]
+    /// <inheritdoc />
     public partial class V3_8 : Migration
     {
         private readonly Elsa.Persistence.EFCore.IElsaDbContextSchema _schema;
@@ -58,21 +55,21 @@ namespace Elsa.Persistence.EFCore.MySql.Migrations.Runtime
                 schema: _schema.Schema,
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "varchar(191)", nullable: false)
+                    Id = table.Column<string>(type: "varchar(255)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    OriginalQueueItemId = table.Column<string>(type: "varchar(191)", nullable: false)
+                    OriginalQueueItemId = table.Column<string>(type: "varchar(255)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    WorkflowInstanceId = table.Column<string>(type: "varchar(191)", nullable: true)
+                    WorkflowInstanceId = table.Column<string>(type: "varchar(255)", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    CorrelationId = table.Column<string>(type: "varchar(191)", nullable: true)
+                    CorrelationId = table.Column<string>(type: "varchar(255)", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    BookmarkId = table.Column<string>(type: "varchar(191)", nullable: true)
+                    BookmarkId = table.Column<string>(type: "varchar(255)", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     StimulusHash = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    ActivityInstanceId = table.Column<string>(type: "varchar(191)", nullable: true)
+                    ActivityInstanceId = table.Column<string>(type: "varchar(255)", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    ActivityTypeName = table.Column<string>(type: "varchar(191)", nullable: true)
+                    ActivityTypeName = table.Column<string>(type: "varchar(255)", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     OriginalCreatedAt = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: false),
                     DeadLetteredAt = table.Column<DateTimeOffset>(type: "datetime(6)", nullable: false),
@@ -90,7 +87,7 @@ namespace Elsa.Persistence.EFCore.MySql.Migrations.Runtime
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     SerializedOptions = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    TenantId = table.Column<string>(type: "varchar(191)", nullable: true)
+                    TenantId = table.Column<string>(type: "varchar(255)", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
@@ -175,6 +172,7 @@ namespace Elsa.Persistence.EFCore.MySql.Migrations.Runtime
                 name: "LastErrorType",
                 schema: _schema.Schema,
                 table: "BookmarkQueueItems");
+
         }
     }
 }
