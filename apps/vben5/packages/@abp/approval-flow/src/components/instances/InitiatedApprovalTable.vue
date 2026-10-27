@@ -11,6 +11,8 @@ import type {
 
 import { ref } from 'vue';
 
+import { $t } from '@vben/locales';
+
 import { useVbenVxeGrid } from '@abp/ui';
 import { Button, message, Modal, Space, Tag } from 'ant-design-vue';
 import { VxeGrid } from 'vxe-table';
@@ -45,7 +47,7 @@ const formOptions: VbenFormProps = {
       component: 'Input',
       fieldName: 'filter',
       formItemClass: 'col-span-2 items-baseline',
-      label: '搜索',
+      label: $t('ElsaNextApprovalFlow.ApprovalFlow:Common:Search'),
     },
   ],
   showCollapseButton: true,
@@ -54,25 +56,33 @@ const formOptions: VbenFormProps = {
 
 const gridOptions: VxeGridProps<ApprovalInstanceDto> = {
   columns: [
-    { field: 'title', minWidth: 220, title: '标题' },
-    { field: 'templateName', minWidth: 160, title: '模板' },
+    {
+      field: 'title',
+      minWidth: 220,
+      title: $t('ElsaNextApprovalFlow.ApprovalFlow:Common:Title'),
+    },
+    {
+      field: 'templateName',
+      minWidth: 160,
+      title: $t('ElsaNextApprovalFlow.ApprovalFlow:Common:Template'),
+    },
     {
       field: 'status',
       slots: { default: 'status' },
-      title: '状态',
+      title: $t('ElsaNextApprovalFlow.ApprovalFlow:Common:Status'),
       width: 110,
     },
     {
       field: 'startedAt',
       slots: { default: 'startedAt' },
-      title: '发起时间',
+      title: $t('ElsaNextApprovalFlow.ApprovalFlow:Common:StartedAt'),
       width: 180,
     },
     {
       field: 'action',
       fixed: 'right',
       slots: { default: 'action' },
-      title: '操作',
+      title: $t('ElsaNextApprovalFlow.ApprovalFlow:Common:Actions'),
       width: 220,
     },
   ],
@@ -112,35 +122,43 @@ const recordColumns: VxeGridProps<ApprovalRecordDto>['columns'] = [
   {
     field: 'occurredAt',
     slots: { default: 'occurredAt' },
-    title: '时间',
+    title: $t('ElsaNextApprovalFlow.ApprovalFlow:Common:Time'),
     width: 180,
   },
   {
     field: 'actionKey',
     slots: { default: 'actionKey' },
-    title: '动作',
+    title: $t('ElsaNextApprovalFlow.ApprovalFlow:Common:Action'),
     width: 120,
   },
-  { field: 'actorDisplayName', title: '处理人', width: 120 },
+  {
+    field: 'actorDisplayName',
+    title: $t('ElsaNextApprovalFlow.ApprovalFlow:Common:Actor'),
+    width: 120,
+  },
   {
     field: 'firstViewedAt',
     slots: { default: 'firstViewedAt' },
-    title: '首次查看时间',
+    title: $t('ElsaNextApprovalFlow.ApprovalFlow:Common:FirstViewedAt'),
     width: 180,
   },
   {
     field: 'completedAt',
     slots: { default: 'completedAt' },
-    title: '办理时间',
+    title: $t('ElsaNextApprovalFlow.ApprovalFlow:Common:CompletedAt'),
     width: 180,
   },
   {
     field: 'duration',
     slots: { default: 'duration' },
-    title: '办理时长',
+    title: $t('ElsaNextApprovalFlow.ApprovalFlow:Common:Duration'),
     width: 160,
   },
-  { field: 'comment', title: '审批意见', width: 200 },
+  {
+    field: 'comment',
+    title: $t('ElsaNextApprovalFlow.ApprovalFlow:Common:Comment'),
+    width: 200,
+  },
 ];
 
 function openDetail(instance: ApprovalInstanceDto) {
@@ -165,19 +183,23 @@ async function openRestart(instance: ApprovalInstanceDto) {
     restartData.value = parseFormData(instance.formDataJson);
     restartOpen.value = true;
   } catch {
-    message.error('审批模板加载失败');
+    message.error(
+      $t('ElsaNextApprovalFlow.ApprovalFlow:Initiated:TemplateLoadFailed'),
+    );
   }
 }
 
 function withdraw(instance: ApprovalInstanceDto) {
   Modal.confirm({
-    content: '撤销后该审批流程将终止，确定继续吗？',
+    content: $t('ElsaNextApprovalFlow.ApprovalFlow:Initiated:WithdrawConfirm'),
     onOk: async () => {
       await instancesApi.withdrawApi(instance.id);
-      message.success('审批已撤销');
+      message.success(
+        $t('ElsaNextApprovalFlow.ApprovalFlow:Initiated:Withdrawn'),
+      );
       await gridApi.query();
     },
-    title: '撤销审批',
+    title: $t('ElsaNextApprovalFlow.ApprovalFlow:Initiated:WithdrawTitle'),
   });
 }
 
@@ -191,13 +213,15 @@ async function openRecords(instance: ApprovalInstanceDto) {
     records.value = result?.items ?? [];
     recordsOpen.value = true;
   } catch {
-    message.error('审批记录加载失败');
+    message.error(
+      $t('ElsaNextApprovalFlow.ApprovalFlow:Initiated:RecordsLoadFailed'),
+    );
   }
 }
 </script>
 
 <template>
-  <Grid table-title="我发起的">
+  <Grid :table-title="$t('ElsaNextApprovalFlow.ApprovalFlow:Initiated:Title')">
     <template #status="{ row }">
       <Tag :color="statusColor(row.status)">{{ statusText(row.status) }}</Tag>
     </template>
@@ -211,14 +235,14 @@ async function openRecords(instance: ApprovalInstanceDto) {
           type="link"
           @click="openDetail(row as ApprovalInstanceDto)"
         >
-          详情
+          {{ $t('ElsaNextApprovalFlow.ApprovalFlow:Common:Detail') }}
         </Button>
         <Button
           size="small"
           type="link"
           @click="openRecords(row as ApprovalInstanceDto)"
         >
-          审批记录
+          {{ $t('ElsaNextApprovalFlow.ApprovalFlow:Initiated:Records') }}
         </Button>
         <Button
           v-if="row.status === 'Running'"
@@ -227,7 +251,7 @@ async function openRecords(instance: ApprovalInstanceDto) {
           type="link"
           @click="withdraw(row as ApprovalInstanceDto)"
         >
-          撤销
+          {{ $t('ElsaNextApprovalFlow.ApprovalFlow:Initiated:Withdraw') }}
         </Button>
         <Button
           v-if="row.status === 'Returned'"
@@ -235,7 +259,7 @@ async function openRecords(instance: ApprovalInstanceDto) {
           type="link"
           @click="openRestart(row as ApprovalInstanceDto)"
         >
-          重新发起
+          {{ $t('ElsaNextApprovalFlow.ApprovalFlow:Initiated:Restart') }}
         </Button>
       </Space>
     </template>
@@ -244,7 +268,7 @@ async function openRecords(instance: ApprovalInstanceDto) {
   <Modal
     v-model:open="recordsOpen"
     :footer="null"
-    title="审批记录"
+    :title="$t('ElsaNextApprovalFlow.ApprovalFlow:Initiated:Records')"
     width="720px"
   >
     <VxeGrid

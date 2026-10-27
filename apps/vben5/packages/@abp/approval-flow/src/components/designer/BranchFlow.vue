@@ -6,6 +6,8 @@ import type {
   FormFieldDto,
 } from '../../types/approval-flow';
 
+import { $t } from '@vben/locales';
+
 import AddNode from './AddNode.vue';
 import { summarizeNode } from './model';
 
@@ -30,21 +32,29 @@ const addActions: Array<{
   key: ApprovalFlowNodeKind;
   label: string;
 }> = [
-  { key: 'approval', label: '审批人', color: '#f2994a' },
-  { key: 'cc', label: '抄送人', color: '#2f80ed' },
-  { key: 'condition', label: '条件分支', color: '#27ae60' },
+  {
+    key: 'approval',
+    label: $t('antflow.designer.common.approval'),
+    color: '#f2994a',
+  },
+  { key: 'cc', label: $t('antflow.designer.common.cc'), color: '#2f80ed' },
+  {
+    key: 'condition',
+    label: $t('antflow.designer.common.condition'),
+    color: '#27ae60',
+  },
 ];
 
 function nodeIcon(kind: ApprovalFlowNodeKind): string {
   switch (kind) {
     case 'approval': {
-      return '审';
+      return $t('antflow.designer.common.approval');
     }
     case 'cc': {
-      return '抄';
+      return $t('antflow.designer.common.cc');
     }
     case 'condition': {
-      return '条';
+      return $t('antflow.designer.common.condition');
     }
     default: {
       return '•';
@@ -55,7 +65,9 @@ function nodeIcon(kind: ApprovalFlowNodeKind): string {
 function summary(node: ApprovalFlowNode): string {
   return (
     summarizeNode(node) ||
-    (node.kind === 'cc' ? '待选择抄送人' : '待配置审批人')
+    (node.kind === 'cc'
+      ? $t('antflow.designer.branch.pendingCc')
+      : $t('antflow.designer.branch.pendingApprover'))
   );
 }
 
@@ -65,7 +77,10 @@ function statusClass(id: string): string {
 }
 
 function conditionTitle(index: number): string {
-  return `条件${index + 1}`;
+  return $t('antflow.designer.common.conditionWithIndex').replace(
+    '{0}',
+    String(index + 1),
+  );
 }
 
 function conditionExpression(
@@ -82,7 +97,9 @@ function conditionExpression(
       .replaceAll('!==', '≠')
       .replaceAll('==', '=');
   }
-  return index === total - 1 ? '其他条件进入此流程' : '请设置条件';
+  return index === total - 1
+    ? $t('antflow.designer.common.otherConditionFlow')
+    : $t('antflow.designer.common.setCondition');
 }
 
 function onAddCondition(node: ApprovalFlowNode) {
@@ -125,7 +142,7 @@ function onRemove(node: ApprovalFlowNode) {
           class="nested-add-condition"
           @click="onAddCondition(node)"
         >
-          添加条件
+          {{ $t('antflow.designer.branch.add') }}
         </div>
         <div class="nested-branches">
           <div
@@ -141,7 +158,12 @@ function onRemove(node: ApprovalFlowNode) {
                 onEditBranch(node, branch)
               "
             >
-              <span class="node-priority">优先级{{ index + 1 }}</span>
+              <span class="node-priority">{{
+                $t('antflow.designer.branch.priority').replace(
+                  '{0}',
+                  String(index + 1),
+                )
+              }}</span>
               <button
                 v-if="!readonly"
                 class="node-delete"

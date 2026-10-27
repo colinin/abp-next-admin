@@ -4,6 +4,8 @@ import type { RuleObject } from 'ant-design-vue/es/form';
 
 import { computed, reactive, ref, watch } from 'vue';
 
+import { $t } from '@vben/locales';
+
 import { AutoComplete, Form, FormItem, Input } from 'ant-design-vue';
 
 /**
@@ -57,8 +59,20 @@ const formRef = ref<FormInstance | null>(null);
 const form = reactive<BasicSettingModel>(createEmpty());
 
 const rules: Record<string, RuleObject[]> = {
-  displayName: [{ message: '请输入审批名称', required: true, trigger: 'blur' }],
-  name: [{ message: '请输入流程编号', required: true, trigger: 'blur' }],
+  displayName: [
+    {
+      message: $t('antflow.basic.nameRequired'),
+      required: true,
+      trigger: 'blur',
+    },
+  ],
+  name: [
+    {
+      message: $t('antflow.basic.codeRequired'),
+      required: true,
+      trigger: 'blur',
+    },
+  ],
 };
 
 const categoryOptions = computed(() =>
@@ -155,44 +169,48 @@ defineExpose({ getModel, reset, validate });
         :rules="rules"
         :wrapper-col="{ span: 19 }"
       >
-        <FormItem label="流程编号" name="name">
+        <FormItem :label="$t('antflow.basic.codeLabel')" name="name">
           <Input
             v-model:value="form.name"
             :disabled="codeDisabled"
             :maxlength="50"
-            placeholder="例如：leave-approval"
+            :placeholder="$t('antflow.basic.codePlaceholder')"
           >
             <template #suffix>
               <span class="field-suffix">{{
-                codeDisabled ? '已固定' : '唯一标识'
+                codeDisabled
+                  ? $t('antflow.basic.fixed')
+                  : $t('antflow.basic.unique')
               }}</span>
             </template>
           </Input>
         </FormItem>
 
-        <FormItem label="审批名称" name="displayName">
+        <FormItem :label="$t('antflow.basic.nameLabel')" name="displayName">
           <Input
             v-model:value="form.displayName"
             :disabled="isReadonly"
             :maxlength="20"
-            placeholder="例如：请假审批"
+            :placeholder="$t('antflow.basic.namePlaceholder')"
           />
         </FormItem>
 
-        <FormItem label="分组" name="category">
+        <FormItem :label="$t('antflow.basic.categoryLabel')" name="category">
           <AutoComplete
             v-model:value="form.category"
             :disabled="isReadonly"
             :options="categoryOptions"
-            placeholder="例如：人事 / 财务"
+            :placeholder="$t('antflow.basic.categoryPlaceholder')"
           >
             <template #notFoundContent>
-              <span class="empty-tip">直接输入分组名称</span>
+              <span class="empty-tip">{{
+                $t('antflow.basic.categoryTip')
+              }}</span>
             </template>
           </AutoComplete>
         </FormItem>
 
-        <FormItem label="模板图标" name="icon">
+        <FormItem :label="$t('antflow.basic.iconLabel')" name="icon">
           <div class="icon-row">
             <span class="icon-preview">{{ iconPreview }}</span>
             <Input
@@ -200,27 +218,34 @@ defineExpose({ getModel, reset, validate });
               class="icon-input"
               :disabled="isReadonly"
               :maxlength="64"
-              placeholder="图标名称或表情，例如：📄 / file-text"
+              :placeholder="$t('antflow.basic.iconPlaceholder')"
             />
           </div>
         </FormItem>
 
-        <FormItem label="业务键提示" name="businessKeyHint">
+        <FormItem
+          :label="$t('antflow.basic.businessKeyLabel')"
+          name="businessKeyHint"
+        >
           <Input
             v-model:value="form.businessKeyHint"
             :disabled="isReadonly"
             :maxlength="100"
-            placeholder="发起审批时业务键的填写提示"
+            :placeholder="$t('antflow.basic.businessKeyPlaceholder')"
           />
         </FormItem>
 
-        <FormItem class="is-textarea" label="审批说明" name="description">
+        <FormItem
+          class="is-textarea"
+          :label="$t('antflow.basic.descriptionLabel')"
+          name="description"
+        >
           <Input.TextArea
             v-model:value="form.description"
             :disabled="isReadonly"
             :maxlength="200"
             :rows="4"
-            placeholder="请输入审批说明"
+            :placeholder="$t('antflow.basic.descriptionPlaceholder')"
             show-count
           />
         </FormItem>

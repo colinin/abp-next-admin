@@ -12,6 +12,8 @@ import {
   watch,
 } from 'vue';
 
+import { $t } from '@vben/locales';
+
 import {
   Button,
   Card,
@@ -78,9 +80,9 @@ const templatesApi = useApprovalTemplatesApi();
 const formsApi = useApprovalFormsApi();
 
 const steps = [
-  { title: '基础设置' },
-  { title: '表单设计' },
-  { title: '流程设计' },
+  { title: $t('antflow.wizard.basicSettings') },
+  { title: $t('antflow.wizard.formDesign') },
+  { title: $t('antflow.wizard.flowDesign') },
 ];
 
 const currentStep = ref(0);
@@ -109,11 +111,13 @@ const basic = reactive<BasicDraft>({
 });
 
 const formOptions = computed(() => [
-  { label: '新建表单', value: '' },
+  { label: $t('antflow.wizard.newForm'), value: '' },
   ...forms.value,
 ]);
 
-const pageTitle = computed(() => basic.displayName || '新建审批流程');
+const pageTitle = computed(
+  () => basic.displayName || $t('antflow.wizard.newFlow'),
+);
 
 const boundFormLabel = computed(
   () => forms.value.find((item) => item.value === formId.value)?.label ?? '',
@@ -182,7 +186,7 @@ async function loadTemplate() {
     await nextTick();
     formDesignerRef.value?.loadForm?.(formId.value, true);
   } catch {
-    message.error('审批模板加载失败');
+    message.error($t('antflow.wizard.loadFailed'));
   } finally {
     loading.value = false;
   }
@@ -225,7 +229,7 @@ function goStep(target: number) {
 
 async function saveBasic(): Promise<boolean> {
   if (!basic.displayName.trim()) {
-    message.warning('请填写审批名称');
+    message.warning($t('antflow.wizard.nameRequired'));
     return false;
   }
 
@@ -240,7 +244,7 @@ async function saveBasic(): Promise<boolean> {
       });
     } else {
       if (!basic.name.trim()) {
-        message.warning('请填写流程编号');
+        message.warning($t('antflow.wizard.codeRequired'));
         return false;
       }
 
@@ -264,7 +268,7 @@ async function saveBasic(): Promise<boolean> {
     }
     return true;
   } catch {
-    message.error('基础信息保存失败');
+    message.error($t('antflow.wizard.basicSaveFailed'));
     return false;
   }
 }
@@ -323,7 +327,7 @@ async function saveDesign(): Promise<boolean> {
   const root = getFlowRoot();
   if (!root) {
     currentStep.value = 2;
-    message.warning('请先完成流程设计');
+    message.warning($t('antflow.wizard.designRequired'));
     return false;
   }
 
@@ -334,7 +338,7 @@ async function saveDesign(): Promise<boolean> {
     });
     return true;
   } catch {
-    message.error('流程设计保存失败');
+    message.error($t('antflow.wizard.designSaveFailed'));
     return false;
   }
 }
@@ -355,7 +359,7 @@ async function save() {
     if (!(await saveDesign())) {
       return;
     }
-    message.success('审批流程已保存');
+    message.success($t('antflow.wizard.saved'));
   } finally {
     saving.value = false;
   }
@@ -378,7 +382,12 @@ async function publish() {
     const errors = flowDesignRef.value?.validatePublish?.() ?? [];
     if (errors.length > 0) {
       currentStep.value = 2;
-      message.warning(`流程设计还有 ${errors.length} 个节点未完善`);
+      message.warning(
+        $t('antflow.wizard.incompleteNodes').replace(
+          '{0}',
+          String(errors.length),
+        ),
+      );
       return;
     }
 
@@ -395,10 +404,10 @@ async function publish() {
       formDefinitionId: useForm.value ? formId.value : null,
     });
     published.value = true;
-    message.success('审批模板已发布');
+    message.success($t('antflow.wizard.published'));
     emit('done', templateId);
   } catch {
-    message.error('发布失败');
+    message.error($t('antflow.wizard.publishFailed'));
   } finally {
     publishing.value = false;
   }
@@ -424,14 +433,18 @@ function cancel() {
       <header class="top-nav">
         <div class="nav-left">
           <span class="process-title" :title="pageTitle">{{ pageTitle }}</span>
-          <Tag v-if="published" color="green">已发布</Tag>
-          <Tag v-if="readonly" color="blue">只读</Tag>
+          <Tag v-if="published" color="green">
+            {{ $t('antflow.wizard.publishedTag') }}
+          </Tag>
+          <Tag v-if="readonly" color="blue">
+            {{ $t('antflow.wizard.readonlyTag') }}
+          </Tag>
         </div>
 
         <div
           class="nav-steps"
           :class="`step-${currentStep}`"
-          aria-label="审批流程步骤"
+          :aria-label="$t('antflow.wizard.stepsAria')"
           role="list"
         >
           <div aria-hidden="true" class="step-active-bg"></div>
@@ -453,11 +466,15 @@ function cancel() {
 
         <div class="nav-right">
           <Button class="ghost-btn" @click="cancel">
-            {{ readonly ? '关闭' : '取消' }}
+            {{
+              readonly
+                ? $t('antflow.wizard.close')
+                : $t('antflow.wizard.cancel')
+            }}
           </Button>
           <template v-if="!readonly">
             <Button class="ghost-btn" :loading="saving" @click="save">
-              保存
+              {{ $t('antflow.wizard.save') }}
             </Button>
             <Button
               class="publish-btn"
@@ -465,7 +482,7 @@ function cancel() {
               type="primary"
               @click="publish"
             >
-              发布
+              {{ $t('antflow.wizard.publish') }}
             </Button>
           </template>
         </div>
@@ -486,11 +503,15 @@ function cancel() {
             <Card class="form-step" :bordered="false">
               <div class="form-toolbar">
                 <Space>
-                  <span class="toolbar-label">启用表单</span>
+                  <span class="toolbar-label">{{
+                    $t('antflow.wizard.enableForm')
+                  }}</span>
                   <Switch v-model:checked="useForm" :disabled="readonly" />
                 </Space>
                 <Space>
-                  <span class="toolbar-label">选择已有表单</span>
+                  <span class="toolbar-label">{{
+                    $t('antflow.wizard.selectExistingForm')
+                  }}</span>
                   <Select
                     class="form-select"
                     :disabled="readonly || !useForm"
@@ -499,8 +520,12 @@ function cancel() {
                     @change="onFormChange"
                   />
                 </Space>
-                <Tag v-if="formId" color="green">已绑定表单</Tag>
-                <Tag v-else-if="useForm" color="orange">未保存</Tag>
+                <Tag v-if="formId" color="green">
+                  {{ $t('antflow.wizard.boundForm') }}
+                </Tag>
+                <Tag v-else-if="useForm" color="orange">
+                  {{ $t('antflow.wizard.unsaved') }}
+                </Tag>
               </div>
 
               <template v-if="useForm">
@@ -512,16 +537,24 @@ function cancel() {
                   v-model:form-id="formId"
                   v-model:name="formName"
                 />
-                <Card v-else size="small" title="表单信息">
+                <Card
+                  v-else
+                  size="small"
+                  :title="$t('antflow.wizard.formInfo')"
+                >
                   <Descriptions bordered :column="1" size="small">
-                    <DescriptionsItem label="表单名称">
-                      {{ formName || boundFormLabel || '未命名表单' }}
+                    <DescriptionsItem :label="$t('antflow.wizard.formName')">
+                      {{
+                        formName ||
+                        boundFormLabel ||
+                        $t('antflow.wizard.unnamedForm')
+                      }}
                     </DescriptionsItem>
-                    <DescriptionsItem label="表单编码">
+                    <DescriptionsItem :label="$t('antflow.wizard.formCode')">
                       {{ formCode || '-' }}
                     </DescriptionsItem>
-                    <DescriptionsItem label="表单 ID">
-                      {{ formId || '未绑定' }}
+                    <DescriptionsItem :label="$t('antflow.wizard.formId')">
+                      {{ formId || $t('antflow.wizard.unbound') }}
                     </DescriptionsItem>
                   </Descriptions>
                 </Card>
@@ -529,8 +562,8 @@ function cancel() {
               <Result
                 v-else
                 status="info"
-                sub-title="本审批不需要填写表单，将直接进入流程。"
-                title="未启用表单"
+                :sub-title="$t('antflow.wizard.noFormDesc')"
+                :title="$t('antflow.wizard.noFormTitle')"
               />
             </Card>
           </div>

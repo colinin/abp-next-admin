@@ -7,6 +7,8 @@ import type { ApprovalTemplateDto } from '../../types/approval-flow';
 
 import { ref } from 'vue';
 
+import { $t } from '@vben/locales';
+
 import { useVbenVxeGrid } from '@abp/ui';
 import { Button, message, Modal, Space, Tag } from 'ant-design-vue';
 
@@ -28,7 +30,7 @@ const formOptions: VbenFormProps = {
       component: 'Input',
       fieldName: 'filter',
       formItemClass: 'col-span-2 items-baseline',
-      label: '搜索',
+      label: $t('ElsaNextApprovalFlow.ApprovalFlow:Common:Search'),
     },
   ],
   showCollapseButton: true,
@@ -37,26 +39,38 @@ const formOptions: VbenFormProps = {
 
 const gridOptions: VxeGridProps<ApprovalTemplateDto> = {
   columns: [
-    { field: 'displayName', minWidth: 220, title: '名称' },
-    { field: 'name', minWidth: 180, title: '编码' },
-    { field: 'category', title: '分类', width: 120 },
+    {
+      field: 'displayName',
+      minWidth: 220,
+      title: $t('ElsaNextApprovalFlow.ApprovalFlow:Common:Name'),
+    },
+    {
+      field: 'name',
+      minWidth: 180,
+      title: $t('ElsaNextApprovalFlow.ApprovalFlow:Common:Code'),
+    },
+    {
+      field: 'category',
+      title: $t('ElsaNextApprovalFlow.ApprovalFlow:Common:Category'),
+      width: 120,
+    },
     {
       field: 'status',
       slots: { default: 'status' },
-      title: '状态',
+      title: $t('ElsaNextApprovalFlow.ApprovalFlow:Common:Status'),
       width: 110,
     },
     {
       field: 'form',
       slots: { default: 'boundForm' },
-      title: '表单',
+      title: $t('ElsaNextApprovalFlow.ApprovalFlow:Common:Form'),
       width: 90,
     },
     {
       field: 'action',
       fixed: 'right',
       slots: { default: 'action' },
-      title: '操作',
+      title: $t('ElsaNextApprovalFlow.ApprovalFlow:Common:Actions'),
       width: 300,
     },
   ],
@@ -119,35 +133,47 @@ function openStart(template: ApprovalTemplateDto) {
 }
 
 function onStarted() {
-  message.success('已发起审批，可在「我的审批」中查看进度');
+  message.success($t('ElsaNextApprovalFlow.ApprovalFlow:Templates:Started'));
 }
 
 async function removeTemplate(template: ApprovalTemplateDto) {
   Modal.confirm({
-    content: `确定删除模板「${template.displayName}」吗？`,
+    content: $t(
+      'ElsaNextApprovalFlow.ApprovalFlow:Templates:DeleteConfirm',
+    ).replace('{0}', template.displayName),
     onOk: async () => {
       await templatesApi.deleteApi(template.id);
-      message.success('已删除');
+      message.success(
+        $t('ElsaNextApprovalFlow.ApprovalFlow:Templates:Deleted'),
+      );
       await gridApi.query();
     },
-    title: '删除审批模板',
+    title: $t('ElsaNextApprovalFlow.ApprovalFlow:Templates:DeleteTitle'),
   });
 }
 </script>
 
 <template>
-  <Grid table-title="审批模板">
+  <Grid :table-title="$t('ElsaNextApprovalFlow.ApprovalFlow:Templates:Title')">
     <template #toolbar-tools>
-      <Button type="primary" @click="openWizard()">新建审批</Button>
+      <Button type="primary" @click="openWizard()">
+        {{ $t('ElsaNextApprovalFlow.ApprovalFlow:Templates:Create') }}
+      </Button>
     </template>
 
     <template #status="{ row }">
       <Tag :color="row.isPublished ? 'green' : 'orange'">
-        {{ row.isPublished ? '已发布' : '草稿' }}
+        {{
+          row.isPublished
+            ? $t('ElsaNextApprovalFlow.ApprovalFlow:Common:Published')
+            : $t('ElsaNextApprovalFlow.ApprovalFlow:Common:Draft')
+        }}
       </Tag>
     </template>
     <template #boundForm="{ row }">
-      <Tag v-if="row.formDefinitionId" color="blue">已绑定</Tag>
+      <Tag v-if="row.formDefinitionId" color="blue">
+        {{ $t('ElsaNextApprovalFlow.ApprovalFlow:Common:Bound') }}
+      </Tag>
       <span v-else class="text-gray-400">-</span>
     </template>
     <template #action="{ row }">
@@ -158,14 +184,14 @@ async function removeTemplate(template: ApprovalTemplateDto) {
           type="link"
           @click="openStart(row as ApprovalTemplateDto)"
         >
-          发起
+          {{ $t('ElsaNextApprovalFlow.ApprovalFlow:Common:Start') }}
         </Button>
         <Button
           size="small"
           type="link"
           @click="openWizard(row as ApprovalTemplateDto)"
         >
-          设计
+          {{ $t('ElsaNextApprovalFlow.ApprovalFlow:Common:Design') }}
         </Button>
         <Button
           danger
@@ -173,7 +199,7 @@ async function removeTemplate(template: ApprovalTemplateDto) {
           type="link"
           @click="removeTemplate(row as ApprovalTemplateDto)"
         >
-          删除
+          {{ $t('ElsaNextApprovalFlow.ApprovalFlow:Common:Delete') }}
         </Button>
       </Space>
     </template>

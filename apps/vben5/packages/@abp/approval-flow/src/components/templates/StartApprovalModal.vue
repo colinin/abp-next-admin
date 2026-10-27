@@ -7,6 +7,8 @@ import type {
 
 import { computed, reactive, ref, watch } from 'vue';
 
+import { $t } from '@vben/locales';
+
 import {
   DatePicker,
   Form,
@@ -89,7 +91,7 @@ watch(
               : initial;
         }
       } catch {
-        message.error('表单加载失败');
+        message.error($t('ElsaNextApprovalFlow.ApprovalFlow:Start:FormLoadFailed'));
       } finally {
         loading.value = false;
       }
@@ -130,7 +132,7 @@ async function submit() {
     return;
   }
   if (!title.value.trim()) {
-    message.warning('请填写审批标题');
+    message.warning($t('ElsaNextApprovalFlow.ApprovalFlow:Start:TitleRequired'));
     return;
   }
 
@@ -146,7 +148,7 @@ async function submit() {
       field.isRequired &&
       (value === undefined || value === null || value === '')
     ) {
-      message.warning(`请填写「${field.label}」`);
+      message.warning($t('ElsaNextApprovalFlow.ApprovalFlow:Start:FieldRequired').replace('{0}', field.label));
       return;
     }
   }
@@ -171,11 +173,11 @@ async function submit() {
       templateId: props.template.id,
       title: title.value.trim(),
     });
-    message.success('审批已发起');
+    message.success($t('ElsaNextApprovalFlow.ApprovalFlow:Start:Started'));
     emit('started');
     emit('update:open', false);
   } catch {
-    message.error('发起审批失败');
+    message.error($t('ElsaNextApprovalFlow.ApprovalFlow:Start:Failed'));
   } finally {
     submitting.value = false;
   }
@@ -186,21 +188,36 @@ async function submit() {
   <Modal
     :confirm-loading="submitting"
     :open="open"
-    :title="`发起审批：${template?.displayName ?? ''}`"
-    ok-text="发起"
+    :title="`${$t('ElsaNextApprovalFlow.ApprovalFlow:Start:Title')}: ${template?.displayName ?? ''}`"
+    :ok-text="$t('ElsaNextApprovalFlow.ApprovalFlow:Common:Start')"
     width="680px"
     @cancel="emit('update:open', false)"
     @ok="submit"
   >
     <Form layout="vertical">
-      <FormItem label="审批标题" required>
-        <Input v-model:value="title" placeholder="例如：张三的请假申请" />
+      <FormItem
+        :label="$t('ElsaNextApprovalFlow.ApprovalFlow:Start:ApprovalTitle')"
+        required
+      >
+        <Input
+          v-model:value="title"
+          :placeholder="
+            $t(
+              'ElsaNextApprovalFlow.ApprovalFlow:Start:ApprovalTitlePlaceholder',
+            )
+          "
+        />
       </FormItem>
       <FormItem
         v-if="template?.businessKeyHint"
         :label="template.businessKeyHint"
       >
-        <Input v-model:value="businessKey" placeholder="可选" />
+        <Input
+          v-model:value="businessKey"
+          :placeholder="
+            $t('ElsaNextApprovalFlow.ApprovalFlow:Start:BusinessKeyPlaceholder')
+          "
+        />
       </FormItem>
 
       <template v-if="useForm">
@@ -278,7 +295,9 @@ async function submit() {
           </FormItem>
         </template>
       </template>
-      <div v-else class="text-sm text-gray-500">该审批无需填写表单。</div>
+      <div v-else class="text-sm text-gray-500">
+        {{ $t('ElsaNextApprovalFlow.ApprovalFlow:Start:NoForm') }}
+      </div>
     </Form>
   </Modal>
 </template>

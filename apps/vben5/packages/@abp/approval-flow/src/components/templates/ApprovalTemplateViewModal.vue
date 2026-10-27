@@ -8,6 +8,8 @@ import type {
 
 import { ref, watch } from 'vue';
 
+import { $t } from '@vben/locales';
+
 import {
   Descriptions,
   DescriptionsItem,
@@ -37,19 +39,31 @@ const fields = ref<FormFieldDto[]>([]);
 const activeTab = ref('basic');
 
 const fieldColumns: VxeGridProps<FormFieldDto>['columns'] = [
-  { field: 'label', minWidth: 200, title: '字段名称' },
-  { field: 'key', minWidth: 160, title: '字段编码' },
-  { field: 'type', title: '类型', width: 140 },
+  {
+    field: 'label',
+    minWidth: 200,
+    title: $t('ElsaNextApprovalFlow.ApprovalFlow:Form:FieldName'),
+  },
+  {
+    field: 'key',
+    minWidth: 160,
+    title: $t('ElsaNextApprovalFlow.ApprovalFlow:Form:FieldCode'),
+  },
+  {
+    field: 'type',
+    title: $t('ElsaNextApprovalFlow.ApprovalFlow:Form:Type'),
+    width: 140,
+  },
   {
     field: 'permission',
     slots: { default: 'permission' },
-    title: '权限',
+    title: $t('ElsaNextApprovalFlow.ApprovalFlow:Form:Permission'),
     width: 90,
   },
   {
     field: 'isRequired',
     slots: { default: 'isRequired' },
-    title: '必填',
+    title: $t('ElsaNextApprovalFlow.ApprovalFlow:Form:Required'),
     width: 80,
   },
 ];
@@ -72,7 +86,9 @@ watch(
       const form = await formsApi.getApi(template.formDefinitionId);
       fields.value = form.fields ?? [];
     } catch {
-      message.error('表单信息加载失败');
+      message.error(
+        $t('ElsaNextApprovalFlow.ApprovalFlow:TemplateView:FormLoadFailed'),
+      );
     } finally {
       loading.value = false;
     }
@@ -85,19 +101,21 @@ function statusColor(isPublished: boolean): string {
 }
 
 function statusText(isPublished: boolean): string {
-  return isPublished ? '已发布' : '草稿';
+  return isPublished
+    ? $t('ElsaNextApprovalFlow.ApprovalFlow:Common:Published')
+    : $t('ElsaNextApprovalFlow.ApprovalFlow:Common:Draft');
 }
 
 function permissionText(permission: string): string {
   switch (permission) {
     case 'E': {
-      return '可编辑';
+      return $t('ElsaNextApprovalFlow.ApprovalFlow:Common:Editable');
     }
     case 'H': {
-      return '隐藏';
+      return $t('ElsaNextApprovalFlow.ApprovalFlow:Common:Hidden');
     }
     case 'R': {
-      return '只读';
+      return $t('ElsaNextApprovalFlow.ApprovalFlow:Common:ReadOnly');
     }
     default: {
       return permission;
@@ -111,41 +129,84 @@ function permissionText(permission: string): string {
     :footer="null"
     :open="open"
     :width="1000"
-    title="审批模板详情"
+    :title="$t('ElsaNextApprovalFlow.ApprovalFlow:TemplateView:Title')"
     @cancel="emit('update:open', false)"
   >
     <Spin :spinning="loading">
       <template v-if="template">
         <Tabs v-model:active-key="activeTab" size="small">
-          <Tabs.TabPane key="basic" tab="基础信息">
+          <Tabs.TabPane
+            key="basic"
+            :tab="$t('ElsaNextApprovalFlow.ApprovalFlow:TemplateView:Basic')"
+          >
             <Descriptions bordered :column="2" size="small">
-              <DescriptionsItem label="模板名称">
+              <DescriptionsItem
+                :label="
+                  $t(
+                    'ElsaNextApprovalFlow.ApprovalFlow:TemplateView:TemplateName',
+                  )
+                "
+              >
                 {{ template.displayName }}
               </DescriptionsItem>
-              <DescriptionsItem label="模板编码">
+              <DescriptionsItem
+                :label="
+                  $t(
+                    'ElsaNextApprovalFlow.ApprovalFlow:TemplateView:TemplateCode',
+                  )
+                "
+              >
                 {{ template.name }}
               </DescriptionsItem>
-              <DescriptionsItem label="分类">
+              <DescriptionsItem
+                :label="$t('ElsaNextApprovalFlow.ApprovalFlow:Common:Category')"
+              >
                 {{ template.category || '-' }}
               </DescriptionsItem>
-              <DescriptionsItem label="状态">
+              <DescriptionsItem
+                :label="$t('ElsaNextApprovalFlow.ApprovalFlow:Common:Status')"
+              >
                 <Tag :color="statusColor(template.isPublished)">
                   {{ statusText(template.isPublished) }}
                 </Tag>
               </DescriptionsItem>
-              <DescriptionsItem label="业务键提示">
+              <DescriptionsItem
+                :label="
+                  $t(
+                    'ElsaNextApprovalFlow.ApprovalFlow:TemplateView:BusinessKeyHint',
+                  )
+                "
+              >
                 {{ template.businessKeyHint || '-' }}
               </DescriptionsItem>
-              <DescriptionsItem label="表单">
-                {{ template.formDefinitionId ? '已绑定' : '未绑定' }}
+              <DescriptionsItem
+                :label="$t('ElsaNextApprovalFlow.ApprovalFlow:Common:Form')"
+              >
+                {{
+                  template.formDefinitionId
+                    ? $t('ElsaNextApprovalFlow.ApprovalFlow:Common:Bound')
+                    : $t('ElsaNextApprovalFlow.ApprovalFlow:Common:Unbound')
+                }}
               </DescriptionsItem>
-              <DescriptionsItem label="说明" :span="2">
+              <DescriptionsItem
+                :label="
+                  $t(
+                    'ElsaNextApprovalFlow.ApprovalFlow:TemplateView:Description',
+                  )
+                "
+                :span="2"
+              >
                 {{ template.description || '-' }}
               </DescriptionsItem>
             </Descriptions>
           </Tabs.TabPane>
 
-          <Tabs.TabPane key="form" tab="表单设计">
+          <Tabs.TabPane
+            key="form"
+            :tab="
+              $t('ElsaNextApprovalFlow.ApprovalFlow:TemplateView:FormDesign')
+            "
+          >
             <VxeGrid
               :columns="fieldColumns"
               :data="fields"
@@ -157,15 +218,24 @@ function permissionText(permission: string): string {
                 {{ permissionText(row.permission) }}
               </template>
               <template #isRequired="{ row }">
-                {{ row.isRequired ? '是' : '否' }}
+                {{
+                  row.isRequired
+                    ? $t('ElsaNextApprovalFlow.ApprovalFlow:Common:Yes')
+                    : $t('ElsaNextApprovalFlow.ApprovalFlow:Common:No')
+                }}
               </template>
             </VxeGrid>
             <div v-if="fields.length === 0" class="empty-tip">
-              该模板未绑定表单或表单没有字段
+              {{ $t('ElsaNextApprovalFlow.ApprovalFlow:TemplateView:NoForm') }}
             </div>
           </Tabs.TabPane>
 
-          <Tabs.TabPane key="flow" tab="流程设计">
+          <Tabs.TabPane
+            key="flow"
+            :tab="
+              $t('ElsaNextApprovalFlow.ApprovalFlow:TemplateView:FlowDesign')
+            "
+          >
             <div class="flow-view">
               <ApprovalFlowDesigner
                 :flow-json="template.flowDefinitionJson"

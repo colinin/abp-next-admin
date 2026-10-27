@@ -11,25 +11,25 @@ export interface FormulaConfig {
 }
 
 export const formulaModeOptions = [
-  { label: '两个数字字段运算', value: 'number' },
-  { label: '两个日期字段运算', value: 'date-diff' },
-  { label: '日期区间运算', value: 'date-range' },
+  { labelKey: 'antflow.formula.numberOperation', value: 'number' },
+  { labelKey: 'antflow.formula.dateOperation', value: 'date-diff' },
+  { labelKey: 'antflow.formula.dateRangeOperation', value: 'date-range' },
 ];
 
 export const formulaOperatorOptions = [
-  { label: '加 +', value: '+' },
-  { label: '减 -', value: '-' },
-  { label: '乘 ×', value: '*' },
-  { label: '除 ÷', value: '/' },
+  { labelKey: 'antflow.formula.add', value: '+' },
+  { labelKey: 'antflow.formula.subtract', value: '-' },
+  { labelKey: 'antflow.formula.multiply', value: '*' },
+  { labelKey: 'antflow.formula.divide', value: '/' },
 ];
 
 export const formulaUnitOptions = [
-  { label: '年', value: 'year' },
-  { label: '月', value: 'month' },
-  { label: '日', value: 'day' },
-  { label: '时', value: 'hour' },
-  { label: '分', value: 'minute' },
-  { label: '秒', value: 'second' },
+  { labelKey: 'antflow.formula.year', value: 'year' },
+  { labelKey: 'antflow.formula.month', value: 'month' },
+  { labelKey: 'antflow.formula.day', value: 'day' },
+  { labelKey: 'antflow.formula.hour', value: 'hour' },
+  { labelKey: 'antflow.formula.minute', value: 'minute' },
+  { labelKey: 'antflow.formula.second', value: 'second' },
 ];
 
 export function isFormulaMode(value: unknown): value is FormulaMode {

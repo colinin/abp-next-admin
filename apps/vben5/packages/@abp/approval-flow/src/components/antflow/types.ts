@@ -6,19 +6,19 @@
  * consumed from plain JavaScript / JSON definitions.
  */
 export const NodeType = {
-  /** 开始节点 */
+  /** Start node */
   StartNode: 1,
-  /** 条件网关 */
+  /** Condition gateway */
   GatewayNode: 2,
-  /** 条件节点（网关内的分支） */
+  /** Condition node (branch inside a gateway) */
   ConditionNode: 3,
-  /** 审批人 */
+  /** Approver */
   ApproveNode: 4,
-  /** 并行审批网关 */
+  /** Parallel approval gateway */
   ParallelApproveWayNode: 5,
-  /** 抄送人 */
+  /** CC recipient */
   CopyNode: 6,
-  /** 并行审批人 */
+  /** Parallel approver */
   ParallelApproveNode: 7,
 } as const;
 
@@ -26,13 +26,13 @@ export type NodeType = (typeof NodeType)[keyof typeof NodeType];
 
 /** Placeholder used by the node card when a node has no display name yet. */
 export const placeholderList: Record<number, string> = {
-  [NodeType.StartNode]: '发起人',
-  [NodeType.GatewayNode]: '条件',
-  [NodeType.ConditionNode]: '条件',
-  [NodeType.ApproveNode]: '审核人',
-  [NodeType.ParallelApproveWayNode]: '并行审核人',
-  [NodeType.CopyNode]: '抄送人',
-  [NodeType.ParallelApproveNode]: '并行审核人',
+  [NodeType.StartNode]: 'antflow.model.start',
+  [NodeType.GatewayNode]: 'antflow.model.conditionBranch',
+  [NodeType.ConditionNode]: 'antflow.model.conditionBranch',
+  [NodeType.ApproveNode]: 'antflow.model.reviewer',
+  [NodeType.ParallelApproveWayNode]: 'antflow.model.reviewer',
+  [NodeType.CopyNode]: 'antflow.model.cc',
+  [NodeType.ParallelApproveNode]: 'antflow.model.reviewer',
 };
 
 /** Actions exposed by the hover "add node" menu. */
@@ -98,7 +98,7 @@ export interface AntFlowConditionItem {
 
 export interface AntFlowConditionGroup {
   conditionList: AntFlowConditionItem[];
-  /** true = 且, false = 或 */
+  /** true = AND, false = OR */
   condRelation: boolean;
   groupId: string;
   sort?: number;
@@ -107,7 +107,7 @@ export interface AntFlowConditionGroup {
 export interface AntFlowConditionNodeProperty {
   expression?: null | string;
   groupConditions: AntFlowConditionGroup[];
-  /** true = 且, false = 或 (relation between groups). */
+  /** true = AND, false = OR (relation between groups). */
   groupRelation: boolean;
   isDefault: number;
   logic?: 'and' | 'or';

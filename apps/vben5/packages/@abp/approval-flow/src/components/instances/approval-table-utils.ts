@@ -31,22 +31,22 @@ export function statusColor(status: string): string {
 export function statusText(status: string): string {
   switch (status) {
     case 'Approved': {
-      return '已通过';
+      return $t('ElsaNextApprovalFlow.ApprovalFlow:Status:Approved');
     }
     case 'Cancelled': {
-      return '已取消';
+      return $t('ElsaNextApprovalFlow.ApprovalFlow:Status:Cancelled');
     }
     case 'Rejected': {
-      return '已拒绝';
+      return $t('ElsaNextApprovalFlow.ApprovalFlow:Status:Rejected');
     }
     case 'Returned': {
-      return '已退回';
+      return $t('ElsaNextApprovalFlow.ApprovalFlow:Status:Returned');
     }
     case 'Running': {
-      return '审批中';
+      return $t('ElsaNextApprovalFlow.ApprovalFlow:Status:Running');
     }
     case 'Withdrawn': {
-      return '已撤回';
+      return $t('ElsaNextApprovalFlow.ApprovalFlow:Status:Withdrawn');
     }
     default: {
       return status;
@@ -77,16 +77,16 @@ export function formatDuration(
 
   const parts: string[] = [];
   if (days > 0) {
-    parts.push(`${days}天`);
+    parts.push($t('antflow.duration.days').replace('{0}', String(days)));
   }
   if (hours > 0) {
-    parts.push(`${hours}时`);
+    parts.push($t('antflow.duration.hours').replace('{0}', String(hours)));
   }
   if (minutes > 0) {
-    parts.push(`${minutes}分`);
+    parts.push($t('antflow.duration.minutes').replace('{0}', String(minutes)));
   }
   if (seconds > 0 || parts.length === 0) {
-    parts.push(`${seconds}秒`);
+    parts.push($t('antflow.duration.seconds').replace('{0}', String(seconds)));
   }
   return parts.join('');
 }

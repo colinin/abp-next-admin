@@ -3,6 +3,8 @@ import type { ApprovalFlowModel } from '../../types/approval-flow';
 
 import { computed, onMounted, reactive, ref } from 'vue';
 
+import { $t } from '@vben/locales';
+
 import {
   Button,
   Card,
@@ -62,15 +64,15 @@ const basic = reactive({
 });
 
 const formOptions = computed(() => [
-  { label: '新建表单', value: '' },
+  { label: $t('antflow.designer.wizard.newForm'), value: '' },
   ...forms.value,
 ]);
 
 const steps = [
-  { title: '基础设置' },
-  { title: '表单设计' },
-  { title: '流程设计' },
-  { title: '发布' },
+  { title: $t('antflow.designer.wizard.basic') },
+  { title: $t('antflow.designer.wizard.form') },
+  { title: $t('antflow.designer.wizard.flow') },
+  { title: $t('antflow.designer.wizard.publish') },
 ];
 
 onMounted(async () => {
@@ -111,7 +113,7 @@ async function loadTemplate() {
     }
     published.value = template.isPublished;
   } catch {
-    message.error('审批模板加载失败');
+    message.error($t('antflow.designer.wizard.loadFailed'));
   } finally {
     loading.value = false;
   }
@@ -119,7 +121,7 @@ async function loadTemplate() {
 
 async function saveBasic(): Promise<boolean> {
   if (!basic.displayName.trim()) {
-    message.warning('请填写模板名称');
+    message.warning($t('antflow.designer.wizard.nameRequired'));
     return false;
   }
 
@@ -135,7 +137,7 @@ async function saveBasic(): Promise<boolean> {
       });
     } else {
       if (!basic.name.trim()) {
-        message.warning('请填写模板编码');
+        message.warning($t('antflow.designer.wizard.codeRequired'));
         return false;
       }
       const created = await templatesApi.createApi({
@@ -153,7 +155,7 @@ async function saveBasic(): Promise<boolean> {
     }
     return true;
   } catch {
-    message.error('基础信息保存失败');
+    message.error($t('antflow.designer.wizard.basicSaveFailed'));
     return false;
   } finally {
     saving.value = false;
@@ -178,7 +180,7 @@ async function saveFlow(): Promise<boolean> {
   const templateId = currentTemplateId.value;
   const json = flowDesigner.value?.getModelJson();
   if (!templateId || !json) {
-    message.warning('流程设计尚未准备好');
+    message.warning($t('antflow.designer.wizard.designNotReady'));
     return false;
   }
 
@@ -197,7 +199,7 @@ async function saveFlow(): Promise<boolean> {
     summary.cc = model.nodes.filter((node) => node.kind === 'cc').length;
     return true;
   } catch {
-    message.error('流程设计保存失败');
+    message.error($t('antflow.designer.wizard.designSaveFailed'));
     return false;
   } finally {
     saving.value = false;
@@ -255,9 +257,9 @@ async function publish() {
       formDefinitionId: useForm.value ? formId.value : null,
     });
     published.value = true;
-    message.success('审批模板已发布');
+    message.success($t('antflow.designer.wizard.published'));
   } catch {
-    message.error('发布失败');
+    message.error($t('antflow.designer.wizard.publishFailed'));
   } finally {
     saving.value = false;
   }
@@ -280,9 +282,11 @@ function finish() {
     <header class="top-nav">
       <div class="nav-left">
         <span class="process-title">{{
-          basic.displayName || '新建审批流程'
+          basic.displayName || $t('antflow.designer.wizard.newFlow')
         }}</span>
-        <Tag v-if="published" color="green">已发布</Tag>
+        <Tag v-if="published" color="green">
+          {{ $t('antflow.designer.wizard.publishedTag') }}
+        </Tag>
       </div>
 
       <div class="nav-steps" :class="`step-${step}`">
@@ -300,24 +304,26 @@ function finish() {
       </div>
 
       <div class="nav-right">
-        <Button @click="cancel">取消</Button>
+        <Button @click="cancel">
+          {{ $t('antflow.designer.wizard.cancel') }}
+        </Button>
         <Button
           v-if="step === 3 && !published"
           :loading="saving"
           type="primary"
           @click="publish"
         >
-          确认发布
+          {{ $t('antflow.designer.wizard.confirmPublish') }}
         </Button>
         <Button
           v-else-if="published && step === 3"
           type="primary"
           @click="finish"
         >
-          完成
+          {{ $t('antflow.designer.wizard.finish') }}
         </Button>
         <Button v-else :loading="saving" type="primary" @click="next">
-          下一步
+          {{ $t('antflow.designer.wizard.next') }}
         </Button>
       </div>
     </header>
@@ -326,11 +332,13 @@ function finish() {
       <div v-if="published" class="result-wrap">
         <Result
           status="success"
-          sub-title="审批模板已发布，可在审批模板列表中直接发起审批。"
-          title="发布成功"
+          :sub-title="$t('antflow.designer.wizard.publishSuccessDesc')"
+          :title="$t('antflow.designer.wizard.publishSuccessTitle')"
         >
           <template #extra>
-            <Button type="primary" @click="finish">完成</Button>
+            <Button type="primary" @click="finish">
+              {{ $t('antflow.designer.wizard.finish') }}
+            </Button>
           </template>
         </Result>
       </div>
@@ -340,40 +348,47 @@ function finish() {
           <div class="basic-setting-wrap" :class="{ 'is-loading': loading }">
             <div class="setting-form">
               <div class="setting-item">
-                <label>流程编号</label>
+                <label>{{ $t('antflow.designer.wizard.code') }}</label>
                 <Input
                   v-model:value="basic.name"
                   :disabled="!!currentTemplateId"
-                  placeholder="例如：leave-approval"
+                  :placeholder="$t('antflow.designer.wizard.codePlaceholder')"
                 />
               </div>
               <div class="setting-item">
-                <label>审批名称</label>
+                <label>{{ $t('antflow.designer.wizard.name') }}</label>
                 <Input
                   v-model:value="basic.displayName"
-                  placeholder="例如：请假审批"
+                  :placeholder="$t('antflow.designer.wizard.namePlaceholder')"
                 />
               </div>
               <div class="setting-item">
-                <label>选择分组</label>
+                <label>{{ $t('antflow.designer.wizard.category') }}</label>
                 <Input
                   v-model:value="basic.category"
-                  placeholder="例如：人事"
+                  :placeholder="
+                    $t('antflow.designer.wizard.categoryPlaceholder')
+                  "
                 />
               </div>
               <div class="setting-item">
-                <label>模板图标</label>
-                <Input v-model:value="basic.icon" placeholder="可选" />
+                <label>{{ $t('antflow.designer.wizard.icon') }}</label>
+                <Input
+                  v-model:value="basic.icon"
+                  :placeholder="$t('antflow.designer.wizard.iconPlaceholder')"
+                />
               </div>
               <div class="setting-item">
-                <label>业务键提示</label>
+                <label>{{ $t('antflow.designer.wizard.businessKey') }}</label>
                 <Input
                   v-model:value="basic.businessKeyHint"
-                  placeholder="发起时业务键的填写提示"
+                  :placeholder="
+                    $t('antflow.designer.wizard.businessKeyPlaceholder')
+                  "
                 />
               </div>
               <div class="setting-item is-textarea">
-                <label>审批说明</label>
+                <label>{{ $t('antflow.designer.wizard.description') }}</label>
                 <Input.TextArea v-model:value="basic.description" :rows="4" />
               </div>
             </div>
@@ -383,11 +398,15 @@ function finish() {
         <div v-else-if="step === 1" class="form-step">
           <div class="mb-3 flex flex-wrap items-center gap-4">
             <Space>
-              <span class="text-sm text-gray-600">启用表单</span>
+              <span class="text-sm text-gray-600">{{
+                $t('antflow.designer.wizard.enableForm')
+              }}</span>
               <Switch v-model:checked="useForm" />
             </Space>
             <Space>
-              <span class="text-sm text-gray-600">选择已有表单</span>
+              <span class="text-sm text-gray-600">{{
+                $t('antflow.designer.wizard.selectExistingForm')
+              }}</span>
               <Select
                 :disabled="!useForm"
                 :options="formOptions"
@@ -396,7 +415,9 @@ function finish() {
                 @update:value="onExistingFormChange"
               />
             </Space>
-            <Tag v-if="formId" color="green">已绑定表单</Tag>
+            <Tag v-if="formId" color="green">
+              {{ $t('antflow.designer.wizard.boundForm') }}
+            </Tag>
           </div>
 
           <FormDesigner
@@ -409,8 +430,8 @@ function finish() {
           <Result
             v-else
             status="info"
-            sub-title="本审批不需要填写表单，将直接进入流程。"
-            title="未启用表单"
+            :sub-title="$t('antflow.designer.wizard.noFormDesc')"
+            :title="$t('antflow.designer.wizard.noFormTitle')"
           />
         </div>
 
@@ -422,32 +443,49 @@ function finish() {
           :template-id="currentTemplateId"
         />
 
-        <Card v-else class="setting-card" title="发布确认">
+        <Card
+          v-else
+          class="setting-card"
+          :title="$t('antflow.designer.wizard.publishConfirmTitle')"
+        >
           <Descriptions bordered :column="2" size="small">
-            <DescriptionsItem label="模板">
+            <DescriptionsItem :label="$t('antflow.designer.wizard.template')">
               {{ basic.displayName }}
             </DescriptionsItem>
-            <DescriptionsItem label="编码">{{ basic.name }}</DescriptionsItem>
-            <DescriptionsItem label="分类">
+            <DescriptionsItem :label="$t('antflow.designer.wizard.codeLabel')">
+              {{ basic.name }}
+            </DescriptionsItem>
+            <DescriptionsItem
+              :label="$t('antflow.designer.wizard.categoryLabel')"
+            >
               {{ basic.category || '-' }}
             </DescriptionsItem>
-            <DescriptionsItem label="表单">
-              {{ useForm ? (formId ? '已配置' : '未保存') : '未启用' }}
+            <DescriptionsItem :label="$t('antflow.designer.wizard.formLabel')">
+              {{
+                useForm
+                  ? formId
+                    ? $t('antflow.designer.wizard.configured')
+                    : $t('antflow.designer.wizard.unsaved')
+                  : $t('antflow.designer.wizard.disabled')
+              }}
             </DescriptionsItem>
-            <DescriptionsItem label="节点数">
+            <DescriptionsItem :label="$t('antflow.designer.wizard.nodeCount')">
               {{ summary.nodes }}
             </DescriptionsItem>
-            <DescriptionsItem label="审批节点">
+            <DescriptionsItem
+              :label="$t('antflow.designer.wizard.approvalNodes')"
+            >
               {{ summary.approvals }}
             </DescriptionsItem>
-            <DescriptionsItem label="抄送节点">
+            <DescriptionsItem :label="$t('antflow.designer.wizard.ccNodes')">
               {{ summary.cc }}
             </DescriptionsItem>
-            <DescriptionsItem label="状态">待发布</DescriptionsItem>
+            <DescriptionsItem :label="$t('antflow.designer.wizard.status')">
+              {{ $t('antflow.designer.wizard.pendingPublish') }}
+            </DescriptionsItem>
           </Descriptions>
           <div class="publish-tip">
-            点击右上角「确认发布」后，系统会根据当前流程设计自动生成并发布 Elsa
-            工作流定义，无需手动填写定义版本 Id。
+            {{ $t('antflow.designer.wizard.publishHint') }}
           </div>
         </Card>
       </div>

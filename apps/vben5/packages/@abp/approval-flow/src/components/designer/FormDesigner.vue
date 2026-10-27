@@ -4,6 +4,8 @@ import type { FormulaConfig } from './formula';
 
 import { computed, ref, watch } from 'vue';
 
+import { $t, useI18n } from '@vben/locales';
+
 import {
   Button,
   Card,
@@ -18,9 +20,9 @@ import {
 
 import { useApprovalFormsApi } from '../../api/useApprovalFormsApi';
 import {
-  formulaModeOptions,
-  formulaOperatorOptions,
-  formulaUnitOptions,
+  formulaModeOptions as formulaModeOptionDefs,
+  formulaOperatorOptions as formulaOperatorOptionDefs,
+  formulaUnitOptions as formulaUnitOptionDefs,
   parseFormula,
   serializeFormula,
 } from './formula';
@@ -50,26 +52,79 @@ const emit = defineEmits<{
 }>();
 
 const formsApi = useApprovalFormsApi();
+const { locale, t } = useI18n();
+
+const formulaModeOptions = computed(() => {
+  void locale.value;
+  return formulaModeOptionDefs.map((option) => ({
+    label: t(option.labelKey),
+    value: option.value,
+  }));
+});
+
+const formulaOperatorOptions = computed(() => {
+  void locale.value;
+  return formulaOperatorOptionDefs.map((option) => ({
+    label: t(option.labelKey),
+    value: option.value,
+  }));
+});
+
+const formulaUnitOptions = computed(() => {
+  void locale.value;
+  return formulaUnitOptionDefs.map((option) => ({
+    label: t(option.labelKey),
+    value: option.value,
+  }));
+});
 
 const palette = [
-  { icon: 'T', label: '单行文本', type: 'single-line-text' },
-  { icon: '¶', label: '多行文本', type: 'multi-line-text' },
-  { icon: '#', label: '数字', type: 'number' },
-  { icon: '▦', label: '日期', type: 'date' },
-  { icon: '▤', label: '日期区间', type: 'date-range' },
-  { icon: '▾', label: '下拉选择', type: 'select' },
-  { icon: '●', label: '单选', type: 'radio' },
-  { icon: '☑', label: '多选', type: 'multiple-select' },
-  { icon: '◐', label: '开关', type: 'switch' },
-  { icon: '📎', label: '附件', type: 'attachment' },
-  { icon: '∑', label: '计算', type: 'calculated' },
-  { icon: 'ℹ', label: '说明', type: 'description' },
+  {
+    icon: 'T',
+    label: $t('antflow.designer.form.singleLineText'),
+    type: 'single-line-text',
+  },
+  {
+    icon: '¶',
+    label: $t('antflow.designer.form.multiLineText'),
+    type: 'multi-line-text',
+  },
+  { icon: '#', label: $t('antflow.designer.form.number'), type: 'number' },
+  { icon: '▦', label: $t('antflow.designer.form.date'), type: 'date' },
+  {
+    icon: '▤',
+    label: $t('antflow.designer.form.dateRange'),
+    type: 'date-range',
+  },
+  { icon: '▾', label: $t('antflow.designer.form.select'), type: 'select' },
+  { icon: '●', label: $t('antflow.designer.form.radio'), type: 'radio' },
+  {
+    icon: '☑',
+    label: $t('antflow.designer.form.multipleSelect'),
+    type: 'multiple-select',
+  },
+  { icon: '◐', label: $t('antflow.designer.form.switch'), type: 'switch' },
+  {
+    icon: '📎',
+    label: $t('antflow.designer.form.attachment'),
+    type: 'attachment',
+  },
+  {
+    icon: '∑',
+    label: $t('antflow.designer.form.calculated'),
+    type: 'calculated',
+  },
+  {
+    icon: 'ℹ',
+    label: $t('antflow.designer.form.description'),
+    type: 'description',
+  },
 ];
 
 const permissions = [
-  { label: '可编辑', value: 'E' },
-  { label: '只读', value: 'R' },
-  { label: '隐藏', value: 'H' },
+  { label: $t('antflow.designer.form.editable'), value: 'E' },
+  { label: $t('antflow.designer.form.readOnly'), value: 'R' },
+  { label: $t('antflow.designer.form.hidden'), value: 'H' },
 ];
 
 const formName = ref(props.name ?? '');
@@ -105,7 +160,7 @@ async function loadForm(formId: null | string, force = false) {
     formPublished.value = !!definition.isPublished;
     selectedIndex.value = fields.value.length > 0 ? 0 : null;
   } catch {
-    message.error('表单加载失败');
+    message.error($t('antflow.designer.form.loadFailed'));
   } finally {
     loading.value = false;
   }
@@ -334,11 +389,11 @@ async function save(publishForm = true): Promise<null | string> {
   }
 
   if (!formCode.value.trim()) {
-    message.warning('请填写表单编码');
+    message.warning($t('antflow.designer.form.codeRequired'));
     return null;
   }
   if (fields.value.length === 0) {
-    message.warning('请至少添加一个字段');
+    message.warning($t('antflow.designer.form.fieldRequired'));
     return null;
   }
 
@@ -382,10 +437,10 @@ async function save(publishForm = true): Promise<null | string> {
 
     await formsApi.publishApi(formId);
     dirty.value = false;
-    message.success('表单已保存并发布');
+    message.success($t('antflow.designer.form.saved'));
     return formId;
   } catch {
-    message.error('表单保存失败');
+    message.error($t('antflow.designer.form.saveFailed'));
     return null;
   } finally {
     saving.value = false;
@@ -414,23 +469,31 @@ defineExpose({ getFields, loadForm, save });
       <div class="flex flex-wrap items-center gap-3">
         <Input
           v-model:value="formName"
-          addon-before="表单名称"
+          :addon-before="$t('antflow.designer.form.formName')"
           class="w-64"
-          placeholder="例如：请假申请"
+          :placeholder="$t('antflow.designer.form.formNamePlaceholder')"
         />
         <Input
           v-model:value="formCode"
-          addon-before="编码"
+          :addon-before="$t('antflow.designer.form.formCode')"
           class="w-64"
-          placeholder="例如：leave-request"
+          :placeholder="$t('antflow.designer.form.formCodePlaceholder')"
         />
-        <Tag v-if="formId" color="green">已保存</Tag>
-        <Tag v-else color="orange">未保存</Tag>
+        <Tag v-if="formId" color="green">
+          {{ $t('antflow.designer.form.savedTag') }}
+        </Tag>
+        <Tag v-else color="orange">
+          {{ $t('antflow.designer.form.unsavedTag') }}
+        </Tag>
       </div>
     </Card>
 
     <div class="mt-3 flex gap-3">
-      <Card class="w-40 shrink-0" size="small" title="控件">
+      <Card
+        class="w-40 shrink-0"
+        size="small"
+        :title="$t('antflow.designer.form.controls')"
+      >
         <div class="flex flex-col gap-2">
           <div
             v-for="item in palette"
@@ -446,11 +509,15 @@ defineExpose({ getFields, loadForm, save });
         </div>
       </Card>
 
-      <Card class="min-h-72 flex-1" size="small" title="表单画布">
+      <Card
+        class="min-h-72 flex-1"
+        size="small"
+        :title="$t('antflow.designer.form.canvas')"
+      >
         <div class="drop-canvas" @dragover.prevent @drop="onDrop">
           <Empty
             v-if="fields.length === 0"
-            description="从左侧拖动控件到此处"
+            :description="$t('antflow.designer.form.dragHint')"
           />
           <div
             v-for="(field, index) in fields"
@@ -464,7 +531,9 @@ defineExpose({ getFields, loadForm, save });
                 <div class="flex items-center gap-2">
                   <Tag color="blue">{{ typeLabel(field.type) }}</Tag>
                   <span class="truncate font-medium">{{ field.label }}</span>
-                  <Tag v-if="field.isRequired" color="red">必填</Tag>
+                  <Tag v-if="field.isRequired" color="red">
+                    {{ $t('antflow.designer.form.required') }}
+                  </Tag>
                 </div>
                 <div class="mt-1 text-xs text-gray-500">{{ field.key }}</div>
               </div>
@@ -489,7 +558,7 @@ defineExpose({ getFields, loadForm, save });
                   type="text"
                   @click.stop="removeField(index)"
                 >
-                  删除
+                  {{ $t('antflow.designer.form.delete') }}
                 </Button>
               </Space>
             </div>
@@ -497,12 +566,21 @@ defineExpose({ getFields, loadForm, save });
         </div>
       </Card>
 
-      <Card class="w-64 shrink-0" size="small" title="字段属性">
-        <Empty v-if="!selectedField" description="选择一个字段" />
+      <Card
+        class="w-64 shrink-0"
+        size="small"
+        :title="$t('antflow.designer.form.fieldProperties')"
+      >
+        <Empty
+          v-if="!selectedField"
+          :description="$t('antflow.designer.form.selectField')"
+        />
         <template v-else>
           <div class="flex flex-col gap-3">
             <div>
-              <div class="mb-1 text-xs text-gray-500">显示名</div>
+              <div class="mb-1 text-xs text-gray-500">
+                {{ $t('antflow.designer.form.displayName') }}
+              </div>
               <Input
                 :value="selectedField.label"
                 @update:value="
@@ -511,7 +589,9 @@ defineExpose({ getFields, loadForm, save });
               />
             </div>
             <div>
-              <div class="mb-1 text-xs text-gray-500">字段键</div>
+              <div class="mb-1 text-xs text-gray-500">
+                {{ $t('antflow.designer.form.fieldKey') }}
+              </div>
               <Input
                 :disabled="!!selectedField.id"
                 :value="selectedField.key"
@@ -521,7 +601,9 @@ defineExpose({ getFields, loadForm, save });
               />
             </div>
             <div class="flex items-center justify-between">
-              <span class="text-xs text-gray-500">必填</span>
+              <span class="text-xs text-gray-500">{{
+                $t('antflow.designer.form.required')
+              }}</span>
               <Switch
                 :checked="selectedField.isRequired"
                 @update:checked="
@@ -530,7 +612,9 @@ defineExpose({ getFields, loadForm, save });
               />
             </div>
             <div>
-              <div class="mb-1 text-xs text-gray-500">权限</div>
+              <div class="mb-1 text-xs text-gray-500">
+                {{ $t('antflow.designer.form.permission') }}
+              </div>
               <Select
                 :options="permissions"
                 :value="selectedField.permission"
@@ -541,7 +625,9 @@ defineExpose({ getFields, loadForm, save });
               />
             </div>
             <div>
-              <div class="mb-1 text-xs text-gray-500">提示</div>
+              <div class="mb-1 text-xs text-gray-500">
+                {{ $t('antflow.designer.form.hint') }}
+              </div>
               <Input
                 :value="selectedField.hint ?? ''"
                 @update:value="
@@ -550,7 +636,9 @@ defineExpose({ getFields, loadForm, save });
               />
             </div>
             <div v-if="supportsOptions">
-              <div class="mb-1 text-xs text-gray-500">选项（每行一个）</div>
+              <div class="mb-1 text-xs text-gray-500">
+                {{ $t('antflow.designer.form.options') }}
+              </div>
               <Input.TextArea
                 :rows="4"
                 :value="selectedField.optionsText ?? ''"
@@ -561,7 +649,9 @@ defineExpose({ getFields, loadForm, save });
             </div>
             <template v-if="supportsFormula">
               <div>
-                <div class="mb-1 text-xs text-gray-500">计算类型</div>
+                <div class="mb-1 text-xs text-gray-500">
+                  {{ $t('antflow.designer.form.calcType') }}
+                </div>
                 <Select
                   :options="formulaModeOptions"
                   :value="selectedField.formula?.mode ?? 'number'"
@@ -573,8 +663,8 @@ defineExpose({ getFields, loadForm, save });
                 <div class="mb-1 text-xs text-gray-500">
                   {{
                     selectedField.formula?.mode === 'date-range'
-                      ? '日期区间'
-                      : '字段A'
+                      ? $t('antflow.designer.form.dateRange')
+                      : $t('antflow.designer.form.fieldA')
                   }}
                 </div>
                 <Select
@@ -587,7 +677,9 @@ defineExpose({ getFields, loadForm, save });
                 />
               </div>
               <div v-if="selectedField.formula?.mode === 'number'">
-                <div class="mb-1 text-xs text-gray-500">运算符</div>
+                <div class="mb-1 text-xs text-gray-500">
+                  {{ $t('antflow.designer.branch.operator') }}
+                </div>
                 <Select
                   :options="formulaOperatorOptions"
                   :value="selectedField.formula?.operator ?? '+'"
@@ -598,7 +690,9 @@ defineExpose({ getFields, loadForm, save });
                 />
               </div>
               <div v-if="selectedField.formula?.mode !== 'date-range'">
-                <div class="mb-1 text-xs text-gray-500">字段B</div>
+                <div class="mb-1 text-xs text-gray-500">
+                  {{ $t('antflow.designer.form.fieldB') }}
+                </div>
                 <Select
                   :options="formulaFieldOptions"
                   :value="selectedField.formula?.right ?? ''"
@@ -609,7 +703,9 @@ defineExpose({ getFields, loadForm, save });
                 />
               </div>
               <div v-if="selectedField.formula?.mode !== 'number'">
-                <div class="mb-1 text-xs text-gray-500">结果单位</div>
+                <div class="mb-1 text-xs text-gray-500">
+                  {{ $t('antflow.designer.form.resultUnit') }}
+                </div>
                 <Select
                   :options="formulaUnitOptions"
                   :value="selectedField.formula?.unit ?? 'day'"

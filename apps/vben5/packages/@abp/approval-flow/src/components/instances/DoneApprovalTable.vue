@@ -7,6 +7,8 @@ import type { DoneDto } from '../../types/done';
 
 import { ref } from 'vue';
 
+import { $t } from '@vben/locales';
+
 import { useVbenVxeGrid } from '@abp/ui';
 import { Button } from 'ant-design-vue';
 
@@ -30,7 +32,7 @@ const formOptions: VbenFormProps = {
       component: 'Input',
       fieldName: 'filter',
       formItemClass: 'col-span-2 items-baseline',
-      label: '搜索',
+      label: $t('ElsaNextApprovalFlow.ApprovalFlow:Common:Search'),
     },
   ],
   showCollapseButton: true,
@@ -39,45 +41,61 @@ const formOptions: VbenFormProps = {
 
 const gridOptions: VxeGridProps<DoneDto> = {
   columns: [
-    { field: 'instanceTitle', minWidth: 240, title: '审批标题' },
-    { field: 'nodeName', minWidth: 160, title: '节点' },
+    {
+      field: 'instanceTitle',
+      minWidth: 240,
+      title: $t('ElsaNextApprovalFlow.ApprovalFlow:Pending:InstanceTitle'),
+    },
+    {
+      field: 'nodeName',
+      minWidth: 160,
+      title: $t('ElsaNextApprovalFlow.ApprovalFlow:Pending:Node'),
+    },
     {
       field: 'actionKey',
       slots: { default: 'actionKey' },
-      title: '动作',
+      title: $t('ElsaNextApprovalFlow.ApprovalFlow:Common:Action'),
       width: 120,
     },
-    { field: 'actorDisplayName', title: '处理人', width: 120 },
-    { field: 'comment', minWidth: 180, title: '审批意见' },
+    {
+      field: 'actorDisplayName',
+      title: $t('ElsaNextApprovalFlow.ApprovalFlow:Common:Actor'),
+      width: 120,
+    },
+    {
+      field: 'comment',
+      minWidth: 180,
+      title: $t('ElsaNextApprovalFlow.ApprovalFlow:Common:Comment'),
+    },
     {
       field: 'firstViewedAt',
       slots: { default: 'firstViewedAt' },
-      title: '首次查看时间',
+      title: $t('ElsaNextApprovalFlow.ApprovalFlow:Common:FirstViewedAt'),
       width: 180,
     },
     {
       field: 'completedAt',
       slots: { default: 'completedAt' },
-      title: '办理时间',
+      title: $t('ElsaNextApprovalFlow.ApprovalFlow:Common:CompletedAt'),
       width: 180,
     },
     {
       field: 'decidedAt',
       slots: { default: 'decidedAt' },
-      title: '处理时间',
+      title: $t('ElsaNextApprovalFlow.ApprovalFlow:Done:HandleTime'),
       width: 180,
     },
     {
       field: 'duration',
       slots: { default: 'duration' },
-      title: '办理时长',
+      title: $t('ElsaNextApprovalFlow.ApprovalFlow:Common:Duration'),
       width: 160,
     },
     {
       field: 'action',
       fixed: 'right',
       slots: { default: 'action' },
-      title: '操作',
+      title: $t('ElsaNextApprovalFlow.ApprovalFlow:Common:Actions'),
       width: 100,
     },
   ],
@@ -119,7 +137,7 @@ function openDetail(row: DoneDto) {
 </script>
 
 <template>
-  <Grid table-title="已办审批">
+  <Grid :table-title="$t('ElsaNextApprovalFlow.ApprovalFlow:Done:Title')">
     <template #actionKey="{ row }">{{ actionText(row.actionKey) }}</template>
     <template #firstViewedAt="{ row }">
       {{ formatDateTime(row.firstViewedAt) }}
@@ -135,7 +153,7 @@ function openDetail(row: DoneDto) {
     </template>
     <template #action="{ row }">
       <Button size="small" type="link" @click="openDetail(row as DoneDto)">
-        查看
+        {{ $t('ElsaNextApprovalFlow.ApprovalFlow:Common:View') }}
       </Button>
     </template>
   </Grid>

@@ -50,16 +50,16 @@ function actionText(actionKey?: null | string): string {
 function statusText(node: ApprovalFlowNode): string {
   switch (props.statusMap[node.id]) {
     case 'approved': {
-      return '已通过';
+      return $t('ElsaNextApprovalFlow.ApprovalFlow:Status:Approved');
     }
     case 'rejected': {
-      return '已拒绝';
+      return $t('ElsaNextApprovalFlow.ApprovalFlow:Status:Rejected');
     }
     case 'running': {
-      return '进行中';
+      return $t('ElsaNextApprovalFlow.ApprovalFlow:Status:Running');
     }
     default: {
-      return '未执行';
+      return $t('ElsaNextApprovalFlow.ApprovalFlow:Status:NotExecuted');
     }
   }
 }
@@ -117,26 +117,32 @@ function onChildSelect() {
       <div v-else class="status-card" :class="statusClass(node)">
         <div class="status-card-header">
           <span class="status-icon">{{
-            node.kind === 'approval' ? '审' : '抄'
+            node.kind === 'approval'
+              ? $t('ElsaNextApprovalFlow.ApprovalFlow:StatusFlow:ApprovalBadge')
+              : $t('ElsaNextApprovalFlow.ApprovalFlow:StatusFlow:CopyBadge')
           }}</span>
           <span class="status-name">{{ node.name }}</span>
           <Tag class="status-tag">{{ statusText(node) }}</Tag>
         </div>
         <div class="status-card-body">
           <div v-if="approverNames(node.id)" class="status-line">
-            审批人：{{ approverNames(node.id) }}
+            {{ $t('ElsaNextApprovalFlow.ApprovalFlow:Common:Approver') }}：{{
+              approverNames(node.id)
+            }}
           </div>
           <div v-if="latestRecord(node.id)" class="status-line">
             {{ actionText(latestRecord(node.id)?.actionKey) }}
             <span v-if="latestRecord(node.id)?.comment">
-              · 审批意见：{{ latestRecord(node.id)?.comment }}
+              · {{ $t('ElsaNextApprovalFlow.ApprovalFlow:Common:Comment') }}：{{
+                latestRecord(node.id)?.comment
+              }}
             </span>
             <span v-if="latestRecord(node.id)?.occurredAt" class="status-time">
               {{ new Date(latestRecord(node.id)!.occurredAt).toLocaleString() }}
             </span>
           </div>
           <div v-if="node.kind === 'cc'" class="status-line status-muted">
-            抄送节点
+            {{ $t('ElsaNextApprovalFlow.ApprovalFlow:StatusFlow:CopyNode') }}
           </div>
         </div>
       </div>

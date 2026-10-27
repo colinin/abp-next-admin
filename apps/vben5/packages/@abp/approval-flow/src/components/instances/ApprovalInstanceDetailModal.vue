@@ -61,11 +61,11 @@ const participantId = ref<string | undefined>(undefined);
 const participants = ref<Array<{ label: string; value: string }>>([]);
 
 const actionLabels: Record<string, string> = {
-  AddApproval: '加批',
-  Approve: '同意',
-  Reject: '不同意',
-  Return: '退回',
-  Transfer: '转办',
+  AddApproval: $t('ElsaNextApprovalFlow.ApprovalFlow:Action:AddApproval'),
+  Approve: $t('ElsaNextApprovalFlow.ApprovalFlow:Action:Approve'),
+  Reject: $t('ElsaNextApprovalFlow.ApprovalFlow:Action:Reject'),
+  Return: $t('ElsaNextApprovalFlow.ApprovalFlow:Action:Return'),
+  Transfer: $t('ElsaNextApprovalFlow.ApprovalFlow:Action:Transfer'),
 };
 
 const actionOptions = computed(() => {
@@ -121,7 +121,9 @@ watch(
         await loadParticipants();
       }
     } catch {
-      message.error('审批详情加载失败');
+      message.error(
+        $t('ElsaNextApprovalFlow.ApprovalFlow:Instance:LoadFailed'),
+      );
     } finally {
       loading.value = false;
     }
@@ -176,7 +178,9 @@ async function submit() {
   }
   if (needsParticipant.value && !participantId.value) {
     message.warning(
-      actionKey.value === 'Transfer' ? '请选择转办人' : '请选择加批人员',
+      actionKey.value === 'Transfer'
+        ? $t('ElsaNextApprovalFlow.ApprovalFlow:Instance:SelectTransferee')
+        : $t('ElsaNextApprovalFlow.ApprovalFlow:Instance:SelectAddApprover'),
     );
     return;
   }
@@ -223,11 +227,13 @@ async function submit() {
       }
     }
 
-    message.success('审批已提交');
+    message.success($t('ElsaNextApprovalFlow.ApprovalFlow:Instance:Submitted'));
     emit('decided');
     emit('update:open', false);
   } catch {
-    message.error('审批提交失败');
+    message.error(
+      $t('ElsaNextApprovalFlow.ApprovalFlow:Instance:SubmitFailed'),
+    );
   } finally {
     submitting.value = false;
   }
@@ -271,22 +277,22 @@ function statusColor(status?: string): string {
 function statusText(status?: string): string {
   switch (status) {
     case 'Approved': {
-      return '已通过';
+      return $t('ElsaNextApprovalFlow.ApprovalFlow:Status:Approved');
     }
     case 'Cancelled': {
-      return '已取消';
+      return $t('ElsaNextApprovalFlow.ApprovalFlow:Status:Cancelled');
     }
     case 'Rejected': {
-      return '已拒绝';
+      return $t('ElsaNextApprovalFlow.ApprovalFlow:Status:Rejected');
     }
     case 'Returned': {
-      return '已退回';
+      return $t('ElsaNextApprovalFlow.ApprovalFlow:Status:Returned');
     }
     case 'Running': {
-      return '审批中';
+      return $t('ElsaNextApprovalFlow.ApprovalFlow:Status:Running');
     }
     case 'Withdrawn': {
-      return '已撤回';
+      return $t('ElsaNextApprovalFlow.ApprovalFlow:Status:Withdrawn');
     }
     default: {
       return status ?? '-';
@@ -325,15 +331,23 @@ function format(value?: null | string): string {
     :footer="null"
     :open="open"
     :width="1120"
-    title="审批详情"
+    :title="$t('ElsaNextApprovalFlow.ApprovalFlow:Instance:Title')"
     @cancel="emit('update:open', false)"
   >
     <Spin :spinning="loading">
       <Tabs v-if="detail" v-model:active-key="activeTab" size="small">
-        <Tabs.TabPane v-if="task" key="action" tab="审批">
+        <Tabs.TabPane
+          v-if="task"
+          key="action"
+          :tab="$t('ElsaNextApprovalFlow.ApprovalFlow:Instance:Approval')"
+        >
           <div class="approval-layout">
             <section class="form-side">
-              <div class="side-title">流程表单</div>
+              <div class="side-title">
+                {{
+                  $t('ElsaNextApprovalFlow.ApprovalFlow:Instance:ProcessForm')
+                }}
+              </div>
               <Descriptions :column="1" bordered size="small">
                 <DescriptionsItem
                   v-for="field in formFields"
@@ -344,12 +358,19 @@ function format(value?: null | string): string {
                 </DescriptionsItem>
               </Descriptions>
               <pre v-if="formFields.length === 0" class="form-json">{{
-                detail.instance.formDataJson || '暂无表单内容'
+                detail.instance.formDataJson ||
+                $t('ElsaNextApprovalFlow.ApprovalFlow:Instance:NoFormContent')
               }}</pre>
             </section>
 
             <section class="action-side">
-              <div class="side-title">审批操作</div>
+              <div class="side-title">
+                {{
+                  $t(
+                    'ElsaNextApprovalFlow.ApprovalFlow:Instance:ApprovalAction',
+                  )
+                }}
+              </div>
 
               <div class="action-block">
                 <RadioGroup v-model:value="actionKey" class="action-radio">
@@ -368,7 +389,13 @@ function format(value?: null | string): string {
                   v-model:value="participantId"
                   :options="participants"
                   :placeholder="
-                    actionKey === 'Transfer' ? '请选择转办人' : '请选择加批人员'
+                    actionKey === 'Transfer'
+                      ? $t(
+                          'ElsaNextApprovalFlow.ApprovalFlow:Instance:SelectTransferee',
+                        )
+                      : $t(
+                          'ElsaNextApprovalFlow.ApprovalFlow:Instance:SelectAddApprover',
+                        )
                   "
                   show-search
                   style="width: 100%"
@@ -379,15 +406,21 @@ function format(value?: null | string): string {
                 <Input.TextArea
                   v-model:value="comment"
                   :rows="5"
-                  placeholder="审批意见"
+                  :placeholder="
+                    $t(
+                      'ElsaNextApprovalFlow.ApprovalFlow:Instance:CommentPlaceholder',
+                    )
+                  "
                 />
               </div>
 
               <div class="action-footer">
                 <Space>
-                  <Button :disabled="submitting" @click="cancel">取消</Button>
+                  <Button :disabled="submitting" @click="cancel">
+                    {{ $t('ElsaNextApprovalFlow.ApprovalFlow:Common:Cancel') }}
+                  </Button>
                   <Button :loading="submitting" type="primary" @click="submit">
-                    提交
+                    {{ $t('ElsaNextApprovalFlow.ApprovalFlow:Common:Submit') }}
                   </Button>
                 </Space>
               </div>
@@ -395,7 +428,10 @@ function format(value?: null | string): string {
           </div>
         </Tabs.TabPane>
 
-        <Tabs.TabPane key="form" tab="表单">
+        <Tabs.TabPane
+          key="form"
+          :tab="$t('ElsaNextApprovalFlow.ApprovalFlow:Instance:Form')"
+        >
           <section class="form-side">
             <Descriptions :column="1" bordered size="small">
               <DescriptionsItem
@@ -406,7 +442,14 @@ function format(value?: null | string): string {
                 {{ fieldValue(field) }}
               </DescriptionsItem>
             </Descriptions>
-            <Empty v-if="formFields.length === 0" description="暂无表单定义" />
+            <Empty
+              v-if="formFields.length === 0"
+              :description="
+                $t(
+                  'ElsaNextApprovalFlow.ApprovalFlow:Instance:NoFormDefinition',
+                )
+              "
+            />
             <pre
               v-if="formFields.length === 0 && detail.instance.formDataJson"
               class="form-json"
@@ -414,7 +457,10 @@ function format(value?: null | string): string {
           </section>
         </Tabs.TabPane>
 
-        <Tabs.TabPane key="flow" tab="流程图">
+        <Tabs.TabPane
+          key="flow"
+          :tab="$t('ElsaNextApprovalFlow.ApprovalFlow:Instance:Flow')"
+        >
           <ApprovalFlowViewer
             :flow-json="detail.flowDefinitionJson"
             :instance-status="detail.instance.status"
@@ -423,32 +469,52 @@ function format(value?: null | string): string {
           />
         </Tabs.TabPane>
 
-        <Tabs.TabPane key="detail" tab="详情">
+        <Tabs.TabPane
+          key="detail"
+          :tab="$t('ElsaNextApprovalFlow.ApprovalFlow:Instance:Details')"
+        >
           <Descriptions bordered :column="2" size="small">
-            <DescriptionsItem label="标题">
+            <DescriptionsItem
+              :label="$t('ElsaNextApprovalFlow.ApprovalFlow:Common:Title')"
+            >
               {{ detail.instance.title }}
             </DescriptionsItem>
-            <DescriptionsItem label="模板">
+            <DescriptionsItem
+              :label="$t('ElsaNextApprovalFlow.ApprovalFlow:Common:Template')"
+            >
               {{ detail.instance.templateName }}
             </DescriptionsItem>
-            <DescriptionsItem label="状态">
+            <DescriptionsItem
+              :label="$t('ElsaNextApprovalFlow.ApprovalFlow:Common:Status')"
+            >
               <Tag :color="statusColor(detail.instance.status)">
                 {{ statusText(detail.instance.status) }}
               </Tag>
             </DescriptionsItem>
-            <DescriptionsItem label="发起人">
+            <DescriptionsItem
+              :label="$t('ElsaNextApprovalFlow.ApprovalFlow:Common:Initiator')"
+            >
               {{ detail.instance.initiatorDisplayName || '-' }}
             </DescriptionsItem>
-            <DescriptionsItem label="发起时间">
+            <DescriptionsItem
+              :label="$t('ElsaNextApprovalFlow.ApprovalFlow:Common:StartedAt')"
+            >
               {{ format(detail.instance.startedAt) }}
             </DescriptionsItem>
-            <DescriptionsItem label="完成时间">
+            <DescriptionsItem
+              :label="
+                $t('ElsaNextApprovalFlow.ApprovalFlow:Instance:FinishedAt')
+              "
+            >
               {{ format(detail.instance.finishedAt) }}
             </DescriptionsItem>
           </Descriptions>
         </Tabs.TabPane>
 
-        <Tabs.TabPane key="records" tab="执行记录">
+        <Tabs.TabPane
+          key="records"
+          :tab="$t('ElsaNextApprovalFlow.ApprovalFlow:Instance:Records')"
+        >
           <Timeline>
             <Timeline.Item
               v-for="record in detail.records"
@@ -460,7 +526,10 @@ function format(value?: null | string): string {
                   actionText(record.actionKey)
                 }}</span>
                 <span class="ml-2 text-gray-500">
-                  {{ record.actorDisplayName || '系统' }}
+                  {{
+                    record.actorDisplayName ||
+                    $t('ElsaNextApprovalFlow.ApprovalFlow:Common:System')
+                  }}
                 </span>
                 <span class="ml-2 text-xs text-gray-400">
                   {{ format(record.occurredAt) }}
@@ -471,28 +540,40 @@ function format(value?: null | string): string {
                 class="mt-1 text-xs text-gray-500"
               >
                 <span v-if="record.firstViewedAt">
-                  首次查看：{{ format(record.firstViewedAt) }}
+                  {{
+                    $t(
+                      'ElsaNextApprovalFlow.ApprovalFlow:Instance:FirstViewed',
+                    )
+                  }}：{{ format(record.firstViewedAt) }}
                 </span>
                 <span v-if="record.completedAt" class="ml-3">
-                  办理时间：{{ format(record.completedAt) }}
+                  {{
+                    $t('ElsaNextApprovalFlow.ApprovalFlow:Instance:Completed')
+                  }}：{{ format(record.completedAt) }}
                 </span>
                 <span
                   v-if="record.firstViewedAt && record.completedAt"
                   class="ml-3"
                 >
-                  办理时长：{{
+                  {{
+                    $t('ElsaNextApprovalFlow.ApprovalFlow:Instance:Duration')
+                  }}：{{
                     formatDuration(record.firstViewedAt, record.completedAt)
                   }}
                 </span>
               </div>
               <div v-if="record.comment" class="mt-1 text-xs text-gray-500">
-                审批意见：{{ record.comment }}
+                {{
+                  $t('ElsaNextApprovalFlow.ApprovalFlow:Instance:Comment')
+                }}：{{ record.comment }}
               </div>
             </Timeline.Item>
           </Timeline>
           <Empty
             v-if="detail.records.length === 0"
-            description="暂无执行记录"
+            :description="
+              $t('ElsaNextApprovalFlow.ApprovalFlow:Instance:NoRecords')
+            "
           />
         </Tabs.TabPane>
       </Tabs>

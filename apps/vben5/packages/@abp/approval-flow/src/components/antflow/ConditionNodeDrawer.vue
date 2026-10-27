@@ -3,6 +3,8 @@ import type { AntFlowNode } from './types';
 
 import { computed, reactive, toRaw, watch } from 'vue';
 
+import { $t } from '@vben/locales';
+
 import {
   Alert,
   Button,
@@ -101,12 +103,12 @@ const emit = defineEmits<{
 const visible = computed(() => props.open || props.modelValue);
 
 const operatorOptions = [
-  { label: '等于', value: '=' },
-  { label: '不等于', value: '!=' },
-  { label: '大于', value: '>' },
-  { label: '大于等于', value: '>=' },
-  { label: '小于', value: '<' },
-  { label: '小于等于', value: '<=' },
+  { label: $t('antflow.condition.equal'), value: '=' },
+  { label: $t('antflow.condition.notEqual'), value: '!=' },
+  { label: $t('antflow.condition.gt'), value: '>' },
+  { label: $t('antflow.condition.gte'), value: '>=' },
+  { label: $t('antflow.condition.lt'), value: '<' },
+  { label: $t('antflow.condition.lte'), value: '<=' },
 ];
 
 const legacyOperatorMap: Record<string, string> = {
@@ -254,7 +256,9 @@ function createGroup(
   return {
     condRelation: toBoolean(item?.condRelation, true),
     groupId: item?.groupId ?? nextUid('group'),
-    groupName: item?.groupName ?? `条件组 ${index + 1}`,
+    groupName:
+      item?.groupName ??
+      $t('antflow.condition.groupName').replace('{0}', String(index + 1)),
     rows: conditionList.map((condition) => createRow(condition)),
     uid: nextUid('group-row'),
   };
@@ -342,7 +346,7 @@ function confirm() {
 
   if (!draft.isDefault) {
     if (conditionCount.value === 0) {
-      message.warning('请至少配置一个条件');
+      message.warning($t('antflow.condition.validation'));
       return;
     }
 
@@ -352,7 +356,7 @@ function confirm() {
       ),
     );
     if (invalidGroup) {
-      message.warning('请选择条件字段');
+      message.warning($t('antflow.condition.fieldRequired'));
       return;
     }
 
@@ -362,7 +366,7 @@ function confirm() {
       ),
     );
     if (missingValue) {
-      message.warning('请填写条件值');
+      message.warning($t('antflow.condition.valueRequired'));
       return;
     }
   }
@@ -387,7 +391,12 @@ function confirm() {
               .filter((row) => row.key.trim().length > 0)
               .map((row) => buildConditionItem(row)),
             groupId: group.groupId || `group-${index + 1}`,
-            groupName: group.groupName || `条件组 ${index + 1}`,
+            groupName:
+              group.groupName ||
+              $t('antflow.condition.groupName').replace(
+                '{0}',
+                String(index + 1),
+              ),
             sort: index,
           }))
           .filter((group) => group.conditionList.length > 0),
@@ -408,26 +417,28 @@ function confirm() {
   <Drawer
     :open="visible"
     placement="right"
-    title="条件设置"
+    :title="$t('antflow.condition.title')"
     :width="620"
     @close="close"
   >
     <div class="condition-drawer">
       <div class="form-item">
-        <label class="form-label">分支名称</label>
+        <label class="form-label">{{
+          $t('antflow.condition.branchName')
+        }}</label>
         <Input
           v-model:value="draft.nodeName"
           :disabled="locked"
           :maxlength="50"
-          placeholder="请输入条件分支名称"
+          :placeholder="$t('antflow.condition.branchPlaceholder')"
         />
       </div>
 
       <template v-if="draft.isDefault">
         <Alert
           class="hint-alert"
-          description="默认条件分支不允许设置条件，它是兜底分支：其它条件都未命中时进入该分支。如需添加条件，请先添加普通条件分支，再删除默认分支。"
-          message="默认条件分支"
+          :description="$t('antflow.condition.defaultDesc')"
+          :message="$t('antflow.condition.defaultLabel')"
           show-icon
           type="warning"
         />
@@ -435,13 +446,17 @@ function confirm() {
 
       <template v-else>
         <div class="global-relation">
-          <span class="relation-tip">当审批单满足以下条件时进入此流程</span>
-          <span class="relation-label">条件组关系：</span>
+          <span class="relation-tip">{{
+            $t('antflow.condition.relationTip')
+          }}</span>
+          <span class="relation-label">{{
+            $t('antflow.condition.groupRelation')
+          }}</span>
           <Switch
             v-model:checked="draft.groupRelation"
-            checked-children="且"
+            :checked-children="$t('antflow.condition.and')"
             :disabled="readonly"
-            un-checked-children="或"
+            :un-checked-children="$t('antflow.condition.or')"
           />
         </div>
 
@@ -460,13 +475,15 @@ function confirm() {
                 :maxlength="30"
                 size="small"
               />
-              <span class="relation-label">组内关系：</span>
+              <span class="relation-label">{{
+                $t('antflow.condition.innerRelation')
+              }}</span>
               <Switch
                 v-model:checked="group.condRelation"
-                checked-children="且"
+                :checked-children="$t('antflow.condition.and')"
                 :disabled="readonly"
                 size="small"
-                un-checked-children="或"
+                :un-checked-children="$t('antflow.condition.or')"
               />
             </div>
           </template>
@@ -478,14 +495,14 @@ function confirm() {
               type="text"
               @click="removeGroup(group)"
             >
-              删除条件组
+              {{ $t('antflow.condition.deleteGroup') }}
             </Button>
           </template>
 
           <div class="rows">
             <Empty
               v-if="group.rows.length === 0"
-              description="该条件组还没有条件"
+              :description="$t('antflow.condition.emptyGroup')"
             />
             <div v-for="row in group.rows" :key="row.uid" class="condition-row">
               <Select
@@ -495,7 +512,7 @@ function confirm() {
                 :disabled="readonly"
                 option-filter-prop="label"
                 :options="fieldOptions"
-                placeholder="选择字段"
+                :placeholder="$t('antflow.condition.selectField')"
                 show-search
               />
               <Input
@@ -503,7 +520,7 @@ function confirm() {
                 v-model:value="row.key"
                 class="field-key"
                 :disabled="readonly"
-                placeholder="字段 key，例如 amount"
+                :placeholder="$t('antflow.condition.fieldKeyPlaceholder')"
               />
 
               <Select
@@ -517,7 +534,7 @@ function confirm() {
                 v-model:value="row.value"
                 class="field-value"
                 :disabled="readonly"
-                placeholder="请输入比较值"
+                :placeholder="$t('antflow.condition.valuePlaceholder')"
               />
 
               <Button
@@ -527,7 +544,7 @@ function confirm() {
                 type="text"
                 @click="removeCondition(group, row)"
               >
-                删除
+                {{ $t('antflow.condition.delete') }}
               </Button>
             </div>
           </div>
@@ -539,14 +556,18 @@ function confirm() {
             type="dashed"
             @click="addCondition(group)"
           >
-            + 添加条件
+            {{ $t('antflow.condition.addCondition') }}
           </Button>
 
           <div
             v-if="groupIndex < draft.groups.length - 1"
             class="between-relation"
           >
-            {{ draft.groupRelation ? '且满足' : '或满足' }}
+            {{
+              draft.groupRelation
+                ? $t('antflow.condition.relationSatisfied')
+                : $t('antflow.condition.relationAny')
+            }}
           </div>
         </Card>
 
@@ -556,24 +577,38 @@ function confirm() {
           type="dashed"
           @click="addGroup"
         >
-          + 添加条件组
+          {{ $t('antflow.condition.addGroup') }}
         </Button>
 
         <div class="condition-summary">
-          共 {{ draft.groups.length }} 个条件组 / {{ conditionCount }} 条条件
-          <Tag v-if="draft.isDefault" color="orange">默认分支</Tag>
+          {{
+            $t('antflow.condition.summary')
+              .replace('{0}', String(draft.groups.length))
+              .replace('{1}', String(conditionCount))
+          }}
+          <Tag v-if="draft.isDefault" color="orange">
+            {{ $t('antflow.condition.defaultBranch') }}
+          </Tag>
         </div>
       </template>
 
       <div v-if="readonly && !draft.isDefault" class="readonly-tip">
-        当前为只读模式，无法修改条件配置。
+        {{ $t('antflow.condition.readonly') }}
       </div>
     </div>
 
     <template #footer>
       <div class="drawer-footer">
-        <Button @click="close">{{ locked ? '关闭' : '取消' }}</Button>
-        <Button v-if="!locked" type="primary" @click="confirm">确定</Button>
+        <Button @click="close">
+          {{
+            locked
+              ? $t('antflow.condition.close')
+              : $t('antflow.condition.cancel')
+          }}
+        </Button>
+        <Button v-if="!locked" type="primary" @click="confirm">
+          {{ $t('antflow.condition.confirm') }}
+        </Button>
       </div>
     </template>
   </Drawer>

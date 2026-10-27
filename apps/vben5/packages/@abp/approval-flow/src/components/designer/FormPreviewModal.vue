@@ -3,6 +3,8 @@ import type { FormFieldDto } from '../../types/approval-flow';
 
 import { computed, reactive, watch } from 'vue';
 
+import { $t } from '@vben/locales';
+
 import {
   DatePicker,
   Form,
@@ -93,7 +95,7 @@ function onOpenChange(value: boolean) {
   <Modal
     :open="open"
     :footer="null"
-    title="表单预览"
+    :title="$t('antflow.designer.form.previewTitle')"
     width="680px"
     @cancel="onOpenChange(false)"
   >
@@ -162,7 +164,7 @@ function onOpenChange(value: boolean) {
           <Input
             v-else-if="field.type === 'attachment'"
             disabled
-            placeholder="附件字段（需接入文件上传组件）"
+            :placeholder="$t('antflow.designer.form.attachmentPlaceholder')"
           />
           <span v-else-if="field.type === 'description'" class="text-gray-500">
             {{ field.hint ?? field.label }}

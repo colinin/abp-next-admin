@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue';
 
+import { $t } from '@vben/locales';
+
 import { Checkbox, CheckboxGroup } from 'ant-design-vue';
 
 interface ButtonOption {
@@ -27,30 +29,30 @@ const emit = defineEmits<{
 
 const options: ButtonOption[] = [
   {
-    description: '审批通过，流转到下一个节点',
-    label: '同意',
+    description: $t('antflow.buttonPerm.approveDesc'),
+    label: $t('antflow.buttonPerm.approveLabel'),
     locked: true,
     value: 3,
   },
   {
-    description: '当不同意任务时，当前任务被终止，并结束整个流程',
-    label: '不同意',
+    description: $t('antflow.buttonPerm.rejectDesc'),
+    label: $t('antflow.buttonPerm.rejectLabel'),
     locked: true,
     value: 4,
   },
   {
-    description: '退回到发起人或任意节点，流程重新开始或者回到当前审批人',
-    label: '退回',
+    description: $t('antflow.buttonPerm.returnDesc'),
+    label: $t('antflow.buttonPerm.returnLabel'),
     value: 18,
   },
   {
-    description: '转办选择审批人，转办后自己将不再进行审批',
-    label: '转办',
+    description: $t('antflow.buttonPerm.transferDesc'),
+    label: $t('antflow.buttonPerm.transferLabel'),
     value: 21,
   },
   {
-    description: '在当前任务上额外添加新人员，处理相关事项或提供审批意见',
-    label: '加批',
+    description: $t('antflow.buttonPerm.addApprovalDesc'),
+    label: $t('antflow.buttonPerm.addApprovalLabel'),
     value: 19,
   },
 ];
@@ -84,8 +86,8 @@ function update(value: Array<boolean | number | string>) {
 <template>
   <section class="button-perm">
     <header class="panel-head">
-      <h3>【审批页面】按钮权限显示控制</h3>
-      <p>可控制审批节点中按钮的显示权限，默认按钮不可取消。</p>
+      <h3>{{ $t('antflow.buttonPerm.title') }}</h3>
+      <p>{{ $t('antflow.buttonPerm.description') }}</p>
     </header>
 
     <CheckboxGroup

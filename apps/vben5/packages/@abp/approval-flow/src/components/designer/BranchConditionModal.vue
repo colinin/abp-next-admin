@@ -7,6 +7,8 @@ import type {
 
 import { ref, watch } from 'vue';
 
+import { $t } from '@vben/locales';
+
 import { Button, Input, message, Modal, Select } from 'ant-design-vue';
 
 const props = defineProps<{
@@ -21,21 +23,21 @@ const emit = defineEmits<{
 }>();
 
 const conditionOperators = [
-  { label: '等于', value: '=' },
-  { label: '不等于', value: '!=' },
-  { label: '大于', value: '>' },
-  { label: '大于等于', value: '>=' },
-  { label: '小于', value: '<' },
-  { label: '小于等于', value: '<=' },
-  { label: '包含', value: 'contains' },
-  { label: '不包含', value: 'notcontains' },
-  { label: '为空', value: 'empty' },
-  { label: '不为空', value: 'notempty' },
+  { label: $t('antflow.designer.branch.equal'), value: '=' },
+  { label: $t('antflow.designer.branch.notEqual'), value: '!=' },
+  { label: $t('antflow.designer.branch.gt'), value: '>' },
+  { label: $t('antflow.designer.branch.gte'), value: '>=' },
+  { label: $t('antflow.designer.branch.lt'), value: '<' },
+  { label: $t('antflow.designer.branch.lte'), value: '<=' },
+  { label: $t('antflow.designer.branch.contains'), value: 'contains' },
+  { label: $t('antflow.designer.branch.notContains'), value: 'notcontains' },
+  { label: $t('antflow.designer.branch.empty'), value: 'empty' },
+  { label: $t('antflow.designer.branch.notEmpty'), value: 'notempty' },
 ];
 
 const logicOptions = [
-  { label: '同时满足（AND）', value: 'and' },
-  { label: '满足任一（OR）', value: 'or' },
+  { label: $t('antflow.designer.branch.and'), value: 'and' },
+  { label: $t('antflow.designer.branch.or'), value: 'or' },
 ];
 
 const conditions = ref<ApprovalFlowCondition[]>([]);
@@ -141,7 +143,7 @@ function save() {
     .filter((expression): expression is string => !!expression);
 
   if (expressions.length !== conditions.value.length) {
-    message.warning('请填写完整的条件字段、运算符和比较值');
+    message.warning($t('antflow.designer.branch.validation'));
     return;
   }
 
@@ -169,22 +171,31 @@ function save() {
 <template>
   <Modal
     :open="open"
-    :title="branch?.name ? `设置${branch.name}` : '设置条件'"
+    :title="
+      branch?.name
+        ? $t('antflow.designer.branch.setNamedTitle').replace(
+            '{0}',
+            branch.name,
+          )
+        : $t('antflow.designer.branch.setTitle')
+    "
     :width="680"
     @cancel="emit('update:open', false)"
     @ok="save"
   >
     <div class="condition-form">
       <div v-if="conditions.length > 1" class="logic-row">
-        <span class="condition-label">条件关系</span>
+        <span class="condition-label">{{
+          $t('antflow.designer.branch.relation')
+        }}</span>
         <Select v-model:value="logic" :options="logicOptions" class="w-full" />
       </div>
 
       <div class="condition-table">
         <div class="condition-table-head">
-          <span>条件字段</span>
-          <span>运算符</span>
-          <span>比较值</span>
+          <span>{{ $t('antflow.designer.branch.field') }}</span>
+          <span>{{ $t('antflow.designer.branch.operator') }}</span>
+          <span>{{ $t('antflow.designer.branch.value') }}</span>
           <span></span>
         </div>
 
@@ -197,7 +208,7 @@ function save() {
             :options="fieldOptions()"
             :value="condition.fieldKey ?? undefined"
             class="w-full"
-            placeholder="选择字段"
+            :placeholder="$t('antflow.designer.branch.selectField')"
             @update:value="
               (value) => (condition.fieldKey = value ? String(value) : null)
             "
@@ -214,7 +225,7 @@ function save() {
             v-if="!isValueHidden(condition.operator)"
             :value="condition.compareValue ?? ''"
             class="w-full"
-            placeholder="比较值"
+            :placeholder="$t('antflow.designer.branch.compareValue')"
             @update:value="(value) => (condition.compareValue = value)"
           />
           <span v-else class="empty-value">—</span>
@@ -225,12 +236,14 @@ function save() {
             type="text"
             @click="removeCondition(index)"
           >
-            删除
+            {{ $t('antflow.designer.branch.delete') }}
           </Button>
         </div>
       </div>
 
-      <Button block type="dashed" @click="addCondition">＋ 添加条件</Button>
+      <Button block type="dashed" @click="addCondition">
+        {{ $t('antflow.designer.branch.addCondition') }}
+      </Button>
     </div>
   </Modal>
 </template>

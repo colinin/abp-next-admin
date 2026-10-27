@@ -4,6 +4,8 @@ import type { AntFlowNode } from './types';
 
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
 
+import { $t } from '@vben/locales';
+
 import { useApprovalParticipantsApi } from '../../api/useApprovalParticipantsApi';
 import ApprovalNodeDrawer from './ApprovalNodeDrawer.vue';
 import ConditionNodeDrawer from './ConditionNodeDrawer.vue';
@@ -272,8 +274,11 @@ function collectErrors(
   if (node.error && node.nodeType !== NodeType.StartNode) {
     errors.push({
       key: node.nodeId,
-      label: node.nodeName || node.nodeDisplayName || '流程设计',
-      message: `请完善：${node.nodeDisplayName || node.nodeName || '节点'}`,
+      label: node.nodeName || node.nodeDisplayName || $t('antflow.flow.design'),
+      message: $t('antflow.flow.completeNode').replace(
+        '{0}',
+        node.nodeDisplayName || node.nodeName || $t('antflow.common.node'),
+      ),
     });
   }
 
@@ -336,7 +341,7 @@ defineExpose({
         <button
           class="zoom-btn"
           type="button"
-          title="缩小"
+          :title="$t('antflow.flow.zoomOut')"
           :disabled="!canZoomOut"
           @click="zoomOut"
         >
@@ -346,13 +351,18 @@ defineExpose({
         <button
           class="zoom-btn"
           type="button"
-          title="放大"
+          :title="$t('antflow.flow.zoomIn')"
           :disabled="!canZoomIn"
           @click="zoomIn"
         >
           ＋
         </button>
-        <button class="zoom-btn" type="button" title="重置" @click="resetView">
+        <button
+          class="zoom-btn"
+          type="button"
+          :title="$t('antflow.flow.reset')"
+          @click="resetView"
+        >
           ⟳
         </button>
       </div>
@@ -367,7 +377,7 @@ defineExpose({
           @select="handleSelect"
           @update:node="handleUpdate"
         />
-        <div v-else class="empty-state">暂无流程数据</div>
+        <div v-else class="empty-state">{{ $t('antflow.flow.empty') }}</div>
       </div>
     </div>
   </div>

@@ -12,6 +12,8 @@ import type {
 
 import { computed, ref, watch } from 'vue';
 
+import { $t } from '@vben/locales';
+
 import {
   Button,
   DatePicker,
@@ -49,13 +51,22 @@ const organizationUnits = ref<ParticipantRef[]>([]);
 const roles = ref<ParticipantRef[]>([]);
 
 const ruleKindOptions = [
-  { label: '指定人员/部门', value: 'Participant' },
-  { label: '发起人', value: 'Initiator' },
-  { label: '发起人自选', value: 'InitiatorSelection' },
-  { label: '角色', value: 'Role' },
-  { label: '部门主管', value: 'Supervisor' },
-  { label: '部门成员', value: 'OrganizationUnit' },
-  { label: '表单字段', value: 'FormField' },
+  {
+    label: $t('antflow.designer.nodeConfig.participant'),
+    value: 'Participant',
+  },
+  { label: $t('antflow.designer.nodeConfig.initiator'), value: 'Initiator' },
+  {
+    label: $t('antflow.designer.nodeConfig.initiatorSelection'),
+    value: 'InitiatorSelection',
+  },
+  { label: $t('antflow.designer.nodeConfig.role'), value: 'Role' },
+  { label: $t('antflow.designer.nodeConfig.supervisor'), value: 'Supervisor' },
+  {
+    label: $t('antflow.designer.nodeConfig.organizationUnit'),
+    value: 'OrganizationUnit',
+  },
+  { label: $t('antflow.designer.nodeConfig.formField'), value: 'FormField' },
 ];
 
 const participantOptions = computed(() => {
@@ -74,9 +85,9 @@ const roleOptions = computed(() =>
 );
 
 const signModeOptions = [
-  { label: '或签（一人通过即可）', value: 'Any' },
-  { label: '会签（全部通过）', value: 'All' },
-  { label: '顺签（依次审批）', value: 'Sequential' },
+  { label: $t('antflow.designer.nodeConfig.any'), value: 'Any' },
+  { label: $t('antflow.designer.nodeConfig.all'), value: 'All' },
+  { label: $t('antflow.designer.nodeConfig.sequential'), value: 'Sequential' },
 ];
 
 watch(
@@ -136,7 +147,7 @@ async function searchUsers(filter: string) {
   try {
     users.value = (await participantsApi.searchUsersAsync(filter)) ?? [];
   } catch {
-    message.warning('人员检索失败');
+    message.warning($t('antflow.designer.nodeConfig.searchFailed'));
   }
 }
 
@@ -150,16 +161,16 @@ function patch(partial: Partial<ApprovalFlowNode>) {
 }
 
 const conditionOperators = [
-  { label: '等于', value: '=' },
-  { label: '不等于', value: '!=' },
-  { label: '大于', value: '>' },
-  { label: '大于等于', value: '>=' },
-  { label: '小于', value: '<' },
-  { label: '小于等于', value: '<=' },
-  { label: '包含', value: 'contains' },
-  { label: '不包含', value: 'notcontains' },
-  { label: '为空', value: 'empty' },
-  { label: '不为空', value: 'notempty' },
+  { label: $t('antflow.designer.branch.equal'), value: '=' },
+  { label: $t('antflow.designer.branch.notEqual'), value: '!=' },
+  { label: $t('antflow.designer.branch.gt'), value: '>' },
+  { label: $t('antflow.designer.branch.gte'), value: '>=' },
+  { label: $t('antflow.designer.branch.lt'), value: '<' },
+  { label: $t('antflow.designer.branch.lte'), value: '<=' },
+  { label: $t('antflow.designer.branch.contains'), value: 'contains' },
+  { label: $t('antflow.designer.branch.notContains'), value: 'notcontains' },
+  { label: $t('antflow.designer.branch.empty'), value: 'empty' },
+  { label: $t('antflow.designer.branch.notEmpty'), value: 'notempty' },
 ];
 
 const formFieldOptions = computed(() =>
@@ -206,8 +217,8 @@ function valueOptions(): { label: string; value: string }[] {
   }
   if (field.type === 'switch') {
     return [
-      { label: '是', value: 'true' },
-      { label: '否', value: 'false' },
+      { label: $t('antflow.designer.nodeConfig.yes'), value: 'true' },
+      { label: $t('antflow.designer.nodeConfig.no'), value: 'false' },
     ];
   }
   if (!field.optionsJson) {
@@ -379,7 +390,7 @@ function addAction() {
       ...local.value.actions,
       {
         key: `Action${local.value.actions.length + 1}`,
-        label: '同意',
+        label: $t('antflow.designer.nodeConfig.agree'),
         effect: 'Approve',
       },
     ],
@@ -414,21 +425,25 @@ loadParticipants();
 <template>
   <Drawer
     :open="open"
-    :title="local ? `节点设置 - ${local.name}` : '节点设置'"
+    :title="
+      local
+        ? $t('antflow.designer.nodeConfig.nodeLabel').replace('{0}', local.name)
+        : $t('antflow.designer.nodeConfig.title')
+    "
     width="460"
     @close="onOpenChange(false)"
   >
     <Form v-if="local" layout="vertical">
-      <FormItem label="节点名称">
+      <FormItem :label="$t('antflow.designer.nodeConfig.nodeName')">
         <Input
           :value="local.name"
-          placeholder="请输入节点名称"
+          :placeholder="$t('antflow.designer.nodeConfig.nodeNamePlaceholder')"
           @update:value="(value) => patch({ name: value })"
         />
       </FormItem>
 
       <template v-if="local.kind === 'approval'">
-        <FormItem label="审批方式">
+        <FormItem :label="$t('antflow.designer.nodeConfig.approvalMode')">
           <RadioGroup
             :value="local.signMode"
             :options="signModeOptions"
@@ -436,7 +451,9 @@ loadParticipants();
           />
         </FormItem>
 
-        <Divider orientation="left">审批人规则</Divider>
+        <Divider orientation="left">
+          {{ $t('antflow.designer.nodeConfig.approverRules') }}
+        </Divider>
 
         <div
           v-for="(rule, index) in local.rules"
@@ -464,7 +481,7 @@ loadParticipants();
                 )
               "
               class="w-full"
-              placeholder="搜索并选择人员或部门"
+              :placeholder="$t('antflow.designer.nodeConfig.searchParticipant')"
               @search="searchUsers"
               @update:value="
                 (values: any) => onParticipantsChange(index, values as string[])
@@ -480,7 +497,7 @@ loadParticipants();
                 )
               "
               class="w-full"
-              placeholder="选择角色"
+              :placeholder="$t('antflow.designer.nodeConfig.selectRole')"
               @update:value="
                 (values: any) => onParticipantsChange(index, values as string[])
               "
@@ -489,9 +506,18 @@ loadParticipants();
               <Select
                 :value="rule.supervisorLevel ?? 'Nearest'"
                 :options="[
-                  { label: '最近一级主管', value: 'Nearest' },
-                  { label: '指定层级', value: 'LevelN' },
-                  { label: '最高层级', value: 'TopMost' },
+                  {
+                    label: $t('antflow.designer.nodeConfig.nearestSupervisor'),
+                    value: 'Nearest',
+                  },
+                  {
+                    label: $t('antflow.designer.nodeConfig.specifiedLevel'),
+                    value: 'LevelN',
+                  },
+                  {
+                    label: $t('antflow.designer.nodeConfig.topMost'),
+                    value: 'TopMost',
+                  },
                 ]"
                 class="flex-1"
                 @update:value="
@@ -522,7 +548,7 @@ loadParticipants();
                 }))
               "
               class="w-full"
-              placeholder="选择表单字段"
+              :placeholder="$t('antflow.designer.nodeConfig.selectFormField')"
               @update:value="
                 (value: any) =>
                   updateRule(index, { formFieldKey: String(value ?? '') })
@@ -530,18 +556,28 @@ loadParticipants();
             />
           </Space>
           <Button danger size="small" type="link" @click="removeRule(index)">
-            删除规则
+            {{ $t('antflow.designer.nodeConfig.deleteRule') }}
           </Button>
         </div>
 
-        <Button block type="dashed" @click="addRule">添加审批人规则</Button>
+        <Button block type="dashed" @click="addRule">
+          {{ $t('antflow.designer.nodeConfig.addApproverRule') }}
+        </Button>
 
-        <Divider orientation="left">空审批人处理</Divider>
+        <Divider orientation="left">
+          {{ $t('antflow.designer.nodeConfig.emptyApprover') }}
+        </Divider>
         <Select
           :value="local.onEmpty"
           :options="[
-            { label: '跳过该节点', value: 'Skip' },
-            { label: '升级到部门主管', value: 'EscalateToManager' },
+            {
+              label: $t('antflow.designer.nodeConfig.skipNode'),
+              value: 'Skip',
+            },
+            {
+              label: $t('antflow.designer.nodeConfig.escalate'),
+              value: 'EscalateToManager',
+            },
           ]"
           class="w-full"
           @update:value="
@@ -549,7 +585,9 @@ loadParticipants();
           "
         />
 
-        <Divider orientation="left">审批动作</Divider>
+        <Divider orientation="left">
+          {{ $t('antflow.designer.nodeConfig.approvalActions') }}
+        </Divider>
         <Space
           v-for="(action, index) in local.actions"
           :key="action.key"
@@ -562,14 +600,18 @@ loadParticipants();
             @update:value="(value) => updateActionLabel(index, value)"
           />
           <Button danger size="small" type="link" @click="removeAction(index)">
-            删除
+            {{ $t('antflow.designer.nodeConfig.deleteAction') }}
           </Button>
         </Space>
-        <Button block type="dashed" @click="addAction">添加动作</Button>
+        <Button block type="dashed" @click="addAction">
+          {{ $t('antflow.designer.nodeConfig.addAction') }}
+        </Button>
       </template>
 
       <template v-if="local.kind === 'cc'">
-        <Divider orientation="left">抄送人</Divider>
+        <Divider orientation="left">
+          {{ $t('antflow.designer.nodeConfig.ccRecipients') }}
+        </Divider>
         <div
           v-for="(rule, index) in local.rules"
           :key="index"
@@ -585,26 +627,30 @@ loadParticipants();
               )
             "
             class="w-full"
-            placeholder="搜索并选择人员或部门"
+            :placeholder="$t('antflow.designer.nodeConfig.searchParticipant')"
             @search="searchUsers"
             @update:value="
               (values: any) => onParticipantsChange(index, values as string[])
             "
           />
           <Button danger size="small" type="link" @click="removeRule(index)">
-            删除抄送
+            {{ $t('antflow.designer.nodeConfig.deleteCc') }}
           </Button>
         </div>
-        <Button block type="dashed" @click="addRule">添加抄送人</Button>
+        <Button block type="dashed" @click="addRule">
+          {{ $t('antflow.designer.nodeConfig.addCc') }}
+        </Button>
       </template>
 
       <template v-if="local.kind === 'condition'">
-        <Divider orientation="left">条件设置</Divider>
+        <Divider orientation="left">
+          {{ $t('antflow.designer.nodeConfig.conditionSettings') }}
+        </Divider>
         <Space class="w-full" direction="vertical">
           <Select
             :options="formFieldOptions"
             :value="local.condition?.fieldKey ?? undefined"
-            placeholder="选择表单字段"
+            :placeholder="$t('antflow.designer.nodeConfig.selectFormField')"
             @update:value="(value: any) => setConditionField(value)"
           />
           <Space class="w-full">
@@ -621,7 +667,9 @@ loadParticipants();
               "
               :options="valueOptions()"
               :value="local.condition?.compareValue ?? undefined"
-              placeholder="选择比较值"
+              :placeholder="
+                $t('antflow.designer.nodeConfig.selectCompareValue')
+              "
               @update:value="(value: any) => setConditionValue(value)"
             />
             <InputNumber
@@ -635,7 +683,7 @@ loadParticipants();
                   : undefined
               "
               class="flex-1"
-              placeholder="输入数字"
+              :placeholder="$t('antflow.designer.nodeConfig.numberPlaceholder')"
               @update:value="(value: any) => setConditionValue(value)"
             />
             <DatePicker
@@ -645,33 +693,49 @@ loadParticipants();
               "
               :value="local.condition?.compareValue ?? undefined"
               class="flex-1"
-              placeholder="选择日期"
+              :placeholder="$t('antflow.designer.nodeConfig.datePlaceholder')"
               value-format="YYYY-MM-DD"
               @update:value="(value: any) => setConditionValue(value)"
             />
             <Input
               v-else-if="!isEmptyOperator(local.condition?.operator)"
               :value="local.condition?.compareValue ?? ''"
-              placeholder="输入比较内容"
+              :placeholder="
+                $t('antflow.designer.nodeConfig.contentPlaceholder')
+              "
               @update:value="(value: any) => setConditionValue(value)"
             />
           </Space>
           <div class="rounded bg-gray-50 p-2 text-xs text-gray-500">
-            {{ local.condition?.expression || '请选择字段并设置条件' }}
+            {{
+              local.condition?.expression ||
+              $t('antflow.designer.nodeConfig.conditionHint')
+            }}
           </div>
         </Space>
 
-        <Divider orientation="left">分支</Divider>
+        <Divider orientation="left">
+          {{ $t('antflow.designer.nodeConfig.branches') }}
+        </Divider>
         <div
           v-for="(branch, index) in local.branches ?? []"
           :key="branch.id"
           class="mb-2 rounded-md border border-gray-200 p-3"
         >
           <Tag :color="index === 0 ? 'green' : 'default'">
-            {{ index === 0 ? '符合条件（true）' : '不符合条件（false）' }}
+            {{
+              index === 0
+                ? $t('antflow.designer.nodeConfig.trueBranch')
+                : $t('antflow.designer.nodeConfig.falseBranch')
+            }}
           </Tag>
           <span class="ml-2 text-xs text-gray-500">
-            {{ branch.nodes.length }} 个节点
+            {{
+              $t('antflow.designer.nodeConfig.nodeCount').replace(
+                '{0}',
+                String(branch.nodes.length),
+              )
+            }}
           </span>
           <div
             v-for="child in branch.nodes"
@@ -682,8 +746,7 @@ loadParticipants();
           </div>
         </div>
         <div class="mt-2 text-xs text-gray-400">
-          条件成立进入「符合条件」分支，否则进入「不符合条件」分支；两个分支创建时已各带一个默认审批人节点，
-          可在画布中继续添加节点。
+          {{ $t('antflow.designer.nodeConfig.branchHint') }}
         </div>
       </template>
     </Form>

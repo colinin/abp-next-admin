@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import type { ApprovalFlowNodeKind } from '../../types/approval-flow';
 
+import { $t } from '@vben/locales';
+
 defineProps<{
   actions: Array<{ color?: string; key: ApprovalFlowNodeKind; label: string }>;
   readonly?: boolean;
@@ -13,7 +15,9 @@ const emit = defineEmits<{
 
 <template>
   <div v-if="!readonly" class="add-node">
-    <div class="add-btn" title="添加节点">＋</div>
+    <div class="add-btn" :title="$t('antflow.designer.common.addCondition')">
+      ＋
+    </div>
     <div class="add-menu">
       <div
         v-for="action in actions"

@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import type {
   ApprovalAction,
   ApprovalFlowBranch,
@@ -10,6 +9,7 @@ import type {
   ApproverRule,
   ParticipantRef,
 } from '../../types/approval-flow';
+/* eslint-disable prettier/prettier */
 import type {
   AntFlowApproveNodeProperty,
   AntFlowAssignee,
@@ -19,11 +19,13 @@ import type {
   AntFlowNode,
 } from './types';
 
+import { $t } from '@vben/locales';
+
 import {
   createBranch,
   createId,
   createNode,
-  defaultApproveRejectActions,
+  getDefaultApproveRejectActions,
   parseModel,
 } from '../designer/model';
 import { NodeType } from './types';
@@ -140,7 +142,7 @@ export function createConditionProperty(
 /** Start node.  `child` is linked to keep the AntFlow single-linked structure. */
 export function createStartNode(child: AntFlowNode | null = null): AntFlowNode {
   return createBaseNode({
-    nodeName: '发起人',
+    nodeName: $t('antflow.model.start'),
     nodeType: NodeType.StartNode,
     nodeWeight: 0,
     childNode: child,
@@ -153,7 +155,7 @@ export function createApproveNode(
   child: AntFlowNode | null = null,
 ): AntFlowNode {
   const node = createBaseNode({
-    nodeName: '审核人',
+    nodeName: $t('antflow.model.reviewer'),
     nodeType: NodeType.ApproveNode,
     childNode: child,
     error: true,
@@ -165,7 +167,7 @@ export function createApproveNode(
 /** Copy (CC) node. */
 export function createCopyNode(child: AntFlowNode | null = null): AntFlowNode {
   const node = createBaseNode({
-    nodeName: '抄送人',
+    nodeName: $t('antflow.model.cc'),
     nodeType: NodeType.CopyNode,
     childNode: child,
     error: true,
@@ -182,8 +184,8 @@ export function createConditionNode(
   isDefault = 0,
 ): AntFlowNode {
   const node = createBaseNode({
-    nodeName: name || '条件1',
-    nodeDisplayName: name || '条件1',
+    nodeName: name || $t('antflow.model.conditionName').replace('{0}', '1'),
+    nodeDisplayName: name || $t('antflow.model.conditionName').replace('{0}', '1'),
     nodeType: NodeType.ConditionNode,
     nodeWeight: weight,
     childNode: child,
@@ -204,7 +206,7 @@ export function createGatewayNode(
   child: AntFlowNode | null = null,
 ): AntFlowNode {
   const node = createBaseNode({
-    nodeName: '网关',
+    nodeName: $t('antflow.model.gateway'),
     nodeType: NodeType.GatewayNode,
     nodeWeight: 1,
     childNode: null,
@@ -215,8 +217,8 @@ export function createGatewayNode(
     isDefault: 0,
     sort: 0,
     conditionNodes: [
-      createConditionNode('条件1', child, 1, 0),
-      createConditionNode('默认条件分支', null, 2, 1),
+      createConditionNode($t('antflow.model.conditionName').replace('{0}', '1'), child, 1, 0),
+      createConditionNode($t('antflow.model.defaultBranch'), null, 2, 1),
     ],
   };
   return node;
@@ -348,37 +350,37 @@ function buildApproveDisplayName(
 
   if (names.length > 0 && (assigneeType === 1 || assigneeType === 2)) {
     if (kind === 'approval' && signType === 2) {
-      return `${names.length}人(${names.join(',')})会签`;
+      return $t('antflow.model.signSummary').replace('{0}', String(names.length)).replace('{1}', names.join(','));
     }
     if (kind === 'approval' && signType === 3) {
-      return `${names.length}人(${names.join(',')})顺序会签`;
+      return $t('antflow.model.sequentialSignSummary').replace('{0}', String(names.length)).replace('{1}', names.join(','));
     }
     return names.join('、');
   }
 
   if (property.ruleKind === 'FormField') {
-    return `表单字段：${property.formFieldKey || '-'}`;
+    return $t('antflow.model.formField').replace('{0}', property.formFieldKey || '-');
   }
   if (property.ruleKind === 'OrganizationUnit') {
-    return '部门成员';
+    return $t('antflow.model.departmentMember');
   }
   if (assigneeType === 3) {
-    return '直属领导';
+    return $t('antflow.model.directLeader');
   }
   if (assigneeType === 5) {
-    return '发起人自己';
+    return $t('antflow.model.initiator');
   }
   if (assigneeType === 6) {
-    return `第 ${property.directorLevel || 0} 级主管`;
+    return $t('antflow.model.levelSupervisor').replace('{0}', String(property.directorLevel || 0));
   }
   if (assigneeType === 7) {
-    return '层层审批';
+    return $t('antflow.model.chainApproval');
   }
   if (assigneeType === 8) {
-    return '发起人自选审批人';
+    return $t('antflow.model.selfSelect');
   }
 
-  return kind === 'cc' ? '待选择抄送人' : '待配置审批人';
+  return kind === 'cc' ? $t('antflow.model.pendingCc') : $t('antflow.model.pendingApprover');
 }
 
 function toConditionItem(source: ApprovalFlowCondition): AntFlowConditionItem {
@@ -454,7 +456,7 @@ function conditionBranchesOf(node: ApprovalFlowNode): ApprovalFlowBranch[] {
   if (condition && (condition.fieldKey || condition.expression)) {
     fallback.push({
       id: createId('branch'),
-      name: '条件1',
+      name: $t('antflow.model.conditionName').replace('{0}', '1'),
       fieldKey: condition.fieldKey ?? null,
       operator: condition.operator ?? '=',
       compareValue: condition.compareValue ?? null,
@@ -466,7 +468,7 @@ function conditionBranchesOf(node: ApprovalFlowNode): ApprovalFlowBranch[] {
   } else {
     fallback.push({
       id: createId('branch'),
-      name: '条件1',
+      name: $t('antflow.model.conditionName').replace('{0}', '1'),
       fieldKey: null,
       operator: '=',
       compareValue: null,
@@ -478,7 +480,7 @@ function conditionBranchesOf(node: ApprovalFlowNode): ApprovalFlowBranch[] {
   }
   fallback.push({
     id: createId('branch'),
-    name: '其他条件',
+    name: $t('antflow.model.otherCondition'),
     fieldKey: null,
     operator: '=',
     compareValue: null,
@@ -499,7 +501,7 @@ function branchToConditionNode(
   const isDefault = index === total - 1 ? 1 : 0;
   const child = convertChain(branch.nodes ?? [], 0);
   const node = createConditionNode(
-    branch.name || (isDefault === 1 ? '其他条件' : `条件${index + 1}`),
+    branch.name || (isDefault === 1 ? $t('antflow.model.otherCondition') : $t('antflow.model.conditionName').replace('{0}', String(index + 1))),
     child,
     index + 1,
     isDefault,
@@ -528,7 +530,7 @@ function conditionToGateway(
   const gateway = createGatewayNode(null);
 
   gateway.nodeId = node.id || gateway.nodeId;
-  gateway.nodeName = node.name || '条件分支';
+  gateway.nodeName = node.name || $t('antflow.model.conditionBranch');
   gateway.nodeDisplayName = gateway.nodeName;
   gateway.childNode = next;
   gateway.error = false;
@@ -823,7 +825,7 @@ function conditionNodeToOldBranch(
 
   return {
     id: node.nodeId || createId('branch'),
-    name: node.nodeName || (isDefault ? '其他条件' : `条件${index + 1}`),
+    name: node.nodeName || (isDefault ? $t('antflow.model.otherCondition') : $t('antflow.model.conditionName').replace('{0}', String(index + 1))),
     fieldKey: first?.fieldKey ?? null,
     operator: first?.operator ?? '=',
     compareValue: first?.compareValue ?? null,
@@ -838,14 +840,14 @@ function conditionNodeToOldBranch(
 }
 
 function startToOld(node: AntFlowNode): ApprovalFlowNode {
-  const oldNode = createNode('start', node.nodeName || '发起人');
+  const oldNode = createNode('start', node.nodeName || $t('antflow.model.start'));
   oldNode.id = node.nodeId || oldNode.id;
   return oldNode;
 }
 
 function approveToOld(node: AntFlowNode): ApprovalFlowNode {
   const property = node.nodeProperty ?? {};
-  const oldNode = createNode('approval', node.nodeName || '审批人');
+  const oldNode = createNode('approval', node.nodeName || $t('antflow.model.reviewer'));
   oldNode.id = node.nodeId || oldNode.id;
   oldNode.signMode = signModeFromSignType(property.signType);
   oldNode.rules = rulesFromAntFlow(property);
@@ -856,13 +858,13 @@ function approveToOld(node: AntFlowNode): ApprovalFlowNode {
     ? (property.actions as ApprovalAction[])
     : [];
   oldNode.actions =
-    actions.length > 0 ? actions : [...defaultApproveRejectActions];
+    actions.length > 0 ? actions : getDefaultApproveRejectActions();
 
   return oldNode;
 }
 
 function copyToOld(node: AntFlowNode): ApprovalFlowNode {
-  const oldNode = createNode('cc', node.nodeName || '抄送人');
+  const oldNode = createNode('cc', node.nodeName || $t('antflow.model.cc'));
   oldNode.id = node.nodeId || oldNode.id;
   oldNode.signMode = 'Any';
   oldNode.rules = rulesFromAntFlow(node.nodeProperty ?? {});
@@ -871,7 +873,7 @@ function copyToOld(node: AntFlowNode): ApprovalFlowNode {
 }
 
 function gatewayToOld(gateway: AntFlowNode): ApprovalFlowNode {
-  const oldNode = createNode('condition', gateway.nodeName || '条件分支');
+  const oldNode = createNode('condition', gateway.nodeName || $t('antflow.model.conditionBranch'));
   oldNode.id = gateway.nodeId || oldNode.id;
 
   const conditionNodes: AntFlowNode[] = Array.isArray(
@@ -889,7 +891,7 @@ function gatewayToOld(gateway: AntFlowNode): ApprovalFlowNode {
       ? conditionNodes.map((node, index) =>
           conditionNodeToOldBranch(node, index, lastIndex, hasExplicitDefault),
         )
-      : [createBranch(0, '条件1'), createBranch(1, '其他条件')];
+      : [createBranch(0, $t('antflow.model.conditionName').replace('{0}', '1')), createBranch(1, $t('antflow.model.otherCondition'))];
 
   oldNode.branches = branches;
 
@@ -917,13 +919,13 @@ function gatewayToOld(gateway: AntFlowNode): ApprovalFlowNode {
  * condition node.
  */
 function standaloneConditionToOld(node: AntFlowNode): ApprovalFlowNode {
-  const oldNode = createNode('condition', node.nodeName || '条件分支');
+  const oldNode = createNode('condition', node.nodeName || $t('antflow.model.conditionBranch'));
   oldNode.id = node.nodeId || oldNode.id;
 
   const branch = conditionNodeToOldBranch(node, 0, 1, false);
   branch.nodes = [];
-  branch.name = node.nodeName || '条件1';
-  oldNode.branches = [branch, createBranch(1, '其他条件')];
+  branch.name = node.nodeName || $t('antflow.model.conditionName').replace('{0}', '1');
+  oldNode.branches = [branch, createBranch(1, $t('antflow.model.otherCondition'))];
   oldNode.condition = {
     fieldKey: branch.fieldKey ?? null,
     operator: branch.operator ?? '=',
@@ -1010,9 +1012,9 @@ export function antFlowToOld(
   }
 
   if (!hasStart) {
-    nodes.unshift(createNode('start', '发起人'));
+    nodes.unshift(createNode('start', $t('antflow.model.start')));
   }
-  nodes.push(createNode('end', '结束'));
+  nodes.push(createNode('end', $t('antflow.model.end')));
 
   return {
     version: options.version ?? 1,

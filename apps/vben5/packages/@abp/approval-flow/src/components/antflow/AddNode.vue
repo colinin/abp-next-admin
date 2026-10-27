@@ -3,6 +3,8 @@ import type { AntFlowAddKind } from './types';
 
 import { ref } from 'vue';
 
+import { $t } from '@vben/locales';
+
 interface AddAction {
   color?: string;
   icon?: string;
@@ -17,9 +19,24 @@ const props = withDefaults(
   }>(),
   {
     actions: () => [
-      { key: 'approval', label: '审批人', icon: '审', color: '#f2994a' },
-      { key: 'cc', label: '抄送人', icon: '抄', color: '#2f80ed' },
-      { key: 'condition', label: '条件网关', icon: '条', color: '#27ae60' },
+      {
+        key: 'approval',
+        label: $t('antflow.addNode.approval'),
+        icon: '✓',
+        color: '#f2994a',
+      },
+      {
+        key: 'cc',
+        label: $t('antflow.addNode.cc'),
+        icon: 'CC',
+        color: '#2f80ed',
+      },
+      {
+        key: 'condition',
+        label: $t('antflow.addNode.condition'),
+        icon: '◇',
+        color: '#27ae60',
+      },
     ],
     readonly: false,
   },
@@ -48,7 +65,12 @@ function handleAdd(kind: AntFlowAddKind) {
     @mouseenter="menuOpen = true"
     @mouseleave="menuOpen = false"
   >
-    <div class="add-btn" role="button" tabindex="0" title="添加节点">
+    <div
+      class="add-btn"
+      role="button"
+      tabindex="0"
+      :title="$t('antflow.addNode.add')"
+    >
       <span class="add-plus">＋</span>
     </div>
     <div class="add-menu" :class="{ 'is-open': menuOpen }" @click.stop>

@@ -9,6 +9,8 @@ import type {
 
 import { computed, onMounted, ref } from 'vue';
 
+import { $t } from '@vben/locales';
+
 import { Button, Empty, message, Modal, Space } from 'ant-design-vue';
 
 import { useApprovalFormsApi } from '../../api/useApprovalFormsApi';
@@ -69,9 +71,17 @@ const addActions: Array<{
   key: ApprovalFlowNodeKind;
   label: string;
 }> = [
-  { key: 'approval', label: '审批人', color: '#f2994a' },
-  { key: 'cc', label: '抄送人', color: '#2f80ed' },
-  { key: 'condition', label: '条件分支', color: '#27ae60' },
+  {
+    key: 'approval',
+    label: $t('antflow.designer.common.approval'),
+    color: '#f2994a',
+  },
+  { key: 'cc', label: $t('antflow.designer.common.cc'), color: '#2f80ed' },
+  {
+    key: 'condition',
+    label: $t('antflow.designer.common.condition'),
+    color: '#27ae60',
+  },
 ];
 
 async function loadTemplate() {
@@ -97,7 +107,7 @@ async function loadTemplate() {
       }
     }
   } catch {
-    message.error('审批模板加载失败');
+    message.error($t('antflow.designer.common.loadFailed'));
   } finally {
     loading.value = false;
   }
@@ -128,7 +138,13 @@ function addConditionBranch(node: ApprovalFlowNode) {
   branch.nodes = [];
   branches.splice(insertAt, 0, branch);
   branches.forEach((item, index) => {
-    item.name = index === branches.length - 1 ? '其他条件' : `条件${index + 1}`;
+    item.name =
+      index === branches.length - 1
+        ? $t('antflow.designer.common.otherCondition')
+        : $t('antflow.designer.common.conditionWithIndex').replace(
+            '{0}',
+            String(index + 1),
+          );
     if (index === branches.length - 1) {
       item.expression = null;
     }
@@ -272,13 +288,13 @@ function addBranchNode(nodes: ApprovalFlowNode[], kind: ApprovalFlowNodeKind) {
 function nodeIcon(kind: ApprovalFlowNodeKind): string {
   switch (kind) {
     case 'approval': {
-      return '审';
+      return $t('antflow.designer.common.approval');
     }
     case 'cc': {
-      return '抄';
+      return $t('antflow.designer.common.cc');
     }
     case 'condition': {
-      return '条';
+      return $t('antflow.designer.common.condition');
     }
     default: {
       return '•';
@@ -298,25 +314,31 @@ function statusClass(id: string): string {
 function statusText(id: string): string {
   switch (statusOf(id)) {
     case 'approved': {
-      return '已通过';
+      return $t('antflow.designer.common.statusApproved');
     }
     case 'rejected': {
-      return '已拒绝';
+      return $t('antflow.designer.common.statusRejected');
     }
     case 'running': {
-      return '进行中';
+      return $t('antflow.designer.common.statusRunning');
     }
     default: {
-      return '未执行';
+      return $t('antflow.designer.common.statusNotStarted');
     }
   }
 }
 function conditionTitle(index: number): string {
-  return `条件${index + 1}`;
+  return $t('antflow.designer.common.conditionWithIndex').replace(
+    '{0}',
+    String(index + 1),
+  );
 }
 
 function conditionPriority(index: number): string {
-  return `优先级${index + 1}`;
+  return $t('antflow.designer.common.priority').replace(
+    '{0}',
+    String(index + 1),
+  );
 }
 
 function conditionExpression(
@@ -333,7 +355,9 @@ function conditionExpression(
       .replaceAll('!==', '≠')
       .replaceAll('==', '=');
   }
-  return index === total - 1 ? '其他条件进入此流程' : '请设置条件';
+  return index === total - 1
+    ? $t('antflow.designer.common.otherConditionFlow')
+    : $t('antflow.designer.common.setCondition');
 }
 function zoomIn() {
   zoom.value = Math.min(1.5, Math.round((zoom.value + 0.1) * 10) / 10);
@@ -349,7 +373,7 @@ function resetZoom() {
 
 async function saveDesign(): Promise<null | string> {
   if (!props.templateId) {
-    message.warning('请先保存模板');
+    message.warning($t('antflow.designer.common.saveFirst'));
     return null;
   }
 
@@ -361,10 +385,10 @@ async function saveDesign(): Promise<null | string> {
     await templatesApi.saveDesignApi(props.templateId, {
       flowDefinitionJson: json,
     });
-    message.success('审批流设计已保存');
+    message.success($t('antflow.designer.common.saveSuccess'));
     return json;
   } catch {
-    message.error('保存失败');
+    message.error($t('antflow.designer.common.saveFailed'));
     return null;
   } finally {
     saving.value = false;
@@ -381,9 +405,9 @@ async function publish() {
     await templatesApi.publishApi(props.templateId, {
       formDefinitionId: model.value.formDefinitionId ?? null,
     });
-    message.success('发布成功');
+    message.success($t('antflow.designer.common.publishSuccess'));
   } catch {
-    message.error('发布失败');
+    message.error($t('antflow.designer.common.publishFailed'));
   } finally {
     saving.value = false;
   }
@@ -391,15 +415,14 @@ async function publish() {
 
 function confirmPublish() {
   if (!props.templateId) {
-    message.warning('请先保存模板');
+    message.warning($t('antflow.designer.common.saveFirst'));
     return;
   }
 
   Modal.confirm({
-    content:
-      '发布后将根据当前流程设计自动生成并发布 Elsa 工作流定义，确定继续吗？',
+    content: $t('antflow.designer.common.publishConfirm'),
     onOk: publish,
-    title: '发布审批模板',
+    title: $t('antflow.designer.common.publishTitle'),
   });
 }
 
@@ -424,13 +447,19 @@ onMounted(() => {
     :class="{ 'is-embedded': embedded, 'is-readonly': readonly }"
   >
     <div v-if="!embedded" class="designer-header">
-      <span class="designer-title">{{ templateName || '审批流设计' }}</span>
+      <span class="designer-title">{{
+        templateName || $t('antflow.designer.common.flowDesign')
+      }}</span>
       <Space>
         <Button :disabled="formFields.length === 0" @click="previewOpen = true">
-          预览表单
+          {{ $t('antflow.designer.common.previewForm') }}
         </Button>
-        <Button :loading="saving" @click="saveDesign">保存设计</Button>
-        <Button type="primary" @click="confirmPublish">发布模板</Button>
+        <Button :loading="saving" @click="saveDesign">
+          {{ $t('antflow.designer.common.saveDesign') }}
+        </Button>
+        <Button type="primary" @click="confirmPublish">
+          {{ $t('antflow.designer.common.publishTemplate') }}
+        </Button>
       </Space>
     </div>
 
@@ -439,7 +468,7 @@ onMounted(() => {
         <button
           class="zoom-btn"
           :disabled="zoom <= 0.5"
-          title="缩小"
+          :title="$t('antflow.designer.common.zoomOut')"
           @click="zoomOut"
         >
           −
@@ -448,12 +477,18 @@ onMounted(() => {
         <button
           class="zoom-btn"
           :disabled="zoom >= 1.5"
-          title="放大"
+          :title="$t('antflow.designer.common.zoomIn')"
           @click="zoomIn"
         >
           ＋
         </button>
-        <button class="zoom-btn" title="重置" @click="resetZoom">↺</button>
+        <button
+          class="zoom-btn"
+          :title="$t('antflow.designer.common.reset')"
+          @click="resetZoom"
+        >
+          ↺
+        </button>
       </div>
 
       <div class="flow-container" :style="{ transform: `scale(${zoom})` }">
@@ -464,13 +499,13 @@ onMounted(() => {
           @click="selectNode(startNode.id)"
         >
           <div class="start-card-header">
-            <span>发起人</span>
+            <span>{{ $t('antflow.designer.common.initiator') }}</span>
             <span v-if="readonly" class="status-chip">{{
               statusText(startNode.id)
             }}</span>
           </div>
           <div class="start-card-body">
-            <span>所有人</span>
+            <span>{{ $t('antflow.designer.common.everyone') }}</span>
             <span class="node-arrow">›</span>
           </div>
         </div>
@@ -494,7 +529,7 @@ onMounted(() => {
                 class="condition-pill"
                 @click="addConditionBranch(node)"
               >
-                添加条件
+                {{ $t('antflow.designer.common.addCondition') }}
               </div>
               <div class="condition-branches">
                 <div
@@ -610,7 +645,10 @@ onMounted(() => {
             </div>
             <div class="node-content">
               <span class="node-summary">
-                {{ summarizeNode(node) || '请点击配置节点' }}
+                {{
+                  summarizeNode(node) ||
+                  $t('antflow.designer.common.selectCondition')
+                }}
               </span>
               <span class="node-arrow">›</span>
             </div>
@@ -630,13 +668,15 @@ onMounted(() => {
 
         <div v-if="endNode" class="end-node" :class="statusClass(endNode.id)">
           <div class="end-circle"></div>
-          <span class="end-text">流程结束</span>
+          <span class="end-text">{{
+            $t('antflow.designer.common.flowEnd')
+          }}</span>
         </div>
 
         <Empty
           v-if="editableNodes.length === 0"
           class="mt-4"
-          description="点击 + 添加审批人、抄送人或条件分支"
+          :description="$t('antflow.designer.common.configHint')"
         />
       </div>
     </div>

@@ -7,6 +7,8 @@ import type { CarbonCopyDto } from '../../types/carbon-copies';
 
 import { ref } from 'vue';
 
+import { $t } from '@vben/locales';
+
 import { useVbenVxeGrid } from '@abp/ui';
 import { Button, Tag } from 'ant-design-vue';
 
@@ -26,7 +28,7 @@ const formOptions: VbenFormProps = {
       component: 'Input',
       fieldName: 'filter',
       formItemClass: 'col-span-2 items-baseline',
-      label: '搜索',
+      label: $t('ElsaNextApprovalFlow.ApprovalFlow:Common:Search'),
     },
   ],
   showCollapseButton: true,
@@ -35,26 +37,38 @@ const formOptions: VbenFormProps = {
 
 const gridOptions: VxeGridProps<CarbonCopyDto> = {
   columns: [
-    { field: 'title', minWidth: 240, title: '标题' },
-    { field: 'summary', minWidth: 200, title: '摘要' },
-    { field: 'senderDisplayName', minWidth: 140, title: '发起人' },
+    {
+      field: 'title',
+      minWidth: 240,
+      title: $t('ElsaNextApprovalFlow.ApprovalFlow:Common:Title'),
+    },
+    {
+      field: 'summary',
+      minWidth: 200,
+      title: $t('ElsaNextApprovalFlow.ApprovalFlow:Common:Summary'),
+    },
+    {
+      field: 'senderDisplayName',
+      minWidth: 140,
+      title: $t('ElsaNextApprovalFlow.ApprovalFlow:Common:Initiator'),
+    },
     {
       field: 'notifiedAt',
       slots: { default: 'notifiedAt' },
-      title: '抄送时间',
+      title: $t('ElsaNextApprovalFlow.ApprovalFlow:CarbonCopy:CopiedAt'),
       width: 180,
     },
     {
       field: 'isRead',
       slots: { default: 'readState' },
-      title: '状态',
+      title: $t('ElsaNextApprovalFlow.ApprovalFlow:Common:Status'),
       width: 90,
     },
     {
       field: 'action',
       fixed: 'right',
       slots: { default: 'action' },
-      title: '操作',
+      title: $t('ElsaNextApprovalFlow.ApprovalFlow:Common:Actions'),
       width: 100,
     },
   ],
@@ -107,13 +121,17 @@ async function openCarbonCopy(item: CarbonCopyDto) {
 </script>
 
 <template>
-  <Grid table-title="抄送我的">
+  <Grid :table-title="$t('ElsaNextApprovalFlow.ApprovalFlow:CarbonCopy:Title')">
     <template #notifiedAt="{ row }">
       {{ formatDateTime(row.notifiedAt) }}
     </template>
     <template #readState="{ row }">
       <Tag :color="row.isRead ? 'default' : 'warning'">
-        {{ row.isRead ? '已读' : '未读' }}
+        {{
+          row.isRead
+            ? $t('ElsaNextApprovalFlow.ApprovalFlow:Common:Read')
+            : $t('ElsaNextApprovalFlow.ApprovalFlow:Common:Unread')
+        }}
       </Tag>
     </template>
     <template #action="{ row }">
@@ -122,7 +140,7 @@ async function openCarbonCopy(item: CarbonCopyDto) {
         type="link"
         @click="openCarbonCopy(row as CarbonCopyDto)"
       >
-        查看
+        {{ $t('ElsaNextApprovalFlow.ApprovalFlow:Common:View') }}
       </Button>
     </template>
   </Grid>

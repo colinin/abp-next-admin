@@ -137,7 +137,10 @@ const statusMap = computed<Record<string, string>>(() => {
 
 <template>
   <div class="flow-viewer">
-    <Empty v-if="!model" description="没有可展示的流程设计" />
+    <Empty
+      v-if="!model"
+      :description="$t('ElsaNextApprovalFlow.ApprovalFlow:Viewer:Empty')"
+    />
     <FlowDesign v-else :status-map="statusMap" :value="antFlowRoot" readonly />
   </div>
 </template>

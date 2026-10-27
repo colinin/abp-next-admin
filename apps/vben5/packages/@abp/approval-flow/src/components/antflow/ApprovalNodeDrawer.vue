@@ -4,6 +4,8 @@ import type { AntFlowNode } from './types';
 
 import { computed, reactive, ref, watch } from 'vue';
 
+import { $t } from '@vben/locales';
+
 import {
   Alert,
   Button,
@@ -75,19 +77,25 @@ const pickerOpen = ref(false);
 const pickerSelected = ref<string[]>([]);
 
 const signTypeOptions = [
-  { label: '或签（只需一名审批人同意或拒绝即可）', value: 1 },
-  { label: '会签（需所有审批人同意，不限顺序）', value: 2 },
-  { label: '顺序会签（需要所有审批人同意，根据前端传入的顺序）', value: 3 },
+  { label: $t('antflow.approvalNode.orSign'), value: 1 },
+  { label: $t('antflow.approvalNode.countersign'), value: 2 },
+  { label: $t('antflow.approvalNode.sequentialCountersign'), value: 3 },
 ];
 
 const noHeaderActionOptions = [
-  { label: '不允许发起', value: 0 },
-  { label: '跳过', value: 1 },
-  { label: '转交给审核管理员', value: 2 },
+  { label: $t('antflow.approvalNode.noHeaderActionNone'), value: 0 },
+  { label: $t('antflow.approvalNode.noHeaderActionSkip'), value: 1 },
+  { label: $t('antflow.approvalNode.noHeaderActionAdmin'), value: 2 },
 ];
 
 const directorLevelOptions = Array.from({ length: 5 }, (_, index) => ({
-  label: index === 0 ? '直接主管' : `第${index + 1}级主管`,
+  label:
+    index === 0
+      ? $t('antflow.approvalNode.directSupervisor')
+      : $t('antflow.approvalNode.levelSupervisor').replace(
+          '{0}',
+          String(index + 1),
+        ),
   value: index + 1,
 }));
 
@@ -111,29 +119,29 @@ const isApprove = computed(
 const isCopy = computed(() => draft.nodeType === NodeType.CopyNode);
 const drawerTitle = computed(() => {
   if (isCopy.value) {
-    return '抄送人';
+    return $t('antflow.approvalNode.ccPerson');
   }
   if (draft.nodeType === NodeType.ParallelApproveNode) {
-    return '并行审批人';
+    return $t('antflow.approvalNode.parallelApprover');
   }
-  return '审批人';
+  return $t('antflow.approvalNode.approver');
 });
 
 const assigneeTypeOptions = computed(() => {
   if (isCopy.value) {
     return [
-      { label: '指定成员', value: 1 },
-      { label: '指定角色', value: 2 },
+      { label: $t('antflow.approvalNode.assigneeMember'), value: 1 },
+      { label: $t('antflow.approvalNode.assigneeRole'), value: 2 },
     ];
   }
   return [
-    { label: '指定成员', value: 1 },
-    { label: '指定角色', value: 2 },
-    { label: '直属领导', value: 3 },
-    { label: '发起人自己', value: 5 },
-    { label: '指定层级', value: 6 },
-    { label: '层层审批', value: 7 },
-    { label: '发起人自选审批人', value: 8 },
+    { label: $t('antflow.approvalNode.assigneeMember'), value: 1 },
+    { label: $t('antflow.approvalNode.assigneeRole'), value: 2 },
+    { label: $t('antflow.approvalNode.assigneeLeader'), value: 3 },
+    { label: $t('antflow.approvalNode.assigneeInitiator'), value: 5 },
+    { label: $t('antflow.approvalNode.assigneeLevel'), value: 6 },
+    { label: $t('antflow.approvalNode.assigneeChain'), value: 7 },
+    { label: $t('antflow.approvalNode.assigneeSelfSelect'), value: 8 },
   ];
 });
 
@@ -158,15 +166,25 @@ const pickerOptions = computed(() => {
 });
 
 const personLabel = computed(() =>
-  draft.assigneeType === 2 ? '添加/修改角色' : '添加/修改人员',
+  draft.assigneeType === 2
+    ? $t('antflow.approvalNode.addRole')
+    : $t('antflow.approvalNode.addPerson'),
 );
 
 const tabs = computed(() => {
   const items = [
-    { key: 'approver', label: isCopy.value ? '抄送人设置' : '审批人设置' },
+    {
+      key: 'approver',
+      label: isCopy.value
+        ? $t('antflow.approvalNode.ccSetting')
+        : $t('antflow.approvalNode.approverSetting'),
+    },
   ];
   if (isApprove.value) {
-    items.push({ key: 'button', label: '按钮权限设置' });
+    items.push({
+      key: 'button',
+      label: $t('antflow.approvalNode.buttonPermission'),
+    });
   }
   return items;
 });
@@ -273,15 +291,22 @@ function generateDisplayName(): string {
 
   if ([1, 2].includes(draft.assigneeType) && names.length > 0) {
     if (draft.signType === 2) {
-      return `${names.length}人(${names.join(',')})会签`;
+      return $t('antflow.approvalNode.signSummary')
+        .replace('{0}', String(names.length))
+        .replace('{1}', names.join(','));
     }
     if (draft.signType === 3) {
-      return `${names.length}人(${names.join(',')})顺序会签`;
+      return $t('antflow.approvalNode.sequentialSignSummary')
+        .replace('{0}', String(names.length))
+        .replace('{1}', names.join(','));
     }
     return names.join(',');
   }
   if (draft.assigneeType === 6) {
-    return `第 ${draft.directorLevel} 级主管`;
+    return $t('antflow.approvalNode.levelSummary').replace(
+      '{0}',
+      String(draft.directorLevel),
+    );
   }
   return (
     assigneeTypeOptions.value.find((item) => item.value === draft.assigneeType)
@@ -291,12 +316,14 @@ function generateDisplayName(): string {
 
 function validate(): boolean {
   if (!draft.nodeName.trim()) {
-    message.warning('请输入节点名称');
+    message.warning($t('antflow.approvalNode.nodeNameRequired'));
     return false;
   }
   if ([1, 2].includes(draft.assigneeType) && draft.assigneeList.length === 0) {
     message.warning(
-      draft.assigneeType === 2 ? '请选择角色' : '请选择审批人/抄送人',
+      draft.assigneeType === 2
+        ? $t('antflow.approvalNode.selectRole')
+        : $t('antflow.approvalNode.selectApprover'),
     );
     return false;
   }
@@ -365,12 +392,14 @@ function confirm() {
 
     <section v-if="activeTab === 'approver'" class="approver-panel">
       <div class="form-item">
-        <label class="form-label">节点名称</label>
+        <label class="form-label">{{
+          $t('antflow.approvalNode.nodeName')
+        }}</label>
         <Input
           v-model:value="draft.nodeName"
           :disabled="readonly"
           :maxlength="50"
-          placeholder="请输入节点名称"
+          :placeholder="$t('antflow.approvalNode.nodeNamePlaceholder')"
         />
       </div>
 
@@ -411,46 +440,46 @@ function confirm() {
 
       <Alert
         v-else-if="draft.assigneeType === 3"
-        description="系统将自动选择流程发起人的直属领导作为审批人"
+        :description="$t('antflow.approvalNode.directLeaderDesc')"
         show-icon
-        title="直属领导"
+        :title="$t('antflow.approvalNode.directLeaderTitle')"
         type="warning"
       />
       <Alert
         v-else-if="draft.assigneeType === 5"
-        description="系统将自动选择流程发起人自己作为审批人"
+        :description="$t('antflow.approvalNode.initiatorDesc')"
         show-icon
-        title="发起人自己"
+        :title="$t('antflow.approvalNode.initiatorTitle')"
         type="warning"
       />
       <div v-else-if="draft.assigneeType === 6" class="director-line">
-        <span>发起人的：</span>
+        <span>{{ $t('antflow.approvalNode.initiatorPrefix') }}</span>
         <Select
           v-model:value="draft.directorLevel"
           :disabled="readonly"
           :options="directorLevelOptions"
           style="width: 220px"
         />
-        <p class="director-tip">找不到主管时，由直属领导代审批</p>
+        <p class="director-tip">{{ $t('antflow.approvalNode.directorTip') }}</p>
       </div>
       <Alert
         v-else-if="draft.assigneeType === 7"
-        description="按照组织架构的上下级关系，从低到高、一级一级往上审批，每一级的直属领导都要依次审批"
+        :description="$t('antflow.approvalNode.chainDesc')"
         show-icon
-        title="层层审批"
+        :title="$t('antflow.approvalNode.chainTitle')"
         type="warning"
       />
       <Alert
         v-else-if="draft.assigneeType === 8"
-        description="用户可以在流程发起时选择该节点的审批人"
+        :description="$t('antflow.approvalNode.selfSelectDesc')"
         show-icon
-        title="发起人自选审批人"
+        :title="$t('antflow.approvalNode.selfSelectTitle')"
         type="warning"
       />
 
       <template v-if="isApprove">
         <div class="section-block">
-          <h3>✍多人审批时采用的审批方式</h3>
+          <h3>✍{{ $t('antflow.approvalNode.multiApprovalMode') }}</h3>
           <RadioGroup
             v-model:value="draft.signType"
             class="radio-stack"
@@ -467,7 +496,7 @@ function confirm() {
         </div>
 
         <div class="section-block">
-          <h3>✍审批人为空时</h3>
+          <h3>✍{{ $t('antflow.approvalNode.emptyApprover') }}</h3>
           <RadioGroup
             v-model:value="draft.noHeaderAction"
             class="radio-stack"
@@ -496,8 +525,16 @@ function confirm() {
     <template #footer>
       <div class="drawer-footer">
         <Space>
-          <Button @click="close">{{ readonly ? '关闭' : '取消' }}</Button>
-          <Button v-if="!readonly" type="primary" @click="confirm">确定</Button>
+          <Button @click="close">
+            {{
+              readonly
+                ? $t('antflow.approvalNode.close')
+                : $t('antflow.approvalNode.cancel')
+            }}
+          </Button>
+          <Button v-if="!readonly" type="primary" @click="confirm">
+            {{ $t('antflow.approvalNode.confirm') }}
+          </Button>
         </Space>
       </div>
     </template>
@@ -505,7 +542,11 @@ function confirm() {
 
   <Modal
     v-model:open="pickerOpen"
-    :title="draft.assigneeType === 2 ? '选择角色' : '选择人员'"
+    :title="
+      draft.assigneeType === 2
+        ? $t('antflow.approvalNode.selectRoleTitle')
+        : $t('antflow.approvalNode.selectPersonTitle')
+    "
     @ok="confirmPicker"
   >
     <CheckboxGroup v-model:value="pickerSelected" class="picker-list">
@@ -517,7 +558,9 @@ function confirm() {
         {{ item.label }}
       </Checkbox>
     </CheckboxGroup>
-    <div v-if="pickerOptions.length === 0" class="muted">暂无可选数据</div>
+    <div v-if="pickerOptions.length === 0" class="muted">
+      {{ $t('antflow.common.noData') }}
+    </div>
   </Modal>
 </template>
 

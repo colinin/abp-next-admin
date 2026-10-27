@@ -9,6 +9,8 @@ import type {
 
 import { computed, ref } from 'vue';
 
+import { $t } from '@vben/locales';
+
 import AddNode from './AddNode.vue';
 import {
   createApproveNode,
@@ -25,7 +27,7 @@ defineOptions({
 
 const props = withDefaults(
   defineProps<{
-    /** Render the terminal "流程结束" marker for the main chain. */
+    /** Render the terminal flow-end marker for the main chain. */
     endNode?: boolean;
     node?: AntFlowNode | null;
     readonly?: boolean;
@@ -69,8 +71,8 @@ const canDelete = computed(
 const defaultText = computed(() => {
   const nodeType = props.node?.nodeType;
   return nodeType === undefined
-    ? '节点'
-    : (placeholderList[nodeType] ?? '节点');
+    ? $t('antflow.nodeWarp.node')
+    : $t(placeholderList[nodeType] ?? 'antflow.nodeWarp.node');
 });
 const conditionNodes = computed<AntFlowNode[]>(() => {
   const nodes = props.node?.nodeProperty?.conditionNodes;
@@ -85,19 +87,19 @@ function iconOf(node: AntFlowNode): string {
   switch (node.nodeType) {
     case NodeType.ApproveNode:
     case NodeType.ParallelApproveNode: {
-      return '审';
+      return '✓';
     }
     case NodeType.ConditionNode: {
-      return '条';
+      return '◇';
     }
     case NodeType.CopyNode: {
-      return '抄';
+      return 'CC';
     }
     case NodeType.StartNode: {
-      return '发';
+      return '▶';
     }
     default: {
-      return '节';
+      return '•';
     }
   }
 }
@@ -152,16 +154,16 @@ function statusOf(node: AntFlowNode): '' | AntFlowNodeStatus {
 function statusLabelOf(node: AntFlowNode): string {
   switch (statusOf(node)) {
     case 'approved': {
-      return '已通过';
+      return $t('antflow.nodeWarp.statusApproved');
     }
     case 'current': {
-      return '进行中';
+      return $t('antflow.nodeWarp.statusRunning');
     }
     case 'pending': {
-      return '未执行';
+      return $t('antflow.nodeWarp.statusNotStarted');
     }
     case 'rejected': {
-      return '已拒绝';
+      return $t('antflow.nodeWarp.statusRejected');
     }
     default: {
       return '';
@@ -234,7 +236,10 @@ function handleAddCondition() {
     ? ([...updated.nodeProperty.conditionNodes] as AntFlowNode[])
     : [];
   const created = createConditionNode(
-    `条件${nodes.length + 1}`,
+    $t('antflow.nodeWarp.conditionName').replace(
+      '{0}',
+      String(nodes.length + 1),
+    ),
     null,
     nodes.length + 1,
     0,
@@ -377,7 +382,9 @@ function commitBranchEdit(index: number) {
     return;
   }
 
-  const name = branchDraftName.value.trim() || `条件${index + 1}`;
+  const name =
+    branchDraftName.value.trim() ||
+    $t('antflow.nodeWarp.conditionName').replace('{0}', String(index + 1));
   nodes[index] = {
     ...(nodes[index] as AntFlowNode),
     nodeDisplayName: name,
@@ -394,25 +401,30 @@ function cancelBranchEdit() {
 
 <template>
   <div class="node-warp">
-    <!-- 1. 普通节点 -->
+    <!-- 1. Regular node -->
     <template v-if="node && !isGateway">
       <div class="node-card-wrap">
         <span
           v-if="node.error"
           class="node-error-badge"
-          aria-label="节点配置错误"
+          :aria-label="$t('antflow.nodeWarp.configError')"
         >
           !
         </span>
         <div :class="cardClass(node)">
           <span v-if="isCondition" class="node-priority">
-            优先级{{ node.nodeWeight }}
+            {{
+              $t('antflow.nodeWarp.priority').replace(
+                '{0}',
+                String(node.nodeWeight),
+              )
+            }}
           </span>
           <button
             v-if="canDelete"
             class="node-delete"
             type="button"
-            aria-label="删除节点"
+            :aria-label="$t('antflow.nodeWarp.deleteNode')"
             @click.stop="handleDelete"
           >
             ×
@@ -438,7 +450,12 @@ function cancelBranchEdit() {
           </div>
           <div class="node-content" @click.stop="handleSelect(node)">
             <span v-if="node.error" class="placeholder">
-              请选择{{ defaultText }}
+              {{
+                $t('antflow.nodeWarp.selectPlaceholder').replace(
+                  '{0}',
+                  defaultText,
+                )
+              }}
             </span>
             <span v-else class="content">{{ node.nodeDisplayName }}</span>
             <span
@@ -474,11 +491,11 @@ function cancelBranchEdit() {
       />
       <div v-else-if="endNode" class="end-node">
         <div class="circle"></div>
-        <span class="text">流程结束</span>
+        <span class="text">{{ $t('antflow.nodeWarp.flowEnd') }}</span>
       </div>
     </template>
 
-    <!-- 2. 条件网关 -->
+    <!-- 2. Condition gateway -->
     <template v-if="node && isGateway">
       <div class="parallel-branches-container">
         <div
@@ -486,9 +503,11 @@ function cancelBranchEdit() {
           class="branch-label condition-branch-label"
           @click.stop="handleAddCondition"
         >
-          添加条件
+          {{ $t('antflow.nodeWarp.addCondition') }}
         </div>
-        <div v-else class="branch-label">条件分支</div>
+        <div v-else class="branch-label">
+          {{ $t('antflow.nodeWarp.conditionBranch') }}
+        </div>
 
         <div class="branches-wrapper">
           <div
@@ -500,19 +519,24 @@ function cancelBranchEdit() {
               <span
                 v-if="branch.error"
                 class="node-error-badge"
-                aria-label="节点配置错误"
+                :aria-label="$t('antflow.nodeWarp.configError')"
               >
                 !
               </span>
               <div :class="cardClass(branch)">
                 <span class="node-priority">
-                  优先级{{ branch.nodeWeight }}
+                  {{
+                    $t('antflow.nodeWarp.priority').replace(
+                      '{0}',
+                      String(branch.nodeWeight),
+                    )
+                  }}
                 </span>
                 <button
                   v-if="!readonly"
                   class="node-delete"
                   type="button"
-                  aria-label="删除条件"
+                  :aria-label="$t('antflow.nodeWarp.deleteCondition')"
                   @click.stop="handleDeleteBranch(branch)"
                 >
                   ×
@@ -542,7 +566,12 @@ function cancelBranchEdit() {
                 </div>
                 <div class="node-content" @click.stop="handleSelect(branch)">
                   <span v-if="branch.error" class="placeholder">
-                    请选择{{ defaultText }}
+                    {{
+                      $t('antflow.nodeWarp.selectPlaceholder').replace(
+                        '{0}',
+                        defaultText,
+                      )
+                    }}
                   </span>
                   <span v-else class="content">
                     {{ branch.nodeDisplayName }}
@@ -614,13 +643,13 @@ function cancelBranchEdit() {
       />
       <div v-else-if="endNode" class="end-node">
         <div class="circle"></div>
-        <span class="text">流程结束</span>
+        <span class="text">{{ $t('antflow.nodeWarp.flowEnd') }}</span>
       </div>
     </template>
 
     <div v-if="!node && endNode" class="end-node">
       <div class="circle"></div>
-      <span class="text">流程结束</span>
+      <span class="text">{{ $t('antflow.nodeWarp.flowEnd') }}</span>
     </div>
   </div>
 </template>

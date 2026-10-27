@@ -10,6 +10,8 @@ import type {
 
 import { reactive, ref } from 'vue';
 
+import { $t } from '@vben/locales';
+
 import { useVbenVxeGrid } from '@abp/ui';
 import {
   Button,
@@ -31,23 +33,65 @@ import { VxeGrid } from 'vxe-table';
 import { useApprovalFormsApi } from '../../api/useApprovalFormsApi';
 
 const formFieldTypes = [
-  { label: '单行文本', value: 'single-line-text' },
-  { label: '多行文本', value: 'multi-line-text' },
-  { label: '数字', value: 'number' },
-  { label: '日期', value: 'date' },
-  { label: '日期区间', value: 'date-range' },
-  { label: '下拉选择', value: 'select' },
-  { label: '单选', value: 'radio' },
-  { label: '多选', value: 'multiple-select' },
-  { label: '开关', value: 'switch' },
-  { label: '附件', value: 'attachment' },
-  { label: '说明', value: 'description' },
+  {
+    label: $t('ElsaNextApprovalFlow.FormDefinitions:FieldType:SingleLineText'),
+    value: 'single-line-text',
+  },
+  {
+    label: $t('ElsaNextApprovalFlow.FormDefinitions:FieldType:MultiLineText'),
+    value: 'multi-line-text',
+  },
+  {
+    label: $t('ElsaNextApprovalFlow.FormDefinitions:FieldType:Number'),
+    value: 'number',
+  },
+  {
+    label: $t('ElsaNextApprovalFlow.FormDefinitions:FieldType:Date'),
+    value: 'date',
+  },
+  {
+    label: $t('ElsaNextApprovalFlow.FormDefinitions:FieldType:DateRange'),
+    value: 'date-range',
+  },
+  {
+    label: $t('ElsaNextApprovalFlow.FormDefinitions:FieldType:Select'),
+    value: 'select',
+  },
+  {
+    label: $t('ElsaNextApprovalFlow.FormDefinitions:FieldType:Radio'),
+    value: 'radio',
+  },
+  {
+    label: $t('ElsaNextApprovalFlow.FormDefinitions:FieldType:MultipleSelect'),
+    value: 'multiple-select',
+  },
+  {
+    label: $t('ElsaNextApprovalFlow.FormDefinitions:FieldType:Switch'),
+    value: 'switch',
+  },
+  {
+    label: $t('ElsaNextApprovalFlow.FormDefinitions:FieldType:Attachment'),
+    value: 'attachment',
+  },
+  {
+    label: $t('ElsaNextApprovalFlow.FormDefinitions:FieldType:Description'),
+    value: 'description',
+  },
 ] as const;
 
 const formFieldPermissions = [
-  { label: '可编辑', value: 'E' },
-  { label: '只读', value: 'R' },
-  { label: '隐藏', value: 'H' },
+  {
+    label: $t('ElsaNextApprovalFlow.FormDefinitions:FieldPermission:Editable'),
+    value: 'E',
+  },
+  {
+    label: $t('ElsaNextApprovalFlow.FormDefinitions:FieldPermission:ReadOnly'),
+    value: 'R',
+  },
+  {
+    label: $t('ElsaNextApprovalFlow.FormDefinitions:FieldPermission:Hidden'),
+    value: 'H',
+  },
 ] as const;
 
 const formsApi = useApprovalFormsApi();
@@ -80,15 +124,32 @@ const fieldForm = reactive({
 });
 
 const columns: VxeGridProps<FormDefinitionDto>['columns'] = [
-  { field: 'name', minWidth: 220, title: '表单名称' },
-  { field: 'code', minWidth: 180, title: '编码' },
-  { field: 'version', title: '版本', width: 80 },
-  { field: 'status', slots: { default: 'status' }, title: '状态', width: 100 },
+  {
+    field: 'name',
+    minWidth: 220,
+    title: $t('ElsaNextApprovalFlow.FormDefinitions:Name'),
+  },
+  {
+    field: 'code',
+    minWidth: 180,
+    title: $t('ElsaNextApprovalFlow.FormDefinitions:Code'),
+  },
+  {
+    field: 'version',
+    title: $t('ElsaNextApprovalFlow.FormDefinitions:Version'),
+    width: 80,
+  },
+  {
+    field: 'status',
+    slots: { default: 'status' },
+    title: $t('ElsaNextApprovalFlow.FormDefinitions:Status'),
+    width: 100,
+  },
   {
     field: 'action',
     fixed: 'right',
     slots: { default: 'action' },
-    title: '操作',
+    title: $t('ElsaNextApprovalFlow.FormDefinitions:Actions'),
     width: 260,
   },
 ];
@@ -100,7 +161,7 @@ const formOptions: VbenFormProps = {
       component: 'Input',
       fieldName: 'filter',
       formItemClass: 'col-span-2 items-baseline',
-      label: '搜索',
+      label: $t('ElsaNextApprovalFlow.FormDefinitions:Search'),
     },
   ],
   showCollapseButton: true,
@@ -148,26 +209,39 @@ const [Grid, gridApi] = useVbenVxeGrid({
 });
 
 const fieldColumns: VxeGridProps<FormFieldDto>['columns'] = [
-  { field: 'label', minWidth: 180, title: '显示名' },
-  { field: 'key', minWidth: 160, title: '字段键' },
-  { field: 'type', slots: { default: 'type' }, title: '类型', width: 120 },
+  {
+    field: 'label',
+    minWidth: 180,
+    title: $t('ElsaNextApprovalFlow.FormDefinitions:DisplayName'),
+  },
+  {
+    field: 'key',
+    minWidth: 160,
+    title: $t('ElsaNextApprovalFlow.FormDefinitions:FieldKey'),
+  },
+  {
+    field: 'type',
+    slots: { default: 'type' },
+    title: $t('ElsaNextApprovalFlow.FormDefinitions:Type'),
+    width: 120,
+  },
   {
     field: 'permission',
     slots: { default: 'permission' },
-    title: '权限',
+    title: $t('ElsaNextApprovalFlow.FormDefinitions:Permission'),
     width: 90,
   },
   {
     field: 'required',
     slots: { default: 'required' },
-    title: '必填',
+    title: $t('ElsaNextApprovalFlow.FormDefinitions:Required'),
     width: 80,
   },
   {
     field: 'action',
     fixed: 'right',
     slots: { default: 'action' },
-    title: '操作',
+    title: $t('ElsaNextApprovalFlow.FormDefinitions:Actions'),
     width: 150,
   },
 ];
@@ -195,7 +269,7 @@ function openEdit(target: FormDefinitionDto) {
 
 async function submitEdit() {
   if (!form.name || !form.code) {
-    message.warning('请填写表单名称和编码');
+    message.warning($t('ElsaNextApprovalFlow.FormDefinitions:NameRequired'));
     return;
   }
 
@@ -216,7 +290,7 @@ async function submitEdit() {
     editOpen.value = false;
     await load();
   } catch {
-    message.error('保存失败');
+    message.error($t('ElsaNextApprovalFlow.FormDefinitions:SaveFailed'));
   } finally {
     saving.value = false;
   }
@@ -225,21 +299,24 @@ async function submitEdit() {
 async function publish(target: FormDefinitionDto) {
   try {
     await formsApi.publishApi(target.id);
-    message.success('发布成功');
+    message.success($t('ElsaNextApprovalFlow.FormDefinitions:PublishSuccess'));
     await load();
   } catch {
-    message.error('发布失败');
+    message.error($t('ElsaNextApprovalFlow.FormDefinitions:PublishFailed'));
   }
 }
 
 async function remove(target: FormDefinitionDto) {
   Modal.confirm({
-    content: `确定删除表单「${target.name}」吗？`,
+    content: $t('ElsaNextApprovalFlow.FormDefinitions:DeleteConfirm').replace(
+      '{0}',
+      target.name,
+    ),
     onOk: async () => {
       await formsApi.deleteApi(target.id);
       await load();
     },
-    title: '删除确认',
+    title: $t('ElsaNextApprovalFlow.FormDefinitions:DeleteTitle'),
   });
 }
 
@@ -285,7 +362,7 @@ async function submitField() {
     return;
   }
   if (!fieldForm.key || !fieldForm.label) {
-    message.warning('请填写字段键和显示名');
+    message.warning($t('ElsaNextApprovalFlow.FormDefinitions:FieldRequired'));
     return;
   }
 
@@ -322,7 +399,7 @@ async function submitField() {
     fieldOpen.value = false;
     await load();
   } catch {
-    message.error('字段保存失败');
+    message.error($t('ElsaNextApprovalFlow.FormDefinitions:FieldSaveFailed'));
   } finally {
     saving.value = false;
   }
@@ -341,7 +418,7 @@ async function removeField(field: FormFieldDto) {
     fields.value = detail.fields ?? [];
     await load();
   } catch {
-    message.error('字段删除失败');
+    message.error($t('ElsaNextApprovalFlow.FormDefinitions:FieldDeleteFailed'));
   }
 }
 
@@ -358,16 +435,21 @@ function permissionLabel(permission: string): string {
 </script>
 
 <template>
-  <Card size="small" title="表单管理">
-    <Grid table-title="表单定义">
+  <Card
+    size="small"
+    :title="$t('ElsaNextApprovalFlow.FormDefinitions:ManageTitle')"
+  >
+    <Grid :table-title="$t('ElsaNextApprovalFlow.FormDefinitions:Title')">
       <template #toolbar-tools>
-        <Button type="primary" @click="openCreate">新建表单</Button>
+        <Button type="primary" @click="openCreate">
+          {{ $t('ElsaNextApprovalFlow.FormDefinitions:NewForm') }}
+        </Button>
       </template>
       <template #status="{ row }">
         <Tag v-if="(row as FormDefinitionDto).isPublished" color="green">
-          已发布
+          {{ $t('ElsaNextApprovalFlow.FormDefinitions:Published') }}
         </Tag>
-        <Tag v-else>草稿</Tag>
+        <Tag v-else>{{ $t('ElsaNextApprovalFlow.FormDefinitions:Draft') }}</Tag>
       </template>
       <template #action="{ row }">
         <Space>
@@ -376,21 +458,21 @@ function permissionLabel(permission: string): string {
             type="link"
             @click="openFields(row as FormDefinitionDto)"
           >
-            字段
+            {{ $t('ElsaNextApprovalFlow.FormDefinitions:Field') }}
           </Button>
           <Button
             size="small"
             type="link"
             @click="publish(row as FormDefinitionDto)"
           >
-            发布
+            {{ $t('ElsaNextApprovalFlow.FormDefinitions:Publish') }}
           </Button>
           <Button
             size="small"
             type="link"
             @click="openEdit(row as FormDefinitionDto)"
           >
-            编辑
+            {{ $t('ElsaNextApprovalFlow.FormDefinitions:Edit') }}
           </Button>
           <Button
             danger
@@ -398,7 +480,7 @@ function permissionLabel(permission: string): string {
             type="link"
             @click="remove(row as FormDefinitionDto)"
           >
-            删除
+            {{ $t('ElsaNextApprovalFlow.FormDefinitions:Delete') }}
           </Button>
         </Space>
       </template>
@@ -407,20 +489,35 @@ function permissionLabel(permission: string): string {
     <Modal
       v-model:open="editOpen"
       :confirm-loading="saving"
-      :title="editTarget ? '编辑表单' : '新建表单'"
+      :title="
+        editTarget
+          ? $t('ElsaNextApprovalFlow.FormDefinitions:EditForm')
+          : $t('ElsaNextApprovalFlow.FormDefinitions:CreateForm')
+      "
       @ok="submitEdit"
     >
       <Form layout="vertical">
-        <FormItem label="表单名称" required>
+        <FormItem
+          :label="$t('ElsaNextApprovalFlow.FormDefinitions:FormName')"
+          required
+        >
           <Input v-model:value="form.name" />
         </FormItem>
-        <FormItem label="表单编码" required>
+        <FormItem
+          :label="$t('ElsaNextApprovalFlow.FormDefinitions:FormCode')"
+          required
+        >
           <Input v-model:value="form.code" :disabled="!!editTarget" />
         </FormItem>
-        <FormItem v-if="!editTarget" label="版本">
+        <FormItem
+          v-if="!editTarget"
+          :label="$t('ElsaNextApprovalFlow.FormDefinitions:Version')"
+        >
           <InputNumber v-model:value="form.version" :min="1" />
         </FormItem>
-        <FormItem label="描述">
+        <FormItem
+          :label="$t('ElsaNextApprovalFlow.FormDefinitions:Description')"
+        >
           <Input.TextArea v-model:value="form.description" :rows="2" />
         </FormItem>
       </Form>
@@ -428,11 +525,18 @@ function permissionLabel(permission: string): string {
 
     <Drawer
       v-model:open="fieldsOpen"
-      :title="`字段管理 - ${fieldsTarget?.name ?? ''}`"
+      :title="
+        $t('ElsaNextApprovalFlow.FormDefinitions:FieldManage').replace(
+          '{0}',
+          fieldsTarget?.name ?? '',
+        )
+      "
       :width="720"
     >
       <template #extra>
-        <Button type="primary" @click="openAddField">添加字段</Button>
+        <Button type="primary" @click="openAddField">
+          {{ $t('ElsaNextApprovalFlow.FormDefinitions:AddField') }}
+        </Button>
       </template>
 
       <VxeGrid
@@ -449,7 +553,9 @@ function permissionLabel(permission: string): string {
           {{ permissionLabel((row as FormFieldDto).permission) }}
         </template>
         <template #required="{ row }">
-          <Tag v-if="(row as FormFieldDto).isRequired" color="red">必填</Tag>
+          <Tag v-if="(row as FormFieldDto).isRequired" color="red">
+            {{ $t('ElsaNextApprovalFlow.FormDefinitions:Required') }}
+          </Tag>
         </template>
         <template #action="{ row }">
           <Space>
@@ -458,7 +564,7 @@ function permissionLabel(permission: string): string {
               type="link"
               @click="openEditField(row as FormFieldDto)"
             >
-              编辑
+              {{ $t('ElsaNextApprovalFlow.FormDefinitions:Edit') }}
             </Button>
             <Button
               danger
@@ -466,7 +572,7 @@ function permissionLabel(permission: string): string {
               type="link"
               @click="removeField(row as FormFieldDto)"
             >
-              删除
+              {{ $t('ElsaNextApprovalFlow.FormDefinitions:Delete') }}
             </Button>
           </Space>
         </template>
@@ -476,39 +582,53 @@ function permissionLabel(permission: string): string {
     <Modal
       v-model:open="fieldOpen"
       :confirm-loading="saving"
-      :title="fieldTarget ? '编辑字段' : '添加字段'"
+      :title="
+        fieldTarget
+          ? $t('ElsaNextApprovalFlow.FormDefinitions:EditField')
+          : $t('ElsaNextApprovalFlow.FormDefinitions:AddField')
+      "
       @ok="submitField"
     >
       <Form layout="vertical">
-        <FormItem label="字段键" required>
+        <FormItem
+          :label="$t('ElsaNextApprovalFlow.FormDefinitions:FieldKey')"
+          required
+        >
           <Input v-model:value="fieldForm.key" :disabled="!!fieldTarget" />
         </FormItem>
-        <FormItem label="显示名" required>
+        <FormItem
+          :label="$t('ElsaNextApprovalFlow.FormDefinitions:DisplayName')"
+          required
+        >
           <Input v-model:value="fieldForm.label" />
         </FormItem>
-        <FormItem label="字段类型">
+        <FormItem :label="$t('ElsaNextApprovalFlow.FormDefinitions:FieldType')">
           <Select
             v-model:value="fieldForm.type"
             :options="formFieldTypes as any"
             :disabled="!!fieldTarget"
           />
         </FormItem>
-        <FormItem label="字段权限">
+        <FormItem
+          :label="$t('ElsaNextApprovalFlow.FormDefinitions:FieldPermission')"
+        >
           <Select
             v-model:value="fieldForm.permission"
             :options="formFieldPermissions as any"
           />
         </FormItem>
-        <FormItem label="排序">
+        <FormItem :label="$t('ElsaNextApprovalFlow.FormDefinitions:Sort')">
           <InputNumber v-model:value="fieldForm.order" :min="0" />
         </FormItem>
-        <FormItem label="必填">
+        <FormItem :label="$t('ElsaNextApprovalFlow.FormDefinitions:Required')">
           <Switch v-model:checked="fieldForm.isRequired" />
         </FormItem>
-        <FormItem label="说明">
+        <FormItem :label="$t('ElsaNextApprovalFlow.FormDefinitions:Hint')">
           <Input v-model:value="fieldForm.hint" />
         </FormItem>
-        <FormItem label="选项 JSON">
+        <FormItem
+          :label="$t('ElsaNextApprovalFlow.FormDefinitions:OptionsJson')"
+        >
           <Input.TextArea v-model:value="fieldForm.optionsJson" :rows="2" />
         </FormItem>
       </Form>

@@ -5,6 +5,8 @@ import type { ApprovalPendingTaskDto } from '../../types/approval-flow';
 
 import { onMounted, ref } from 'vue';
 
+import { $t } from '@vben/locales';
+
 import { useVbenVxeGrid } from '@abp/ui';
 import { Button, message } from 'ant-design-vue';
 
@@ -21,20 +23,32 @@ const detailTask = ref<ApprovalPendingTaskDto | null>(null);
 
 const gridOptions: VxeGridProps<ApprovalPendingTaskDto> = {
   columns: [
-    { field: 'instanceTitle', minWidth: 220, title: '审批标题' },
-    { field: 'title', minWidth: 180, title: '任务' },
-    { field: 'nodeName', minWidth: 140, title: '节点' },
+    {
+      field: 'instanceTitle',
+      minWidth: 220,
+      title: $t('ElsaNextApprovalFlow.ApprovalFlow:Pending:InstanceTitle'),
+    },
+    {
+      field: 'title',
+      minWidth: 180,
+      title: $t('ElsaNextApprovalFlow.ApprovalFlow:Pending:Task'),
+    },
+    {
+      field: 'nodeName',
+      minWidth: 140,
+      title: $t('ElsaNextApprovalFlow.ApprovalFlow:Pending:Node'),
+    },
     {
       field: 'createdAt',
       slots: { default: 'createdAt' },
-      title: '到达时间',
+      title: $t('ElsaNextApprovalFlow.ApprovalFlow:Pending:ArrivedAt'),
       width: 180,
     },
     {
       field: 'action',
       fixed: 'right',
       slots: { default: 'action' },
-      title: '操作',
+      title: $t('ElsaNextApprovalFlow.ApprovalFlow:Common:Actions'),
       width: 100,
     },
   ],
@@ -79,7 +93,7 @@ async function loadTasks() {
     allTasks.value = result.items ?? [];
     await gridApi.query();
   } catch {
-    message.error('待办加载失败');
+    message.error($t('ElsaNextApprovalFlow.ApprovalFlow:Pending:LoadFailed'));
   }
 }
 
@@ -103,7 +117,7 @@ onMounted(loadTasks);
 </script>
 
 <template>
-  <Grid table-title="待办审批">
+  <Grid :table-title="$t('ElsaNextApprovalFlow.ApprovalFlow:Pending:Title')">
     <template #createdAt="{ row }">
       {{ formatDateTime(row.createdAt) }}
     </template>
@@ -113,7 +127,7 @@ onMounted(loadTasks);
         type="link"
         @click="openDetail(row as ApprovalPendingTaskDto)"
       >
-        查看
+        {{ $t('ElsaNextApprovalFlow.ApprovalFlow:Common:View') }}
       </Button>
     </template>
   </Grid>

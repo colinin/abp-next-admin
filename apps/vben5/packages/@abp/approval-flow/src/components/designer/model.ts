@@ -8,10 +8,14 @@ import type {
   ApproverRule,
 } from '../../types/approval-flow';
 
-export const defaultApproveRejectActions: ApprovalAction[] = [
-  { key: 'Approve', label: '同意', effect: 'Approve' },
-  { key: 'Reject', label: '拒绝', effect: 'Reject' },
-];
+import { $t } from '@vben/locales';
+
+export function getDefaultApproveRejectActions(): ApprovalAction[] {
+  return [
+    { key: 'Approve', label: $t('antflow.model.approve'), effect: 'Approve' },
+    { key: 'Reject', label: $t('antflow.model.reject'), effect: 'Reject' },
+  ];
+}
 
 let sequence = 0;
 
@@ -31,7 +35,7 @@ export function createNode(
     signMode: 'Any',
     rules: kind === 'approval' || kind === 'cc' ? [createRule()] : [],
     onEmpty: 'Skip',
-    actions: kind === 'approval' ? [...defaultApproveRejectActions] : [],
+    actions: kind === 'approval' ? [...getDefaultApproveRejectActions()] : [],
     conditionExpression: null,
     expression: null,
     condition:
@@ -46,8 +50,17 @@ export function createNode(
     branches:
       kind === 'condition'
         ? [
-            { ...createBranch(0, '条件1'), nodes: [] },
-            { ...createBranch(1, '其他条件'), nodes: [] },
+            {
+              ...createBranch(
+                0,
+                $t('antflow.model.conditionName').replace('{0}', '1'),
+              ),
+              nodes: [],
+            },
+            {
+              ...createBranch(1, $t('antflow.model.otherCondition')),
+              nodes: [],
+            },
           ]
         : undefined,
   };
@@ -56,7 +69,9 @@ export function createNode(
 export function createBranch(index: number, name?: string): ApprovalFlowBranch {
   return {
     id: createId('branch'),
-    name: name ?? `条件${index + 1}`,
+    name:
+      name ??
+      $t('antflow.model.conditionName').replace('{0}', String(index + 1)),
     fieldKey: null,
     operator: '=',
     compareValue: null,
@@ -78,22 +93,22 @@ export function createRule(): ApproverRule {
 export function nodeDefaultName(kind: ApprovalFlowNodeKind): string {
   switch (kind) {
     case 'approval': {
-      return '审批人';
+      return $t('antflow.model.reviewer');
     }
     case 'cc': {
-      return '抄送人';
+      return $t('antflow.model.cc');
     }
     case 'condition': {
-      return '条件分支';
+      return $t('antflow.model.conditionBranch');
     }
     case 'end': {
-      return '结束';
+      return $t('antflow.model.end');
     }
     case 'start': {
-      return '发起人';
+      return $t('antflow.model.start');
     }
     default: {
-      return '节点';
+      return $t('antflow.model.notSelected');
     }
   }
 }
@@ -103,7 +118,7 @@ export function createDefaultModel(): ApprovalFlowModel {
     version: 1,
     formDefinitionId: null,
     nodes: [
-      { ...createNode('start', '发起人'), rules: [] },
+      { ...createNode('start', $t('antflow.model.start')), rules: [] },
       createNode('approval'),
       { ...createNode('end'), rules: [] },
     ],
@@ -134,17 +149,24 @@ function normalizeNode(node: ApprovalFlowNode): ApprovalFlowNode {
 
     let branches = node.branches ?? [];
     if (branches.length === 0) {
-      branches = [createBranch(0, '条件1')];
+      branches = [
+        createBranch(0, $t('antflow.model.conditionName').replace('{0}', '1')),
+      ];
     }
     while (branches.length < 2) {
-      branches = [...branches, createBranch(branches.length, '其他条件')];
+      branches = [
+        ...branches,
+        createBranch(branches.length, $t('antflow.model.otherCondition')),
+      ];
     }
 
     normalized.branches = branches.map((branch, index) => {
       const isDefault = index === branches.length - 1;
       return {
         ...branch,
-        name: isDefault ? '其他条件' : `条件${index + 1}`,
+        name: isDefault
+          ? $t('antflow.model.otherCondition')
+          : $t('antflow.model.conditionName').replace('{0}', String(index + 1)),
         expression: isDefault
           ? null
           : (branch.expression ?? (index === 0 ? condition.expression : null)),
@@ -157,7 +179,7 @@ function normalizeNode(node: ApprovalFlowNode): ApprovalFlowNode {
       const onlyNode = defaultBranch.nodes[0];
       const isAutoDefault =
         onlyNode?.kind === 'approval' &&
-        onlyNode.name === '审批人' &&
+        onlyNode.name === $t('antflow.model.reviewer') &&
         onlyNode.rules.every(
           (rule) =>
             rule.kind === 'Participant' && rule.participants.length === 0,
@@ -210,14 +232,18 @@ export function summarizeNode(node: ApprovalFlowNode): string {
         node.signMode === 'All' &&
         names.length > 1
       ) {
-        return `${names.length}人(${names.join(',')})会签`;
+        return $t('antflow.model.signSummary')
+          .replace('{0}', String(names.length))
+          .replace('{1}', names.join(','));
       }
       if (
         node.kind === 'approval' &&
         node.signMode === 'Sequential' &&
         names.length > 1
       ) {
-        return `${names.length}人(${names.join('→')})依次审批`;
+        return $t('antflow.model.sequentialSignSummary')
+          .replace('{0}', String(names.length))
+          .replace('{1}', names.join('→'));
       }
       return names.join('、');
     }
@@ -228,13 +254,18 @@ export function summarizeNode(node: ApprovalFlowNode): string {
     if (summaries.length > 0) {
       return summaries.join(' / ');
     }
-    return node.kind === 'cc' ? '待选择抄送人' : '待配置审批人';
+    return node.kind === 'cc'
+      ? $t('antflow.model.pendingCc')
+      : $t('antflow.model.pendingApprover');
   }
 
   if (node.kind === 'condition') {
     return node.condition?.expression
-      ? `条件：${node.condition.expression}`
-      : '未设置条件';
+      ? $t('antflow.model.conditionPrefix').replace(
+          '{0}',
+          node.condition.expression,
+        )
+      : $t('antflow.model.noCondition');
   }
 
   return '';
@@ -243,33 +274,38 @@ export function summarizeNode(node: ApprovalFlowNode): string {
 export function summarizeRule(rule: ApproverRule): string {
   switch (rule.kind) {
     case 'FormField': {
-      return `表单字段：${rule.formFieldKey ?? '-'}`;
+      return $t('antflow.model.formField').replace(
+        '{0}',
+        rule.formFieldKey ?? '-',
+      );
     }
     case 'Initiator': {
-      return '发起人';
+      return $t('antflow.model.initiator');
     }
     case 'InitiatorSelection': {
-      return '发起人自选';
+      return $t('antflow.model.selfSelect');
     }
     case 'OrganizationUnit': {
-      return '部门成员';
+      return $t('antflow.model.departmentMember');
     }
     case 'Participant': {
       const names = rule.participants
         .map((participant) => participant.displayName ?? participant.id)
         .filter(Boolean);
-      return names.length > 0 ? names.join(',') : '未选择人员';
+      return names.length > 0 ? names.join(',') : $t('antflow.model.noPerson');
     }
     case 'Role': {
       const roleNames = rule.participants
         .map((participant) => participant.displayName ?? participant.id)
         .filter(Boolean);
       return roleNames.length > 0
-        ? `角色：${roleNames.join(',')}`
-        : '未选择角色';
+        ? $t('antflow.model.rolePrefix').replace('{0}', roleNames.join(','))
+        : $t('antflow.model.noRole');
     }
     case 'Supervisor': {
-      return rule.supervisorLevel === 'TopMost' ? '最高层级主管' : '部门主管';
+      return rule.supervisorLevel === 'TopMost'
+        ? $t('antflow.model.topMostSupervisor')
+        : $t('antflow.model.supervisor');
     }
     default: {
       return '';
