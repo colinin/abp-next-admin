@@ -148,7 +148,7 @@ async function submit() {
       field.isRequired &&
       (value === undefined || value === null || value === '')
     ) {
-      message.warning($t('ElsaNextApprovalFlow.ApprovalFlow:Start:FieldRequired').replace('{0}', field.label));
+      message.warning($t('ElsaNextApprovalFlow.ApprovalFlow:Start:FieldRequired', [field.label]));
       return;
     }
   }

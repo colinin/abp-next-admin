@@ -384,7 +384,7 @@ function commitBranchEdit(index: number) {
 
   const name =
     branchDraftName.value.trim() ||
-    $t('antflow.nodeWarp.conditionName').replace('{0}', String(index + 1));
+    $t('antflow.nodeWarp.conditionName', [String(index + 1)]);
   nodes[index] = {
     ...(nodes[index] as AntFlowNode),
     nodeDisplayName: name,

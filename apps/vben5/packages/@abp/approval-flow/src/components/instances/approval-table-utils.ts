@@ -77,16 +77,16 @@ export function formatDuration(
 
   const parts: string[] = [];
   if (days > 0) {
-    parts.push($t('antflow.duration.days').replace('{0}', String(days)));
+    parts.push($t('antflow.duration.days', [String(days)]));
   }
   if (hours > 0) {
-    parts.push($t('antflow.duration.hours').replace('{0}', String(hours)));
+    parts.push($t('antflow.duration.hours', [String(hours)]));
   }
   if (minutes > 0) {
-    parts.push($t('antflow.duration.minutes').replace('{0}', String(minutes)));
+    parts.push($t('antflow.duration.minutes', [String(minutes)]));
   }
   if (seconds > 0 || parts.length === 0) {
-    parts.push($t('antflow.duration.seconds').replace('{0}', String(seconds)));
+    parts.push($t('antflow.duration.seconds', [String(seconds)]));
   }
   return parts.join('');
 }

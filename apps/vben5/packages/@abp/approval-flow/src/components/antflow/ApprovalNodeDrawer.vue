@@ -291,22 +291,23 @@ function generateDisplayName(): string {
 
   if ([1, 2].includes(draft.assigneeType) && names.length > 0) {
     if (draft.signType === 2) {
-      return $t('antflow.approvalNode.signSummary')
-        .replace('{0}', String(names.length))
-        .replace('{1}', names.join(','));
+      return $t('antflow.approvalNode.signSummary', [
+        String(names.length),
+        names.join(','),
+      ]);
     }
     if (draft.signType === 3) {
-      return $t('antflow.approvalNode.sequentialSignSummary')
-        .replace('{0}', String(names.length))
-        .replace('{1}', names.join(','));
+      return $t('antflow.approvalNode.sequentialSignSummary', [
+        String(names.length),
+        names.join(','),
+      ]);
     }
     return names.join(',');
   }
   if (draft.assigneeType === 6) {
-    return $t('antflow.approvalNode.levelSummary').replace(
-      '{0}',
+    return $t('antflow.approvalNode.levelSummary', [
       String(draft.directorLevel),
-    );
+    ]);
   }
   return (
     assigneeTypeOptions.value.find((item) => item.value === draft.assigneeType)

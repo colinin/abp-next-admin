@@ -427,7 +427,7 @@ loadParticipants();
     :open="open"
     :title="
       local
-        ? $t('antflow.designer.nodeConfig.nodeLabel').replace('{0}', local.name)
+        ? $t('antflow.designer.nodeConfig.nodeLabel', [local.name])
         : $t('antflow.designer.nodeConfig.title')
     "
     width="460"

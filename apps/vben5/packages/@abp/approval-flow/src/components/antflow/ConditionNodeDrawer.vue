@@ -257,8 +257,7 @@ function createGroup(
     condRelation: toBoolean(item?.condRelation, true),
     groupId: item?.groupId ?? nextUid('group'),
     groupName:
-      item?.groupName ??
-      $t('antflow.condition.groupName').replace('{0}', String(index + 1)),
+      item?.groupName ?? $t('antflow.condition.groupName', [String(index + 1)]),
     rows: conditionList.map((condition) => createRow(condition)),
     uid: nextUid('group-row'),
   };
@@ -582,9 +581,10 @@ function confirm() {
 
         <div class="condition-summary">
           {{
-            $t('antflow.condition.summary')
-              .replace('{0}', String(draft.groups.length))
-              .replace('{1}', String(conditionCount))
+            $t('antflow.condition.summary', [
+              String(draft.groups.length),
+              String(conditionCount),
+            ])
           }}
           <Tag v-if="draft.isDefault" color="orange">
             {{ $t('antflow.condition.defaultBranch') }}

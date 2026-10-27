@@ -51,10 +51,7 @@ export function createNode(
       kind === 'condition'
         ? [
             {
-              ...createBranch(
-                0,
-                $t('antflow.model.conditionName').replace('{0}', '1'),
-              ),
+              ...createBranch(0, $t('antflow.model.conditionName', ['1'])),
               nodes: [],
             },
             {
@@ -69,9 +66,7 @@ export function createNode(
 export function createBranch(index: number, name?: string): ApprovalFlowBranch {
   return {
     id: createId('branch'),
-    name:
-      name ??
-      $t('antflow.model.conditionName').replace('{0}', String(index + 1)),
+    name: name ?? $t('antflow.model.conditionName', [String(index + 1)]),
     fieldKey: null,
     operator: '=',
     compareValue: null,
@@ -149,9 +144,7 @@ function normalizeNode(node: ApprovalFlowNode): ApprovalFlowNode {
 
     let branches = node.branches ?? [];
     if (branches.length === 0) {
-      branches = [
-        createBranch(0, $t('antflow.model.conditionName').replace('{0}', '1')),
-      ];
+      branches = [createBranch(0, $t('antflow.model.conditionName', ['1']))];
     }
     while (branches.length < 2) {
       branches = [
@@ -166,7 +159,7 @@ function normalizeNode(node: ApprovalFlowNode): ApprovalFlowNode {
         ...branch,
         name: isDefault
           ? $t('antflow.model.otherCondition')
-          : $t('antflow.model.conditionName').replace('{0}', String(index + 1)),
+          : $t('antflow.model.conditionName', [String(index + 1)]),
         expression: isDefault
           ? null
           : (branch.expression ?? (index === 0 ? condition.expression : null)),
@@ -232,18 +225,20 @@ export function summarizeNode(node: ApprovalFlowNode): string {
         node.signMode === 'All' &&
         names.length > 1
       ) {
-        return $t('antflow.model.signSummary')
-          .replace('{0}', String(names.length))
-          .replace('{1}', names.join(','));
+        return $t('antflow.model.signSummary', [
+          String(names.length),
+          names.join(','),
+        ]);
       }
       if (
         node.kind === 'approval' &&
         node.signMode === 'Sequential' &&
         names.length > 1
       ) {
-        return $t('antflow.model.sequentialSignSummary')
-          .replace('{0}', String(names.length))
-          .replace('{1}', names.join('→'));
+        return $t('antflow.model.sequentialSignSummary', [
+          String(names.length),
+          names.join('→'),
+        ]);
       }
       return names.join('、');
     }
@@ -299,7 +294,7 @@ export function summarizeRule(rule: ApproverRule): string {
         .map((participant) => participant.displayName ?? participant.id)
         .filter(Boolean);
       return roleNames.length > 0
-        ? $t('antflow.model.rolePrefix').replace('{0}', roleNames.join(','))
+        ? $t('antflow.model.rolePrefix', [roleNames.join(',')])
         : $t('antflow.model.noRole');
     }
     case 'Supervisor': {

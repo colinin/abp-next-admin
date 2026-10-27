@@ -184,8 +184,8 @@ export function createConditionNode(
   isDefault = 0,
 ): AntFlowNode {
   const node = createBaseNode({
-    nodeName: name || $t('antflow.model.conditionName').replace('{0}', '1'),
-    nodeDisplayName: name || $t('antflow.model.conditionName').replace('{0}', '1'),
+    nodeName: name || $t('antflow.model.conditionName', ['1']),
+    nodeDisplayName: name || $t('antflow.model.conditionName', ['1']),
     nodeType: NodeType.ConditionNode,
     nodeWeight: weight,
     childNode: child,
@@ -217,7 +217,7 @@ export function createGatewayNode(
     isDefault: 0,
     sort: 0,
     conditionNodes: [
-      createConditionNode($t('antflow.model.conditionName').replace('{0}', '1'), child, 1, 0),
+      createConditionNode($t('antflow.model.conditionName', ['1']), child, 1, 0),
       createConditionNode($t('antflow.model.defaultBranch'), null, 2, 1),
     ],
   };
@@ -350,16 +350,16 @@ function buildApproveDisplayName(
 
   if (names.length > 0 && (assigneeType === 1 || assigneeType === 2)) {
     if (kind === 'approval' && signType === 2) {
-      return $t('antflow.model.signSummary').replace('{0}', String(names.length)).replace('{1}', names.join(','));
+      return $t('antflow.model.signSummary', [String(names.length), names.join(',')]);
     }
     if (kind === 'approval' && signType === 3) {
-      return $t('antflow.model.sequentialSignSummary').replace('{0}', String(names.length)).replace('{1}', names.join(','));
+      return $t('antflow.model.sequentialSignSummary', [String(names.length), names.join(',')]);
     }
     return names.join('、');
   }
 
   if (property.ruleKind === 'FormField') {
-    return $t('antflow.model.formField').replace('{0}', property.formFieldKey || '-');
+    return $t('antflow.model.formField', [property.formFieldKey || '-']);
   }
   if (property.ruleKind === 'OrganizationUnit') {
     return $t('antflow.model.departmentMember');
@@ -371,7 +371,7 @@ function buildApproveDisplayName(
     return $t('antflow.model.initiator');
   }
   if (assigneeType === 6) {
-    return $t('antflow.model.levelSupervisor').replace('{0}', String(property.directorLevel || 0));
+    return $t('antflow.model.levelSupervisor', [String(property.directorLevel || 0)]);
   }
   if (assigneeType === 7) {
     return $t('antflow.model.chainApproval');
@@ -456,7 +456,7 @@ function conditionBranchesOf(node: ApprovalFlowNode): ApprovalFlowBranch[] {
   if (condition && (condition.fieldKey || condition.expression)) {
     fallback.push({
       id: createId('branch'),
-      name: $t('antflow.model.conditionName').replace('{0}', '1'),
+      name: $t('antflow.model.conditionName', ['1']),
       fieldKey: condition.fieldKey ?? null,
       operator: condition.operator ?? '=',
       compareValue: condition.compareValue ?? null,
@@ -468,7 +468,7 @@ function conditionBranchesOf(node: ApprovalFlowNode): ApprovalFlowBranch[] {
   } else {
     fallback.push({
       id: createId('branch'),
-      name: $t('antflow.model.conditionName').replace('{0}', '1'),
+      name: $t('antflow.model.conditionName', ['1']),
       fieldKey: null,
       operator: '=',
       compareValue: null,
@@ -501,7 +501,7 @@ function branchToConditionNode(
   const isDefault = index === total - 1 ? 1 : 0;
   const child = convertChain(branch.nodes ?? [], 0);
   const node = createConditionNode(
-    branch.name || (isDefault === 1 ? $t('antflow.model.otherCondition') : $t('antflow.model.conditionName').replace('{0}', String(index + 1))),
+    branch.name || (isDefault === 1 ? $t('antflow.model.otherCondition') : $t('antflow.model.conditionName', [String(index + 1)])),
     child,
     index + 1,
     isDefault,
@@ -825,7 +825,7 @@ function conditionNodeToOldBranch(
 
   return {
     id: node.nodeId || createId('branch'),
-    name: node.nodeName || (isDefault ? $t('antflow.model.otherCondition') : $t('antflow.model.conditionName').replace('{0}', String(index + 1))),
+    name: node.nodeName || (isDefault ? $t('antflow.model.otherCondition') : $t('antflow.model.conditionName', [String(index + 1)])),
     fieldKey: first?.fieldKey ?? null,
     operator: first?.operator ?? '=',
     compareValue: first?.compareValue ?? null,
@@ -891,7 +891,7 @@ function gatewayToOld(gateway: AntFlowNode): ApprovalFlowNode {
       ? conditionNodes.map((node, index) =>
           conditionNodeToOldBranch(node, index, lastIndex, hasExplicitDefault),
         )
-      : [createBranch(0, $t('antflow.model.conditionName').replace('{0}', '1')), createBranch(1, $t('antflow.model.otherCondition'))];
+      : [createBranch(0, $t('antflow.model.conditionName', ['1'])), createBranch(1, $t('antflow.model.otherCondition'))];
 
   oldNode.branches = branches;
 
@@ -924,7 +924,7 @@ function standaloneConditionToOld(node: AntFlowNode): ApprovalFlowNode {
 
   const branch = conditionNodeToOldBranch(node, 0, 1, false);
   branch.nodes = [];
-  branch.name = node.nodeName || $t('antflow.model.conditionName').replace('{0}', '1');
+  branch.name = node.nodeName || $t('antflow.model.conditionName', ['1']);
   oldNode.branches = [branch, createBranch(1, $t('antflow.model.otherCondition'))];
   oldNode.condition = {
     fieldKey: branch.fieldKey ?? null,

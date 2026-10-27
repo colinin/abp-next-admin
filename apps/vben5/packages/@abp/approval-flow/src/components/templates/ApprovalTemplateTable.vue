@@ -138,9 +138,9 @@ function onStarted() {
 
 async function removeTemplate(template: ApprovalTemplateDto) {
   Modal.confirm({
-    content: $t(
-      'ElsaNextApprovalFlow.ApprovalFlow:Templates:DeleteConfirm',
-    ).replace('{0}', template.displayName),
+    content: $t('ElsaNextApprovalFlow.ApprovalFlow:Templates:DeleteConfirm', [
+      template.displayName,
+    ]),
     onOk: async () => {
       await templatesApi.deleteApi(template.id);
       message.success(
