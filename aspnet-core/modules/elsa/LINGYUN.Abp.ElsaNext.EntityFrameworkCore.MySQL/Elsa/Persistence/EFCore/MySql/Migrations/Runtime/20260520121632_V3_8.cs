@@ -1,10 +1,14 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+using Elsa.Persistence.EFCore.Modules.Runtime;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using System;
 
 #nullable disable
 
 namespace Elsa.Persistence.EFCore.MySql.Migrations.Runtime
 {
+    [DbContext(typeof(RuntimeElsaDbContext))]
+    [Migration("20260520121632_V3_8")]
     public partial class V3_8 : Migration
     {
         private readonly Elsa.Persistence.EFCore.IElsaDbContextSchema _schema;
