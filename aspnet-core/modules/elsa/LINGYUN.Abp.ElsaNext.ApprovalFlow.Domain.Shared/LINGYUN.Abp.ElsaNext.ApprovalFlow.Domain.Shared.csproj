@@ -10,6 +10,7 @@
 		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
 		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
 		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<RootNamespace />
 		<!-- The approval flow sources were reconstructed from compiled artifacts, which do not preserve nullable flow analysis. Keep the annotations but do not report nullable analysis warnings. -->
