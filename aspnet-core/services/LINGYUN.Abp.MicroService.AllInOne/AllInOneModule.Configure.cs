@@ -893,19 +893,13 @@ public partial class AllInOneModule
             };
         });
 
-        if (!isDevelopment)
-        {
-            services
-                .AddDataProtection()
-                .SetApplicationName("LINGYUN.Abp.Application")
-                .PersistKeysToStackExchangeRedis(() =>
-                {
-                    var redis = ConnectionMultiplexer.Connect(configuration["Redis:Configuration"]!);
-
-                    return redis.GetDatabase();
-                },
-                "LINGYUN.Abp.Application:DataProtection:Protection-Keys");
-        }
+        services.AddDataProtection()
+            .SetApplicationName("LINGYUN.Abp.Application")
+            .PersistKeysToStackExchangeRedis(() =>
+            {
+                return ConnectionMultiplexer.Connect(configuration["Redis:Configuration"]!).GetDatabase();
+            },
+            "LINGYUN.Abp.Application:DataProtection:Protection-Keys");
 
         services.AddSameSiteCookiePolicy();
     }
