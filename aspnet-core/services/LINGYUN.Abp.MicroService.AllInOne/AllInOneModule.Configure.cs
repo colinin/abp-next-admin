@@ -173,20 +173,10 @@ public partial class AllInOneModule
             // 如果使用持久化存储, 则配置quartz持久层
             if (configuration.GetValue("Quartz:UsePersistentStore", false))
             {
-                var settings = configuration.GetSection("Quartz:Properties").Get<Dictionary<string, string>>();
-                if (settings != null)
-                {
-                    foreach (var setting in settings)
-                    {
-                        options.Properties[setting.Key] = setting.Value;
-                    }
-                }
-
                 options.Configurator += (config) =>
                 {
                     config.UsePersistentStore(store =>
                     {
-                        store.UseProperties = false;
                         store.UseNewtonsoftJsonSerializer();
                     });
                 };
