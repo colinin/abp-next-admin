@@ -1,3 +1,4 @@
+﻿using Elsa.Persistence.EFCore;
 using Elsa.UserTasks.Persistence.EFCore.Features;
 using Elsa.UserTasks.Persistence.EFCore.PostgreSql.Extensions;
 using LINGYUN.Abp.ElsaNext.EntityFrameworkCore.Extensions;
@@ -27,5 +28,10 @@ public class AbpElsaNextUserTasksEntityFrameworkCorePostgreSqlModule : AbpModule
                 });
             });
         }
+    }
+
+    public override void ConfigureServices(ServiceConfigurationContext context)
+    {
+        context.Services.AddScoped<IEntityModelCreatingHandler, FixForPostgreSql>();
     }
 }
