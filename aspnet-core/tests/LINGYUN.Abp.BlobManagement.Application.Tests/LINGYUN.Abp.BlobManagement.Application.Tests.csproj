@@ -4,6 +4,7 @@
 		<TargetFramework>net10.0</TargetFramework>
 		<RootNamespace />
 		<IsPackable>false</IsPackable>
+		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<Configurations>Debug;Release;PostgreSQL</Configurations>
 		<Platforms>AnyCPU</Platforms>
@@ -17,6 +18,8 @@
 			<PrivateAssets>all</PrivateAssets>
 		</PackageReference>
 		<PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" />
+		<PackageReference Include="NSubstitute" />
+		<PackageReference Include="Volo.Abp.Autofac" />
 	</ItemGroup>
 
 	<ItemGroup>

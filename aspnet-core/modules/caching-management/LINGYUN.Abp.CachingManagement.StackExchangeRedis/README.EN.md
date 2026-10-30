@@ -51,6 +51,8 @@ The module has built-in multi-tenancy support, automatically isolating cache dat
 * Key format with tenant: `{InstanceName}t:{TenantId}:{KeyPrefix}:{Key}`
 * Key format without tenant: `{InstanceName}c:{KeyPrefix}:{Key}`
 
+Read, set, refresh and delete operations validate the Redis instance prefix and, for tenant requests, the complete tenant key prefix. Bulk deletion validates every key before deleting any entries. Host administrators can still manage cache entries within the configured instance.
+
 ## More
 
 For more information, please refer to the following resources:

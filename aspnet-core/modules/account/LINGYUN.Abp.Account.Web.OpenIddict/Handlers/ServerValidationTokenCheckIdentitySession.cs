@@ -34,7 +34,7 @@ public class ServerValidationTokenCheckIdentitySession : IOpenIddictServerHandle
 
     public async virtual ValueTask HandleAsync(OpenIddictServerEvents.ValidateTokenContext context)
     {
-        Logger.LogDebug("Server Validate Token: {endpointType} - {requestUri}", context.EndpointType, context.RequestUri);
+        Logger.LogDebug("Server Validate Token: {endpointType} - {requestPath}", context.EndpointType, context.RequestUri?.AbsolutePath);
 
         if (context.Principal == null || context.Principal.Identity?.IsAuthenticated == false)
         {
