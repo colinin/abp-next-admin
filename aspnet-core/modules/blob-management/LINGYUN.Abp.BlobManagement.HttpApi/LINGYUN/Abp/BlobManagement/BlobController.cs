@@ -73,7 +73,6 @@ public class BlobController : BlobControllerBase, IBlobAppService
     }
 
     [HttpGet("download/by-name/{name}")]
-    [HttpGet("download/by-name/t/{tenantId}/{name}")]
     public virtual Task<IRemoteStreamContent> DownloadByNameAsync(BlobDownloadByNameInput input)
     {
         return _service.DownloadByNameAsync(input);
