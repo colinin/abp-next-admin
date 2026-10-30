@@ -1,4 +1,4 @@
-﻿using System.Globalization;
+using System.Globalization;
 using Volo.Abp.Ui.Branding;
 
 namespace LINGYUN.Abp.MicroService.AllInOne.Branding;

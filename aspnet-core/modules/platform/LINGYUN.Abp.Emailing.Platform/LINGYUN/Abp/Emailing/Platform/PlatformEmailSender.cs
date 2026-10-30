@@ -109,7 +109,7 @@ public class PlatformEmailSender : IEmailSender
                     new RemoteStreamContent(
                         attachment.ContentStream, 
                         attachment.Name,
-                        attachment.ContentType?.ToString()));
+                        attachment.ContentType?.MediaType));
             }
 
             createInput.Attachments = attachments.ToArray();

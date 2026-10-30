@@ -232,18 +232,16 @@ builder.AddProject<Projects.LINGYUN_Abp_MicroService_WeChatService>("WeChatServi
     .WaitFor(localizationService);
 
 // WorkflowService
-builder.AddProject<Projects.LINGYUN_Abp_MicroService_WorkflowService>("WorkflowService")
-    .WithHttpEndpoint(port: 30050, name: "workflow")
-    .WithExternalHttpEndpoints()
-    .WithReference(abpDb, "Default")
-    .WithReference(redis, "Redis")
-    .WithReference(rabbitmq, "Rabbitmq")
-    .WithReference(elasticsearch, "Elasticsearch")
-    .WaitFor(elasticsearch)
-    .WaitFor(redis)
-    .WaitFor(abpDb)
-    .WaitFor(rabbitmq)
-    .WaitFor(taskService);
+AddDotNetProject<
+    Projects.LINGYUN_Abp_MicroService_WorkflowService_DbMigrator,
+    Projects.LINGYUN_Abp_MicroService_WorkflowService>(
+    builder: builder,
+    servicePrefix: "Workflow",
+    serviceSuffix: "Service",
+    migratorSuffix: "Migrator",
+    port: 30050,
+    portName: "workflow",
+    waitProjects: taskService);
 
 // AIService
 AddDotNetProject<

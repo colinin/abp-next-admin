@@ -1,4 +1,4 @@
-﻿using Volo.Abp.Data;
+using Volo.Abp.Data;
 using Volo.Abp.MultiTenancy;
 
 namespace LINGYUN.Abp.UI.Navigation.VueVbenAdmin5;
@@ -18,7 +18,114 @@ public class AbpUINavigationVueVbenAdmin5NavigationDefinitionProvider : Navigati
         context.Add(GetWebhooksManagement());
         context.Add(GetTextTemplating());
         context.Add(GetWeChatManagement());
+        context.Add(GetApprovalFlow());
         context.Add(GetVbenDemos());
+    }
+
+    private static NavigationDefinition GetApprovalFlow()
+    {
+        var approvalFlow = new ApplicationMenu(
+            name: "Vben5ApprovalFlow",
+            displayName: "审批流程",
+            url: "/approval-flow",
+            component: "",
+            description: "审批流程",
+            order: 12,
+            icon: "lucide:workflow")
+            .WithRoles(["Users"])
+            .SetProperty("title", "page.approvalFlow.title");
+
+        approvalFlow.AddItem(
+            new ApplicationMenu(
+                name: "Vben5ApprovalFlowTemplates",
+                displayName: "审批模板",
+                url: "/approval-flow/templates",
+                component: "/approval-flow/templates/index",
+                icon: "lucide:file-text",
+                description: "审批模板")
+            .WithRoles(["Users"])
+            .SetProperty("title", "page.approvalFlow.templates")
+        );
+
+        var myApprovals = new ApplicationMenu(
+            name: "Vben5ApprovalFlowMyApprovals",
+            displayName: "我的审批",
+            url: "/approval-flow/my-approvals",
+            component: "",
+            icon: "lucide:clipboard-check",
+            description: "我的审批")
+            .WithRoles(["Users"])
+            .SetProperty("title", "page.approvalFlow.myApprovals");
+
+        myApprovals.AddItem(
+            new ApplicationMenu(
+                name: "Vben5ApprovalFlowMyApprovalPending",
+                displayName: "待办",
+                url: "/approval-flow/my-approvals/pending",
+                component: "/approval-flow/my-approvals/pending/index",
+                description: "待办审批")
+            .WithRoles(["Users"])
+            .SetProperty("title", "page.approvalFlow.pending")
+        );
+        myApprovals.AddItem(
+            new ApplicationMenu(
+                name: "Vben5ApprovalFlowMyApprovalInitiated",
+                displayName: "我发起的",
+                url: "/approval-flow/my-approvals/initiated",
+                component: "/approval-flow/my-approvals/initiated/index",
+                description: "我发起的审批")
+            .WithRoles(["Users"])
+            .SetProperty("title", "page.approvalFlow.initiated")
+        );
+        myApprovals.AddItem(
+            new ApplicationMenu(
+                name: "Vben5ApprovalFlowMyApprovalDone",
+                displayName: "已办",
+                url: "/approval-flow/my-approvals/done",
+                component: "/approval-flow/my-approvals/done/index",
+                description: "已办审批")
+            .WithRoles(["Users"])
+            .SetProperty("title", "page.approvalFlow.done")
+        );
+        myApprovals.AddItem(
+            new ApplicationMenu(
+                name: "Vben5ApprovalFlowMyApprovalCarbonCopy",
+                displayName: "抄送我的",
+                url: "/approval-flow/my-approvals/carbon-copy",
+                component: "/approval-flow/my-approvals/carbon-copy/index",
+                description: "抄送我的审批")
+            .WithRoles(["Users"])
+            .SetProperty("title", "page.approvalFlow.carbonCopy")
+        );
+
+        approvalFlow.AddItem(myApprovals);
+
+        approvalFlow.AddItem(
+            new ApplicationMenu(
+                name: "Vben5ApprovalFlowFormDefinitions",
+                displayName: "表单设计",
+                url: "/approval-flow/form-definitions",
+                component: "/form-definitions/index",
+                icon: "lucide:form-input",
+                description: "表单设计")
+            .WithRoles(["Users"])
+            .SetProperty("title", "page.approvalFlow.formDefinitions")
+        );
+
+        approvalFlow.AddItem(
+            new ApplicationMenu(
+                name: "Vben5ApprovalFlowDesigner",
+                displayName: "流程设计器",
+                url: "/approval-flow/designer",
+                component: "/approval-flow/designer/index",
+                icon: "lucide:git-branch",
+                description: "流程设计器")
+            .WithRoles(["Users"])
+            .SetProperty("hideInMenu", "true")
+            .SetProperty("title", "page.approvalFlow.designer")
+        );
+
+        return new NavigationDefinition(approvalFlow);
     }
 
     private static NavigationDefinition[] GetVbenDemos()

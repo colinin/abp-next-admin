@@ -1,0 +1,19 @@
+{
+  "culture": "zh-Hans",
+  "texts": {
+    "Elsa": "Elsa",
+    "Approval Flow": "审批流",
+    "Approval Task": "审批节点",
+    "Creates an approval node and waits for its approvers to decide.": "创建一个审批节点，等待配置的审批人做出决定。",
+    "The node title shown on every approver's task.": "显示在每位审批人任务上的节点标题。",
+    "The rules that resolve who may act on this node.": "解析谁可以办理该节点的审批人规则。",
+    "Any asks every approver at once and accepts the first decision; All asks everyone; Sequential asks one at a time.": "或签一次征询所有人并接受第一个决定；会签征询所有人；顺序会签逐个征询。",
+    "The actions offered to every approver. Keys are literal; labels may use expressions.": "提供给每位审批人的动作。动作键为字面量，标签可以使用表达式。",
+    "What to do when the rules resolve to nobody. Skip passes the node without asking anybody.": "规则未解析出任何人时的处置方式。Skip 表示不征询任何人直接通过该节点。",
+    "The node instance identifier, for correlation with the approval records.": "节点实例标识，用于与审批记录关联。",
+    "Approval Cc": "抄送节点",
+    "Sends a carbon copy to the resolved recipients without waiting for them.": "向解析出的收件人发送抄送，且不等待他们处理。",
+    "The carbon copy title.": "抄送标题。",
+    "The rules that resolve who receives the carbon copy.": "解析抄送收件人的规则。"
+  }
+}

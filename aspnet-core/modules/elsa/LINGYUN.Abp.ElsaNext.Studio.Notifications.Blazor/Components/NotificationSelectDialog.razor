@@ -1,0 +1,155 @@
+﻿@using System.Threading
+@using Elsa.Api.Client.Shared.UIHints.DropDown
+@using LINGYUN.Abp.Notifications
+@using Microsoft.Extensions.Localization
+@inject ILocalizer Localizer
+
+@implements IDisposable
+
+<MudDialog>
+    <TitleContent>
+        <MudText Typo="Typo.h6">@Title</MudText>
+    </TitleContent>
+    <DialogContent>
+        <MudStack Spacing="3">
+            <MudTextField T="string"
+                          Value="_searchText"
+                          ValueChanged="OnSearchTextChangedAsync"
+                          Immediate="true"
+                          Placeholder="@Localizer["Search"]"
+                          Adornment="Adornment.Start"
+                          AdornmentIcon="@Icons.Material.Filled.Search"
+                          Variant="Variant.Outlined"
+                          Margin="Margin.Dense" />
+
+            <MudTable T="SelectListItem"
+                      @ref="_table"
+                      ServerData="LoadTenantsAsync"
+                      Dense="true"
+                      Hover="true"
+                      Breakpoint="Breakpoint.None"
+                      OnRowClick="OnRowClickAsync">
+                <HeaderContent>
+                    <MudTh>@Localizer["Name"]</MudTh>
+                    <MudTh Style="text-align:right" />
+                </HeaderContent>
+                <RowTemplate>
+                    <MudTd DataLabel="@Localizer["Name"]">@context.Text</MudTd>
+                    <MudTd DataLabel="" Style="text-align:right">
+                        @if (context.Value == SelectedValue)
+                        {
+                            <MudIcon Icon="@Icons.Material.Filled.Check" Color="Color.Success" Size="Size.Small" />
+                        }
+                        else
+                        {
+                            <MudButton Size="Size.Small" Variant="Variant.Text" Color="Color.Primary" OnClick="@(() => SelectAsync(context))">
+                                @Localizer["Select"]
+                            </MudButton>
+                        }
+                    </MudTd>
+                </RowTemplate>
+                <PagerContent>
+                    <MudTablePager
+                        PageSizeOptions="new int[] { 10, 25, 50, 100 }"/>
+                </PagerContent>
+                <NoRecordsContent>
+                    <MudText Typo="Typo.body2">@Localizer["No results found"]</MudText>
+                </NoRecordsContent>
+            </MudTable>
+        </MudStack>
+    </DialogContent>
+    <DialogActions>
+        <MudButton Variant="Variant.Text" OnClick="CancelAsync">@Localizer["Cancel"]</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    private const int DebounceIntervalMilliseconds = 350;
+
+    private MudTable<SelectListItem>? _table;
+    private string? _searchText;
+    private CancellationTokenSource? _debounceCancellationTokenSource;
+
+    [CascadingParameter] private IMudDialogInstance MudDialog { get; set; } = null!;
+
+    [Parameter] public string Title { get; set; } = string.Empty;
+
+    [Parameter] public string? SelectedValue { get; set; }
+
+    [Inject] private IStringLocalizerFactory StringLocalizerFactory { get; set; } = null!;
+    [Inject] private INotificationDefinitionManager NotificationDefinitionManager { get; set; } = null!;
+
+    public void Dispose()
+    {
+        _debounceCancellationTokenSource?.Cancel();
+        _debounceCancellationTokenSource?.Dispose();
+    }
+
+    private async Task OnSearchTextChangedAsync(string? searchValue)
+    {
+        _searchText = searchValue;
+
+        _debounceCancellationTokenSource?.Cancel();
+        _debounceCancellationTokenSource?.Dispose();
+        _debounceCancellationTokenSource = new CancellationTokenSource();
+
+        try
+        {
+            await Task.Delay(DebounceIntervalMilliseconds, _debounceCancellationTokenSource.Token);
+
+            var table = _table;
+
+            if (table != null)
+            {
+                await InvokeAsync(() => table.ReloadServerData());
+            }
+        }
+        catch (OperationCanceledException)
+        {
+        }
+    }
+
+    private async Task<TableData<SelectListItem>> LoadTenantsAsync(TableState state, CancellationToken cancellationToken)
+    {
+        var filter = string.IsNullOrWhiteSpace(_searchText) ? null : _searchText.Trim();
+
+        var notifications = await NotificationDefinitionManager.GetNotificationsAsync();
+
+        var items = notifications
+            .Select(notification => new SelectListItem(
+                notification.DisplayName.Localize(StringLocalizerFactory),
+                notification.Name))
+            .WhereIf(!string.IsNullOrWhiteSpace(filter), x => x.Text.Contains(filter!) || x.Value.Contains(filter!))
+            .OrderBy(x => x.Text)
+            .Skip(state.Page * state.PageSize)
+            .Take(state.PageSize)
+            .ToList();
+
+        return new TableData<SelectListItem>
+        {
+            Items = items,
+            TotalItems = notifications.Count,
+        };
+    }
+
+    private async Task OnRowClickAsync(TableRowClickEventArgs<SelectListItem> args)
+    {
+        await SelectAsync(args.Item);
+    }
+
+    private Task SelectAsync(SelectListItem? item)
+    {
+        if (item == null)
+        {
+            return Task.CompletedTask;
+        }
+
+        MudDialog.Close(DialogResult.Ok(item));
+        return Task.CompletedTask;
+    }
+
+    private void CancelAsync()
+    {
+        MudDialog.Cancel();
+    }
+}

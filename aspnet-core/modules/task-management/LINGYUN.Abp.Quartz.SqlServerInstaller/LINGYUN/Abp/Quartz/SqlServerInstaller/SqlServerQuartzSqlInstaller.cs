@@ -123,7 +123,7 @@ public class SqlServerQuartzSqlInstaller : IQuartzSqlInstaller
 
         if (checkDataBaseName.IsNullOrWhiteSpace())
         {
-            using (var sqlCommand = new SqlCommand($"CREATE DATABASE {dataBase};", sqlConnection))
+            using (var sqlCommand = new SqlCommand($"CREATE DATABASE [{dataBase}];", sqlConnection))
             {
                 await sqlCommand.ExecuteNonQueryAsync();
             }

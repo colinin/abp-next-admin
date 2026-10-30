@@ -13,5 +13,16 @@
     "title": "Dashboard",
     "analytics": "Analytics",
     "workspace": "Workspace"
+  },
+  "approvalFlow": {
+    "title": "Approval flow",
+    "templates": "Approval templates",
+    "myApprovals": "My approvals",
+    "pending": "My pending",
+    "initiated": "Initiated by me",
+    "done": "My handled",
+    "carbonCopy": "CC to me",
+    "formDefinitions": "Form design",
+    "designer": "Flow designer"
   }
 }

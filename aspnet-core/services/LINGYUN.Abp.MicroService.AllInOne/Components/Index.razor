@@ -1,0 +1,59 @@
+@page "/"
+@using Microsoft.AspNetCore.Components.Authorization
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject NavigationManager Navigation
+
+<MudGrid Class="mb-3">
+    <MudItem xs="12" md="7">
+        <MudCard Style="height: 100%;">
+            <MudCardContent>
+                <MudText Typo="Typo.h4" Class="mb-2">LINGYUN AllInOne</MudText>
+                <MudText Typo="Typo.body1" Class="mud-text-secondary mb-3">
+                    统一管理门户。身份认证、设置管理与 Elsa 工作流工作室均以 Blazor Server 方式集成。
+                </MudText>
+                @if (IsAuthenticated)
+                {
+                    <MudButton Href="/workflows/definitions"
+                               Variant="Variant.Filled"
+                               Color="Color.Primary"
+                               StartIcon="@Icons.Material.Filled.AccountTree">
+                        打开 Elsa Studio
+                    </MudButton>
+                }
+                else
+                {
+                    <MudButton Href="/Account/Login?returnUrl=%2F"
+                               Variant="Variant.Filled"
+                               Color="Color.Primary"
+                               StartIcon="@Icons.Material.Filled.Login">
+                        登录
+                    </MudButton>
+                }
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+    <MudItem xs="12" md="5">
+        <MudCard Style="height: 100%;">
+            <MudCardContent>
+                <MudText Typo="Typo.h6" Color="Color.Primary" Class="mb-2">工作流工作室</MudText>
+                <MudText Typo="Typo.body2" Class="mud-text-secondary mb-3">
+                    使用左侧菜单进入工作流定义、实例、设计器等 Studio 页面。
+                </MudText>
+                <MudDivider Class="my-2" />
+                <MudText Typo="Typo.body2" Class="mud-text-secondary">
+                    Blazor Server + ABP MudBlazor Basic Theme
+                </MudText>
+            </MudCardContent>
+        </MudCard>
+    </MudItem>
+</MudGrid>
+
+@code {
+    private bool IsAuthenticated;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var state = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        IsAuthenticated = state.User.Identity?.IsAuthenticated == true;
+    }
+}

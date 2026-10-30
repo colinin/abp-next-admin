@@ -1,0 +1,19 @@
+{
+  "culture": "en",
+  "texts": {
+    "Elsa": "Elsa",
+    "Approval Flow": "Approval Flow",
+    "Approval Task": "Approval Task",
+    "Creates an approval node and waits for its approvers to decide.": "Creates an approval node and waits for its approvers to decide.",
+    "The node title shown on every approver's task.": "The node title shown on every approver's task.",
+    "The rules that resolve who may act on this node.": "The rules that resolve who may act on this node.",
+    "Any asks every approver at once and accepts the first decision; All asks everyone; Sequential asks one at a time.": "Any asks every approver at once and accepts the first decision; All asks everyone; Sequential asks one at a time.",
+    "The actions offered to every approver. Keys are literal; labels may use expressions.": "The actions offered to every approver. Keys are literal; labels may use expressions.",
+    "What to do when the rules resolve to nobody. Skip passes the node without asking anybody.": "What to do when the rules resolve to nobody. Skip passes the node without asking anybody.",
+    "The node instance identifier, for correlation with the approval records.": "The node instance identifier, for correlation with the approval records.",
+    "Approval Cc": "Approval Cc",
+    "Sends a carbon copy to the resolved recipients without waiting for them.": "Sends a carbon copy to the resolved recipients without waiting for them.",
+    "The carbon copy title.": "The carbon copy title.",
+    "The rules that resolve who receives the carbon copy.": "The rules that resolve who receives the carbon copy."
+  }
+}

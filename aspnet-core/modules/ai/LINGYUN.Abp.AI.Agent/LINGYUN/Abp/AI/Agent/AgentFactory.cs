@@ -1,4 +1,4 @@
-﻿using LINGYUN.Abp.AI.Workspaces;
+using LINGYUN.Abp.AI.Workspaces;
 using Microsoft.Agents.AI;
 using Microsoft.Extensions.AI;
 using Microsoft.Extensions.Localization;
@@ -84,8 +84,7 @@ public class AgentFactory : IAgentFactory, IScopedDependency
             handlerAction(workspace, clientAgentOptions);
         }
 
-        var aiAgentBuilder = chatClient
-            .CreateAIAgent(clientAgentOptions)
+        var aiAgentBuilder = new ChatClientAgent(chatClient, clientAgentOptions)
             .AsBuilder();
 
         foreach (var handlerAction in AgentOptions.AgentBuildActions)

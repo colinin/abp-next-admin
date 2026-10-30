@@ -1,0 +1,25 @@
+﻿{
+  "culture": "en",
+  "texts": {
+    "Menu:Labels": "Labels",
+    "Labels": "Labels",
+    "The name of the label.": "The name of the label.",
+    "The name of the new label.": "The name of the new label.",
+    "A description about the label.": "A description about the label.",
+    "A brief description of the label.": "A brief description of the label.",
+    "The color of the label.": "The color of the label.",
+    "No Labels found": "No Labels found",
+    "Label": "Label",
+    "Bulk actions": "Bulk actions",
+    "Delete": "Delete",
+    "Create Label": "Create Label",
+    "General": "General",
+    "Name": "Name",
+    "Description": "Description",
+    "Color": "Color",
+    "Loading": "Loading",
+    "Save": "Save",
+    "Cancel": "Cancel",
+    "Ok": "Ok"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "culture": "en",
+  "texts": {
+    "Permission:Elsa": "Elsa Workflows",
+    "Permission:Create": "Create",
+    "Permission:Update": "Update",
+    "Permission:Delete": "Delete",
+    "Permission:Execute": "Execute",
+    "Permission:Publish": "Publish",
+    "Permission:Retract": "Retract",
+    "Permission:Refresh": "Refresh",
+    "Permission:Reload": "Reload"
+  }
+}

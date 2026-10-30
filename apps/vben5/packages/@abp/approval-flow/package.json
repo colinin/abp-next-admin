@@ -1,0 +1,34 @@
+{
+  "name": "@abp/approval-flow",
+  "version": "10.0.2",
+  "homepage": "https://github.com/colinin/abp-next-admin",
+  "bugs": "https://github.com/colinin/abp-next-admin/issues",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/colinin/abp-next-admin.git",
+    "directory": "packages/@abp/approval-flow"
+  },
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./src/index.ts"
+    }
+  },
+  "dependencies": {
+    "@abp/core": "workspace:*",
+    "@abp/request": "workspace:*",
+    "@ant-design/icons-vue": "catalog:",
+    "@vben/common-ui": "workspace:*",
+    "@vben/icons": "workspace:*",
+    "@vben/locales": "workspace:*",
+    "ant-design-vue": "catalog:",
+    "vue": "catalog:",
+    "vxe-table": "catalog:",
+    "@abp/ui": "workspace:*"
+  }
+}

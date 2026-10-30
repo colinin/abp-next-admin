@@ -1,4 +1,4 @@
-﻿using LINGYUN.Abp.BlobManagement;
+using LINGYUN.Abp.BlobManagement;
 using System.Threading.Tasks;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;

@@ -13,5 +13,16 @@
     "title": "概览",
     "analytics": "分析页",
     "workspace": "工作台"
+  },
+  "approvalFlow": {
+    "title": "审批流程",
+    "templates": "审批模板",
+    "myApprovals": "我的审批",
+    "pending": "我的待办",
+    "initiated": "我发起的",
+    "done": "我的已办",
+    "carbonCopy": "抄送我的",
+    "formDefinitions": "表单设计",
+    "designer": "流程设计器"
   }
 }

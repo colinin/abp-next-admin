@@ -1,3 +1,9 @@
+﻿# Global editor defaults for the .NET solution.
+[*]
+end_of_line = crlf
+charset = utf-8-bom
+insert_final_newline = true
+
 # Rules in this file were initially inferred by Visual Studio IntelliCode from the D:\Projects\MicroService\CRM\Vue\abp-next-admin\aspnet-core codebase based on best match to current usage at 2022-01-07
 # There already existed an .editorconfig file in this directory. Copy rules from this .editorconfig.inferred file to the existing .editorconfig file as desired to have them take effect at this location.
 # You can modify the rules from these initially generated values to suit your own policies

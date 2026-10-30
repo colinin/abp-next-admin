@@ -1,4 +1,4 @@
-﻿using LINGYUN.Platform.Messages;
+using LINGYUN.Platform.Messages;
 using LINGYUN.Platform.Messages.Integration;
 using System.Net.Mail;
 using Volo.Abp.Content;

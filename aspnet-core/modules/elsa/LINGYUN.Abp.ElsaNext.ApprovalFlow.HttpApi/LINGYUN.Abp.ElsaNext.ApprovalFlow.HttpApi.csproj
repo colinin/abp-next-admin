@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<Import Project="..\..\..\..\configureawait.props" />
+	<Import Project="..\..\..\..\common.props" />
+
+	<PropertyGroup>
+		<TargetFramework>net10.0</TargetFramework>
+		<AssemblyName>LINGYUN.Abp.ElsaNext.ApprovalFlow.HttpApi</AssemblyName>
+		<PackageId>LINGYUN.Abp.ElsaNext.ApprovalFlow.HttpApi</PackageId>
+		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+		<RootNamespace />
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.AspNetCore.Mvc" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\LINGYUN.Abp.ElsaNext.ApprovalFlow.Application\LINGYUN.Abp.ElsaNext.ApprovalFlow.Application.csproj" />
+		<ProjectReference Include="..\LINGYUN.Abp.ElsaNext.ApprovalFlow.Application.Contracts\LINGYUN.Abp.ElsaNext.ApprovalFlow.Application.Contracts.csproj" />
+	</ItemGroup>
+
+</Project>

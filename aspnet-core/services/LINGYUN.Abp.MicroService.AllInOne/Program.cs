@@ -1,6 +1,12 @@
+using Elsa.Extensions;
+using Elsa.Http;
 using LINGYUN.Abp.MicroService.AllInOne;
+using LINGYUN.Abp.MicroService.AllInOne.Components;
+using Microsoft.Extensions.Options;
+using Volo.Abp.AspNetCore.Components.Web.Theming.MudBlazor.Routing;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.WebHost.UseStaticWebAssets();
 builder.Host.AddAppSettingsSecretsJson()
     .UseAutofac()
     .ConfigureAppConfiguration((context, builder) =>
@@ -70,7 +76,21 @@ if (app.Environment.IsDevelopment())
 }
 app.UseAuditing();
 app.UseAbpSerilogEnrichers();
-app.UseConfiguredEndpoints();
+app.UseAntiforgery();
+app.UseWorkflowsApi(); // Elsa 3 API endpoints.
+app.UseWhen(
+    context => !context.Request.Path.StartsWithSegments("/workflows"),
+    branch => branch.UseWorkflows()); // Elsa 3 HTTP endpoint activities, excluding Studio UI routes.
+app.UseConfiguredEndpoints(builder =>
+{
+    builder.MapRazorComponents<App>()
+        .AddInteractiveServerRenderMode()
+        .AddAdditionalAssemblies(
+            builder.ServiceProvider.GetRequiredService<IOptions<AbpRouterOptions>>().Value.AdditionalAssemblies
+                .Append(typeof(Elsa.Studio.Workflows.Pages.WorkflowDefinitions.List.Index).Assembly)
+                .Distinct()
+                .ToArray());
+});
 // app.UseHttpActivities();
 
 await app.RunAsync();

@@ -1,3 +1,4 @@
+﻿using Elsa.Extensions;
 using Savorboard.CAP.InMemoryMessageQueue;
 using VoloAbpExceptionHandlingOptions = Volo.Abp.AspNetCore.ExceptionHandling.AbpExceptionHandlingOptions;
 
@@ -172,65 +173,14 @@ public partial class AllInOneModule
             // 如果使用持久化存储, 则配置quartz持久层
             if (configuration.GetValue("Quartz:UsePersistentStore", false))
             {
-                var settings = configuration.GetSection("Quartz:Properties").Get<Dictionary<string, string>>();
-                if (settings != null)
-                {
-                    foreach (var setting in settings)
-                    {
-                        options.Properties[setting.Key] = setting.Value;
-                    }
-                }
-
                 options.Configurator += (config) =>
                 {
                     config.UsePersistentStore(store =>
                     {
-                        store.UseProperties = false;
                         store.UseNewtonsoftJsonSerializer();
                     });
                 };
             }
-        });
-    }
-
-    private void PreConfigureElsa(IServiceCollection services, IConfiguration configuration)
-    {
-        var elsaSection = configuration.GetSection("Elsa");
-        // 本项目命名空间位于 LINGYUN.Abp 之下, 直接使用 Elsa.* 会被解析为 LINGYUN.Abp.Elsa.* 命名空间,
-        // 因此这里使用 global:: 指定 Elsa 包中的类型
-        var startups = new[]
-            {
-                typeof(global::Elsa.Activities.Console.Startup),
-                typeof(global::Elsa.Activities.Http.Startup),
-                typeof(global::Elsa.Activities.UserTask.Startup),
-                typeof(global::Elsa.Activities.Temporal.Quartz.Startup),
-                typeof(global::Elsa.Activities.Email.Startup),
-                typeof(global::Elsa.Scripting.JavaScript.Startup),
-                typeof(global::Elsa.Activities.Webhooks.Startup),
-            };
-
-        PreConfigure<ElsaOptionsBuilder>(elsa =>
-        {
-            elsa
-                .AddActivitiesFrom<AllInOneModule>()
-                .AddWorkflowsFrom<AllInOneModule>()
-                .AddFeatures(startups, configuration)
-                .ConfigureWorkflowChannels(options => elsaSection.GetSection("WorkflowChannels").Bind(options));
-
-            elsa.DistributedLockingOptionsBuilder
-                .UseProviderFactory(sp => name =>
-                {
-                    var provider = sp.GetRequiredService<IDistributedLockProvider>();
-
-                    return provider.CreateLock(name);
-                });
-        });
-
-        services.AddNotificationHandlersFrom<AllInOneModule>();
-
-        PreConfigure<IMvcBuilder>(mvcBuilder =>
-        {
-            mvcBuilder.AddApplicationPartIfNotExists(typeof(global::Elsa.Webhooks.Api.Endpoints.List).Assembly);
         });
     }
 
@@ -943,19 +893,13 @@ public partial class AllInOneModule
             };
         });
 
-        if (!isDevelopment)
-        {
-            services
-                .AddDataProtection()
-                .SetApplicationName("LINGYUN.Abp.Application")
-                .PersistKeysToStackExchangeRedis(() =>
-                {
-                    var redis = ConnectionMultiplexer.Connect(configuration["Redis:Configuration"]!);
-
-                    return redis.GetDatabase();
-                },
-                "LINGYUN.Abp.Application:DataProtection:Protection-Keys");
-        }
+        services.AddDataProtection()
+            .SetApplicationName("LINGYUN.Abp.Application")
+            .PersistKeysToStackExchangeRedis(() =>
+            {
+                return ConnectionMultiplexer.Connect(configuration["Redis:Configuration"]!).GetDatabase();
+            },
+            "LINGYUN.Abp.Application:DataProtection:Protection-Keys");
 
         services.AddSameSiteCookiePolicy();
     }

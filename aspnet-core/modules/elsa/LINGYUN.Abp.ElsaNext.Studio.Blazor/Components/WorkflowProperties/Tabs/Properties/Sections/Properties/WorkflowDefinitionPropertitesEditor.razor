@@ -1,0 +1,52 @@
+﻿@inject ILocalizer Localizer
+@inherits StudioComponentBase
+
+<VerticalWell ExtraPadding="40">
+    <MudText Typo="Typo.overline">@Localizer["Propertites"]</MudText>
+    <MudStack>
+        <MudButton StartIcon="@Icons.Material.Outlined.Add"
+            Variant="Variant.Filled"
+            Color="Color.Primary"
+            Class="align-self-end"
+            OnClick="OnAddPropertyClicked"
+            Disabled="IsReadOnly">
+            @Localizer["Add property"]
+        </MudButton>
+
+        @if (!Properties.Any())
+        {
+            <MudAlert Severity="Severity.Normal" Variant="Variant.Text" Icon="@Icons.Material.Outlined.Info"> @Localizer["There are currently no propertites defined."]</MudAlert>
+        }
+        else
+        {
+            <VerticalWell ExtraPadding="160">
+                <MudSimpleTable Dense="true" Bordered="false" Striped="false" Elevation="0" Outlined="true" FixedHeader="true">
+                    <thead>
+                        <tr>
+                            <th>@Localizer["Key"]</th>
+                            <th>@Localizer["Value"]</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        @foreach (var property in Properties)
+                        {
+                            <tr>
+                                <td>@property.Key</td>
+                                <td>@property.Value</td>
+                                <td style="text-align: right;">
+                                    <MudMenu Icon="@Icons.Material.Filled.MoreVert" Size="Size.Small" Dense="true" Disabled="IsReadOnly">
+                                        <MudMenuItem Icon="@Icons.Material.Outlined.Edit" OnClick="@(() => OnEditClicked(property))">@Localizer["Edit"]</MudMenuItem>
+                                        <MudMenuItem Icon="@Icons.Material.Outlined.Delete" OnClick="@(() => OnDeleteClicked(property))">@Localizer["Delete"]</MudMenuItem>
+                                    </MudMenu>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </MudSimpleTable>
+            </VerticalWell>
+        }
+    </MudStack>
+</VerticalWell>
+<MudDivider />

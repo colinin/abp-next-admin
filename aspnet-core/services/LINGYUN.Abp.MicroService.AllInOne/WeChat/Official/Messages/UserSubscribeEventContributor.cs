@@ -1,4 +1,4 @@
-﻿using LINGYUN.Abp.WeChat.Common.Messages.Handlers;
+using LINGYUN.Abp.WeChat.Common.Messages.Handlers;
 using LINGYUN.Abp.WeChat.Official.Messages.Models;
 using LINGYUN.Abp.WeChat.Official.Services;
 

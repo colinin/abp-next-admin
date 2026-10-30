@@ -1,0 +1,12 @@
+{
+  "culture": "zh-Hans",
+  "texts": {
+    "Webhooks": "Webhooks",
+    "Publish Webhook": "发布Webhook",
+    "Send webhooks to subscriptions.": "向订阅方发布Webhook。",
+    "Data to send.": "要发送的数据。",
+    "If true, It sends the exact same data as the parameter to clients.": "如果为True，它会向客户端发送与参数完全相同的数据。",
+    "If true, webhook will only contain given headers. If false given headers will be added to predefined headers in subscription.": "如果为True，webhook 将仅包含指定的标头。如果为False，则在订阅中预定义的标头将添加给定的标头。",
+    "That headers will be sent with the webhook.": "将随 webhook 一起发送的请求头。"
+  }
+}

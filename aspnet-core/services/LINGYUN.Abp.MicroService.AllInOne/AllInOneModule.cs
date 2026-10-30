@@ -1,4 +1,4 @@
-namespace LINGYUN.Abp.MicroService.AllInOne;
+﻿namespace LINGYUN.Abp.MicroService.AllInOne;
 
 [DependsOn(
     // CAP事件总线模块
@@ -28,7 +28,8 @@ namespace LINGYUN.Abp.MicroService.AllInOne;
     // 身份认证模块 实体框架
     typeof(AbpIdentityEntityFrameworkCoreModule),
     // 身份认证模块 Mvc视图
-    typeof(AbpIdentityWebModule),
+    // 身份认证模块 Blazor MudBlazor 页面
+    typeof(AbpIdentityBlazorMudBlazorServerModule),
 
     // 账户模块 应用服务
     typeof(AbpAccountApplicationModule),
@@ -58,6 +59,8 @@ namespace LINGYUN.Abp.MicroService.AllInOne;
 
     // MVC Theme
     typeof(AbpAspNetCoreMvcUiLeptonXLiteThemeModule),
+    // Blazor Server MudBlazor 基础主题
+    typeof(AbpAspNetCoreComponentsServerMudBlazorBasicThemeModule),
 
     // 缓存模块 Redis集成
     typeof(AbpCachingStackExchangeRedisModule),
@@ -216,7 +219,8 @@ namespace LINGYUN.Abp.MicroService.AllInOne;
     // 设置管理模块 实体框架
     typeof(AbpSettingManagementEntityFrameworkCoreModule),
     // 设置管理模块 Mvc视图
-    typeof(AbpSettingManagementWebModule),
+    // 设置管理模块 Blazor MudBlazor 页面
+    typeof(AbpSettingManagementBlazorMudBlazorServerModule),
 
     // 权限管理模块 应用服务
     typeof(LINGYUN.Abp.PermissionManagement.AbpPermissionManagementApplicationModule),
@@ -368,16 +372,35 @@ namespace LINGYUN.Abp.MicroService.AllInOne;
     // 自定义导航模块
     typeof(AbpUINavigationModule),
 
-    // Elsa工作流模块
-    typeof(AbpElsaModule),
-    // Elsa工作流模块 工作流服务器
-    typeof(AbpElsaServerModule),
-    // Elsa工作流模块 活动
-    typeof(AbpElsaActivitiesModule),
-    // Elsa工作流模块 实体框架
-    typeof(AbpElsaEntityFrameworkCoreModule),
-    // Elsa工作流设计器模块
-    typeof(AbpElsaDesignerModule),
+    // Elsa 3 工作流服务器
+    typeof(AbpElsaNextServerModule),
+    typeof(AbpElsaNextStudioAIBlazorModule),
+    typeof(AbpElsaNextStudioAlterationsBlazorModule),
+    typeof(AbpElsaNextStudioBlazorModule),
+    typeof(AbpElsaNextStudioDashboardBlazorModule),
+    typeof(AbpElsaNextStudioDiagnosticsOpenTelemetryBlazorModule),
+    typeof(AbpElsaNextStudioDiagnosticsStructuredLogsBlazorModule),
+    typeof(AbpElsaNextStudioIdentityBlazorModule),
+    typeof(AbpElsaNextStudioLabelsBlazorModule),
+    typeof(AbpElsaNextStudioNotificationsBlazorModule),
+    typeof(AbpElsaNextStudioSaasBlazorModule),
+    typeof(AbpElsaNextStudioUserTasksBlazorModule),
+    typeof(AbpElsaNextStudioWebhooksBlazorModule),
+    // Elsa 3 UserTasks
+    typeof(AbpElsaNextUserTasksModule),
+    typeof(AbpElsaNextUserTasksEntityFrameworkCoreModule),
+    // Elsa 3 审批流
+    typeof(AbpElsaNextApprovalFlowActivitiesModule),
+    typeof(AbpElsaNextApprovalFlowEntityFrameworkCoreModule),
+    typeof(AbpElsaNextApprovalFlowHttpApiModule),
+    // Elsa 3 人员部门（身份标识集成）
+    typeof(AbpElsaNextApprovalFlowDomainIdentityModule),
+    // Elsa 3 内置扩展
+    typeof(AbpElsaNextBlobStoringModule),
+    typeof(AbpElsaNextEmailModule),
+    typeof(AbpElsaNextLabelsModule),
+    typeof(AbpElsaNextNotificationsModule),
+    typeof(AbpElsaNextWebhooksModule),
 
     // 数据导出模块 MiniSoftware集成
     typeof(AbpExporterMiniSoftwareModule),
@@ -437,13 +460,15 @@ public partial class AllInOneModule : AbpModule
         PreConfigureWrapper();
         PreConfigureFeature();
         PreConfigureIdentity();
+        PreConfigureBlazorUI();
         PreConfigureApp(configuration);
         PreConfigureCAP(configuration);
         PreConfigureQuartz(configuration);
         PreConfigureSignalR(configuration);
         PreConfigureAuthServer(configuration);
-        PreConfigureElsa(context.Services, configuration);
         PreConfigureCertificate(configuration, hostingEnvironment);
+        // Studio and the Elsa API share this host. Studio is protected by the host login cookie, but Elsa uses its own permission claim format; disable Elsa endpoint permission evaluation for the in-process Studio backend.
+        Elsa.EndpointSecurityOptions.DisableSecurity();
     }
 
     public override void ConfigureServices(ServiceConfigurationContext context)
@@ -457,6 +482,7 @@ public partial class AllInOneModule : AbpModule
         ConfigureAuditing();
         ConfigureIdempotent();
         ConfigureMvcUiTheme();
+        ConfigureBlazorUI(context.Services);
         ConfigureLocalization();
         ConfigureBackgroundTasks();
         ConfigureExceptionHandling();

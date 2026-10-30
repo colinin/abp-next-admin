@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<Import Project="..\..\..\..\configureawait.props" />
+	<Import Project="..\..\..\..\common.props" />
+
+	<PropertyGroup>
+		<TargetFramework>net10.0</TargetFramework>
+		<AssemblyName>LINGYUN.Abp.ElsaNext.ApprovalFlow.Domain.Identity</AssemblyName>
+		<PackageId>LINGYUN.Abp.ElsaNext.ApprovalFlow.Domain.Identity</PackageId>
+		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+		<RootNamespace />
+		<!-- The approval flow sources were reconstructed from compiled artifacts, which do not preserve nullable flow analysis. Keep the annotations but do not report nullable analysis warnings. -->
+		<Nullable>annotations</Nullable>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Elsa.UserTasks" />
+		<PackageReference Include="Volo.Abp.Identity.Domain" />
+		<PackageReference Include="Volo.Abp.Security" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\identity\LINGYUN.Abp.Identity.Domain\LINGYUN.Abp.Identity.Domain.csproj" />
+		<ProjectReference Include="..\LINGYUN.Abp.ElsaNext.ApprovalFlow.Domain\LINGYUN.Abp.ElsaNext.ApprovalFlow.Domain.csproj" />
+	</ItemGroup>
+
+</Project>

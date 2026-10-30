@@ -1,4 +1,4 @@
-﻿using LINGYUN.Abp.AI.Workspaces;
+using LINGYUN.Abp.AI.Workspaces;
 using Microsoft.Agents.AI;
 using Microsoft.Extensions.AI;
 using System;
@@ -19,24 +19,29 @@ public class WorkspaceAIAgent : AIAgent
         Workspace = workspace;
     }
 
-    public override AgentThread DeserializeThread(JsonElement serializedThread, JsonSerializerOptions? jsonSerializerOptions = null)
+    protected override ValueTask<AgentSession> CreateSessionCoreAsync(CancellationToken cancellationToken = default)
     {
-        return InnerAgent.DeserializeThread(serializedThread, jsonSerializerOptions);
+        return InnerAgent.CreateSessionAsync(cancellationToken);
     }
 
-    public override AgentThread GetNewThread()
+    protected override ValueTask<JsonElement> SerializeSessionCoreAsync(AgentSession session, JsonSerializerOptions? jsonSerializerOptions = null, CancellationToken cancellationToken = default)
     {
-        return InnerAgent.GetNewThread();
+        return InnerAgent.SerializeSessionAsync(session, jsonSerializerOptions, cancellationToken);
     }
 
-    protected override Task<AgentRunResponse> RunCoreAsync(IEnumerable<ChatMessage> messages, AgentThread? thread = null, AgentRunOptions? options = null, CancellationToken cancellationToken = default)
+    protected override ValueTask<AgentSession> DeserializeSessionCoreAsync(JsonElement serializedState, JsonSerializerOptions? jsonSerializerOptions = null, CancellationToken cancellationToken = default)
     {
-        return InnerAgent.RunAsync(GetChatMessages(messages), thread, options, cancellationToken);
+        return InnerAgent.DeserializeSessionAsync(serializedState, jsonSerializerOptions, cancellationToken);
     }
 
-    protected override IAsyncEnumerable<AgentRunResponseUpdate> RunCoreStreamingAsync(IEnumerable<ChatMessage> messages, AgentThread? thread = null, AgentRunOptions? options = null, CancellationToken cancellationToken = default)
+    protected override Task<AgentResponse> RunCoreAsync(IEnumerable<ChatMessage> messages, AgentSession? session = null, AgentRunOptions? options = null, CancellationToken cancellationToken = default)
     {
-        return InnerAgent.RunStreamingAsync(GetChatMessages(messages), thread, options, cancellationToken);
+        return InnerAgent.RunAsync(GetChatMessages(messages), session, options, cancellationToken);
+    }
+
+    protected override IAsyncEnumerable<AgentResponseUpdate> RunCoreStreamingAsync(IEnumerable<ChatMessage> messages, AgentSession? session = null, AgentRunOptions? options = null, CancellationToken cancellationToken = default)
+    {
+        return InnerAgent.RunStreamingAsync(GetChatMessages(messages), session, options, cancellationToken);
     }
 
     protected virtual IEnumerable<ChatMessage> GetChatMessages(IEnumerable<ChatMessage> messages)

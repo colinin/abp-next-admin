@@ -1,0 +1,33 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+	<Import Project="..\..\..\..\configureawait.props" />
+	<Import Project="..\..\..\..\common.props" />
+
+	<PropertyGroup>
+		<TargetFramework>net10.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<AssemblyName>LINGYUN.Abp.ElsaNext.Studio.UserTasks.Blazor</AssemblyName>
+		<PackageId>LINGYUN.Abp.ElsaNext.Studio.UserTasks.Blazor</PackageId>
+		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Content Remove="Localization\Resources\UserTasksBlazor\*.json" />
+		<EmbeddedResource Include="Localization\Resources\UserTasksBlazor\*.json" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Elsa.Studio.Shared" />
+		<PackageReference Include="Elsa.Studio.UserTasks" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\LINGYUN.Abp.ElsaNext.UserTasks\LINGYUN.Abp.ElsaNext.UserTasks.csproj" />
+		<ProjectReference Include="..\LINGYUN.Abp.ElsaNext.Studio.Blazor\LINGYUN.Abp.ElsaNext.Studio.Blazor.csproj" />
+	</ItemGroup>
+
+</Project>

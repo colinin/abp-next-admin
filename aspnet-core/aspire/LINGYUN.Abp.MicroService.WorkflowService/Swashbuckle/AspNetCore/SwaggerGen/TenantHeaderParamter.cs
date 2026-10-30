@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Options;
 using Microsoft.OpenApi;
 using System.Collections.Generic;
 using Volo.Abp.AspNetCore.MultiTenancy;
