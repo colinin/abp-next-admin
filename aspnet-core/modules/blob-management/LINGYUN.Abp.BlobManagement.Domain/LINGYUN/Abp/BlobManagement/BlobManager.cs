@@ -1,4 +1,4 @@
-﻿using LINGYUN.Abp.BlobManagement.Features;
+using LINGYUN.Abp.BlobManagement.Features;
 using LINGYUN.Abp.BlobManagement.Settings;
 using LINGYUN.Abp.Features.LimitValidation;
 using Microsoft.Extensions.Caching.Distributed;
@@ -23,7 +23,6 @@ namespace LINGYUN.Abp.BlobManagement;
 
 public class BlobManager : DomainService
 {
-    private readonly IDistributedCache<BlobDownloadKeyCacheItem> _blobDownloadKeyCache;
     private readonly IDistributedCache<BlobDownloadCacheItem> _blobDownloadCache;
     private readonly IDistributedEventBus _distributedEventBus;
     private readonly IMemoryCache _blobFileValidateCache;
@@ -33,6 +32,7 @@ public class BlobManager : DomainService
     private readonly IBlobProvider _blobProvider;
     private readonly IBlobRepository _blobRepository;
     private readonly IBlobContainerRepository _blobContainerRepository;
+    private readonly IBlobDownloadKeyGenerator _blobDownloadKeyGenerator;
 
     private readonly IApplicationInfoAccessor _applicationInfoAccessor;
     private readonly ICancellationTokenProvider _cancellationTokenProvider;
@@ -42,7 +42,7 @@ public class BlobManager : DomainService
         IBlobContainerRepository blobContainerRepository,
         ICancellationTokenProvider cancellationTokenProvider,
         IDistributedEventBus distributedEventBus,
-        IDistributedCache<BlobDownloadKeyCacheItem> blobDownloadKeyCache,
+        IBlobDownloadKeyGenerator blobDownloadKeyGenerator,
         IDistributedCache<BlobDownloadCacheItem> blobDownloadCache,
         IBlobContentTypeResolver blobContentTypeResolver,
         IApplicationInfoAccessor applicationInfoAccessor,
@@ -54,7 +54,7 @@ public class BlobManager : DomainService
         _blobContainerRepository = blobContainerRepository;
         _cancellationTokenProvider = cancellationTokenProvider;
         _distributedEventBus = distributedEventBus;
-        _blobDownloadKeyCache = blobDownloadKeyCache;
+        _blobDownloadKeyGenerator = blobDownloadKeyGenerator;
         _blobDownloadCache = blobDownloadCache;
         _blobContentTypeResolver = blobContentTypeResolver;
         _applicationInfoAccessor = applicationInfoAccessor;
@@ -346,55 +346,40 @@ public class BlobManager : DomainService
         string fallbackUrlPrefix,
         bool isAttachmentContent = true)
     {
-        var cacheKey = $"{fallbackUrlPrefix}{Clock.Now:yyyy-MM-ddHH}{blob.Name}".ToMd5();
-        var cacheItem = await _blobDownloadKeyCache.GetAsync(cacheKey);
-        if (cacheItem == null)
-        {
-            var downloadUrlExpirySeconds = await _settingProvider.GetAsync(
+        var downloadUrlExpirySeconds = await _settingProvider.GetAsync(
             BlobManagementSettingNames.GenerateDownloadUrlExpirySeconds,
             BlobManagementSettingNames.DefaultGenerateDownloadUrlExpirySeconds);
 
-            var downloadUrl = await _blobProvider.GeneratePresignedUrlAsync(
-                blobContainer.Name,
-                blob.FullName,
-                TimeSpan.FromSeconds(downloadUrlExpirySeconds),
-                isAttachmentContent,
-                GetCancellationToken());
+        var downloadUrl = await _blobProvider.GeneratePresignedUrlAsync(
+            blobContainer.Name,
+            blob.FullName,
+            TimeSpan.FromSeconds(downloadUrlExpirySeconds),
+            isAttachmentContent,
+            GetCancellationToken());
 
-            if (downloadUrl.IsNullOrWhiteSpace())
-            {
-                // 特殊对象存储提供者（FileSystem）无法生成下载链接, 回退指定的请求Url
-                downloadUrl = $"{fallbackUrlPrefix.EnsureEndsWith('/')}{cacheKey}";
-            }
+        if (downloadUrl.IsNullOrWhiteSpace())
+        {
+            // 特殊对象存储提供者（FileSystem）无法生成下载链接, 回退到带签名的下载密钥
+            // 重构为默认HMAC签名生成,可在有效期内多次使用,无法主动撤销,建议生产环境减少downloadUrlExpirySeconds时长
+            var downloadKey = _blobDownloadKeyGenerator.Generate(blob);
 
-            cacheItem = new BlobDownloadKeyCacheItem(
-                blob.Id,
-                downloadUrl,
-                blob.TenantId);
-
-            await _blobDownloadKeyCache.SetAsync(
-                cacheKey,
-                cacheItem,
-                new DistributedCacheEntryOptions
-                {
-                    AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(downloadUrlExpirySeconds),
-                });
+            downloadUrl = $"{fallbackUrlPrefix.EnsureEndsWith('/')}{downloadKey}";
         }
 
-        return cacheItem.Url;
+        return downloadUrl;
     }
 
     public async virtual Task<Blob?> FindBlobByDownloadKeyAsync(string downloadKey)
     {
-        var cacheItem = await _blobDownloadKeyCache.GetAsync(downloadKey);
-        if (cacheItem == null)
+        var key = _blobDownloadKeyGenerator.Parse(downloadKey);
+        if (key == null)
         {
             return null;
         }
 
-        using (CurrentTenant.Change(cacheItem.TenantId))
+        using (CurrentTenant.Change(key.TenantId))
         {
-            return await _blobRepository.FindAsync(cacheItem.BlobId);
+            return await _blobRepository.FindAsync(key.BlobId);
         }
     }
 

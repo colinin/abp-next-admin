@@ -574,6 +574,7 @@
     <Project Path="tests/LINGYUN.Abp.AuditLogging.Tests/LINGYUN.Abp.AuditLogging.Tests.csproj" Id="a360d3e3-0cef-433c-a866-77abd64d8a52" />
     <Project Path="tests/LINGYUN.Abp.BlobManagement.Application.Tests/LINGYUN.Abp.BlobManagement.Application.Tests.csproj" />
     <Project Path="tests/LINGYUN.Abp.BlobManagement.Domain.Tests/LINGYUN.Abp.BlobManagement.Domain.Tests.csproj" />
+    <Project Path="tests/LINGYUN.Abp.BlobManagement.EntityFrameworkCore.Tests/LINGYUN.Abp.BlobManagement.EntityFrameworkCore.Tests.csproj" />
     <Project Path="tests/LINGYUN.Abp.BlobManagement.FileSystem.Tests/LINGYUN.Abp.BlobManagement.FileSystem.Tests.csproj" />
     <Project Path="tests/LINGYUN.Abp.BlobStoring.Aliyun.Tests/LINGYUN.Abp.BlobStoring.Aliyun.Tests.csproj" />
     <Project Path="tests/LINGYUN.Abp.BlobStoring.Nexus.Tests/LINGYUN.Abp.BlobStoring.Nexus.Tests.csproj" />

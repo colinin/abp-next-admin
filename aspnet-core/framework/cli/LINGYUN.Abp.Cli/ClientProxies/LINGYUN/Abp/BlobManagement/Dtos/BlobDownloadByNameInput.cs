@@ -11,8 +11,6 @@ namespace LINGYUN.Abp.BlobManagement.Dtos;
 
 public class BlobDownloadByNameInput
 {
-    public Guid? TenantId { get; set; }
-
     public string ContainerName { get; set; }
 
     public string BlobName { get; set; }

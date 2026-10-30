@@ -1,4 +1,4 @@
-﻿using LINGYUN.Abp.BlobManagement.Dtos;
+using LINGYUN.Abp.BlobManagement.Dtos;
 using LINGYUN.Abp.BlobManagement.Permissions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Web;
 using Volo.Abp;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Authorization;
 using Volo.Abp.Content;
 using Volo.Abp.Specifications;
 
@@ -76,13 +77,18 @@ public abstract class BlobAppServiceBase : BlobManagementApplicationService
         var blob = await BlobManager.FindBlobByDownloadKeyAsync(key);
         if (blob != null)
         {
-            var stream = await BlobManager.DownloadBlobsync(blob);
+            // 下载密钥中携带了租户信息,
+            // 需要在对应的租户上下文中读取Blob容器(匿名访问时当前租户可能为空)
+            using (CurrentTenant.Change(blob.TenantId))
+            {
+                var stream = await BlobManager.DownloadBlobsync(blob);
 
-            return new RemoteStreamContent(
-                stream ?? Stream.Null,
-                blob.Name,
-                blob.ContentType,
-                stream != null ? blob.Size : null);
+                return new RemoteStreamContent(
+                    stream ?? Stream.Null,
+                    blob.Name,
+                    blob.ContentType,
+                    stream != null ? blob.Size : null);
+            }
         }
 
         return new RemoteStreamContent(Stream.Null);
@@ -186,6 +192,8 @@ public abstract class BlobAppServiceBase : BlobManagementApplicationService
                 $"There is no file/directory named {name}!")
                 .WithData("Name", name);
 
+        CheckBlobTenant(blob);
+
         await CheckGetPolicyAsync(blobContainer.Name, blob);
 
         var stream = await BlobManager.DownloadBlobsync(blob);
@@ -284,5 +292,20 @@ public abstract class BlobAppServiceBase : BlobManagementApplicationService
         }
 
         return null;
+    }
+
+    /// <summary>
+    /// 校验 Blob 的归属租户
+    /// </summary>
+    /// <remarks>
+    /// 防止在切换了租户上下文之后读取到其它租户的数据
+    /// </remarks>
+    protected virtual void CheckBlobTenant(Blob blob)
+    {
+        if (blob.TenantId != CurrentTenant.Id)
+        {
+            throw new AbpAuthorizationException(
+                "The blob does not belong to the current tenant. Cross-tenant access is not allowed.");
+        }
     }
 }

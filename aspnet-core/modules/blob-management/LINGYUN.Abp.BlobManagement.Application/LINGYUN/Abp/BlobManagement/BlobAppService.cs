@@ -59,21 +59,50 @@ public class BlobAppService : BlobAppServiceBase, IBlobAppService
 
     public async virtual Task<IRemoteStreamContent> DownloadByNameAsync(BlobDownloadByNameInput input)
     {
-        using (CurrentTenant.Change(input.TenantId ?? CurrentTenant.Id))
-        {
-            var blobContainer = await BlobContainerRepository.GetByNameAsync(BlobManager.GetBlobProvider(), input.ContainerName);
+        // fix: 只能在当前租户上下文中访问, 移除通过参数切换租户造成跨租户越权访问
+        var blobContainer = await BlobContainerRepository.GetByNameAsync(BlobManager.GetBlobProvider(), input.ContainerName);
 
-            return await base.DownloadByNameAsync(blobContainer, input.BlobName);
-        }
+        return await base.DownloadByNameAsync(blobContainer, input.BlobName);
+    }
+
+    protected async override Task CheckGetPolicyAsync(Blob blob)
+    {
+        await base.CheckGetPolicyAsync(blob);
+
+        await CheckContainerGetPolicyAsync(blob);
     }
 
     protected async override Task CheckGetPolicyAsync(string containerName, Blob blob)
     {
         await base.CheckGetPolicyAsync(blob);
+
+        await base.CheckGetPolicyAsync(containerName, blob);
     }
 
-    protected override Task CheckDeletePolicyAsync(string containerName, Blob blob)
+    protected async override Task CheckDeletePolicyAsync(Blob blob)
     {
-        return base.CheckDeletePolicyAsync(blob);
+        await base.CheckDeletePolicyAsync(blob);
+
+        await CheckContainerDeletePolicyAsync(blob);
+    }
+
+    protected async override Task CheckDeletePolicyAsync(string containerName, Blob blob)
+    {
+        await base.CheckDeletePolicyAsync(blob);
+
+        await base.CheckDeletePolicyAsync(containerName, blob);
+    }
+
+    protected async virtual Task CheckContainerGetPolicyAsync(Blob blob)
+    {
+        var containerName = await BlobContainerRepository.GetNameAsync(blob.ContainerId);
+        await base.CheckGetPolicyAsync(containerName, blob);
+    }
+
+    /// <summary>
+    protected async virtual Task CheckContainerDeletePolicyAsync(Blob blob)
+    {
+        var containerName = await BlobContainerRepository.GetNameAsync(blob.ContainerId);
+        await base.CheckDeletePolicyAsync(containerName, blob);
     }
 }
