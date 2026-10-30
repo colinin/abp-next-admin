@@ -872,18 +872,6 @@
               "parameters": [
                 {
                   "nameOnMethod": "input",
-                  "name": "TenantId",
-                  "jsonName": null,
-                  "type": "System.Guid?",
-                  "typeSimple": "string?",
-                  "isOptional": false,
-                  "defaultValue": null,
-                  "constraintTypes": null,
-                  "bindingSourceId": "ModelBinding",
-                  "descriptorName": "input"
-                },
-                {
-                  "nameOnMethod": "input",
                   "name": "ContainerName",
                   "jsonName": null,
                   "type": "System.String",
@@ -10113,19 +10101,6 @@
       "enumValues": null,
       "genericArguments": null,
       "properties": [
-        {
-          "name": "TenantId",
-          "jsonName": null,
-          "type": "System.Guid?",
-          "typeSimple": "string?",
-          "isRequired": false,
-          "minLength": null,
-          "maxLength": null,
-          "minimum": null,
-          "maximum": null,
-          "regex": null,
-          "isNullable": true
-        },
         {
           "name": "ContainerName",
           "jsonName": null,
