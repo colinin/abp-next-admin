@@ -113,7 +113,7 @@ onMounted(onGetAuthenticator);
     <List v-else-if="authenticator?.isAuthenticated === true">
       <ListItem>
         <template #extra>
-          <Button type="primary" @click="onResetAuthenticator">
+          <Button type="primary" danger @click="onResetAuthenticator">
             {{ $t('AbpAccount.ResetAuthenticator') }}
           </Button>
         </template>
@@ -124,7 +124,7 @@ onMounted(onGetAuthenticator);
       </ListItem>
       <ListItem v-if="recoveryCodeCount">
         <template #extra>
-          <Button type="primary" @click="onResetRecoveryCode">
+          <Button type="primary" danger @click="onResetRecoveryCode">
             {{ $t('AbpAccount.ResetRecoveryCode') }}
           </Button>
         </template>
