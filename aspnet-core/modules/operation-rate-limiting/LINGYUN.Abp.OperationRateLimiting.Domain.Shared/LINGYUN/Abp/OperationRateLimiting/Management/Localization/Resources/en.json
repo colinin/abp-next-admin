@@ -1,0 +1,12 @@
+﻿{
+  "culture": "en",
+  "texts": {
+    "Permission:OperationRateLimiting": "Operation rate limiting",
+    "Permission:Policies": "Managing rate limiting policies",
+    "Permission:Create": "Create",
+    "Permission:Update": "Update",
+    "Permission:Delete": "Delete",
+    "LINGYUN.Abp.OperationRateLimiting.Management:010001": "A rate limiting policy with the same name already exists.",
+    "LINGYUN.Abp.OperationRateLimiting.Management:010002": "The rate limiting policy is invalid. Check the algorithm, partition and rule values."
+  }
+}
