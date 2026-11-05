@@ -105,6 +105,11 @@
   <Folder Name="/framework/open-observe/">
     <Project Path="framework/open-observe/LINGYUN.Abp.OpenObserve/LINGYUN.Abp.OpenObserve.csproj" />
   </Folder>
+  <Folder Name="/framework/operation-rate-limiting/">
+    <Project Path="framework/operation-rate-limiting/LINGYUN.Abp.OperationRateLimiting/LINGYUN.Abp.OperationRateLimiting.csproj" />
+    <Project Path="framework/operation-rate-limiting/LINGYUN.Abp.OperationRateLimiting.AspNetCore/LINGYUN.Abp.OperationRateLimiting.AspNetCore.csproj" />
+    <Project Path="framework/operation-rate-limiting/LINGYUN.Abp.OperationRateLimiting.StackExchangeRedis/LINGYUN.Abp.OperationRateLimiting.StackExchangeRedis.csproj" />
+  </Folder>
   <Folder Name="/framework/realtime/">
     <Project Path="framework/common/LINGYUN.Abp.RealTime/LINGYUN.Abp.RealTime.csproj" />
     <Project Path="modules/realtime-message/LINGYUN.Abp.IM.SignalR/LINGYUN.Abp.IM.SignalR.csproj" />
@@ -347,6 +352,14 @@
     <Project Path="modules/openIddict/LINGYUN.Abp.OpenIddict.Sms/LINGYUN.Abp.OpenIddict.Sms.csproj" />
     <Project Path="modules/openIddict/LINGYUN.Abp.OpenIddict.WeChat.Work/LINGYUN.Abp.OpenIddict.WeChat.Work.csproj" />
     <Project Path="modules/openIddict/LINGYUN.Abp.OpenIddict.WeChat/LINGYUN.Abp.OpenIddict.WeChat.csproj" />
+  </Folder>
+  <Folder Name="/modules/operation-rate-limiting/">
+    <Project Path="modules/operation-rate-limiting/LINGYUN.Abp.OperationRateLimiting.Application.Contracts/LINGYUN.Abp.OperationRateLimiting.Application.Contracts.csproj" />
+    <Project Path="modules/operation-rate-limiting/LINGYUN.Abp.OperationRateLimiting.Application/LINGYUN.Abp.OperationRateLimiting.Application.csproj" />
+    <Project Path="modules/operation-rate-limiting/LINGYUN.Abp.OperationRateLimiting.Domain.Shared/LINGYUN.Abp.OperationRateLimiting.Domain.Shared.csproj" />
+    <Project Path="modules/operation-rate-limiting/LINGYUN.Abp.OperationRateLimiting.Domain/LINGYUN.Abp.OperationRateLimiting.Domain.csproj" />
+    <Project Path="modules/operation-rate-limiting/LINGYUN.Abp.OperationRateLimiting.EntityFrameworkCore/LINGYUN.Abp.OperationRateLimiting.EntityFrameworkCore.csproj" />
+    <Project Path="modules/operation-rate-limiting/LINGYUN.Abp.OperationRateLimiting.HttpApi/LINGYUN.Abp.OperationRateLimiting.HttpApi.csproj" />
   </Folder>
   <Folder Name="/modules/permissions-management/">
     <Project Path="modules/permissions-management/LINGYUN.Abp.PermissionManagement.Application.Contracts/LINGYUN.Abp.PermissionManagement.Application.Contracts.csproj" />
