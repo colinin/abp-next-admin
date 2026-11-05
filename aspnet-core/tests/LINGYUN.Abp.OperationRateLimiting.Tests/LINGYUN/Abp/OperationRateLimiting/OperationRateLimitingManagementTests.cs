@@ -1,8 +1,8 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using LINGYUN.Abp.OperationRateLimiting.Dtos;
 using LINGYUN.Abp.OperationRateLimiting.Management;
-using LINGYUN.Abp.OperationRateLimiting.Management.Dto;
 using Shouldly;
 using Volo.Abp;
 using Xunit;

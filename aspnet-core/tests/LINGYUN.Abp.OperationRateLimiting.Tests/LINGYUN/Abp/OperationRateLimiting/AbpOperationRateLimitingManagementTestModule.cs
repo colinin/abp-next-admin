@@ -4,7 +4,7 @@ namespace LINGYUN.Abp.OperationRateLimiting;
 
 [DependsOn(
     typeof(AbpOperationRateLimitingEfCoreTestModule),
-    typeof(Management.AbpOperationRateLimitingManagementApplicationModule))]
+    typeof(AbpOperationRateLimitingApplicationModule))]
 public class AbpOperationRateLimitingManagementTestModule : AbpModule
 {
 }

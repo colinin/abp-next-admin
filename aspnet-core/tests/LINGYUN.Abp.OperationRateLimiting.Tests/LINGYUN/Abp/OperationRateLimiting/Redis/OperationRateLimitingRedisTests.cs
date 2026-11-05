@@ -2,6 +2,11 @@ using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using LINGYUN.Abp.OperationRateLimiting.Redis.Algorithms.Concurrency;
+using LINGYUN.Abp.OperationRateLimiting.Redis.Algorithms.FixedWindow;
+using LINGYUN.Abp.OperationRateLimiting.Redis.Algorithms.SlidingWindow;
+using LINGYUN.Abp.OperationRateLimiting.Redis.Algorithms.TokenBucket;
+using Microsoft.Extensions.Options;
 using Shouldly;
 using Volo.Abp;
 using Xunit;
@@ -12,18 +17,33 @@ public class OperationRateLimitingRedisTests : LINGYUN.Abp.Tests.AbpTestsBase<Ab
 {
     protected IOperationRateLimitingChecker Checker { get; }
 
-    protected IOperationRateLimitingStore Store { get; }
+    protected IOperationRateLimitingStateAccessor StateAccessor { get; }
 
     public OperationRateLimitingRedisTests()
     {
         Checker = GetRequiredService<IOperationRateLimitingChecker>();
-        Store = GetRequiredService<IOperationRateLimitingStore>();
+        StateAccessor = GetRequiredService<IOperationRateLimitingStateAccessor>();
     }
 
     [Fact]
-    public void Redis_Store_Should_Be_Used()
+    public void Redis_State_Accessor_Should_Be_Used()
     {
-        Store.ShouldBeOfType<StackExchangeRedisOperationRateLimitingStore>();
+        StateAccessor.ShouldBeOfType<StackExchangeRedisOperationRateLimitingStateAccessor>();
+    }
+
+    [Fact]
+    public void BuiltIn_Rules_Should_Be_Replaced_By_Redis_Implementations()
+    {
+        var options = GetRequiredService<IOptions<AbpOperationRateLimitingOptions>>().Value;
+
+        options.GetAlgorithmType(OperationRateLimitingAlgorithms.FixedWindow)
+            .ShouldBe(typeof(RedisFixedWindowRateLimitingRule));
+        options.GetAlgorithmType(OperationRateLimitingAlgorithms.SlidingWindow)
+            .ShouldBe(typeof(RedisSlidingWindowRateLimitingRule));
+        options.GetAlgorithmType(OperationRateLimitingAlgorithms.TokenBucket)
+            .ShouldBe(typeof(RedisTokenBucketRateLimitingRule));
+        options.GetAlgorithmType(OperationRateLimitingAlgorithms.Concurrency)
+            .ShouldBe(typeof(RedisConcurrencyRateLimitingRule));
     }
 
     [Fact]
@@ -96,7 +116,7 @@ public class OperationRateLimitingRedisTests : LINGYUN.Abp.Tests.AbpTestsBase<Ab
     {
         var key = "cas:" + UniqueKey();
 
-        var tasks = Enumerable.Range(0, 50).Select(_ => Store.UpdateStateAsync(
+        var tasks = Enumerable.Range(0, 50).Select(_ => StateAccessor.UpdateStateAsync(
             key,
             (RedisTestCounterState? current) =>
             {
@@ -108,13 +128,13 @@ public class OperationRateLimitingRedisTests : LINGYUN.Abp.Tests.AbpTestsBase<Ab
 
         await Task.WhenAll(tasks);
 
-        var state = await Store.GetStateAsync<RedisTestCounterState>(key);
+        var state = await StateAccessor.GetStateAsync<RedisTestCounterState>(key);
 
         state.ShouldNotBeNull();
         state!.Count.ShouldBe(50);
 
-        await Store.ResetAsync(key);
-        (await Store.GetStateAsync<RedisTestCounterState>(key)).ShouldBeNull();
+        await StateAccessor.ResetAsync(key);
+        (await StateAccessor.GetStateAsync<RedisTestCounterState>(key)).ShouldBeNull();
     }
 
     private static string UniqueKey()

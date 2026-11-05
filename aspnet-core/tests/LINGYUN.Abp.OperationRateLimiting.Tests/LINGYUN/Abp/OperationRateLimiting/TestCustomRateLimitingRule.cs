@@ -8,13 +8,20 @@ namespace LINGYUN.Abp.OperationRateLimiting;
 /// </summary>
 public class TestCustomRateLimitingRule : OperationRateLimitingRuleBase
 {
+    protected IOperationRateLimitingStateAccessor StateAccessor { get; }
+
+    public TestCustomRateLimitingRule(IOperationRateLimitingStateAccessor stateAccessor)
+    {
+        StateAccessor = stateAccessor;
+    }
+
     public override async Task<OperationRateLimitingStoreResult> ExecuteAsync(OperationRateLimitingRuleContext context)
     {
         var maxCount = context.Rule.MaxCount;
         var duration = context.Rule.Duration;
         var allowed = false;
 
-        var state = await context.Store.UpdateStateAsync(
+        var state = await StateAccessor.UpdateStateAsync(
             context.Key,
             (TestCustomRateLimitingState? current) =>
             {
