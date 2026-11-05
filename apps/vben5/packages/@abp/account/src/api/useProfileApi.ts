@@ -1,5 +1,6 @@
 import type {
   AuthenticatorDto,
+  AuthenticatorRecoveryCodeCountDto,
   AuthenticatorRecoveryCodeDto,
   ChangePasswordInput,
   ChangePhoneNumberInput,
@@ -158,6 +159,30 @@ export function useProfileApi() {
   }
 
   /**
+   * 获取恢复代码数量
+   */
+  function getRecoveryCodeCountApi(): Promise<AuthenticatorRecoveryCodeCountDto> {
+    return request<AuthenticatorRecoveryCodeCountDto>(
+      '/api/account/my-profile/recovery-code-count',
+      {
+        method: 'GET',
+      },
+    );
+  }
+
+  /**
+   * 重置恢复代码
+   */
+  function resetRecoveryCodeApi(): Promise<AuthenticatorRecoveryCodeDto> {
+    return request<AuthenticatorRecoveryCodeDto>(
+      '/api/account/my-profile/reset-recovery-code',
+      {
+        method: 'PUT',
+      },
+    );
+  }
+
+  /**
    * 发送邮件确认链接
    * @param input 参数
    */
@@ -190,9 +215,11 @@ export function useProfileApi() {
     confirmEmailApi,
     getApi,
     getAuthenticatorApi,
+    getRecoveryCodeCountApi,
     getPictureApi,
     getTwoFactorEnabledApi,
     resetAuthenticatorApi,
+    resetRecoveryCodeApi,
     sendChangePhoneNumberCodeApi,
     sendEmailConfirmLinkApi,
     updateApi,
