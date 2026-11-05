@@ -1,9 +1,7 @@
-using LINGYUN.Abp.OperationRateLimiting.Redis.Algorithms.Concurrency;
+﻿using LINGYUN.Abp.OperationRateLimiting.Redis.Algorithms.Concurrency;
 using LINGYUN.Abp.OperationRateLimiting.Redis.Algorithms.FixedWindow;
 using LINGYUN.Abp.OperationRateLimiting.Redis.Algorithms.SlidingWindow;
 using LINGYUN.Abp.OperationRateLimiting.Redis.Algorithms.TokenBucket;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
 
@@ -34,10 +32,5 @@ public class AbpOperationRateLimitingStackExchangeRedisModule : AbpModule
             options.AddAlgorithm<RedisTokenBucketRateLimitingRule>(OperationRateLimitingAlgorithms.TokenBucket);
             options.AddAlgorithm<RedisConcurrencyRateLimitingRule>(OperationRateLimitingAlgorithms.Concurrency);
         });
-
-        context.Services.AddSingleton<StackExchangeRedisOperationRateLimitingExecutor>();
-
-        context.Services.Replace(
-            ServiceDescriptor.Singleton<IOperationRateLimitingStateAccessor, StackExchangeRedisOperationRateLimitingStateAccessor>());
     }
 }

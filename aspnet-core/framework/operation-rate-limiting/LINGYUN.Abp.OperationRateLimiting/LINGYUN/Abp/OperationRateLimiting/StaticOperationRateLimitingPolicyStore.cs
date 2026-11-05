@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -10,13 +10,13 @@ namespace LINGYUN.Abp.OperationRateLimiting;
 /// <summary>
 /// Default static store: creates the policies from <see cref="AbpOperationRateLimitingOptions"/>.
 /// </summary>
-public class OptionsOperationRateLimitingPolicyStore :
+public class StaticOperationRateLimitingPolicyStore :
     IStaticOperationRateLimitingPolicyStore,
     ITransientDependency
 {
     protected AbpOperationRateLimitingOptions Options { get; }
 
-    public OptionsOperationRateLimitingPolicyStore(IOptions<AbpOperationRateLimitingOptions> options)
+    public StaticOperationRateLimitingPolicyStore(IOptions<AbpOperationRateLimitingOptions> options)
     {
         Options = options.Value;
     }

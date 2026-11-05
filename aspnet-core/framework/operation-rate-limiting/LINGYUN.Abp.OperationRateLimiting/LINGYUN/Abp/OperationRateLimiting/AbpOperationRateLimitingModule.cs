@@ -1,11 +1,10 @@
-using LINGYUN.Abp.Dynamic.Definitions;
+﻿using LINGYUN.Abp.Dynamic.Definitions;
 using LINGYUN.Abp.OperationRateLimiting.Algorithms.Concurrency;
 using LINGYUN.Abp.OperationRateLimiting.Algorithms.FixedWindow;
 using LINGYUN.Abp.OperationRateLimiting.Algorithms.SlidingWindow;
 using LINGYUN.Abp.OperationRateLimiting.Algorithms.TokenBucket;
 using LINGYUN.Abp.OperationRateLimiting.Localization;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Volo.Abp.Caching;
 using Volo.Abp.DistributedLocking;
 using Volo.Abp.Localization;
@@ -65,21 +64,5 @@ public class AbpOperationRateLimitingModule : AbpModule
         {
             options.MapStrategy<OperationRateLimitingPolicy>(DynamicDefinitionStrategy.Merge);
         });
-
-        // The static store reads AbpOperationRateLimitingOptions by default.
-        context.Services.AddTransient<
-            IStaticOperationRateLimitingPolicyStore,
-            OptionsOperationRateLimitingPolicyStore>();
-
-        context.Services.AddTransient<
-            IOperationRateLimitingPolicyManager,
-            OperationRateLimitingPolicyManager>();
-
-        // Default dynamic store. A persistent store (for example the EF Core one) registered
-        // by another module after this one replaces it, so the manager always resolves the
-        // most specific implementation.
-        context.Services.TryAddSingleton<
-            IDynamicOperationRateLimitingPolicyStore,
-            NullDynamicOperationRateLimitingPolicyStore>();
     }
 }

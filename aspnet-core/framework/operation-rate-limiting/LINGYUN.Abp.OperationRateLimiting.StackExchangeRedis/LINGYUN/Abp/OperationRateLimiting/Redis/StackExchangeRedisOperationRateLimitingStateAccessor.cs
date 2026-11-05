@@ -1,8 +1,9 @@
+﻿using StackExchange.Redis;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using StackExchange.Redis;
 using Volo.Abp;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.Json;
 
 namespace LINGYUN.Abp.OperationRateLimiting.Redis;
@@ -11,7 +12,8 @@ namespace LINGYUN.Abp.OperationRateLimiting.Redis;
 /// Redis implementation of <see cref="IOperationRateLimitingStateAccessor"/>.
 /// Custom rule states are updated with a Lua compare-and-set loop.
 /// </summary>
-public class StackExchangeRedisOperationRateLimitingStateAccessor : IOperationRateLimitingStateAccessor
+[Dependency(ReplaceServices = true)]
+public class StackExchangeRedisOperationRateLimitingStateAccessor : IOperationRateLimitingStateAccessor, ITransientDependency
 {
     protected const int MaxStateUpdateAttempts = 500;
 

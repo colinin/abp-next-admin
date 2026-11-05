@@ -1,12 +1,15 @@
+﻿using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Volo.Abp.DependencyInjection;
 
 namespace LINGYUN.Abp.OperationRateLimiting;
 
 /// <summary>
 /// Default dynamic store used when no persistent store is registered.
 /// </summary>
+[Dependency(ServiceLifetime.Singleton, TryRegister = true)]
 public class NullDynamicOperationRateLimitingPolicyStore : IDynamicOperationRateLimitingPolicyStore
 {
     public static NullDynamicOperationRateLimitingPolicyStore Instance { get; } = new();

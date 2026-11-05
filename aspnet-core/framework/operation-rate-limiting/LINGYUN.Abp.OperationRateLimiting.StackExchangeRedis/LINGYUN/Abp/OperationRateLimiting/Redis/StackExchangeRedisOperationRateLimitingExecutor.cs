@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using StackExchange.Redis;
 using Volo.Abp;
+using Volo.Abp.DependencyInjection;
 using Volo.Abp.VirtualFileSystem;
 
 namespace LINGYUN.Abp.OperationRateLimiting.Redis;
@@ -15,7 +16,7 @@ namespace LINGYUN.Abp.OperationRateLimiting.Redis;
 /// <summary>
 /// Shared Redis connection and Lua script runner used by the Redis rules and state accessor.
 /// </summary>
-public class StackExchangeRedisOperationRateLimitingExecutor : IDisposable
+public class StackExchangeRedisOperationRateLimitingExecutor : IDisposable, ISingletonDependency
 {
     protected AbpOperationRateLimitingRedisOptions Options { get; }
 

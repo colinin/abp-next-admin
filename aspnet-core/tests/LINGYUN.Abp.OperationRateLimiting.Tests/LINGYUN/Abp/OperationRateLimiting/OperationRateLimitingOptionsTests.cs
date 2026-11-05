@@ -191,7 +191,7 @@ public class OperationRateLimitingOptionsTests
         options.AddPolicy("StaticPolicy", policy =>
             policy.WithFixedWindow(TimeSpan.FromMinutes(1), 3).PartitionByParameter());
 
-        var store = new OptionsOperationRateLimitingPolicyStore(Options.Create(options));
+        var store = new StaticOperationRateLimitingPolicyStore(Options.Create(options));
 
         var policy = await store.GetOrNullAsync("StaticPolicy");
         policy.ShouldNotBeNull();
