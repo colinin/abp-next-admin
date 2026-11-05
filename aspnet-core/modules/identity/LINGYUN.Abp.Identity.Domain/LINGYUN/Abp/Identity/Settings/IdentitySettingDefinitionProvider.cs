@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.Localization;
-using Volo.Abp;
-using Volo.Abp.Identity.Localization;
+﻿using Volo.Abp.Identity.Localization;
 using Volo.Abp.Localization;
 using Volo.Abp.Settings;
 
@@ -170,6 +168,21 @@ public class IdentitySettingDefinitionProvider : SettingDefinitionProvider
             .WithParent("Security", L("Settings:Identity.Security"), order: 5)
             .WithOrder(3)
             .WithValueType(ValueType.Boolean),
+            new SettingDefinition(
+                name: IdentitySettingNames.Security.GenerateRecoveryCodeNumber,
+                defaultValue: 10.ToString(),
+                displayName: L("DisplayName:Abp.Identity.GenerateRecoveryCodeNumber"),
+                description: L("Description:Abp.Identity.GenerateRecoveryCodeNumber"),
+                isVisibleToClients: false)
+            .WithProviders(
+                DefaultValueSettingValueProvider.ProviderName,
+                ConfigurationSettingValueProvider.ProviderName,
+                GlobalSettingValueProvider.ProviderName,
+                TenantSettingValueProvider.ProviderName)
+            .WithGroup(GroupName, L("Settings:Identity"), GroupOrder)
+            .WithParent("Security", L("Settings:Identity.Security"), order: 5)
+            .WithOrder(4)
+            .WithValueType(ValueType.Number),
 
             new SettingDefinition(
                 name: IdentitySettingNames.Session.ConcurrentLoginStrategy,

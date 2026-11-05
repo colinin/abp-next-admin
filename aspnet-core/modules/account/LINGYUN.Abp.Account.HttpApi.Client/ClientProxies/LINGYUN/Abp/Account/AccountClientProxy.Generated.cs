@@ -17,19 +17,19 @@ namespace LINGYUN.Abp.Account;
 [ExposeServices(typeof(IAccountAppService), typeof(AccountClientProxy))]
 public partial class AccountClientProxy : ClientProxyBase<IAccountAppService>, IAccountAppService
 {
-    public virtual async Task RegisterAsync(PhoneRegisterDto input)
+    public virtual async Task WeChatRegisterAsync(WeChatRegisterDto input)
     {
-        await RequestAsync(nameof(RegisterAsync), new ClientProxyRequestTypeValue
+        await RequestAsync(nameof(WeChatRegisterAsync), new ClientProxyRequestTypeValue
         {
-            { typeof(PhoneRegisterDto), input }
+            { typeof(WeChatRegisterDto), input }
         });
     }
 
-    public virtual async Task RegisterAsync(WeChatRegisterDto input)
+    public virtual async Task PhoneRegisterAsync(PhoneRegisterDto input)
     {
-        await RequestAsync(nameof(RegisterAsync), new ClientProxyRequestTypeValue
+        await RequestAsync(nameof(PhoneRegisterAsync), new ClientProxyRequestTypeValue
         {
-            { typeof(WeChatRegisterDto), input }
+            { typeof(PhoneRegisterDto), input }
         });
     }
 

@@ -11,13 +11,17 @@
           "isIntegrationService": false,
           "apiVersion": null,
           "type": "LINGYUN.Abp.Account.AccountController",
+          "summary": null,
+          "remarks": null,
+          "description": null,
+          "displayName": null,
           "interfaces": [
             {
               "type": "LINGYUN.Abp.Account.IAccountAppService",
               "name": "IAccountAppService",
               "methods": [
                 {
-                  "name": "RegisterAsync",
+                  "name": "PhoneRegisterAsync",
                   "parametersOnMethod": [
                     {
                       "name": "input",
@@ -25,16 +29,22 @@
                       "type": "LINGYUN.Abp.Account.PhoneRegisterDto",
                       "typeSimple": "LINGYUN.Abp.Account.PhoneRegisterDto",
                       "isOptional": false,
-                      "defaultValue": null
+                      "defaultValue": null,
+                      "summary": null,
+                      "description": null,
+                      "displayName": null
                     }
                   ],
                   "returnValue": {
                     "type": "System.Void",
-                    "typeSimple": "System.Void"
+                    "typeSimple": "System.Void",
+                    "summary": null,
+                    "contentTypes": null,
+                    "isRemoteStream": false
                   }
                 },
                 {
-                  "name": "RegisterAsync",
+                  "name": "WeChatRegisterAsync",
                   "parametersOnMethod": [
                     {
                       "name": "input",
@@ -42,12 +52,18 @@
                       "type": "LINGYUN.Abp.Account.WeChatRegisterDto",
                       "typeSimple": "LINGYUN.Abp.Account.WeChatRegisterDto",
                       "isOptional": false,
-                      "defaultValue": null
+                      "defaultValue": null,
+                      "summary": null,
+                      "description": null,
+                      "displayName": null
                     }
                   ],
                   "returnValue": {
                     "type": "System.Void",
-                    "typeSimple": "System.Void"
+                    "typeSimple": "System.Void",
+                    "summary": null,
+                    "contentTypes": null,
+                    "isRemoteStream": false
                   }
                 },
                 {
@@ -59,12 +75,18 @@
                       "type": "LINGYUN.Abp.Account.PhoneResetPasswordDto",
                       "typeSimple": "LINGYUN.Abp.Account.PhoneResetPasswordDto",
                       "isOptional": false,
-                      "defaultValue": null
+                      "defaultValue": null,
+                      "summary": null,
+                      "description": null,
+                      "displayName": null
                     }
                   ],
                   "returnValue": {
                     "type": "System.Void",
-                    "typeSimple": "System.Void"
+                    "typeSimple": "System.Void",
+                    "summary": null,
+                    "contentTypes": null,
+                    "isRemoteStream": false
                   }
                 },
                 {
@@ -76,12 +98,18 @@
                       "type": "LINGYUN.Abp.Account.SendPhoneRegisterCodeDto",
                       "typeSimple": "LINGYUN.Abp.Account.SendPhoneRegisterCodeDto",
                       "isOptional": false,
-                      "defaultValue": null
+                      "defaultValue": null,
+                      "summary": null,
+                      "description": null,
+                      "displayName": null
                     }
                   ],
                   "returnValue": {
                     "type": "System.Void",
-                    "typeSimple": "System.Void"
+                    "typeSimple": "System.Void",
+                    "summary": null,
+                    "contentTypes": null,
+                    "isRemoteStream": false
                   }
                 },
                 {
@@ -93,12 +121,18 @@
                       "type": "LINGYUN.Abp.Account.SendPhoneSigninCodeDto",
                       "typeSimple": "LINGYUN.Abp.Account.SendPhoneSigninCodeDto",
                       "isOptional": false,
-                      "defaultValue": null
+                      "defaultValue": null,
+                      "summary": null,
+                      "description": null,
+                      "displayName": null
                     }
                   ],
                   "returnValue": {
                     "type": "System.Void",
-                    "typeSimple": "System.Void"
+                    "typeSimple": "System.Void",
+                    "summary": null,
+                    "contentTypes": null,
+                    "isRemoteStream": false
                   }
                 },
                 {
@@ -110,12 +144,18 @@
                       "type": "LINGYUN.Abp.Account.SendPhoneResetPasswordCodeDto",
                       "typeSimple": "LINGYUN.Abp.Account.SendPhoneResetPasswordCodeDto",
                       "isOptional": false,
-                      "defaultValue": null
+                      "defaultValue": null,
+                      "summary": null,
+                      "description": null,
+                      "displayName": null
                     }
                   ],
                   "returnValue": {
                     "type": "System.Void",
-                    "typeSimple": "System.Void"
+                    "typeSimple": "System.Void",
+                    "summary": null,
+                    "contentTypes": null,
+                    "isRemoteStream": false
                   }
                 },
                 {
@@ -127,12 +167,18 @@
                       "type": "LINGYUN.Abp.Account.SendEmailRegisterCodeDto",
                       "typeSimple": "LINGYUN.Abp.Account.SendEmailRegisterCodeDto",
                       "isOptional": false,
-                      "defaultValue": null
+                      "defaultValue": null,
+                      "summary": null,
+                      "description": null,
+                      "displayName": null
                     }
                   ],
                   "returnValue": {
                     "type": "System.Void",
-                    "typeSimple": "System.Void"
+                    "typeSimple": "System.Void",
+                    "summary": null,
+                    "contentTypes": null,
+                    "isRemoteStream": false
                   }
                 },
                 {
@@ -144,12 +190,18 @@
                       "type": "LINGYUN.Abp.Account.VerifyEmailRegisterCodeInput",
                       "typeSimple": "LINGYUN.Abp.Account.VerifyEmailRegisterCodeInput",
                       "isOptional": false,
-                      "defaultValue": null
+                      "defaultValue": null,
+                      "summary": null,
+                      "description": null,
+                      "displayName": null
                     }
                   ],
                   "returnValue": {
                     "type": "System.Boolean",
-                    "typeSimple": "boolean"
+                    "typeSimple": "boolean",
+                    "summary": null,
+                    "contentTypes": null,
+                    "isRemoteStream": false
                   }
                 },
                 {
@@ -161,12 +213,18 @@
                       "type": "LINGYUN.Abp.Account.SendEmailSigninCodeDto",
                       "typeSimple": "LINGYUN.Abp.Account.SendEmailSigninCodeDto",
                       "isOptional": false,
-                      "defaultValue": null
+                      "defaultValue": null,
+                      "summary": null,
+                      "description": null,
+                      "displayName": null
                     }
                   ],
                   "returnValue": {
                     "type": "System.Void",
-                    "typeSimple": "System.Void"
+                    "typeSimple": "System.Void",
+                    "summary": null,
+                    "contentTypes": null,
+                    "isRemoteStream": false
                   }
                 },
                 {
@@ -178,12 +236,18 @@
                       "type": "LINGYUN.Abp.Account.SendUserEmailConfirmCodeDto",
                       "typeSimple": "LINGYUN.Abp.Account.SendUserEmailConfirmCodeDto",
                       "isOptional": false,
-                      "defaultValue": null
+                      "defaultValue": null,
+                      "summary": null,
+                      "description": null,
+                      "displayName": null
                     }
                   ],
                   "returnValue": {
                     "type": "System.Void",
-                    "typeSimple": "System.Void"
+                    "typeSimple": "System.Void",
+                    "summary": null,
+                    "contentTypes": null,
+                    "isRemoteStream": false
                   }
                 },
                 {
@@ -195,12 +259,18 @@
                       "type": "LINGYUN.Abp.Account.ConfirmUserEmailInput",
                       "typeSimple": "LINGYUN.Abp.Account.ConfirmUserEmailInput",
                       "isOptional": false,
-                      "defaultValue": null
+                      "defaultValue": null,
+                      "summary": null,
+                      "description": null,
+                      "displayName": null
                     }
                   ],
                   "returnValue": {
                     "type": "System.Void",
-                    "typeSimple": "System.Void"
+                    "typeSimple": "System.Void",
+                    "summary": null,
+                    "contentTypes": null,
+                    "isRemoteStream": false
                   }
                 },
                 {
@@ -212,21 +282,27 @@
                       "type": "LINGYUN.Abp.Account.GetTwoFactorProvidersInput",
                       "typeSimple": "LINGYUN.Abp.Account.GetTwoFactorProvidersInput",
                       "isOptional": false,
-                      "defaultValue": null
+                      "defaultValue": null,
+                      "summary": null,
+                      "description": null,
+                      "displayName": null
                     }
                   ],
                   "returnValue": {
                     "type": "Volo.Abp.Application.Dtos.ListResultDto<Volo.Abp.NameValue>",
-                    "typeSimple": "Volo.Abp.Application.Dtos.ListResultDto<Volo.Abp.NameValue>"
+                    "typeSimple": "Volo.Abp.Application.Dtos.ListResultDto<Volo.Abp.NameValue>",
+                    "summary": null,
+                    "contentTypes": null,
+                    "isRemoteStream": false
                   }
                 }
               ]
             }
           ],
           "actions": {
-            "RegisterAsyncByInput": {
-              "uniqueName": "RegisterAsyncByInput",
-              "name": "RegisterAsync",
+            "WeChatRegisterAsyncByInput": {
+              "uniqueName": "WeChatRegisterAsyncByInput",
+              "name": "WeChatRegisterAsync",
               "httpMethod": "POST",
               "url": "api/account/wechat/register",
               "supportedVersions": [],
@@ -237,7 +313,10 @@
                   "type": "LINGYUN.Abp.Account.WeChatRegisterDto",
                   "typeSimple": "LINGYUN.Abp.Account.WeChatRegisterDto",
                   "isOptional": false,
-                  "defaultValue": null
+                  "defaultValue": null,
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
                 }
               ],
               "parameters": [
@@ -251,16 +330,85 @@
                   "defaultValue": null,
                   "constraintTypes": null,
                   "bindingSourceId": "Body",
-                  "descriptorName": ""
+                  "descriptorName": "",
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
                 }
               ],
               "returnValue": {
                 "type": "System.Void",
-                "typeSimple": "System.Void"
+                "typeSimple": "System.Void",
+                "summary": null,
+                "contentTypes": [
+                  "text/plain",
+                  "application/json",
+                  "text/json"
+                ],
+                "isRemoteStream": false
               },
               "allowAnonymous": null,
               "authorizeDatas": [],
-              "implementFrom": "LINGYUN.Abp.Account.IAccountAppService"
+              "implementFrom": "LINGYUN.Abp.Account.IAccountAppService",
+              "summary": null,
+              "remarks": null,
+              "description": null,
+              "displayName": null
+            },
+            "PhoneRegisterAsyncByInput": {
+              "uniqueName": "PhoneRegisterAsyncByInput",
+              "name": "PhoneRegisterAsync",
+              "httpMethod": "POST",
+              "url": "api/account/phone/register",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "LINGYUN.Abp.Account.PhoneRegisterDto, LINGYUN.Abp.Account.Application.Contracts",
+                  "type": "LINGYUN.Abp.Account.PhoneRegisterDto",
+                  "typeSimple": "LINGYUN.Abp.Account.PhoneRegisterDto",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "jsonName": null,
+                  "type": "LINGYUN.Abp.Account.PhoneRegisterDto",
+                  "typeSimple": "LINGYUN.Abp.Account.PhoneRegisterDto",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": "",
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
+                }
+              ],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void",
+                "summary": null,
+                "contentTypes": [
+                  "text/plain",
+                  "application/json",
+                  "text/json"
+                ],
+                "isRemoteStream": false
+              },
+              "allowAnonymous": null,
+              "authorizeDatas": [],
+              "implementFrom": "LINGYUN.Abp.Account.IAccountAppService",
+              "summary": null,
+              "remarks": null,
+              "description": null,
+              "displayName": null
             },
             "ResetPasswordAsyncByInput": {
               "uniqueName": "ResetPasswordAsyncByInput",
@@ -275,7 +423,10 @@
                   "type": "LINGYUN.Abp.Account.PhoneResetPasswordDto",
                   "typeSimple": "LINGYUN.Abp.Account.PhoneResetPasswordDto",
                   "isOptional": false,
-                  "defaultValue": null
+                  "defaultValue": null,
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
                 }
               ],
               "parameters": [
@@ -289,16 +440,30 @@
                   "defaultValue": null,
                   "constraintTypes": null,
                   "bindingSourceId": "Body",
-                  "descriptorName": ""
+                  "descriptorName": "",
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
                 }
               ],
               "returnValue": {
                 "type": "System.Void",
-                "typeSimple": "System.Void"
+                "typeSimple": "System.Void",
+                "summary": null,
+                "contentTypes": [
+                  "text/plain",
+                  "application/json",
+                  "text/json"
+                ],
+                "isRemoteStream": false
               },
               "allowAnonymous": null,
               "authorizeDatas": [],
-              "implementFrom": "LINGYUN.Abp.Account.IAccountAppService"
+              "implementFrom": "LINGYUN.Abp.Account.IAccountAppService",
+              "summary": null,
+              "remarks": null,
+              "description": null,
+              "displayName": null
             },
             "SendPhoneSigninCodeAsyncByInput": {
               "uniqueName": "SendPhoneSigninCodeAsyncByInput",
@@ -313,7 +478,10 @@
                   "type": "LINGYUN.Abp.Account.SendPhoneSigninCodeDto",
                   "typeSimple": "LINGYUN.Abp.Account.SendPhoneSigninCodeDto",
                   "isOptional": false,
-                  "defaultValue": null
+                  "defaultValue": null,
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
                 }
               ],
               "parameters": [
@@ -327,16 +495,30 @@
                   "defaultValue": null,
                   "constraintTypes": null,
                   "bindingSourceId": "Body",
-                  "descriptorName": ""
+                  "descriptorName": "",
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
                 }
               ],
               "returnValue": {
                 "type": "System.Void",
-                "typeSimple": "System.Void"
+                "typeSimple": "System.Void",
+                "summary": null,
+                "contentTypes": [
+                  "text/plain",
+                  "application/json",
+                  "text/json"
+                ],
+                "isRemoteStream": false
               },
               "allowAnonymous": null,
               "authorizeDatas": [],
-              "implementFrom": "LINGYUN.Abp.Account.IAccountAppService"
+              "implementFrom": "LINGYUN.Abp.Account.IAccountAppService",
+              "summary": null,
+              "remarks": null,
+              "description": null,
+              "displayName": null
             },
             "SendEmailRegisterCodeAsyncByInput": {
               "uniqueName": "SendEmailRegisterCodeAsyncByInput",
@@ -351,7 +533,10 @@
                   "type": "LINGYUN.Abp.Account.SendEmailRegisterCodeDto",
                   "typeSimple": "LINGYUN.Abp.Account.SendEmailRegisterCodeDto",
                   "isOptional": false,
-                  "defaultValue": null
+                  "defaultValue": null,
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
                 }
               ],
               "parameters": [
@@ -365,16 +550,30 @@
                   "defaultValue": null,
                   "constraintTypes": null,
                   "bindingSourceId": "Body",
-                  "descriptorName": ""
+                  "descriptorName": "",
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
                 }
               ],
               "returnValue": {
                 "type": "System.Void",
-                "typeSimple": "System.Void"
+                "typeSimple": "System.Void",
+                "summary": null,
+                "contentTypes": [
+                  "text/plain",
+                  "application/json",
+                  "text/json"
+                ],
+                "isRemoteStream": false
               },
               "allowAnonymous": null,
               "authorizeDatas": [],
-              "implementFrom": "LINGYUN.Abp.Account.IAccountAppService"
+              "implementFrom": "LINGYUN.Abp.Account.IAccountAppService",
+              "summary": null,
+              "remarks": null,
+              "description": null,
+              "displayName": null
             },
             "VerifyEmailRegisterCodeAsyncByInput": {
               "uniqueName": "VerifyEmailRegisterCodeAsyncByInput",
@@ -389,7 +588,10 @@
                   "type": "LINGYUN.Abp.Account.VerifyEmailRegisterCodeInput",
                   "typeSimple": "LINGYUN.Abp.Account.VerifyEmailRegisterCodeInput",
                   "isOptional": false,
-                  "defaultValue": null
+                  "defaultValue": null,
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
                 }
               ],
               "parameters": [
@@ -403,16 +605,30 @@
                   "defaultValue": null,
                   "constraintTypes": null,
                   "bindingSourceId": "Body",
-                  "descriptorName": ""
+                  "descriptorName": "",
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
                 }
               ],
               "returnValue": {
                 "type": "System.Boolean",
-                "typeSimple": "boolean"
+                "typeSimple": "boolean",
+                "summary": null,
+                "contentTypes": [
+                  "text/plain",
+                  "application/json",
+                  "text/json"
+                ],
+                "isRemoteStream": false
               },
               "allowAnonymous": null,
               "authorizeDatas": [],
-              "implementFrom": "LINGYUN.Abp.Account.IAccountAppService"
+              "implementFrom": "LINGYUN.Abp.Account.IAccountAppService",
+              "summary": null,
+              "remarks": null,
+              "description": null,
+              "displayName": null
             },
             "SendEmailSigninCodeAsyncByInput": {
               "uniqueName": "SendEmailSigninCodeAsyncByInput",
@@ -427,7 +643,10 @@
                   "type": "LINGYUN.Abp.Account.SendEmailSigninCodeDto",
                   "typeSimple": "LINGYUN.Abp.Account.SendEmailSigninCodeDto",
                   "isOptional": false,
-                  "defaultValue": null
+                  "defaultValue": null,
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
                 }
               ],
               "parameters": [
@@ -441,16 +660,30 @@
                   "defaultValue": null,
                   "constraintTypes": null,
                   "bindingSourceId": "Body",
-                  "descriptorName": ""
+                  "descriptorName": "",
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
                 }
               ],
               "returnValue": {
                 "type": "System.Void",
-                "typeSimple": "System.Void"
+                "typeSimple": "System.Void",
+                "summary": null,
+                "contentTypes": [
+                  "text/plain",
+                  "application/json",
+                  "text/json"
+                ],
+                "isRemoteStream": false
               },
               "allowAnonymous": null,
               "authorizeDatas": [],
-              "implementFrom": "LINGYUN.Abp.Account.IAccountAppService"
+              "implementFrom": "LINGYUN.Abp.Account.IAccountAppService",
+              "summary": null,
+              "remarks": null,
+              "description": null,
+              "displayName": null
             },
             "SendEmailConfirmLinkAsyncByInput": {
               "uniqueName": "SendEmailConfirmLinkAsyncByInput",
@@ -465,7 +698,10 @@
                   "type": "LINGYUN.Abp.Account.SendUserEmailConfirmCodeDto",
                   "typeSimple": "LINGYUN.Abp.Account.SendUserEmailConfirmCodeDto",
                   "isOptional": false,
-                  "defaultValue": null
+                  "defaultValue": null,
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
                 }
               ],
               "parameters": [
@@ -479,16 +715,30 @@
                   "defaultValue": null,
                   "constraintTypes": null,
                   "bindingSourceId": "Body",
-                  "descriptorName": ""
+                  "descriptorName": "",
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
                 }
               ],
               "returnValue": {
                 "type": "System.Void",
-                "typeSimple": "System.Void"
+                "typeSimple": "System.Void",
+                "summary": null,
+                "contentTypes": [
+                  "text/plain",
+                  "application/json",
+                  "text/json"
+                ],
+                "isRemoteStream": false
               },
               "allowAnonymous": null,
               "authorizeDatas": [],
-              "implementFrom": "LINGYUN.Abp.Account.IAccountAppService"
+              "implementFrom": "LINGYUN.Abp.Account.IAccountAppService",
+              "summary": null,
+              "remarks": null,
+              "description": null,
+              "displayName": null
             },
             "ConfirmEmailAsyncByInput": {
               "uniqueName": "ConfirmEmailAsyncByInput",
@@ -503,7 +753,10 @@
                   "type": "LINGYUN.Abp.Account.ConfirmUserEmailInput",
                   "typeSimple": "LINGYUN.Abp.Account.ConfirmUserEmailInput",
                   "isOptional": false,
-                  "defaultValue": null
+                  "defaultValue": null,
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
                 }
               ],
               "parameters": [
@@ -517,16 +770,30 @@
                   "defaultValue": null,
                   "constraintTypes": null,
                   "bindingSourceId": "Body",
-                  "descriptorName": ""
+                  "descriptorName": "",
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
                 }
               ],
               "returnValue": {
                 "type": "System.Void",
-                "typeSimple": "System.Void"
+                "typeSimple": "System.Void",
+                "summary": null,
+                "contentTypes": [
+                  "text/plain",
+                  "application/json",
+                  "text/json"
+                ],
+                "isRemoteStream": false
               },
               "allowAnonymous": null,
               "authorizeDatas": [],
-              "implementFrom": "LINGYUN.Abp.Account.IAccountAppService"
+              "implementFrom": "LINGYUN.Abp.Account.IAccountAppService",
+              "summary": null,
+              "remarks": null,
+              "description": null,
+              "displayName": null
             },
             "SendPhoneRegisterCodeAsyncByInput": {
               "uniqueName": "SendPhoneRegisterCodeAsyncByInput",
@@ -541,7 +808,10 @@
                   "type": "LINGYUN.Abp.Account.SendPhoneRegisterCodeDto",
                   "typeSimple": "LINGYUN.Abp.Account.SendPhoneRegisterCodeDto",
                   "isOptional": false,
-                  "defaultValue": null
+                  "defaultValue": null,
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
                 }
               ],
               "parameters": [
@@ -555,16 +825,30 @@
                   "defaultValue": null,
                   "constraintTypes": null,
                   "bindingSourceId": "Body",
-                  "descriptorName": ""
+                  "descriptorName": "",
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
                 }
               ],
               "returnValue": {
                 "type": "System.Void",
-                "typeSimple": "System.Void"
+                "typeSimple": "System.Void",
+                "summary": null,
+                "contentTypes": [
+                  "text/plain",
+                  "application/json",
+                  "text/json"
+                ],
+                "isRemoteStream": false
               },
               "allowAnonymous": null,
               "authorizeDatas": [],
-              "implementFrom": "LINGYUN.Abp.Account.IAccountAppService"
+              "implementFrom": "LINGYUN.Abp.Account.IAccountAppService",
+              "summary": null,
+              "remarks": null,
+              "description": null,
+              "displayName": null
             },
             "SendPhoneResetPasswordCodeAsyncByInput": {
               "uniqueName": "SendPhoneResetPasswordCodeAsyncByInput",
@@ -579,7 +863,10 @@
                   "type": "LINGYUN.Abp.Account.SendPhoneResetPasswordCodeDto",
                   "typeSimple": "LINGYUN.Abp.Account.SendPhoneResetPasswordCodeDto",
                   "isOptional": false,
-                  "defaultValue": null
+                  "defaultValue": null,
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
                 }
               ],
               "parameters": [
@@ -593,16 +880,30 @@
                   "defaultValue": null,
                   "constraintTypes": null,
                   "bindingSourceId": "Body",
-                  "descriptorName": ""
+                  "descriptorName": "",
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
                 }
               ],
               "returnValue": {
                 "type": "System.Void",
-                "typeSimple": "System.Void"
+                "typeSimple": "System.Void",
+                "summary": null,
+                "contentTypes": [
+                  "text/plain",
+                  "application/json",
+                  "text/json"
+                ],
+                "isRemoteStream": false
               },
               "allowAnonymous": null,
               "authorizeDatas": [],
-              "implementFrom": "LINGYUN.Abp.Account.IAccountAppService"
+              "implementFrom": "LINGYUN.Abp.Account.IAccountAppService",
+              "summary": null,
+              "remarks": null,
+              "description": null,
+              "displayName": null
             },
             "GetTwoFactorProvidersAsyncByInput": {
               "uniqueName": "GetTwoFactorProvidersAsyncByInput",
@@ -617,7 +918,10 @@
                   "type": "LINGYUN.Abp.Account.GetTwoFactorProvidersInput",
                   "typeSimple": "LINGYUN.Abp.Account.GetTwoFactorProvidersInput",
                   "isOptional": false,
-                  "defaultValue": null
+                  "defaultValue": null,
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
                 }
               ],
               "parameters": [
@@ -631,16 +935,30 @@
                   "defaultValue": null,
                   "constraintTypes": null,
                   "bindingSourceId": "ModelBinding",
-                  "descriptorName": "input"
+                  "descriptorName": "input",
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
                 }
               ],
               "returnValue": {
                 "type": "Volo.Abp.Application.Dtos.ListResultDto<Volo.Abp.NameValue>",
-                "typeSimple": "Volo.Abp.Application.Dtos.ListResultDto<Volo.Abp.NameValue>"
+                "typeSimple": "Volo.Abp.Application.Dtos.ListResultDto<Volo.Abp.NameValue>",
+                "summary": null,
+                "contentTypes": [
+                  "text/plain",
+                  "application/json",
+                  "text/json"
+                ],
+                "isRemoteStream": false
               },
               "allowAnonymous": null,
               "authorizeDatas": [],
-              "implementFrom": "LINGYUN.Abp.Account.IAccountAppService"
+              "implementFrom": "LINGYUN.Abp.Account.IAccountAppService",
+              "summary": null,
+              "remarks": null,
+              "description": null,
+              "displayName": null
             }
           }
         },
@@ -651,6 +969,10 @@
           "isIntegrationService": false,
           "apiVersion": null,
           "type": "LINGYUN.Abp.Account.IdentityLinkUserController",
+          "summary": null,
+          "remarks": null,
+          "description": null,
+          "displayName": null,
           "interfaces": [
             {
               "type": "LINGYUN.Abp.Account.IIdentityLinkUserAppService",
@@ -665,12 +987,18 @@
                       "type": "LINGYUN.Abp.Account.Dto.LinkUserInput",
                       "typeSimple": "LINGYUN.Abp.Account.Dto.LinkUserInput",
                       "isOptional": false,
-                      "defaultValue": null
+                      "defaultValue": null,
+                      "summary": null,
+                      "description": null,
+                      "displayName": null
                     }
                   ],
                   "returnValue": {
                     "type": "System.Void",
-                    "typeSimple": "System.Void"
+                    "typeSimple": "System.Void",
+                    "summary": null,
+                    "contentTypes": null,
+                    "isRemoteStream": false
                   }
                 },
                 {
@@ -682,12 +1010,18 @@
                       "type": "LINGYUN.Abp.Account.Dto.UnLinkUserInput",
                       "typeSimple": "LINGYUN.Abp.Account.Dto.UnLinkUserInput",
                       "isOptional": false,
-                      "defaultValue": null
+                      "defaultValue": null,
+                      "summary": null,
+                      "description": null,
+                      "displayName": null
                     }
                   ],
                   "returnValue": {
                     "type": "System.Void",
-                    "typeSimple": "System.Void"
+                    "typeSimple": "System.Void",
+                    "summary": null,
+                    "contentTypes": null,
+                    "isRemoteStream": false
                   }
                 },
                 {
@@ -695,7 +1029,10 @@
                   "parametersOnMethod": [],
                   "returnValue": {
                     "type": "System.String",
-                    "typeSimple": "string"
+                    "typeSimple": "string",
+                    "summary": null,
+                    "contentTypes": null,
+                    "isRemoteStream": false
                   }
                 },
                 {
@@ -703,7 +1040,10 @@
                   "parametersOnMethod": [],
                   "returnValue": {
                     "type": "System.String",
-                    "typeSimple": "string"
+                    "typeSimple": "string",
+                    "summary": null,
+                    "contentTypes": null,
+                    "isRemoteStream": false
                   }
                 },
                 {
@@ -711,7 +1051,10 @@
                   "parametersOnMethod": [],
                   "returnValue": {
                     "type": "Volo.Abp.Application.Dtos.ListResultDto<LINGYUN.Abp.Account.Dto.LinkUserDto>",
-                    "typeSimple": "Volo.Abp.Application.Dtos.ListResultDto<LINGYUN.Abp.Account.Dto.LinkUserDto>"
+                    "typeSimple": "Volo.Abp.Application.Dtos.ListResultDto<LINGYUN.Abp.Account.Dto.LinkUserDto>",
+                    "summary": null,
+                    "contentTypes": null,
+                    "isRemoteStream": false
                   }
                 },
                 {
@@ -723,12 +1066,18 @@
                       "type": "LINGYUN.Abp.Account.Dto.VerifyLinkUserInput",
                       "typeSimple": "LINGYUN.Abp.Account.Dto.VerifyLinkUserInput",
                       "isOptional": false,
-                      "defaultValue": null
+                      "defaultValue": null,
+                      "summary": null,
+                      "description": null,
+                      "displayName": null
                     }
                   ],
                   "returnValue": {
                     "type": "LINGYUN.Abp.Account.Dto.VerifyLinkUserDto",
-                    "typeSimple": "LINGYUN.Abp.Account.Dto.VerifyLinkUserDto"
+                    "typeSimple": "LINGYUN.Abp.Account.Dto.VerifyLinkUserDto",
+                    "summary": null,
+                    "contentTypes": null,
+                    "isRemoteStream": false
                   }
                 },
                 {
@@ -740,12 +1089,18 @@
                       "type": "LINGYUN.Abp.Account.Dto.VerifyLinkTokenInput",
                       "typeSimple": "LINGYUN.Abp.Account.Dto.VerifyLinkTokenInput",
                       "isOptional": false,
-                      "defaultValue": null
+                      "defaultValue": null,
+                      "summary": null,
+                      "description": null,
+                      "displayName": null
                     }
                   ],
                   "returnValue": {
                     "type": "System.Boolean",
-                    "typeSimple": "boolean"
+                    "typeSimple": "boolean",
+                    "summary": null,
+                    "contentTypes": null,
+                    "isRemoteStream": false
                   }
                 },
                 {
@@ -757,12 +1112,18 @@
                       "type": "LINGYUN.Abp.Account.Dto.VerifyLinkTokenInput",
                       "typeSimple": "LINGYUN.Abp.Account.Dto.VerifyLinkTokenInput",
                       "isOptional": false,
-                      "defaultValue": null
+                      "defaultValue": null,
+                      "summary": null,
+                      "description": null,
+                      "displayName": null
                     }
                   ],
                   "returnValue": {
                     "type": "System.Boolean",
-                    "typeSimple": "boolean"
+                    "typeSimple": "boolean",
+                    "summary": null,
+                    "contentTypes": null,
+                    "isRemoteStream": false
                   }
                 }
               ]
@@ -779,11 +1140,22 @@
               "parameters": [],
               "returnValue": {
                 "type": "System.String",
-                "typeSimple": "string"
+                "typeSimple": "string",
+                "summary": null,
+                "contentTypes": [
+                  "text/plain",
+                  "application/json",
+                  "text/json"
+                ],
+                "isRemoteStream": false
               },
               "allowAnonymous": null,
               "authorizeDatas": [],
-              "implementFrom": "LINGYUN.Abp.Account.IIdentityLinkUserAppService"
+              "implementFrom": "LINGYUN.Abp.Account.IIdentityLinkUserAppService",
+              "summary": null,
+              "remarks": null,
+              "description": null,
+              "displayName": null
             },
             "GenerateLinkTokenAsync": {
               "uniqueName": "GenerateLinkTokenAsync",
@@ -795,11 +1167,22 @@
               "parameters": [],
               "returnValue": {
                 "type": "System.String",
-                "typeSimple": "string"
+                "typeSimple": "string",
+                "summary": null,
+                "contentTypes": [
+                  "text/plain",
+                  "application/json",
+                  "text/json"
+                ],
+                "isRemoteStream": false
               },
               "allowAnonymous": null,
               "authorizeDatas": [],
-              "implementFrom": "LINGYUN.Abp.Account.IIdentityLinkUserAppService"
+              "implementFrom": "LINGYUN.Abp.Account.IIdentityLinkUserAppService",
+              "summary": null,
+              "remarks": null,
+              "description": null,
+              "displayName": null
             },
             "GetListAsync": {
               "uniqueName": "GetListAsync",
@@ -811,11 +1194,22 @@
               "parameters": [],
               "returnValue": {
                 "type": "Volo.Abp.Application.Dtos.ListResultDto<LINGYUN.Abp.Account.Dto.LinkUserDto>",
-                "typeSimple": "Volo.Abp.Application.Dtos.ListResultDto<LINGYUN.Abp.Account.Dto.LinkUserDto>"
+                "typeSimple": "Volo.Abp.Application.Dtos.ListResultDto<LINGYUN.Abp.Account.Dto.LinkUserDto>",
+                "summary": null,
+                "contentTypes": [
+                  "text/plain",
+                  "application/json",
+                  "text/json"
+                ],
+                "isRemoteStream": false
               },
               "allowAnonymous": null,
               "authorizeDatas": [],
-              "implementFrom": "LINGYUN.Abp.Account.IIdentityLinkUserAppService"
+              "implementFrom": "LINGYUN.Abp.Account.IIdentityLinkUserAppService",
+              "summary": null,
+              "remarks": null,
+              "description": null,
+              "displayName": null
             },
             "LinkAsyncByInput": {
               "uniqueName": "LinkAsyncByInput",
@@ -830,7 +1224,10 @@
                   "type": "LINGYUN.Abp.Account.Dto.LinkUserInput",
                   "typeSimple": "LINGYUN.Abp.Account.Dto.LinkUserInput",
                   "isOptional": false,
-                  "defaultValue": null
+                  "defaultValue": null,
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
                 }
               ],
               "parameters": [
@@ -844,16 +1241,30 @@
                   "defaultValue": null,
                   "constraintTypes": null,
                   "bindingSourceId": "Body",
-                  "descriptorName": ""
+                  "descriptorName": "",
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
                 }
               ],
               "returnValue": {
                 "type": "System.Void",
-                "typeSimple": "System.Void"
+                "typeSimple": "System.Void",
+                "summary": null,
+                "contentTypes": [
+                  "text/plain",
+                  "application/json",
+                  "text/json"
+                ],
+                "isRemoteStream": false
               },
               "allowAnonymous": null,
               "authorizeDatas": [],
-              "implementFrom": "LINGYUN.Abp.Account.IIdentityLinkUserAppService"
+              "implementFrom": "LINGYUN.Abp.Account.IIdentityLinkUserAppService",
+              "summary": null,
+              "remarks": null,
+              "description": null,
+              "displayName": null
             },
             "UnlinkAsyncByInput": {
               "uniqueName": "UnlinkAsyncByInput",
@@ -868,7 +1279,10 @@
                   "type": "LINGYUN.Abp.Account.Dto.UnLinkUserInput",
                   "typeSimple": "LINGYUN.Abp.Account.Dto.UnLinkUserInput",
                   "isOptional": false,
-                  "defaultValue": null
+                  "defaultValue": null,
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
                 }
               ],
               "parameters": [
@@ -882,16 +1296,30 @@
                   "defaultValue": null,
                   "constraintTypes": null,
                   "bindingSourceId": "Body",
-                  "descriptorName": ""
+                  "descriptorName": "",
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
                 }
               ],
               "returnValue": {
                 "type": "System.Void",
-                "typeSimple": "System.Void"
+                "typeSimple": "System.Void",
+                "summary": null,
+                "contentTypes": [
+                  "text/plain",
+                  "application/json",
+                  "text/json"
+                ],
+                "isRemoteStream": false
               },
               "allowAnonymous": null,
               "authorizeDatas": [],
-              "implementFrom": "LINGYUN.Abp.Account.IIdentityLinkUserAppService"
+              "implementFrom": "LINGYUN.Abp.Account.IIdentityLinkUserAppService",
+              "summary": null,
+              "remarks": null,
+              "description": null,
+              "displayName": null
             },
             "VerifyLinkUserAsyncByInput": {
               "uniqueName": "VerifyLinkUserAsyncByInput",
@@ -906,7 +1334,10 @@
                   "type": "LINGYUN.Abp.Account.Dto.VerifyLinkUserInput",
                   "typeSimple": "LINGYUN.Abp.Account.Dto.VerifyLinkUserInput",
                   "isOptional": false,
-                  "defaultValue": null
+                  "defaultValue": null,
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
                 }
               ],
               "parameters": [
@@ -920,16 +1351,30 @@
                   "defaultValue": null,
                   "constraintTypes": null,
                   "bindingSourceId": "Body",
-                  "descriptorName": ""
+                  "descriptorName": "",
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
                 }
               ],
               "returnValue": {
                 "type": "LINGYUN.Abp.Account.Dto.VerifyLinkUserDto",
-                "typeSimple": "LINGYUN.Abp.Account.Dto.VerifyLinkUserDto"
+                "typeSimple": "LINGYUN.Abp.Account.Dto.VerifyLinkUserDto",
+                "summary": null,
+                "contentTypes": [
+                  "text/plain",
+                  "application/json",
+                  "text/json"
+                ],
+                "isRemoteStream": false
               },
               "allowAnonymous": null,
               "authorizeDatas": [],
-              "implementFrom": "LINGYUN.Abp.Account.IIdentityLinkUserAppService"
+              "implementFrom": "LINGYUN.Abp.Account.IIdentityLinkUserAppService",
+              "summary": null,
+              "remarks": null,
+              "description": null,
+              "displayName": null
             },
             "VerifyLinkLoginTokenAsyncByInput": {
               "uniqueName": "VerifyLinkLoginTokenAsyncByInput",
@@ -944,7 +1389,10 @@
                   "type": "LINGYUN.Abp.Account.Dto.VerifyLinkTokenInput",
                   "typeSimple": "LINGYUN.Abp.Account.Dto.VerifyLinkTokenInput",
                   "isOptional": false,
-                  "defaultValue": null
+                  "defaultValue": null,
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
                 }
               ],
               "parameters": [
@@ -958,16 +1406,30 @@
                   "defaultValue": null,
                   "constraintTypes": null,
                   "bindingSourceId": "Body",
-                  "descriptorName": ""
+                  "descriptorName": "",
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
                 }
               ],
               "returnValue": {
                 "type": "System.Boolean",
-                "typeSimple": "boolean"
+                "typeSimple": "boolean",
+                "summary": null,
+                "contentTypes": [
+                  "text/plain",
+                  "application/json",
+                  "text/json"
+                ],
+                "isRemoteStream": false
               },
               "allowAnonymous": null,
               "authorizeDatas": [],
-              "implementFrom": "LINGYUN.Abp.Account.IIdentityLinkUserAppService"
+              "implementFrom": "LINGYUN.Abp.Account.IIdentityLinkUserAppService",
+              "summary": null,
+              "remarks": null,
+              "description": null,
+              "displayName": null
             },
             "VerifyLinkTokenAsyncByInput": {
               "uniqueName": "VerifyLinkTokenAsyncByInput",
@@ -982,7 +1444,10 @@
                   "type": "LINGYUN.Abp.Account.Dto.VerifyLinkTokenInput",
                   "typeSimple": "LINGYUN.Abp.Account.Dto.VerifyLinkTokenInput",
                   "isOptional": false,
-                  "defaultValue": null
+                  "defaultValue": null,
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
                 }
               ],
               "parameters": [
@@ -996,16 +1461,30 @@
                   "defaultValue": null,
                   "constraintTypes": null,
                   "bindingSourceId": "Body",
-                  "descriptorName": ""
+                  "descriptorName": "",
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
                 }
               ],
               "returnValue": {
                 "type": "System.Boolean",
-                "typeSimple": "boolean"
+                "typeSimple": "boolean",
+                "summary": null,
+                "contentTypes": [
+                  "text/plain",
+                  "application/json",
+                  "text/json"
+                ],
+                "isRemoteStream": false
               },
               "allowAnonymous": null,
               "authorizeDatas": [],
-              "implementFrom": "LINGYUN.Abp.Account.IIdentityLinkUserAppService"
+              "implementFrom": "LINGYUN.Abp.Account.IIdentityLinkUserAppService",
+              "summary": null,
+              "remarks": null,
+              "description": null,
+              "displayName": null
             }
           }
         },
@@ -1016,6 +1495,10 @@
           "isIntegrationService": false,
           "apiVersion": null,
           "type": "LINGYUN.Abp.Account.MyClaimController",
+          "summary": null,
+          "remarks": null,
+          "description": null,
+          "displayName": null,
           "interfaces": [
             {
               "type": "LINGYUN.Abp.Account.IMyClaimAppService",
@@ -1030,12 +1513,18 @@
                       "type": "System.String",
                       "typeSimple": "string",
                       "isOptional": false,
-                      "defaultValue": null
+                      "defaultValue": null,
+                      "summary": null,
+                      "description": null,
+                      "displayName": null
                     }
                   ],
                   "returnValue": {
                     "type": "LINGYUN.Abp.Account.GetUserClaimStateDto",
-                    "typeSimple": "LINGYUN.Abp.Account.GetUserClaimStateDto"
+                    "typeSimple": "LINGYUN.Abp.Account.GetUserClaimStateDto",
+                    "summary": null,
+                    "contentTypes": null,
+                    "isRemoteStream": false
                   }
                 },
                 {
@@ -1047,12 +1536,18 @@
                       "type": "System.String",
                       "typeSimple": "string",
                       "isOptional": false,
-                      "defaultValue": null
+                      "defaultValue": null,
+                      "summary": null,
+                      "description": null,
+                      "displayName": null
                     }
                   ],
                   "returnValue": {
                     "type": "System.Void",
-                    "typeSimple": "System.Void"
+                    "typeSimple": "System.Void",
+                    "summary": null,
+                    "contentTypes": null,
+                    "isRemoteStream": false
                   }
                 }
               ]
@@ -1072,7 +1567,10 @@
                   "type": "System.String",
                   "typeSimple": "string",
                   "isOptional": false,
-                  "defaultValue": null
+                  "defaultValue": null,
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
                 }
               ],
               "parameters": [
@@ -1086,12 +1584,22 @@
                   "defaultValue": null,
                   "constraintTypes": [],
                   "bindingSourceId": "Path",
-                  "descriptorName": ""
+                  "descriptorName": "",
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
                 }
               ],
               "returnValue": {
                 "type": "LINGYUN.Abp.Account.GetUserClaimStateDto",
-                "typeSimple": "LINGYUN.Abp.Account.GetUserClaimStateDto"
+                "typeSimple": "LINGYUN.Abp.Account.GetUserClaimStateDto",
+                "summary": null,
+                "contentTypes": [
+                  "text/plain",
+                  "application/json",
+                  "text/json"
+                ],
+                "isRemoteStream": false
               },
               "allowAnonymous": false,
               "authorizeDatas": [
@@ -1100,7 +1608,11 @@
                   "roles": null
                 }
               ],
-              "implementFrom": "LINGYUN.Abp.Account.IMyClaimAppService"
+              "implementFrom": "LINGYUN.Abp.Account.IMyClaimAppService",
+              "summary": null,
+              "remarks": null,
+              "description": null,
+              "displayName": null
             },
             "ResetAsyncByClaimType": {
               "uniqueName": "ResetAsyncByClaimType",
@@ -1115,7 +1627,10 @@
                   "type": "System.String",
                   "typeSimple": "string",
                   "isOptional": false,
-                  "defaultValue": null
+                  "defaultValue": null,
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
                 }
               ],
               "parameters": [
@@ -1129,12 +1644,22 @@
                   "defaultValue": null,
                   "constraintTypes": [],
                   "bindingSourceId": "Path",
-                  "descriptorName": ""
+                  "descriptorName": "",
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
                 }
               ],
               "returnValue": {
                 "type": "System.Void",
-                "typeSimple": "System.Void"
+                "typeSimple": "System.Void",
+                "summary": null,
+                "contentTypes": [
+                  "text/plain",
+                  "application/json",
+                  "text/json"
+                ],
+                "isRemoteStream": false
               },
               "allowAnonymous": false,
               "authorizeDatas": [
@@ -1143,7 +1668,11 @@
                   "roles": null
                 }
               ],
-              "implementFrom": "LINGYUN.Abp.Account.IMyClaimAppService"
+              "implementFrom": "LINGYUN.Abp.Account.IMyClaimAppService",
+              "summary": null,
+              "remarks": null,
+              "description": null,
+              "displayName": null
             }
           }
         },
@@ -1154,6 +1683,10 @@
           "isIntegrationService": false,
           "apiVersion": null,
           "type": "LINGYUN.Abp.Account.MyProfileController",
+          "summary": null,
+          "remarks": null,
+          "description": null,
+          "displayName": null,
           "interfaces": [
             {
               "type": "LINGYUN.Abp.Account.IMyProfileAppService",
@@ -1164,7 +1697,10 @@
                   "parametersOnMethod": [],
                   "returnValue": {
                     "type": "LINGYUN.Abp.Account.AuthenticatorDto",
-                    "typeSimple": "LINGYUN.Abp.Account.AuthenticatorDto"
+                    "typeSimple": "LINGYUN.Abp.Account.AuthenticatorDto",
+                    "summary": null,
+                    "contentTypes": null,
+                    "isRemoteStream": false
                   }
                 },
                 {
@@ -1176,12 +1712,40 @@
                       "type": "LINGYUN.Abp.Account.VerifyAuthenticatorCodeInput",
                       "typeSimple": "LINGYUN.Abp.Account.VerifyAuthenticatorCodeInput",
                       "isOptional": false,
-                      "defaultValue": null
+                      "defaultValue": null,
+                      "summary": null,
+                      "description": null,
+                      "displayName": null
                     }
                   ],
                   "returnValue": {
                     "type": "LINGYUN.Abp.Account.AuthenticatorRecoveryCodeDto",
-                    "typeSimple": "LINGYUN.Abp.Account.AuthenticatorRecoveryCodeDto"
+                    "typeSimple": "LINGYUN.Abp.Account.AuthenticatorRecoveryCodeDto",
+                    "summary": null,
+                    "contentTypes": null,
+                    "isRemoteStream": false
+                  }
+                },
+                {
+                  "name": "GetRecoveryCodeCountAsync",
+                  "parametersOnMethod": [],
+                  "returnValue": {
+                    "type": "LINGYUN.Abp.Account.Dto.AuthenticatorRecoveryCodeCountDto",
+                    "typeSimple": "LINGYUN.Abp.Account.Dto.AuthenticatorRecoveryCodeCountDto",
+                    "summary": null,
+                    "contentTypes": null,
+                    "isRemoteStream": false
+                  }
+                },
+                {
+                  "name": "ResetRecoveryCodeAsync",
+                  "parametersOnMethod": [],
+                  "returnValue": {
+                    "type": "LINGYUN.Abp.Account.AuthenticatorRecoveryCodeDto",
+                    "typeSimple": "LINGYUN.Abp.Account.AuthenticatorRecoveryCodeDto",
+                    "summary": null,
+                    "contentTypes": null,
+                    "isRemoteStream": false
                   }
                 },
                 {
@@ -1193,12 +1757,18 @@
                       "type": "LINGYUN.Abp.Identity.GetMySessionsInput",
                       "typeSimple": "LINGYUN.Abp.Identity.GetMySessionsInput",
                       "isOptional": false,
-                      "defaultValue": null
+                      "defaultValue": null,
+                      "summary": null,
+                      "description": null,
+                      "displayName": null
                     }
                   ],
                   "returnValue": {
                     "type": "Volo.Abp.Application.Dtos.PagedResultDto<LINGYUN.Abp.Account.IdentitySessionDto>",
-                    "typeSimple": "Volo.Abp.Application.Dtos.PagedResultDto<LINGYUN.Abp.Account.IdentitySessionDto>"
+                    "typeSimple": "Volo.Abp.Application.Dtos.PagedResultDto<LINGYUN.Abp.Account.IdentitySessionDto>",
+                    "summary": null,
+                    "contentTypes": null,
+                    "isRemoteStream": false
                   }
                 },
                 {
@@ -1210,12 +1780,18 @@
                       "type": "System.String",
                       "typeSimple": "string",
                       "isOptional": false,
-                      "defaultValue": null
+                      "defaultValue": null,
+                      "summary": null,
+                      "description": null,
+                      "displayName": null
                     }
                   ],
                   "returnValue": {
                     "type": "System.Void",
-                    "typeSimple": "System.Void"
+                    "typeSimple": "System.Void",
+                    "summary": null,
+                    "contentTypes": null,
+                    "isRemoteStream": false
                   }
                 },
                 {
@@ -1223,7 +1799,10 @@
                   "parametersOnMethod": [],
                   "returnValue": {
                     "type": "System.Void",
-                    "typeSimple": "System.Void"
+                    "typeSimple": "System.Void",
+                    "summary": null,
+                    "contentTypes": null,
+                    "isRemoteStream": false
                   }
                 },
                 {
@@ -1231,7 +1810,10 @@
                   "parametersOnMethod": [],
                   "returnValue": {
                     "type": "LINGYUN.Abp.Account.TwoFactorEnabledDto",
-                    "typeSimple": "LINGYUN.Abp.Account.TwoFactorEnabledDto"
+                    "typeSimple": "LINGYUN.Abp.Account.TwoFactorEnabledDto",
+                    "summary": null,
+                    "contentTypes": null,
+                    "isRemoteStream": false
                   }
                 },
                 {
@@ -1243,12 +1825,18 @@
                       "type": "LINGYUN.Abp.Account.TwoFactorEnabledDto",
                       "typeSimple": "LINGYUN.Abp.Account.TwoFactorEnabledDto",
                       "isOptional": false,
-                      "defaultValue": null
+                      "defaultValue": null,
+                      "summary": null,
+                      "description": null,
+                      "displayName": null
                     }
                   ],
                   "returnValue": {
                     "type": "System.Void",
-                    "typeSimple": "System.Void"
+                    "typeSimple": "System.Void",
+                    "summary": null,
+                    "contentTypes": null,
+                    "isRemoteStream": false
                   }
                 },
                 {
@@ -1260,12 +1848,18 @@
                       "type": "LINGYUN.Abp.Account.SendChangePhoneNumberCodeInput",
                       "typeSimple": "LINGYUN.Abp.Account.SendChangePhoneNumberCodeInput",
                       "isOptional": false,
-                      "defaultValue": null
+                      "defaultValue": null,
+                      "summary": null,
+                      "description": null,
+                      "displayName": null
                     }
                   ],
                   "returnValue": {
                     "type": "System.Void",
-                    "typeSimple": "System.Void"
+                    "typeSimple": "System.Void",
+                    "summary": null,
+                    "contentTypes": null,
+                    "isRemoteStream": false
                   }
                 },
                 {
@@ -1277,12 +1871,18 @@
                       "type": "LINGYUN.Abp.Account.ChangePhoneNumberInput",
                       "typeSimple": "LINGYUN.Abp.Account.ChangePhoneNumberInput",
                       "isOptional": false,
-                      "defaultValue": null
+                      "defaultValue": null,
+                      "summary": null,
+                      "description": null,
+                      "displayName": null
                     }
                   ],
                   "returnValue": {
                     "type": "System.Void",
-                    "typeSimple": "System.Void"
+                    "typeSimple": "System.Void",
+                    "summary": null,
+                    "contentTypes": null,
+                    "isRemoteStream": false
                   }
                 },
                 {
@@ -1294,12 +1894,18 @@
                       "type": "LINGYUN.Abp.Account.SendEmailConfirmCodeDto",
                       "typeSimple": "LINGYUN.Abp.Account.SendEmailConfirmCodeDto",
                       "isOptional": false,
-                      "defaultValue": null
+                      "defaultValue": null,
+                      "summary": null,
+                      "description": null,
+                      "displayName": null
                     }
                   ],
                   "returnValue": {
                     "type": "System.Void",
-                    "typeSimple": "System.Void"
+                    "typeSimple": "System.Void",
+                    "summary": null,
+                    "contentTypes": null,
+                    "isRemoteStream": false
                   }
                 },
                 {
@@ -1311,12 +1917,18 @@
                       "type": "LINGYUN.Abp.Account.ConfirmEmailInput",
                       "typeSimple": "LINGYUN.Abp.Account.ConfirmEmailInput",
                       "isOptional": false,
-                      "defaultValue": null
+                      "defaultValue": null,
+                      "summary": null,
+                      "description": null,
+                      "displayName": null
                     }
                   ],
                   "returnValue": {
                     "type": "System.Void",
-                    "typeSimple": "System.Void"
+                    "typeSimple": "System.Void",
+                    "summary": null,
+                    "contentTypes": null,
+                    "isRemoteStream": false
                   }
                 },
                 {
@@ -1328,12 +1940,18 @@
                       "type": "LINGYUN.Abp.Account.ChangePictureInput",
                       "typeSimple": "LINGYUN.Abp.Account.ChangePictureInput",
                       "isOptional": false,
-                      "defaultValue": null
+                      "defaultValue": null,
+                      "summary": null,
+                      "description": null,
+                      "displayName": null
                     }
                   ],
                   "returnValue": {
                     "type": "System.Void",
-                    "typeSimple": "System.Void"
+                    "typeSimple": "System.Void",
+                    "summary": null,
+                    "contentTypes": null,
+                    "isRemoteStream": false
                   }
                 },
                 {
@@ -1341,7 +1959,10 @@
                   "parametersOnMethod": [],
                   "returnValue": {
                     "type": "Volo.Abp.Content.IRemoteStreamContent",
-                    "typeSimple": "Volo.Abp.Content.IRemoteStreamContent"
+                    "typeSimple": "Volo.Abp.Content.IRemoteStreamContent",
+                    "summary": null,
+                    "contentTypes": null,
+                    "isRemoteStream": true
                   }
                 }
               ]
@@ -1361,7 +1982,10 @@
                   "type": "LINGYUN.Abp.Identity.GetMySessionsInput",
                   "typeSimple": "LINGYUN.Abp.Identity.GetMySessionsInput",
                   "isOptional": false,
-                  "defaultValue": null
+                  "defaultValue": null,
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
                 }
               ],
               "parameters": [
@@ -1375,7 +1999,10 @@
                   "defaultValue": null,
                   "constraintTypes": null,
                   "bindingSourceId": "ModelBinding",
-                  "descriptorName": "input"
+                  "descriptorName": "input",
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
                 },
                 {
                   "nameOnMethod": "input",
@@ -1387,7 +2014,10 @@
                   "defaultValue": null,
                   "constraintTypes": null,
                   "bindingSourceId": "ModelBinding",
-                  "descriptorName": "input"
+                  "descriptorName": "input",
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
                 },
                 {
                   "nameOnMethod": "input",
@@ -1399,7 +2029,10 @@
                   "defaultValue": null,
                   "constraintTypes": null,
                   "bindingSourceId": "ModelBinding",
-                  "descriptorName": "input"
+                  "descriptorName": "input",
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
                 },
                 {
                   "nameOnMethod": "input",
@@ -1411,7 +2044,10 @@
                   "defaultValue": null,
                   "constraintTypes": null,
                   "bindingSourceId": "ModelBinding",
-                  "descriptorName": "input"
+                  "descriptorName": "input",
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
                 },
                 {
                   "nameOnMethod": "input",
@@ -1423,12 +2059,22 @@
                   "defaultValue": null,
                   "constraintTypes": null,
                   "bindingSourceId": "ModelBinding",
-                  "descriptorName": "input"
+                  "descriptorName": "input",
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
                 }
               ],
               "returnValue": {
                 "type": "Volo.Abp.Application.Dtos.PagedResultDto<LINGYUN.Abp.Account.IdentitySessionDto>",
-                "typeSimple": "Volo.Abp.Application.Dtos.PagedResultDto<LINGYUN.Abp.Account.IdentitySessionDto>"
+                "typeSimple": "Volo.Abp.Application.Dtos.PagedResultDto<LINGYUN.Abp.Account.IdentitySessionDto>",
+                "summary": null,
+                "contentTypes": [
+                  "text/plain",
+                  "application/json",
+                  "text/json"
+                ],
+                "isRemoteStream": false
               },
               "allowAnonymous": false,
               "authorizeDatas": [
@@ -1437,7 +2083,11 @@
                   "roles": null
                 }
               ],
-              "implementFrom": "LINGYUN.Abp.Account.IMyProfileAppService"
+              "implementFrom": "LINGYUN.Abp.Account.IMyProfileAppService",
+              "summary": null,
+              "remarks": null,
+              "description": null,
+              "displayName": null
             },
             "RevokeSessionAsyncBySessionId": {
               "uniqueName": "RevokeSessionAsyncBySessionId",
@@ -1452,7 +2102,10 @@
                   "type": "System.String",
                   "typeSimple": "string",
                   "isOptional": false,
-                  "defaultValue": null
+                  "defaultValue": null,
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
                 }
               ],
               "parameters": [
@@ -1466,12 +2119,22 @@
                   "defaultValue": null,
                   "constraintTypes": [],
                   "bindingSourceId": "Path",
-                  "descriptorName": ""
+                  "descriptorName": "",
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
                 }
               ],
               "returnValue": {
                 "type": "System.Void",
-                "typeSimple": "System.Void"
+                "typeSimple": "System.Void",
+                "summary": null,
+                "contentTypes": [
+                  "text/plain",
+                  "application/json",
+                  "text/json"
+                ],
+                "isRemoteStream": false
               },
               "allowAnonymous": false,
               "authorizeDatas": [
@@ -1480,7 +2143,11 @@
                   "roles": null
                 }
               ],
-              "implementFrom": "LINGYUN.Abp.Account.IMyProfileAppService"
+              "implementFrom": "LINGYUN.Abp.Account.IMyProfileAppService",
+              "summary": null,
+              "remarks": null,
+              "description": null,
+              "displayName": null
             },
             "GetTwoFactorEnabledAsync": {
               "uniqueName": "GetTwoFactorEnabledAsync",
@@ -1492,7 +2159,14 @@
               "parameters": [],
               "returnValue": {
                 "type": "LINGYUN.Abp.Account.TwoFactorEnabledDto",
-                "typeSimple": "LINGYUN.Abp.Account.TwoFactorEnabledDto"
+                "typeSimple": "LINGYUN.Abp.Account.TwoFactorEnabledDto",
+                "summary": null,
+                "contentTypes": [
+                  "text/plain",
+                  "application/json",
+                  "text/json"
+                ],
+                "isRemoteStream": false
               },
               "allowAnonymous": false,
               "authorizeDatas": [
@@ -1501,7 +2175,11 @@
                   "roles": null
                 }
               ],
-              "implementFrom": "LINGYUN.Abp.Account.IMyProfileAppService"
+              "implementFrom": "LINGYUN.Abp.Account.IMyProfileAppService",
+              "summary": null,
+              "remarks": null,
+              "description": null,
+              "displayName": null
             },
             "ChangeTwoFactorEnabledAsyncByInput": {
               "uniqueName": "ChangeTwoFactorEnabledAsyncByInput",
@@ -1516,7 +2194,10 @@
                   "type": "LINGYUN.Abp.Account.TwoFactorEnabledDto",
                   "typeSimple": "LINGYUN.Abp.Account.TwoFactorEnabledDto",
                   "isOptional": false,
-                  "defaultValue": null
+                  "defaultValue": null,
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
                 }
               ],
               "parameters": [
@@ -1530,12 +2211,22 @@
                   "defaultValue": null,
                   "constraintTypes": null,
                   "bindingSourceId": "Body",
-                  "descriptorName": ""
+                  "descriptorName": "",
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
                 }
               ],
               "returnValue": {
                 "type": "System.Void",
-                "typeSimple": "System.Void"
+                "typeSimple": "System.Void",
+                "summary": null,
+                "contentTypes": [
+                  "text/plain",
+                  "application/json",
+                  "text/json"
+                ],
+                "isRemoteStream": false
               },
               "allowAnonymous": false,
               "authorizeDatas": [
@@ -1544,7 +2235,11 @@
                   "roles": null
                 }
               ],
-              "implementFrom": "LINGYUN.Abp.Account.IMyProfileAppService"
+              "implementFrom": "LINGYUN.Abp.Account.IMyProfileAppService",
+              "summary": null,
+              "remarks": null,
+              "description": null,
+              "displayName": null
             },
             "SendChangePhoneNumberCodeAsyncByInput": {
               "uniqueName": "SendChangePhoneNumberCodeAsyncByInput",
@@ -1559,7 +2254,10 @@
                   "type": "LINGYUN.Abp.Account.SendChangePhoneNumberCodeInput",
                   "typeSimple": "LINGYUN.Abp.Account.SendChangePhoneNumberCodeInput",
                   "isOptional": false,
-                  "defaultValue": null
+                  "defaultValue": null,
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
                 }
               ],
               "parameters": [
@@ -1573,12 +2271,22 @@
                   "defaultValue": null,
                   "constraintTypes": null,
                   "bindingSourceId": "Body",
-                  "descriptorName": ""
+                  "descriptorName": "",
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
                 }
               ],
               "returnValue": {
                 "type": "System.Void",
-                "typeSimple": "System.Void"
+                "typeSimple": "System.Void",
+                "summary": null,
+                "contentTypes": [
+                  "text/plain",
+                  "application/json",
+                  "text/json"
+                ],
+                "isRemoteStream": false
               },
               "allowAnonymous": false,
               "authorizeDatas": [
@@ -1587,7 +2295,11 @@
                   "roles": null
                 }
               ],
-              "implementFrom": "LINGYUN.Abp.Account.IMyProfileAppService"
+              "implementFrom": "LINGYUN.Abp.Account.IMyProfileAppService",
+              "summary": null,
+              "remarks": null,
+              "description": null,
+              "displayName": null
             },
             "ChangePhoneNumberAsyncByInput": {
               "uniqueName": "ChangePhoneNumberAsyncByInput",
@@ -1602,7 +2314,10 @@
                   "type": "LINGYUN.Abp.Account.ChangePhoneNumberInput",
                   "typeSimple": "LINGYUN.Abp.Account.ChangePhoneNumberInput",
                   "isOptional": false,
-                  "defaultValue": null
+                  "defaultValue": null,
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
                 }
               ],
               "parameters": [
@@ -1616,12 +2331,22 @@
                   "defaultValue": null,
                   "constraintTypes": null,
                   "bindingSourceId": "Body",
-                  "descriptorName": ""
+                  "descriptorName": "",
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
                 }
               ],
               "returnValue": {
                 "type": "System.Void",
-                "typeSimple": "System.Void"
+                "typeSimple": "System.Void",
+                "summary": null,
+                "contentTypes": [
+                  "text/plain",
+                  "application/json",
+                  "text/json"
+                ],
+                "isRemoteStream": false
               },
               "allowAnonymous": false,
               "authorizeDatas": [
@@ -1630,7 +2355,11 @@
                   "roles": null
                 }
               ],
-              "implementFrom": "LINGYUN.Abp.Account.IMyProfileAppService"
+              "implementFrom": "LINGYUN.Abp.Account.IMyProfileAppService",
+              "summary": null,
+              "remarks": null,
+              "description": null,
+              "displayName": null
             },
             "SendEmailConfirmLinkAsyncByInput": {
               "uniqueName": "SendEmailConfirmLinkAsyncByInput",
@@ -1645,7 +2374,10 @@
                   "type": "LINGYUN.Abp.Account.SendEmailConfirmCodeDto",
                   "typeSimple": "LINGYUN.Abp.Account.SendEmailConfirmCodeDto",
                   "isOptional": false,
-                  "defaultValue": null
+                  "defaultValue": null,
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
                 }
               ],
               "parameters": [
@@ -1659,12 +2391,22 @@
                   "defaultValue": null,
                   "constraintTypes": null,
                   "bindingSourceId": "Body",
-                  "descriptorName": ""
+                  "descriptorName": "",
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
                 }
               ],
               "returnValue": {
                 "type": "System.Void",
-                "typeSimple": "System.Void"
+                "typeSimple": "System.Void",
+                "summary": null,
+                "contentTypes": [
+                  "text/plain",
+                  "application/json",
+                  "text/json"
+                ],
+                "isRemoteStream": false
               },
               "allowAnonymous": false,
               "authorizeDatas": [
@@ -1673,7 +2415,11 @@
                   "roles": null
                 }
               ],
-              "implementFrom": "LINGYUN.Abp.Account.IMyProfileAppService"
+              "implementFrom": "LINGYUN.Abp.Account.IMyProfileAppService",
+              "summary": null,
+              "remarks": null,
+              "description": null,
+              "displayName": null
             },
             "ConfirmEmailAsyncByInput": {
               "uniqueName": "ConfirmEmailAsyncByInput",
@@ -1688,7 +2434,10 @@
                   "type": "LINGYUN.Abp.Account.ConfirmEmailInput",
                   "typeSimple": "LINGYUN.Abp.Account.ConfirmEmailInput",
                   "isOptional": false,
-                  "defaultValue": null
+                  "defaultValue": null,
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
                 }
               ],
               "parameters": [
@@ -1702,12 +2451,22 @@
                   "defaultValue": null,
                   "constraintTypes": null,
                   "bindingSourceId": "Body",
-                  "descriptorName": ""
+                  "descriptorName": "",
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
                 }
               ],
               "returnValue": {
                 "type": "System.Void",
-                "typeSimple": "System.Void"
+                "typeSimple": "System.Void",
+                "summary": null,
+                "contentTypes": [
+                  "text/plain",
+                  "application/json",
+                  "text/json"
+                ],
+                "isRemoteStream": false
               },
               "allowAnonymous": false,
               "authorizeDatas": [
@@ -1716,7 +2475,11 @@
                   "roles": null
                 }
               ],
-              "implementFrom": "LINGYUN.Abp.Account.IMyProfileAppService"
+              "implementFrom": "LINGYUN.Abp.Account.IMyProfileAppService",
+              "summary": null,
+              "remarks": null,
+              "description": null,
+              "displayName": null
             },
             "GetAuthenticatorAsync": {
               "uniqueName": "GetAuthenticatorAsync",
@@ -1728,7 +2491,14 @@
               "parameters": [],
               "returnValue": {
                 "type": "LINGYUN.Abp.Account.AuthenticatorDto",
-                "typeSimple": "LINGYUN.Abp.Account.AuthenticatorDto"
+                "typeSimple": "LINGYUN.Abp.Account.AuthenticatorDto",
+                "summary": null,
+                "contentTypes": [
+                  "text/plain",
+                  "application/json",
+                  "text/json"
+                ],
+                "isRemoteStream": false
               },
               "allowAnonymous": false,
               "authorizeDatas": [
@@ -1737,7 +2507,11 @@
                   "roles": null
                 }
               ],
-              "implementFrom": "LINGYUN.Abp.Account.IMyProfileAppService"
+              "implementFrom": "LINGYUN.Abp.Account.IMyProfileAppService",
+              "summary": null,
+              "remarks": null,
+              "description": null,
+              "displayName": null
             },
             "VerifyAuthenticatorCodeAsyncByInput": {
               "uniqueName": "VerifyAuthenticatorCodeAsyncByInput",
@@ -1752,7 +2526,10 @@
                   "type": "LINGYUN.Abp.Account.VerifyAuthenticatorCodeInput",
                   "typeSimple": "LINGYUN.Abp.Account.VerifyAuthenticatorCodeInput",
                   "isOptional": false,
-                  "defaultValue": null
+                  "defaultValue": null,
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
                 }
               ],
               "parameters": [
@@ -1766,12 +2543,22 @@
                   "defaultValue": null,
                   "constraintTypes": null,
                   "bindingSourceId": "Body",
-                  "descriptorName": ""
+                  "descriptorName": "",
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
                 }
               ],
               "returnValue": {
                 "type": "LINGYUN.Abp.Account.AuthenticatorRecoveryCodeDto",
-                "typeSimple": "LINGYUN.Abp.Account.AuthenticatorRecoveryCodeDto"
+                "typeSimple": "LINGYUN.Abp.Account.AuthenticatorRecoveryCodeDto",
+                "summary": null,
+                "contentTypes": [
+                  "text/plain",
+                  "application/json",
+                  "text/json"
+                ],
+                "isRemoteStream": false
               },
               "allowAnonymous": false,
               "authorizeDatas": [
@@ -1780,7 +2567,11 @@
                   "roles": null
                 }
               ],
-              "implementFrom": "LINGYUN.Abp.Account.IMyProfileAppService"
+              "implementFrom": "LINGYUN.Abp.Account.IMyProfileAppService",
+              "summary": null,
+              "remarks": null,
+              "description": null,
+              "displayName": null
             },
             "ResetAuthenticatorAsync": {
               "uniqueName": "ResetAuthenticatorAsync",
@@ -1792,7 +2583,14 @@
               "parameters": [],
               "returnValue": {
                 "type": "System.Void",
-                "typeSimple": "System.Void"
+                "typeSimple": "System.Void",
+                "summary": null,
+                "contentTypes": [
+                  "text/plain",
+                  "application/json",
+                  "text/json"
+                ],
+                "isRemoteStream": false
               },
               "allowAnonymous": false,
               "authorizeDatas": [
@@ -1801,7 +2599,75 @@
                   "roles": null
                 }
               ],
-              "implementFrom": "LINGYUN.Abp.Account.IMyProfileAppService"
+              "implementFrom": "LINGYUN.Abp.Account.IMyProfileAppService",
+              "summary": null,
+              "remarks": null,
+              "description": null,
+              "displayName": null
+            },
+            "GetRecoveryCodeCountAsync": {
+              "uniqueName": "GetRecoveryCodeCountAsync",
+              "name": "GetRecoveryCodeCountAsync",
+              "httpMethod": "GET",
+              "url": "api/account/my-profile/recovery-code-count",
+              "supportedVersions": [],
+              "parametersOnMethod": [],
+              "parameters": [],
+              "returnValue": {
+                "type": "LINGYUN.Abp.Account.Dto.AuthenticatorRecoveryCodeCountDto",
+                "typeSimple": "LINGYUN.Abp.Account.Dto.AuthenticatorRecoveryCodeCountDto",
+                "summary": null,
+                "contentTypes": [
+                  "text/plain",
+                  "application/json",
+                  "text/json"
+                ],
+                "isRemoteStream": false
+              },
+              "allowAnonymous": false,
+              "authorizeDatas": [
+                {
+                  "policy": null,
+                  "roles": null
+                }
+              ],
+              "implementFrom": "LINGYUN.Abp.Account.IMyProfileAppService",
+              "summary": null,
+              "remarks": null,
+              "description": null,
+              "displayName": null
+            },
+            "ResetRecoveryCodeAsync": {
+              "uniqueName": "ResetRecoveryCodeAsync",
+              "name": "ResetRecoveryCodeAsync",
+              "httpMethod": "PUT",
+              "url": "api/account/my-profile/reset-recovery-code",
+              "supportedVersions": [],
+              "parametersOnMethod": [],
+              "parameters": [],
+              "returnValue": {
+                "type": "LINGYUN.Abp.Account.AuthenticatorRecoveryCodeDto",
+                "typeSimple": "LINGYUN.Abp.Account.AuthenticatorRecoveryCodeDto",
+                "summary": null,
+                "contentTypes": [
+                  "text/plain",
+                  "application/json",
+                  "text/json"
+                ],
+                "isRemoteStream": false
+              },
+              "allowAnonymous": false,
+              "authorizeDatas": [
+                {
+                  "policy": null,
+                  "roles": null
+                }
+              ],
+              "implementFrom": "LINGYUN.Abp.Account.IMyProfileAppService",
+              "summary": null,
+              "remarks": null,
+              "description": null,
+              "displayName": null
             },
             "ChangePictureAsyncByInput": {
               "uniqueName": "ChangePictureAsyncByInput",
@@ -1816,7 +2682,10 @@
                   "type": "LINGYUN.Abp.Account.ChangePictureInput",
                   "typeSimple": "LINGYUN.Abp.Account.ChangePictureInput",
                   "isOptional": false,
-                  "defaultValue": null
+                  "defaultValue": null,
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
                 }
               ],
               "parameters": [
@@ -1830,12 +2699,22 @@
                   "defaultValue": null,
                   "constraintTypes": null,
                   "bindingSourceId": "FormFile",
-                  "descriptorName": "input"
+                  "descriptorName": "input",
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
                 }
               ],
               "returnValue": {
                 "type": "System.Void",
-                "typeSimple": "System.Void"
+                "typeSimple": "System.Void",
+                "summary": null,
+                "contentTypes": [
+                  "text/plain",
+                  "application/json",
+                  "text/json"
+                ],
+                "isRemoteStream": false
               },
               "allowAnonymous": false,
               "authorizeDatas": [
@@ -1844,7 +2723,11 @@
                   "roles": null
                 }
               ],
-              "implementFrom": "LINGYUN.Abp.Account.IMyProfileAppService"
+              "implementFrom": "LINGYUN.Abp.Account.IMyProfileAppService",
+              "summary": null,
+              "remarks": null,
+              "description": null,
+              "displayName": null
             },
             "GetPictureAsync": {
               "uniqueName": "GetPictureAsync",
@@ -1856,7 +2739,14 @@
               "parameters": [],
               "returnValue": {
                 "type": "Volo.Abp.Content.IRemoteStreamContent",
-                "typeSimple": "Volo.Abp.Content.IRemoteStreamContent"
+                "typeSimple": "Volo.Abp.Content.IRemoteStreamContent",
+                "summary": null,
+                "contentTypes": [
+                  "text/plain",
+                  "application/json",
+                  "text/json"
+                ],
+                "isRemoteStream": true
               },
               "allowAnonymous": false,
               "authorizeDatas": [
@@ -1865,7 +2755,11 @@
                   "roles": null
                 }
               ],
-              "implementFrom": "LINGYUN.Abp.Account.IMyProfileAppService"
+              "implementFrom": "LINGYUN.Abp.Account.IMyProfileAppService",
+              "summary": null,
+              "remarks": null,
+              "description": null,
+              "displayName": null
             }
           }
         },
@@ -1876,6 +2770,10 @@
           "isIntegrationService": false,
           "apiVersion": null,
           "type": "LINGYUN.Abp.Account.MySecurityLogController",
+          "summary": null,
+          "remarks": null,
+          "description": null,
+          "displayName": null,
           "interfaces": [
             {
               "type": "LINGYUN.Abp.Account.IMySecurityLogAppService",
@@ -1890,12 +2788,18 @@
                       "type": "LINGYUN.Abp.Account.SecurityLogGetListInput",
                       "typeSimple": "LINGYUN.Abp.Account.SecurityLogGetListInput",
                       "isOptional": false,
-                      "defaultValue": null
+                      "defaultValue": null,
+                      "summary": null,
+                      "description": null,
+                      "displayName": null
                     }
                   ],
                   "returnValue": {
                     "type": "Volo.Abp.Application.Dtos.PagedResultDto<LINGYUN.Abp.Account.SecurityLogDto>",
-                    "typeSimple": "Volo.Abp.Application.Dtos.PagedResultDto<LINGYUN.Abp.Account.SecurityLogDto>"
+                    "typeSimple": "Volo.Abp.Application.Dtos.PagedResultDto<LINGYUN.Abp.Account.SecurityLogDto>",
+                    "summary": null,
+                    "contentTypes": null,
+                    "isRemoteStream": false
                   }
                 },
                 {
@@ -1907,12 +2811,18 @@
                       "type": "System.Guid",
                       "typeSimple": "string",
                       "isOptional": false,
-                      "defaultValue": null
+                      "defaultValue": null,
+                      "summary": null,
+                      "description": null,
+                      "displayName": null
                     }
                   ],
                   "returnValue": {
                     "type": "LINGYUN.Abp.Account.SecurityLogDto",
-                    "typeSimple": "LINGYUN.Abp.Account.SecurityLogDto"
+                    "typeSimple": "LINGYUN.Abp.Account.SecurityLogDto",
+                    "summary": null,
+                    "contentTypes": null,
+                    "isRemoteStream": false
                   }
                 },
                 {
@@ -1924,12 +2834,18 @@
                       "type": "System.Guid",
                       "typeSimple": "string",
                       "isOptional": false,
-                      "defaultValue": null
+                      "defaultValue": null,
+                      "summary": null,
+                      "description": null,
+                      "displayName": null
                     }
                   ],
                   "returnValue": {
                     "type": "System.Void",
-                    "typeSimple": "System.Void"
+                    "typeSimple": "System.Void",
+                    "summary": null,
+                    "contentTypes": null,
+                    "isRemoteStream": false
                   }
                 }
               ]
@@ -1949,7 +2865,10 @@
                   "type": "System.Guid",
                   "typeSimple": "string",
                   "isOptional": false,
-                  "defaultValue": null
+                  "defaultValue": null,
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
                 }
               ],
               "parameters": [
@@ -1963,12 +2882,22 @@
                   "defaultValue": null,
                   "constraintTypes": [],
                   "bindingSourceId": "Path",
-                  "descriptorName": ""
+                  "descriptorName": "",
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
                 }
               ],
               "returnValue": {
                 "type": "System.Void",
-                "typeSimple": "System.Void"
+                "typeSimple": "System.Void",
+                "summary": null,
+                "contentTypes": [
+                  "text/plain",
+                  "application/json",
+                  "text/json"
+                ],
+                "isRemoteStream": false
               },
               "allowAnonymous": false,
               "authorizeDatas": [
@@ -1977,7 +2906,11 @@
                   "roles": null
                 }
               ],
-              "implementFrom": "LINGYUN.Abp.Account.IMySecurityLogAppService"
+              "implementFrom": "LINGYUN.Abp.Account.IMySecurityLogAppService",
+              "summary": null,
+              "remarks": null,
+              "description": null,
+              "displayName": null
             },
             "GetAsyncById": {
               "uniqueName": "GetAsyncById",
@@ -1992,7 +2925,10 @@
                   "type": "System.Guid",
                   "typeSimple": "string",
                   "isOptional": false,
-                  "defaultValue": null
+                  "defaultValue": null,
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
                 }
               ],
               "parameters": [
@@ -2006,12 +2942,22 @@
                   "defaultValue": null,
                   "constraintTypes": [],
                   "bindingSourceId": "Path",
-                  "descriptorName": ""
+                  "descriptorName": "",
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
                 }
               ],
               "returnValue": {
                 "type": "LINGYUN.Abp.Account.SecurityLogDto",
-                "typeSimple": "LINGYUN.Abp.Account.SecurityLogDto"
+                "typeSimple": "LINGYUN.Abp.Account.SecurityLogDto",
+                "summary": null,
+                "contentTypes": [
+                  "text/plain",
+                  "application/json",
+                  "text/json"
+                ],
+                "isRemoteStream": false
               },
               "allowAnonymous": false,
               "authorizeDatas": [
@@ -2020,7 +2966,11 @@
                   "roles": null
                 }
               ],
-              "implementFrom": "LINGYUN.Abp.Account.IMySecurityLogAppService"
+              "implementFrom": "LINGYUN.Abp.Account.IMySecurityLogAppService",
+              "summary": null,
+              "remarks": null,
+              "description": null,
+              "displayName": null
             },
             "GetListAsyncByInput": {
               "uniqueName": "GetListAsyncByInput",
@@ -2035,7 +2985,10 @@
                   "type": "LINGYUN.Abp.Account.SecurityLogGetListInput",
                   "typeSimple": "LINGYUN.Abp.Account.SecurityLogGetListInput",
                   "isOptional": false,
-                  "defaultValue": null
+                  "defaultValue": null,
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
                 }
               ],
               "parameters": [
@@ -2049,7 +3002,10 @@
                   "defaultValue": null,
                   "constraintTypes": null,
                   "bindingSourceId": "ModelBinding",
-                  "descriptorName": "input"
+                  "descriptorName": "input",
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
                 },
                 {
                   "nameOnMethod": "input",
@@ -2061,7 +3017,10 @@
                   "defaultValue": null,
                   "constraintTypes": null,
                   "bindingSourceId": "ModelBinding",
-                  "descriptorName": "input"
+                  "descriptorName": "input",
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
                 },
                 {
                   "nameOnMethod": "input",
@@ -2073,7 +3032,10 @@
                   "defaultValue": null,
                   "constraintTypes": null,
                   "bindingSourceId": "ModelBinding",
-                  "descriptorName": "input"
+                  "descriptorName": "input",
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
                 },
                 {
                   "nameOnMethod": "input",
@@ -2085,7 +3047,10 @@
                   "defaultValue": null,
                   "constraintTypes": null,
                   "bindingSourceId": "ModelBinding",
-                  "descriptorName": "input"
+                  "descriptorName": "input",
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
                 },
                 {
                   "nameOnMethod": "input",
@@ -2097,7 +3062,10 @@
                   "defaultValue": null,
                   "constraintTypes": null,
                   "bindingSourceId": "ModelBinding",
-                  "descriptorName": "input"
+                  "descriptorName": "input",
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
                 },
                 {
                   "nameOnMethod": "input",
@@ -2109,7 +3077,10 @@
                   "defaultValue": null,
                   "constraintTypes": null,
                   "bindingSourceId": "ModelBinding",
-                  "descriptorName": "input"
+                  "descriptorName": "input",
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
                 },
                 {
                   "nameOnMethod": "input",
@@ -2121,7 +3092,10 @@
                   "defaultValue": null,
                   "constraintTypes": null,
                   "bindingSourceId": "ModelBinding",
-                  "descriptorName": "input"
+                  "descriptorName": "input",
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
                 },
                 {
                   "nameOnMethod": "input",
@@ -2133,7 +3107,10 @@
                   "defaultValue": null,
                   "constraintTypes": null,
                   "bindingSourceId": "ModelBinding",
-                  "descriptorName": "input"
+                  "descriptorName": "input",
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
                 },
                 {
                   "nameOnMethod": "input",
@@ -2145,7 +3122,10 @@
                   "defaultValue": null,
                   "constraintTypes": null,
                   "bindingSourceId": "ModelBinding",
-                  "descriptorName": "input"
+                  "descriptorName": "input",
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
                 },
                 {
                   "nameOnMethod": "input",
@@ -2157,12 +3137,22 @@
                   "defaultValue": null,
                   "constraintTypes": null,
                   "bindingSourceId": "ModelBinding",
-                  "descriptorName": "input"
+                  "descriptorName": "input",
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
                 }
               ],
               "returnValue": {
                 "type": "Volo.Abp.Application.Dtos.PagedResultDto<LINGYUN.Abp.Account.SecurityLogDto>",
-                "typeSimple": "Volo.Abp.Application.Dtos.PagedResultDto<LINGYUN.Abp.Account.SecurityLogDto>"
+                "typeSimple": "Volo.Abp.Application.Dtos.PagedResultDto<LINGYUN.Abp.Account.SecurityLogDto>",
+                "summary": null,
+                "contentTypes": [
+                  "text/plain",
+                  "application/json",
+                  "text/json"
+                ],
+                "isRemoteStream": false
               },
               "allowAnonymous": false,
               "authorizeDatas": [
@@ -2171,7 +3161,11 @@
                   "roles": null
                 }
               ],
-              "implementFrom": "LINGYUN.Abp.Account.IMySecurityLogAppService"
+              "implementFrom": "LINGYUN.Abp.Account.IMySecurityLogAppService",
+              "summary": null,
+              "remarks": null,
+              "description": null,
+              "displayName": null
             }
           }
         },
@@ -2182,6 +3176,10 @@
           "isIntegrationService": false,
           "apiVersion": null,
           "type": "Volo.Abp.Account.AccountController",
+          "summary": null,
+          "remarks": null,
+          "description": null,
+          "displayName": null,
           "interfaces": [
             {
               "type": "Volo.Abp.Account.IAccountAppService",
@@ -2196,12 +3194,18 @@
                       "type": "Volo.Abp.Account.RegisterDto",
                       "typeSimple": "Volo.Abp.Account.RegisterDto",
                       "isOptional": false,
-                      "defaultValue": null
+                      "defaultValue": null,
+                      "summary": null,
+                      "description": null,
+                      "displayName": null
                     }
                   ],
                   "returnValue": {
                     "type": "Volo.Abp.Identity.IdentityUserDto",
-                    "typeSimple": "Volo.Abp.Identity.IdentityUserDto"
+                    "typeSimple": "Volo.Abp.Identity.IdentityUserDto",
+                    "summary": null,
+                    "contentTypes": null,
+                    "isRemoteStream": false
                   }
                 },
                 {
@@ -2213,12 +3217,18 @@
                       "type": "Volo.Abp.Account.SendPasswordResetCodeDto",
                       "typeSimple": "Volo.Abp.Account.SendPasswordResetCodeDto",
                       "isOptional": false,
-                      "defaultValue": null
+                      "defaultValue": null,
+                      "summary": null,
+                      "description": null,
+                      "displayName": null
                     }
                   ],
                   "returnValue": {
                     "type": "System.Void",
-                    "typeSimple": "System.Void"
+                    "typeSimple": "System.Void",
+                    "summary": null,
+                    "contentTypes": null,
+                    "isRemoteStream": false
                   }
                 },
                 {
@@ -2230,12 +3240,18 @@
                       "type": "Volo.Abp.Account.VerifyPasswordResetTokenInput",
                       "typeSimple": "Volo.Abp.Account.VerifyPasswordResetTokenInput",
                       "isOptional": false,
-                      "defaultValue": null
+                      "defaultValue": null,
+                      "summary": null,
+                      "description": null,
+                      "displayName": null
                     }
                   ],
                   "returnValue": {
                     "type": "System.Boolean",
-                    "typeSimple": "boolean"
+                    "typeSimple": "boolean",
+                    "summary": null,
+                    "contentTypes": null,
+                    "isRemoteStream": false
                   }
                 },
                 {
@@ -2247,12 +3263,18 @@
                       "type": "Volo.Abp.Account.ResetPasswordDto",
                       "typeSimple": "Volo.Abp.Account.ResetPasswordDto",
                       "isOptional": false,
-                      "defaultValue": null
+                      "defaultValue": null,
+                      "summary": null,
+                      "description": null,
+                      "displayName": null
                     }
                   ],
                   "returnValue": {
                     "type": "System.Void",
-                    "typeSimple": "System.Void"
+                    "typeSimple": "System.Void",
+                    "summary": null,
+                    "contentTypes": null,
+                    "isRemoteStream": false
                   }
                 }
               ]
@@ -2272,7 +3294,10 @@
                   "type": "Volo.Abp.Account.RegisterDto",
                   "typeSimple": "Volo.Abp.Account.RegisterDto",
                   "isOptional": false,
-                  "defaultValue": null
+                  "defaultValue": null,
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
                 }
               ],
               "parameters": [
@@ -2286,16 +3311,30 @@
                   "defaultValue": null,
                   "constraintTypes": null,
                   "bindingSourceId": "Body",
-                  "descriptorName": ""
+                  "descriptorName": "",
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
                 }
               ],
               "returnValue": {
                 "type": "Volo.Abp.Identity.IdentityUserDto",
-                "typeSimple": "Volo.Abp.Identity.IdentityUserDto"
+                "typeSimple": "Volo.Abp.Identity.IdentityUserDto",
+                "summary": null,
+                "contentTypes": [
+                  "text/plain",
+                  "application/json",
+                  "text/json"
+                ],
+                "isRemoteStream": false
               },
               "allowAnonymous": null,
               "authorizeDatas": [],
-              "implementFrom": "Volo.Abp.Account.IAccountAppService"
+              "implementFrom": "Volo.Abp.Account.IAccountAppService",
+              "summary": null,
+              "remarks": null,
+              "description": null,
+              "displayName": null
             },
             "SendPasswordResetCodeAsyncByInput": {
               "uniqueName": "SendPasswordResetCodeAsyncByInput",
@@ -2310,7 +3349,10 @@
                   "type": "Volo.Abp.Account.SendPasswordResetCodeDto",
                   "typeSimple": "Volo.Abp.Account.SendPasswordResetCodeDto",
                   "isOptional": false,
-                  "defaultValue": null
+                  "defaultValue": null,
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
                 }
               ],
               "parameters": [
@@ -2324,16 +3366,30 @@
                   "defaultValue": null,
                   "constraintTypes": null,
                   "bindingSourceId": "Body",
-                  "descriptorName": ""
+                  "descriptorName": "",
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
                 }
               ],
               "returnValue": {
                 "type": "System.Void",
-                "typeSimple": "System.Void"
+                "typeSimple": "System.Void",
+                "summary": null,
+                "contentTypes": [
+                  "text/plain",
+                  "application/json",
+                  "text/json"
+                ],
+                "isRemoteStream": false
               },
               "allowAnonymous": null,
               "authorizeDatas": [],
-              "implementFrom": "Volo.Abp.Account.IAccountAppService"
+              "implementFrom": "Volo.Abp.Account.IAccountAppService",
+              "summary": null,
+              "remarks": null,
+              "description": null,
+              "displayName": null
             },
             "VerifyPasswordResetTokenAsyncByInput": {
               "uniqueName": "VerifyPasswordResetTokenAsyncByInput",
@@ -2348,7 +3404,10 @@
                   "type": "Volo.Abp.Account.VerifyPasswordResetTokenInput",
                   "typeSimple": "Volo.Abp.Account.VerifyPasswordResetTokenInput",
                   "isOptional": false,
-                  "defaultValue": null
+                  "defaultValue": null,
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
                 }
               ],
               "parameters": [
@@ -2362,16 +3421,30 @@
                   "defaultValue": null,
                   "constraintTypes": null,
                   "bindingSourceId": "Body",
-                  "descriptorName": ""
+                  "descriptorName": "",
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
                 }
               ],
               "returnValue": {
                 "type": "System.Boolean",
-                "typeSimple": "boolean"
+                "typeSimple": "boolean",
+                "summary": null,
+                "contentTypes": [
+                  "text/plain",
+                  "application/json",
+                  "text/json"
+                ],
+                "isRemoteStream": false
               },
               "allowAnonymous": null,
               "authorizeDatas": [],
-              "implementFrom": "Volo.Abp.Account.IAccountAppService"
+              "implementFrom": "Volo.Abp.Account.IAccountAppService",
+              "summary": null,
+              "remarks": null,
+              "description": null,
+              "displayName": null
             },
             "ResetPasswordAsyncByInput": {
               "uniqueName": "ResetPasswordAsyncByInput",
@@ -2386,7 +3459,10 @@
                   "type": "Volo.Abp.Account.ResetPasswordDto",
                   "typeSimple": "Volo.Abp.Account.ResetPasswordDto",
                   "isOptional": false,
-                  "defaultValue": null
+                  "defaultValue": null,
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
                 }
               ],
               "parameters": [
@@ -2400,16 +3476,30 @@
                   "defaultValue": null,
                   "constraintTypes": null,
                   "bindingSourceId": "Body",
-                  "descriptorName": ""
+                  "descriptorName": "",
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
                 }
               ],
               "returnValue": {
                 "type": "System.Void",
-                "typeSimple": "System.Void"
+                "typeSimple": "System.Void",
+                "summary": null,
+                "contentTypes": [
+                  "text/plain",
+                  "application/json",
+                  "text/json"
+                ],
+                "isRemoteStream": false
               },
               "allowAnonymous": null,
               "authorizeDatas": [],
-              "implementFrom": "Volo.Abp.Account.IAccountAppService"
+              "implementFrom": "Volo.Abp.Account.IAccountAppService",
+              "summary": null,
+              "remarks": null,
+              "description": null,
+              "displayName": null
             }
           }
         },
@@ -2420,6 +3510,10 @@
           "isIntegrationService": false,
           "apiVersion": null,
           "type": "Volo.Abp.Account.DynamicClaimsController",
+          "summary": null,
+          "remarks": null,
+          "description": null,
+          "displayName": null,
           "interfaces": [
             {
               "type": "Volo.Abp.Account.IDynamicClaimsAppService",
@@ -2430,7 +3524,10 @@
                   "parametersOnMethod": [],
                   "returnValue": {
                     "type": "System.Void",
-                    "typeSimple": "System.Void"
+                    "typeSimple": "System.Void",
+                    "summary": null,
+                    "contentTypes": null,
+                    "isRemoteStream": false
                   }
                 }
               ]
@@ -2447,11 +3544,22 @@
               "parameters": [],
               "returnValue": {
                 "type": "System.Void",
-                "typeSimple": "System.Void"
+                "typeSimple": "System.Void",
+                "summary": null,
+                "contentTypes": [
+                  "text/plain",
+                  "application/json",
+                  "text/json"
+                ],
+                "isRemoteStream": false
               },
               "allowAnonymous": null,
               "authorizeDatas": [],
-              "implementFrom": "Volo.Abp.Account.IDynamicClaimsAppService"
+              "implementFrom": "Volo.Abp.Account.IDynamicClaimsAppService",
+              "summary": null,
+              "remarks": null,
+              "description": null,
+              "displayName": null
             }
           }
         },
@@ -2462,6 +3570,10 @@
           "isIntegrationService": false,
           "apiVersion": null,
           "type": "Volo.Abp.Account.ProfileController",
+          "summary": null,
+          "remarks": null,
+          "description": null,
+          "displayName": null,
           "interfaces": [
             {
               "type": "Volo.Abp.Account.IProfileAppService",
@@ -2472,7 +3584,10 @@
                   "parametersOnMethod": [],
                   "returnValue": {
                     "type": "Volo.Abp.Account.ProfileDto",
-                    "typeSimple": "Volo.Abp.Account.ProfileDto"
+                    "typeSimple": "Volo.Abp.Account.ProfileDto",
+                    "summary": null,
+                    "contentTypes": null,
+                    "isRemoteStream": false
                   }
                 },
                 {
@@ -2484,12 +3599,18 @@
                       "type": "Volo.Abp.Account.UpdateProfileDto",
                       "typeSimple": "Volo.Abp.Account.UpdateProfileDto",
                       "isOptional": false,
-                      "defaultValue": null
+                      "defaultValue": null,
+                      "summary": null,
+                      "description": null,
+                      "displayName": null
                     }
                   ],
                   "returnValue": {
                     "type": "Volo.Abp.Account.ProfileDto",
-                    "typeSimple": "Volo.Abp.Account.ProfileDto"
+                    "typeSimple": "Volo.Abp.Account.ProfileDto",
+                    "summary": null,
+                    "contentTypes": null,
+                    "isRemoteStream": false
                   }
                 },
                 {
@@ -2501,12 +3622,18 @@
                       "type": "Volo.Abp.Account.ChangePasswordInput",
                       "typeSimple": "Volo.Abp.Account.ChangePasswordInput",
                       "isOptional": false,
-                      "defaultValue": null
+                      "defaultValue": null,
+                      "summary": null,
+                      "description": null,
+                      "displayName": null
                     }
                   ],
                   "returnValue": {
                     "type": "System.Void",
-                    "typeSimple": "System.Void"
+                    "typeSimple": "System.Void",
+                    "summary": null,
+                    "contentTypes": null,
+                    "isRemoteStream": false
                   }
                 }
               ]
@@ -2523,11 +3650,22 @@
               "parameters": [],
               "returnValue": {
                 "type": "Volo.Abp.Account.ProfileDto",
-                "typeSimple": "Volo.Abp.Account.ProfileDto"
+                "typeSimple": "Volo.Abp.Account.ProfileDto",
+                "summary": null,
+                "contentTypes": [
+                  "text/plain",
+                  "application/json",
+                  "text/json"
+                ],
+                "isRemoteStream": false
               },
               "allowAnonymous": null,
               "authorizeDatas": [],
-              "implementFrom": "Volo.Abp.Account.IProfileAppService"
+              "implementFrom": "Volo.Abp.Account.IProfileAppService",
+              "summary": null,
+              "remarks": null,
+              "description": null,
+              "displayName": null
             },
             "UpdateAsyncByInput": {
               "uniqueName": "UpdateAsyncByInput",
@@ -2542,7 +3680,10 @@
                   "type": "Volo.Abp.Account.UpdateProfileDto",
                   "typeSimple": "Volo.Abp.Account.UpdateProfileDto",
                   "isOptional": false,
-                  "defaultValue": null
+                  "defaultValue": null,
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
                 }
               ],
               "parameters": [
@@ -2556,16 +3697,30 @@
                   "defaultValue": null,
                   "constraintTypes": null,
                   "bindingSourceId": "Body",
-                  "descriptorName": ""
+                  "descriptorName": "",
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
                 }
               ],
               "returnValue": {
                 "type": "Volo.Abp.Account.ProfileDto",
-                "typeSimple": "Volo.Abp.Account.ProfileDto"
+                "typeSimple": "Volo.Abp.Account.ProfileDto",
+                "summary": null,
+                "contentTypes": [
+                  "text/plain",
+                  "application/json",
+                  "text/json"
+                ],
+                "isRemoteStream": false
               },
               "allowAnonymous": null,
               "authorizeDatas": [],
-              "implementFrom": "Volo.Abp.Account.IProfileAppService"
+              "implementFrom": "Volo.Abp.Account.IProfileAppService",
+              "summary": null,
+              "remarks": null,
+              "description": null,
+              "displayName": null
             },
             "ChangePasswordAsyncByInput": {
               "uniqueName": "ChangePasswordAsyncByInput",
@@ -2580,7 +3735,10 @@
                   "type": "Volo.Abp.Account.ChangePasswordInput",
                   "typeSimple": "Volo.Abp.Account.ChangePasswordInput",
                   "isOptional": false,
-                  "defaultValue": null
+                  "defaultValue": null,
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
                 }
               ],
               "parameters": [
@@ -2594,16 +3752,30 @@
                   "defaultValue": null,
                   "constraintTypes": null,
                   "bindingSourceId": "Body",
-                  "descriptorName": ""
+                  "descriptorName": "",
+                  "summary": null,
+                  "description": null,
+                  "displayName": null
                 }
               ],
               "returnValue": {
                 "type": "System.Void",
-                "typeSimple": "System.Void"
+                "typeSimple": "System.Void",
+                "summary": null,
+                "contentTypes": [
+                  "text/plain",
+                  "application/json",
+                  "text/json"
+                ],
+                "isRemoteStream": false
               },
               "allowAnonymous": null,
               "authorizeDatas": [],
-              "implementFrom": "Volo.Abp.Account.IProfileAppService"
+              "implementFrom": "Volo.Abp.Account.IProfileAppService",
+              "summary": null,
+              "remarks": null,
+              "description": null,
+              "displayName": null
             }
           }
         }

@@ -20,4 +20,11 @@ public static class IdentityTwoFactorBehaviourSettingHelper
 
         return IdentityTwoFactorBehaviour.Optional;
     }
+
+    public static async Task<int> GetGenerateRecoveryCodeNumber([NotNull] ISettingProvider settingProvider)
+    {
+        Check.NotNull(settingProvider, nameof(settingProvider));
+
+        return await settingProvider.GetAsync(IdentitySettingNames.Security.GenerateRecoveryCodeNumber, 10);
+    }
 }

@@ -68,6 +68,11 @@ interface AuthenticatorRecoveryCodeDto {
   recoveryCodes: string[];
 }
 
+interface AuthenticatorRecoveryCodeCountDto {
+  availableNumber: number;
+  recoveryCodeNumber: number;
+}
+
 interface SendEmailConfirmCodeDto {
   appName: string;
   email: string;
@@ -80,6 +85,7 @@ interface ConfirmEmailInput {
 
 export type {
   AuthenticatorDto,
+  AuthenticatorRecoveryCodeCountDto,
   AuthenticatorRecoveryCodeDto,
   ChangePasswordInput,
   ChangePhoneNumberInput,
