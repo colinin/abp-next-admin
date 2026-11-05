@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<Import Project="..\..\..\..\configureawait.props" />
+	<Import Project="..\..\..\..\common.props" />
+
+	<PropertyGroup>
+		<TargetFramework>net10.0</TargetFramework>
+		<AssemblyName>LINGYUN.Abp.OperationRateLimiting.Application</AssemblyName>
+		<PackageId>LINGYUN.Abp.OperationRateLimiting.Application</PackageId>
+		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+		<Nullable>enable</Nullable>
+		<RootNamespace />
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.Authorization" />
+		<PackageReference Include="Volo.Abp.Ddd.Application" />
+		<PackageReference Include="Volo.Abp.EventBus" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\..\framework\operation-rate-limiting\LINGYUN.Abp.OperationRateLimiting\LINGYUN.Abp.OperationRateLimiting.csproj" />
+		<ProjectReference Include="..\LINGYUN.Abp.OperationRateLimiting.Application.Contracts\LINGYUN.Abp.OperationRateLimiting.Application.Contracts.csproj" />
+		<ProjectReference Include="..\LINGYUN.Abp.OperationRateLimiting.Domain\LINGYUN.Abp.OperationRateLimiting.Domain.csproj" />
+	</ItemGroup>
+
+</Project>
