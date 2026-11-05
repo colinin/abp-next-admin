@@ -12,13 +12,13 @@ public interface IAccountAppService : IApplicationService
     /// </summary>
     /// <param name="input"></param>
     /// <returns></returns>
-    Task RegisterAsync(PhoneRegisterDto input);
+    Task PhoneRegisterAsync(PhoneRegisterDto input);
     /// <summary>
     /// 通过微信小程序注册用户账户
     /// </summary>
     /// <param name="input"></param>
     /// <returns></returns>
-    Task RegisterAsync(WeChatRegisterDto input);
+    Task WeChatRegisterAsync(WeChatRegisterDto input);
     /// <summary>
     /// 通过手机号重置用户密码
     /// </summary>

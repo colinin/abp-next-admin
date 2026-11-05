@@ -21,16 +21,16 @@ public class AccountController : AbpControllerBase, IAccountAppService
 
     [HttpPost]
     [Route("wechat/register")]
-    public async virtual Task RegisterAsync(WeChatRegisterDto input)
+    public async virtual Task WeChatRegisterAsync(WeChatRegisterDto input)
     {
-        await AccountAppService.RegisterAsync(input);
+        await AccountAppService.WeChatRegisterAsync(input);
     }
 
     [HttpPost]
     [Route("phone/register")]
-    public async virtual Task RegisterAsync(PhoneRegisterDto input)
+    public async virtual Task PhoneRegisterAsync(PhoneRegisterDto input)
     {
-        await AccountAppService.RegisterAsync(input);
+        await AccountAppService.PhoneRegisterAsync(input);
     }
 
     [HttpPut]

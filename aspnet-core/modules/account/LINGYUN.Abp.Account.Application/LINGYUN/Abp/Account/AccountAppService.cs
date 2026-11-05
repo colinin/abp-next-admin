@@ -52,7 +52,7 @@ public class AccountAppService : AccountApplicationServiceBase, IAccountAppServi
         EmailSecurityCodeSender = emailSecurityCodeSender;
     }
 
-    public async virtual Task RegisterAsync(WeChatRegisterDto input)
+    public async virtual Task WeChatRegisterAsync(WeChatRegisterDto input)
     {
         ThowIfInvalidEmailAddress(input.EmailAddress);
 
@@ -149,7 +149,7 @@ public class AccountAppService : AccountApplicationServiceBase, IAccountAppServi
                 });
     }
 
-    public async virtual Task RegisterAsync(PhoneRegisterDto input)
+    public async virtual Task PhoneRegisterAsync(PhoneRegisterDto input)
     {
         await CheckSelfRegistrationAsync();
         await IdentityOptions.SetAsync();
