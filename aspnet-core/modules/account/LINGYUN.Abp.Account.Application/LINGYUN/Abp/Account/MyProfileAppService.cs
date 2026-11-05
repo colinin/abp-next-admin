@@ -1,4 +1,5 @@
-﻿using LINGYUN.Abp.Account.Security;
+﻿using LINGYUN.Abp.Account.Dto;
+using LINGYUN.Abp.Account.Security;
 using LINGYUN.Abp.Identity;
 using LINGYUN.Abp.Identity.Security;
 using LINGYUN.Abp.Identity.Session;
@@ -8,7 +9,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Options;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -314,11 +314,10 @@ public class MyProfileAppService : AccountApplicationServiceBase, IMyProfileAppS
             throw new BusinessException(Identity.IdentityErrorCodes.AuthenticatorTokenInValid);
         }
 
-        var recoveryCodes = await UserManager.GenerateNewTwoFactorRecoveryCodesAsync(user, 10);
+        var recoveryCodeNumber = await IdentityTwoFactorBehaviourSettingHelper.GetGenerateRecoveryCodeNumber(SettingProvider);
+        var recoveryCodes = await UserManager.GenerateNewTwoFactorRecoveryCodesAsync(user, recoveryCodeNumber);
 
         user.SetProperty(UserManager.Options.Tokens.AuthenticatorTokenProvider, true);
-
-        await UserStore.ReplaceCodesAsync(user, recoveryCodes);
 
         (await UserManager.UpdateAsync(user)).CheckErrors();
 
@@ -367,6 +366,40 @@ public class MyProfileAppService : AccountApplicationServiceBase, IMyProfileAppS
         });
 
         await CurrentUnitOfWork!.SaveChangesAsync();
+    }
+
+    public async virtual Task<AuthenticatorRecoveryCodeCountDto> GetRecoveryCodeCountAsync()
+    {
+        await IdentityOptions.SetAsync();
+
+        var user = await UserManager.GetByIdAsync(CurrentUser.GetId());
+
+        var recoveryCodeNumber = await IdentityTwoFactorBehaviourSettingHelper.GetGenerateRecoveryCodeNumber(SettingProvider);
+        var redeemCodeNumber = await UserManager.CountRecoveryCodesAsync(user);
+
+        return new AuthenticatorRecoveryCodeCountDto
+        {
+            RecoveryCodeNumber = recoveryCodeNumber,
+            AvailableNumber = recoveryCodeNumber - redeemCodeNumber,
+        };
+    }
+
+    public async virtual Task<AuthenticatorRecoveryCodeDto> ResetRecoveryCodeAsync()
+    {
+        await IdentityOptions.SetAsync();
+
+        var user = await UserManager.GetByIdAsync(CurrentUser.GetId());
+        var recoveryCodeNumber = await IdentityTwoFactorBehaviourSettingHelper.GetGenerateRecoveryCodeNumber(SettingProvider);
+        var recoveryCodes = await UserManager.GenerateNewTwoFactorRecoveryCodesAsync(user, recoveryCodeNumber);
+
+        (await UserManager.UpdateAsync(user)).CheckErrors();
+
+        await CurrentUnitOfWork!.SaveChangesAsync();
+
+        return new AuthenticatorRecoveryCodeDto
+        {
+            RecoveryCodes = recoveryCodes?.ToList(),
+        };
     }
 
     private static string? FormatKey(string? unformattedKey)

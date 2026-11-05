@@ -1,4 +1,5 @@
-﻿using LINGYUN.Abp.Identity;
+﻿using LINGYUN.Abp.Account.Dto;
+using LINGYUN.Abp.Identity;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
@@ -19,6 +20,16 @@ public interface IMyProfileAppService : IApplicationService
     /// <param name="input"></param>
     /// <returns></returns>
     Task<AuthenticatorRecoveryCodeDto> VerifyAuthenticatorCodeAsync(VerifyAuthenticatorCodeInput input);
+    /// <summary>
+    /// 获取可用恢复代码数量
+    /// </summary>
+    /// <returns></returns>
+    Task<AuthenticatorRecoveryCodeCountDto> GetRecoveryCodeCountAsync();
+    /// <summary>
+    /// 重置恢复代码
+    /// </summary>
+    /// <returns></returns>
+    Task<AuthenticatorRecoveryCodeDto> ResetRecoveryCodeAsync();
     /// <summary>
     /// 获取会话列表
     /// </summary>

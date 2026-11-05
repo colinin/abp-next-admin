@@ -1,4 +1,5 @@
 ﻿using Asp.Versioning;
+using LINGYUN.Abp.Account.Dto;
 using LINGYUN.Abp.Identity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -101,6 +102,20 @@ public class MyProfileController : AbpControllerBase, IMyProfileAppService
     public virtual Task ResetAuthenticatorAsync()
     {
         return MyProfileAppService.ResetAuthenticatorAsync();
+    }
+
+    [HttpGet]
+    [Route("recovery-code-count")]
+    public virtual Task<AuthenticatorRecoveryCodeCountDto> GetRecoveryCodeCountAsync()
+    {
+        return MyProfileAppService.GetRecoveryCodeCountAsync();
+    }
+
+    [HttpPut]
+    [Route("reset-recovery-code")]
+    public virtual Task<AuthenticatorRecoveryCodeDto> ResetRecoveryCodeAsync()
+    {
+        return MyProfileAppService.ResetRecoveryCodeAsync();
     }
 
     [HttpPost]
