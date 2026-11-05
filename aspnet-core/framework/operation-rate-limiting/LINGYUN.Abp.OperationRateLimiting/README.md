@@ -128,7 +128,7 @@ public class MyModule : AbpModule { }
 * 四种内置算法各自一条 Lua 脚本，在 Redis 内完成读改写：固定窗口 `GET/SET`、滑动窗口 `ZSET`、令牌桶 `HASH`、并发 `ZSET`，返回值包含放行、当前值、剩余值与重试毫秒数。
 * 自定义算法的状态通过 `UpdateStateAsync` 的 Lua CAS（比较并交换）循环更新，同样具备原子性。
 * 连接串也可通过 `ConfigurationOptions` 提供更细粒度配置；`InstanceName` 为所有键的统一前缀。
-* 行为与默认存储一致；`IOperationRateLimitingStore` 的替换对上层完全透明。
+* 行为与默认实现一致；`IOperationRateLimitingStateAccessor` 的替换对上层完全透明。
 
 ## 分区策略
 
@@ -378,23 +378,29 @@ rule.SetTokensPerPeriod(2);
 
 自定义规则从 DI 按检查解析，因此可以使用 Scoped 服务。实现 `IOperationRateLimitingRuleReleaser` 可支持“许可释放”语义（参考并发算法）。
 
-### 自定义存储
+### 自定义状态存储
 
-实现 `IOperationRateLimitingStore` 并注册替换默认实现。为让底层能够把整个算法作为一次原子操作执行，接口按“算法级操作”设计：`ExecuteAsync(OperationRateLimitingStoreRequest)` 执行四种内置算法，`UpdateStateAsync<TState>` 供自定义算法使用，`ReleaseAsync` 释放并发许可，`ResetAsync` 删除计数：
+规则通过 `IOperationRateLimitingStateAccessor` 读写自己的状态；默认实现使用分布式缓存 + 分布式锁，Redis 模块会替换为 Lua CAS 实现。自定义规则可在构造函数注入该接口：
 
 ```csharp
-[Dependency(ReplaceServices = true)]
-public class MyStore : IOperationRateLimitingStore, ITransientDependency
+public class MyRule : OperationRateLimitingRuleBase
 {
-    public Task<OperationRateLimitingStoreResult> ExecuteAsync(OperationRateLimitingStoreRequest request, CancellationToken ct = default) => ...;
-    public Task ReleaseAsync(OperationRateLimitingStoreRequest request, CancellationToken ct = default) => ...;
-    public Task<TState?> GetStateAsync<TState>(string key, CancellationToken ct = default) where TState : class, new() => ...;
-    public Task<TState?> UpdateStateAsync<TState>(string key, Func<TState?, TState?> updater, TimeSpan expiration, CancellationToken ct = default) where TState : class, new() => ...;
-    public Task ResetAsync(string key, CancellationToken ct = default) => ...;
+    protected IOperationRateLimitingStateAccessor StateAccessor { get; }
+
+    public MyRule(IOperationRateLimitingStateAccessor stateAccessor)
+    {
+        StateAccessor = stateAccessor;
+    }
+
+    public override async Task<OperationRateLimitingStoreResult> ExecuteAsync(OperationRateLimitingRuleContext context)
+    {
+        var state = await StateAccessor.UpdateStateAsync(...);
+        return OperationRateLimitingStoreResult.Allow(...);
+    }
 }
 ```
 
-自定义存储必须保证 `ExecuteAsync` 与 `UpdateStateAsync` 的原子性（分布式锁、Redis Lua 或数据库原子语句）；可参考 `StackExchangeRedisOperationRateLimitingStore`。
+`IOperationRateLimitingRuleResetter` 用于让 `ResetAsync` 清除规则自己的状态；`IOperationRateLimitingRuleReleaser` 用于并发许可释放。状态访问器必须保证 `UpdateStateAsync` 的原子性（分布式锁、Redis Lua/CAS 或数据库原子语句）。
 
 ### 自定义格式化器
 
@@ -445,5 +451,5 @@ Configure<AbpOperationRateLimitingOptions>(options =>
 ## 与设计文档的差异
 
 * 错误码常量值、HTTP 429、异常数据键、四种算法、分区类型、多规则与声明式用法均与文档一致。
-* 为让存储层能够原子执行四种算法，`IOperationRateLimitingStore` 采用算法级 `ExecuteAsync(OperationRateLimitingStoreRequest)` + 自定义算法 `UpdateStateAsync` 的接口（文档中的 `IncrementAsync(key, duration, maxCount)` 仅能表达固定窗口）。默认实现用分布式锁，Redis 实现用 Lua，均不需要调用方加锁。
+* 四种算法分别在各自的规则类中实现，状态读写由 `IOperationRateLimitingStateAccessor` 提供（默认分布式锁，Redis 使用 Lua CAS/Lua 原子脚本），不再需要按算法名 switch 的存储层。文档中的 `IncrementAsync(key, duration, maxCount)` 仅能表达固定窗口。
 * 文档中的“动态策略仓储”只描述了 `AddPolicy(OperationRateLimitingPolicy)` 与自定义 `IOperationRateLimitingPolicyProvider`；本模块把实体、EF Core 仓储、应用服务、REST API 拆到 `modules/operation-rate-limiting`，并复用 `LINGYUN.Abp.Dynamic.Definitions` 的合并策略。

@@ -1,4 +1,8 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+using LINGYUN.Abp.OperationRateLimiting.Redis.Algorithms.Concurrency;
+using LINGYUN.Abp.OperationRateLimiting.Redis.Algorithms.FixedWindow;
+using LINGYUN.Abp.OperationRateLimiting.Redis.Algorithms.SlidingWindow;
+using LINGYUN.Abp.OperationRateLimiting.Redis.Algorithms.TokenBucket;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Volo.Abp.Modularity;
 using Volo.Abp.VirtualFileSystem;
@@ -6,8 +10,8 @@ using Volo.Abp.VirtualFileSystem;
 namespace LINGYUN.Abp.OperationRateLimiting.Redis;
 
 /// <summary>
-/// Replaces the distributed cache store with a Redis store that executes every algorithm
-/// atomically with Lua scripts.
+/// Replaces the built-in rules with Redis Lua implementations and the distributed cache state
+/// accessor with a Redis compare-and-set implementation.
 /// </summary>
 [DependsOn(typeof(AbpOperationRateLimitingModule))]
 public class AbpOperationRateLimitingStackExchangeRedisModule : AbpModule
@@ -23,7 +27,17 @@ public class AbpOperationRateLimitingStackExchangeRedisModule : AbpModule
             options.FileSets.AddEmbedded<AbpOperationRateLimitingStackExchangeRedisModule>();
         });
 
+        Configure<AbpOperationRateLimitingOptions>(options =>
+        {
+            options.AddAlgorithm<RedisFixedWindowRateLimitingRule>(OperationRateLimitingAlgorithms.FixedWindow);
+            options.AddAlgorithm<RedisSlidingWindowRateLimitingRule>(OperationRateLimitingAlgorithms.SlidingWindow);
+            options.AddAlgorithm<RedisTokenBucketRateLimitingRule>(OperationRateLimitingAlgorithms.TokenBucket);
+            options.AddAlgorithm<RedisConcurrencyRateLimitingRule>(OperationRateLimitingAlgorithms.Concurrency);
+        });
+
+        context.Services.AddSingleton<StackExchangeRedisOperationRateLimitingExecutor>();
+
         context.Services.Replace(
-            ServiceDescriptor.Singleton<IOperationRateLimitingStore, StackExchangeRedisOperationRateLimitingStore>());
+            ServiceDescriptor.Singleton<IOperationRateLimitingStateAccessor, StackExchangeRedisOperationRateLimitingStateAccessor>());
     }
 }

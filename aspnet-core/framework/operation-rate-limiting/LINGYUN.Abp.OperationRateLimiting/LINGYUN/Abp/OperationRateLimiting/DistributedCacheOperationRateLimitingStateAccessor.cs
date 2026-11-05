@@ -1,10 +1,6 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using LINGYUN.Abp.OperationRateLimiting.Algorithms.Concurrency;
-using LINGYUN.Abp.OperationRateLimiting.Algorithms.FixedWindow;
-using LINGYUN.Abp.OperationRateLimiting.Algorithms.SlidingWindow;
-using LINGYUN.Abp.OperationRateLimiting.Algorithms.TokenBucket;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Options;
 using Volo.Abp;
@@ -16,16 +12,12 @@ using Volo.Abp.Json;
 namespace LINGYUN.Abp.OperationRateLimiting;
 
 /// <summary>
-/// Default <see cref="IOperationRateLimitingStore"/> based on ABP's distributed cache.
+/// Default <see cref="IOperationRateLimitingStateAccessor"/> based on ABP's distributed cache.
+/// Updates are guarded by a distributed lock named after the counter.
 /// </summary>
-/// <remarks>
-/// The built-in algorithms are executed by the executors of their algorithm folder while a
-/// distributed lock (an <see cref="IAbpDistributedLock"/> named after the counter) is held.
-/// This makes the update atomic when the distributed lock provider is shared by all instances.
-/// For Redis deployments, replace it with
-/// <c>LINGYUN.Abp.OperationRateLimiting.StackExchangeRedis</c> (Lua scripts, no lock).
-/// </remarks>
-public class DistributedCacheOperationRateLimitingStore : IOperationRateLimitingStore, ITransientDependency
+public class DistributedCacheOperationRateLimitingStateAccessor :
+    IOperationRateLimitingStateAccessor,
+    ITransientDependency
 {
     protected IDistributedCache<OperationRateLimitingStateCacheItem> Cache { get; }
 
@@ -35,7 +27,7 @@ public class DistributedCacheOperationRateLimitingStore : IOperationRateLimiting
 
     protected IOptions<AbpOperationRateLimitingOptions> Options { get; }
 
-    public DistributedCacheOperationRateLimitingStore(
+    public DistributedCacheOperationRateLimitingStateAccessor(
         IDistributedCache<OperationRateLimitingStateCacheItem> cache,
         IAbpDistributedLock distributedLock,
         IJsonSerializer jsonSerializer,
@@ -47,54 +39,9 @@ public class DistributedCacheOperationRateLimitingStore : IOperationRateLimiting
         Options = options;
     }
 
-    public virtual async Task<OperationRateLimitingStoreResult> ExecuteAsync(
-        OperationRateLimitingStoreRequest request,
+    public virtual async Task<TState?> GetStateAsync<TState>(
+        string key,
         CancellationToken cancellationToken = default)
-    {
-        Check.NotNull(request, nameof(request));
-        Check.NotNullOrWhiteSpace(request.Key, nameof(request.Key));
-
-        if (request.MaxCount <= 0)
-        {
-            return OperationRateLimitingStoreResult.Deny(0, 0, null, request.Duration, isPermanent: true);
-        }
-
-        switch (request.Algorithm)
-        {
-            case OperationRateLimitingAlgorithms.FixedWindow:
-                return await FixedWindowRateLimitingExecutor.ExecuteAsync(this, request, cancellationToken);
-
-            case OperationRateLimitingAlgorithms.SlidingWindow:
-                return await SlidingWindowRateLimitingExecutor.ExecuteAsync(this, request, cancellationToken);
-
-            case OperationRateLimitingAlgorithms.TokenBucket:
-                return await TokenBucketRateLimitingExecutor.ExecuteAsync(this, request, cancellationToken);
-
-            case OperationRateLimitingAlgorithms.Concurrency:
-                return await ConcurrencyRateLimitingExecutor.ExecuteAsync(this, request, cancellationToken);
-
-            default:
-                throw new AbpException(
-                    $"The distributed cache store does not implement the algorithm '{request.Algorithm}'. " +
-                    "Custom algorithms must use IOperationRateLimitingStore.UpdateStateAsync in their rule implementation.");
-        }
-    }
-
-    public virtual async Task ReleaseAsync(
-        OperationRateLimitingStoreRequest request,
-        CancellationToken cancellationToken = default)
-    {
-        Check.NotNull(request, nameof(request));
-
-        if (request.Algorithm != OperationRateLimitingAlgorithms.Concurrency)
-        {
-            return;
-        }
-
-        await ConcurrencyRateLimitingExecutor.ReleaseAsync(this, request, cancellationToken);
-    }
-
-    public virtual async Task<TState?> GetStateAsync<TState>(string key, CancellationToken cancellationToken = default)
         where TState : class, new()
     {
         Check.NotNullOrWhiteSpace(key, nameof(key));

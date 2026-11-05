@@ -25,8 +25,6 @@ public class OperationRateLimitingRuleContext
 
     public DateTimeOffset Now { get; }
 
-    public IOperationRateLimitingStore Store { get; }
-
     public OperationRateLimitingContext RateLimitingContext { get; }
 
     public IServiceProvider ServiceProvider { get; }
@@ -39,7 +37,6 @@ public class OperationRateLimitingRuleContext
         string key,
         bool consume,
         DateTimeOffset now,
-        IOperationRateLimitingStore store,
         OperationRateLimitingContext rateLimitingContext,
         IServiceProvider serviceProvider,
         CancellationToken cancellationToken = default)
@@ -49,7 +46,6 @@ public class OperationRateLimitingRuleContext
         Key = key;
         Consume = consume;
         Now = now;
-        Store = store;
         RateLimitingContext = rateLimitingContext;
         ServiceProvider = serviceProvider;
         CancellationToken = cancellationToken;

@@ -16,8 +16,6 @@ public class OperationRateLimitingChecker : IOperationRateLimitingChecker, ITran
 {
     protected IOperationRateLimitingPolicyProvider PolicyProvider { get; }
 
-    protected IOperationRateLimitingStore Store { get; }
-
     protected IOperationRateLimitingPartitionKeyResolver PartitionKeyResolver { get; }
 
     protected IOperationRateLimitingFormatter Formatter { get; }
@@ -32,7 +30,6 @@ public class OperationRateLimitingChecker : IOperationRateLimitingChecker, ITran
 
     public OperationRateLimitingChecker(
         IOperationRateLimitingPolicyProvider policyProvider,
-        IOperationRateLimitingStore store,
         IOperationRateLimitingPartitionKeyResolver partitionKeyResolver,
         IOperationRateLimitingFormatter formatter,
         ICurrentTenant currentTenant,
@@ -41,7 +38,6 @@ public class OperationRateLimitingChecker : IOperationRateLimitingChecker, ITran
         IServiceProvider serviceProvider)
     {
         PolicyProvider = policyProvider;
-        Store = store;
         PartitionKeyResolver = partitionKeyResolver;
         Formatter = formatter;
         CurrentTenant = currentTenant;
@@ -143,7 +139,22 @@ public class OperationRateLimitingChecker : IOperationRateLimitingChecker, ITran
         foreach (var rule in policy.Rules)
         {
             var key = await BuildKeyAsync(policy, rule, context, cancellationToken);
-            await Store.ResetAsync(key, cancellationToken);
+            var executor = ResolveRule(rule);
+
+            if (executor is not IOperationRateLimitingRuleResetter resetter)
+            {
+                continue;
+            }
+
+            await resetter.ResetAsync(new OperationRateLimitingRuleContext(
+                policy,
+                rule,
+                key,
+                consume: false,
+                Clock.Now,
+                context,
+                ServiceProvider,
+                cancellationToken));
         }
     }
 
@@ -175,7 +186,6 @@ public class OperationRateLimitingChecker : IOperationRateLimitingChecker, ITran
                 key,
                 consume: false,
                 Clock.Now,
-                Store,
                 context,
                 ServiceProvider,
                 cancellationToken));
@@ -226,6 +236,16 @@ public class OperationRateLimitingChecker : IOperationRateLimitingChecker, ITran
         DateTimeOffset now,
         CancellationToken cancellationToken)
     {
+        if (rule.MaxCount <= 0)
+        {
+            return OperationRateLimitingStoreResult.Deny(
+                0,
+                0,
+                null,
+                rule.Duration,
+                isPermanent: true);
+        }
+
         var executor = ResolveRule(rule);
         var key = await BuildKeyAsync(policy, rule, context, cancellationToken);
 
@@ -235,7 +255,6 @@ public class OperationRateLimitingChecker : IOperationRateLimitingChecker, ITran
             key,
             consume,
             now,
-            Store,
             context,
             ServiceProvider,
             cancellationToken));
