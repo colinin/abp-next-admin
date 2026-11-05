@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<Import Project="..\..\..\..\configureawait.props" />
+	<Import Project="..\..\..\..\common.props" />
+
+	<PropertyGroup>
+		<TargetFramework>net10.0</TargetFramework>
+		<AssemblyName>LINGYUN.Abp.OperationRateLimiting.StackExchangeRedis</AssemblyName>
+		<PackageId>LINGYUN.Abp.OperationRateLimiting.StackExchangeRedis</PackageId>
+		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+		<Nullable>enable</Nullable>
+		<RootNamespace />
+		<Description>操作限流模块的 Redis 原子实现（Lua 脚本）</Description>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="StackExchange.Redis" />
+		<PackageReference Include="Volo.Abp.VirtualFileSystem" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Remove="LINGYUN\Abp\OperationRateLimiting\Redis\Lua\**\*.lua" />
+		<Content Remove="LINGYUN\Abp\OperationRateLimiting\Redis\Lua\**\*.lua" />
+		<EmbeddedResource Include="LINGYUN\Abp\OperationRateLimiting\Redis\Lua\**\*.lua" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\LINGYUN.Abp.OperationRateLimiting\LINGYUN.Abp.OperationRateLimiting.csproj" />
+	</ItemGroup>
+
+</Project>
