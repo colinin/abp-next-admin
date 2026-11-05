@@ -88,6 +88,8 @@
     "Description:Abp.Identity.AdminRoleTwoFactorForceEnabled": "The administrator role is required to use TFA when logging in.",
     "DisplayName:Abp.Identity.ProhibitDefaultAdminRole": "Prohibit the setting of the default admin role",
     "Description:Abp.Identity.ProhibitDefaultAdminRole": "It is not allowed to set the administrator role (admin) as the default role.",
+    "DisplayName:Abp.Identity.GenerateRecoveryCodeNumber": "Generate the number of recovery codes",
+    "Description:Abp.Identity.GenerateRecoveryCodeNumber": "The number of generated/replaced recovery codes after binding the two-factor identity authentication device.",
     "DisplayName:Identity.Link": "Link",
     "Description:Identity.Link": "Used for setting up external access links",
     "DisplayName:NewPhoneNumber": "New Phone Number",

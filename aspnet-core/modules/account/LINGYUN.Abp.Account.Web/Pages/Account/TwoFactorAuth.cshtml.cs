@@ -1,5 +1,6 @@
 ﻿using LINGYUN.Abp.Identity;
 using LINGYUN.Abp.Identity.Security;
+using LINGYUN.Abp.Identity.Settings;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -113,7 +114,8 @@ public class TwoFactorAuthModel : AccountPageModel
             return Page();
         }
 
-        var recoveryCodes = await UserManager.GenerateNewTwoFactorRecoveryCodesAsync(user, 10);
+        var recoveryCodeNumber = await IdentityTwoFactorBehaviourSettingHelper.GetGenerateRecoveryCodeNumber(SettingProvider);
+        var recoveryCodes = await UserManager.GenerateNewTwoFactorRecoveryCodesAsync(user, recoveryCodeNumber);
 
         user.SetProperty(UserManager.Options.Tokens.AuthenticatorTokenProvider, true);
 

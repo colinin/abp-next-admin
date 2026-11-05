@@ -88,6 +88,8 @@
     "Description:Abp.Identity.AdminRoleTwoFactorForceEnabled": "管理员角色登录时强制使用二次认证.",
     "DisplayName:Abp.Identity.ProhibitDefaultAdminRole": "禁止设置管理员默认角色",
     "Description:Abp.Identity.ProhibitDefaultAdminRole": "不允许将管理员角色(admin)设置为默认角色.",
+    "DisplayName:Abp.Identity.GenerateRecoveryCodeNumber": "生成恢复代码数量",
+    "Description:Abp.Identity.GenerateRecoveryCodeNumber": "绑定双因素身份认证设备后生成/重置恢复代码的数量.",
     "DisplayName:Identity.Link": "链接",
     "Description:Identity.Link": "用于设定外部接入链接",
     "DisplayName:NewPhoneNumber": "新手机号码",

@@ -58,7 +58,7 @@ public static class IdentitySettingNames
 
         public const string ProhibitDefaultAdminRole = SecurityPrefix + ".ProhibitDefaultAdminRole";
 
-        public const string UseCaptcha = SecurityPrefix + ".ProhibitDefaultAdminRole";
+        public const string GenerateRecoveryCodeNumber = SecurityPrefix + ".GenerateRecoveryCodeNumber";
     }
 
     public static class SignIn
