@@ -1,6 +1,8 @@
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using System.Reflection;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.DynamicProxy;
 
@@ -12,39 +14,54 @@ namespace LINGYUN.Abp.OperationRateLimiting;
 /// </summary>
 public class OperationRateLimitingInterceptor : AbpInterceptor, ITransientDependency
 {
-    protected IOperationRateLimitingChecker Checker { get; }
+    private readonly IServiceScopeFactory _serviceScopeFactory;
 
-    protected ILogger<OperationRateLimitingInterceptor> Logger { get; }
-
-    public OperationRateLimitingInterceptor(
-        IOperationRateLimitingChecker checker,
-        ILogger<OperationRateLimitingInterceptor> logger)
+    public OperationRateLimitingInterceptor(IServiceScopeFactory serviceScopeFactory)
     {
-        Checker = checker;
-        Logger = logger;
+        _serviceScopeFactory = serviceScopeFactory;
     }
 
     public override async Task InterceptAsync(IAbpMethodInvocation invocation)
     {
-        var attribute = invocation.Method.GetCustomAttribute<OperationRateLimitingAttribute>(inherit: true)
-            ?? invocation.TargetObject?.GetType().GetCustomAttribute<OperationRateLimitingAttribute>(inherit: true);
-
-        if (attribute == null)
+        using (var serviceScope = _serviceScopeFactory.CreateScope())
         {
+            var options = serviceScope.ServiceProvider.GetRequiredService<IOptions<AbpOperationRateLimitingOptions>>().Value;
+            var attribute = ResolveAttribute(invocation, options);
+            if (attribute == null)
+            {
+                await invocation.ProceedAsync();
+                return;
+            }
+
+            var checker = serviceScope.ServiceProvider.GetRequiredService<IOperationRateLimitingChecker>();
+            var logger = serviceScope.ServiceProvider.GetService<ILogger<OperationRateLimitingInterceptor>>();
+            var parameter = OperationRateLimitingParameterResolver.Resolve(
+                invocation.Method,
+                invocation.Arguments,
+                warning => logger?.LogWarning(warning));
+
+            await checker.CheckAsync(attribute!.PolicyName,
+                new OperationRateLimitingContext
+                {
+                    Parameter = parameter
+                });
+
             await invocation.ProceedAsync();
-            return;
+        }
+    }
+
+    protected virtual OperationRateLimitingAttribute? ResolveAttribute(
+        IAbpMethodInvocation invocation,
+        AbpOperationRateLimitingOptions options)
+    {
+        if (!options.IsEnabled)
+        {
+            return null;
         }
 
-        var parameter = OperationRateLimitingParameterResolver.Resolve(
-            invocation.Method,
-            invocation.Arguments,
-            warning => Logger.LogWarning(warning));
+        var attribute = invocation.Method.GetCustomAttribute<OperationRateLimitingAttribute>(inherit: true)
+            ?? invocation.Method.DeclaringType!.GetCustomAttribute<OperationRateLimitingAttribute>(inherit: true);
 
-        await Checker.CheckAsync(attribute.PolicyName, new OperationRateLimitingContext
-        {
-            Parameter = parameter
-        });
-
-        await invocation.ProceedAsync();
+        return attribute;
     }
 }

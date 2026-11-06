@@ -1,10 +1,12 @@
+﻿using Microsoft.AspNetCore.Mvc.Controllers;
+using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Controllers;
-using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.Extensions.Logging;
+using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.DependencyInjection;
 
 namespace LINGYUN.Abp.OperationRateLimiting.AspNetCore;
@@ -15,18 +17,6 @@ namespace LINGYUN.Abp.OperationRateLimiting.AspNetCore;
 /// </summary>
 public class AbpOperationRateLimitingActionFilter : IAsyncActionFilter, ITransientDependency
 {
-    protected IOperationRateLimitingChecker Checker { get; }
-
-    protected ILogger<AbpOperationRateLimitingActionFilter> Logger { get; }
-
-    public AbpOperationRateLimitingActionFilter(
-        IOperationRateLimitingChecker checker,
-        ILogger<AbpOperationRateLimitingActionFilter> logger)
-    {
-        Checker = checker;
-        Logger = logger;
-    }
-
     public virtual async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
     {
         if (context.ActionDescriptor is not ControllerActionDescriptor descriptor)
@@ -42,12 +32,15 @@ public class AbpOperationRateLimitingActionFilter : IAsyncActionFilter, ITransie
             return;
         }
 
+        var checker = context.GetRequiredService<IOperationRateLimitingChecker>();
+        var logger = context.GetService<ILogger<AbpOperationRateLimitingActionFilter>>();
+
         var parameter = OperationRateLimitingParameterResolver.Resolve(
             descriptor.MethodInfo,
             BuildArguments(descriptor, context),
-            warning => Logger.LogWarning(warning));
+            warning => logger?.LogWarning(warning));
 
-        await Checker.CheckAsync(attribute.PolicyName, new OperationRateLimitingContext
+        await checker.CheckAsync(attribute.PolicyName, new OperationRateLimitingContext
         {
             Parameter = parameter
         });
@@ -59,6 +52,12 @@ public class AbpOperationRateLimitingActionFilter : IAsyncActionFilter, ITransie
         ActionExecutingContext context,
         ControllerActionDescriptor descriptor)
     {
+        var options = context.GetRequiredService<IOptions<AbpOperationRateLimitingOptions>>().Value;
+        if (!options.IsEnabled)
+        {
+            return null;
+        }
+
         var endpointAttribute = context.ActionDescriptor.EndpointMetadata
             .OfType<OperationRateLimitingAttribute>()
             .FirstOrDefault();
