@@ -1,8 +1,8 @@
-{
+﻿{
   "culture": "en",
   "texts": {
-    "Volo.Abp.OperationRateLimiting:010001": "Operation rate limit exceeded. Please try again later.",
-    "Volo.Abp.OperationRateLimiting:010002": "Operation rate limit exceeded. This request is permanently denied.",
+    "OperationRateLimiting:010001": "Operation rate limit exceeded. Please try again later.",
+    "OperationRateLimiting:010002": "Operation rate limit exceeded. This request is permanently denied.",
     "DurationFormat.Days": "{0} days {1} hours",
     "DurationFormat.Hours": "{0} hours {1} minutes",
     "DurationFormat.Minutes": "{0} minutes {1} seconds",

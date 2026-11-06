@@ -56,7 +56,7 @@ public class AbpOperationRateLimitingModule : AbpModule
 
         Configure<AbpExceptionLocalizationOptions>(options =>
         {
-            options.MapCodeNamespace("Volo.Abp.OperationRateLimiting", typeof(OperationRateLimitingResource));
+            options.MapCodeNamespace(AbpOperationRateLimitingErrorCodes.Namespace, typeof(OperationRateLimitingResource));
         });
 
         // Policies loaded from a database are merged with the statically defined ones.

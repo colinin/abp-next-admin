@@ -15,13 +15,8 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<None Remove="LINGYUN\Abp\OperationRateLimiting\Localization\Resources\en.json" />
-		<None Remove="LINGYUN\Abp\OperationRateLimiting\Localization\Resources\zh-Hans.json" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<EmbeddedResource Include="LINGYUN\Abp\OperationRateLimiting\Localization\Resources\en.json" />
-		<EmbeddedResource Include="LINGYUN\Abp\OperationRateLimiting\Localization\Resources\zh-Hans.json" />
+		<None Remove="LINGYUN\Abp\OperationRateLimiting\Localization\Resources\*.json" />
+		<EmbeddedResource Include="LINGYUN\Abp\OperationRateLimiting\Localization\Resources\*.json" />
 	</ItemGroup>
 
 	<ItemGroup>

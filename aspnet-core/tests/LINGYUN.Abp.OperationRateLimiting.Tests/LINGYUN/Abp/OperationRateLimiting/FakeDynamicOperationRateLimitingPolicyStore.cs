@@ -23,9 +23,4 @@ public class FakeDynamicOperationRateLimitingPolicyStore : IDynamicOperationRate
     {
         return Task.FromResult(State.Policies.TryGetValue(name, out var policy) ? policy : null);
     }
-
-    public Task InvalidateCacheAsync(CancellationToken cancellationToken = default)
-    {
-        return Task.CompletedTask;
-    }
 }

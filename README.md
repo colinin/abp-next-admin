@@ -214,8 +214,7 @@ apps/vben5/
 │   │   ├── platform/  project/  system-info/  demo/  # 平台、项目、系统信息、示例
 │   │   ├── realtime-message/  realtime-notifications/  # 即时消息、实时通知
 │   │   ├── task-management/  rules-management/  webhooks/  # 后台任务、规则引擎、Webhook
-│   │   ├── operation-rate-limiting/  # 操作限流策略管理（Application / HttpApi / EF Core）
-│   │   ├── ai/  elsa/           # AI 能力、工作流（Elsa）
+│   │   ├── operation-rate-limiting/                     # 操作级限流（固定/滑动窗口、令牌桶、并发、Redis Lua 原子实现）│   │   ├── ai/  elsa/           # AI 能力、工作流（Elsa）
 │   ├── framework/               # 基础框架包（34 个分组），常用分组：
 │   │   ├── common/  core 相关基础包（LINGYUN.Abp.Core、CAP、Hangfire、BlobStoring、SignalR ...）
 │   │   ├── security/  authentication/  authorization/   # 安全、登录方式、授权

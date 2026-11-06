@@ -18,9 +18,4 @@ public interface IDynamicOperationRateLimitingPolicyStore
     Task<IReadOnlyList<OperationRateLimitingPolicy>> GetPoliciesAsync(CancellationToken cancellationToken = default);
 
     Task<OperationRateLimitingPolicy?> GetOrNullAsync(string name, CancellationToken cancellationToken = default);
-
-    /// <summary>
-    /// Removes the cached definitions, so the next call reloads them from the storage.
-    /// </summary>
-    Task InvalidateCacheAsync(CancellationToken cancellationToken = default);
 }

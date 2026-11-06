@@ -215,8 +215,7 @@ apps/vben5/
 │   │   ├── platform/  project/  system-info/  demo/  # Platform, project, system info, demo
 │   │   ├── realtime-message/  realtime-notifications/  # Instant messaging and real-time notifications
 │   │   ├── task-management/  rules-management/  webhooks/  # Background tasks, rules engine, webhooks
-│   │   ├── operation-rate-limiting/  # Operation rate limiting policy management (Application / HttpApi / EF Core)
-│   │   ├── ai/  elsa/           # AI capabilities and workflow (Elsa)
+│   │   ├── operation-rate-limiting/                     # Operation rate limiting (fixed/sliding window, token bucket, concurrency, Redis Lua atomic store)│   │   ├── ai/  elsa/           # AI capabilities and workflow (Elsa)
 │   ├── framework/               # Base framework packages (34 groups), the most used ones:
 │   │   ├── common/  core packages (LINGYUN.Abp.Core, CAP, Hangfire, BlobStoring, SignalR ...)
 │   │   ├── security/  authentication/  authorization/   # Security, sign-in methods, authorization

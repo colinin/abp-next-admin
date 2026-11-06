@@ -27,17 +27,6 @@ Unlike the [ASP.NET Core rate limiting middleware](https://learn.microsoft.com/e
 | `LINGYUN.Abp.OperationRateLimiting.AspNetCore` | Base library: MVC action filter and client IP resolution |
 | `LINGYUN.Abp.OperationRateLimiting.StackExchangeRedis` | Base library: atomic Redis store implemented with Lua scripts |
 
-Policy management (Application / HttpApi / EF Core repository) lives in `modules/operation-rate-limiting`:
-
-| Project | Description |
-| --- | --- |
-| `LINGYUN.Abp.OperationRateLimiting.Domain.Shared` | Constants, error codes, ETOs such as `OperationRateLimitingPolicyChangedEto`, front-end localization resources |
-| `LINGYUN.Abp.OperationRateLimiting.Domain` | Dynamic policy/rule entities and repository abstraction |
-| `LINGYUN.Abp.OperationRateLimiting.EntityFrameworkCore` | EF Core repository, cached dynamic policy store, `DbContext` configuration |
-| `LINGYUN.Abp.OperationRateLimiting.Application.Contracts` | DTOs, permissions, app service contracts, localization |
-| `LINGYUN.Abp.OperationRateLimiting.Application` | Policy CRUD app service (invalidates the dynamic policy cache after writes) |
-| `LINGYUN.Abp.OperationRateLimiting.HttpApi` | Policy management REST API |
-
 ## Quick start
 
 ```csharp
@@ -123,7 +112,7 @@ public class MyModule : AbpModule { }
 * Each built-in algorithm is one Lua script executed inside Redis (fixed window `GET/SET`, sliding window `ZSET`, token bucket `HASH`, concurrency `ZSET`) returning allowed/current/remaining/retry values.
 * Custom algorithm states are updated with a Lua compare-and-set loop, so they are atomic as well.
 * `ConfigurationOptions` allows advanced connection settings; `InstanceName` prefixes every key.
-* Replacing `IOperationRateLimitingStore` is transparent to the rest of the module.
+* Replacing `IOperationRateLimitingStateAccessor` is transparent to the rest of the module.
 
 ## Partitions
 
@@ -193,44 +182,16 @@ Counters are shared across tenants by default. `WithMultiTenancy()` adds the cur
 
 Partition values appear in cache keys as-is; do not use secrets as partition values.
 
-## Dynamic policies (database, in modules/operation-rate-limiting)
+## Dynamic policies
 
-Dynamic policy persistence, app services and the REST API live in `modules/operation-rate-limiting`; the base library keeps only the `IDynamicOperationRateLimitingPolicyStore` abstraction and the merge logic. Reference `LINGYUN.Abp.OperationRateLimiting.EntityFrameworkCore` and depend on `AbpOperationRateLimitingEntityFrameworkCoreModule`.
+The base library keeps only the `IDynamicOperationRateLimitingPolicyStore` abstraction and the merge logic. It does not ship database entities, an EF Core repository, a management API or migrations. To load dynamic policies from a database/configuration source, implement the interface and replace the default empty implementation.
 
-```csharp
-Configure<AbpDbContextOptions>(options =>
-{
-    options.Configure<OperationRateLimitingDbContext>(context =>
-    {
-        context.DbContextOptions.UseSqlServer(connectionString);
-    });
-});
-```
+Static and dynamic policies are provided by `IStaticOperationRateLimitingPolicyStore` and `IDynamicOperationRateLimitingPolicyStore` and merged by `IOperationRateLimitingPolicyManager` (default implementation `OperationRateLimitingPolicyManager`) through `LINGYUN.Abp.Dynamic.Definitions` (`DynamicDefinitionStrategy.Merge` by default):
 
-Or add the entities to an existing `DbContext` (two tables: `OperationRateLimitingPolicies` and `OperationRateLimitingPolicyRules`) and call `builder.ConfigureOperationRateLimiting()`.
+* `IStaticOperationRateLimitingPolicyStore` defaults to `StaticOperationRateLimitingPolicyStore`, which reads `AbpOperationRateLimitingOptions.Policies`; replace it to load static policies from configuration, files, etc.
+* `IDynamicOperationRateLimitingPolicyStore` defaults to an empty store; a custom implementation owns its loading and cache invalidation.
 
-```csharp
-var record = new OperationRateLimitingPolicyRecord(GuidGenerator.Create(), "DynamicPolicy", CurrentTenant.Id);
-record.SetRules(new[]
-{
-    new OperationRateLimitingRuleRecord(GuidGenerator.Create(), record.Id, OperationRateLimitingAlgorithms.FixedWindow)
-    {
-        Duration = TimeSpan.FromMinutes(1),
-        MaxCount = 5,
-        PartitionType = OperationRateLimitingPartitionType.Parameter
-    }
-});
-await _policyRecordRepository.InsertAsync(record);
-
-await _dynamicPolicyStore.InvalidateCacheAsync();
-```
-
-Static and database policies are provided by `IStaticOperationRateLimitingPolicyStore` and `IDynamicOperationRateLimitingPolicyStore` and merged by `IOperationRateLimitingPolicyManager` (default implementation `OperationRateLimitingPolicyManager`) through `LINGYUN.Abp.Dynamic.Definitions` (`DynamicDefinitionStrategy.Merge` by default):
-
-* `IStaticOperationRateLimitingPolicyStore` defaults to `OptionsOperationRateLimitingPolicyStore`, which reads `AbpOperationRateLimitingOptions.Policies`; replace it to load static policies from configuration, files, etc.
-* `IDynamicOperationRateLimitingPolicyStore` defaults to an empty store; referencing the management EF Core project replaces it with `EfCoreOperationRateLimitingPolicyStore`.
-
-For a policy defined in both places, the database `DisplayName`, `ErrorCode` and `IsEnabled` override the static values and a non-empty database rule list replaces the static rules. Dynamic definitions are cached for 5 minutes per tenant.
+For a policy defined in both places, the dynamic `DisplayName`, `ErrorCode` and `IsEnabled` override the static values and a non-empty dynamic rule list replaces the static rules.
 
 ## Extensibility
 
@@ -257,4 +218,3 @@ When globally disabled, `CheckAsync`/`ResetAsync` do nothing, `IsAllowedAsync` r
 
 * Single instance works out of the box (ABP's `LocalAbpDistributedLock` is used by default), or use the Redis store for atomicity without a lock.
 * Multi-instance deployments must use the Redis store, or replace `IAbpDistributedLock` with a real distributed lock provider and use a distributed cache (e.g. Redis) for the counters.
-* Policies are stored in the `OperationRateLimitingPolicies` table and their rules in `OperationRateLimitingPolicyRules` (the `Properties` column is JSON); generate a migration for your database provider.

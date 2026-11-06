@@ -27,17 +27,6 @@
 | `LINGYUN.Abp.OperationRateLimiting.AspNetCore` | 基础库：MVC 控制器 `[OperationRateLimiting]` 过滤器、客户端 IP 解析 |
 | `LINGYUN.Abp.OperationRateLimiting.StackExchangeRedis` | 基础库：基于 Redis + Lua 的原子存储实现 |
 
-策略管理（Application / HttpApi / EF Core 仓储）位于 `modules/operation-rate-limiting`：
-
-| 项目 | 说明 |
-| --- | --- |
-| `LINGYUN.Abp.OperationRateLimiting.Domain.Shared` | 常量、错误码、`OperationRateLimitingPolicyChangedEto` 等 ETO、前端本地化资源 |
-| `LINGYUN.Abp.OperationRateLimiting.Domain` | 动态策略/规则实体与仓储接口 |
-| `LINGYUN.Abp.OperationRateLimiting.EntityFrameworkCore` | 动态策略 EF Core 仓储与缓存存储、`DbContext` 配置扩展 |
-| `LINGYUN.Abp.OperationRateLimiting.Application.Contracts` | DTO、权限、应用服务接口、本地化 |
-| `LINGYUN.Abp.OperationRateLimiting.Application` | 策略 CRUD 应用服务（保存后自动失效动态策略缓存） |
-| `LINGYUN.Abp.OperationRateLimiting.HttpApi` | 策略管理 REST API |
-
 ## 快速开始
 
 在模块中依赖 `AbpOperationRateLimitingModule`，并在 `ConfigureServices` 中定义策略：
@@ -263,67 +252,18 @@ options.AddPolicy("BlockedUser", policy =>
 
 > 分区值会原样出现在缓存键中。请勿使用密码等敏感值作为分区键；敏感标识请使用自定义解析器返回不可逆的稳定值。
 
-## 动态策略仓储（数据库，位于 modules/operation-rate-limiting）
+## 动态策略
 
-动态策略的实体、EF Core 仓储、应用服务与 REST API 位于 `modules/operation-rate-limiting`，基础库只保留 `IDynamicOperationRateLimitingPolicyStore` 抽象与合并逻辑。引用 `LINGYUN.Abp.OperationRateLimiting.EntityFrameworkCore` 并依赖 `AbpOperationRateLimitingEntityFrameworkCoreModule`。
+基础库只保留 `IDynamicOperationRateLimitingPolicyStore` 抽象和策略合并逻辑，不包含数据库实体、EF Core 仓储、管理 API 或对应迁移。需要从数据库/配置中心加载动态策略时，实现该接口并通过 DI 替换默认的空实现即可。
 
-使用模块自带的 `OperationRateLimitingDbContext`：
+静态策略与动态策略分别由 `IStaticOperationRateLimitingPolicyStore`、`IDynamicOperationRateLimitingPolicyStore` 提供，再由 `IOperationRateLimitingPolicyManager`（默认实现 `OperationRateLimitingPolicyManager`）通过 `LINGYUN.Abp.Dynamic.Definitions` 合并，默认策略为 `Merge`：
 
-```csharp
-Configure<AbpDbContextOptions>(options =>
-{
-    options.Configure<OperationRateLimitingDbContext>(context =>
-    {
-        context.DbContextOptions.UseSqlServer(connectionString);
-    });
-});
-```
+* `IStaticOperationRateLimitingPolicyStore` 默认实现为 `StaticOperationRateLimitingPolicyStore`，从 `AbpOperationRateLimitingOptions.Policies` 读取；可替换为配置中心、文件等来源。
+* `IDynamicOperationRateLimitingPolicyStore` 默认是空实现；自定义实现负责加载策略并管理自己的缓存失效。
 
-或加入现有 `DbContext`：
-
-```csharp
-public class MyDbContext : AbpDbContext<MyDbContext>, IOperationRateLimitingDbContext
-{
-    public DbSet<OperationRateLimitingPolicyRecord> OperationRateLimitingPolicies { get; set; }
-    public DbSet<OperationRateLimitingRuleRecord> OperationRateLimitingPolicyRules { get; set; }
-
-    protected override void OnModelCreating(ModelBuilder builder)
-    {
-        base.OnModelCreating(builder);
-        builder.ConfigureOperationRateLimiting();
-    }
-}
-```
-
-写入/更新策略：
-
-```csharp
-var record = new OperationRateLimitingPolicyRecord(GuidGenerator.Create(), "DynamicPolicy", CurrentTenant.Id);
-record.SetRules(new[]
-{
-    new OperationRateLimitingRuleRecord(GuidGenerator.Create(), record.Id, OperationRateLimitingAlgorithms.FixedWindow)
-    {
-        Duration = TimeSpan.FromMinutes(1),
-        MaxCount = 5,
-        PartitionType = OperationRateLimitingPartitionType.Parameter
-    }
-});
-await _policyRecordRepository.InsertAsync(record);
-
-// 使缓存失效，下一次检查立即加载新策略
-await _dynamicPolicyStore.InvalidateCacheAsync();
-```
-
-静态策略与数据库策略分别由 `IStaticOperationRateLimitingPolicyStore`、`IDynamicOperationRateLimitingPolicyStore` 提供，再由 `IOperationRateLimitingPolicyManager`（默认实现 `OperationRateLimitingPolicyManager`）通过 `LINGYUN.Abp.Dynamic.Definitions` 的 `DynamicDefinitionManager` 合并，默认策略为 `Merge`：
-
-* `IStaticOperationRateLimitingPolicyStore` 默认实现为 `OptionsOperationRateLimitingPolicyStore`，从 `AbpOperationRateLimitingOptions.Policies` 读取；可替换为配置中心、文件等来源。
-* `IDynamicOperationRateLimitingPolicyStore` 默认是空实现，引用管理模块的 EF Core 工程后由 `EfCoreOperationRateLimitingPolicyStore` 替换。
-
-* 同名策略：数据库中的 `DisplayName`、`ErrorCode`、`IsEnabled` 覆盖静态值；数据库规则列表非空时整体替换规则。
-* 仅数据库存在的策略直接生效。
+* 同名策略：动态策略的 `DisplayName`、`ErrorCode`、`IsEnabled` 覆盖静态值；动态规则列表非空时整体替换规则。
+* 仅动态源存在的策略直接生效。
 * 合并策略可通过 `Configure<AbpDynamicDefinitionsOptions>(o => o.MapStrategy<OperationRateLimitingPolicy>(DynamicDefinitionStrategy.Dynamic))` 调整。
-
-策略读取带 5 分钟绝对过期缓存（按租户隔离）。管理端修改数据库后请调用 `InvalidateCacheAsync`，或等待缓存过期。
 
 ## 扩展
 
@@ -446,11 +386,10 @@ Configure<AbpOperationRateLimitingOptions>(options =>
 * **单机默认可用**：默认使用 ABP 的 `LocalAbpDistributedLock`（进程内键控锁），单实例无需额外配置。
 * **多实例必须替换为真正的分布式锁**（Redis / Medallion / 数据库锁等），否则跨实例的原子性无法保证。
 * **多实例请使用分布式缓存**（如 Redis）存储计数，`AbpCachingModule` 默认的内存缓存只在单实例内一致。
-* 数据库表：`OperationRateLimitingPolicies`（策略）与 `OperationRateLimitingPolicyRules`（规则，`Properties` 为 JSON 列）；请按项目使用的数据库生成迁移。
-* 策略缓存按租户隔离；`InvalidateCacheAsync` 只清理当前租户的缓存。
+* 策略缓存由动态策略实现自行管理，基础库不提供统一的缓存失效接口。
 
 ## 与设计文档的差异
 
 * 错误码常量值、HTTP 429、异常数据键、四种算法、分区类型、多规则与声明式用法均与文档一致。
-* 四种算法分别在各自的规则类中实现，状态读写由 `IOperationRateLimitingStateAccessor` 提供（默认分布式锁，Redis 使用 Lua CAS/Lua 原子脚本），不再需要按算法名 switch 的存储层。文档中的 `IncrementAsync(key, duration, maxCount)` 仅能表达固定窗口。
-* 文档中的“动态策略仓储”只描述了 `AddPolicy(OperationRateLimitingPolicy)` 与自定义 `IOperationRateLimitingPolicyProvider`；本模块把实体、EF Core 仓储、应用服务、REST API 拆到 `modules/operation-rate-limiting`，并复用 `LINGYUN.Abp.Dynamic.Definitions` 的合并策略。
+* 四种算法分别在各自的规则类中实现，状态读写由 `IOperationRateLimitingStateAccessor` 提供（默认分布式锁，Redis 规则使用 Lua 原子脚本），不再需要按算法名 switch 的存储层。文档中的 `IncrementAsync(key, duration, maxCount)` 仅能表达固定窗口。
+* 文档中的“动态策略仓储”只描述了 `AddPolicy(OperationRateLimitingPolicy)` 与自定义 `IOperationRateLimitingPolicyProvider`；本模块额外提供 `IStaticOperationRateLimitingPolicyStore`、`IDynamicOperationRateLimitingPolicyStore` 抽象，并复用 `LINGYUN.Abp.Dynamic.Definitions` 的合并策略。
