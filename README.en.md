@@ -215,8 +215,8 @@ apps/vben5/
 │   │   ├── platform/  project/  system-info/  demo/  # Platform, project, system info, demo
 │   │   ├── realtime-message/  realtime-notifications/  # Instant messaging and real-time notifications
 │   │   ├── task-management/  rules-management/  webhooks/  # Background tasks, rules engine, webhooks
-│   │   ├── ai/  elsa/           # AI capabilities and workflow (Elsa)
-│   ├── framework/               # Base framework packages (33 groups), the most used ones:
+│   │   ├── operation-rate-limiting/                     # Operation rate limiting (fixed/sliding window, token bucket, concurrency, Redis Lua atomic store)│   │   ├── ai/  elsa/           # AI capabilities and workflow (Elsa)
+│   ├── framework/               # Base framework packages (34 groups), the most used ones:
 │   │   ├── common/  core packages (LINGYUN.Abp.Core, CAP, Hangfire, BlobStoring, SignalR ...)
 │   │   ├── security/  authentication/  authorization/   # Security, sign-in methods, authorization
 │   │   ├── auditing/  logging/  telemetry/              # Auditing, logging, tracing (OpenTelemetry/SkyWalking)
@@ -225,6 +225,7 @@ apps/vben5/
 │   │   ├── cloud-aliyun/  cloud-tencent/                # Aliyun and Tencent Cloud integration
 │   │   ├── dapr/  elasticsearch/  efcore/  data-protection/  # Dapr, Elasticsearch, EF Core, data protection
 │   │   ├── dynamic-queryable/  dynamic-definition/  exporter/  # Dynamic query, dynamic definitions, import/export
+│   │   ├── operation-rate-limiting/                     # Operation rate limiting (fixed/sliding window, token bucket, concurrency, Redis Lua atomic store)
 │   │   ├── localization/  settings/  features/  mvc/  open-api/  cli/  ...  # Other base packages
 │   ├── migrations/              # DbMigrator and EntityFrameworkCore migration projects of each service (run by deploy.ps1)
 │   ├── aspire/                  # .NET Aspire: LINGYUN.Abp.MicroService.AppHost and the Aspire hosts of each service

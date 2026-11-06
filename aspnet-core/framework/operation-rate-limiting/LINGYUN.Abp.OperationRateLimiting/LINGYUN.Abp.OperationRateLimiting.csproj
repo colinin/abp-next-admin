@@ -1,0 +1,38 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<Import Project="..\..\..\..\configureawait.props" />
+	<Import Project="..\..\..\..\common.props" />
+
+	<PropertyGroup>
+		<TargetFramework>net10.0</TargetFramework>
+		<AssemblyName>LINGYUN.Abp.OperationRateLimiting</AssemblyName>
+		<PackageId>LINGYUN.Abp.OperationRateLimiting</PackageId>
+		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+		<Nullable>enable</Nullable>
+		<RootNamespace />
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Remove="LINGYUN\Abp\OperationRateLimiting\Localization\Resources\*.json" />
+		<EmbeddedResource Include="LINGYUN\Abp\OperationRateLimiting\Localization\Resources\*.json" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.Caching" />
+		<PackageReference Include="Volo.Abp.DistributedLocking.Abstractions" />
+		<PackageReference Include="Volo.Abp.ExceptionHandling" />
+		<PackageReference Include="Volo.Abp.Localization" />
+		<PackageReference Include="Volo.Abp.MultiTenancy" />
+		<PackageReference Include="Volo.Abp.Security" />
+		<PackageReference Include="Volo.Abp.Timing" />
+		<PackageReference Include="Volo.Abp.VirtualFileSystem" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\LINGYUN.Abp.OperationRateLimiting.Abstractions\LINGYUN.Abp.OperationRateLimiting.Abstractions.csproj" />
+		<ProjectReference Include="..\..\dynamic-definition\LINGYUN.Abp.Dynamic.Definitions.Core\LINGYUN.Abp.Dynamic.Definitions.Core.csproj" />
+	</ItemGroup>
+
+</Project>

@@ -214,8 +214,8 @@ apps/vben5/
 │   │   ├── platform/  project/  system-info/  demo/  # 平台、项目、系统信息、示例
 │   │   ├── realtime-message/  realtime-notifications/  # 即时消息、实时通知
 │   │   ├── task-management/  rules-management/  webhooks/  # 后台任务、规则引擎、Webhook
-│   │   ├── ai/  elsa/           # AI 能力、工作流（Elsa）
-│   ├── framework/               # 基础框架包（33 个分组），常用分组：
+│   │   ├── operation-rate-limiting/                     # 操作级限流（固定/滑动窗口、令牌桶、并发、Redis Lua 原子实现）│   │   ├── ai/  elsa/           # AI 能力、工作流（Elsa）
+│   ├── framework/               # 基础框架包（34 个分组），常用分组：
 │   │   ├── common/  core 相关基础包（LINGYUN.Abp.Core、CAP、Hangfire、BlobStoring、SignalR ...）
 │   │   ├── security/  authentication/  authorization/   # 安全、登录方式、授权
 │   │   ├── auditing/  logging/  telemetry/              # 审计、日志、链路追踪（OpenTelemetry/SkyWalking）
@@ -224,6 +224,7 @@ apps/vben5/
 │   │   ├── cloud-aliyun/  cloud-tencent/                # 阿里云、腾讯云集成
 │   │   ├── dapr/  elasticsearch/  efcore/  data-protection/  # Dapr、ES、EF Core、数据保护
 │   │   ├── dynamic-queryable/  dynamic-definition/  exporter/  # 动态查询、动态定义、导入导出
+│   │   ├── operation-rate-limiting/                     # 操作级限流（固定/滑动窗口、令牌桶、并发、Redis Lua 原子实现）
 │   │   ├── localization/  settings/  features/  mvc/  open-api/  cli/  ...  # 其它基础包
 │   ├── migrations/              # 各服务的 DbMigrator 与 EntityFrameworkCore 迁移项目（deploy.ps1 会依次执行）
 │   ├── aspire/                  # .NET Aspire：LINGYUN.Abp.MicroService.AppHost 及各服务的 Aspire 宿主

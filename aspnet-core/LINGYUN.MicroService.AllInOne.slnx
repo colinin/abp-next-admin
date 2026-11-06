@@ -105,6 +105,12 @@
   <Folder Name="/framework/open-observe/">
     <Project Path="framework/open-observe/LINGYUN.Abp.OpenObserve/LINGYUN.Abp.OpenObserve.csproj" />
   </Folder>
+  <Folder Name="/framework/operation-rate-limiting/">
+    <Project Path="framework/operation-rate-limiting/LINGYUN.Abp.OperationRateLimiting.Abstractions/LINGYUN.Abp.OperationRateLimiting.Abstractions.csproj" />
+    <Project Path="framework/operation-rate-limiting/LINGYUN.Abp.OperationRateLimiting/LINGYUN.Abp.OperationRateLimiting.csproj" />
+    <Project Path="framework/operation-rate-limiting/LINGYUN.Abp.OperationRateLimiting.AspNetCore/LINGYUN.Abp.OperationRateLimiting.AspNetCore.csproj" />
+    <Project Path="framework/operation-rate-limiting/LINGYUN.Abp.OperationRateLimiting.StackExchangeRedis/LINGYUN.Abp.OperationRateLimiting.StackExchangeRedis.csproj" />
+  </Folder>
   <Folder Name="/framework/realtime/">
     <Project Path="framework/common/LINGYUN.Abp.RealTime/LINGYUN.Abp.RealTime.csproj" />
     <Project Path="modules/realtime-message/LINGYUN.Abp.IM.SignalR/LINGYUN.Abp.IM.SignalR.csproj" />

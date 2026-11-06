@@ -1,0 +1,12 @@
+﻿{
+  "culture": "zh-Hans",
+  "texts": {
+    "OperationRateLimiting:010001": "操作超过频率限制，请稍后重试。",
+    "OperationRateLimiting:010002": "操作超过频率限制，此请求已被永久拒绝。",
+    "DurationFormat.Days": "{0} 天 {1} 小时",
+    "DurationFormat.Hours": "{0} 小时 {1} 分钟",
+    "DurationFormat.Minutes": "{0} 分钟 {1} 秒",
+    "DurationFormat.Seconds": "{0} 秒",
+    "DurationFormat.Milliseconds": "{0} 毫秒"
+  }
+}

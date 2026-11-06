@@ -1,0 +1,12 @@
+﻿{
+  "culture": "en",
+  "texts": {
+    "OperationRateLimiting:010001": "Operation rate limit exceeded. Please try again later.",
+    "OperationRateLimiting:010002": "Operation rate limit exceeded. This request is permanently denied.",
+    "DurationFormat.Days": "{0} days {1} hours",
+    "DurationFormat.Hours": "{0} hours {1} minutes",
+    "DurationFormat.Minutes": "{0} minutes {1} seconds",
+    "DurationFormat.Seconds": "{0} seconds",
+    "DurationFormat.Milliseconds": "{0} milliseconds"
+  }
+}
