@@ -36,6 +36,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\LINGYUN.Abp.OperationRateLimiting.Abstractions\LINGYUN.Abp.OperationRateLimiting.Abstractions.csproj" />
 		<ProjectReference Include="..\..\dynamic-definition\LINGYUN.Abp.Dynamic.Definitions.Core\LINGYUN.Abp.Dynamic.Definitions.Core.csproj" />
 	</ItemGroup>
 

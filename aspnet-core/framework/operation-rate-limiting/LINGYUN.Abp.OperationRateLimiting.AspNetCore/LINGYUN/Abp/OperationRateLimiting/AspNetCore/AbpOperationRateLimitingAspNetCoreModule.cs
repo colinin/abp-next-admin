@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.AspNetCore.Mvc;
 using Volo.Abp.Modularity;
@@ -13,10 +13,6 @@ public class AbpOperationRateLimitingAspNetCoreModule : AbpModule
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         context.Services.AddTransient<AbpOperationRateLimitingActionFilter>();
-
-        context.Services.AddTransient<
-            IOperationRateLimitingClientInfoProvider,
-            HttpContextOperationRateLimitingClientInfoProvider>();
 
         Configure<MvcOptions>(options =>
         {

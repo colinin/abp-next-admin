@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using LINGYUN.Abp.OperationRateLimiting.Algorithms.SlidingWindow;
 using LINGYUN.Abp.OperationRateLimiting.Algorithms.TokenBucket;
@@ -87,7 +87,6 @@ public class OperationRateLimitingPolicyBuilder
         var definition = new OperationRateLimitingRuleDefinition
         {
             Algorithm = algorithmName,
-            RuleType = typeof(TRule)
         };
         Policy.Rules.Add(definition);
 
@@ -197,7 +196,7 @@ public class OperationRateLimitingPolicyBuilder
             OperationRateLimitingRuleDefinitionTokenBucketExtensions.Validate(rule, Policy.Name);
         }
 
-        if (rule.RuleType == null && Options.GetAlgorithmType(rule.Algorithm) == null)
+        if (Options.GetAlgorithmType(rule.Algorithm) == null)
         {
             throw new AbpException($"Undefined operation rate limiting algorithm: {rule.Algorithm}. Register it with options.AddAlgorithm first.");
         }

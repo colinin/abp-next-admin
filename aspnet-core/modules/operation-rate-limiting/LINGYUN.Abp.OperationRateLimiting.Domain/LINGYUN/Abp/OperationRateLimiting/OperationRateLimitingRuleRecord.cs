@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.MultiTenancy;
@@ -19,9 +19,9 @@ public class OperationRateLimitingRuleRecord : Entity<Guid>, IMultiTenant
     /// </summary>
     public string? Name { get; set; }
 
-    public string Algorithm { get; set; } = OperationRateLimitingAlgorithms.FixedWindow;
+    public string Algorithm { get; set; } = default!;
 
-    public TimeSpan Duration { get; set; } = TimeSpan.FromMinutes(1);
+    public TimeSpan Duration { get; set; }
 
     public int MaxCount { get; set; } = 1;
 
@@ -30,7 +30,7 @@ public class OperationRateLimitingRuleRecord : Entity<Guid>, IMultiTenant
     /// </summary>
     public int SortOrder { get; set; }
 
-    public OperationRateLimitingPartitionType PartitionType { get; set; } = OperationRateLimitingPartitionType.Parameter;
+    public OperationRateLimitingPartitionType PartitionType { get; set; }
 
     public string? PartitionResolverName { get; set; }
 
@@ -47,9 +47,15 @@ public class OperationRateLimitingRuleRecord : Entity<Guid>, IMultiTenant
     {
     }
 
-    public OperationRateLimitingRuleRecord(Guid id, Guid policyId, string algorithm, Guid? tenantId = null)
+    public OperationRateLimitingRuleRecord(
+        Guid id, 
+        Guid policyId, 
+        string? name,
+        string algorithm, 
+        Guid? tenantId = null)
         : base(id)
     {
+        Name = name;
         PolicyId = policyId;
         Algorithm = algorithm;
         TenantId = tenantId;

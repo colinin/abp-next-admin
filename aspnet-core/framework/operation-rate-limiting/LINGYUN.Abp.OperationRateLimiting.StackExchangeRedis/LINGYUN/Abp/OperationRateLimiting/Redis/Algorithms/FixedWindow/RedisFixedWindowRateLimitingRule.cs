@@ -1,17 +1,16 @@
-﻿using System;
+﻿using StackExchange.Redis;
+using System;
 using System.Threading.Tasks;
-using StackExchange.Redis;
 
 namespace LINGYUN.Abp.OperationRateLimiting.Redis.Algorithms.FixedWindow;
 
-public class RedisFixedWindowRateLimitingRule : RedisOperationRateLimitingRuleBase
+public class RedisFixedWindowRateLimitingRule : StackExchangeRedisOperationRateLimitingRuleBase
 {
     protected const string ScriptPath = "/LINGYUN/Abp/OperationRateLimiting/Redis/Lua/FixedWindow/fixed-window.lua";
 
     public RedisFixedWindowRateLimitingRule(
-        StackExchangeRedisOperationRateLimitingExecutor executor,
-        IOperationRateLimitingStateAccessor stateAccessor)
-        : base(executor, stateAccessor)
+        StackExchangeRedisOperationRateLimitingExecutor executor)
+        : base(executor)
     {
     }
 

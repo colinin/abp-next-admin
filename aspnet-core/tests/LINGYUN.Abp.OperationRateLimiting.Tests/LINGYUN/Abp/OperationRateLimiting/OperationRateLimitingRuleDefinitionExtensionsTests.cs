@@ -1,6 +1,4 @@
-using System;
-using LINGYUN.Abp.OperationRateLimiting.Algorithms.Concurrency;
-using LINGYUN.Abp.OperationRateLimiting.Algorithms.FixedWindow;
+﻿using System;
 using LINGYUN.Abp.OperationRateLimiting.Algorithms.SlidingWindow;
 using LINGYUN.Abp.OperationRateLimiting.Algorithms.TokenBucket;
 using Shouldly;
@@ -23,7 +21,7 @@ public class OperationRateLimitingRuleDefinitionExtensionsTests
         rule.Duration.ShouldBe(TimeSpan.FromSeconds(5));
         rule.MaxCount.ShouldBe(2);
         rule.Properties.ShouldBeEmpty();
-        OperationRateLimitingRuleDefinitionFixedWindowExtensions.GetKeyDescriptor(rule).ShouldNotBeNullOrEmpty();
+        rule.GetRuleKeyDescriptor().ShouldNotBeNullOrEmpty();
     }
 
     [Fact]
@@ -36,10 +34,10 @@ public class OperationRateLimitingRuleDefinitionExtensionsTests
             MaxCount = 10
         };
 
-        OperationRateLimitingRuleDefinitionSlidingWindowExtensions.SetSegments(rule, 5);
+        rule.SetSegments(5);
 
         rule.GetPropertyOrNull("SlidingWindow:Segments").ShouldBe("5");
-        OperationRateLimitingRuleDefinitionSlidingWindowExtensions.GetSegments(rule).ShouldBe(5);
+        rule.GetSegments().ShouldBe(5);
     }
 
     [Fact]
@@ -52,10 +50,10 @@ public class OperationRateLimitingRuleDefinitionExtensionsTests
             MaxCount = 3
         };
 
-        OperationRateLimitingRuleDefinitionTokenBucketExtensions.SetTokensPerPeriod(rule, 2);
+        rule.SetTokensPerPeriod(2);
 
         rule.GetPropertyOrNull("TokenBucket:TokensPerPeriod").ShouldBe("2");
-        OperationRateLimitingRuleDefinitionTokenBucketExtensions.GetTokensPerPeriod(rule).ShouldBe(2);
+        rule.GetTokensPerPeriod().ShouldBe(2);
     }
 
     [Fact]
@@ -71,6 +69,6 @@ public class OperationRateLimitingRuleDefinitionExtensionsTests
         rule.Duration.ShouldBe(TimeSpan.FromSeconds(30));
         rule.MaxCount.ShouldBe(4);
         rule.Properties.ShouldBeEmpty();
-        OperationRateLimitingRuleDefinitionConcurrencyExtensions.GetKeyDescriptor(rule).ShouldNotBeNullOrEmpty();
+        rule.GetRuleKeyDescriptor().ShouldNotBeNullOrEmpty();
     }
 }

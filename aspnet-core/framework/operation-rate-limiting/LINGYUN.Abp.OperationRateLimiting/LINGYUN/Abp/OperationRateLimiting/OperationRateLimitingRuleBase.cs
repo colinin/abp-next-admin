@@ -1,4 +1,4 @@
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Volo.Abp.DependencyInjection;
 
 namespace LINGYUN.Abp.OperationRateLimiting;
@@ -8,5 +8,11 @@ namespace LINGYUN.Abp.OperationRateLimiting;
 /// </summary>
 public abstract class OperationRateLimitingRuleBase : IOperationRateLimitingRule, ITransientDependency
 {
+    protected IOperationRateLimitingStateAccessor StateAccessor { get; }
+    protected OperationRateLimitingRuleBase(IOperationRateLimitingStateAccessor stateAccessor)
+    {
+        StateAccessor = stateAccessor;
+    }
+
     public abstract Task<OperationRateLimitingStoreResult> ExecuteAsync(OperationRateLimitingRuleContext context);
 }

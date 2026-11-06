@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Threading.Tasks;
 
 namespace LINGYUN.Abp.OperationRateLimiting.Algorithms.TokenBucket;
@@ -6,7 +6,7 @@ namespace LINGYUN.Abp.OperationRateLimiting.Algorithms.TokenBucket;
 /// <summary>
 /// Token bucket algorithm: replenishes tokens periodically and consumes one token per request.
 /// </summary>
-public class TokenBucketRateLimitingRule : OperationRateLimitingStateRuleBase
+public class TokenBucketRateLimitingRule : OperationRateLimitingRuleBase
 {
     public TokenBucketRateLimitingRule(IOperationRateLimitingStateAccessor stateAccessor)
         : base(stateAccessor)

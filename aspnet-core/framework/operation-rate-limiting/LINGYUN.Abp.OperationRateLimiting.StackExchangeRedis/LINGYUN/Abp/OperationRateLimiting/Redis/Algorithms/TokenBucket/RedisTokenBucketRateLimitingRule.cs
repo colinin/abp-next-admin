@@ -1,18 +1,17 @@
-﻿using System;
-using System.Threading.Tasks;
-using LINGYUN.Abp.OperationRateLimiting.Algorithms.TokenBucket;
+﻿using LINGYUN.Abp.OperationRateLimiting.Algorithms.TokenBucket;
 using StackExchange.Redis;
+using System;
+using System.Threading.Tasks;
 
 namespace LINGYUN.Abp.OperationRateLimiting.Redis.Algorithms.TokenBucket;
 
-public class RedisTokenBucketRateLimitingRule : RedisOperationRateLimitingRuleBase
+public class RedisTokenBucketRateLimitingRule : StackExchangeRedisOperationRateLimitingRuleBase
 {
     protected const string ScriptPath = "/LINGYUN/Abp/OperationRateLimiting/Redis/Lua/TokenBucket/token-bucket.lua";
 
     public RedisTokenBucketRateLimitingRule(
-        StackExchangeRedisOperationRateLimitingExecutor executor,
-        IOperationRateLimitingStateAccessor stateAccessor)
-        : base(executor, stateAccessor)
+        StackExchangeRedisOperationRateLimitingExecutor executor)
+        : base(executor)
     {
     }
 

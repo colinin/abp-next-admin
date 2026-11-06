@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Concurrent;
 using System.IO;
 using System.Threading;
@@ -42,15 +42,6 @@ public class StackExchangeRedisOperationRateLimitingExecutor : IDisposable, ISin
     public virtual string NormalizeKey(string key)
     {
         return string.IsNullOrEmpty(Options.InstanceName) ? key : Options.InstanceName + key;
-    }
-
-    public virtual async Task<RedisValue> StringGetAsync(
-        string key,
-        CancellationToken cancellationToken)
-    {
-        var database = await GetDatabaseAsync(cancellationToken);
-
-        return await database.StringGetAsync(NormalizeKey(key));
     }
 
     public virtual async Task KeyDeleteAsync(

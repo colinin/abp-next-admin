@@ -7,13 +7,11 @@ public static class OperationRateLimitingRuleRecordExtensions
 {
     public static OperationRateLimitingRuleDefinition ToDefinition(this OperationRateLimitingRuleRecord record)
     {
-        return new OperationRateLimitingRuleDefinition
+        return new OperationRateLimitingRuleDefinition(record.Name!, record.PartitionType)
         {
-            Name = record.Name,
             Algorithm = record.Algorithm,
             Duration = record.Duration,
             MaxCount = record.MaxCount,
-            PartitionType = record.PartitionType,
             PartitionResolverName = record.PartitionResolverName,
             IsMultiTenancyEnabled = record.IsMultiTenancyEnabled,
             ErrorCode = record.ErrorCode,
@@ -27,9 +25,8 @@ public static class OperationRateLimitingRuleRecordExtensions
         Guid policyId,
         int sortOrder)
     {
-        return new OperationRateLimitingRuleRecord(id, policyId, definition.Algorithm)
+        return new OperationRateLimitingRuleRecord(id, policyId, definition.Name, definition.Algorithm)
         {
-            Name = definition.Name,
             Duration = definition.Duration,
             MaxCount = definition.MaxCount,
             SortOrder = sortOrder,

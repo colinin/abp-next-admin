@@ -37,6 +37,7 @@ public class FakeOperationRateLimitingPolicyStoreState
         var rule = new OperationRateLimitingRuleDefinition
         {
             Algorithm = OperationRateLimitingAlgorithms.FixedWindow,
+            Duration = TimeSpan.FromMinutes(1),
             PartitionType = OperationRateLimitingPartitionType.Parameter,
             MaxCount = maxCount
         };

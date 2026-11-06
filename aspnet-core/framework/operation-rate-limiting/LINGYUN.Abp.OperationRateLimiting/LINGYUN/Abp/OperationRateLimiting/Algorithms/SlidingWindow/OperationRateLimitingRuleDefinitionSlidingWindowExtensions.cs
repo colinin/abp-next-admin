@@ -21,11 +21,6 @@ public static class OperationRateLimitingRuleDefinitionSlidingWindowExtensions
             OperationRateLimitingRuleDefinitionValueHelper.FormatInt(segments));
     }
 
-    public static string GetKeyDescriptor(this OperationRateLimitingRuleDefinition definition)
-    {
-        return OperationRateLimitingRuleDefinitionValueHelper.BuildKeyDescriptor(definition);
-    }
-
     public static void Validate(this OperationRateLimitingRuleDefinition definition, string policyName)
     {
         if (definition.GetSegments() < 2)

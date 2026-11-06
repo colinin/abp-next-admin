@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -8,7 +8,7 @@ namespace LINGYUN.Abp.OperationRateLimiting.Algorithms.SlidingWindow;
 /// <summary>
 /// Sliding window algorithm: approximates the count over the last window with aligned segments.
 /// </summary>
-public class SlidingWindowRateLimitingRule : OperationRateLimitingStateRuleBase
+public class SlidingWindowRateLimitingRule : OperationRateLimitingRuleBase
 {
     public SlidingWindowRateLimitingRule(IOperationRateLimitingStateAccessor stateAccessor)
         : base(stateAccessor)

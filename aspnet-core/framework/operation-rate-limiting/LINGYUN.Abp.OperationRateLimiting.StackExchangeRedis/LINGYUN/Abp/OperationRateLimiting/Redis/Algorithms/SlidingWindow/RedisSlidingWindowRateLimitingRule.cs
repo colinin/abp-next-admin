@@ -1,17 +1,16 @@
-﻿using System;
+﻿using StackExchange.Redis;
+using System;
 using System.Threading.Tasks;
-using StackExchange.Redis;
 
 namespace LINGYUN.Abp.OperationRateLimiting.Redis.Algorithms.SlidingWindow;
 
-public class RedisSlidingWindowRateLimitingRule : RedisOperationRateLimitingRuleBase
+public class RedisSlidingWindowRateLimitingRule : StackExchangeRedisOperationRateLimitingRuleBase
 {
     protected const string ScriptPath = "/LINGYUN/Abp/OperationRateLimiting/Redis/Lua/SlidingWindow/sliding-window.lua";
 
     public RedisSlidingWindowRateLimitingRule(
-        StackExchangeRedisOperationRateLimitingExecutor executor,
-        IOperationRateLimitingStateAccessor stateAccessor)
-        : base(executor, stateAccessor)
+        StackExchangeRedisOperationRateLimitingExecutor executor)
+        : base(executor)
     {
     }
 

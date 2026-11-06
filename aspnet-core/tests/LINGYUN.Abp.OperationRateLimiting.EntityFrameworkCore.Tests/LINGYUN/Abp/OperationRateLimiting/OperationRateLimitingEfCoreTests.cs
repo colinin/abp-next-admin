@@ -35,8 +35,13 @@ public class OperationRateLimitingEfCoreTests : AbpOperationRateLimitingEfCoreTe
         await WithUnitOfWorkAsync(async () =>
         {
             var record = new OperationRateLimitingPolicyRecord(Guid.NewGuid(), name);
-            var rule = new OperationRateLimitingRuleRecord(Guid.NewGuid(), record.Id, OperationRateLimitingAlgorithms.FixedWindow)
+            var rule = new OperationRateLimitingRuleRecord(
+                Guid.NewGuid(),
+                record.Id,
+                "Fixed",
+                OperationRateLimitingAlgorithms.FixedWindow)
             {
+                Duration = TimeSpan.FromMinutes(1),
                 PartitionType = OperationRateLimitingPartitionType.Parameter,
                 MaxCount = 1,
                 SortOrder = 0

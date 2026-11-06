@@ -1,4 +1,4 @@
-﻿using LINGYUN.Abp.OperationRateLimiting.Algorithms.SlidingWindow;
+using LINGYUN.Abp.OperationRateLimiting.Algorithms.SlidingWindow;
 using LINGYUN.Abp.OperationRateLimiting.Algorithms.TokenBucket;
 using LINGYUN.Abp.OperationRateLimiting.Dtos;
 using LINGYUN.Abp.OperationRateLimiting.Management;
@@ -158,7 +158,7 @@ public class OperationRateLimitingPolicyAppService :
 
             var definition = new OperationRateLimitingRuleDefinition
             {
-                Name = rule.Name,
+                Name = rule.Name!,
                 Algorithm = rule.Algorithm,
                 Duration = TimeSpan.FromSeconds(rule.DurationSeconds),
                 MaxCount = rule.MaxCount,

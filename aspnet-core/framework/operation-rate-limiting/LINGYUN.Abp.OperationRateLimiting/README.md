@@ -22,7 +22,8 @@
 
 | 项目 | 说明 |
 | --- | --- |
-| `LINGYUN.Abp.OperationRateLimiting` | 基础库：选项、策略、算法、检查器、异常、特性、本地化、默认分布式缓存存储 |
+| `LINGYUN.Abp.OperationRateLimiting.Abstractions` | 模型、Attribute、枚举、常量等公共契约 |
+| `LINGYUN.Abp.OperationRateLimiting` | 基础库：接口、选项、策略、算法、检查器、异常、本地化、默认分布式缓存状态访问器 |
 | `LINGYUN.Abp.OperationRateLimiting.AspNetCore` | 基础库：MVC 控制器 `[OperationRateLimiting]` 过滤器、客户端 IP 解析 |
 | `LINGYUN.Abp.OperationRateLimiting.StackExchangeRedis` | 基础库：基于 Redis + Lua 的原子存储实现 |
 

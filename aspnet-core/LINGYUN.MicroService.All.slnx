@@ -237,6 +237,7 @@
     <Project Path="framework/open-observe/LINGYUN.Abp.OpenObserve/LINGYUN.Abp.OpenObserve.csproj" Id="15498427-1b1e-4fe4-bc6d-09dfd8e547a2" />
   </Folder>
   <Folder Name="/framework/operation-rate-limiting/">
+    <Project Path="framework/operation-rate-limiting/LINGYUN.Abp.OperationRateLimiting.Abstractions/LINGYUN.Abp.OperationRateLimiting.Abstractions.csproj" />
     <Project Path="framework/operation-rate-limiting/LINGYUN.Abp.OperationRateLimiting/LINGYUN.Abp.OperationRateLimiting.csproj" />
     <Project Path="framework/operation-rate-limiting/LINGYUN.Abp.OperationRateLimiting.AspNetCore/LINGYUN.Abp.OperationRateLimiting.AspNetCore.csproj" />
     <Project Path="framework/operation-rate-limiting/LINGYUN.Abp.OperationRateLimiting.StackExchangeRedis/LINGYUN.Abp.OperationRateLimiting.StackExchangeRedis.csproj" />
@@ -601,6 +602,9 @@
     <Project Path="tests/LINGYUN.Abp.Features.LimitValidation.Tests/LINGYUN.Abp.Features.LimitValidation.Tests.csproj" />
     <Project Path="tests/LINGYUN.Abp.IdGenerator.Tests/LINGYUN.Abp.IdGenerator.Tests.csproj" />
     <Project Path="tests/LINGYUN.Abp.IP2Region.Tests/LINGYUN.Abp.IP2Region.Tests.csproj" />
+    <Project Path="tests/LINGYUN.Abp.OperationRateLimiting.Application.Tests/LINGYUN.Abp.OperationRateLimiting.Application.Tests.csproj" />
+    <Project Path="tests/LINGYUN.Abp.OperationRateLimiting.EntityFrameworkCore.Tests/LINGYUN.Abp.OperationRateLimiting.EntityFrameworkCore.Tests.csproj" />
+    <Project Path="tests/LINGYUN.Abp.OperationRateLimiting.StackExchangeRedis.Tests/LINGYUN.Abp.OperationRateLimiting.StackExchangeRedis.Tests.csproj" />
     <Project Path="tests/LINGYUN.Abp.OperationRateLimiting.Tests/LINGYUN.Abp.OperationRateLimiting.Tests.csproj" />
     <Project Path="tests/LINGYUN.Abp.Localization.Xml.Tests/LINGYUN.Abp.Localization.Xml.Tests.csproj" />
     <Project Path="tests/LINGYUN.Abp.Location.Baidu.Tests/LINGYUN.Abp.Location.Baidu.Tests.csproj" />

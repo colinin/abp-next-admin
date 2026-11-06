@@ -1,4 +1,4 @@
-namespace LINGYUN.Abp.OperationRateLimiting;
+﻿namespace LINGYUN.Abp.OperationRateLimiting;
 
 public static class AbpOperationRateLimitingConsts
 {

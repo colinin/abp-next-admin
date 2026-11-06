@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -18,6 +18,8 @@ public class OperationRateLimitingChecker : IOperationRateLimitingChecker, ITran
 
     protected IOperationRateLimitingPartitionKeyResolver PartitionKeyResolver { get; }
 
+    protected IOperationRateLimitingRuleResetter RuleResetter { get; }
+
     protected IOperationRateLimitingFormatter Formatter { get; }
 
     protected ICurrentTenant CurrentTenant { get; }
@@ -31,6 +33,7 @@ public class OperationRateLimitingChecker : IOperationRateLimitingChecker, ITran
     public OperationRateLimitingChecker(
         IOperationRateLimitingPolicyProvider policyProvider,
         IOperationRateLimitingPartitionKeyResolver partitionKeyResolver,
+        IOperationRateLimitingRuleResetter ruleResetter,
         IOperationRateLimitingFormatter formatter,
         ICurrentTenant currentTenant,
         IClock clock,
@@ -39,6 +42,7 @@ public class OperationRateLimitingChecker : IOperationRateLimitingChecker, ITran
     {
         PolicyProvider = policyProvider;
         PartitionKeyResolver = partitionKeyResolver;
+        RuleResetter = ruleResetter;
         Formatter = formatter;
         CurrentTenant = currentTenant;
         Clock = clock;
@@ -139,14 +143,8 @@ public class OperationRateLimitingChecker : IOperationRateLimitingChecker, ITran
         foreach (var rule in policy.Rules)
         {
             var key = await BuildKeyAsync(policy, rule, context, cancellationToken);
-            var executor = ResolveRule(rule);
 
-            if (executor is not IOperationRateLimitingRuleResetter resetter)
-            {
-                continue;
-            }
-
-            await resetter.ResetAsync(new OperationRateLimitingRuleContext(
+            await RuleResetter.ResetAsync(new OperationRateLimitingRuleContext(
                 policy,
                 rule,
                 key,
@@ -306,12 +304,8 @@ public class OperationRateLimitingChecker : IOperationRateLimitingChecker, ITran
 
     protected virtual IOperationRateLimitingRule ResolveRule(OperationRateLimitingRuleDefinition rule)
     {
-        var ruleType = rule.RuleType ?? Options.Value.GetAlgorithmType(rule.Algorithm);
-
-        if (ruleType == null)
-        {
-            throw new AbpException($"Undefined operation rate limiting algorithm: {rule.Algorithm}");
-        }
+        var ruleType = Options.Value.GetAlgorithmType(rule.Algorithm)
+            ?? throw new AbpException($"Undefined operation rate limiting algorithm: {rule.Algorithm}");
 
         var ruleService = ServiceProvider.GetService(ruleType);
 

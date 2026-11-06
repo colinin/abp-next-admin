@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Threading.Tasks;
 
 namespace LINGYUN.Abp.OperationRateLimiting;
@@ -8,11 +8,9 @@ namespace LINGYUN.Abp.OperationRateLimiting;
 /// </summary>
 public class TestCustomRateLimitingRule : OperationRateLimitingRuleBase
 {
-    protected IOperationRateLimitingStateAccessor StateAccessor { get; }
-
     public TestCustomRateLimitingRule(IOperationRateLimitingStateAccessor stateAccessor)
+        : base(stateAccessor)
     {
-        StateAccessor = stateAccessor;
     }
 
     public override async Task<OperationRateLimitingStoreResult> ExecuteAsync(OperationRateLimitingRuleContext context)

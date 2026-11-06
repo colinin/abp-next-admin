@@ -1,20 +1,17 @@
-﻿using System;
-using System.Threading.Tasks;
 using StackExchange.Redis;
+using System;
+using System.Threading.Tasks;
 
 namespace LINGYUN.Abp.OperationRateLimiting.Redis.Algorithms.Concurrency;
 
-public class RedisConcurrencyRateLimitingRule :
-    RedisOperationRateLimitingRuleBase,
-    IOperationRateLimitingRuleReleaser
+public class RedisConcurrencyRateLimitingRule : StackExchangeRedisOperationRateLimitingRuleBase, IOperationRateLimitingRuleReleaser
 {
     protected const string ScriptPath = "/LINGYUN/Abp/OperationRateLimiting/Redis/Lua/Concurrency/concurrency.lua";
     protected const string ReleaseScriptPath = "/LINGYUN/Abp/OperationRateLimiting/Redis/Lua/Concurrency/concurrency-release.lua";
 
     public RedisConcurrencyRateLimitingRule(
-        StackExchangeRedisOperationRateLimitingExecutor executor,
-        IOperationRateLimitingStateAccessor stateAccessor)
-        : base(executor, stateAccessor)
+        StackExchangeRedisOperationRateLimitingExecutor executor)
+        : base(executor)
     {
     }
 

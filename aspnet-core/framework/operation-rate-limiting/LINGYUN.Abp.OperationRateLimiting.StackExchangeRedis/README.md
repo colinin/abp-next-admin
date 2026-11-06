@@ -53,7 +53,6 @@ Configure<AbpOperationRateLimitingRedisOptions>(options =>
 | `sliding-window.lua` | ZSET（请求时间戳） | 按时间戳精确滑动，过期成员由 `ZREMRANGEBYSCORE` 清理 |
 | `token-bucket.lua` | HASH（tokens/last） | 按周期补充令牌，返回下一次可用时间 |
 | `concurrency.lua` | ZSET（租约开始时间） | 清理过期租约后占用许可；`concurrency-release.lua` 释放最早租约 |
-| `state-cas.lua` / `state-cas-delete.lua` | String（JSON） | 自定义算法状态的原子比较并交换 / 删除 |
 
 滑动窗口与并发算法的 ZSET 成员数上限为 `maxCount`（只在未超限时写入），因此内存占用受策略上限约束。
 

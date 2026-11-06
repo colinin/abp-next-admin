@@ -1,6 +1,5 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 using Volo.Abp;
 
 namespace LINGYUN.Abp.OperationRateLimiting;
@@ -22,18 +21,18 @@ public class OperationRateLimitingRuleDefinition
     /// When set, it is used as the counter key, so changing the rule parameters
     /// does not reset existing counters.
     /// </summary>
-    public string? Name { get; set; }
+    public string Name { get; set; } = default!;
 
     /// <summary>
     /// Name of the algorithm executed by this rule. See <see cref="OperationRateLimitingAlgorithms"/>.
     /// </summary>
-    public string Algorithm { get; set; } = OperationRateLimitingAlgorithms.FixedWindow;
+    public string Algorithm { get; set; } = default!;
 
     /// <summary>
     /// Window duration (fixed/sliding window), replenishment period (token bucket)
     /// or lease duration (concurrency), depending on the algorithm.
     /// </summary>
-    public TimeSpan Duration { get; set; } = TimeSpan.FromMinutes(1);
+    public TimeSpan Duration { get; set; }
 
     /// <summary>
     /// Maximum number of requests (or permits). A value of 0 creates a permanent ban policy.
@@ -43,7 +42,7 @@ public class OperationRateLimitingRuleDefinition
     /// <summary>
     /// Partition strategy of the rule.
     /// </summary>
-    public OperationRateLimitingPartitionType PartitionType { get; set; } = OperationRateLimitingPartitionType.Parameter;
+    public OperationRateLimitingPartitionType PartitionType { get; set; }
 
     /// <summary>
     /// Name of the custom partition key resolver (only when <see cref="PartitionType"/> is
@@ -67,11 +66,22 @@ public class OperationRateLimitingRuleDefinition
     /// </summary>
     public Dictionary<string, string> Properties { get; set; } = new();
 
-    /// <summary>
-    /// Type of a custom rule. It is only set for policies defined in code and is never persisted.
-    /// </summary>
-    [JsonIgnore]
-    public Type? RuleType { get; set; }
+    public OperationRateLimitingRuleDefinition()
+        : this(null!)
+    {
+    }
+
+    public OperationRateLimitingRuleDefinition(
+        string name, 
+        OperationRateLimitingPartitionType partitionType = OperationRateLimitingPartitionType.Parameter)
+    {
+        Name = name;
+        PartitionType = partitionType;
+
+        Properties = new Dictionary<string, string>(StringComparer.Ordinal);
+    }
+
+
 
     /// <summary>
     /// Adds or updates a property.

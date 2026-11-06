@@ -1,8 +1,6 @@
-using System;
+﻿using Microsoft.Extensions.Options;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using Volo.Abp;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.MultiTenancy;
@@ -25,13 +23,12 @@ public class OperationRateLimitingPartitionKeyResolver :
     public OperationRateLimitingPartitionKeyResolver(
         ICurrentUser currentUser,
         ICurrentTenant currentTenant,
-        IServiceProvider serviceProvider,
+        IOperationRateLimitingClientInfoProvider clientInfoProvider,
         IOptions<AbpOperationRateLimitingOptions> options)
     {
         CurrentUser = currentUser;
         CurrentTenant = currentTenant;
-        ClientInfoProvider = serviceProvider.GetService<IOperationRateLimitingClientInfoProvider>()
-                             ?? NullOperationRateLimitingClientInfoProvider.Instance;
+        ClientInfoProvider = clientInfoProvider;
         Options = options.Value;
     }
 

@@ -53,7 +53,6 @@ The module replaces the default `DistributedCacheOperationRateLimitingStore` wit
 | `sliding-window.lua` | ZSET (request timestamps) | Exact sliding window; expired members are removed with `ZREMRANGEBYSCORE` |
 | `token-bucket.lua` | HASH (tokens/last) | Replenishes tokens per period and returns the next available time |
 | `concurrency.lua` | ZSET (lease start times) | Removes expired leases then acquires a permit; `concurrency-release.lua` releases the oldest lease |
-| `state-cas.lua` / `state-cas-delete.lua` | String (JSON) | Atomic compare-and-set / delete for custom algorithm states |
 
 The sliding window and concurrency sets hold at most `maxCount` members (members are only added while the limit is not exceeded), so memory is bounded by the policy limit.
 

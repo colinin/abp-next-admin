@@ -1,34 +1,24 @@
-using System;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using LINGYUN.Abp.OperationRateLimiting.Redis.Algorithms.Concurrency;
+﻿using LINGYUN.Abp.OperationRateLimiting.Redis.Algorithms.Concurrency;
 using LINGYUN.Abp.OperationRateLimiting.Redis.Algorithms.FixedWindow;
 using LINGYUN.Abp.OperationRateLimiting.Redis.Algorithms.SlidingWindow;
 using LINGYUN.Abp.OperationRateLimiting.Redis.Algorithms.TokenBucket;
 using Microsoft.Extensions.Options;
 using Shouldly;
-using Volo.Abp;
+using System;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace LINGYUN.Abp.OperationRateLimiting.Redis;
 
-public class OperationRateLimitingRedisTests : LINGYUN.Abp.Tests.AbpTestsBase<AbpOperationRateLimitingRedisTestModule>
+public class OperationRateLimitingRedisTests : AbpOperationRateLimitingRedisTestBase
 {
     protected IOperationRateLimitingChecker Checker { get; }
-
-    protected IOperationRateLimitingStateAccessor StateAccessor { get; }
 
     public OperationRateLimitingRedisTests()
     {
         Checker = GetRequiredService<IOperationRateLimitingChecker>();
-        StateAccessor = GetRequiredService<IOperationRateLimitingStateAccessor>();
-    }
-
-    [Fact]
-    public void Redis_State_Accessor_Should_Be_Used()
-    {
-        StateAccessor.ShouldBeOfType<StackExchangeRedisOperationRateLimitingStateAccessor>();
     }
 
     [Fact]
@@ -58,6 +48,25 @@ public class OperationRateLimitingRedisTests : LINGYUN.Abp.Tests.AbpTestsBase<Ab
             () => Checker.CheckAsync(TestPolicyNames.Fixed, key));
 
         await Task.Delay(400);
+
+        await Checker.CheckAsync(TestPolicyNames.Fixed, key);
+    }
+
+    [Fact]
+    public async Task Reset_Should_Delete_The_Redis_Key()
+    {
+        var key = UniqueKey();
+
+        GetRequiredService<IOperationRateLimitingRuleResetter>()
+            .ShouldBeOfType<StackExchangeRedisOperationRateLimitingRuleReleaser>();
+
+        await Checker.CheckAsync(TestPolicyNames.Fixed, key);
+        await Checker.CheckAsync(TestPolicyNames.Fixed, key);
+
+        await Should.ThrowAsync<AbpOperationRateLimitingException>(
+            () => Checker.CheckAsync(TestPolicyNames.Fixed, key));
+
+        await Checker.ResetAsync(TestPolicyNames.Fixed, key);
 
         await Checker.CheckAsync(TestPolicyNames.Fixed, key);
     }
@@ -109,32 +118,6 @@ public class OperationRateLimitingRedisTests : LINGYUN.Abp.Tests.AbpTestsBase<Ab
         await Task.WhenAll(tasks);
 
         successes.ShouldBe(10);
-    }
-
-    [Fact]
-    public async Task Custom_State_Should_Be_Updated_Atomically()
-    {
-        var key = "cas:" + UniqueKey();
-
-        var tasks = Enumerable.Range(0, 50).Select(_ => StateAccessor.UpdateStateAsync(
-            key,
-            (RedisTestCounterState? current) =>
-            {
-                current ??= new RedisTestCounterState();
-                current.Count++;
-                return current;
-            },
-            TimeSpan.FromMinutes(1)));
-
-        await Task.WhenAll(tasks);
-
-        var state = await StateAccessor.GetStateAsync<RedisTestCounterState>(key);
-
-        state.ShouldNotBeNull();
-        state!.Count.ShouldBe(50);
-
-        await StateAccessor.ResetAsync(key);
-        (await StateAccessor.GetStateAsync<RedisTestCounterState>(key)).ShouldBeNull();
     }
 
     private static string UniqueKey()

@@ -22,7 +22,8 @@ Unlike the [ASP.NET Core rate limiting middleware](https://learn.microsoft.com/e
 
 | Project | Description |
 | --- | --- |
-| `LINGYUN.Abp.OperationRateLimiting` | Base library: options, policies, algorithms, checker, exception, attributes, localization, default distributed cache store |
+| `LINGYUN.Abp.OperationRateLimiting.Abstractions` | Models, attributes, enums and constants |
+| `LINGYUN.Abp.OperationRateLimiting` | Base library: interfaces, options, policies, algorithms, checker, exception, localization, default distributed cache state accessor |
 | `LINGYUN.Abp.OperationRateLimiting.AspNetCore` | Base library: MVC action filter and client IP resolution |
 | `LINGYUN.Abp.OperationRateLimiting.StackExchangeRedis` | Base library: atomic Redis store implemented with Lua scripts |
 

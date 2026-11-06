@@ -9,9 +9,7 @@ namespace LINGYUN.Abp.OperationRateLimiting.Algorithms.Concurrency;
 /// A permit is released explicitly with <see cref="IOperationRateLimitingRuleReleaser.ReleaseAsync"/>
 /// or automatically after the configured lease duration.
 /// </summary>
-public class ConcurrencyRateLimitingRule :
-    OperationRateLimitingStateRuleBase,
-    IOperationRateLimitingRuleReleaser
+public class ConcurrencyRateLimitingRule : OperationRateLimitingRuleBase, IOperationRateLimitingRuleReleaser
 {
     public ConcurrencyRateLimitingRule(IOperationRateLimitingStateAccessor stateAccessor)
         : base(stateAccessor)
