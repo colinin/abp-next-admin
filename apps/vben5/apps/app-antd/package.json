@@ -43,6 +43,7 @@
     "@abp/openiddict": "workspace:*",
     "@abp/permissions": "workspace:*",
     "@abp/platform": "workspace:*",
+    "@abp/print-designer": "workspace:*",
     "@abp/request": "workspace:*",
     "@abp/saas": "workspace:*",
     "@abp/settings": "workspace:*",

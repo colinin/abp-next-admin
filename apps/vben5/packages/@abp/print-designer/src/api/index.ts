@@ -1,0 +1,1 @@
+export { useTemplatesAdminApi } from './useTemplatesAdminApi';
