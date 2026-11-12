@@ -2961,6 +2961,200 @@ namespace LINGYUN.Abp.MicroService.AllInOne.EntityFrameworkCore.PostgreSql.Migra
                     b.ToTable("AppUserSubscribes", (string)null);
                 });
 
+            modelBuilder.Entity("LINGYUN.Abp.PrintDesigner.CustomElements.CustomElement", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("character varying(40)")
+                        .HasColumnName("ConcurrencyStamp");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("CreationTime");
+
+                    b.Property<Guid?>("CreatorId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("CreatorId");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)")
+                        .HasColumnName("Description");
+
+                    b.Property<string>("ExtraProperties")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("ExtraProperties");
+
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("LastModificationTime");
+
+                    b.Property<Guid?>("LastModifierId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("LastModifierId");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)")
+                        .HasColumnName("Name");
+
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("TenantId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("AbpPrintDesignerCustomElements", (string)null);
+                });
+
+            modelBuilder.Entity("LINGYUN.Abp.PrintDesigner.CustomElements.CustomElementData", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("character varying(40)")
+                        .HasColumnName("ConcurrencyStamp");
+
+                    b.Property<string>("ElementData")
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("ElementId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("ExtendedData")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ExtraProperties")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("ExtraProperties");
+
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("TenantId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ElementId")
+                        .IsUnique();
+
+                    b.ToTable("AbpPrintDesignerCustomElementDatas", (string)null);
+                });
+
+            modelBuilder.Entity("LINGYUN.Abp.PrintDesigner.Templates.Template", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("character varying(40)")
+                        .HasColumnName("ConcurrencyStamp");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("CreationTime");
+
+                    b.Property<Guid?>("CreatorId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("CreatorId");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)")
+                        .HasColumnName("Description");
+
+                    b.Property<string>("ExtraProperties")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("ExtraProperties");
+
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("LastModificationTime");
+
+                    b.Property<Guid?>("LastModifierId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("LastModifierId");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)")
+                        .HasColumnName("Name");
+
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("TenantId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("AbpPrintDesignerTemplates", (string)null);
+                });
+
+            modelBuilder.Entity("LINGYUN.Abp.PrintDesigner.Templates.TemplateData", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("character varying(40)")
+                        .HasColumnName("ConcurrencyStamp");
+
+                    b.Property<string>("DesignerData")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ExtendedData")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ExtraProperties")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("ExtraProperties");
+
+                    b.Property<Guid>("TemplateId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("TenantId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("TenantId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TemplateId")
+                        .IsUnique();
+
+                    b.ToTable("AbpPrintDesignerTemplateDatas", (string)null);
+                });
+
             modelBuilder.Entity("LINGYUN.Abp.Saas.Editions.Edition", b =>
                 {
                     b.Property<Guid>("Id")
@@ -6736,6 +6930,24 @@ namespace LINGYUN.Abp.MicroService.AllInOne.EntityFrameworkCore.PostgreSql.Migra
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("LINGYUN.Abp.PrintDesigner.CustomElements.CustomElementData", b =>
+                {
+                    b.HasOne("LINGYUN.Abp.PrintDesigner.CustomElements.CustomElement", null)
+                        .WithOne("Data")
+                        .HasForeignKey("LINGYUN.Abp.PrintDesigner.CustomElements.CustomElementData", "ElementId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("LINGYUN.Abp.PrintDesigner.Templates.TemplateData", b =>
+                {
+                    b.HasOne("LINGYUN.Abp.PrintDesigner.Templates.Template", null)
+                        .WithOne("Data")
+                        .HasForeignKey("LINGYUN.Abp.PrintDesigner.Templates.TemplateData", "TemplateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("LINGYUN.Abp.Saas.Tenants.Tenant", b =>
                 {
                     b.HasOne("LINGYUN.Abp.Saas.Editions.Edition", "Edition")
@@ -7033,6 +7245,16 @@ namespace LINGYUN.Abp.MicroService.AllInOne.EntityFrameworkCore.PostgreSql.Migra
             modelBuilder.Entity("LINGYUN.Abp.Gdpr.GdprRequest", b =>
                 {
                     b.Navigation("Infos");
+                });
+
+            modelBuilder.Entity("LINGYUN.Abp.PrintDesigner.CustomElements.CustomElement", b =>
+                {
+                    b.Navigation("Data");
+                });
+
+            modelBuilder.Entity("LINGYUN.Abp.PrintDesigner.Templates.Template", b =>
+                {
+                    b.Navigation("Data");
                 });
 
             modelBuilder.Entity("LINGYUN.Abp.Saas.Tenants.Tenant", b =>

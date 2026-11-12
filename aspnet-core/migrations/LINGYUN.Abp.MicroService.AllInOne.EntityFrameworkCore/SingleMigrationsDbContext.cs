@@ -64,6 +64,9 @@ using Volo.Abp.PermissionManagement;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
+using LINGYUN.Abp.PrintDesigner.EntityFrameworkCore;
+using LINGYUN.Abp.PrintDesigner.CustomElements;
+using LINGYUN.Abp.PrintDesigner.Templates;
 
 namespace LINGYUN.Abp.MicroService.AllInOne.EntityFrameworkCore;
 
@@ -111,6 +114,7 @@ public class SingleMigrationsDbContext :
     IDemoDbContext,
     IAIManagementDbContext,
     IBlobManagementDbContext,
+    IPrintDesignerDbContext,
     IElsaNextApprovalFlowDbContext
 {
     public DbSet<ApprovalTemplate> ApprovalTemplates { get; set; }
@@ -273,6 +277,10 @@ public class SingleMigrationsDbContext :
 
     public DbSet<Blob> Blobs { get; set; }
 
+    public DbSet<CustomElement> CustomElements { get; set; }
+
+    public DbSet<Template> Templates { get; set; }
+
     public SingleMigrationsDbContext(DbContextOptions<SingleMigrationsDbContext> options)
         : base(options)
     {
@@ -310,6 +318,8 @@ public class SingleMigrationsDbContext :
         modelBuilder.ConfigureElsaNextApprovalFlow();
 
         modelBuilder.ConfigureIdentityUserInactive();
+
+        modelBuilder.ConfigurePrintDesigner();
 
         modelBuilder.Entity<ResourcePermissionGrant>(b =>
         {
