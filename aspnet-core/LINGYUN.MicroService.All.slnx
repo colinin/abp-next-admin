@@ -238,9 +238,9 @@
   </Folder>
   <Folder Name="/framework/operation-rate-limiting/">
     <Project Path="framework/operation-rate-limiting/LINGYUN.Abp.OperationRateLimiting.Abstractions/LINGYUN.Abp.OperationRateLimiting.Abstractions.csproj" />
-    <Project Path="framework/operation-rate-limiting/LINGYUN.Abp.OperationRateLimiting/LINGYUN.Abp.OperationRateLimiting.csproj" />
     <Project Path="framework/operation-rate-limiting/LINGYUN.Abp.OperationRateLimiting.AspNetCore/LINGYUN.Abp.OperationRateLimiting.AspNetCore.csproj" />
     <Project Path="framework/operation-rate-limiting/LINGYUN.Abp.OperationRateLimiting.StackExchangeRedis/LINGYUN.Abp.OperationRateLimiting.StackExchangeRedis.csproj" />
+    <Project Path="framework/operation-rate-limiting/LINGYUN.Abp.OperationRateLimiting/LINGYUN.Abp.OperationRateLimiting.csproj" />
   </Folder>
   <Folder Name="/framework/pushplus/">
     <Project Path="framework/pushplus/LINGYUN.Abp.PushPlus.SettingManagement/LINGYUN.Abp.PushPlus.SettingManagement.csproj" />
@@ -473,6 +473,23 @@
     <Project Path="modules/platform/LINGYUN.Platform.HttpApi/LINGYUN.Platform.HttpApi.csproj" />
     <Project Path="modules/platform/LINGYUN.Platform.Jobs/LINGYUN.Platform.Jobs.csproj" />
   </Folder>
+  <Folder Name="/modules/print-designer/">
+    <Project Path="modules/print-designer/LINGYUN.Abp.PrintDesigner.Common.Application.Contracts/LINGYUN.Abp.PrintDesigner.Common.Application.Contracts.csproj" Id="d2a7a373-b038-448d-9be6-94d12d317c65" />
+    <Project Path="modules/print-designer/LINGYUN.Abp.PrintDesigner.Common.Application/LINGYUN.Abp.PrintDesigner.Common.Application.csproj" Id="0f1c2562-e55f-47d4-86b0-0726aba3d997" />
+    <Project Path="modules/print-designer/LINGYUN.Abp.PrintDesigner.Domain.Shared/LINGYUN.Abp.PrintDesigner.Domain.Shared.csproj" Id="25e5d383-273d-4baf-8d08-c078829b0fd9" />
+    <Project Path="modules/print-designer/LINGYUN.Abp.PrintDesigner.Domain/LINGYUN.Abp.PrintDesigner.Domain.csproj" Id="f090501d-4786-48cd-9acb-00c176bd737c" />
+    <Project Path="modules/print-designer/LINGYUN.Abp.PrintDesigner.EntityFrameworkCore/LINGYUN.Abp.PrintDesigner.EntityFrameworkCore.csproj" Id="f101b09a-20e7-40fb-a772-f8ff382cbeb4" />
+  </Folder>
+  <Folder Name="/modules/print-designer/admin/">
+    <Project Path="modules/print-designer/LINGYUN.Abp.PrintDesigner.Admin.Application.Contracts/LINGYUN.Abp.PrintDesigner.Admin.Application.Contracts.csproj" Id="d9b61730-11f5-40a5-95c5-d87d3331a477" />
+    <Project Path="modules/print-designer/LINGYUN.Abp.PrintDesigner.Admin.Application/LINGYUN.Abp.PrintDesigner.Admin.Application.csproj" Id="18e39d63-fcbc-4c2e-9f71-ad090336c27e" />
+    <Project Path="modules/print-designer/LINGYUN.Abp.PrintDesigner.Admin.HttpApi/LINGYUN.Abp.PrintDesigner.Admin.HttpApi.csproj" Id="6e0e6c68-e8ae-43aa-abbc-7b31f52efda0" />
+  </Folder>
+  <Folder Name="/modules/print-designer/public/">
+    <Project Path="modules/print-designer/LINGYUN.Abp.PrintDesigner.Public.Application.Contracts/LINGYUN.Abp.PrintDesigner.Public.Application.Contracts.csproj" Id="f0b13701-bfb8-4301-9d83-997c6d1e082a" />
+    <Project Path="modules/print-designer/LINGYUN.Abp.PrintDesigner.Public.Application/LINGYUN.Abp.PrintDesigner.Public.Application.csproj" Id="07712203-87a4-4aad-8adf-9ec2d39e4d72" />
+    <Project Path="modules/print-designer/LINGYUN.Abp.PrintDesigner.Public.HttpApi/LINGYUN.Abp.PrintDesigner.Public.HttpApi.csproj" Id="619fcfe7-af9e-4c4b-bca4-63c4aee6db9b" />
+  </Folder>
   <Folder Name="/modules/realtime-message/">
     <Project Path="modules/realtime-message/LINGYUN.Abp.IM.SignalR/LINGYUN.Abp.IM.SignalR.csproj" />
     <Project Path="modules/realtime-message/LINGYUN.Abp.IM/LINGYUN.Abp.IM.csproj" />
@@ -594,8 +611,6 @@
     <Project Path="tests/LINGYUN.Abp.Features.LimitValidation.Tests/LINGYUN.Abp.Features.LimitValidation.Tests.csproj" />
     <Project Path="tests/LINGYUN.Abp.IdGenerator.Tests/LINGYUN.Abp.IdGenerator.Tests.csproj" />
     <Project Path="tests/LINGYUN.Abp.IP2Region.Tests/LINGYUN.Abp.IP2Region.Tests.csproj" />
-    <Project Path="tests/LINGYUN.Abp.OperationRateLimiting.StackExchangeRedis.Tests/LINGYUN.Abp.OperationRateLimiting.StackExchangeRedis.Tests.csproj" />
-    <Project Path="tests/LINGYUN.Abp.OperationRateLimiting.Tests/LINGYUN.Abp.OperationRateLimiting.Tests.csproj" />
     <Project Path="tests/LINGYUN.Abp.Localization.Xml.Tests/LINGYUN.Abp.Localization.Xml.Tests.csproj" />
     <Project Path="tests/LINGYUN.Abp.Location.Baidu.Tests/LINGYUN.Abp.Location.Baidu.Tests.csproj" />
     <Project Path="tests/LINGYUN.Abp.Location.Tencent.Tests/LINGYUN.Abp.Location.Tencent.Tests.csproj" />
@@ -609,6 +624,8 @@
     <Project Path="tests/LINGYUN.Abp.Notifications.WeChat.MiniProgram.Tests/LINGYUN.Abp.Notifications.WeChat.MiniProgram.Tests.csproj" />
     <Project Path="tests/LINGYUN.Abp.Notifications.WeChat.Work.Tests/LINGYUN.Abp.Notifications.WeChat.Work.Tests.csproj" />
     <Project Path="tests/LINGYUN.Abp.OpenObserve.Tests/LINGYUN.Abp.OpenObserve.Tests.csproj" />
+    <Project Path="tests/LINGYUN.Abp.OperationRateLimiting.StackExchangeRedis.Tests/LINGYUN.Abp.OperationRateLimiting.StackExchangeRedis.Tests.csproj" />
+    <Project Path="tests/LINGYUN.Abp.OperationRateLimiting.Tests/LINGYUN.Abp.OperationRateLimiting.Tests.csproj" />
     <Project Path="tests/LINGYUN.Abp.Rules.RulesEngine.Tests/LINGYUN.Abp.Rules.RulesEngine.Tests.csproj" />
     <Project Path="tests/LINGYUN.Abp.Sms.Platform.Tests/LINGYUN.Abp.Sms.Platform.Tests.csproj" />
     <Project Path="tests/LINGYUN.Abp.TestBase/LINGYUN.Abp.TestsBase.csproj" />
