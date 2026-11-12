@@ -1,5 +1,8 @@
 ﻿using LINGYUN.Abp.DataProtectionManagement;
 using LINGYUN.Abp.DataProtectionManagement.EntityFrameworkCore;
+using LINGYUN.Abp.PrintDesigner.CustomElements;
+using LINGYUN.Abp.PrintDesigner.EntityFrameworkCore;
+using LINGYUN.Abp.PrintDesigner.Templates;
 using LINGYUN.Abp.Saas.Editions;
 using LINGYUN.Abp.Saas.EntityFrameworkCore;
 using LINGYUN.Abp.Saas.Tenants;
@@ -25,7 +28,8 @@ public class AdminServiceMigrationsDbContext :
     IFeatureManagementDbContext,
     ISettingManagementDbContext,
     IPermissionManagementDbContext,
-    IAbpDataProtectionManagementDbContext
+    IAbpDataProtectionManagementDbContext,
+    IPrintDesignerDbContext
 {
     #region Entities from the modules
 
@@ -59,6 +63,10 @@ public class AdminServiceMigrationsDbContext :
 
     public DbSet<TenantConnectionString> TenantConnectionStrings { get; set; }
 
+    public DbSet<CustomElement> CustomElements { get; set; }
+
+    public DbSet<Template> Templates { get; set; }
+
     #endregion
 
     public AdminServiceMigrationsDbContext(DbContextOptions<AdminServiceMigrationsDbContext> options)
@@ -77,5 +85,6 @@ public class AdminServiceMigrationsDbContext :
         modelBuilder.ConfigureSettingManagement();
         modelBuilder.ConfigurePermissionManagement();
         modelBuilder.ConfigureDataProtectionManagement();
+        modelBuilder.ConfigurePrintDesigner();
     }
 }
