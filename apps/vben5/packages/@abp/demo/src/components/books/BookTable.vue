@@ -1,26 +1,43 @@
 <script setup lang="ts">
+import type { PrintDesignerInstance } from '@abp/print-designer';
 import type { VxeGridListeners, VxeGridProps, VxeGridPropTypes } from '@abp/ui';
 
 import type { VbenFormProps } from '@vben/common-ui';
 
 import type { BookDto } from '../../types/books';
 
-import { defineAsyncComponent, h, nextTick, onMounted, reactive } from 'vue';
+import {
+  defineAsyncComponent,
+  h,
+  nextTick,
+  onMounted,
+  reactive,
+  ref,
+  useTemplateRef,
+} from 'vue';
 
 import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
 import { DataAccessOperation } from '@abp/data-protection';
+import { PrintDesigner } from '@abp/print-designer';
 import { useVbenVxeGrid } from '@abp/ui';
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons-vue';
+import {
+  DeleteOutlined,
+  EditOutlined,
+  PrinterOutlined,
+} from '@ant-design/icons-vue';
 import { Button, message, Modal } from 'ant-design-vue';
 
 import { useBooksApi } from '../../api/useBooksApi';
 import { BookPermissions } from '../../constants/permissions';
 
 defineOptions({
-  name: 'GdprTable',
+  name: 'BookTable',
 });
+
+const printDesigner = useTemplateRef<PrintDesignerInstance>('print-designer');
+const selectedKeys = ref<string[]>([]);
 
 const { deleteApi, getEntityInfoApi, getPagedListApi } = useBooksApi();
 const formOptions: VbenFormProps = {
@@ -57,6 +74,11 @@ const actionColumns = reactive<VxeGridPropTypes.Columns<BookDto>>([
 ]);
 const baseColumns = reactive<VxeGridPropTypes.Columns<BookDto>>([
   {
+    align: 'center',
+    type: 'checkbox',
+    minWidth: 50,
+  },
+  {
     align: 'left',
     field: 'name',
     minWidth: 150,
@@ -67,7 +89,6 @@ const baseColumns = reactive<VxeGridPropTypes.Columns<BookDto>>([
     align: 'left',
     field: 'authorName',
     minWidth: 150,
-    sortable: true,
     title: $t('Demo.DisplayName:AuthorId'),
   },
   {
@@ -116,7 +137,12 @@ const gridOptions: VxeGridProps<BookDto> = {
 };
 
 const gridEvents: VxeGridListeners<BookDto> = {
-  cellClick: () => {},
+  checkboxAll: (params) => {
+    selectedKeys.value = params.records.map((x) => x.id);
+  },
+  checkboxChange: (params) => {
+    selectedKeys.value = params.records.map((x) => x.id);
+  },
   sortChange: () => {
     gridApi.query();
   },
@@ -129,10 +155,44 @@ const [Grid, gridApi] = useVbenVxeGrid({
 const [BookModal, modalApi] = useVbenModal({
   connectedComponent: defineAsyncComponent(() => import('./BookModal.vue')),
 });
+
 function onCreate() {
   modalApi.setData({});
   modalApi.open();
 }
+
+async function onPrint(record: BookDto) {
+  if (!printDesigner.value) {
+    return;
+  }
+  try {
+    gridApi.setLoading(true);
+    const designer = printDesigner.value;
+
+    // 批量打印
+    // const data = gridApi.grid.getFullData();
+    // await designer.printBatchWithName(
+    //   data.map((d) => {
+    //     return {
+    //       variables: d,
+    //     };
+    //   }),
+    //   {
+    //     templateName: '书籍标签',
+    //     label: {
+    //       language: 'auto',
+    //     },
+    //   },
+    // );
+    await designer.previewWithName({
+      templateName: '书籍标签',
+      variables: record,
+    });
+  } finally {
+    gridApi.setLoading(false);
+  }
+}
+
 function onEdit(record: BookDto) {
   modalApi.setData(record);
   modalApi.open();
@@ -189,6 +249,14 @@ onMounted(onInit);
     <template #action="{ row }">
       <div class="flex flex-row">
         <Button
+          :icon="h(PrinterOutlined)"
+          type="link"
+          block
+          @click="onPrint(row)"
+        >
+          {{ $t('Demo.Print') }}
+        </Button>
+        <Button
           v-access:code="[BookPermissions.Update]"
           :icon="h(EditOutlined)"
           type="link"
@@ -211,6 +279,7 @@ onMounted(onInit);
     </template>
   </Grid>
   <BookModal @change="() => gridApi.query()" />
+  <PrintDesigner ref="print-designer" headless />
 </template>
 
 <style lang="scss" scoped></style>
