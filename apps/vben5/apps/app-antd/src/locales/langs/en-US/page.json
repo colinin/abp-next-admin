@@ -24,5 +24,9 @@
     "carbonCopy": "CC to me",
     "formDefinitions": "Form design",
     "designer": "Flow designer"
+  },
+  "printDesigner": {
+    "title": "Print Designer",
+    "templates": "Tempaltes"
   }
 }

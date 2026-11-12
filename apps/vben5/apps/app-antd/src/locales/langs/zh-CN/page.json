@@ -24,5 +24,9 @@
     "carbonCopy": "抄送我的",
     "formDefinitions": "表单设计",
     "designer": "流程设计器"
+  },
+  "printDesigner": {
+    "title": "打印设计器",
+    "templates": "模板管理"
   }
 }
