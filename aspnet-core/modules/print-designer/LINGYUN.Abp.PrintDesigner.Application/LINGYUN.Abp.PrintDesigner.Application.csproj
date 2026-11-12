@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<Import Project="..\..\..\..\configureawait.props" />
+	<Import Project="..\..\..\..\common.props" />
+
+	<PropertyGroup>
+		<TargetFramework>net10.0</TargetFramework>
+		<AssemblyName>LINGYUN.Abp.PrintDesigner.Application</AssemblyName>
+		<PackageId>LINGYUN.Abp.PrintDesigner.Application</PackageId>
+		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+		<RootNamespace />
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Volo.Abp.Ddd.Application" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\LINGYUN.Abp.PrintDesigner.Application.Contracts\LINGYUN.Abp.PrintDesigner.Application.Contracts.csproj" />
+		<ProjectReference Include="..\LINGYUN.Abp.PrintDesigner.Domain\LINGYUN.Abp.PrintDesigner.Domain.csproj" />
+	</ItemGroup>
+
+</Project>

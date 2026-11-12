@@ -1,0 +1,28 @@
+﻿{
+  "culture": "en",
+  "texts": {
+    "Features:PrintDesigner": "Print Designer",
+    "Permission:PrintDesigner": "Print Designer",
+    "Permission:ManageSettings": "Manage Settings",
+    "Permission:CustomElement": "Manage Custom Element",
+    "Permission:Template": "Manage Template",
+    "Permission:Create": "Create",
+    "Permission:Delete": "Delete",
+    "Permission:Update": "Update",
+    "Permission:Copy": "Copy",
+    "PrintDesigner:001001": "A custom element definition named {Name} already exists.!",
+    "PrintDesigner:002001": "A template definition named {Name} already exists.!",
+    "PrintDesigner:002002": "{Name} template not found!",
+    "Templates": "Template Management",
+    "DisplayName:Name": "Name",
+    "DisplayName:Description": "Description",
+    "DisplayName:TemplateId": "Template Id",
+    "DisplayName:CreationTime": "Creation Time",
+    "Templates:AddNew": "Add New Template",
+    "Templates:Market": "Template Market",
+    "Templates:Design": "Design Template",
+    "Templates:Create": "Create Template",
+    "Templates:Edit": "Edit Template",
+    "Templates:Print": "Print Template"
+  }
+}
