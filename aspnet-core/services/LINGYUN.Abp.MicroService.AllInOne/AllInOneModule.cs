@@ -363,6 +363,10 @@
     // AI管理模块 控制器
     typeof(AbpAIManagementHttpApiModule),
 
+    // 打印设计器模块
+    typeof(AbpPrintDesignerApplicationModule),
+    typeof(AbpPrintDesignerHttpApiModule),
+
     // 数据迁移模块
     typeof(AbpDataDbMigratorModule),
     // IP解析模块 IP2Region集成

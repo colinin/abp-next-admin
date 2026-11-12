@@ -6,6 +6,7 @@ using LINGYUN.Abp.Demo.Permissions;
 using LINGYUN.Abp.Exporter;
 using Microsoft.AspNetCore.Authorization;
 using System.Linq.Dynamic.Core;
+using System.Linq.Expressions;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Content;
 using Volo.Abp.Domain.Entities;
@@ -103,55 +104,37 @@ public class BookAppService : DemoApplicationServiceBase, IBookAppService //impl
 
     public async virtual Task<BookDto> GetAsync(Guid id)
     {
-        //Get the IQueryable<Book> from the repository
-        var queryable = await _bookRepository.GetQueryableAsync();
+        var book = await _bookRepository.GetAsync(id);
+        var author = await _authorRepository.GetAsync(book.AuthorId);
 
-        //Prepare a query to join books and authors
-        var query = from book in queryable
-                    join author in await _authorRepository.GetQueryableAsync() on book.AuthorId equals author.Id
-                    where book.Id == id
-                    select new { book, author };
-
-        //Execute the query and get the book with author
-        var queryResult = await AsyncExecuter.FirstOrDefaultAsync(query);
-        if (queryResult == null)
-        {
-            throw new EntityNotFoundException(typeof(Book), id);
-        }
-
-        var bookDto = ObjectMapper.Map<Book, BookDto>(queryResult.book);
-        bookDto.AuthorName = queryResult.author.Name;
+        var bookDto = ObjectMapper.Map<Book, BookDto>(book);
+        bookDto.AuthorName = author.Name;
         return bookDto;
     }
 
     public async virtual Task<PagedResultDto<BookDto>> GetListAsync(BookGetListInput input)
     {
-        var queryable = await _bookRepository.GetQueryableAsync();
-        //Prepare a query to join books and authors
-        var query = from book in queryable
-                    join author in await _authorRepository.GetQueryableAsync() on book.AuthorId equals author.Id
-                    select new { book, author };
-
-        //Paging
-        query = query
-            .WhereIf(!input.Filter.IsNullOrWhiteSpace(), x => x.book.Name.Contains(input.Filter!))
-            .OrderBy(NormalizeSorting(input.Sorting))
-            .Skip(input.SkipCount)
-            .Take(input.MaxResultCount);
-
-        //Execute the query and get a list
-        var queryResult = await AsyncExecuter.ToListAsync(query);
-
-        //Convert the query result to a list of BookDto objects
-        var bookDtos = queryResult.Select(x =>
+        Expression<Func<Book, bool>> expression = _ => true;
+        if (!input.Filter.IsNullOrWhiteSpace())
         {
-            var bookDto = ObjectMapper.Map<Book, BookDto>(x.book);
-            bookDto.AuthorName = x.author.Name;
-            return bookDto;
-        }).ToList();
+            expression = expression.And(x => x.Name.Contains(input.Filter!));
+        }
+        var specification = new Volo.Abp.Specifications.ExpressionSpecification<Book>(expression);
 
-        //Get the total count with another query
-        var totalCount = await AsyncExecuter.CountAsync(query);
+        var totalCount = await _bookRepository.GetCountAsync(specification);
+        var books = await _bookRepository.GetListAsync(specification,
+            input.Sorting, input.MaxResultCount, input.SkipCount);
+
+        var bookDtos = ObjectMapper.Map<List<Book>, List<BookDto>>(books);
+
+        var authors = await _authorRepository.GetListAsync(
+            new Volo.Abp.Specifications.ExpressionSpecification<Author>(
+                x => bookDtos.Select(b => b.AuthorId).Distinct().Contains(x.Id)));
+
+        foreach (var bookDto in bookDtos)
+        {
+            bookDto.AuthorName = authors.Find(x => x.Id == bookDto.AuthorId)!.Name;
+        }
 
         return new PagedResultDto<BookDto>(
             totalCount,

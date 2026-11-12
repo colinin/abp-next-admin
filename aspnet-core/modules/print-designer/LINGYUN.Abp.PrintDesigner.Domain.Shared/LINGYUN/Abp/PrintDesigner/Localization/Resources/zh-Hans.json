@@ -1,0 +1,28 @@
+﻿{
+  "culture": "zh-Hans",
+  "texts": {
+    "Features:PrintDesigner": "PrintDesigner",
+    "Permission:PrintDesigner": "PrintDesigner",
+    "Permission:ManageSettings": "管理设置",
+    "Permission:CustomElement": "管理自定义元素",
+    "Permission:Template": "管理模板",
+    "Permission:Create": "新增",
+    "Permission:Delete": "删除",
+    "Permission:Update": "编辑",
+    "Permission:Copy": "复制",
+    "PrintDesigner:001001": "已经存在名为 {Name} 的自定义元素定义!",
+    "PrintDesigner:002001": "已经存在名为 {Name} 的模板定义!",
+    "PrintDesigner:002002": "{Name} 模板不存在!",
+    "Templates": "模板管理",
+    "DisplayName:Name": "名称",
+    "DisplayName:Description": "描述",
+    "DisplayName:TemplateId": "模板Id",
+    "DisplayName:CreationTime": "创建时间",
+    "Templates:AddNew": "添加新模板",
+    "Templates:Market": "模板市场",
+    "Templates:Design": "设计模板",
+    "Templates:Create": "新增模板",
+    "Templates:Edit": "编辑模板",
+    "Templates:Print": "打印模板"
+  }
+}

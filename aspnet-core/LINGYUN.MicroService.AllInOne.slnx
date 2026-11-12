@@ -107,9 +107,9 @@
   </Folder>
   <Folder Name="/framework/operation-rate-limiting/">
     <Project Path="framework/operation-rate-limiting/LINGYUN.Abp.OperationRateLimiting.Abstractions/LINGYUN.Abp.OperationRateLimiting.Abstractions.csproj" />
-    <Project Path="framework/operation-rate-limiting/LINGYUN.Abp.OperationRateLimiting/LINGYUN.Abp.OperationRateLimiting.csproj" />
     <Project Path="framework/operation-rate-limiting/LINGYUN.Abp.OperationRateLimiting.AspNetCore/LINGYUN.Abp.OperationRateLimiting.AspNetCore.csproj" />
     <Project Path="framework/operation-rate-limiting/LINGYUN.Abp.OperationRateLimiting.StackExchangeRedis/LINGYUN.Abp.OperationRateLimiting.StackExchangeRedis.csproj" />
+    <Project Path="framework/operation-rate-limiting/LINGYUN.Abp.OperationRateLimiting/LINGYUN.Abp.OperationRateLimiting.csproj" />
   </Folder>
   <Folder Name="/framework/realtime/">
     <Project Path="framework/common/LINGYUN.Abp.RealTime/LINGYUN.Abp.RealTime.csproj" />
@@ -365,7 +365,6 @@
   <Folder Name="/modules/platform/">
     <Project Path="modules/platform/LINGYUN.Abp.Emailing.Platform/LINGYUN.Abp.Emailing.Platform.csproj" />
     <Project Path="modules/platform/LINGYUN.Abp.Sms.Platform/LINGYUN.Abp.Sms.Platform.csproj" />
-    <Project Path="modules/platform/LINGYUN.Abp.UI.Navigation.VueVbenAdmin/LINGYUN.Abp.UI.Navigation.VueVbenAdmin.csproj" />
     <Project Path="modules/platform/LINGYUN.Abp.UI.Navigation.VueVbenAdmin5/LINGYUN.Abp.UI.Navigation.VueVbenAdmin5.csproj" />
     <Project Path="modules/platform/LINGYUN.Platform.Application.Contracts/LINGYUN.Platform.Application.Contracts.csproj" />
     <Project Path="modules/platform/LINGYUN.Platform.Application/LINGYUN.Platform.Application.csproj" />
@@ -375,6 +374,14 @@
     <Project Path="modules/platform/LINGYUN.Platform.HttpApi.Client/LINGYUN.Platform.HttpApi.Client.csproj" />
     <Project Path="modules/platform/LINGYUN.Platform.HttpApi/LINGYUN.Platform.HttpApi.csproj" />
     <Project Path="modules/platform/LINGYUN.Platform.Jobs/LINGYUN.Platform.Jobs.csproj" />
+  </Folder>
+  <Folder Name="/modules/print-designer/">
+    <Project Path="modules/print-designer/LINGYUN.Abp.PrintDesigner.Application.Contracts/LINGYUN.Abp.PrintDesigner.Application.Contracts.csproj" Id="2d888e59-cfb9-4573-b657-b2424b6a6d88" />
+    <Project Path="modules/print-designer/LINGYUN.Abp.PrintDesigner.Application/LINGYUN.Abp.PrintDesigner.Application.csproj" Id="4e0c6d13-6ba8-4847-be9a-0f0a0d3f42e3" />
+    <Project Path="modules/print-designer/LINGYUN.Abp.PrintDesigner.Domain.Shared/LINGYUN.Abp.PrintDesigner.Domain.Shared.csproj" />
+    <Project Path="modules/print-designer/LINGYUN.Abp.PrintDesigner.Domain/LINGYUN.Abp.PrintDesigner.Domain.csproj" />
+    <Project Path="modules/print-designer/LINGYUN.Abp.PrintDesigner.EntityFrameworkCore/LINGYUN.Abp.PrintDesigner.EntityFrameworkCore.csproj" />
+    <Project Path="modules/print-designer/LINGYUN.Abp.PrintDesigner.HttpApi/LINGYUN.Abp.PrintDesigner.HttpApi.csproj" Id="a2a36ce8-c0b6-42d9-bdf9-20e47a6d67cb" />
   </Folder>
   <Folder Name="/modules/saas/">
     <Project Path="modules/saas/LINGYUN.Abp.Saas.Application.Contracts/LINGYUN.Abp.Saas.Application.Contracts.csproj" />

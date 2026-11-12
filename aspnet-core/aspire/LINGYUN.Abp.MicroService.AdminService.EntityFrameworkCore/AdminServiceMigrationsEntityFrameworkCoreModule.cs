@@ -16,6 +16,7 @@ using LINGYUN.Abp.MessageService;
 using LINGYUN.Abp.Notifications;
 using LINGYUN.Abp.OpenIddict;
 using LINGYUN.Abp.PermissionManagement.EntityFrameworkCore;
+using LINGYUN.Abp.PrintDesigner.EntityFrameworkCore;
 using LINGYUN.Abp.ProjectManagement;
 using LINGYUN.Abp.RulesEngineManagement;
 using LINGYUN.Abp.Saas;
@@ -70,6 +71,7 @@ namespace LINGYUN.Abp.MicroService.AdminService;
     typeof(AbpIdentityEntityFrameworkCoreModule),// 用户角色权限需要引用包
     typeof(AbpLocalizationManagementEntityFrameworkCoreModule),
     typeof(AbpTextTemplatingEntityFrameworkCoreModule),
+    typeof(AbpPrintDesignerEntityFrameworkCoreModule),
     typeof(AbpEntityFrameworkCorePostgreSqlModule),
     typeof(AbpDataDbMigratorModule)
     )]

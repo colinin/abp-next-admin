@@ -1,4 +1,4 @@
-global using DotNetCore.CAP;
+﻿global using DotNetCore.CAP;
 global using Elsa.Studio.Authentication.Abstractions.Contracts;
 global using LINGYUN.Abp.Account;
 global using LINGYUN.Abp.Account.Web.AliyunCaptcha;
@@ -130,6 +130,7 @@ global using LINGYUN.Abp.OpenIddict.WeChat;
 global using LINGYUN.Abp.OpenIddict.WeChat.Work;
 global using LINGYUN.Abp.PermissionManagement.HttpApi;
 global using LINGYUN.Abp.PermissionManagement.OrganizationUnits;
+global using LINGYUN.Abp.PrintDesigner;
 global using LINGYUN.Abp.Saas;
 global using LINGYUN.Abp.Saas.EntityFrameworkCore;
 global using LINGYUN.Abp.Serilog.Enrichers.Application;

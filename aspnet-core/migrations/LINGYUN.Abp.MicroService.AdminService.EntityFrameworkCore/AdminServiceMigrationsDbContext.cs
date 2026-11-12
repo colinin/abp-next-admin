@@ -1,4 +1,5 @@
 ﻿using LINGYUN.Abp.DataProtectionManagement.EntityFrameworkCore;
+using LINGYUN.Abp.PrintDesigner.EntityFrameworkCore;
 using LINGYUN.Abp.Saas.EntityFrameworkCore;
 using LINGYUN.Abp.TextTemplating.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -30,6 +31,7 @@ public class AdminServiceMigrationsDbContext : AbpDbContext<AdminServiceMigratio
         modelBuilder.ConfigureSettingManagement();
         modelBuilder.ConfigurePermissionManagement();
         modelBuilder.ConfigureDataProtectionManagement();
+        modelBuilder.ConfigurePrintDesigner();
 
         modelBuilder.Entity<ResourcePermissionGrant>(b =>
         {

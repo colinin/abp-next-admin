@@ -1,4 +1,4 @@
-using Volo.Abp.Data;
+﻿using Volo.Abp.Data;
 using Volo.Abp.MultiTenancy;
 
 namespace LINGYUN.Abp.UI.Navigation.VueVbenAdmin5;
@@ -19,7 +19,34 @@ public class AbpUINavigationVueVbenAdmin5NavigationDefinitionProvider : Navigati
         context.Add(GetTextTemplating());
         context.Add(GetWeChatManagement());
         context.Add(GetApprovalFlow());
+        context.Add(GetPrintDesigner());
         context.Add(GetVbenDemos());
+    }
+
+    private static NavigationDefinition GetPrintDesigner()
+    {
+        var printDesigner = new ApplicationMenu(
+            name: "Vben5PrintDesigner",
+            displayName: "打印设计器",
+            url: "/print-designer",
+            component: "",
+            description: "打印设计器",
+            order: 13,
+            icon: "carbon:printer")
+            .SetProperty("title", "page.printDesigner.title");
+
+        printDesigner.AddItem(
+            new ApplicationMenu(
+                name: "Vben5PrintDesignerTemplates",
+                displayName: "模板管理",
+                url: "/print-designer/templates",
+                component: "/print-designer/templates/index",
+                icon: "carbon:template",
+                description: "模板管理")
+            .SetProperty("title", "page.printDesigner.templates")
+        );
+
+        return new NavigationDefinition(printDesigner);
     }
 
     private static NavigationDefinition GetApprovalFlow()

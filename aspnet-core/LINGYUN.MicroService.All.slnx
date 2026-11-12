@@ -238,9 +238,9 @@
   </Folder>
   <Folder Name="/framework/operation-rate-limiting/">
     <Project Path="framework/operation-rate-limiting/LINGYUN.Abp.OperationRateLimiting.Abstractions/LINGYUN.Abp.OperationRateLimiting.Abstractions.csproj" />
-    <Project Path="framework/operation-rate-limiting/LINGYUN.Abp.OperationRateLimiting/LINGYUN.Abp.OperationRateLimiting.csproj" />
     <Project Path="framework/operation-rate-limiting/LINGYUN.Abp.OperationRateLimiting.AspNetCore/LINGYUN.Abp.OperationRateLimiting.AspNetCore.csproj" />
     <Project Path="framework/operation-rate-limiting/LINGYUN.Abp.OperationRateLimiting.StackExchangeRedis/LINGYUN.Abp.OperationRateLimiting.StackExchangeRedis.csproj" />
+    <Project Path="framework/operation-rate-limiting/LINGYUN.Abp.OperationRateLimiting/LINGYUN.Abp.OperationRateLimiting.csproj" />
   </Folder>
   <Folder Name="/framework/pushplus/">
     <Project Path="framework/pushplus/LINGYUN.Abp.PushPlus.SettingManagement/LINGYUN.Abp.PushPlus.SettingManagement.csproj" />
@@ -473,6 +473,14 @@
     <Project Path="modules/platform/LINGYUN.Platform.HttpApi/LINGYUN.Platform.HttpApi.csproj" />
     <Project Path="modules/platform/LINGYUN.Platform.Jobs/LINGYUN.Platform.Jobs.csproj" />
   </Folder>
+  <Folder Name="/modules/print-designer/">
+    <Project Path="modules/print-designer/LINGYUN.Abp.PrintDesigner.Application.Contracts/LINGYUN.Abp.PrintDesigner.Application.Contracts.csproj" />
+    <Project Path="modules/print-designer/LINGYUN.Abp.PrintDesigner.Application/LINGYUN.Abp.PrintDesigner.Application.csproj" />
+    <Project Path="modules/print-designer/LINGYUN.Abp.PrintDesigner.Domain.Shared/LINGYUN.Abp.PrintDesigner.Domain.Shared.csproj" Id="25e5d383-273d-4baf-8d08-c078829b0fd9" />
+    <Project Path="modules/print-designer/LINGYUN.Abp.PrintDesigner.Domain/LINGYUN.Abp.PrintDesigner.Domain.csproj" Id="f090501d-4786-48cd-9acb-00c176bd737c" />
+    <Project Path="modules/print-designer/LINGYUN.Abp.PrintDesigner.EntityFrameworkCore/LINGYUN.Abp.PrintDesigner.EntityFrameworkCore.csproj" Id="f101b09a-20e7-40fb-a772-f8ff382cbeb4" />
+    <Project Path="modules/print-designer/LINGYUN.Abp.PrintDesigner.HttpApi/LINGYUN.Abp.PrintDesigner.HttpApi.csproj" />
+  </Folder>
   <Folder Name="/modules/realtime-message/">
     <Project Path="modules/realtime-message/LINGYUN.Abp.IM.SignalR/LINGYUN.Abp.IM.SignalR.csproj" />
     <Project Path="modules/realtime-message/LINGYUN.Abp.IM/LINGYUN.Abp.IM.csproj" />
@@ -594,8 +602,6 @@
     <Project Path="tests/LINGYUN.Abp.Features.LimitValidation.Tests/LINGYUN.Abp.Features.LimitValidation.Tests.csproj" />
     <Project Path="tests/LINGYUN.Abp.IdGenerator.Tests/LINGYUN.Abp.IdGenerator.Tests.csproj" />
     <Project Path="tests/LINGYUN.Abp.IP2Region.Tests/LINGYUN.Abp.IP2Region.Tests.csproj" />
-    <Project Path="tests/LINGYUN.Abp.OperationRateLimiting.StackExchangeRedis.Tests/LINGYUN.Abp.OperationRateLimiting.StackExchangeRedis.Tests.csproj" />
-    <Project Path="tests/LINGYUN.Abp.OperationRateLimiting.Tests/LINGYUN.Abp.OperationRateLimiting.Tests.csproj" />
     <Project Path="tests/LINGYUN.Abp.Localization.Xml.Tests/LINGYUN.Abp.Localization.Xml.Tests.csproj" />
     <Project Path="tests/LINGYUN.Abp.Location.Baidu.Tests/LINGYUN.Abp.Location.Baidu.Tests.csproj" />
     <Project Path="tests/LINGYUN.Abp.Location.Tencent.Tests/LINGYUN.Abp.Location.Tencent.Tests.csproj" />
@@ -609,6 +615,8 @@
     <Project Path="tests/LINGYUN.Abp.Notifications.WeChat.MiniProgram.Tests/LINGYUN.Abp.Notifications.WeChat.MiniProgram.Tests.csproj" />
     <Project Path="tests/LINGYUN.Abp.Notifications.WeChat.Work.Tests/LINGYUN.Abp.Notifications.WeChat.Work.Tests.csproj" />
     <Project Path="tests/LINGYUN.Abp.OpenObserve.Tests/LINGYUN.Abp.OpenObserve.Tests.csproj" />
+    <Project Path="tests/LINGYUN.Abp.OperationRateLimiting.StackExchangeRedis.Tests/LINGYUN.Abp.OperationRateLimiting.StackExchangeRedis.Tests.csproj" />
+    <Project Path="tests/LINGYUN.Abp.OperationRateLimiting.Tests/LINGYUN.Abp.OperationRateLimiting.Tests.csproj" />
     <Project Path="tests/LINGYUN.Abp.Rules.RulesEngine.Tests/LINGYUN.Abp.Rules.RulesEngine.Tests.csproj" />
     <Project Path="tests/LINGYUN.Abp.Sms.Platform.Tests/LINGYUN.Abp.Sms.Platform.Tests.csproj" />
     <Project Path="tests/LINGYUN.Abp.TestBase/LINGYUN.Abp.TestsBase.csproj" />

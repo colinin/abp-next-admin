@@ -15,12 +15,14 @@
     "Demo:00001": "Author {Name} already exists!",
     "Author": "Authors",
     "Book": "Books",
+    "NewBook": "New Book",
     "DisplayName:Name": "Name",
     "DisplayName:Type": "Type",
     "DisplayName:PublishDate": "Publish Date",
     "DisplayName:Price": "Price",
     "DisplayName:AuthorId": "Author Id",
     "DisplayName:BirthDate": "Birth Date",
-    "DisplayName:ShortBio": "Short Bio"
+    "DisplayName:ShortBio": "Short Bio",
+    "Print": "Print"
   }
 }

@@ -1,14 +1,15 @@
-using LINGYUN.Abp.AIManagement.EntityFrameworkCore;
+﻿using LINGYUN.Abp.AIManagement.EntityFrameworkCore;
 using LINGYUN.Abp.AuditLogging.EntityFrameworkCore;
 using LINGYUN.Abp.BlobManagement.EntityFrameworkCore;
 using LINGYUN.Abp.Data.DbMigrator;
-using LINGYUN.Abp.Gdpr.EntityFrameworkCore;
 using LINGYUN.Abp.ElsaNext.ApprovalFlow.EntityFrameworkCore;
+using LINGYUN.Abp.Gdpr.EntityFrameworkCore;
 using LINGYUN.Abp.Identity.EntityFrameworkCore;
 using LINGYUN.Abp.LocalizationManagement.EntityFrameworkCore;
 using LINGYUN.Abp.MessageService.EntityFrameworkCore;
 using LINGYUN.Abp.Notifications.EntityFrameworkCore;
 using LINGYUN.Abp.PermissionManagement.EntityFrameworkCore;
+using LINGYUN.Abp.PrintDesigner.EntityFrameworkCore;
 using LINGYUN.Abp.Saas.EntityFrameworkCore;
 using LINGYUN.Abp.TaskManagement.EntityFrameworkCore;
 using LINGYUN.Abp.TextTemplating.EntityFrameworkCore;
@@ -42,6 +43,7 @@ namespace LINGYUN.Abp.MicroService.AllInOne.EntityFrameworkCore;
     typeof(AbpTextTemplatingEntityFrameworkCoreModule),
     typeof(WebhooksManagementEntityFrameworkCoreModule),
     typeof(TaskManagementEntityFrameworkCoreModule),
+    typeof(AbpPrintDesignerEntityFrameworkCoreModule),
     typeof(AbpGdprEntityFrameworkCoreModule),
     typeof(AbpUINavigationVueVbenAdmin5Module),
     typeof(AbpWeChatModule),

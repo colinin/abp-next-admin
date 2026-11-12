@@ -1,14 +1,14 @@
 ﻿using LINGYUN.Abp.Aliyun.SettingManagement;
+using LINGYUN.Abp.AspNetCore.Authentication;
 using LINGYUN.Abp.AspNetCore.HttpOverrides;
 using LINGYUN.Abp.AspNetCore.Mvc.Wrapper;
 using LINGYUN.Abp.AspNetCore.Session;
-using LINGYUN.Abp.AuditLogging.IP.Location;
 using LINGYUN.Abp.Auditing;
 using LINGYUN.Abp.AuditLogging.Elasticsearch;
+using LINGYUN.Abp.AuditLogging.IP.Location;
 using LINGYUN.Abp.BlobManagement.SettingManagement;
 using LINGYUN.Abp.CachingManagement;
 using LINGYUN.Abp.CachingManagement.StackExchangeRedis;
-using LINGYUN.Abp.AspNetCore.Authentication;
 using LINGYUN.Abp.Data.DbMigrator;
 using LINGYUN.Abp.DataProtectionManagement;
 using LINGYUN.Abp.Dynamic.Definitions;
@@ -23,6 +23,7 @@ using LINGYUN.Abp.Logging.Serilog.Elasticsearch;
 using LINGYUN.Abp.PermissionManagement;
 using LINGYUN.Abp.PermissionManagement.HttpApi;
 using LINGYUN.Abp.PermissionManagement.OrganizationUnits;
+using LINGYUN.Abp.PrintDesigner;
 using LINGYUN.Abp.Saas;
 using LINGYUN.Abp.Serilog.Enrichers.Application;
 using LINGYUN.Abp.Serilog.Enrichers.UniqueId;
@@ -83,6 +84,8 @@ namespace LINGYUN.Abp.MicroService.AdminService;
     typeof(AbpCachingManagementApplicationModule),
     typeof(AbpCachingManagementHttpApiModule),
     typeof(AbpCachingManagementStackExchangeRedisModule),
+    typeof(AbpPrintDesignerApplicationModule),
+    typeof(AbpPrintDesignerHttpApiModule),
     typeof(AbpPermissionManagementDomainOrganizationUnitsModule), // 组织机构权限管理
     typeof(AbpPermissionManagementDomainIdentityModule),
     typeof(AbpPermissionManagementDomainOpenIddictModule),
