@@ -91,6 +91,8 @@
 		<ProjectReference Include="..\..\modules\permissions-management\LINGYUN.Abp.PermissionManagement.HttpApi\LINGYUN.Abp.PermissionManagement.HttpApi.csproj" />
 		<ProjectReference Include="..\..\modules\platform\LINGYUN.Abp.Emailing.Platform\LINGYUN.Abp.Emailing.Platform.csproj" />
 		<ProjectReference Include="..\..\modules\platform\LINGYUN.Abp.Sms.Platform\LINGYUN.Abp.Sms.Platform.csproj" />
+		<ProjectReference Include="..\..\modules\print-designer\LINGYUN.Abp.PrintDesigner.Application\LINGYUN.Abp.PrintDesigner.Application.csproj" />
+		<ProjectReference Include="..\..\modules\print-designer\LINGYUN.Abp.PrintDesigner.HttpApi\LINGYUN.Abp.PrintDesigner.HttpApi.csproj" />
 		<ProjectReference Include="..\..\modules\saas\LINGYUN.Abp.Saas.Application\LINGYUN.Abp.Saas.Application.csproj" />
 		<ProjectReference Include="..\..\modules\saas\LINGYUN.Abp.Saas.DbChecker\LINGYUN.Abp.Saas.DbChecker.csproj" />
 		<ProjectReference Include="..\..\modules\saas\LINGYUN.Abp.Saas.EntityFrameworkCore\LINGYUN.Abp.Saas.EntityFrameworkCore.csproj" />

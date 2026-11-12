@@ -474,21 +474,12 @@
     <Project Path="modules/platform/LINGYUN.Platform.Jobs/LINGYUN.Platform.Jobs.csproj" />
   </Folder>
   <Folder Name="/modules/print-designer/">
-    <Project Path="modules/print-designer/LINGYUN.Abp.PrintDesigner.Common.Application.Contracts/LINGYUN.Abp.PrintDesigner.Common.Application.Contracts.csproj" Id="d2a7a373-b038-448d-9be6-94d12d317c65" />
-    <Project Path="modules/print-designer/LINGYUN.Abp.PrintDesigner.Common.Application/LINGYUN.Abp.PrintDesigner.Common.Application.csproj" Id="0f1c2562-e55f-47d4-86b0-0726aba3d997" />
+    <Project Path="modules/print-designer/LINGYUN.Abp.PrintDesigner.Application.Contracts/LINGYUN.Abp.PrintDesigner.Application.Contracts.csproj" />
+    <Project Path="modules/print-designer/LINGYUN.Abp.PrintDesigner.Application/LINGYUN.Abp.PrintDesigner.Application.csproj" />
     <Project Path="modules/print-designer/LINGYUN.Abp.PrintDesigner.Domain.Shared/LINGYUN.Abp.PrintDesigner.Domain.Shared.csproj" Id="25e5d383-273d-4baf-8d08-c078829b0fd9" />
     <Project Path="modules/print-designer/LINGYUN.Abp.PrintDesigner.Domain/LINGYUN.Abp.PrintDesigner.Domain.csproj" Id="f090501d-4786-48cd-9acb-00c176bd737c" />
     <Project Path="modules/print-designer/LINGYUN.Abp.PrintDesigner.EntityFrameworkCore/LINGYUN.Abp.PrintDesigner.EntityFrameworkCore.csproj" Id="f101b09a-20e7-40fb-a772-f8ff382cbeb4" />
-  </Folder>
-  <Folder Name="/modules/print-designer/admin/">
-    <Project Path="modules/print-designer/LINGYUN.Abp.PrintDesigner.Admin.Application.Contracts/LINGYUN.Abp.PrintDesigner.Admin.Application.Contracts.csproj" Id="d9b61730-11f5-40a5-95c5-d87d3331a477" />
-    <Project Path="modules/print-designer/LINGYUN.Abp.PrintDesigner.Admin.Application/LINGYUN.Abp.PrintDesigner.Admin.Application.csproj" Id="18e39d63-fcbc-4c2e-9f71-ad090336c27e" />
-    <Project Path="modules/print-designer/LINGYUN.Abp.PrintDesigner.Admin.HttpApi/LINGYUN.Abp.PrintDesigner.Admin.HttpApi.csproj" Id="6e0e6c68-e8ae-43aa-abbc-7b31f52efda0" />
-  </Folder>
-  <Folder Name="/modules/print-designer/public/">
-    <Project Path="modules/print-designer/LINGYUN.Abp.PrintDesigner.Public.Application.Contracts/LINGYUN.Abp.PrintDesigner.Public.Application.Contracts.csproj" Id="f0b13701-bfb8-4301-9d83-997c6d1e082a" />
-    <Project Path="modules/print-designer/LINGYUN.Abp.PrintDesigner.Public.Application/LINGYUN.Abp.PrintDesigner.Public.Application.csproj" Id="07712203-87a4-4aad-8adf-9ec2d39e4d72" />
-    <Project Path="modules/print-designer/LINGYUN.Abp.PrintDesigner.Public.HttpApi/LINGYUN.Abp.PrintDesigner.Public.HttpApi.csproj" Id="619fcfe7-af9e-4c4b-bca4-63c4aee6db9b" />
+    <Project Path="modules/print-designer/LINGYUN.Abp.PrintDesigner.HttpApi/LINGYUN.Abp.PrintDesigner.HttpApi.csproj" />
   </Folder>
   <Folder Name="/modules/realtime-message/">
     <Project Path="modules/realtime-message/LINGYUN.Abp.IM.SignalR/LINGYUN.Abp.IM.SignalR.csproj" />
