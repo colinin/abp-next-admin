@@ -11,13 +11,14 @@ import { $t } from '@vben/locales';
 import { isNullOrWhiteSpace } from '@abp/core';
 import { message } from 'ant-design-vue';
 
-import { useTemplatesAdminApi } from '../../api/useTemplatesAdminApi';
+import { useTemplatesApi } from '../../api/useTemplatesApi';
 
 const emits = defineEmits<{
+  (event: 'new', data: TemplateDto): void;
   (event: 'change', data: TemplateDto): void;
 }>();
 
-const { createApi, getApi, updateApi } = useTemplatesAdminApi();
+const { createApi, getApi, updateApi } = useTemplatesApi();
 
 const [Form, formApi] = useVbenForm({
   commonConfig: {
@@ -38,7 +39,7 @@ const [Form, formApi] = useVbenForm({
     {
       component: 'Input',
       fieldName: 'name',
-      label: $t('名称'),
+      label: $t('PrintDesigner.DisplayName:Name'),
       rules: 'required',
     },
     {
@@ -49,7 +50,7 @@ const [Form, formApi] = useVbenForm({
         },
       },
       fieldName: 'description',
-      label: $t('描述'),
+      label: $t('PrintDesigner.DisplayName:Description'),
     },
   ],
   showDefaultActions: false,
@@ -72,7 +73,7 @@ async function onGet() {
   formApi.resetForm();
   const { id } = modalApi.getData<TemplateDto>();
   if (isNullOrWhiteSpace(id)) {
-    modalApi.setState({ title: $t('新增模板') });
+    modalApi.setState({ title: $t('PrintDesigner.Templates:Create') });
     return;
   }
   try {
@@ -80,7 +81,7 @@ async function onGet() {
     const dto = await getApi(id);
     formApi.setValues(dto, false);
     modalApi.setState({
-      title: `${$t('编辑模板')} - ${dto.name}`,
+      title: `${$t('PrintDesigner.Templates:Edit')} - ${dto.name}`,
     });
   } finally {
     modalApi.setState({ loading: false });
@@ -95,6 +96,9 @@ async function onSubmit(values: Record<string, any>) {
       : createApi(values as TemplateCreateDto);
     const dto = await api;
     message.success($t('AbpUi.SavedSuccessfully'));
+    if (!values.id) {
+      emits('new', dto);
+    }
     emits('change', dto);
     modalApi.close();
   } finally {

@@ -30,6 +30,7 @@
     "@vben/icons": "workspace:*",
     "@vben/layouts": "workspace:*",
     "@vben/locales": "workspace:*",
+    "@vben/preferences": "workspace:*",
     "@vben/stores": "workspace:*",
     "ant-design-vue": "catalog:",
     "vue": "catalog:",

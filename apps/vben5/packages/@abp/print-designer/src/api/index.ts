@@ -1,1 +1,1 @@
-export { useTemplatesAdminApi } from './useTemplatesAdminApi';
+export { useTemplatesApi } from './useTemplatesApi';

@@ -6,7 +6,6 @@ import type { VbenFormProps } from '@vben/common-ui';
 import type { TemplateDto } from '../../types/templates';
 
 import { defineAsyncComponent, h } from 'vue';
-import { useRouter } from 'vue-router';
 
 import { useVbenModal } from '@vben/common-ui';
 import { createIconifyIcon } from '@vben/icons';
@@ -21,16 +20,16 @@ import {
 } from '@ant-design/icons-vue';
 import { Button, message, Modal } from 'ant-design-vue';
 
-import { useTemplatesAdminApi } from '../../api/useTemplatesAdminApi';
+import { useTemplatesApi } from '../../api/useTemplatesApi';
 import { TemplatePermissions } from '../../constants/permissions';
 
 const DesignIcon = createIconifyIcon(
   'material-symbols-light:design-services-outline',
 );
+const MarketIcon = createIconifyIcon('carbon:store');
 
-const router = useRouter();
 const { isGranted } = useAuthorization();
-const { deleteApi, getPagedListApi } = useTemplatesAdminApi();
+const { deleteApi, getPagedListApi } = useTemplatesApi();
 
 const formOptions: VbenFormProps = {
   // 默认展开
@@ -68,18 +67,26 @@ const gridOptions: VxeGridProps<TemplateDto> = {
     },
     {
       align: 'left',
+      field: 'id',
+      fixed: 'left',
+      minWidth: 140,
+      sortable: true,
+      title: $t('PrintDesigner.DisplayName:TemplateId'),
+    },
+    {
+      align: 'left',
       field: 'name',
       fixed: 'left',
       minWidth: 180,
       sortable: true,
-      title: $t('名称'),
+      title: $t('PrintDesigner.DisplayName:Name'),
     },
     {
       align: 'left',
       field: 'description',
       minWidth: 220,
       sortable: true,
-      title: $t('描述'),
+      title: $t('PrintDesigner.DisplayName:Description'),
     },
     {
       align: 'left',
@@ -89,7 +96,7 @@ const gridOptions: VxeGridProps<TemplateDto> = {
       },
       minWidth: 220,
       sortable: true,
-      title: $t('创建时间'),
+      title: $t('PrintDesigner.DisplayName:CreationTime'),
     },
     {
       field: 'action',
@@ -104,7 +111,7 @@ const gridOptions: VxeGridProps<TemplateDto> = {
         ],
         false,
       ),
-      width: 240,
+      width: 300,
     },
   ],
   exportConfig: {},
@@ -153,19 +160,25 @@ const [TemplateModal, modalApi] = useVbenModal({
   connectedComponent: defineAsyncComponent(() => import('./TemplateModal.vue')),
 });
 
+const [PrintDesignerModal, designerModalApi] = useVbenModal({
+  connectedComponent: defineAsyncComponent(
+    () => import('../designer/PrintDesignerModal.vue'),
+  ),
+});
+
 function onCreate() {
   modalApi.setData({});
   modalApi.open();
 }
 
+function onOpenMarket() {
+  designerModalApi.setData({ openMarket: true });
+  designerModalApi.open();
+}
+
 function onDesign(row: TemplateDto) {
-  console.warn(row);
-  router.push({
-    path: '/print-designer/designer',
-    query: {
-      id: row.id,
-    },
-  });
+  designerModalApi.setData({ templateId: row.id });
+  designerModalApi.open();
 }
 
 function onUpdate(row: TemplateDto) {
@@ -196,21 +209,29 @@ function onDelete(row: TemplateDto) {
 </script>
 
 <template>
-  <Grid :table-title="$t('模板管理')">
+  <Grid :table-title="$t('PrintDesigner.Templates')">
     <template #toolbar-tools>
-      <Button
+      <div
         v-if="isGranted([TemplatePermissions.Create])"
-        :icon="h(PlusOutlined)"
-        type="primary"
-        @click="onCreate"
+        class="flex flex-row gap-2"
       >
-        {{ $t('添加新模板') }}
-      </Button>
+        <Button :icon="h(PlusOutlined)" type="primary" @click="onCreate">
+          {{ $t('PrintDesigner.Templates:AddNew') }}
+        </Button>
+        <Button
+          :icon="h(MarketIcon)"
+          type="primary"
+          ghost
+          @click="onOpenMarket"
+        >
+          {{ $t('PrintDesigner.Templates:Market') }}
+        </Button>
+      </div>
     </template>
     <template #action="{ row }">
       <div class="flex flex-row">
         <Button :icon="h(DesignIcon)" block type="link" @click="onDesign(row)">
-          {{ $t('设计模板') }}
+          {{ $t('PrintDesigner.Templates:Design') }}
         </Button>
         <Button
           v-if="
@@ -239,7 +260,8 @@ function onDelete(row: TemplateDto) {
       </div>
     </template>
   </Grid>
-  <TemplateModal @change="() => gridApi.query()" />
+  <TemplateModal @change="() => gridApi.query()" @new="onDesign" />
+  <PrintDesignerModal />
 </template>
 
 <style lang="scss" scoped></style>

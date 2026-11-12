@@ -10,11 +10,11 @@ import type {
 
 import { useRequest } from '@abp/request';
 
-export function useTemplatesAdminApi() {
+export function useTemplatesApi() {
   const { cancel, request } = useRequest();
 
   function createApi(input: TemplateCreateDto): Promise<TemplateDto> {
-    return request<TemplateDto>(`/api/print-designer/admin/templates`, {
+    return request<TemplateDto>(`/api/print-designer/templates`, {
       data: input,
       method: 'POST',
     });
@@ -24,7 +24,7 @@ export function useTemplatesAdminApi() {
     input?: TemplateGetPagedListInput,
   ): Promise<PagedResultDto<TemplateDto>> {
     return request<PagedResultDto<TemplateDto>>(
-      '/api/print-designer/admin/templates',
+      '/api/print-designer/templates',
       {
         method: 'GET',
         params: input,
@@ -33,25 +33,31 @@ export function useTemplatesAdminApi() {
   }
 
   function getApi(id: string): Promise<TemplateDto> {
-    return request<TemplateDto>(`/api/print-designer/admin/templates/${id}`, {
+    return request<TemplateDto>(`/api/print-designer/templates/${id}`, {
       method: 'GET',
     });
   }
 
-  function deleteApi(id: string): Promise<TemplateDeleteDto> {
-    return request<TemplateDeleteDto>(
-      `/api/print-designer/admin/templates/${id}`,
+  function getByNameApi(name: string): Promise<TemplateDto> {
+    return request<TemplateDto>(
+      `/api/print-designer/templates/by-name/${name}`,
       {
-        method: 'DELETE',
+        method: 'GET',
       },
     );
+  }
+
+  function deleteApi(id: string): Promise<TemplateDeleteDto> {
+    return request<TemplateDeleteDto>(`/api/print-designer/templates/${id}`, {
+      method: 'DELETE',
+    });
   }
 
   function updateApi(
     id: string,
     input: TemplateUpdateDto,
   ): Promise<TemplateDto> {
-    return request<TemplateDto>(`/api/print-designer/admin/templates/${id}`, {
+    return request<TemplateDto>(`/api/print-designer/templates/${id}`, {
       data: input,
       method: 'PUT',
     });
@@ -63,6 +69,7 @@ export function useTemplatesAdminApi() {
     deleteApi,
     getPagedListApi,
     getApi,
+    getByNameApi,
     updateApi,
   };
 }
