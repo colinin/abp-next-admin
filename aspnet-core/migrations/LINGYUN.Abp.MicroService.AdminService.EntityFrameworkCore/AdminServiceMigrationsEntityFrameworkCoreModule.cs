@@ -2,6 +2,7 @@
 using LINGYUN.Abp.DataProtectionManagement.EntityFrameworkCore;
 using LINGYUN.Abp.EntityFrameworkCore.MySQL;
 using LINGYUN.Abp.PermissionManagement.EntityFrameworkCore;
+using LINGYUN.Abp.PrintDesigner.EntityFrameworkCore;
 using LINGYUN.Abp.Saas.EntityFrameworkCore;
 using LINGYUN.Abp.TextTemplating.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -20,6 +21,7 @@ namespace LINGYUN.Abp.MicroService.AdminService.EntityFrameworkCore;
     typeof(AbpPermissionManagementEntityFrameworkCoreModule),
     typeof(AbpFeatureManagementEntityFrameworkCoreModule),
     typeof(AbpTextTemplatingEntityFrameworkCoreModule),
+    typeof(AbpPrintDesignerEntityFrameworkCoreModule),
     typeof(AbpEntityFrameworkCoreMySQLMicrotingModule),
     typeof(AbpDataDbMigratorModule)
     )]

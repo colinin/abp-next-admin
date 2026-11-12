@@ -27,6 +27,7 @@
 		<ProjectReference Include="..\..\framework\efcore\LINGYUN.Abp.EntityFrameworkCore.MySQL.Microting\LINGYUN.Abp.EntityFrameworkCore.MySQL.Microting.csproj" />
 		<ProjectReference Include="..\..\modules\data-protection\LINGYUN.Abp.DataProtectionManagement.EntityFrameworkCore\LINGYUN.Abp.DataProtectionManagement.EntityFrameworkCore.csproj" />
 		<ProjectReference Include="..\..\modules\permissions-management\LINGYUN.Abp.PermissionManagement.EntityFrameworkCore\LINGYUN.Abp.PermissionManagement.EntityFrameworkCore.csproj" />
+		<ProjectReference Include="..\..\modules\print-designer\LINGYUN.Abp.PrintDesigner.EntityFrameworkCore\LINGYUN.Abp.PrintDesigner.EntityFrameworkCore.csproj" />
 		<ProjectReference Include="..\..\modules\saas\LINGYUN.Abp.Saas.EntityFrameworkCore\LINGYUN.Abp.Saas.EntityFrameworkCore.csproj" />
 		<ProjectReference Include="..\..\modules\text-templating\LINGYUN.Abp.TextTemplating.EntityFrameworkCore\LINGYUN.Abp.TextTemplating.EntityFrameworkCore.csproj" />
 	</ItemGroup>
