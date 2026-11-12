@@ -22,6 +22,8 @@
 
 	<ItemGroup>
 	  <ProjectReference Include="..\..\..\framework\data-protection\LINGYUN.Abp.DataProtection\LINGYUN.Abp.DataProtection.csproj" />
+	  <ProjectReference Include="..\..\..\framework\navigation\LINGYUN.Abp.UI.Navigation\LINGYUN.Abp.UI.Navigation.csproj" />
+	  <ProjectReference Include="..\..\print-designer\LINGYUN.Abp.PrintDesigner.Domain\LINGYUN.Abp.PrintDesigner.Domain.csproj" />
 	  <ProjectReference Include="..\LINGYUN.Abp.Demo.Domain.Shared\LINGYUN.Abp.Demo.Domain.Shared.csproj" />
 	</ItemGroup>
 

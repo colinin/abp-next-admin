@@ -15,12 +15,14 @@
     "Demo:00001": "作者 {Name} 已经存在!",
     "Author": "作者",
     "Book": "书籍",
+    "NewBook": "新书籍",
     "DisplayName:Name": "名称",
     "DisplayName:Type": "类型",
     "DisplayName:PublishDate": "出版日期",
     "DisplayName:Price": "单价",
     "DisplayName:AuthorId": "作者",
     "DisplayName:BirthDate": "生日",
-    "DisplayName:ShortBio": "简介"
+    "DisplayName:ShortBio": "简介",
+    "Print": "打印"
   }
 }

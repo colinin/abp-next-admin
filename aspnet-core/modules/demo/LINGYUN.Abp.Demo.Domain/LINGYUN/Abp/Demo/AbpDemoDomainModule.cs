@@ -1,7 +1,8 @@
-﻿using LINGYUN.Abp.DataProtection;
+using LINGYUN.Abp.DataProtection;
 using LINGYUN.Abp.DataProtection.Localization;
 using LINGYUN.Abp.Demo.Books;
 using LINGYUN.Abp.Demo.Localization;
+using LINGYUN.Abp.PrintDesigner;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Domain;
 using Volo.Abp.Localization;
@@ -14,6 +15,7 @@ namespace LINGYUN.Abp.Demo;
     typeof(AbpMapperlyModule),
     typeof(AbpDddDomainModule),
     typeof(AbpDataProtectionModule),
+    typeof(AbpPrintDesignerDomainModule),
     typeof(AbpDemoDomainSharedModule))]
 public class AbpDemoDomainModule : AbpModule
 {
