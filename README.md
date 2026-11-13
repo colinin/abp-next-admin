@@ -1,65 +1,66 @@
-[English](./README.en.md) | 简体中文
+English | [简体中文](./README.zh.md)
 
-[更新说明](./RELEASE.md) 更新说明
+[RELEASE](./RELEASE.md) RELEASE
 
-## 总览
+## Overview
 
-这是一个基于 [vue-vben-admin](https://github.com/anncwb/vue-vben-admin) 的Abp框架后台管理界面
+This is a [vue-vben-admin](https://github.com/anncwb/vue-vben-admin) -based Abp framework background management interface
 
 ## Build
 
 [![Build](https://github.com/colinin/abp-next-admin/actions/workflows/build.yml/badge.svg)](https://github.com/colinin/abp-next-admin/actions/workflows/build.yml)  [![NuGet](https://img.shields.io/nuget/v/LINGYUN.Abp.Core.svg?style=flat-square)](https://www.nuget.org/packages/LINGYUN.Abp.Core)
 
-## 部署方案
+## Deployment Options
 
-### 单体服务部署
+### Monolithic Service Deployment
 
-如果您不需要微服务架构，可以选择单体服务部署方案。单体服务具有部署简单、维护方便的特点。
+If you don't need a microservices architecture, you can choose the monolithic service deployment option. Monolithic services are characterized by simple deployment and easy maintenance.
 
-- [单体服务启动说明](./docs/startup-aio-readme.md)
 - [Monolithic Service Startup Guide](./docs/startup-aio-readme.en.md)
+- [单体服务启动说明](./docs/startup-aio-readme.md)
 
-### 微服务部署
+### Microservices Deployment
 
-如果您需要更高的可扩展性和更灵活的服务架构，可以选择微服务部署方案。
+If you need higher scalability and a more flexible service architecture, you can choose the microservices deployment option.
 
-## 快速搭建微服务启动项目
+## Quick Start of a Microservice Project
 
-### 0、设置hosts文件
-windows下，修改 C:\Windows\System32\drivers\etc\hosts 文件；
-linux下，修改 /etc/hosts；
-增加如下配置：
+### 0. Configure the hosts file
+
+On Windows, modify C:\Windows\System32\drivers\etc\hosts ;
+on Linux, modify /etc/hosts ;
+add the following entry:
 ```
 	127.0.0.1 host.docker.internal
 ```
-linux下，修改完hosts后需要重启网络，在shell中执行：
+On Linux, restart the network after changing the hosts file:
 ```shell
 	/etc/init.d/network restart
 ```
 
-### 1、安装dotnet工具
+### 1. Install the dotnet tool
 
 ```shell
   dotnet tool install --global LINGYUN.Abp.Cli
 ```
 
-### 2、安装.NET模板
+### 2. Install the .NET template
 
 ```shell
   dotnet new --install LINGYUN.Abp.MicroService.Templates
 ```
 
-### 3、使用cli创建一个项目
+### 3. Create a project with the CLI
 
 ```shell
-  # 使用 sqlserver 连接字符串初始化一个项目
-  # MyCompanyName 公司名称
-  # MyProjectName 项目名称
-  # MyPackageName 包名
-  # -o  输出到指定目录,见abp cli
-  # --dbms  指定数据库驱动,见abp cli
-  # --cs    指定数据库连接字符串
-  # --no-random-port 不使用随机端口（默认应用端口5000、dapr监听端口3500）
+  # Initialize a project with a sqlserver connection string
+  # MyCompanyName company name
+  # MyProjectName project name
+  # MyPackageName package name
+  # -o  output to the specified directory, see abp cli
+  # --dbms  specify the database provider, see abp cli
+  # --cs    specify the database connection string, see abp cli
+  # --no-random-port do not use random ports (app port 5000, dapr listening port 3500 by default)
   labp create MyCompanyName.MyProjectName -pk MyPackageName -o "D:\Project" --dbms sqlserver --cs "Server=127.0.0.1;Database=MyProject;User Id=sa;Password=123456" --no-random-port
 
   cd D:\Project\host\MyPackageName.MyCompanyName.MyProjectName.HttpApi.Host
@@ -72,35 +73,72 @@ linux下，修改完hosts后需要重启网络，在shell中执行：
 
 ```
 
-### 问题反馈
+### Feedback
 
-* 作者不是自由职业者，并没有那么多时间维护项目，如果出现问题，可以邮件联系 **colin.in@foxmail.com**，也可以加入QQ群聊: 795966922  
+* The author is not a freelancer and does not have much time to maintain the project. If you have any problems, you can contact **colin.in@foxmail.com** by email
 
-## 截图
+## Screenshots
 
-![系统日志](./apps/vue/images/logging.png)
+### Sign-in and workspace
 
-![审计日志](./apps/vue/images/audit-log.png)
+| Login | Dashboard |
+|:--:|:--:|
+| <a href="screenshots/en/01-login.png"><img src="screenshots/en/01-login.png" alt="Login" width="100%"></a><br>**Login** — ABP identity server with tenant switching, password/phone/QR sign-in and language selection. | <a href="screenshots/en/02-dashboard.png"><img src="screenshots/en/02-dashboard.png" alt="Dashboard" width="100%"></a><br>**Dashboard** — Permission-aware workspace with quick actions, notifications and to-do widgets. |
 
-![安全日志](./apps/vue/images/security-log.png)
+### Identity and access
 
-![数据字典](./apps/vue/images/data-dictionary.png)
+| Users | Roles |
+|:--:|:--:|
+| <a href="screenshots/en/03-users.png"><img src="screenshots/en/03-users.png" alt="Users" width="100%"></a><br>**Users** — Search, create, edit, lock and unlock users; assign roles, permissions and organization units. | <a href="screenshots/en/04-roles.png"><img src="screenshots/en/04-roles.png" alt="Roles" width="100%"></a><br>**Roles** — Manage built-in and custom roles and review their permission grants. |
+| <a href="screenshots/en/05-organization-units.png"><img src="screenshots/en/05-organization-units.png" alt="Organization units" width="100%"></a><br>**Organization units** — Hierarchical departments with members and roles. | <a href="screenshots/en/06-permissions.png"><img src="screenshots/en/06-permissions.png" alt="Permission definitions" width="100%"></a><br>**Permissions** — Module-grouped permission tree with multi-tenancy and provider metadata. |
 
-![对象存储](./apps/vue/images/oss.png)
+### Permission management
 
-![特性管理](./apps/vue/images/features.png)
+| User permissions | Role permissions |
+|:--:|:--:|
+| <a href="screenshots/en/22-user-permissions.png"><img src="screenshots/en/22-user-permissions.png" alt="User permissions" width="100%"></a><br>**User permissions** — Grant permissions directly to a user and review checked or inherited grants by group. | <a href="screenshots/en/23-role-permissions.png"><img src="screenshots/en/23-role-permissions.png" alt="Role permissions" width="100%"></a><br>**Role permissions** — Grant permissions to a role and inspect the granted total for every permission group. |
+| <a href="screenshots/en/25-organization-unit-permissions.png"><img src="screenshots/en/25-organization-unit-permissions.png" alt="Organization unit permissions" width="100%"></a><br>**Organization unit permissions** — Open an organization unit's context menu and manage permissions for that unit. | <a href="screenshots/en/24-authorized-objects.png"><img src="screenshots/en/24-authorized-objects.png" alt="Authorized entities" width="100%"></a><br>**Authorized entities** — Select a permission to see every user or role currently granted it, with direct revoke actions. |
 
-![系统设置](./apps/vue/images/settings.png)
+### Auditing and configuration
 
-![菜单管理](./apps/vue/images/menus.png)
+| Audit logs | Security logs |
+|:--:|:--:|
+| <a href="screenshots/en/07-audit-logs.png"><img src="screenshots/en/07-audit-logs.png" alt="Audit logs" width="100%"></a><br>**Audit logs** — Request-level audit trail with status, duration, user, client and action details. | <a href="screenshots/en/08-security-logs.png"><img src="screenshots/en/08-security-logs.png" alt="Security logs" width="100%"></a><br>**Security logs** — Sign-in, sign-out and other authentication security events. |
+| <a href="screenshots/en/09-settings.png"><img src="screenshots/en/09-settings.png" alt="System settings" width="100%"></a><br>**System settings** — Host-level language, time zone and feature configuration. | <a href="screenshots/en/10-features.png"><img src="screenshots/en/10-features.png" alt="Feature management" width="100%"></a><br>**Features** — Feature toggles for host and tenant capabilities. |
 
-![组织机构](./apps/vue/images/organization-unit.png)
+### Localization and platform
 
-![本地化管理](./apps/vue/images/localization.png)
+| Localization texts | Data dictionaries |
+|:--:|:--:|
+| <a href="screenshots/en/11-localization.png"><img src="screenshots/en/11-localization.png" alt="Localization texts" width="100%"></a><br>**Localization** — Side-by-side source and target translations by resource. | <a href="screenshots/en/12-data-dictionaries.png"><img src="screenshots/en/12-data-dictionaries.png" alt="Data dictionaries" width="100%"></a><br>**Data dictionaries** — Reusable enumerations for UI and business rules. |
+| <a href="screenshots/en/13-menus.png"><img src="screenshots/en/13-menus.png" alt="Dynamic menus" width="100%"></a><br>**Menus** — Navigation tree, ordering and menu-level permissions. | <a href="screenshots/en/14-object-storage.png"><img src="screenshots/en/14-object-storage.png" alt="Object storage" width="100%"></a><br>**Object storage** — Blob containers and file management. |
 
-## 相关项目
+### SaaS and operations
 
-后端项目
+| Tenants | Cache management |
+|:--:|:--:|
+| <a href="screenshots/en/15-tenants.png"><img src="screenshots/en/15-tenants.png" alt="Tenants" width="100%"></a><br>**Tenants** — Multi-tenant SaaS tenants and edition assignment. | <a href="screenshots/en/16-cache-management.png"><img src="screenshots/en/16-cache-management.png" alt="Cache management" width="100%"></a><br>**Cache** — Inspect, refresh and delete cache entries. |
+| <a href="screenshots/en/17-text-templates.png"><img src="screenshots/en/17-text-templates.png" alt="Text templates" width="100%"></a><br>**Text templates** — Email and notification templates with layout and localization metadata. | <a href="screenshots/en/18-webhooks.png"><img src="screenshots/en/18-webhooks.png" alt="Webhooks" width="100%"></a><br>**Webhooks** — Webhook definitions, subscriptions and delivery attempts. |
+
+### Workflow and automation
+
+| Print designer | Approval flow | Background jobs |
+|:--:|:--:|:--:|
+| <a href="screenshots/en/19-print-designer.png"><img src="screenshots/en/19-print-designer.png" alt="Print designer" width="100%"></a><br>**Print designer** — WYSIWYG template editor with text, image, barcode, QR code and layout tools. | <a href="screenshots/en/20-approval-flow.png"><img src="screenshots/en/20-approval-flow.png" alt="Approval flow" width="100%"></a><br>**Approval flow** — Visual designer for initiators, conditional branches, approvers and CC nodes. | <a href="screenshots/en/21-background-jobs.png"><img src="screenshots/en/21-background-jobs.png" alt="Background jobs" width="100%"></a><br>**Background jobs** — Job scheduling and execution state; this instance currently has no scheduled jobs. |
+
+### Two-factor authentication flow
+
+| **1. Enable forced 2FA** | **2. Create test user** |
+|:--:|:--:|
+| <a href="screenshots/en/two-factor-auth/01-feature-setting.png"><img src="screenshots/en/two-factor-auth/01-feature-setting.png" alt="Enable forced two-factor authentication" width="100%"></a><br>**Enable forced 2FA** — Identity feature: Two factor behaviour = Forced. | <a href="screenshots/en/two-factor-auth/02-test-user.png"><img src="screenshots/en/two-factor-auth/02-test-user.png" alt="Create test user" width="100%"></a><br>**Create test user** — New active `twofa.demo` account without an authenticator. |
+| **3. Sign in** | **4. Authenticator setup** |
+| <a href="screenshots/en/two-factor-auth/03-login.png"><img src="screenshots/en/two-factor-auth/03-login.png" alt="Sign in" width="100%"></a><br>**Sign in** — The user starts with the standard username/password login. | <a href="screenshots/en/two-factor-auth/04-authenticator-setup.png"><img src="screenshots/en/two-factor-auth/04-authenticator-setup.png" alt="Authenticator setup" width="100%"></a><br>**Authenticator setup** — Scan the QR code or enter the shared key in an authenticator app. |
+| **5. Verify code** | **6. Recovery codes** |
+| <a href="screenshots/en/two-factor-auth/05-verification.png"><img src="screenshots/en/two-factor-auth/05-verification.png" alt="Verify authenticator code" width="100%"></a><br>**Verify code** — Re-enter the password and the current 6-digit TOTP code. | <a href="screenshots/en/two-factor-auth/06-recovery-codes.png"><img src="screenshots/en/two-factor-auth/06-recovery-codes.png" alt="Recovery codes" width="100%"></a><br>**Recovery codes** — Store the one-time recovery codes before continuing. |
+
+## Related Projects
+
+Backend projects
 
 [abpframework/abp](https://github.com/abpframework/abp) (abp vNext)
 
@@ -108,308 +146,308 @@ linux下，修改完hosts后需要重启网络，在shell中执行：
 
 [DotNetCore/CAP](https://github.com/dotnetcore/CAP) (CAP)
 
-前端项目
+Frontend projects
 
 [vue-vben-admin](https://github.com/anncwb/vue-vben-admin.git) (vue-vben-admin)
 
-## 准备
+## Preparation
 
-- [node](http://nodejs.org/) 和 [git](https://git-scm.com/) -项目开发环境
-- [Vite](https://vitejs.dev/) - 熟悉 vite 特性
-- [Vue3](https://v3.vuejs.org/) - 熟悉 Vue 基础语法
-- [TypeScript](https://www.typescriptlang.org/) - 熟悉`TypeScript`基本语法
-- [Es6+](http://es6.ruanyifeng.com/) - 熟悉 es6 基本语法
-- [Vue-Router-Next](https://next.router.vuejs.org/) - 熟悉 vue-router 基本使用
-- [Ant-Design-Vue](https://2x.antdv.com/docs/vue/introduce-cn/) - ui 基本使用
-- [Mock.js](https://github.com/nuysoft/Mock) - mockjs 基本语法
+- [node](http://nodejs.org/) and [git](https://git-scm.com/) - Project development environment
+- [Vite](https://vitejs.dev/) - Familiar with vite features
+- [Vue3](https://v3.vuejs.org/) - Familiar with Vue basic syntax
+- [TypeScript](https://www.typescriptlang.org/) - Familiar with the basic syntax of `TypeScript`
+- [Es6+](http://es6.ruanyifeng.com/) - Familiar with es6 basic syntax
+- [Vue-Router-Next](https://next.router.vuejs.org/) - Familiar with the basic use of vue-router
+- [Ant-Design-Vue](https://2x.antdv.com/docs/vue/introduce-cn/) - ui basic use
+- [Mock.js](https://github.com/nuysoft/Mock) - mockjs basic syntax
 
-## 目录结构
+## Project Structure
 
-### 前端：apps/vben5（pnpm workspace + turbo 的 monorepo）
+### Frontend: apps/vben5 (a pnpm workspace + turbo monorepo)
 
 ```bash
 apps/vben5/
-├── apps/                        # 可独立运行的 UI 应用
-│   ├── app-antd/                # ABP 业务前端（当前使用：pnpm dev:app / pnpm build:app）
-│   ├── web-antd/                # vben 官方 antd 示例应用
-│   ├── web-antdv-next/          # antdv-next 示例应用
-│   ├── web-ele/                 # Element Plus 示例应用
-│   ├── web-naive/               # Naive UI 示例应用
-│   └── web-tdesign/             # TDesign 示例应用
+├── apps/                        # Independently runnable UI applications
+│   ├── app-antd/                # ABP business frontend (the one in use: pnpm dev:app / pnpm build:app)
+│   ├── web-antd/                # Official vben antd demo application
+│   ├── web-antdv-next/          # antdv-next demo application
+│   ├── web-ele/                 # Element Plus demo application
+│   ├── web-naive/               # Naive UI demo application
+│   └── web-tdesign/             # TDesign demo application
 ├── packages/
-│   ├── @abp/                    # ABP 业务模块包（27 个）
-│   │   ├── account/             # 账户、外部登录（第三方账号绑定）
-│   │   ├── ai-management/       # AI 管理（工作区、工具、智能体）
-│   │   ├── auditing/            # 审计日志、安全日志
-│   │   ├── blob-management/     # 对象存储（容器、文件）
-│   │   ├── cache-management/    # 缓存管理
-│   │   ├── components/          # ABP 前端通用业务组件
-│   │   ├── core/                # ABP 前端核心（请求、权限、菜单等基础能力）
-│   │   ├── data-protection/     # 数据保护（实体/字段级访问控制）
-│   │   ├── demo/                # 示例模块
-│   │   ├── features/            # 特性（Feature）管理
-│   │   ├── gdpr/                # GDPR 数据导出与删除
-│   │   ├── identity/            # 用户、角色、组织机构、会话、登录日志
-│   │   ├── localization/        # 本地化（语言、资源、文本）
-│   │   ├── notifications/       # 通知（通知定义、我的通知、发送记录）
-│   │   ├── openiddict/          # OpenIddict（应用、作用域、授权、令牌）
-│   │   ├── oss/                 # OSS/Blob 文件列表
-│   │   ├── permissions/         # 权限定义与授权
-│   │   ├── platform/            # 平台（布局、菜单、数据字典、邮件/短信）
-│   │   ├── request/             # HTTP 请求封装（令牌、错误处理、租户头）
-│   │   ├── saas/                # 租户与版本（Edition）
-│   │   ├── settings/            # 设置定义与设置值
-│   │   ├── signalr/             # SignalR 实时通信
-│   │   ├── tasks/               # 后台任务（作业管理）
-│   │   ├── text-templating/     # 文本模板
-│   │   ├── ui/                  # ABP 前端 UI 组件库
-│   │   ├── webhooks/            # Webhook 定义、订阅与发送记录
-│   │   └── wechat/              # 微信（公众号、企业微信等）
-│   ├── @core/                   # 内核：base / ui-kit / forward
-│   ├── effects/                 # 通用能力：plugins / hooks / common-ui 等
-│   ├── icons/  types/           # 图标、类型定义
-│   └── ...                      # 其余公共包（见 pnpm-workspace.yaml）
-├── internal/                    # 工程化配置：vite-config / lint-configs / tailwind-config / tsconfig / node-utils
-├── docs/                        # VitePress 文档
-├── playground/                  # 组件与示例演练场
-├── scripts/                     # 清理、构建、部署等脚本
-├── package.json                 # 根脚本：dev / dev:app / build:app / lint / format / test:unit / check:type
-├── pnpm-workspace.yaml          # workspace 划分与依赖 catalog
-├── turbo.json                   # turbo 流水线配置
-└── vitest.config.ts             # 单元测试（vitest）配置
+│   ├── @abp/                    # ABP business module packages (27 in total)
+│   │   ├── account/             # Account, external logins (third-party account binding)
+│   │   ├── ai-management/       # AI management (workspaces, tools, agents)
+│   │   ├── auditing/            # Audit logs and security logs
+│   │   ├── blob-management/     # Object storage (containers, files)
+│   │   ├── cache-management/    # Cache management
+│   │   ├── components/          # Shared ABP business components
+│   │   ├── core/                # ABP frontend core (request, permissions, menus, etc.)
+│   │   ├── data-protection/     # Data protection (entity/field level access control)
+│   │   ├── demo/                # Demo module
+│   │   ├── features/            # Feature management
+│   │   ├── gdpr/                # GDPR data export and deletion
+│   │   ├── identity/            # Users, roles, organization units, sessions, login logs
+│   │   ├── localization/        # Localization (languages, resources, texts)
+│   │   ├── notifications/       # Notifications (definitions, my notifications, send records)
+│   │   ├── openiddict/          # OpenIddict (applications, scopes, authorizations, tokens)
+│   │   ├── oss/                 # OSS/Blob file list
+│   │   ├── permissions/         # Permission definitions and grants
+│   │   ├── platform/            # Platform (layouts, menus, data dictionaries, email/SMS)
+│   │   ├── request/             # HTTP request wrapper (token, error handling, tenant header)
+│   │   ├── saas/                # Tenants and editions
+│   │   ├── settings/            # Setting definitions and values
+│   │   ├── signalr/             # SignalR real-time communication
+│   │   ├── tasks/               # Background tasks (job management)
+│   │   ├── text-templating/     # Text templates
+│   │   ├── ui/                  # ABP frontend UI component library
+│   │   ├── webhooks/            # Webhook definitions, subscriptions and send attempts
+│   │   └── wechat/              # WeChat (official account, WeCom, etc.)
+│   ├── @core/                   # Core: base / ui-kit / forward
+│   ├── effects/                 # Shared capabilities: plugins / hooks / common-ui, etc.
+│   ├── icons/  types/           # Icons and type definitions
+│   └── ...                      # The remaining shared packages (see pnpm-workspace.yaml)
+├── internal/                    # Engineering configuration: vite-config / lint-configs / tailwind-config / tsconfig / node-utils
+├── docs/                        # VitePress documentation
+├── playground/                  # Component and example playground
+├── scripts/                     # Cleanup, build and deployment scripts
+├── package.json                 # Root scripts: dev / dev:app / build:app / lint / format / test:unit / check:type
+├── pnpm-workspace.yaml          # Workspace layout and dependency catalog
+├── turbo.json                   # turbo pipeline configuration
+└── vitest.config.ts             # Unit test (vitest) configuration
 ```
 
-### 后端：aspnet-core 与配套目录
+### Backend: aspnet-core and the surrounding directories
 
 ```bash
 .
 ├── aspnet-core/
-│   ├── services/                # 各服务宿主（含 Dockerfile）
-│   │   ├── LINGYUN.Abp.MicroService.AuthServer/        # 认证服务（STS，44385）
-│   │   ├── LINGYUN.Abp.MicroService.IdentityService/   # 身份服务（30015）
-│   │   ├── LINGYUN.Abp.MicroService.AdminService/      # 管理服务（30010）
-│   │   ├── LINGYUN.Abp.MicroService.LocalizationService/# 本地化服务（30030）
-│   │   ├── LINGYUN.Abp.MicroService.PlatformService/   # 平台服务（30025）
-│   │   ├── LINGYUN.Abp.MicroService.MessageService/    # 消息服务（30020）
-│   │   ├── LINGYUN.Abp.MicroService.TaskService/       # 任务服务（30040）
-│   │   ├── LINGYUN.Abp.MicroService.WebhookService/    # Webhook 服务（30045）
-│   │   ├── LINGYUN.Abp.MicroService.WorkflowService/   # 工作流服务（30050）
-│   │   ├── LINGYUN.Abp.MicroService.WeChatService/     # 微信服务（30060）
-│   │   ├── LINGYUN.Abp.MicroService.AIService/         # AI 服务（30070）
-│   │   ├── LINGYUN.Abp.MicroService.AllInOne/        # 单体应用（30000，合并网关与全部模块）
-│   │   ├── LY.MicroService.IdentityServer/             # IdentityServer 版本服务与宿主
-│   │   ├── LINGYUN.Abp.Applications/  LY.AIO.Applications.Single/  # 其它宿主
-│   │   └── Publish/             # 发布输出目录（容器镜像构建使用）
-│   ├── modules/                 # 业务模块，每个模块按 DDD 分层（Domain / Application / EntityFrameworkCore / HttpApi ...）
-│   │   ├── account/             # 账户与登录（含 OpenIddict/IdentityServer 的 Web 集成、验证码）
-│   │   ├── identity/            # 用户、角色、组织机构、会话、登录日志
-│   │   ├── identityServer/      # IdentityServer4 相关实现
-│   │   ├── openIddict/          # OpenIddict 服务端（应用、作用域、令牌、Portal、二维码、短信、微信登录）
-│   │   ├── permissions-management/  # 权限管理与授权
-│   │   ├── saas/                # 多租户与版本
-│   │   ├── settings/  feature-management/  # 设置、特性管理
-│   │   ├── localization-management/  text-templating/  # 本地化、文本模板
-│   │   ├── auditing/  data-protection/  gdpr/  captcha/  # 审计、数据保护、GDPR、验证码
-│   │   ├── blob-management/  caching-management/  # 对象存储、缓存管理
-│   │   ├── platform/  project/  system-info/  demo/  # 平台、项目、系统信息、示例
-│   │   ├── realtime-message/  realtime-notifications/  # 即时消息、实时通知
-│   │   ├── task-management/  rules-management/  webhooks/  # 后台任务、规则引擎、Webhook
-│   │   ├── operation-rate-limiting/                     # 操作级限流（固定/滑动窗口、令牌桶、并发、Redis Lua 原子实现）│   │   ├── ai/  elsa/           # AI 能力、工作流（Elsa）
-│   ├── framework/               # 基础框架包（34 个分组），常用分组：
-│   │   ├── common/  core 相关基础包（LINGYUN.Abp.Core、CAP、Hangfire、BlobStoring、SignalR ...）
-│   │   ├── security/  authentication/  authorization/   # 安全、登录方式、授权
-│   │   ├── auditing/  logging/  telemetry/              # 审计、日志、链路追踪（OpenTelemetry/SkyWalking）
-│   │   ├── multi-tenancy 相关：tenants/                 # 多租户与版本
-│   │   ├── wechat/  wx-pusher/  pushplus/  tui-juhe/    # 微信、消息推送
-│   │   ├── cloud-aliyun/  cloud-tencent/                # 阿里云、腾讯云集成
-│   │   ├── dapr/  elasticsearch/  efcore/  data-protection/  # Dapr、ES、EF Core、数据保护
-│   │   ├── dynamic-queryable/  dynamic-definition/  exporter/  # 动态查询、动态定义、导入导出
-│   │   ├── operation-rate-limiting/                     # 操作级限流（固定/滑动窗口、令牌桶、并发、Redis Lua 原子实现）
-│   │   ├── localization/  settings/  features/  mvc/  open-api/  cli/  ...  # 其它基础包
-│   ├── migrations/              # 各服务的 DbMigrator 与 EntityFrameworkCore 迁移项目（deploy.ps1 会依次执行）
-│   ├── aspire/                  # .NET Aspire：LINGYUN.Abp.MicroService.AppHost 及各服务的 Aspire 宿主
-│   ├── templates/               # dotnet new 项目模板（micro 微服务 / aio 单体）
-│   ├── tests/                   # 单元测试项目
-│   ├── LINGYUN.MicroService.All.slnx            # 全量解决方案
-│   ├── LINGYUN.MicroService.Aspire.slnx         # Aspire 解决方案
-│   └── LINGYUN.MicroService.AllInOne.slnx  # 单体解决方案
+│   ├── services/                # Service hosts (each with its own Dockerfile)
+│   │   ├── LINGYUN.Abp.MicroService.AuthServer/        # Auth server (STS, 44385)
+│   │   ├── LINGYUN.Abp.MicroService.IdentityService/   # Identity service (30015)
+│   │   ├── LINGYUN.Abp.MicroService.AdminService/      # Admin service (30010)
+│   │   ├── LINGYUN.Abp.MicroService.LocalizationService/# Localization service (30030)
+│   │   ├── LINGYUN.Abp.MicroService.PlatformService/   # Platform service (30025)
+│   │   ├── LINGYUN.Abp.MicroService.MessageService/    # Message service (30020)
+│   │   ├── LINGYUN.Abp.MicroService.TaskService/       # Task service (30040)
+│   │   ├── LINGYUN.Abp.MicroService.WebhookService/    # Webhook service (30045)
+│   │   ├── LINGYUN.Abp.MicroService.WorkflowService/   # Workflow service (30050)
+│   │   ├── LINGYUN.Abp.MicroService.WeChatService/     # WeChat service (30060)
+│   │   ├── LINGYUN.Abp.MicroService.AIService/         # AI service (30070)
+│   │   ├── LINGYUN.Abp.MicroService.AllInOne/        # Monolith (30000, gateway and all modules merged)
+│   │   ├── LY.MicroService.IdentityServer/             # IdentityServer based services and hosts
+│   │   ├── LINGYUN.Abp.Applications/  LY.AIO.Applications.Single/  # Other hosts
+│   │   └── Publish/             # Publish output directory (used by the container image builds)
+│   ├── modules/                 # Business modules, each layered by DDD (Domain / Application / EntityFrameworkCore / HttpApi ...)
+│   │   ├── account/             # Account and sign-in (OpenIddict/IdentityServer web integration, captcha)
+│   │   ├── identity/            # Users, roles, organization units, sessions, login logs
+│   │   ├── identityServer/      # IdentityServer4 based implementation
+│   │   ├── openIddict/          # OpenIddict server (applications, scopes, tokens, Portal, QR code, SMS, WeChat)
+│   │   ├── permissions-management/  # Permission management and grants
+│   │   ├── saas/                # Multi-tenancy and editions
+│   │   ├── settings/  feature-management/  # Settings and features
+│   │   ├── localization-management/  text-templating/  # Localization and text templates
+│   │   ├── auditing/  data-protection/  gdpr/  captcha/  # Auditing, data protection, GDPR, captcha
+│   │   ├── blob-management/  caching-management/  # Object storage and cache management
+│   │   ├── platform/  project/  system-info/  demo/  # Platform, project, system info, demo
+│   │   ├── realtime-message/  realtime-notifications/  # Instant messaging and real-time notifications
+│   │   ├── task-management/  rules-management/  webhooks/  # Background tasks, rules engine, webhooks
+│   │   ├── operation-rate-limiting/                     # Operation rate limiting (fixed/sliding window, token bucket, concurrency, Redis Lua atomic store)│   │   ├── ai/  elsa/           # AI capabilities and workflow (Elsa)
+│   ├── framework/               # Base framework packages (34 groups), the most used ones:
+│   │   ├── common/  core packages (LINGYUN.Abp.Core, CAP, Hangfire, BlobStoring, SignalR ...)
+│   │   ├── security/  authentication/  authorization/   # Security, sign-in methods, authorization
+│   │   ├── auditing/  logging/  telemetry/              # Auditing, logging, tracing (OpenTelemetry/SkyWalking)
+│   │   ├── multi-tenancy: tenants/                      # Multi-tenancy and editions
+│   │   ├── wechat/  wx-pusher/  pushplus/  tui-juhe/    # WeChat and message push
+│   │   ├── cloud-aliyun/  cloud-tencent/                # Aliyun and Tencent Cloud integration
+│   │   ├── dapr/  elasticsearch/  efcore/  data-protection/  # Dapr, Elasticsearch, EF Core, data protection
+│   │   ├── dynamic-queryable/  dynamic-definition/  exporter/  # Dynamic query, dynamic definitions, import/export
+│   │   ├── operation-rate-limiting/                     # Operation rate limiting (fixed/sliding window, token bucket, concurrency, Redis Lua atomic store)
+│   │   ├── localization/  settings/  features/  mvc/  open-api/  cli/  ...  # Other base packages
+│   ├── migrations/              # DbMigrator and EntityFrameworkCore migration projects of each service (run by deploy.ps1)
+│   ├── aspire/                  # .NET Aspire: LINGYUN.Abp.MicroService.AppHost and the Aspire hosts of each service
+│   ├── templates/               # dotnet new project templates (micro / aio)
+│   ├── tests/                   # Unit test projects
+│   ├── LINGYUN.MicroService.All.slnx            # Full solution
+│   ├── LINGYUN.MicroService.Aspire.slnx         # Aspire solution
+│   └── LINGYUN.MicroService.AllInOne.slnx  # Monolith solution
 ├── gateways/
-│   ├── internal/                # 内部网关（YARP）：Internal.Gateway / OpenApi.Gateway + yarp*.json 路由
-│   └── web/                     # Web 网关：LY.MicroService.ApiGateway
-├── apps/                        # 前端：vben5（当前）/ vue（旧版）
-├── build/                       # 构建与迁移脚本：build-aspnetcore-ef-update.ps1、build-aspnetcore-docker-build.ps1 ...
-├── deploy/                      # 一键部署脚本（deploy.ps1）、中间件数据与各服务日志目录
-├── docs/                        # 文档（单体服务启动指南等）
-├── docker-compose.yml                        # 后端服务编排
-├── docker-compose.override.yml               # 镜像标签、卷映射与启动顺序
-├── docker-compose.override.configuration.yml # 各服务环境变量（连接串、CAP、Redis、Elasticsearch 等）
-├── docker-compose.middleware.yml             # 中间件：MySQL/Redis/RabbitMQ/Elasticsearch/Kibana/Logstash/OpenObserve
-├── docker-compose.override.agile.yml         # AgileConfig 配置中心（可选）
-├── Directory.Build.props  Directory.Packages.props  NuGet.Config  common.props  # 统一构建与包版本管理
-└── README.md  README.en.md  RELEASE.md  LICENSE  # 文档与许可
+│   ├── internal/                # Internal gateway (YARP): Internal.Gateway / OpenApi.Gateway + yarp*.json routes
+│   └── web/                     # Web gateway: LY.MicroService.ApiGateway
+├── apps/                        # Frontend: vben5 (current) / vue (legacy)
+├── build/                       # Build and migration scripts: build-aspnetcore-ef-update.ps1, build-aspnetcore-docker-build.ps1 ...
+├── deploy/                      # One-click deployment script (deploy.ps1), middleware data and service log directories
+├── docs/                        # Documentation (monolith startup guide, etc.)
+├── docker-compose.yml                        # Backend service orchestration
+├── docker-compose.override.yml               # Image tags, volumes and startup order
+├── docker-compose.override.configuration.yml # Environment variables of each service (connection strings, CAP, Redis, Elasticsearch, ...)
+├── docker-compose.middleware.yml             # Middleware: MySQL/Redis/RabbitMQ/Elasticsearch/Kibana/Logstash/OpenObserve
+├── docker-compose.override.agile.yml         # AgileConfig configuration center (optional)
+├── Directory.Build.props  Directory.Packages.props  NuGet.Config  common.props  # Shared build and package version management
+└── README.md  README.zh.md  README.en.md  RELEASE.md  LICENSE  # Documentation and license
 ```
 
-## 启动项目
+## Starting the Project
 
-本项目提供三种启动方式，按需选择：
+Three startup options are provided; choose the one that fits your needs:
 
-| 方式 | 说明 | 中间件 | 前端 |
+| Option | Description | Middleware | Frontend |
 | --- | --- | --- | --- |
-| 方式一：微服务 | 完整微服务架构，后端全部以容器运行 | 需**先启动** `docker-compose.middleware.yml` | 单独启动 vben5 |
-| 方式二：Aspire | AppHost 编排本地微服务开发环境 | AppHost 自动创建容器（PostgreSQL/Redis/RabbitMQ/Elasticsearch/Kibana） | AppHost 自动启动 |
-| 方式三：单体 | 网关、认证与业务模块合并为一个进程 | 需**先启动** `docker-compose.middleware.yml` | 单独启动 vben5 |
+| Option 1: Microservices | Full microservices architecture, all backends run as containers | Must **start first**: `docker-compose.middleware.yml` | Start vben5 separately |
+| Option 2: Aspire | AppHost orchestrates a local microservices development environment | AppHost creates the containers automatically (PostgreSQL/Redis/RabbitMQ/Elasticsearch/Kibana) | Started automatically by AppHost |
+| Option 3: Monolith | Gateway, authentication and business modules merged into a single process | Must **start first**: `docker-compose.middleware.yml` | Start vben5 separately |
 
-### 通用前提
+### Prerequisites
 
-- **.NET SDK 10**（`dotnet --version`）
-- **Docker / Docker Compose**（方式一、三的中间件；方式二的中间件容器同样由 Docker 提供）
-- **Node.js 20+ 与 pnpm**（前端位于 `apps/vben5`，为 pnpm monorepo，`preinstall` 会执行 `only-allow pnpm`）
-- **hosts**：Windows 修改 `C:\Windows\System32\drivers\etc\hosts`，Linux 修改 `/etc/hosts`，增加如下配置
+- **.NET SDK 10** (`dotnet --version`)
+- **Docker / Docker Compose** (middleware for options 1 and 3; option 2 also relies on Docker for its middleware containers)
+- **Node.js 20+ and pnpm** (the frontend lives in `apps/vben5`, a pnpm monorepo; `preinstall` runs `only-allow pnpm`)
+- **hosts**: on Windows edit `C:\Windows\System32\drivers\etc\hosts`, on Linux edit `/etc/hosts`, and add the following entry
   ```
   127.0.0.1 host.docker.internal
   ```
-  （容器内通过 `extra_hosts: host.docker.internal:host-gateway` 访问宿主机上的中间件）
+  (containers reach the middleware on the host through `extra_hosts: host.docker.internal:host-gateway`)
 
 ---
 
-### 方式一：微服务启动
+### Option 1: Microservices
 
-#### 1) 一键启动：deploy/deploy.ps1
+#### 1) One-click startup: deploy/deploy.ps1
 
 ```powershell
 cd ./deploy
 powershell -ExecutionPolicy Bypass -File .\deploy.ps1
 ```
 
-脚本依次完成（见 `deploy/deploy.ps1`）：
+The script performs the following steps (see `deploy/deploy.ps1`):
 
-1. 启动中间件：`docker-compose -f .\docker-compose.middleware.yml -p labp up -d --build`（MySQL、Redis、RabbitMQ、Elasticsearch、Kibana、Logstash、OpenObserve）
-2. 等待 30 秒，等 MySQL 初始化完成
-3. 依次执行 8 个数据库迁移项目（`dotnet run --no-build`，**因此执行脚本前必须先构建过后端**）
-4. 构建 12 个后端镜像（`labp-*-service:10.6.0`）
-5. 启动后端：`docker-compose -f .\docker-compose.yml -f .\docker-compose.override.yml -f .\docker-compose.override.configuration.yml -p labp up -d`
-6. 在 `apps/vben5` 下执行 `pnpm dev:app` 启动前端
+1. Starts the middleware: `docker-compose -f .\docker-compose.middleware.yml -p labp up -d --build` (MySQL, Redis, RabbitMQ, Elasticsearch, Kibana, Logstash, OpenObserve)
+2. Waits 30 seconds for MySQL initialization to complete
+3. Runs the 8 database migration projects one by one (`dotnet run --no-build`, **so the backend must have been built before running the script**)
+4. Builds the 12 backend images (`labp-*-service:10.6.0`)
+5. Starts the backend: `docker-compose -f .\docker-compose.yml -f .\docker-compose.override.yml -f .\docker-compose.override.configuration.yml -p labp up -d`
+6. Runs `pnpm dev:app` under `apps/vben5` to start the frontend
 
-注意：
+Notes:
 
-- 必须在 **deploy 目录**下执行脚本（脚本内部使用相对路径）。
-- 脚本调用的是 `docker-compose`（Compose V1 命令）；本机只安装 Compose V2 插件时，请把脚本中的 `docker-compose` 改为 `docker compose`。
-- 脚本不包含 AgileConfig（`docker-compose.override.agile.yml`），配置均来自 `docker-compose.override.configuration.yml`。
+- The script must be executed in the **deploy directory** (it uses relative paths internally).
+- The script calls `docker-compose` (Compose V1 command); if only the Compose V2 plugin is installed on your machine, replace `docker-compose` with `docker compose` in the script.
+- The script does not include AgileConfig (`docker-compose.override.agile.yml`); all configuration comes from `docker-compose.override.configuration.yml`.
 
-#### 2) 手动启动（与脚本等价，务必先启动中间件）
+#### 2) Manual startup (equivalent to the script; make sure the middleware is started first)
 
 ```powershell
-# ① 启动中间件（务必先启动）
+# 1) Start the middleware (must be first)
 docker-compose -f .\docker-compose.middleware.yml -p labp up -d
-# 首次启动请等待 30 秒以上，让 MySQL 执行 deploy/mysql/docker-entrypoint-initdb.d 下的初始化脚本
+# On the first run, wait at least 30 seconds so that MySQL can execute the init scripts under deploy/mysql/docker-entrypoint-initdb.d
 
-# ② 数据库迁移：使用迁移脚本（内部对 aspnet-core/migrations 下的 8 个 *.DbMigrator 依次执行 dotnet run，会自动构建）
+# 2) Database migration: use the migration script (it runs dotnet run for each of the 8 *.DbMigrator projects under aspnet-core/migrations, and builds automatically)
 cd .\build
 .\build-aspnetcore-ef-update.ps1
 
-# ③ 构建后端镜像：生成 12 个 labp-*-service:10.6.0（标签必须与 docker-compose.override.yml 中的 image 一致）
+# 3) Build the backend images: produces the 12 labp-*-service:10.6.0 images (the tags must match the image values in docker-compose.override.yml)
 .\build-aspnetcore-docker-build.ps1
 
-# ④ 启动后端（三个 compose 文件缺一不可）
+# 4) Start the backend (all three compose files are required)
 docker-compose -f .\docker-compose.yml -f .\docker-compose.override.yml -f .\docker-compose.override.configuration.yml -p labp up -d
 
-# ⑤ 启动前端
+# 5) Start the frontend
 cd .\apps\vben5
 pnpm install
 pnpm dev:app
 ```
 
-手动步骤说明：
+Notes on the manual steps:
 
-- ②③ 两个脚本都必须在 **build 目录**下执行（脚本内部相对引用 `./build-aspnetcore-common.ps1`）。
-- `build-aspnetcore-ef-update.ps1` 内部使用 `dotnet run`（会先构建再运行），因此手动流程**不需要**预先构建后端；而一键脚本 `deploy.ps1` 使用 `dotnet run --no-build`，所以走一键脚本前必须先构建过后端。
-- 只想迁移某个服务时，可直接进入对应目录执行，例如：
+- Both scripts in steps 2 and 3 must be executed in the **build directory** (they reference `./build-aspnetcore-common.ps1` relatively).
+- `build-aspnetcore-ef-update.ps1` uses `dotnet run` internally (it builds first, then runs), so the manual flow does **not** require a pre-built backend; the one-click `deploy.ps1` uses `dotnet run --no-build`, so the backend must be built before running it.
+- To migrate only a single service, run it from its own directory, for example:
 
   ```powershell
   cd .\aspnet-core\migrations\LINGYUN.Abp.MicroService.AuthServer.DbMigrator
   dotnet run
   ```
 
-#### 3) 访问地址
+#### 3) Endpoints
 
-| 组件 | 地址 |
+| Component | Address |
 | --- | --- |
-| 前端（vben5，`@abp/app-antd`） | http://localhost:5666 |
-| API 网关 | http://localhost:30000 |
-| 认证服务（STS） | http://localhost:44385 |
-| 身份 / 管理 / 平台 / 消息 / 本地化 | 30015 / 30010 / 30025 / 30020 / 30030 |
-| 任务 / Webhook / 工作流 / 微信 / AI | 30040 / 30045 / 30050 / 30060 / 30070 |
+| Frontend (vben5, `@abp/app-antd`) | http://localhost:5666 |
+| API Gateway | http://localhost:30000 |
+| Auth Server (STS) | http://localhost:44385 |
+| Identity / Admin / Platform / Message / Localization | 30015 / 30010 / 30025 / 30020 / 30030 |
+| Task / Webhook / Workflow / WeChat / AI | 30040 / 30045 / 30050 / 30060 / 30070 |
 | Kibana | http://localhost:5601 |
-| RabbitMQ 管理台 | http://localhost:15672 （admin / 123456） |
-| MySQL | localhost:3306 （root / 123456，数据库 `abp`） |
+| RabbitMQ management | http://localhost:15672 (admin / 123456) |
+| MySQL | localhost:3306 (root / 123456, database `abp`) |
 | Redis | localhost:6379 |
-| OpenObserve 管理台 | http://localhost:5080 （admin@abp.io / ww1Z5L%6） |
+| OpenObserve console | http://localhost:5080 (admin@abp.io / ww1Z5L%6) |
 
-### 方式二：Aspire 启动
+### Option 2: Aspire
 
-AppHost 会自动拉起它自己的中间件容器（PostgreSQL、Redis、RabbitMQ、Elasticsearch、Kibana），在 Development 环境下自动执行各服务的数据库迁移项目，并自动以 `pnpm dev:app` 启动 vben5 前端，**不需要**再启动 `docker-compose.middleware.yml`。
+The AppHost brings up its own middleware containers (PostgreSQL, Redis, RabbitMQ, Elasticsearch, Kibana), automatically runs the database migration projects of each service in the Development environment, and automatically starts the vben5 frontend with `pnpm dev:app`, so there is **no need** to start `docker-compose.middleware.yml` as well.
 
 ```powershell
 cd ./aspnet-core/aspire/LINGYUN.Abp.MicroService.AppHost
 aspire run
 ```
 
-- 需要安装 Aspire CLI（版本需与 AppHost 的 `Aspire.AppHost.Sdk` 13.x 匹配）：`dotnet tool install --global Aspire.Cli`；不使用 CLI 时也可以直接 `dotnet run --project .\LINGYUN.Abp.MicroService.AppHost.csproj`。
-- 需要 Docker 处于运行状态，且 `apps/vben5` 已经执行过 `pnpm install`（AppHost 会运行 `pnpm dev:app`，前端端口固定 5666）。
-- 启动后终端会输出 Aspire Dashboard 地址，可在面板中查看资源状态、日志与链路。
-- AppHost 占用的宿主机端口与方式一的中间件完全重叠（6379/9200/5601/5672/15672/5432 等），**请勿与方式一的中间件同时运行**。
+- The Aspire CLI must be installed (the version must match the AppHost's `Aspire.AppHost.Sdk` 13.x): `dotnet tool install --global Aspire.Cli`; if you prefer not to install the CLI, you can simply run `dotnet run --project .\LINGYUN.Abp.MicroService.AppHost.csproj`.
+- Docker must be running, and `apps/vben5` must already have run `pnpm install` (the AppHost runs `pnpm dev:app`, and the frontend port is fixed at 5666).
+- After startup the terminal prints the Aspire Dashboard address, where you can inspect resource status, logs and traces.
+- The host ports used by the AppHost fully overlap with the middleware of option 1 (6379/9200/5601/5672/15672/5432, etc.) — **do not run it at the same time as the option 1 middleware**.
 
-### 方式三：单体服务启动
+### Option 3: Monolith
 
-单体服务把网关、认证与各业务模块合并到一个进程，但**仍然依赖中间件，必须先启动中间件**：
+The monolith merges the gateway, authentication and all business modules into a single process, but it **still depends on the middleware, so the middleware must be started first**:
 
 ```powershell
-# ① 启动中间件
+# 1) Start the middleware
 docker-compose -f .\docker-compose.middleware.yml -p labp up -d
-# 首次启动请等待 30 秒以上
+# On the first run, wait at least 30 seconds
 
-# ② 启动单体服务
+# 2) Start the monolith
 cd .\aspnet-core\services\LINGYUN.Abp.MicroService.AllInOne
 dotnet run --launch-profile Single.MySql.Dev
 
-# ③ 启动前端
+# 3) Start the frontend
 cd .\apps\vben5
 pnpm install
 pnpm dev:app
 ```
 
-- 默认地址 **http://localhost:30000**：`App:SelfUrl` 与 `AuthServer:Authority` 均指向它，认证端点与 API 同端口。
-- **建议显式指定 Profile**：不指定时 `dotnet run` 使用 `launchSettings.json` 中的第一个 Profile（当前为 `Single.PostgreSql.Dev`）。使用默认数据库（MySQL）请用 `Single.MySql.Dev`，其它可选 `Single.PostgreSql.Dev`、`Single.SqlServer.Dev`。
-- 各数据库连接串见 `appsettings.Development.MySql.json` / `appsettings.Development.PostgreSql.json` / `appsettings.Development.SqlServer.json`。
+- Default address **http://localhost:30000**: both `App:SelfUrl` and `AuthServer:Authority` point to it, so the token endpoint and the API share the same port.
+- **Specify the profile explicitly**: without `--launch-profile`, `dotnet run` uses the first profile in `launchSettings.json` (currently `Single.PostgreSql.Dev`). With the default database (MySQL) use `Single.MySql.Dev`; the other options are `Single.PostgreSql.Dev` and `Single.SqlServer.Dev`.
+- The connection strings of each database can be found in `appsettings.Development.MySql.json` / `appsettings.Development.PostgreSql.json` / `appsettings.Development.SqlServer.json`.
 
-### 常见问题
+### Troubleshooting
 
-- **`docker-compose` 命令不存在**：脚本使用的是 Compose V1 命令；仅安装 Compose V2 时请改用 `docker compose`。
-- **提示找不到镜像 `labp-*-service:10.6.0`**：`docker-compose.override.yml` 通过 `image:` 引用预构建镜像，请先执行 `build/build-aspnetcore-docker-build.ps1`（方式一·手动启动 步骤 ③）。
-- **一键脚本迁移报错（`dotnet run --no-build`）**：`deploy.ps1` 内部使用 `--no-build`，执行脚本前需先构建后端（`dotnet build .\aspnet-core\LINGYUN.MicroService.All.slnx`）；手动迁移请改用 **build/build-aspnetcore-ef-update.ps1**（内部 `dotnet run`，会自动构建）。
-- **前端依赖安装失败**：`apps/vben5` 强制使用 pnpm（`preinstall` 会执行 `only-allow pnpm`），请使用 `pnpm install` / `pnpm dev:app`。
-- **容器内连不上宿主机中间件**：确认 hosts 文件包含 `127.0.0.1 host.docker.internal`。
+- **`docker-compose` command not found**: the scripts use the Compose V1 command; if only Compose V2 is installed, use `docker compose` instead.
+- **Image `labp-*-service:10.6.0` not found**: `docker-compose.override.yml` references pre-built images through `image:`, so run `build/build-aspnetcore-docker-build.ps1` first (option 1, manual startup, step 3).
+- **One-click migration fails (`dotnet run --no-build`)**: `deploy.ps1` uses `--no-build` internally, so the backend must be built before running the script (`dotnet build .\aspnet-core\LINGYUN.MicroService.All.slnx`); for manual migration use **build/build-aspnetcore-ef-update.ps1** instead (it uses `dotnet run` and builds automatically).
+- **Frontend dependency installation fails**: `apps/vben5` enforces pnpm (`preinstall` runs `only-allow pnpm`), so use `pnpm install` / `pnpm dev:app`.
+- **Containers cannot reach the middleware on the host**: make sure the hosts file contains `127.0.0.1 host.docker.internal`.
 
 ---
 
-### 代码格式检查以及自动修复
+### Lints and fixes files
 
-在 `apps/vben5` 下执行（vben5 强制使用 pnpm）：
+Run the following in `apps/vben5` (vben5 enforces pnpm):
 
 ```bash
 cd apps/vben5
 
-# 代码检查
+# lint
 pnpm lint
 
-# 自动修复
+# auto-fix
 pnpm format
 
-# 类型检查
+# type check
 pnpm check:type
 ```
 
-### 运行单元测试
+### Run your unit tests
 
 ```bash
 cd apps/vben5
@@ -417,41 +455,41 @@ cd apps/vben5
 pnpm test:unit
 ```
 
-## 如何贡献
+## How to contribute
 
-非常欢迎你的加入！提一个 Issue 或者提交一个 Pull Request。
+You are very welcome to join! Raise an issue or submit a Pull Request.
 
 **Pull Request:**
 
-1. Fork 代码!
-2. 创建自己的分支: `git checkout -b feat/xxxx`
-3. 提交你的修改: `git commit -am 'feat(function): add xxxxx'`
-4. 推送您的分支: `git push origin feat/xxxx`
-5. 提交`pull request`
+1. Fork the code!
+2. Create your own branch: `git checkout -b feat/xxxx`
+3. Submit your changes: `git commit -am 'feat(function): add xxxxx'`
+4. Push your branch: `git push origin feat/xxxx`
+5. Submit a `pull request`
 
-## Git 贡献提交规范
+## Git Contribution submission specification
 
-- 参考 [vue](./apps/vue/.github/COMMIT_CONVENTION.md) 规范 ([Angular](https://github.com/conventional-changelog/conventional-changelog/tree/master/packages/conventional-changelog-angular))
+- Reference the [vue](./apps/vue/.github/commit-convention.md) specification ([Angular](https://github.com/conventional-changelog/conventional-changelog/tree/master/packages/conventional-changelog-angular))
 
-  - `feat` 增加新功能
-  - `fix` 修复问题/BUG
-  - `style` 代码风格相关无影响运行结果的
-  - `perf` 优化/性能提升
-  - `refactor` 重构
-  - `revert` 撤销修改
-  - `test` 测试相关
-  - `docs` 文档/注释
-  - `chore` 依赖更新/脚手架配置修改等
-  - `workflow` 工作流改进
-  - `ci` 持续集成
-  - `types` 类型定义文件更改
-  - `wip` 开发中
+  - `feat` Add new features
+  - `fix` Fix the problem/BUG
+  - `style` The code style is related and does not affect the running result
+  - `perf` Optimization/performance improvement
+  - `refactor` Refactor
+  - `revert` Undo edit
+  - `test` Test related
+  - `docs` Documentation/notes
+  - `chore` Dependency update/scaffolding configuration modification etc.
+  - `workflow` Workflow improvements
+  - `ci` Continuous integration
+  - `types` Type definition file changes
+  - `wip` In development
 
-## 浏览器支持
+## Browser support
 
-本地开发推荐使用`Chrome 80+` 浏览器
+The `Chrome 80+` browser is recommended for local development
 
-支持现代浏览器, 不支持 IE
+Support modern browsers, not IE
 
 | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/edge/edge_48x48.png" alt=" Edge" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>IE | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/edge/edge_48x48.png" alt=" Edge" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>Edge | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/firefox/firefox_48x48.png" alt="Firefox" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>Firefox | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/chrome/chrome_48x48.png" alt="Chrome" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>Chrome | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/safari/safari_48x48.png" alt="Safari" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>Safari |
 | :-: | :-: | :-: | :-: | :-: |
