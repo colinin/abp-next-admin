@@ -25,6 +25,7 @@ import { useVbenVxeGrid } from '@abp/ui';
 import {
   DeleteOutlined,
   EditOutlined,
+  PlusOutlined,
   PrinterOutlined,
 } from '@ant-design/icons-vue';
 import { Button, message, Modal } from 'ant-design-vue';
@@ -76,7 +77,6 @@ const baseColumns = reactive<VxeGridPropTypes.Columns<BookDto>>([
   {
     align: 'center',
     type: 'checkbox',
-    minWidth: 50,
   },
   {
     align: 'left',
@@ -143,6 +143,9 @@ const gridEvents: VxeGridListeners<BookDto> = {
   checkboxChange: (params) => {
     selectedKeys.value = params.records.map((x) => x.id);
   },
+  dataChange: () => {
+    selectedKeys.value = [];
+  },
   sortChange: () => {
     gridApi.query();
   },
@@ -168,26 +171,36 @@ async function onPrint(record: BookDto) {
   try {
     gridApi.setLoading(true);
     const designer = printDesigner.value;
-
-    // 批量打印
-    // const data = gridApi.grid.getFullData();
-    // await designer.printBatchWithName(
-    //   data.map((d) => {
-    //     return {
-    //       variables: d,
-    //     };
-    //   }),
-    //   {
-    //     templateName: '书籍标签',
-    //     label: {
-    //       language: 'auto',
-    //     },
-    //   },
-    // );
     await designer.previewWithName({
       templateName: '书籍标签',
       variables: record,
     });
+  } finally {
+    gridApi.setLoading(false);
+  }
+}
+
+async function onPrintMany() {
+  if (!printDesigner.value) {
+    return;
+  }
+  try {
+    gridApi.setLoading(true);
+    const designer = printDesigner.value;
+    const data = gridApi.grid.getCheckboxRecords();
+    await designer.printBatchWithName(
+      data.map((d) => {
+        return {
+          variables: d,
+        };
+      }),
+      {
+        templateName: '书籍标签',
+        label: {
+          language: 'auto',
+        },
+      },
+    );
   } finally {
     gridApi.setLoading(false);
   }
@@ -225,7 +238,7 @@ async function onInit() {
   nextTick(() => {
     gridApi.setGridOptions({
       columns: [
-        ...baseColumns.filter((x) => allowProperties.has(x.field!)),
+        ...baseColumns.filter((x) => !x.field || allowProperties.has(x.field)),
         ...actionColumns,
       ],
     });
@@ -238,13 +251,25 @@ onMounted(onInit);
 <template>
   <Grid :table-title="$t('Demo.Book')">
     <template #toolbar-tools>
-      <Button
-        type="primary"
-        v-access:code="[BookPermissions.Create]"
-        @click="onCreate"
-      >
-        {{ $t('Demo.NewBook') }}
-      </Button>
+      <div class="flex flex-row gap-2">
+        <Button
+          type="primary"
+          v-access:code="[BookPermissions.Create]"
+          :icon="h(PlusOutlined)"
+          @click="onCreate"
+        >
+          {{ $t('Demo.NewBook') }}
+        </Button>
+        <Button
+          v-if="selectedKeys.length > 0"
+          type="primary"
+          :icon="h(PrinterOutlined)"
+          ghost
+          @click="onPrintMany"
+        >
+          {{ $t('Demo.Print') }}
+        </Button>
+      </div>
     </template>
     <template #action="{ row }">
       <div class="flex flex-row">
