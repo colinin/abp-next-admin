@@ -18,6 +18,7 @@ pnpm-lock.yaml
 # .NET
 *.pubxml
 *.user
+*.tmp
 
 /tests/e2e/videos/
 /tests/e2e/screenshots/
