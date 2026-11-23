@@ -19,6 +19,11 @@ defineOptions({
   name: 'GdprTable',
 });
 
+interface GdprRequestRow extends GdprRequestDto {
+  /** 是否已就绪 */
+  isReadly: boolean;
+}
+
 const {
   cancel,
   deleteApi,
@@ -29,7 +34,7 @@ const {
 } = useGdprRequestsApi();
 
 const abpStore = useAbpStore();
-const gridOptions: VxeGridProps<GdprRequestDto> = {
+const gridOptions: VxeGridProps<GdprRequestRow> = {
   columns: [
     {
       align: 'left',
@@ -91,7 +96,7 @@ const gridOptions: VxeGridProps<GdprRequestDto> = {
   },
 };
 
-const gridEvents: VxeGridListeners<GdprRequestDto> = {
+const gridEvents: VxeGridListeners<GdprRequestRow> = {
   cellClick: () => {},
   sortChange: () => {
     gridApi.query();
@@ -148,10 +153,14 @@ const onDeleteData = () => {
 
 const onDownload = async (row: GdprRequestDto) => {
   const blob = await downloadPersonalDataApi(row.id);
+  const application = abpStore.application;
+  if (!application) {
+    return;
+  }
   const url = window.URL.createObjectURL(blob);
   const link = document.createElement('a');
   link.href = url;
-  const { userName } = abpStore.application!.currentUser;
+  const { userName } = application.currentUser;
   const fileName = `${$t('AbpGdpr.PersonalData')}_${userName}_${formatToDateTime(row.readyTime)}.xlsx`;
   link.setAttribute('download', decodeURIComponent(fileName));
   document.body.append(link);

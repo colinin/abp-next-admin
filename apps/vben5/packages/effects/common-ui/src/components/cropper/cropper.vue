@@ -528,7 +528,7 @@ const handleImageLoad = () => {
  * @param {number} targetHeight - 目标高度（可选，不传则为原始裁剪高度）
  */
 const getCropImage = async (
-  format: 'image/jpeg' | 'image/png' = 'image/jpeg',
+  format: 'image/jpeg' | 'image/png' = 'image/png',
   quality: number = 0.92,
   outputType: 'base64' | 'blob' = 'blob',
   targetWidth?: number,
@@ -851,6 +851,8 @@ defineExpose({ getCropImage });
 </template>
 
 <style scoped>
+@reference "@vben/tailwind-config/theme";
+
 .cropper-action-wrapper {
   @apply box-border flex items-center justify-center;
 
@@ -880,34 +882,34 @@ defineExpose({ getCropImage });
 
 /* 遮罩层 */
 .cropper-mask {
-  @apply absolute left-0 top-0 bg-black/50;
+  @apply absolute top-0 left-0 bg-black/50;
 }
 
 .cropper-mask-view {
-  @apply absolute left-0 top-0;
+  @apply absolute top-0 left-0;
 }
 
 /* 裁剪框 */
 .cropper-box {
-  @apply absolute left-0 top-0 z-10;
+  @apply absolute top-0 left-0 z-10;
 }
 
 .cropper-view {
-  @apply absolute bottom-0 left-0 right-0 top-0 select-none outline outline-1 outline-blue-500;
+  @apply absolute top-0 right-0 bottom-0 left-0 outline-1 outline-blue-500 select-none;
 }
 
 /* 裁剪框辅助线 */
 .cropper-dashed-h {
-  @apply absolute left-0 top-1/3 block h-1/3 w-full border-b border-t border-dashed border-gray-200/50;
+  @apply absolute top-1/3 left-0 block h-1/3 w-full border-t border-b border-dashed border-gray-200/50;
 }
 
 .cropper-dashed-v {
-  @apply absolute left-1/3 top-0 block h-full w-1/3 border-l border-r border-dashed border-gray-200/50;
+  @apply absolute top-0 left-1/3 block h-full w-1/3 border-r border-l border-dashed border-gray-200/50;
 }
 
 /* 裁剪框拖拽区域 */
 .cropper-move-area {
-  @apply absolute left-0 top-0 block h-full w-full cursor-move bg-white/10;
+  @apply absolute top-0 left-0 block h-full w-full cursor-move bg-white/10;
 }
 
 /* 边框拖拽线 */
@@ -919,19 +921,19 @@ defineExpose({ getCropImage });
 }
 
 .cropper-line-e {
-  @apply right-[-3px] top-0 h-full w-1;
+  @apply top-0 -right-0.75 h-full w-1;
 }
 
 .cropper-line-n {
-  @apply left-0 top-[-3px] h-1 w-full;
+  @apply -top-0.75 left-0 h-1 w-full;
 }
 
 .cropper-line-w {
-  @apply left-[-3px] top-0 h-full w-1;
+  @apply top-0 -left-0.75 h-full w-1;
 }
 
 .cropper-line-s {
-  @apply bottom-[-3px] left-0 h-1 w-full;
+  @apply -bottom-0.75 left-0 h-1 w-full;
 }
 
 /* 拖拽点 */
@@ -945,35 +947,35 @@ defineExpose({ getCropImage });
 
 /* 边角拖拽点位置和光标 */
 .cropper-point-ne {
-  @apply right-[-5px] top-[-5px] cursor-ne-resize;
+  @apply -top-1.25 -right-1.25 cursor-ne-resize;
 }
 
 .cropper-point-nw {
-  @apply left-[-5px] top-[-5px] cursor-nw-resize;
+  @apply -top-1.25 -left-1.25 cursor-nw-resize;
 }
 
 .cropper-point-sw {
-  @apply bottom-[-5px] left-[-5px] cursor-sw-resize;
+  @apply -bottom-1.25 -left-1.25 cursor-sw-resize;
 }
 
 .cropper-point-se {
-  @apply bottom-[-5px] right-[-5px] cursor-se-resize;
+  @apply -right-1.25 -bottom-1.25 cursor-se-resize;
 }
 
 /* 边中点拖拽点位置和光标 */
 .cropper-point-e {
-  @apply right-[-5px] top-1/2 -mt-1 cursor-e-resize;
+  @apply top-1/2 -right-1.25 -mt-1 cursor-e-resize;
 }
 
 .cropper-point-n {
-  @apply left-1/2 top-[-5px] -ml-1 cursor-n-resize;
+  @apply -top-1.25 left-1/2 -ml-1 cursor-n-resize;
 }
 
 .cropper-point-w {
-  @apply left-[-5px] top-1/2 -mt-1 cursor-w-resize;
+  @apply top-1/2 -left-1.25 -mt-1 cursor-w-resize;
 }
 
 .cropper-point-s {
-  @apply bottom-[-5px] left-1/2 -ml-1 cursor-s-resize;
+  @apply -bottom-1.25 left-1/2 -ml-1 cursor-s-resize;
 }
 </style>

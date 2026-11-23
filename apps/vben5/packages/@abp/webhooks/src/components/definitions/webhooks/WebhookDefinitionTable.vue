@@ -4,7 +4,6 @@ import type { VxeGridListeners, VxeGridProps } from '@abp/ui';
 import type { VbenFormProps } from '@vben/common-ui';
 
 import type { WebhookDefinitionDto } from '../../../types/definitions';
-import type { WebhookGroupDefinitionDto } from '../../../types/groups';
 
 import { defineAsyncComponent, h, onMounted, ref } from 'vue';
 
@@ -80,7 +79,7 @@ const formOptions: VbenFormProps = {
   submitOnEnter: true,
 };
 
-const gridOptions: VxeGridProps<WebhookGroupDefinitionDto> = {
+const gridOptions: VxeGridProps<DefinitionGroup> = {
   columns: [
     {
       align: 'center',
@@ -201,7 +200,7 @@ const subGridColumns: VxeGridProps<WebhookDefinitionDto>['columns'] = [
   },
 ];
 
-const gridEvents: VxeGridListeners<WebhookGroupDefinitionDto> = {
+const gridEvents: VxeGridListeners<DefinitionGroup> = {
   sortChange: () => {
     gridApi.query();
   },

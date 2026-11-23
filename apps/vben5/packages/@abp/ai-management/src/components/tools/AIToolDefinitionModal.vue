@@ -105,8 +105,11 @@ const getDependencyProperties = computed<AIToolPropertyDescriptorDto[]>(() => {
   );
   return properties.filter((p) => {
     for (let index = 0; index < p.dependencies.length; index++) {
-      const depend = p.dependencies[index]!;
-      if (formModel.value.extraProperties[depend.name] === depend.value) {
+      const depend = p.dependencies[index];
+      if (
+        depend &&
+        formModel.value.extraProperties[depend.name] === depend.value
+      ) {
         return true;
       }
     }
@@ -124,7 +127,7 @@ watch(
 );
 
 // 工作区编辑模态框
-const [Modal, modalApi] = useVbenModal({
+const [Modal, modalApi] = useVbenModal<AIToolDefinitionVto>({
   title: $t('AIManagement.Tools:New'),
   class: 'w-1/2',
   closeOnClickModal: false,
@@ -144,13 +147,13 @@ async function onInit() {
       showConfirmButton: true,
     });
     await onInitProviderOptions();
-    const { id } = modalApi.getData<AIToolDefinitionVto>();
-    if (!id) {
+    const vto = modalApi.getData();
+    if (!vto?.id) {
       formModel.value = { ...defaultModel };
       currentAIToolProvider.value = undefined;
       return;
     }
-    const dto = await getApi(id);
+    const dto = await getApi(vto.id);
     formModel.value = dto;
     currentAIToolProvider.value = aiToolProviders.value.find(
       (p) => p.name === dto.provider,

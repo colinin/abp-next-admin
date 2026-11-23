@@ -5,11 +5,12 @@ import type { FormInstance } from 'ant-design-vue';
 
 import type { SettingDefinitionDto } from '../../types/definitions';
 
-import { defineEmits, defineOptions, ref, toValue, useTemplateRef } from 'vue';
+import { ref, toValue, useTemplateRef } from 'vue';
 
 import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
+import { getModalData } from '@abp/core';
 import { LocalizableInput, PropertyTable } from '@abp/ui';
 import {
   Checkbox,
@@ -46,7 +47,7 @@ const availableProviders = ref<NameValue<string>[]>([]);
 const { createApi, getApi, getAssignableProvidersApi, updateApi } =
   useDefinitionsApi();
 
-const [Modal, modalApi] = useVbenModal({
+const [Modal, modalApi] = useVbenModal<SettingDefinitionDto>({
   class: 'w-1/2',
   draggable: true,
   fullscreenButton: false,
@@ -80,7 +81,7 @@ const [Modal, modalApi] = useVbenModal({
       });
       try {
         modalApi.setState({ loading: true });
-        const { name } = modalApi.getData<SettingDefinitionDto>();
+        const { name } = getModalData(modalApi);
         name && (await onGet(name));
         await onInitProviders();
       } finally {
@@ -109,7 +110,7 @@ function onPropChange(prop: PropertyInfo) {
 }
 function onPropDelete(prop: PropertyInfo) {
   formModel.value.extraProperties ??= {};
-  delete formModel.value.extraProperties[prop.key];
+  Reflect.deleteProperty(formModel.value.extraProperties, prop.key);
 }
 </script>
 

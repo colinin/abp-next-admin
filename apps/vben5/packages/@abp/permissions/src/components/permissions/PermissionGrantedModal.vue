@@ -15,6 +15,7 @@ import { ColPage, useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
 import {
+  getModalData,
   listToTree,
   useLocalization,
   useLocalizationSerializer,
@@ -200,7 +201,7 @@ watch(searchPermission, (value) => {
   autoExpandParent.value = false;
 });
 
-const [Modal, modalApi] = useVbenModal({
+const [Modal, modalApi] = useVbenModal<ModalState>({
   fullscreen: true,
   fullscreenButton: false,
   async onOpenChange(isOpen) {
@@ -316,7 +317,9 @@ async function onCheckNode(_keys: any, info: CheckInfo) {
 
 async function onProviderChange() {
   gridApi.setState((state) => {
-    state.gridOptions!.data = [];
+    if (state.gridOptions) {
+      state.gridOptions.data = [];
+    }
     return state;
   });
   await gridApi.query();
@@ -329,7 +332,7 @@ async function onInit() {
   permissionGroups.value = [];
   filteredPermissionGroups.value = [];
   searchPermission.value = '';
-  const state = modalApi.getData<ModalState>();
+  const state = getModalData(modalApi);
   providerName.value = state.providerName;
   const [providerRes, permissionRes, permissionGroupRes] = await Promise.all([
     getAssignableProvidersApi(),
@@ -370,11 +373,15 @@ async function onInit() {
 }
 
 async function onDeleteGrand(grantedInfo: PermissionProvider) {
+  const permission = permissionInfo.value;
+  if (!permission) {
+    return;
+  }
   await updateApi(grantedInfo, {
     permissions: [
       {
         isGranted: false,
-        name: permissionInfo.value!.name,
+        name: permission.name,
       },
     ],
   });

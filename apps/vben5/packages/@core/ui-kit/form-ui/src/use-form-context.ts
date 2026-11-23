@@ -1,19 +1,31 @@
-import type { ZodRawShape } from 'zod';
+import type { ZodType } from 'zod';
 
 import type { ComputedRef } from 'vue';
 
 import type { ExtendedFormApi, FormActions, VbenFormProps } from './types';
 
-import { computed, unref, useSlots } from 'vue';
+import { computed, toRaw, unref, useSlots } from 'vue';
 
 import { createContext } from '@vben-core/shadcn-ui';
 import { isString, mergeWithArrayOverride, set } from '@vben-core/shared/utils';
 
-import { useForm } from 'vee-validate';
-import { object, ZodIntersection, ZodNumber, ZodObject, ZodString } from 'zod';
+import {
+  object,
+  ZodIntersection,
+  ZodNumber,
+  ZodObject,
+  ZodString,
+  string as zodString,
+  ZodStringFormat,
+} from 'zod';
 import { getDefaultsForSchema } from 'zod-defaults';
 
-type ExtendFormProps = VbenFormProps & { formApi?: ExtendedFormApi };
+import { getFormFieldSchemas } from './form-render/schema';
+import { useFormRuntime } from './form-runtime';
+
+type ExtendFormProps = VbenFormProps & {
+  formApi?: ExtendedFormApi<any, any, any>;
+};
 
 export const [injectFormProps, provideFormProps] =
   createContext<[ComputedRef<ExtendFormProps> | ExtendFormProps, FormActions]>(
@@ -23,15 +35,53 @@ export const [injectFormProps, provideFormProps] =
 export const [injectComponentRefMap, provideComponentRefMap] =
   createContext<Map<string, unknown>>('ComponentRefMap');
 
+/**
+ * Rebuild the schema used by zod-defaults, replacing native format nodes that
+ * zod-defaults does not recognise while retaining supported wrappers.
+ */
+function normalizeSchemaForDefaults(rule: ZodType): ZodType {
+  const rawRule = toRaw(rule) as any;
+
+  if (rawRule instanceof ZodStringFormat) {
+    return zodString();
+  }
+
+  if (rawRule instanceof ZodObject) {
+    const shape = Object.fromEntries(
+      Object.entries(rawRule.shape).map(([key, value]) => [
+        key,
+        normalizeSchemaForDefaults(value as ZodType),
+      ]),
+    );
+    return object(shape);
+  }
+
+  if (rawRule instanceof ZodIntersection) {
+    const { left, right } = (rawRule as any).def;
+    return normalizeSchemaForDefaults(left as ZodType).and(
+      normalizeSchemaForDefaults(right as ZodType),
+    );
+  }
+
+  if (rawRule.constructor.name === 'ZodDefault') {
+    const inner = normalizeSchemaForDefaults(rawRule.unwrap());
+    return inner.default(rawRule.def.defaultValue);
+  }
+
+  if (rawRule.constructor.name === 'ZodPipe') {
+    return normalizeSchemaForDefaults(rawRule.in).pipe(rawRule.out);
+  }
+
+  return rawRule;
+}
+
 export function useFormInitial(
   props: ComputedRef<VbenFormProps> | VbenFormProps,
 ) {
   const slots = useSlots();
   const initialValues = generateInitialValues();
 
-  const form = useForm({
-    ...(Object.keys(initialValues)?.length ? { initialValues } : {}),
-  });
+  const form = useFormRuntime(initialValues);
 
   const delegatedSlots = computed(() => {
     const resultSlots: string[] = [];
@@ -47,14 +97,15 @@ export function useFormInitial(
   function generateInitialValues() {
     const initialValues: Record<string, any> = {};
 
-    const zodObject: ZodRawShape = {};
-    (unref(props).schema || []).forEach((item) => {
+    const zodObject: Record<string, ZodType> = {};
+    getFormFieldSchemas(unref(props).schema ?? []).forEach((item) => {
       if (Reflect.has(item, 'defaultValue')) {
         set(initialValues, item.fieldName, item.defaultValue);
       } else if (item.rules && !isString(item.rules)) {
         // 检查规则是否适合提取默认值
-        const customDefaultValue = getCustomDefaultValue(item.rules);
-        zodObject[item.fieldName] = item.rules;
+        const rawRules = toRaw(item.rules);
+        const customDefaultValue = getCustomDefaultValue(rawRules);
+        zodObject[item.fieldName] = normalizeSchemaForDefaults(rawRules);
         if (customDefaultValue !== undefined) {
           initialValues[item.fieldName] = customDefaultValue;
         }
@@ -71,8 +122,9 @@ export function useFormInitial(
   }
   // 自定义默认值提取逻辑
   function getCustomDefaultValue(rule: any): any {
-    if (rule instanceof ZodString) {
-      return ''; // 默认为空字符串
+    rule = toRaw(rule);
+    if (rule instanceof ZodString || rule instanceof ZodStringFormat) {
+      return ''; // 字符串及其格式校验默认为空字符串
     } else if (rule instanceof ZodNumber) {
       return null; // 默认为 null（避免显示 0）
     } else if (rule instanceof ZodObject) {
@@ -83,20 +135,7 @@ export function useFormInitial(
       }
       return defaultValues;
     } else if (rule instanceof ZodIntersection) {
-      // 对于交集类型，从schema 提取默认值
-      const leftDefaultValue = getCustomDefaultValue(rule._def.left);
-      const rightDefaultValue = getCustomDefaultValue(rule._def.right);
-
-      // 如果左右两边都能提取默认值，合并它们
-      if (
-        typeof leftDefaultValue === 'object' &&
-        typeof rightDefaultValue === 'object'
-      ) {
-        return { ...leftDefaultValue, ...rightDefaultValue };
-      }
-
-      // 否则优先使用左边的默认值
-      return leftDefaultValue ?? rightDefaultValue;
+      return getDefaultsForSchema(normalizeSchemaForDefaults(rule) as any);
     } else {
       return undefined; // 其他类型不提供默认值
     }

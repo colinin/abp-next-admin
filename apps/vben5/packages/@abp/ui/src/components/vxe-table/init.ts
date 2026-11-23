@@ -34,9 +34,9 @@ import {
   // VxeSwitch,
   // VxeTextarea,
 } from 'vxe-pc-ui';
-import enUS from 'vxe-pc-ui/lib/language/en-US';
+import enUS from 'vxe-pc-ui/es/language/en-US';
 // 导入默认的语言
-import zhCN from 'vxe-pc-ui/lib/language/zh-CN';
+import zhCN from 'vxe-pc-ui/es/language/zh-CN';
 import {
   VxeColgroup,
   VxeColumn,
@@ -50,8 +50,21 @@ import { extendsDefaultFormatter } from './extends';
 // 是否加载过
 let isInit = false;
 
-// eslint-disable-next-line import/no-mutable-exports
-export let useTableForm: typeof useVbenForm;
+let tableFormFactory: typeof useVbenForm | undefined;
+
+/**
+ * 获取表格使用的表单实例。
+ * @remarks 需要先调用 `setupVbenVxeTable()` 完成初始化。
+ */
+export const useTableForm = ((...args: Parameters<typeof useVbenForm>) => {
+  const factory = tableFormFactory;
+  if (!factory) {
+    throw new Error(
+      'useTableForm is not initialized. Please call setupVbenVxeTable() first.',
+    );
+  }
+  return factory(...args);
+}) as typeof useVbenForm;
 
 // 部分组件，如果没注册，vxe-table 会报错，这里实际没用组件，只是为了不报错，同时可以减少打包体积
 const createVirtualComponent = (name = '') => {
@@ -104,7 +117,7 @@ export function setupVbenVxeTable(setupOptions: SetupVxeTable) {
   const { configVxeTable, useVbenForm } = setupOptions;
 
   initVxeTable();
-  useTableForm = useVbenForm;
+  tableFormFactory = useVbenForm;
 
   const preference = usePreferences();
 
@@ -112,13 +125,15 @@ export function setupVbenVxeTable(setupOptions: SetupVxeTable) {
     'en-US': enUS,
     'zh-CN': zhCN,
   };
+  type LocalLanguage = keyof typeof localMap;
 
   watch(
     [() => preference.theme.value, () => preference.locale.value],
     ([theme, locale]) => {
       VxeUI.setTheme(theme === 'dark' ? 'dark' : 'light');
-      VxeUI.setI18n(locale, localMap[locale]);
-      VxeUI.setLanguage(locale);
+      const language: LocalLanguage = locale === 'zh-CN' ? 'zh-CN' : 'en-US';
+      VxeUI.setI18n(language, localMap[language]);
+      VxeUI.setLanguage(language);
     },
     {
       immediate: true,

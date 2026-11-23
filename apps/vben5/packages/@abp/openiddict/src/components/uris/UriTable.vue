@@ -20,8 +20,7 @@ const props = defineProps<{
 }>();
 
 const emits = defineEmits<{
-  (event: 'change', uri: string): void;
-  (event: 'delete', uri: string): void;
+  (event: 'change' | 'delete', uri: string): void;
 }>();
 
 interface Uri {

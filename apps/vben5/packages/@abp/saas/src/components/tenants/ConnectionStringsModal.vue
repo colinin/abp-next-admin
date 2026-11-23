@@ -6,6 +6,7 @@ import { ref } from 'vue';
 import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
+import { getModalData } from '@abp/core';
 import { message } from 'ant-design-vue';
 
 import { useTenantsApi } from '../../api/useTenantsApi';
@@ -23,13 +24,13 @@ const {
   getConnectionStringsApi,
   setConnectionStringApi,
 } = useTenantsApi();
-const [Modal, modalApi] = useVbenModal({
+const [Modal, modalApi] = useVbenModal<TenantDto>({
   class: 'w-[800px]',
   onClosed: cancel,
   async onOpenChange(isOpen) {
     connectionStrings.value = [];
     if (isOpen) {
-      const dto = modalApi.getData<TenantDto>();
+      const dto = getModalData(modalApi);
       await onGet(dto.id);
     }
   },
@@ -39,7 +40,7 @@ async function onGet(id: string) {
   connectionStrings.value = items;
 }
 async function onChange(data: TenantConnectionStringDto) {
-  const dto = modalApi.getData<TenantDto>();
+  const dto = getModalData(modalApi);
   try {
     modalApi.setState({ submitting: true });
     await setConnectionStringApi(dto.id, data);
@@ -50,7 +51,7 @@ async function onChange(data: TenantConnectionStringDto) {
   }
 }
 async function onDelete(data: TenantConnectionStringDto) {
-  const dto = modalApi.getData<TenantDto>();
+  const dto = getModalData(modalApi);
   try {
     modalApi.setState({ submitting: true });
     await deleteConnectionStringApi(dto.id, data.name);

@@ -7,46 +7,49 @@ import {
   hasAuthority,
 } from '../generate-routes-frontend';
 
-// Mock 路由数据
-const mockRoutes = [
-  {
-    meta: {
-      authority: ['admin', 'user'],
-      hideInMenu: false,
+// Mock 路由数据（具名 fixture，避免 noUncheckedIndexedAccess 下的索引访问）
+const dashboardRoute = {
+  children: [
+    {
+      meta: { authority: ['admin'], hideInMenu: false },
+      path: '/dashboard/overview',
     },
-    path: '/dashboard',
-    children: [
-      {
-        path: '/dashboard/overview',
-        meta: { authority: ['admin'], hideInMenu: false },
-      },
-      {
-        path: '/dashboard/stats',
-        meta: { authority: ['user'], hideInMenu: true },
-      },
-    ],
+    {
+      meta: { authority: ['user'], hideInMenu: true },
+      path: '/dashboard/stats',
+    },
+  ],
+  meta: {
+    authority: ['admin', 'user'],
+    hideInMenu: false,
   },
-  {
-    meta: { authority: ['admin'], hideInMenu: false },
-    path: '/settings',
-  },
-  {
-    meta: { hideInMenu: false },
-    path: '/profile',
-  },
-] as RouteRecordRaw[];
+  path: '/dashboard',
+} as RouteRecordRaw;
+const settingsRoute = {
+  meta: { authority: ['admin'], hideInMenu: false },
+  path: '/settings',
+} as RouteRecordRaw;
+const profileRoute = {
+  meta: { hideInMenu: false },
+  path: '/profile',
+} as RouteRecordRaw;
+const mockRoutes: RouteRecordRaw[] = [
+  dashboardRoute,
+  settingsRoute,
+  profileRoute,
+];
 
 describe('hasAuthority', () => {
   it('should return true if there is no authority defined', () => {
-    expect(hasAuthority(mockRoutes[2], ['admin'])).toBe(true);
+    expect(hasAuthority(profileRoute, ['admin'])).toBe(true);
   });
 
   it('should return true if the user has the required authority', () => {
-    expect(hasAuthority(mockRoutes[0], ['admin'])).toBe(true);
+    expect(hasAuthority(dashboardRoute, ['admin'])).toBe(true);
   });
 
   it('should return false if the user does not have the required authority', () => {
-    expect(hasAuthority(mockRoutes[1], ['user'])).toBe(false);
+    expect(hasAuthority(settingsRoute, ['user'])).toBe(false);
   });
 });
 
@@ -100,6 +103,29 @@ describe('generateRoutesByFrontend', () => {
       { path: '/path1' },
       { meta: {}, path: '/path2' },
       { meta: { authority: ['admin'] }, path: '/path3' },
+    ]);
+  });
+
+  it('should not corrupt the source route table across repeated generations', async () => {
+    // 复现场景：低权限用户先登录，同一会话内再以更高权限重新生成路由。
+    // filterTree 曾把上一次过滤掉的子节点写回源路由表，
+    // 导致高权限用户再也拿不到那些路由。
+    const routes = [
+      {
+        meta: { authority: ['admin', 'user'] },
+        path: '/dashboard',
+        children: [
+          { path: '/dashboard/overview', meta: { authority: ['admin'] } },
+          { path: '/dashboard/stats', meta: { authority: ['user'] } },
+        ],
+      },
+    ] as unknown as RouteRecordRaw[];
+
+    await generateRoutesByFrontend(routes, ['user']);
+    const asAdmin = await generateRoutesByFrontend(routes, ['admin']);
+
+    expect(asAdmin[0]?.children?.map((child) => child.path)).toEqual([
+      '/dashboard/overview',
     ]);
   });
 });

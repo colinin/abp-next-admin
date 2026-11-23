@@ -142,7 +142,11 @@ function onDelete(row: ResourceDto) {
 
 async function onChange() {
   // 资源变化刷新本地多语言缓存
-  const cultureName = abpStore.localization!.currentCulture.cultureName;
+  const currentLocalization = abpStore.localization;
+  if (!currentLocalization) {
+    return;
+  }
+  const cultureName = currentLocalization.currentCulture.cultureName;
   const localization = await getLocalizationApi({
     cultureName,
   });

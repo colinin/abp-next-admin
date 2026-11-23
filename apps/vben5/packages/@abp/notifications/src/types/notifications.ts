@@ -46,7 +46,7 @@ interface NotificationSendInput {
   /** 当前文化（模板渲染时需要） */
   culture?: string;
   /** 通知数据 */
-  data: Dictionary<string, any>;
+  data: Dictionary<string>;
   /** 通知（模板通知时为模板名称）名称 */
   name: string;
   /** 紧急程度 */

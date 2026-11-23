@@ -11,11 +11,18 @@ type ThemeModeType = 'auto' | 'dark' | 'light';
 
 /**
  * 偏好设置按钮位置
- * fixed 固定在右侧
+ * auto 自动（按布局上下文在 header/fixed 间切换）
+ * fixed 固定在屏幕右边缘
  * header 顶栏
- * auto 自动
+ * user-dropdown 用户的下拉弹出框中
+ * none 不显示
  */
-type PreferencesButtonPositionType = 'auto' | 'fixed' | 'header';
+type PreferencesButtonPositionType =
+  | 'auto'
+  | 'fixed'
+  | 'header'
+  | 'none'
+  | 'user-dropdown';
 
 type BuiltinThemeType =
   | 'custom'
@@ -35,7 +42,7 @@ type BuiltinThemeType =
   | 'violet'
   | 'yellow'
   | 'zinc'
-  | (Record<never, never> & string);
+  | (string & {});
 
 type ContentCompactType = 'compact' | 'wide';
 

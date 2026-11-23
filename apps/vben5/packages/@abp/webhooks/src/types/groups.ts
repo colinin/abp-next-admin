@@ -10,14 +10,12 @@ interface WebhookGroupDefinitionCreateOrUpdateDto extends IHasExtraProperties {
   displayName: string;
 }
 
-interface WebhookGroupDefinitionCreateDto
-  extends WebhookGroupDefinitionCreateOrUpdateDto {
+interface WebhookGroupDefinitionCreateDto extends WebhookGroupDefinitionCreateOrUpdateDto {
   name: string;
 }
 
 interface WebhookGroupDefinitionUpdateDto
-  extends IHasConcurrencyStamp,
-    WebhookGroupDefinitionCreateOrUpdateDto {}
+  extends IHasConcurrencyStamp, WebhookGroupDefinitionCreateOrUpdateDto {}
 
 interface WebhookGroupDefinitionGetListInput {
   filter?: string;

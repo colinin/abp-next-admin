@@ -7,6 +7,7 @@ import { h } from 'vue';
 import { useVbenForm, useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
+import { getModalData } from '@abp/core';
 import { Button, message } from 'ant-design-vue';
 
 import { useUsersApi } from '../../api/useUsersApi';
@@ -33,7 +34,7 @@ const [Form, formApi] = useVbenForm({
   schema: [
     {
       component: 'InputSearch',
-      componentProps: (_, actions) => {
+      componentProps: () => {
         return {
           allowClear: false,
           enterButton: h(
@@ -44,8 +45,8 @@ const [Form, formApi] = useVbenForm({
             () => $t('AbpIdentity.RandomPassword'),
           ),
           onSearch: () => {
-            actions.resetForm();
-            actions.setFieldValue('password', generatePassword());
+            formApi.resetForm();
+            formApi.setFieldValue('password', generatePassword());
           },
         };
       },
@@ -57,7 +58,7 @@ const [Form, formApi] = useVbenForm({
   showDefaultActions: false,
 });
 
-const [Modal, modalApi] = useVbenModal({
+const [Modal, modalApi] = useVbenModal<IdentityUserDto>({
   closeOnClickModal: false,
   closeOnPressEscape: false,
   draggable: true,
@@ -79,7 +80,7 @@ const [Modal, modalApi] = useVbenModal({
   onOpenChange(isOpen) {
     let title = $t('AbpIdentity.SetPassword');
     if (isOpen) {
-      const { userName } = modalApi.getData<IdentityUserDto>();
+      const { userName } = getModalData(modalApi);
       title += ` - ${userName}`;
     }
     modalApi.setState({ title });
@@ -88,7 +89,7 @@ const [Modal, modalApi] = useVbenModal({
 });
 
 async function onSubmit(input: Record<string, any>) {
-  const { id } = modalApi.getData<IdentityUserDto>();
+  const { id } = getModalData(modalApi);
   await changePasswordApi(id, { password: input.password });
   message.success($t('AbpUi.SavedSuccessfully'));
   emits('change');

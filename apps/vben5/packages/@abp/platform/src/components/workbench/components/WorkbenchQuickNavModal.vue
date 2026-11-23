@@ -109,8 +109,8 @@ async function onSubmit(values: Record<string, any>) {
     <Form>
       <template #color="slotProps">
         <div class="flex flex-row items-center">
-          <ColorPicker v-bind="slotProps" format="hex" />
-          <span>({{ slotProps.value }})</span>
+          <ColorPicker v-bind="slotProps.componentProps" format="hex" />
+          <span>({{ slotProps.modelValue }})</span>
         </div>
       </template>
       <template #menuId="slotProps">
@@ -118,7 +118,7 @@ async function onSubmit(values: Record<string, any>) {
           allow-clear
           class="w-full"
           tree-icon
-          v-bind="slotProps"
+          v-bind="slotProps.componentProps"
           :field-names="{ label: 'displayName', value: 'id' }"
           :tree-data="availableMenus"
         >

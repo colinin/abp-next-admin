@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { VNode } from 'vue';
+import type { IconPickerProps } from './types';
 
 import { computed, ref, useAttrs, watch, watchEffect } from 'vue';
 
@@ -11,45 +11,23 @@ import {
   Button,
   Input,
   Pagination,
+  PaginationContent,
   PaginationEllipsis,
   PaginationFirst,
+  PaginationItem,
   PaginationLast,
-  PaginationList,
-  PaginationListItem,
   PaginationNext,
-  PaginationPrev,
+  PaginationPrevious,
   VbenIcon,
   VbenIconButton,
   VbenPopover,
 } from '@vben-core/shadcn-ui';
-import { isFunction } from '@vben-core/shared/utils';
 
 import { objectOmit, refDebounced, watchDebounced } from '@vueuse/core';
 
 import { fetchIconsData } from './icons';
 
-interface Props {
-  pageSize?: number;
-  /** 图标集的名字 */
-  prefix?: string;
-  /** 是否自动请求API以获得图标集的数据.提供prefix时有效 */
-  autoFetchApi?: boolean;
-  /**
-   * 图标列表
-   */
-  icons?: string[];
-  /** Input组件 */
-  inputComponent?: VNode;
-  /** 图标插槽名，预览图标将被渲染到此插槽中 */
-  iconSlot?: string;
-  /** input组件的值属性名称 */
-  modelValueProp?: string;
-  /** 图标样式 */
-  iconClass?: string;
-  type?: 'icon' | 'input';
-}
-
-const props = withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<IconPickerProps>(), {
   prefix: 'ant-design',
   pageSize: 36,
   icons: () => [],
@@ -120,6 +98,9 @@ const { paginationList, total, setCurrentPage, currentPage } = usePagination(
   props.pageSize,
 );
 
+// The picker exchanges its value exclusively through v-model (modelValue),
+// regardless of the inner input protocol. Adapters bridge the outer form
+// binding via the form config's `modelPropNameMap` (see apps/*/adapter).
 watchEffect(() => {
   currentSelect.value = modelValue.value;
 });
@@ -132,8 +113,7 @@ watch(
 );
 
 const handleClick = (icon: string) => {
-  currentSelect.value = icon;
-  modelValue.value = icon;
+  updateCurrentSelect(icon);
   close();
 };
 
@@ -168,13 +148,37 @@ const searchInputProps = computed(() => {
 
 function updateCurrentSelect(v: string) {
   currentSelect.value = v;
-  const eventKey = `onUpdate:${props.modelValueProp}`;
-  if (attrs[eventKey] && isFunction(attrs[eventKey])) {
-    attrs[eventKey](v);
-  }
+  modelValue.value = v;
 }
+// `modelValueProp` describes the value protocol of the configured inner
+// input component ('value' for antd/naive inputs, 'model-value' for
+// element-plus). The forwarded attrs must never carry the outer value or
+// its listener under that name, or they would override the inner binding.
 const getBindAttrs = computed(() => {
-  return objectOmit(attrs, [`onUpdate:${props.modelValueProp}`]);
+  return objectOmit(attrs, [
+    `onUpdate:${props.modelValueProp}`,
+    props.modelValueProp,
+  ]);
+});
+
+// Legacy adapter configs bound the outer value through
+// `<name>`/`onUpdate:<name>` attributes; they are dropped now, so warn once
+// and tell callers how to migrate.
+let warnedLegacyBinding = false;
+watchEffect(() => {
+  if (
+    !warnedLegacyBinding &&
+    (attrs[props.modelValueProp] !== undefined ||
+      attrs[`onUpdate:${props.modelValueProp}`] !== undefined)
+  ) {
+    warnedLegacyBinding = true;
+    console.warn(
+      `[IconPicker] received \`${props.modelValueProp}\`/` +
+        `\`onUpdate:${props.modelValueProp}\`. The picker exchanges its value ` +
+        `through v-model (modelValue); bind it with v-model, or map it via ` +
+        `the form config's modelPropNameMap.`,
+    );
+  }
 });
 
 defineExpose({ toggleOpenState, open, close });
@@ -219,7 +223,7 @@ defineExpose({ toggleOpenState, open, close });
           />
           <VbenIcon
             :icon="currentSelect || Grip"
-            class="absolute right-1 top-1 size-6"
+            class="absolute top-1 right-1 size-6"
             aria-hidden="true"
           />
         </div>
@@ -246,7 +250,7 @@ defineExpose({ toggleOpenState, open, close });
     </div>
 
     <template v-if="paginationList.length > 0">
-      <div class="grid max-h-[360px] w-full grid-cols-6 justify-items-center">
+      <div class="grid max-h-90 w-full grid-cols-6 justify-items-center">
         <VbenIconButton
           v-for="(item, index) in paginationList"
           :key="index"
@@ -274,14 +278,14 @@ defineExpose({ toggleOpenState, open, close });
           size="small"
           @update:page="handlePageChange"
         >
-          <PaginationList
+          <PaginationContent
             v-slot="{ items }"
             class="flex w-full items-center gap-1"
           >
             <PaginationFirst class="size-5" />
-            <PaginationPrev class="size-5" />
+            <PaginationPrevious class="size-5" />
             <template v-for="(item, index) in items">
-              <PaginationListItem
+              <PaginationItem
                 v-if="item.type === 'page'"
                 :key="index"
                 :value="item.value"
@@ -293,7 +297,7 @@ defineExpose({ toggleOpenState, open, close });
                 >
                   {{ item.value }}
                 </Button>
-              </PaginationListItem>
+              </PaginationItem>
               <PaginationEllipsis
                 v-else
                 :key="item.type"
@@ -303,13 +307,13 @@ defineExpose({ toggleOpenState, open, close });
             </template>
             <PaginationNext class="size-5" />
             <PaginationLast class="size-5" />
-          </PaginationList>
+          </PaginationContent>
         </Pagination>
       </div>
     </template>
 
     <template v-else>
-      <div class="flex-col-center text-muted-foreground min-h-[150px] w-full">
+      <div class="flex-col-center min-h-37.5 w-full text-muted-foreground">
         <EmptyIcon class="size-10" />
         <div class="mt-1 text-sm">{{ $t('common.noData') }}</div>
       </div>

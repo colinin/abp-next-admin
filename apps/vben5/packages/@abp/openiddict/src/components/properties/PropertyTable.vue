@@ -18,16 +18,16 @@ defineOptions({
 
 const props = defineProps<PropertyProps>();
 const emits = defineEmits<{
-  (event: 'change', data: PropertyInfo): void;
-  (event: 'delete', data: PropertyInfo): void;
+  (event: 'change' | 'delete', data: PropertyInfo): void;
 }>();
 
 const getDataResource = computed((): PropertyInfo[] => {
-  if (!props.data) return [];
-  return Object.keys(props.data).map((item) => {
+  const data = props.data;
+  if (!data) return [];
+  return Object.keys(data).map((item) => {
     return {
       key: item,
-      value: props.data![item]!,
+      value: data[item] ?? '',
     };
   });
 });

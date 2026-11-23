@@ -9,12 +9,15 @@ import { cn } from '@vben-core/shared/utils';
 
 import { DialogContent, useForwardPropsEmits } from 'reka-ui';
 
+import { useDialogStateEvents } from '../dialog/use-dialog-state-events';
 import { sheetVariants } from './sheet';
 import SheetOverlay from './SheetOverlay.vue';
 
 interface SheetContentProps extends DialogContentProps {
   appendTo?: HTMLElement | string;
   class?: any;
+  /** Remove the overlay immediately when its cached page is inactive. */
+  inactive?: boolean;
   modal?: boolean;
   open?: boolean;
   overlayBlur?: number;
@@ -28,6 +31,7 @@ defineOptions({
 
 const props = withDefaults(defineProps<SheetContentProps>(), {
   appendTo: 'body',
+  inactive: false,
 });
 
 const emits = defineEmits<
@@ -37,6 +41,7 @@ const emits = defineEmits<
 const delegatedProps = computed(() => {
   const {
     class: _,
+    inactive: _inactive,
     modal: _modal,
     open: _open,
     side: _side,
@@ -60,21 +65,18 @@ const position = computed(() => {
 
 const forwarded = useForwardPropsEmits(delegatedProps, emits);
 const contentRef = ref<InstanceType<typeof DialogContent> | null>(null);
-function onAnimationEnd(event: AnimationEvent) {
-  // 只有在 contentRef 的动画结束时才触发 opened/closed 事件
-  if (event.target === contentRef.value?.$el) {
-    if (props.open) {
-      emits('opened');
-    } else {
-      emits('closed');
-    }
-  }
-}
+
+const { handleAnimationEvent } = useDialogStateEvents({
+  contentRef,
+  isOpen: () => props.open,
+  onClosed: () => emits('closed'),
+  onOpened: () => emits('opened'),
+});
 </script>
 
 <template>
   <Teleport defer :to="appendTo">
-    <Transition name="fade">
+    <Transition v-if="!inactive" name="fade">
       <SheetOverlay
         v-if="open && modal"
         :style="{
@@ -92,13 +94,14 @@ function onAnimationEnd(event: AnimationEvent) {
         ...(zIndex ? { zIndex } : {}),
         position,
       }"
-      @animationend="onAnimationEnd"
+      @animationend="handleAnimationEvent"
+      @animationcancel="handleAnimationEvent"
       v-bind="{ ...forwarded, ...$attrs }"
     >
       <slot></slot>
 
       <!-- <DialogClose
-        class="data-[state=open]:bg-secondary absolute right-4 top-4 rounded-sm opacity-70 transition-opacity hover:opacity-100 focus:outline-none disabled:pointer-events-none"
+        class="data-[state=open]:bg-secondary absolute right-4 top-4 rounded-sm opacity-70 transition-opacity hover:opacity-100 focus:outline-hidden disabled:pointer-events-none"
       >
         <Cross2Icon class="h-5 w-" />
       </DialogClose> -->

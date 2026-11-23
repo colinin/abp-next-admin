@@ -210,16 +210,13 @@ interface CurrentUser {
 interface IHasSimpleStateCheckers<
   TState extends IHasSimpleStateCheckers<TState>,
 > {
-  // eslint-disable-next-line no-use-before-define
   stateCheckers: ISimpleStateChecker<TState>[];
 }
 
 type SimpleStateRecord<
   TState extends IHasSimpleStateCheckers<TState>,
   TValue,
-> = {
-  [P in TState]: TValue;
-};
+> = Map<TState, TValue>;
 
 type SimpleStateCheckerResult<TState extends IHasSimpleStateCheckers<TState>> =
   SimpleStateRecord<TState, boolean>;

@@ -5,6 +5,8 @@ import type { ClaimEditModalProps } from './types';
 import { useVbenForm, useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
+import { getModalData } from '@abp/core';
+
 import { useClaimTypesApi } from '../../api/useClaimTypesApi';
 
 defineOptions({
@@ -40,7 +42,7 @@ const [Form, formApi] = useVbenForm({
   ],
   showDefaultActions: false,
 });
-const [Modal, modalApi] = useVbenModal({
+const [Modal, modalApi] = useVbenModal<IdentityClaimDto>({
   draggable: true,
   fullscreenButton: false,
   onClosed() {
@@ -53,7 +55,7 @@ const [Modal, modalApi] = useVbenModal({
     if (isOpen) {
       try {
         modalApi.setState({ loading: true });
-        const claimDto = modalApi.getData<IdentityClaimDto>();
+        const claimDto = getModalData(modalApi);
         formApi.setValues({
           ...claimDto,
           newClaimValue: claimDto.claimValue,
@@ -94,7 +96,7 @@ async function initAssignableClaims() {
 async function onSubmit(values: Record<string, any>) {
   try {
     modalApi.setState({ submitting: true });
-    const claimDto = modalApi.getData<IdentityClaimDto>();
+    const claimDto = getModalData(modalApi);
     const api = claimDto.id
       ? updateApi({
           claimType: claimDto.claimType,

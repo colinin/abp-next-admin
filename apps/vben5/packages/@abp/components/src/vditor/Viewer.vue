@@ -36,8 +36,11 @@ function init() {
       current: isDark ? 'dark' : 'light',
     },
     transform: (html) => {
-      return html.replaceAll(/<a\s+/gi, '<a class="text-blue-600" target="_blank" rel="noopener noreferrer" ');
-    }
+      return html.replaceAll(
+        /<a\s+/gi,
+        '<a class="text-blue-600" target="_blank" rel="noopener noreferrer" ',
+      );
+    },
   });
 }
 

@@ -13,10 +13,15 @@ interface Props extends DropdownMenuProps {}
 
 defineOptions({ name: 'DropdownRadioMenu' });
 withDefaults(defineProps<Props>(), {});
+const emit = defineEmits<{ reselect: [value: string] }>();
 
 const modelValue = defineModel<string>();
 
 function handleItemClick(value: string) {
+  if (value === modelValue.value) {
+    emit('reselect', value);
+    return;
+  }
   modelValue.value = value;
 }
 </script>
@@ -34,8 +39,8 @@ function handleItemClick(value: string) {
                 ? 'bg-accent text-accent-foreground'
                 : ''
             "
-            class="mb-1 cursor-pointer text-foreground/80 data-[state=checked]:bg-accent data-[state=checked]:text-accent-foreground"
-            @click="handleItemClick(menu.value)"
+            class="text-foreground/80 data-[state=checked]:bg-accent data-[state=checked]:text-accent-foreground mb-1 cursor-pointer"
+            @select="handleItemClick(menu.value)"
           >
             <component :is="menu.icon" v-if="menu.icon" class="mr-2 size-4" />
             <span

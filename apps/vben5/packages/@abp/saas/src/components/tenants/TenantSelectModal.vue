@@ -4,6 +4,7 @@ import { ref } from 'vue';
 import { useVbenForm, useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
+import { getModalData } from '@abp/core';
 import { message } from 'ant-design-vue';
 import Cookies from 'universal-cookie';
 
@@ -37,7 +38,7 @@ const [Form, formApi] = useVbenForm({
   ],
   showDefaultActions: false,
 });
-const [Modal, modalApi] = useVbenModal({
+const [Modal, modalApi] = useVbenModal<Tenant>({
   onCancel() {
     emits('change', tenant.value);
   },
@@ -46,7 +47,7 @@ const [Modal, modalApi] = useVbenModal({
   },
   onOpenChange(isOpen) {
     if (isOpen) {
-      const { name } = modalApi.getData<Tenant>();
+      const { name } = getModalData(modalApi);
       formApi.setFieldValue('name', name);
     }
   },

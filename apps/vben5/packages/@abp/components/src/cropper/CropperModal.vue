@@ -92,7 +92,7 @@ function handlerToolbar(event: string, arg?: number) {
       return cropper.value.reset();
     }
     case 'rotate': {
-      return cropper.value.rotate(arg!);
+      return cropper.value.rotate(arg ?? 0);
     }
     case 'scaleX': {
       return cropper.value.scaleX(scaleX);
@@ -101,7 +101,7 @@ function handlerToolbar(event: string, arg?: number) {
       return cropper.value.scaleY(scaleY);
     }
     case 'zoom': {
-      return cropper.value.zoom(arg!);
+      return cropper.value.zoom(arg ?? 0);
     }
   }
 }

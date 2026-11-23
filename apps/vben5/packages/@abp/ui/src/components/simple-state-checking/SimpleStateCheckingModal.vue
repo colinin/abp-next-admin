@@ -1,8 +1,12 @@
 <script setup lang="ts">
+import type { BaseFormComponentType } from '@vben/common-ui';
+
 import { toRaw } from 'vue';
 
 import { useVbenForm, useVbenModal, z } from '@vben/common-ui';
 import { $t } from '@vben/locales';
+
+import { getModalData } from '@abp/core';
 
 interface ModalState {
   options: { disabled?: boolean; label: string; value: string }[];
@@ -10,7 +14,7 @@ interface ModalState {
 }
 
 const emits = defineEmits(['change']);
-const [Modal, modalApi] = useVbenModal({
+const [Modal, modalApi] = useVbenModal<ModalState>({
   closeOnClickModal: false,
   closeOnPressEscape: false,
   onConfirm: onSubmit,
@@ -21,7 +25,7 @@ const [Modal, modalApi] = useVbenModal({
   },
 });
 
-const [Form, formApi] = useVbenForm({
+const [Form, formApi] = useVbenForm<BaseFormComponentType>({
   schema: [
     {
       component: 'Select',
@@ -31,7 +35,6 @@ const [Form, formApi] = useVbenForm({
     },
     {
       component: 'Empty',
-      disabledOnChangeListener: false,
       fieldName: 'value',
       label: '',
     },
@@ -40,7 +43,7 @@ const [Form, formApi] = useVbenForm({
 });
 
 async function onInit() {
-  const state = modalApi.getData<ModalState>();
+  const state = getModalData(modalApi);
   formApi.updateSchema([
     {
       componentProps: {

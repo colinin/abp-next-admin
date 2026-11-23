@@ -4,11 +4,12 @@ import type { FormInstance } from 'ant-design-vue';
 
 import type { FeatureGroupDefinitionDto } from '../../../types/groups';
 
-import { defineEmits, defineOptions, ref, toValue, useTemplateRef } from 'vue';
+import { ref, toValue, useTemplateRef } from 'vue';
 
 import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
+import { getModalData } from '@abp/core';
 import { LocalizableInput, PropertyTable } from '@abp/ui';
 import { Form, Input, message, Tabs } from 'ant-design-vue';
 
@@ -35,7 +36,7 @@ const formModel = ref<FeatureGroupDefinitionDto>({ ...defaultModel });
 
 const { cancel, createApi, getApi, updateApi } =
   useFeatureGroupDefinitionsApi();
-const [Modal, modalApi] = useVbenModal({
+const [Modal, modalApi] = useVbenModal<FeatureGroupDefinitionDto>({
   class: 'w-1/2',
   draggable: true,
   fullscreenButton: false,
@@ -72,7 +73,7 @@ const [Modal, modalApi] = useVbenModal({
       });
       try {
         modalApi.setState({ loading: true });
-        const { name } = modalApi.getData<FeatureGroupDefinitionDto>();
+        const { name } = getModalData(modalApi);
         name && (await onGet(name));
       } finally {
         modalApi.setState({ loading: false });
@@ -96,7 +97,7 @@ function onPropChange(prop: PropertyInfo) {
 }
 function onPropDelete(prop: PropertyInfo) {
   formModel.value.extraProperties ??= {};
-  delete formModel.value.extraProperties[prop.key];
+  Reflect.deleteProperty(formModel.value.extraProperties, prop.key);
 }
 </script>
 

@@ -34,7 +34,7 @@ Modal 内的内容一般业务中，会比较复杂，所以我们可以将 moda
 
 ## 开启拖拽
 
-通过 `draggable` 参数，可开启拖拽功能。
+通过 `draggable` 参数，可开启拖拽功能。若需要拖动范围超出可视区，可设置 `overflow: true`（需已开启 `draggable`）。
 
 <DemoPreview dir="demos/vben-modal/draggable" />
 
@@ -56,6 +56,29 @@ Modal 内的内容一般业务中，会比较复杂，所以我们可以将 moda
 
 <DemoPreview dir="demos/vben-modal/shared-data" />
 
+### 数据类型约束
+
+推荐在 connected 子组件中声明一次数据类型并暴露 `modalApi`，外部会从 `connectedComponent` 自动推导 `setData` 和 `getData` 的类型：
+
+```ts
+// connected 子组件
+const [Modal, modalApi] = useVbenModal<EditData>();
+defineExpose({ modalApi });
+
+// 外部组件，无需重复声明 EditData
+const [Modal, modalApi] = useVbenModal({
+  connectedComponent: EditModal,
+});
+```
+
+无法从组件公开实例推导时，可以显式使用 `useVbenModal<EditData>()`。需要让多个文件共享同一契约时，可以在独立模块中预绑定：
+
+```ts
+export const useEditModal = createVbenModal<EditData>();
+```
+
+三种方式的优先级为：显式泛型、connected component 自动推导、`unknown`。普通 SFC 通过 `defineExpose` 支持自动推导；泛型 SFC、函数式组件或被标注为宽 `Component` 的组件应使用显式泛型或契约工厂。`getData()` 在尚未调用 `setData()` 时返回 `undefined`，业务允许 `null`、部分对象等值时，需要在数据泛型中准确声明。
+
 ## 动画类型
 
 通过 `animationType` 属性可以控制弹窗的动画效果：
@@ -69,7 +92,7 @@ Modal 内的内容一般业务中，会比较复杂，所以我们可以将 moda
 
 - `VbenModal` 组件对与参数的处理优先级是 `slot` > `props` > `state`(通过api更新的状态以及useVbenModal参数)。如果你已经传入了 `slot` 或者 `props`，那么 `setState` 将不会生效，这种情况下你可以通过 `slot` 或者 `props` 来更新状态。
 - 如果你使用到了 `connectedComponent` 参数，那么会存在 2 个`useVbenModal`, 此时，如果同时设置了相同的参数，那么以内部为准（也就是没有设置 connectedComponent 的代码）。比如 同时设置了 `onConfirm`，那么以内部的 `onConfirm` 为准。`onOpenChange`事件除外，内外都会触发。另外，如果设置了`destroyOnClose`，内部Modal及其子组件会在被关闭后<b>完全销毁</b>。
-- 如果弹窗的默认行为不符合你的预期，可以在`src\bootstrap.ts`中修改`setDefaultModalProps`的参数来设置默认的属性，如默认隐藏全屏按钮，修改默认ZIndex等。
+- 如果弹窗的默认行为不符合你的预期，可以在对应应用的 `apps/<app>/src/bootstrap.ts` 中修改 `setDefaultModalProps` 的参数来设置默认属性，例如默认隐藏全屏按钮、修改默认 `zIndex` 等。
 
 :::
 
@@ -101,6 +124,7 @@ const [Modal, modalApi] = useVbenModal({
 | fullscreen | 全屏显示 | `boolean` | `false` |
 | fullscreenButton | 显示全屏按钮 | `boolean` | `true` |
 | draggable | 可拖拽 | `boolean` | `false` |
+| overflow | 拖动范围可以超出可视区 | `boolean` | `false` |
 | closable | 显示关闭按钮 | `boolean` | `true` |
 | centered | 居中显示 | `boolean` | `false` |
 | modal | 显示遮罩 | `boolean` | `true` |
@@ -161,8 +185,8 @@ const [Modal, modalApi] = useVbenModal({
 | setState | 动态设置弹窗状态属性 | `(((prev: ModalState) => Partial<ModalState>)\| Partial<ModalState>)=>modalApi` | - |
 | open | 打开弹窗 | `()=>void` | - |
 | close | 关闭弹窗 | `()=>void` | - |
-| setData | 设置共享数据 | `<T>(data:T)=>modalApi` | - |
-| getData | 获取共享数据 | `<T>()=>T` | - |
+| setData | 设置共享数据 | `(data:TData)=>modalApi` | - |
+| getData | 获取共享数据 | `()=>TData\|undefined` | - |
 | useStore | 获取可响应式状态 | - | - |
 | lock | 将弹窗标记为提交中，锁定当前状态 | `(isLock:boolean)=>modalApi` | >5.5.2 |
 | unlock | lock方法的反操作，解除弹窗的锁定状态，也是lock(false)的别名 | `()=>modalApi` | >5.5.3 |

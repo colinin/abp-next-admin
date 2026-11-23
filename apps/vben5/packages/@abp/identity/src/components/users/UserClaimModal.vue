@@ -11,6 +11,8 @@ import { defineAsyncComponent } from 'vue';
 import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
+import { getModalData } from '@abp/core';
+
 import { useUsersApi } from '../../api/useUsersApi';
 import { IdentityUserPermissions } from '../../constants/permissions';
 
@@ -24,7 +26,7 @@ const ClaimTable = defineAsyncComponent(
 
 const { cancel, createClaimApi, deleteClaimApi, getClaimsApi, updateClaimApi } =
   useUsersApi();
-const [Modal, modalApi] = useVbenModal({
+const [Modal, modalApi] = useVbenModal<IdentityUserDto>({
   draggable: true,
   fullscreenButton: false,
   onCancel() {
@@ -36,7 +38,7 @@ const [Modal, modalApi] = useVbenModal({
   onOpenChange(isOpen) {
     let title = $t('AbpIdentity.ManageClaim');
     if (isOpen) {
-      const { userName } = modalApi.getData<IdentityUserDto>();
+      const { userName } = getModalData(modalApi);
       title += ` - ${userName}`;
     }
     modalApi.setState({ title });
@@ -47,22 +49,22 @@ const [Modal, modalApi] = useVbenModal({
 });
 
 async function onGet() {
-  const { id } = modalApi.getData<IdentityUserDto>();
+  const { id } = getModalData(modalApi);
   return await getClaimsApi(id);
 }
 
 async function onCreate(input: IdentityClaimCreateDto) {
-  const { id } = modalApi.getData<IdentityUserDto>();
+  const { id } = getModalData(modalApi);
   await createClaimApi(id, input);
 }
 
 async function onDelete(input: IdentityClaimDeleteDto) {
-  const { id } = modalApi.getData<IdentityUserDto>();
+  const { id } = getModalData(modalApi);
   await deleteClaimApi(id, input);
 }
 
 async function onUpdate(input: IdentityClaimUpdateDto) {
-  const { id } = modalApi.getData<IdentityUserDto>();
+  const { id } = getModalData(modalApi);
   await updateClaimApi(id, input);
 }
 

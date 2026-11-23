@@ -204,7 +204,7 @@ function propertyOf(node: AntFlowNode | null | undefined): NodePropertyLike {
 }
 
 function deepClone<T>(value: T): T {
-  // eslint-disable-next-line unicorn/prefer-structured-clone
+  // oxlint-disable-next-line unicorn/prefer-structured-clone
   return JSON.parse(JSON.stringify(value)) as T;
 }
 

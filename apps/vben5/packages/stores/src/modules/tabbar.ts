@@ -9,12 +9,12 @@ import type {
 
 import type { TabDefinition } from '@vben-core/typings';
 
-import { markRaw, toRaw } from 'vue';
+import { markRaw, nextTick, toRaw } from 'vue';
 
 import { preferences } from '@vben-core/preferences';
 import {
   createStack,
-  openRouteInNewWindow,
+  openWindow,
   Stack,
   startProgress,
   stopProgress,
@@ -145,8 +145,7 @@ export const useTabbarStore = defineStore('core-tabbar', {
       if (tabIndex === -1) {
         const maxCount = preferences.tabbar.maxCount;
         // 获取动态路由打开数，超过 0 即代表需要控制打开数
-        const maxNumOfOpenTab = (routeTab?.meta?.maxNumOfOpenTab ??
-          -1) as number;
+        const maxNumOfOpenTab = routeTab?.meta?.maxNumOfOpenTab ?? -1;
         // 如果动态路由层级大于 0 了，那么就要限制该路由的打开数限制了
         // 获取到已经打开的动态路由数, 判断是否大于某一个值
         if (
@@ -188,7 +187,7 @@ export const useTabbarStore = defineStore('core-tabbar', {
         tab = mergedTab;
         this.tabs.splice(tabIndex, 1, mergedTab);
       }
-      this.updateCacheTabs();
+      void this.updateCacheTabs();
       // 添加访问历史记录
       if (isVisitHistory()) {
         this.visitHistory.push(tab.key as string);
@@ -208,7 +207,7 @@ export const useTabbarStore = defineStore('core-tabbar', {
         );
       }
       await this._goToDefaultTab(router);
-      this.updateCacheTabs();
+      await this.updateCacheTabs();
     },
     /**
      * @zh_CN 关闭左侧标签页
@@ -286,7 +285,7 @@ export const useTabbarStore = defineStore('core-tabbar', {
       // 关闭不是激活选项卡
       if (currentTabKey !== getTabKeyFromTab(tab)) {
         this._close(tab);
-        this.updateCacheTabs();
+        await this.updateCacheTabs();
         // 移除访问历史记录
         if (isVisitHistory()) {
           this.visitHistory.remove(getTabKeyFromTab(tab));
@@ -344,10 +343,20 @@ export const useTabbarStore = defineStore('core-tabbar', {
      * @param router
      */
     async closeTabByKey(key: string, router: Router) {
-      const originKey = decodeURIComponent(key);
-      const index = this.tabs.findIndex(
-        (item) => getTabKeyFromTab(item) === originKey,
-      );
+      // 标签页的 key 在创建时已经解码过，优先按原样匹配；重复解码会改变
+      // 已解码 key 中的 "%xx" 片段，匹配到别的标签页或抛 URIError
+      let index = this.tabs.findIndex((item) => getTabKeyFromTab(item) === key);
+      if (index === -1) {
+        let decodedKey: string;
+        try {
+          decodedKey = decodeURIComponent(key);
+        } catch {
+          return;
+        }
+        index = this.tabs.findIndex(
+          (item) => getTabKeyFromTab(item) === decodedKey,
+        );
+      }
       if (index === -1) {
         return;
       }
@@ -371,8 +380,9 @@ export const useTabbarStore = defineStore('core-tabbar', {
      * @zh_CN 新窗口打开标签页
      * @param tab
      */
-    async openTabInNewWindow(tab: TabDefinition) {
-      openRouteInNewWindow(tab.fullPath || tab.path);
+    async openTabInNewWindow(tab: TabDefinition, router: Router) {
+      const href = router.resolve(tab.fullPath || tab.path).href;
+      openWindow(new URL(href, location.href).href, { target: '_blank' });
     },
 
     /**
@@ -393,8 +403,12 @@ export const useTabbarStore = defineStore('core-tabbar', {
       const affixTabs = this.tabs.filter((tab) => isAffixTab(tab));
       // 获得固定tabs的index
       const newIndex = affixTabs.findIndex((item) => equalTab(item, tab));
+      // sortTabs 的源下标同样要按渲染顺序取，否则固定标签在原始数组靠后时会动到别的标签页
+      const renderedIndex = this.getTabs.findIndex((item) =>
+        equalTab(item, tab),
+      );
       // 交换位置重新排序
-      await this.sortTabs(index, newIndex);
+      await this.sortTabs(renderedIndex, newIndex);
     },
 
     /**
@@ -412,13 +426,17 @@ export const useTabbarStore = defineStore('core-tabbar', {
 
       this.excludeCachedTabs.add(name as string);
       this.renderRouteView = false;
-      startProgress();
+      // startProgress 内部是动态导入 nprogress，导入失败不应中断刷新流程：
+      // 否则 renderRouteView 停留 false（内容区空白）、标签页永久滞留在
+      // excludeCachedTabs 里。与各应用 guard.ts 一致 fire-and-forget。
+      void startProgress();
 
-      await new Promise((resolve) => setTimeout(resolve, 200));
+      await nextTick();
+      // await new Promise((resolve) => setTimeout(resolve, 200));
 
       this.excludeCachedTabs.delete(name as string);
       this.renderRouteView = true;
-      stopProgress();
+      void stopProgress();
     },
 
     /**
@@ -499,12 +517,15 @@ export const useTabbarStore = defineStore('core-tabbar', {
      * @param newIndex
      */
     async sortTabs(oldIndex: number, newIndex: number) {
-      const currentTab = this.tabs[oldIndex];
+      // 拖拽回调（use-tabs-drag）给出的是渲染顺序的下标，而 this.tabs 的原始顺序
+      // 可能把固定标签页排在后面，直接按下标改 this.tabs 会动到别的标签页。
+      const currentTab = this.getTabs[oldIndex];
       if (!currentTab) {
         return;
       }
-      this.tabs.splice(oldIndex, 1);
-      this.tabs.splice(newIndex, 0, currentTab);
+      const sortedTabs = this.getTabs.toSpliced(oldIndex, 1);
+      sortedTabs.splice(newIndex, 0, currentTab);
+      this.tabs = sortedTabs;
       this.dragEndIndex = this.dragEndIndex + 1;
     },
 
@@ -536,8 +557,12 @@ export const useTabbarStore = defineStore('core-tabbar', {
       const affixTabs = this.tabs.filter((tab) => isAffixTab(tab));
       // 获得固定tabs的index,使用固定tabs的下一个位置也就是活动tabs的第一个位置
       const newIndex = affixTabs.length;
+      // sortTabs 的源下标同样要按渲染顺序取，否则固定标签在原始数组靠后时会动到别的标签页
+      const renderedIndex = this.getTabs.findIndex((item) =>
+        equalTab(item, tab),
+      );
       // 交换位置重新排序
-      await this.sortTabs(index, newIndex);
+      await this.sortTabs(renderedIndex, newIndex);
     },
     /**
      * 根据当前打开的选项卡更新缓存
@@ -587,8 +612,8 @@ export const useTabbarStore = defineStore('core-tabbar', {
       const affixTabs = this.tabs.filter((tab) => isAffixTab(tab));
 
       return affixTabs.toSorted((a, b) => {
-        const orderA = (a.meta?.affixTabOrder ?? 0) as number;
-        const orderB = (b.meta?.affixTabOrder ?? 0) as number;
+        const orderA = a.meta?.affixTabOrder ?? 0;
+        const orderB = b.meta?.affixTabOrder ?? 0;
         return orderA - orderB;
       });
     },
@@ -709,12 +734,15 @@ function isTabShown(tab: TabDefinition) {
  * @param tab
  */
 function getTabKey(tab: RouteLocationNormalized | RouteRecordNormalized) {
+  // 运行时传入的记录可能缺省 meta/query（测试与部分调用点给的是不完整对象），
+  // 按可选视图解构，让解构默认值真正承担兜底职责。
   const {
     fullPath,
     path,
     meta: { fullPathKey } = {},
     query = {},
-  } = tab as RouteLocationNormalized;
+  } = tab as Partial<RouteLocationNormalized> &
+    Pick<RouteLocationNormalized, 'fullPath' | 'path'>;
   // pageKey可能是数组（查询参数重复时可能出现）
   const pageKey = Array.isArray(query.pageKey)
     ? query.pageKey[0]

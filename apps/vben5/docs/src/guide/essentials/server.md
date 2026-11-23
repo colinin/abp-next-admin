@@ -4,7 +4,7 @@
 
 本文档介绍如何在开发环境下使用 Mock 数据和与服务端进行交互，涉及到的技术有：
 
-- [Nitro](https://nitro.unjs.io/) 轻量级后端服务器，可部署在任何地方，项目用作于 Mock 服务器。
+- [Nitro](https://nitro.build/) 轻量级后端服务器，可部署在任何地方，项目用作于 Mock 服务器。
 - [axios](https://axios-http.com/docs/intro) 用于发送 HTTP 请求与服务端进行交互。
 
 :::
@@ -63,16 +63,18 @@ export default defineConfig(async () => {
 ```ts
 import axios from 'axios';
 
-axios.get('/api/user').then((res) => {
-  console.log(res);
-});
+axios
+  .post('/api/auth/login', { username: 'vben', password: '123456' })
+  .then((res) => {
+    console.log(res);
+  });
 ```
 
-此时，请求会被代理到 `http://localhost:5320/api/user`。
+此时，请求会被代理到 `http://localhost:5320/api/auth/login`。
 
 ::: warning 注意
 
-从浏览器控制台的 Network 看，请求是 `http://localhost:5555/api/user`, 这是因为 proxy 配置不会改变本地请求的 url。
+从浏览器控制台的 Network 看，请求是 `http://localhost:5555/api/auth/login`, 这是因为 proxy 配置不会改变本地请求的 url。
 
 :::
 
@@ -98,7 +100,7 @@ VITE_GLOB_API_URL=https://mock-napi.vben.pro/api
 
 ::: tip 打包如何动态修改接口地址
 
-`.env` 文件内的 `VITE_GLOB_*` 开头的变量会在打包的时候注入 `_app.config.js` 文件内。在 `dist/_app.config.js` 修改相应的接口地址后刷新页面即可，不需要在根据不同环境打包多次，一次打包可以用于多个不同接口环境的部署。
+`.env` 文件内的 `VITE_GLOB_*` 开头的变量会在打包的时候注入 `_app-config-{version}-{hash}.js` 文件内。在 `dist/_app-config-{version}-{hash}.js` 修改相应的接口地址后刷新页面即可，不需要在根据不同环境打包多次，一次打包可以用于多个不同接口环境的部署。
 
 :::
 
@@ -204,7 +206,7 @@ import {
 } from '@vben/request';
 import { useAccessStore } from '@vben/stores';
 
-import { message } from 'ant-design-vue';
+import { message } from 'antdv-next';
 
 import { useAuthStore } from '#/store';
 
@@ -369,13 +371,13 @@ async function doRefreshToken() {
 
 Mock 数据是前端开发过程中必不可少的一环，是分离前后端开发的关键链路。通过预先跟服务器端约定好的接口，模拟请求数据甚至逻辑，能够让前端开发独立自主，不会被服务端的开发进程所阻塞。
 
-项目使用 [Nitro](https://nitro.unjs.io/) 来进行本地 mock 数据处理。其原理是本地额外启动一个后端服务，是一个真实的后端服务，可以处理请求，返回数据。
+项目使用 [Nitro](https://nitro.build/) 来进行本地 mock 数据处理。其原理是本地额外启动一个后端服务，是一个真实的后端服务，可以处理请求，返回数据。
 
 ### Nitro 使用
 
 Mock 服务代码位于`apps/backend-mock`目录下，无需手动启动，已经集成在项目中，只需要在项目根目录下运行`pnpm dev`即可，运行成功之后，控制台会打印 `http://localhost:5320/api`, 访问该地址即可查看 mock 服务。
 
-[Nitro](https://nitro.unjs.io/) 语法简单，可以根据自己的需求进行配置及开发，具体配置可以查看 [Nitro 文档](https://nitro.unjs.io/)。
+[Nitro](https://nitro.build/) 语法简单，可以根据自己的需求进行配置及开发，具体配置可以查看 [Nitro 文档](https://nitro.build/docs/)。
 
 ## 关闭 Mock 服务
 

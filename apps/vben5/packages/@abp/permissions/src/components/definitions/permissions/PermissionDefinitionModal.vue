@@ -10,12 +10,13 @@ import type { FormInstance } from 'ant-design-vue';
 import type { PermissionDefinitionDto } from '../../../types/definitions';
 import type { PermissionGroupDefinitionDto } from '../../../types/groups';
 
-import { defineEmits, defineOptions, ref, toValue, useTemplateRef } from 'vue';
+import { ref, toValue, useTemplateRef } from 'vue';
 
 import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
 import {
+  getModalData,
   isNullOrWhiteSpace,
   listToTree,
   useLocalization,
@@ -85,7 +86,7 @@ const {
   getAssignableProvidersApi,
   updateApi,
 } = usePermissionDefinitionsApi();
-const [Modal, modalApi] = useVbenModal({
+const [Modal, modalApi] = useVbenModal<PermissionDefinitionDto>({
   class: 'w-1/2',
   closeOnClickModal: false,
   draggable: true,
@@ -128,8 +129,7 @@ const [Modal, modalApi] = useVbenModal({
       });
       try {
         modalApi.setState({ loading: true });
-        const { groupName, name, parentName } =
-          modalApi.getData<PermissionDefinitionDto>();
+        const { groupName, name, parentName } = getModalData(modalApi);
         name && (await onGet(name));
         await Promise.all([onInitGroups(groupName), onInitProviders()]);
         formModel.value.parentName = parentName;
@@ -193,7 +193,7 @@ function onPropChange(prop: PropertyInfo) {
 }
 function onPropDelete(prop: PropertyInfo) {
   formModel.value.extraProperties ??= {};
-  delete formModel.value.extraProperties[prop.key];
+  Reflect.deleteProperty(formModel.value.extraProperties, prop.key);
 }
 </script>
 

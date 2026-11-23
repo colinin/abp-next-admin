@@ -1,0 +1,98 @@
+<script setup lang="ts">
+import type { ActionItem } from './types';
+
+import { computed, ref } from 'vue';
+
+import { useSimpleLocale } from '@vben-core/composables';
+import { cn } from '@vben-core/shared/utils';
+
+import { Popover, PopoverContent, PopoverTrigger } from '../../ui';
+import { VbenButton } from '../button';
+import { VbenIcon } from '../icon';
+
+const props = defineProps<{ action: ActionItem }>();
+
+const { $t } = useSimpleLocale();
+const open = ref(false);
+
+const buttonClass = computed(() =>
+  cn(
+    // 与 table-action.vue 一致：垂直方向不加内边距，避免按钮总高度
+    // 超过 small 档表格 40px 的单元格行高导致视觉不对齐 (#8461)
+    'gap-1 px-2 py-0',
+    props.action.danger && 'text-destructive hover:text-destructive',
+    props.action.class,
+  ),
+);
+
+const variant = computed(() => props.action.variant ?? 'link');
+const size = computed(() => props.action.size ?? 'default');
+
+function onClick() {
+  if (props.action.disabled || props.action.loading) return;
+  props.action.onClick?.();
+}
+
+function onConfirm() {
+  open.value = false;
+  const pc = props.action.popConfirm;
+  if (pc?.confirm) {
+    pc.confirm();
+  } else {
+    props.action.onClick?.();
+  }
+}
+
+function onCancel() {
+  open.value = false;
+}
+</script>
+
+<template>
+  <!-- 气泡确认 -->
+  <Popover v-if="action.popConfirm" v-model:open="open">
+    <PopoverTrigger as-child>
+      <VbenButton
+        :class="buttonClass"
+        :disabled="action.disabled"
+        :loading="action.loading"
+        :size="size"
+        :variant="variant"
+      >
+        <VbenIcon :icon="action.icon" v-if="action.icon" class="size-4" />
+        <span v-if="action.text">{{ action.text }}</span>
+      </VbenButton>
+    </PopoverTrigger>
+    <PopoverContent class="z-popup w-60" side="top">
+      <div class="text-foreground mb-3 text-sm">
+        {{ action.popConfirm.title ?? $t('common.confirm-title') }}
+      </div>
+      <div class="flex justify-end gap-2">
+        <VbenButton size="sm" variant="outline" @click="onCancel">
+          {{ action.popConfirm.cancelText ?? $t('common.cancel') }}
+        </VbenButton>
+        <VbenButton
+          :variant="action.danger ? 'destructive' : 'default'"
+          size="sm"
+          @click="onConfirm"
+        >
+          {{ action.popConfirm.okText ?? $t('common.confirm') }}
+        </VbenButton>
+      </div>
+    </PopoverContent>
+  </Popover>
+
+  <!-- 普通按钮 -->
+  <VbenButton
+    v-else
+    :class="buttonClass"
+    :disabled="action.disabled"
+    :loading="action.loading"
+    :size="size"
+    :variant="variant"
+    @click="onClick"
+  >
+    <VbenIcon :icon="action.icon" v-if="action.icon" class="size-4" />
+    <span v-if="action.text">{{ action.text }}</span>
+  </VbenButton>
+</template>

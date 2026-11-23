@@ -35,9 +35,11 @@ export interface RequirePermissionsStateChecker<
 }
 
 export class RequirePermissionsSimpleStateChecker<
-    TState extends IHasSimpleStateCheckers<TState>,
-  >
-  implements ISimpleStateChecker<TState>, RequirePermissionsStateChecker<TState>
+  TState extends IHasSimpleStateCheckers<TState>,
+>
+  implements
+    ISimpleStateChecker<TState>,
+    RequirePermissionsStateChecker<TState>
 {
   _permissionChecker: IPermissionChecker;
   model: RequirePermissionsSimpleBatchStateCheckerModel<TState>;
@@ -67,8 +69,7 @@ export class RequirePermissionsSimpleStateChecker<
 
 export class RequirePermissionsSimpleBatchStateChecker<
   TState extends IHasSimpleStateCheckers<TState>,
-> implements ISimpleBatchStateChecker<TState>
-{
+> implements ISimpleBatchStateChecker<TState> {
   _permissionChecker: IPermissionChecker;
   models: RequirePermissionsSimpleBatchStateCheckerModel<TState>[];
   name: string = 'P';
@@ -80,13 +81,16 @@ export class RequirePermissionsSimpleBatchStateChecker<
     this._permissionChecker = permissionChecker;
   }
   isEnabled(context: SimpleBatchStateCheckerContext<TState>) {
-    const result = {} as SimpleStateCheckerResult<TState>;
+    const result: SimpleStateCheckerResult<TState> = new Map();
     context.states.forEach((state) => {
       const model = this.models.find((x) => x.state === state);
       if (model) {
-        result[model.state] = this._permissionChecker.isGranted(
-          model.permissions,
-          model.requiresAll,
+        result.set(
+          model.state,
+          this._permissionChecker.isGranted(
+            model.permissions,
+            model.requiresAll,
+          ),
         );
       }
     });

@@ -8,7 +8,7 @@ import type {
 import { useVbenForm, useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { listToTree } from '@abp/core';
+import { getModalData, listToTree } from '@abp/core';
 import { message } from 'ant-design-vue';
 
 import { useDataDictionariesApi } from '../../api';
@@ -84,7 +84,7 @@ const [Form, formApi] = useVbenForm({
   ],
   showDefaultActions: false,
 });
-const [Modal, modalApi] = useVbenModal({
+const [Modal, modalApi] = useVbenModal<DataDto>({
   onConfirm: async () => {
     await formApi.validateAndSubmitForm();
   },
@@ -99,7 +99,7 @@ async function onGet() {
   try {
     modalApi.setState({ loading: true });
     formApi.resetForm();
-    const { displayName, id, parentId } = modalApi.getData<DataDto>();
+    const { displayName, id, parentId } = getModalData(modalApi);
     let title = $t('AppPlatform.Data:AddNew');
     if (id) {
       const dto = await getApi(id);

@@ -8,13 +8,13 @@ import type {
   WebhookSubscriptionDto,
 } from '../../types';
 
-import { defineEmits, defineOptions, ref, toValue, useTemplateRef } from 'vue';
+import { ref, toValue, useTemplateRef } from 'vue';
 
 import { useAccess } from '@vben/access';
 import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { isNullOrWhiteSpace } from '@abp/core';
+import { getModalData, isNullOrWhiteSpace } from '@abp/core';
 import { useTenantsApi } from '@abp/saas';
 import { PropertyTable } from '@abp/ui';
 import {
@@ -49,7 +49,6 @@ const TabPane = Tabs.TabPane;
 const defaultModel: WebhookSubscriptionDto = {
   creationTime: new Date(),
   displayName: '',
-  extraProperties: {},
   id: '',
   isActive: true,
   isStatic: false,
@@ -70,7 +69,7 @@ const { getPagedListApi: getTenantsApi } = useTenantsApi();
 const { cancel, createApi, getAllAvailableWebhooksApi, getApi, updateApi } =
   useSubscriptionsApi();
 
-const [Modal, modalApi] = useVbenModal({
+const [Modal, modalApi] = useVbenModal<WebhookSubscriptionDto>({
   class: 'w-1/2',
   draggable: true,
   fullscreenButton: false,
@@ -107,7 +106,7 @@ const [Modal, modalApi] = useVbenModal({
         title: $t('WebhooksManagement.Subscriptions:AddNew'),
       });
       try {
-        const { id } = modalApi.getData<WebhookSubscriptionDto>();
+        const { id } = getModalData(modalApi);
         await onInit();
         !isNullOrWhiteSpace(id) && (await onGet(id));
       } finally {
@@ -160,7 +159,7 @@ function onPropChange(prop: PropertyInfo) {
 }
 function onPropDelete(prop: PropertyInfo) {
   formModel.value.headers ??= {};
-  delete formModel.value.headers[prop.key];
+  Reflect.deleteProperty(formModel.value.headers, prop.key);
 }
 </script>
 

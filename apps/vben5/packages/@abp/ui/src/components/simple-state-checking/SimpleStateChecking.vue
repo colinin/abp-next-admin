@@ -55,7 +55,7 @@ const [Modal, modalApi] = useVbenModal({
   connectedComponent: SimpleStateCheckingModal,
 });
 
-const getTableColumns = computed(() => {
+const getTableColumns = computed<ColumnsType>(() => {
   const columns: ColumnsType = [
     {
       align: 'left',
@@ -73,21 +73,19 @@ const getTableColumns = computed(() => {
       title: $t('component.simple_state_checking.table.properties'),
     },
   ];
-  return [
-    ...columns,
-    ...(props.disabled
-      ? []
-      : [
-          {
-            align: 'center',
-            dataIndex: 'action',
-            fixed: 'right',
-            key: 'action',
-            title: $t('component.simple_state_checking.table.actions'),
-            width: 180,
-          },
-        ]),
-  ];
+  const actionColumns: ColumnsType = props.disabled
+    ? []
+    : [
+        {
+          align: 'center',
+          dataIndex: 'action',
+          fixed: 'right',
+          key: 'action',
+          title: $t('component.simple_state_checking.table.actions'),
+          width: 180,
+        },
+      ];
+  return [...columns, ...actionColumns];
 });
 const getSimpleCheckers = computed(() => {
   if (isNullOrUnDef(props.value) || props.value.length === 0) {
@@ -123,7 +121,10 @@ function handleEdit(record: any) {
 }
 
 function onChange(record: any) {
-  const stateChecker = deserialize(record, props.state)!;
+  const stateChecker = deserialize(record, props.state);
+  if (!stateChecker) {
+    return;
+  }
   const stateCheckers = unref(getSimpleCheckers);
   const inputIndex = stateCheckers.findIndex(
     (x) => (x as any).name === record.name,

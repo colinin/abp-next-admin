@@ -6,6 +6,7 @@ import { defineAsyncComponent, ref } from 'vue';
 import { useVbenDrawer } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
+import { getModalData } from '@abp/core';
 import { message, Modal } from 'ant-design-vue';
 
 import { useUserSessionsApi } from '../../api/useUserSessionsApi';
@@ -18,7 +19,7 @@ const sessions = ref<IdentitySessionDto[]>([]);
 
 const { cancel, getSessionsApi, revokeSessionApi } = useUserSessionsApi();
 
-const [Drawer, drawerApi] = useVbenDrawer({
+const [Drawer, drawerApi] = useVbenDrawer<IdentityUserDto>({
   class: 'w-[800px]',
   onCancel() {
     drawerApi.close();
@@ -33,7 +34,7 @@ const [Drawer, drawerApi] = useVbenDrawer({
 async function onRefresh() {
   try {
     drawerApi.setState({ loading: true });
-    const dto = drawerApi.getData<IdentityUserDto>();
+    const dto = getModalData(drawerApi);
     const { items } = await getSessionsApi({ userId: dto.id });
     sessions.value = items;
   } finally {

@@ -4,6 +4,7 @@ import type { BlobDto } from '../../types/blobs';
 import { useVbenForm, useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
+import { getModalData } from '@abp/core';
 import { message } from 'ant-design-vue';
 
 import { useBlobsApi } from '../../api/useBlobsApi';
@@ -32,15 +33,15 @@ const [Form, formApi] = useVbenForm({
   showDefaultActions: false,
 });
 
-const [Modal, modalApi] = useVbenModal({
+const [Modal, modalApi] = useVbenModal<ModalState>({
   onConfirm: async () => {
-    await formApi.validateAndSubmitForm();
+    await formApi.validateAndSubmit();
   },
 });
 
 async function onSubmit(values: Record<string, any>) {
   try {
-    const state = modalApi.getData<ModalState>();
+    const state = getModalData(modalApi);
     modalApi.setState({ submitting: true });
     const dto = await createFolderApi({
       containerId: state.containerId,

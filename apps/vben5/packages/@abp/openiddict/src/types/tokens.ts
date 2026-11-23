@@ -18,6 +18,10 @@ interface OpenIddictTokenGetListInput extends PagedAndSortedResultRequestDto {
 }
 
 interface OpenIddictTokenDto extends ExtensibleAuditedEntityDto<string> {
+  /** 是否内置（静态） */
+  isStatic?: boolean;
+  /** 是否必需 */
+  required?: boolean;
   applicationId?: string;
   authorizationId?: string;
   creationDate?: string;

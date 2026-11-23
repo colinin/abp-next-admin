@@ -11,7 +11,7 @@ import {
 
 export interface StringValueType {
   name: string;
-  properties: Dictionary<string, any>;
+  properties: Dictionary<string>;
   validator: ValueValidator;
 }
 
@@ -26,7 +26,7 @@ export interface SelectionStringValueItemSource {
 
 export class FreeTextStringValueType implements StringValueType {
   name = 'FreeTextStringValueType';
-  properties: Dictionary<string, any>;
+  properties: Dictionary<string>;
   validator: ValueValidator;
   constructor(validator?: ValueValidator) {
     this.properties = {};
@@ -36,7 +36,7 @@ export class FreeTextStringValueType implements StringValueType {
 
 export class ToggleStringValueType implements StringValueType {
   name = 'ToggleStringValueType';
-  properties: Dictionary<string, any>;
+  properties: Dictionary<string>;
   validator: ValueValidator;
   constructor(validator?: ValueValidator) {
     this.properties = {};
@@ -47,7 +47,7 @@ export class ToggleStringValueType implements StringValueType {
 export class SelectionStringValueType implements StringValueType {
   itemSource: SelectionStringValueItemSource;
   name = 'SelectionStringValueType';
-  properties: Dictionary<string, any>;
+  properties: Dictionary<string>;
   validator: ValueValidator;
   constructor(validator?: ValueValidator) {
     this.properties = {};

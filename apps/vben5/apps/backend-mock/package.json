@@ -1,13 +1,14 @@
 {
   "name": "@vben/backend-mock",
-  "version": "0.0.1",
+  "version": "5.8.0",
   "description": "",
   "private": true,
   "license": "MIT",
   "author": "",
   "scripts": {
     "build": "nitro build",
-    "start": "nitro dev"
+    "start": "nitro dev",
+    "typecheck": "vue-tsc --noEmit"
   },
   "dependencies": {
     "@faker-js/faker": "catalog:",

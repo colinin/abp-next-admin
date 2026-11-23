@@ -1,4 +1,5 @@
 <script setup lang="ts">
+// oxlint-disable typescript/no-non-null-assertion
 import type {
   BubbleListProps,
   ConversationsProps,

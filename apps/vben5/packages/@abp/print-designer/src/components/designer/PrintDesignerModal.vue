@@ -9,13 +9,20 @@ import { useTemplateRef } from 'vue';
 import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
+import { getModalData } from '@abp/core';
+
 import PrintDesigner from './index.vue';
 
 const props = defineProps<PrintDesignerOptions>();
 
 const designer = useTemplateRef<PrintDesignerInstance>('print-designer');
 
-const [Modal, modalApi] = useVbenModal({
+interface PrintDesignerModalState {
+  openMarket?: boolean;
+  templateId?: string;
+}
+
+const [Modal, modalApi] = useVbenModal<PrintDesignerModalState>({
   closeOnClickModal: false,
   closeOnPressEscape: false,
   fullscreen: true,
@@ -23,7 +30,7 @@ const [Modal, modalApi] = useVbenModal({
   footer: false,
   title: $t('PrintDesigner.Templates:Print'),
   async onOpened() {
-    const { templateId, openMarket } = modalApi.getData();
+    const { templateId, openMarket } = getModalData(modalApi);
     if (openMarket === true) {
       await designer.value?.designerApi?.openMarket();
       return;

@@ -100,7 +100,7 @@ function handleScroll(event: Event) {
       v-if="showShadowTop"
       :class="{
         'opacity-100': !isAtTop,
-        'border-t border-border': shadowBorder && !isAtTop,
+        'border-border border-t': shadowBorder && !isAtTop,
       }"
       class="scrollbar-top-shadow pointer-events-none absolute top-0 z-10 h-12 w-full opacity-0 transition-opacity duration-300 ease-in-out will-change-[opacity]"
     ></div>
@@ -109,13 +109,13 @@ function handleScroll(event: Event) {
       v-if="showShadowBottom"
       :class="{
         'opacity-100': !isAtTop && !isAtBottom,
-        'border-b border-border': shadowBorder && !isAtTop && !isAtBottom,
+        'border-border border-b': shadowBorder && !isAtTop && !isAtBottom,
       }"
       class="scrollbar-bottom-shadow pointer-events-none absolute bottom-0 z-10 h-12 w-full opacity-0 transition-opacity duration-300 ease-in-out will-change-[opacity]"
     ></div>
     <ScrollBar
       v-if="horizontal"
-      :class="scrollBarClass"
+      :class="cn(scrollBarClass)"
       orientation="horizontal"
     />
   </ScrollArea>

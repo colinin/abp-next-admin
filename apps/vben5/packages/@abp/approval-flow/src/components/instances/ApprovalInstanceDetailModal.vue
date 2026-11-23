@@ -1,4 +1,5 @@
 <script setup lang="ts">
+// oxlint-disable typescript/no-non-null-assertion
 import type {
   ApprovalInstanceDetailDto,
   ApprovalParticipantDto,
@@ -503,7 +504,7 @@ function actionText(actionKey?: null | string): string {
                 $t('ElsaNextApprovalFlow.ApprovalFlow:Instance:FinishedAt')
               "
             >
-              {{ formatToDateTime(detail.instance.finishedAt) }}
+              {{ formatToDateTime(detail.instance.finishedAt ?? undefined) }}
             </DescriptionsItem>
           </Descriptions>
         </Tabs.TabPane>

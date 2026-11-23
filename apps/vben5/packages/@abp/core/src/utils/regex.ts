@@ -1,5 +1,5 @@
-/* eslint-disable regexp/no-unused-capturing-group */
 export function isRegMatch(reg: RegExp, val: string) {
+  reg.lastIndex = 0;
   return reg.test(val);
 }
 
@@ -14,34 +14,17 @@ export function isPhone(val: string) {
 }
 
 export function isDigit(val: string) {
-  return [...val].some((element) => _isDigit(element));
+  return /\d/.test(val);
 }
 
 export function isLower(val: string) {
-  return [...val].some((element) => _isLower(element));
+  return /[a-z]/.test(val);
 }
 
 export function isUpper(val: string) {
-  return [...val].some((element) => _isUpper(element));
+  return /[A-Z]/.test(val);
 }
 
 export function isLetterOrDigit(val: string) {
-  const arr = [...val];
-  return !arr.some((element) => _isLetterOrDigit(element));
-}
-
-function _isDigit(char: string) {
-  return isRegMatch(/\d/g, char);
-}
-
-function _isLower(char: string) {
-  return isRegMatch(/[a-z]/g, char);
-}
-
-function _isUpper(char: string) {
-  return isRegMatch(/[A-Z]/g, char);
-}
-
-function _isLetterOrDigit(char: string) {
-  return isRegMatch(/[^ \w]/g, char);
+  return /^[A-Za-z0-9]+$/.test(val);
 }

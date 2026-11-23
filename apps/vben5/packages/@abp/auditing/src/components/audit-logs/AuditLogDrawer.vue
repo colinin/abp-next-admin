@@ -25,11 +25,11 @@ const TabPane = Tabs.TabPane;
 const DescriptionsItem = Descriptions.Item;
 
 const activedTab = ref('basic');
-const auditLogModel = ref<AuditLogDto>({} as AuditLogDto);
+const auditLogModel = ref<Partial<AuditLogDto>>({});
 
 const { getApi } = useAuditLogsApi();
 const { getHttpMethodColor, getHttpStatusCodeColor } = useAuditlogs();
-const [Drawer, drawerApi] = useVbenDrawer({
+const [Drawer, drawerApi] = useVbenDrawer<AuditLogDto>({
   class: 'w-auto',
   onCancel() {
     drawerApi.close();
@@ -42,8 +42,8 @@ const [Drawer, drawerApi] = useVbenDrawer({
       try {
         auditLogModel.value = {} as AuditLogDto;
         drawerApi.setState({ loading: true });
-        const dto = drawerApi.getData<AuditLogDto>();
-        await onGet(dto.id);
+        const dto = drawerApi.getData();
+        await onGet(dto?.id);
       } finally {
         drawerApi.setState({ loading: false });
       }
@@ -127,7 +127,11 @@ const [ActionsGrid] = useVbenVxeGrid({
   gridOptions: actionsGridOptions,
 });
 /** 查询审计日志 */
-async function onGet(id: string) {
+async function onGet(id?: string) {
+  if (!id) {
+    auditLogModel.value = {};
+    return;
+  }
   const dto = await getApi(id);
   auditLogModel.value = dto;
 }

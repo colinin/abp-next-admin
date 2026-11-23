@@ -4,6 +4,7 @@ import type { OssObjectDto } from '../../types/objects';
 import { useVbenForm, useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
+import { getModalData } from '@abp/core';
 import { message } from 'ant-design-vue';
 
 import { useObjectsApi } from '../../api';
@@ -32,7 +33,7 @@ const [Form, formApi] = useVbenForm({
   showDefaultActions: false,
 });
 
-const [Modal, modalApi] = useVbenModal({
+const [Modal, modalApi] = useVbenModal<ModalState>({
   onConfirm: async () => {
     await formApi.validateAndSubmitForm();
   },
@@ -40,7 +41,7 @@ const [Modal, modalApi] = useVbenModal({
 
 async function onSubmit(values: Record<string, any>) {
   try {
-    const state = modalApi.getData<ModalState>();
+    const state = getModalData(modalApi);
     modalApi.setState({ submitting: true });
     const dto = await createApi({
       bucket: state.bucket,

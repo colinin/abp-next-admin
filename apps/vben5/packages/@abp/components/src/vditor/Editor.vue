@@ -50,8 +50,7 @@ const props = defineProps({
   },
 });
 const emits = defineEmits<{
-  (event: 'change', content: any): void;
-  (event: 'update:modelValue', content: any): void;
+  (event: 'change' | 'update:modelValue', content: any): void;
 }>();
 let editor: Vditor;
 

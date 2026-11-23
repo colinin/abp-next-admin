@@ -16,6 +16,12 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   (event: 'change', feature: FeatureDto, groupIndex: number): void;
+  (
+    event: 'update:value',
+    value: any,
+    feature: FeatureDto,
+    groupIndex: number,
+  ): void;
 }>();
 
 const FormItem = Form.Item;
@@ -65,8 +71,13 @@ function createRules(field: string, validator: Validator) {
   return featureRules;
 }
 
-function handleChange() {
+function onValueChange(value: any) {
+  emit('update:value', value, props.feature, props.groupIndex);
   emit('change', props.feature, props.groupIndex);
+}
+
+function onCheckboxChange(event: { target: { checked: boolean } }) {
+  onValueChange(event.target.checked);
 }
 
 const isCheckbox = computed(
@@ -99,8 +110,8 @@ const isSelection = computed(
     <!-- 复选框类型 -->
     <Checkbox
       v-if="isCheckbox"
-      v-model:checked="feature.value"
-      @change="handleChange"
+      :checked="feature.value"
+      @change="onCheckboxChange"
     >
       {{ feature.displayName }}
     </Checkbox>
@@ -110,24 +121,24 @@ const isSelection = computed(
       <InputNumber
         v-if="isNumeric"
         style="width: 100%"
-        v-model:value="feature.value"
-        @change="handleChange"
+        :value="feature.value"
+        @update:value="onValueChange"
       />
       <Input
         v-else
-        v-model:value="feature.value"
+        :value="feature.value"
         autocomplete="off"
-        @change="handleChange"
+        @update:value="onValueChange"
       />
     </div>
 
     <!-- 选择类型 -->
     <Select
       v-else-if="isSelection"
-      v-model:value="feature.value"
+      :value="feature.value"
       :options="feature.valueType.itemSource?.items"
       :field-names="{ label: 'displayName', value: 'value' }"
-      @change="handleChange"
+      @update:value="onValueChange"
     />
   </FormItem>
 </template>

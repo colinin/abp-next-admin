@@ -91,10 +91,12 @@ const MAX_FILE_SIZE = 50 * 1024 * 1024;
 
 // 判断文件类型
 function getFileType(): FileType | undefined {
-  const fileName = blob.value!.name.toLocaleLowerCase();
-  for (const [type, extensions] of Object.entries(allowFiles)) {
-    if (extensions.some((ext) => fileName.endsWith(ext))) {
-      return type as FileType;
+  if (blob.value) {
+    const fileName = blob.value.name.toLocaleLowerCase();
+    for (const [type, extensions] of Object.entries(allowFiles)) {
+      if (extensions.some((ext) => fileName.endsWith(ext))) {
+        return type as FileType;
+      }
     }
   }
   return undefined;
@@ -132,7 +134,7 @@ function cleanup() {
   errorMessage.value = '';
 }
 
-const [Modal, modalApi] = useVbenModal({
+const [Modal, modalApi] = useVbenModal<BlobDto>({
   showCancelButton: false,
   showConfirmButton: false,
   fullscreen: true,
@@ -160,7 +162,7 @@ async function onInit() {
     cleanup();
 
     // 获取数据
-    blob.value = modalApi.getData<BlobDto>();
+    blob.value = modalApi.getData();
     if (!blob.value) {
       errorMessage.value = $t('BlobManagement.Blobs:NoData');
       return;
@@ -215,7 +217,7 @@ async function processFileContent(content: Blob) {
       }
     } catch (error) {
       console.error('Read text error:', error);
-      throw new Error('Failed to read text file');
+      throw new Error('Failed to read text file', { cause: error });
     }
   }
 }

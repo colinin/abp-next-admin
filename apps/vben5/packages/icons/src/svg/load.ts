@@ -2,11 +2,7 @@ import type { IconifyIconStructure } from '@vben-core/icons';
 
 import { addIcon } from '@vben-core/icons';
 
-let loaded = false;
-if (!loaded) {
-  loadSvgIcons();
-  loaded = true;
-}
+void loadSvgIcons();
 
 function parseSvg(svgData: string): IconifyIconStructure {
   const parser = new DOMParser();
@@ -57,23 +53,29 @@ function parseSvg(svgData: string): IconifyIconStructure {
  * <Icon icon="svg:avatar"></Icon>
  */
 async function loadSvgIcons() {
+  if (
+    typeof DOMParser === 'undefined' ||
+    typeof Node === 'undefined' ||
+    typeof XMLSerializer === 'undefined'
+  ) {
+    return;
+  }
+
   const svgEagers = import.meta.glob('./icons/**', {
     eager: true,
     query: '?raw',
   });
 
-  await Promise.all(
-    Object.entries(svgEagers).map((svg) => {
-      const [key, body] = svg as [string, string | { default: string }];
+  Object.entries(svgEagers).forEach((svg) => {
+    const [key, body] = svg as [string, string | { default: string }];
 
-      // ./icons/xxxx.svg => xxxxxx
-      const start = key.lastIndexOf('/') + 1;
-      const end = key.lastIndexOf('.');
-      const iconName = key.slice(start, end);
+    // ./icons/xxxx.svg => xxxxxx
+    const start = key.lastIndexOf('/') + 1;
+    const end = key.lastIndexOf('.');
+    const iconName = key.slice(start, end);
 
-      return addIcon(`svg:${iconName}`, {
-        ...parseSvg(typeof body === 'object' ? body.default : body),
-      });
-    }),
-  );
+    addIcon(`svg:${iconName}`, {
+      ...parseSvg(typeof body === 'object' ? body.default : body),
+    });
+  });
 }

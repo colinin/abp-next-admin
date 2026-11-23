@@ -1,26 +1,57 @@
+import type { Component } from 'vue';
+
 import type {
   DrawerApiOptions,
   DrawerProps,
   ExtendedDrawerApi,
+  InferDrawerData,
 } from './drawer';
 
 import {
   defineComponent,
   h,
   inject,
+  markRaw,
   nextTick,
+  onBeforeUnmount,
   provide,
-  reactive,
   ref,
+  shallowReactive,
 } from 'vue';
 
-import { useStore } from '@vben-core/shared/store';
+import { usePreferences } from '@vben-core/preferences';
+import { useSelector } from '@vben-core/shared/store';
 
 import { DrawerApi } from './drawer-api';
 import VbenDrawer from './drawer.vue';
 
 const USER_DRAWER_INJECT_KEY = Symbol('VBEN_DRAWER_INJECT');
 
+declare const DRAWER_DATA_NOT_PROVIDED: unique symbol;
+
+type DrawerDataNotProvided = {
+  readonly [DRAWER_DATA_NOT_PROVIDED]: true;
+};
+
+type ResolvedDrawerData<
+  TData,
+  TConnectedComponent extends Component,
+> = TData extends DrawerDataNotProvided
+  ? InferDrawerData<TConnectedComponent>
+  : TData;
+
+interface DrawerInjectData<TData> {
+  consumed?: boolean;
+  extendApi?: (api: ExtendedDrawerApi<TData>) => void;
+  options?: DrawerApiOptions;
+  reCreateDrawer?: () => Promise<void>;
+}
+
+const { globalEscapeShortcutKey } = usePreferences();
+
+/**
+ * 默认配置
+ */
 const DEFAULT_DRAWER_PROPS: Partial<DrawerProps> = {};
 
 export function setDefaultDrawerProps(props: Partial<DrawerProps>) {
@@ -28,31 +59,39 @@ export function setDefaultDrawerProps(props: Partial<DrawerProps>) {
 }
 
 export function useVbenDrawer<
-  TParentDrawerProps extends DrawerProps = DrawerProps,
->(options: DrawerApiOptions = {}) {
+  TData = DrawerDataNotProvided,
+  TConnectedComponent extends Component = Component,
+>(options: DrawerApiOptions<TConnectedComponent> = {}) {
+  type TResolvedData = ResolvedDrawerData<TData, TConnectedComponent>;
+
   // Drawer一般会抽离出来，所以如果有传入 connectedComponent，则表示为外部调用，与内部组件进行连接
   // 外部的Drawer通过provide/inject传递api
 
+  const defaultOptions = {
+    closeOnPressEscape: globalEscapeShortcutKey.value, // 全局Esc快捷键配置
+    ...options,
+  };
   const { connectedComponent } = options;
   if (connectedComponent) {
-    const extendedApi = reactive({});
+    const extendedApi = shallowReactive({}) as ExtendedDrawerApi<TResolvedData>;
     const isDrawerReady = ref(true);
     const Drawer = defineComponent(
-      (props: TParentDrawerProps, { attrs, slots }) => {
+      (props: DrawerProps, { attrs, slots }) => {
+        function rebindApi(api: ExtendedDrawerApi<TResolvedData>) {
+          Object.setPrototypeOf(extendedApi, markRaw(api));
+        }
+
         provide(USER_DRAWER_INJECT_KEY, {
-          extendApi(api: ExtendedDrawerApi) {
-            // 不能直接给 reactive 赋值，会丢失响应
-            // 不能用 Object.assign,会丢失 api 的原型函数
-            Object.setPrototypeOf(extendedApi, api);
-          },
-          options,
+          extendApi: rebindApi,
+          consumed: false,
+          options: defaultOptions,
           async reCreateDrawer() {
             isDrawerReady.value = false;
             await nextTick();
             isDrawerReady.value = true;
           },
         });
-        checkProps(extendedApi as ExtendedDrawerApi, {
+        void checkProps(extendedApi, {
           ...props,
           ...attrs,
           ...slots,
@@ -71,35 +110,53 @@ export function useVbenDrawer<
       },
     );
 
-    return [Drawer, extendedApi as ExtendedDrawerApi] as const;
+    return [Drawer, extendedApi] as const;
   }
 
-  const injectData = inject<any>(USER_DRAWER_INJECT_KEY, {});
+  const injectData = inject<DrawerInjectData<TResolvedData>>(
+    USER_DRAWER_INJECT_KEY,
+    {},
+  );
+  const isConsumed = injectData.consumed;
+  const effectiveOptions = isConsumed ? {} : injectData.options;
+  if (!isConsumed && injectData.consumed !== undefined) {
+    injectData.consumed = true;
+  }
+  onBeforeUnmount(() => {
+    if (!isConsumed && injectData.consumed !== undefined) {
+      injectData.consumed = false;
+    }
+  });
 
   const mergedOptions = {
     ...DEFAULT_DRAWER_PROPS,
-    ...injectData.options,
-    ...options,
+    ...effectiveOptions,
+    ...defaultOptions,
   } as DrawerApiOptions;
 
   mergedOptions.onOpenChange = (isOpen: boolean) => {
     options.onOpenChange?.(isOpen);
-    injectData.options?.onOpenChange?.(isOpen);
+    if (!isConsumed) {
+      injectData.options?.onOpenChange?.(isOpen);
+    }
   };
 
   const onClosed = mergedOptions.onClosed;
   mergedOptions.onClosed = () => {
     onClosed?.();
-    if (mergedOptions.destroyOnClose) {
-      injectData.reCreateDrawer?.();
+    if (mergedOptions.destroyOnClose && !isConsumed) {
+      if (injectData.consumed !== undefined) {
+        injectData.consumed = false;
+      }
+      void injectData.reCreateDrawer?.();
     }
   };
-  const api = new DrawerApi(mergedOptions);
+  const api = new DrawerApi<TResolvedData>(mergedOptions);
 
-  const extendedApi: ExtendedDrawerApi = api as never;
+  const extendedApi = api as ExtendedDrawerApi<TResolvedData>;
 
   extendedApi.useStore = (selector) => {
-    return useStore(api.store, selector);
+    return useSelector(api.store, selector);
   };
 
   const Drawer = defineComponent(
@@ -117,7 +174,18 @@ export function useVbenDrawer<
   return [Drawer, extendedApi] as const;
 }
 
-async function checkProps(api: ExtendedDrawerApi, attrs: Record<string, any>) {
+export function createVbenDrawer<TData = unknown>() {
+  return function useTypedVbenDrawer<
+    TConnectedComponent extends Component = Component,
+  >(options: DrawerApiOptions<TConnectedComponent> = {}) {
+    return useVbenDrawer<TData, TConnectedComponent>(options);
+  };
+}
+
+async function checkProps<TData>(
+  api: ExtendedDrawerApi<TData>,
+  attrs: Record<string, any>,
+) {
   if (!attrs || Object.keys(attrs).length === 0) {
     return;
   }

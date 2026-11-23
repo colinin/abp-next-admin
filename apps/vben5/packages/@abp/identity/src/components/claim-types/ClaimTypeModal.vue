@@ -4,11 +4,12 @@ import type { DefaultOptionType } from 'ant-design-vue/es/select';
 
 import type { IdentityClaimTypeDto } from '../../types/claim-types';
 
-import { defineEmits, defineOptions, reactive, ref, toValue } from 'vue';
+import { reactive, ref, toValue } from 'vue';
 
 import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
+import { getModalData } from '@abp/core';
 import {
   Checkbox,
   Form,
@@ -56,7 +57,7 @@ const valueTypeOptions = reactive<DefaultOptionType[]>([
 ]);
 
 const { cancel, createApi, getApi, updateApi } = useClaimTypesApi();
-const [Modal, modalApi] = useVbenModal({
+const [Modal, modalApi] = useVbenModal<IdentityClaimTypeDto>({
   draggable: true,
   fullscreenButton: false,
   onCancel() {
@@ -88,7 +89,7 @@ const [Modal, modalApi] = useVbenModal({
         showConfirmButton: false,
         title: $t('AbpIdentity.IdentityClaim:New'),
       });
-      const claimTypeDto = modalApi.getData<IdentityClaimTypeDto>();
+      const claimTypeDto = getModalData(modalApi);
       if (claimTypeDto?.id) {
         modalApi.setState({ loading: true });
         try {

@@ -7,6 +7,7 @@ import { useVbenForm, useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
 import { CodeEditor } from '@abp/components/codeeditor';
+import { getModalData } from '@abp/core';
 import { message } from 'ant-design-vue';
 
 import { useApplicationsApi } from '../../api/useApplicationsApi';
@@ -77,7 +78,7 @@ const [Form, formApi] = useVbenForm({
   ],
   showDefaultActions: false,
 });
-const [Modal, modalApi] = useVbenModal({
+const [Modal, modalApi] = useVbenModal<OpenIddictApplicationDto>({
   draggable: true,
   fullscreenButton: false,
   onCancel() {
@@ -94,7 +95,7 @@ const [Modal, modalApi] = useVbenModal({
     if (isOpen) {
       try {
         modalApi.setState({ loading: true });
-        const { clientId, id } = modalApi.getData<OpenIddictApplicationDto>();
+        const { clientId, id } = getModalData(modalApi);
         await onGet(id);
         title += ` - ${clientId}`;
       } finally {
@@ -110,10 +111,14 @@ async function onGet(id: string) {
   applicationModel.value = dto;
 }
 async function onSubmit(input: Record<string, any>) {
+  const model = applicationModel.value;
+  if (!model) {
+    return;
+  }
   try {
     modalApi.setState({ submitting: true });
-    const dto = await updateApi(applicationModel.value!.id, {
-      ...applicationModel.value!,
+    const dto = await updateApi(model.id, {
+      ...model,
       clientSecret: input.clientSecret,
       jsonWebKeySet: input.jsonWebKeySet,
     });

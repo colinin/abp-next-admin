@@ -1,15 +1,53 @@
 <script lang="ts" setup>
-import { h, markRaw } from 'vue';
+import { h, markRaw, ref } from 'vue';
 
 import { Page } from '@vben/common-ui';
 
-import { Card, Input, message } from 'ant-design-vue';
+import { Button, Card, Input, message, Select } from 'antdv-next';
 
 import { useVbenForm, z } from '#/adapter/form';
 
+import TagPicker from './modules/tag-picker.vue';
 import TwoFields from './modules/two-fields.vue';
 
-const [Form] = useVbenForm({
+interface CustomFormValues extends Record<string, unknown> {
+  field?: string;
+  field1?: string;
+  field2?: string;
+  field3?: string;
+  field4?: [string | undefined, string | undefined];
+  field5?: string;
+  field6?: string[];
+}
+
+function encodeCustomFormValues(values: Readonly<CustomFormValues>) {
+  const { field4, ...formValues } = values;
+  return {
+    ...formValues,
+    phoneNumber: field4?.[1],
+    phoneType: field4?.[0],
+  };
+}
+
+type CustomSubmitValues = ReturnType<typeof encodeCustomFormValues>;
+
+const dynamicComponentType = ref<'input' | 'select'>('input');
+
+function decodeCustomFormValues(
+  values: Readonly<CustomSubmitValues>,
+): CustomFormValues {
+  const { phoneNumber, phoneType, ...formValues } = values;
+  return {
+    ...formValues,
+    field4: [phoneType, phoneNumber ?? ''],
+  };
+}
+
+const [Form, formApi] = useVbenForm({
+  codec: {
+    decode: decodeCustomFormValues,
+    encode: encodeCustomFormValues,
+  },
   // 所有表单项共用，可单独在表单内覆盖
   commonConfig: {
     // 所有表单项
@@ -18,7 +56,6 @@ const [Form] = useVbenForm({
     },
     labelClass: 'w-2/6',
   },
-  fieldMappingTime: [['field4', ['phoneType', 'phoneNumber'], null]],
   // 提交函数
   handleSubmit: onSubmit,
   // 垂直布局，label和input在不同行，值为vertical
@@ -57,7 +94,6 @@ const [Form] = useVbenForm({
     {
       component: markRaw(TwoFields),
       defaultValue: [undefined, ''],
-      disabledOnChangeListener: false,
       fieldName: 'field4',
       formItemClass: 'col-span-1',
       label: '组合字段',
@@ -75,12 +111,65 @@ const [Form] = useVbenForm({
           message: '　　　　　　　号码格式不正确',
         }),
     },
+    {
+      component: markRaw(Input),
+      componentProps: {
+        placeholder: '请输入动态组件值',
+      },
+      fieldName: 'field5',
+      label: '动态组件',
+      modelPropName: 'value',
+    },
+    {
+      component: 'Input',
+      defaultValue: [],
+      fieldName: 'field6',
+      label: '自定义取值(slot)',
+      // 插槽里的 TagPicker 用的是标准 modelValue，不能套用 antdv 的 v-model:value
+      modelPropName: 'modelValue',
+      rules: z.array(z.string()).min(1, '请至少选择一个标签'),
+    },
   ],
   // 中屏一行显示2个，小屏一行显示1个
   wrapperClass: 'grid-cols-1 md:grid-cols-2',
 });
 
-function onSubmit(values: Record<string, any>) {
+function handleToggleDynamicComponent() {
+  const nextType = dynamicComponentType.value === 'input' ? 'select' : 'input';
+  dynamicComponentType.value = nextType;
+
+  if (nextType === 'select') {
+    formApi.updateSchema([
+      {
+        component: markRaw(Select),
+        componentProps: {
+          allowClear: true,
+          options: [
+            { label: '选项一', value: 'option-1' },
+            { label: '选项二', value: 'option-2' },
+          ],
+          placeholder: '请选择动态组件值',
+        },
+        fieldName: 'field5',
+        modelPropName: 'value',
+      },
+    ]);
+    return;
+  }
+
+  formApi.updateSchema([
+    {
+      component: markRaw(Input),
+      componentProps: {
+        placeholder: '请输入动态组件值',
+      },
+      fieldName: 'field5',
+      modelPropName: 'value',
+    },
+  ]);
+}
+
+function onSubmit(values: CustomSubmitValues) {
   message.success({
     content: `form values: ${JSON.stringify(values)}`,
   });
@@ -90,9 +179,20 @@ function onSubmit(values: Record<string, any>) {
 <template>
   <Page description="表单组件自定义示例" title="表单组件">
     <Card title="基础示例">
+      <template #extra>
+        <Button @click="handleToggleDynamicComponent">
+          {{
+            dynamicComponentType === 'input' ? '切换为下拉框' : '切换为输入框'
+          }}
+        </Button>
+      </template>
       <Form>
         <template #field3="slotProps">
-          <Input placeholder="请输入" v-bind="slotProps" />
+          <Input placeholder="请输入" v-bind="slotProps.componentProps" />
+        </template>
+        <!-- 值走 componentProps 的 modelValue，校验值由组件内 useCustomFieldValue 提供 -->
+        <template #field6="slotProps">
+          <TagPicker v-bind="slotProps.componentProps" />
         </template>
       </Form>
     </Card>

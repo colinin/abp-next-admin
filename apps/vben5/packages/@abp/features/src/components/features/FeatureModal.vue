@@ -9,7 +9,7 @@ import { computed, ref, toValue, useTemplateRef } from 'vue';
 import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { useValidation } from '@abp/core';
+import { getModalData, useValidation } from '@abp/core';
 import {
   Card,
   Checkbox,
@@ -56,7 +56,7 @@ const {
   fieldRequired,
 } = useValidation();
 
-const [Modal, modalApi] = useVbenModal({
+const [Modal, modalApi] = useVbenModal<ModalState>({
   centered: true,
   class: 'w-1/2',
   async onConfirm() {
@@ -67,8 +67,9 @@ const [Modal, modalApi] = useVbenModal({
     if (isOpen) {
       formModel.value = { groups: [] };
       await onGet();
-      if (formModel.value?.groups.length > 0) {
-        activeTabKey.value = formModel.value.groups[0]?.name!;
+      const firstGroup = formModel.value?.groups[0];
+      if (firstGroup) {
+        activeTabKey.value = firstGroup.name;
       }
     }
   },
@@ -168,7 +169,7 @@ function createRules(field: string, validator: Validator) {
 async function onGet() {
   try {
     modalApi.setState({ loading: true });
-    const state = modalApi.getData<ModalState>();
+    const state = getModalData(modalApi);
     const { groups } = await getApi({
       providerKey: state.providerKey,
       providerName: state.providerName,
@@ -185,7 +186,7 @@ async function onSubmit() {
   try {
     modalApi.setState({ submitting: true });
     const model = toValue(formModel);
-    const state = modalApi.getData<ModalState>();
+    const state = getModalData(modalApi);
     const input = getFeatureInput(model.groups);
     await updateApi(
       {

@@ -72,7 +72,7 @@ watch(
     title.value = props.template?.displayName ?? '';
     businessKey.value = '';
     for (const key of Object.keys(data)) {
-      delete data[key];
+      Reflect.deleteProperty(data, key);
     }
     fields.value = [];
 
@@ -83,15 +83,13 @@ watch(
         fields.value = form.fields ?? [];
         for (const field of fields.value) {
           const initial = props.initialData?.[field.key];
-          data[field.key] =
-            initial === undefined
-              ? (field.type === 'switch'
-                ? false
-                : undefined)
-              : initial;
+          const switchDefault = field.type === 'switch' ? false : undefined;
+          data[field.key] = initial === undefined ? switchDefault : initial;
         }
       } catch {
-        message.error($t('ElsaNextApprovalFlow.ApprovalFlow:Start:FormLoadFailed'));
+        message.error(
+          $t('ElsaNextApprovalFlow.ApprovalFlow:Start:FormLoadFailed'),
+        );
       } finally {
         loading.value = false;
       }
@@ -132,7 +130,9 @@ async function submit() {
     return;
   }
   if (!title.value.trim()) {
-    message.warning($t('ElsaNextApprovalFlow.ApprovalFlow:Start:TitleRequired'));
+    message.warning(
+      $t('ElsaNextApprovalFlow.ApprovalFlow:Start:TitleRequired'),
+    );
     return;
   }
 
@@ -148,7 +148,11 @@ async function submit() {
       field.isRequired &&
       (value === undefined || value === null || value === '')
     ) {
-      message.warning($t('ElsaNextApprovalFlow.ApprovalFlow:Start:FieldRequired', [field.label]));
+      message.warning(
+        $t('ElsaNextApprovalFlow.ApprovalFlow:Start:FieldRequired', [
+          field.label,
+        ]),
+      );
       return;
     }
   }

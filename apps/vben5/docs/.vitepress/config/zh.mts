@@ -80,6 +80,9 @@ function sidebarGuide(): DefaultTheme.SidebarItem[] {
         { link: 'essentials/settings', text: '配置' },
         { link: 'essentials/icons', text: '图标' },
         { link: 'essentials/styles', text: '样式' },
+        { link: 'essentials/utils', text: '工具' },
+        { link: 'essentials/stores', text: '状态管理' },
+        { link: 'essentials/cache', text: '缓存' },
         { link: 'essentials/external-module', text: '外部模块' },
         { link: 'essentials/build', text: '构建与部署' },
         { link: 'essentials/server', text: '服务端交互与数据Mock' },
@@ -195,6 +198,22 @@ function sidebarComponents(): DefaultTheme.SidebarItem[] {
         {
           link: 'common-ui/vben-ellipsis-text',
           text: 'EllipsisText 省略文本',
+        },
+        {
+          link: 'common-ui/vben-descriptions',
+          text: 'Descriptions 描述列表',
+        },
+        {
+          link: 'common-ui/vben-table-action',
+          text: 'TableAction 表格操作',
+        },
+        {
+          link: 'common-ui/vben-cropper',
+          text: 'Cropper 图片裁剪',
+        },
+        {
+          link: 'common-ui/vben-tiptap',
+          text: 'Tiptap 富文本编辑器',
         },
       ],
     },
@@ -329,8 +348,8 @@ export const search: DefaultTheme.AlgoliaSearchOptions['locales'] = {
         footer: {
           closeText: '关闭',
           navigateText: '切换',
-          searchByText: '搜索提供者',
           selectText: '选择',
+          poweredByText: '搜索提供者',
         },
         noResultsScreen: {
           noResultsText: '无法找到相关结果',
@@ -339,10 +358,10 @@ export const search: DefaultTheme.AlgoliaSearchOptions['locales'] = {
           suggestedQueryText: '你可以尝试查询',
         },
         searchBox: {
-          cancelButtonAriaLabel: '取消',
-          cancelButtonText: '取消',
-          resetButtonAriaLabel: '清除查询条件',
-          resetButtonTitle: '清除查询条件',
+          closeButtonAriaLabel: '取消',
+          closeButtonText: '取消',
+          clearButtonAriaLabel: '清除查询条件',
+          clearButtonTitle: '清除查询条件',
         },
         startScreen: {
           favoriteSearchesTitle: '收藏',

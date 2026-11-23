@@ -88,15 +88,18 @@ async function onRefresh() {
 async function onLoad(node: EventDataNode) {
   const nodeKey = String(node.key);
   const { items } = await getChildrenApi({ id: nodeKey });
-  node.dataRef!.isLeaf = items.length === 0;
-  node.dataRef!.children = items.map((item): DataNode => {
-    return {
-      isLeaf: false,
-      key: item.id,
-      title: item.displayName,
-      children: [],
-    };
-  });
+  const dataRef = node.dataRef;
+  if (dataRef) {
+    dataRef.isLeaf = items.length === 0;
+    dataRef.children = items.map((item): DataNode => {
+      return {
+        isLeaf: false,
+        key: item.id,
+        title: item.displayName,
+        children: [],
+      };
+    });
+  }
   organizationUnits.value = [...organizationUnits.value];
   loadedKeys.value.push(nodeKey);
 }
@@ -146,7 +149,7 @@ function onDelete(id: string) {
 
 /** 右键菜单点击事件 */
 function onMenuClick(id: string, eventKey: Key) {
-  actionsMap[eventKey]!(id);
+  actionsMap[eventKey]?.(id);
 }
 
 /** 组织机构选择变化事件 */

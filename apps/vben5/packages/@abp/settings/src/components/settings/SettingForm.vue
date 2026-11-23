@@ -106,7 +106,10 @@ function onValueChange(setting: SettingDetail) {
       value: String(setting.value),
     });
   } else {
-    settingsUpdateInput.value.settings[index]!.value = String(setting.value);
+    const current = settingsUpdateInput.value.settings[index];
+    if (current) {
+      current.value = String(setting.value);
+    }
   }
 }
 

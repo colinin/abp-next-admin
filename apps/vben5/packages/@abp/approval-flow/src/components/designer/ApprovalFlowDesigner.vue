@@ -193,7 +193,7 @@ function removeNode(node: ApprovalFlowNode) {
 function moveNode(node: ApprovalFlowNode, offset: number) {
   const index = model.value.nodes.findIndex((item) => item.id === node.id);
   const target = index + offset;
-  if (index < 0 || target <= 0 || target >= model.value.nodes.length - 1) {
+  if (index === -1 || target <= 0 || target >= model.value.nodes.length - 1) {
     return;
   }
 

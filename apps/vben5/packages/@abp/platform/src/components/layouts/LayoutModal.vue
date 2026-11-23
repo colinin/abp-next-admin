@@ -8,7 +8,7 @@ import type {
 import { useVbenForm, useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { isNullOrWhiteSpace, listToTree } from '@abp/core';
+import { getModalData, isNullOrWhiteSpace, listToTree } from '@abp/core';
 import { message } from 'ant-design-vue';
 
 import { useDataDictionariesApi, useLayoutsApi } from '../../api';
@@ -119,7 +119,7 @@ const [Form, formApi] = useVbenForm({
   ],
   showDefaultActions: false,
 });
-const [Modal, modalApi] = useVbenModal({
+const [Modal, modalApi] = useVbenModal<LayoutDto>({
   closeOnClickModal: false,
   closeOnPressEscape: false,
   draggable: true,
@@ -135,7 +135,7 @@ const [Modal, modalApi] = useVbenModal({
 
 async function onGet() {
   formApi.resetForm();
-  const { id } = modalApi.getData<LayoutDto>();
+  const { id } = getModalData(modalApi);
   if (isNullOrWhiteSpace(id)) {
     modalApi.setState({ title: $t('AppPlatform.Layout:AddNew') });
     return;

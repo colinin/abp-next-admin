@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { cn } from '@vben-core/shared/utils';
 
-import { CircleHelp } from 'lucide-vue-next';
+import { CircleHelp } from '@lucide/vue';
 
 import Tooltip from './tooltip.vue';
 
@@ -19,7 +19,7 @@ defineProps<{ triggerClass?: string }>();
         <CircleHelp
           :class="
             cn(
-              'inline-flex size-5 cursor-pointer text-foreground/80 hover:text-foreground',
+              'text-foreground/80 hover:text-foreground inline-flex size-5 cursor-pointer',
               triggerClass,
             )
           "

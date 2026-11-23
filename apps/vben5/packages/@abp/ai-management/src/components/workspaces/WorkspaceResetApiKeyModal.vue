@@ -1,4 +1,5 @@
 <script setup lang="ts">
+// oxlint-disable typescript/no-non-null-assertion
 import type { WorkspaceDefinitionRecordDto } from '../../types/workspaces';
 
 import { ref } from 'vue';
@@ -32,17 +33,18 @@ const [Form, formApi] = useVbenForm({
   handleSubmit: onSubmit,
 });
 
-const [Modal, modalApi] = useVbenModal({
+const [Modal, modalApi] = useVbenModal<WorkspaceDefinitionRecordDto>({
   title: $t('AIManagement.ResetApiKey'),
-  async onOpenChange(isOpen) {
-    if (isOpen) {
-      const { id } = modalApi.getData<WorkspaceDefinitionRecordDto>();
-      const dto = await getApi(id);
+  async onOpened() {
+    formModel.value = undefined;
+    const data = modalApi.getData();
+    if (data?.id) {
+      const dto = await getApi(data.id);
       formModel.value = dto;
     }
   },
   async onConfirm() {
-    await formApi.validateAndSubmitForm();
+    await formApi.validateAndSubmit();
   },
 });
 

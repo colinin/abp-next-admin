@@ -7,7 +7,7 @@ import { useVbenDrawer } from '@vben/common-ui';
 import { createIconifyIcon } from '@vben/icons';
 import { $t } from '@vben/locales';
 
-import { formatToDateTime } from '@abp/core';
+import { formatToDateTime, getModalData } from '@abp/core';
 import { PropertyTable } from '@abp/ui';
 import {
   Button,
@@ -55,7 +55,7 @@ const paginationInfo = ref({
   show: true,
   totalCount: 0,
 });
-const [Drawer, drawerApi] = useVbenDrawer({
+const [Drawer, drawerApi] = useVbenDrawer<BackgroundJobInfoDto>({
   class: 'w-1/2',
   onCancel() {
     drawerApi.close();
@@ -83,7 +83,7 @@ async function onGet() {
   drawerApi.setState({ loading: true });
   try {
     jobLogs.value = [];
-    const { id } = drawerApi.getData<BackgroundJobInfoDto>();
+    const { id } = getModalData(drawerApi);
     jobInfo.value = await getApi(id);
   } finally {
     drawerApi.setState({ loading: false });
@@ -95,7 +95,7 @@ async function onGetLogs(page?: number) {
   try {
     const pageNumber = page ?? 1;
     paginationInfo.value.current = pageNumber;
-    const { id } = drawerApi.getData<BackgroundJobInfoDto>();
+    const { id } = getModalData(drawerApi);
     const jobLogResult = await getJobLogsApi({
       jobId: id,
       maxResultCount: paginationInfo.value.pageSize,
@@ -239,7 +239,7 @@ async function onDeleteLog(jobLog: BackgroundJobLogDto) {
             <span>{{ jobInfo.maxTryCount }}</span>
           </DescriptionsItem>
           <DescriptionsItem :label="$t('TaskManagement.DisplayName:Result')">
-            <h3 style="word-wrap: break-word; white-space: pre-line">
+            <h3 style="overflow-wrap: break-word; white-space: pre-line">
               {{ jobInfo.result }}
             </h3>
           </DescriptionsItem>
@@ -292,7 +292,7 @@ async function onDeleteLog(jobLog: BackgroundJobLogDto) {
                   <span>{{ jobInfo.name }}</span>
                 </template>
               </ListItemMeta>
-              <h3 style="word-wrap: break-word; white-space: pre-line">
+              <h3 style="overflow-wrap: break-word; white-space: pre-line">
                 {{ item.exception ?? item.message }}
               </h3>
             </ListItem>

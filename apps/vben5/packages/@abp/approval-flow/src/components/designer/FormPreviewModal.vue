@@ -38,7 +38,7 @@ watch(
     }
 
     for (const key of Object.keys(data)) {
-      delete data[key];
+      Reflect.deleteProperty(data, key);
     }
     for (const field of props.fields) {
       data[field.key] = field.type === 'switch' ? false : undefined;

@@ -9,19 +9,13 @@ import type { FormInstance } from 'ant-design-vue';
 import type { WebhookDefinitionDto } from '../../../types/definitions';
 import type { WebhookGroupDefinitionDto } from '../../../types/groups';
 
-import {
-  computed,
-  defineEmits,
-  defineOptions,
-  ref,
-  toValue,
-  useTemplateRef,
-} from 'vue';
+import { computed, ref, toValue, useTemplateRef } from 'vue';
 
 import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
 import {
+  getModalData,
   isNullOrWhiteSpace,
   listToTree,
   useAuthorization,
@@ -124,7 +118,7 @@ const getRequiredFeatures = computed(() => {
   return requiredFeatures;
 });
 
-const [Modal, modalApi] = useVbenModal({
+const [Modal, modalApi] = useVbenModal<WebhookDefinitionDto>({
   class: 'w-1/2',
   draggable: true,
   fullscreenButton: false,
@@ -161,7 +155,7 @@ const [Modal, modalApi] = useVbenModal({
         title: $t('WebhooksManagement.Webhooks:AddNew'),
       });
       try {
-        const { groupName, name } = modalApi.getData<WebhookDefinitionDto>();
+        const { groupName, name } = getModalData(modalApi);
         await onInit(groupName);
         name && (await onGet(name));
       } finally {
@@ -195,8 +189,9 @@ async function onInit(groupName?: string) {
       displayName: Lr(displayName.resourceName, displayName.name),
     };
   });
-  if (webhookGroupRes.items.length === 1) {
-    formModel.value.groupName = webhookGroupRes.items[0]!.name;
+  const firstGroup = webhookGroupRes.items[0];
+  if (firstGroup) {
+    formModel.value.groupName = firstGroup.name;
   }
 }
 async function onInitFeatures() {
@@ -245,7 +240,7 @@ function onPropChange(prop: PropertyInfo) {
 }
 function onPropDelete(prop: PropertyInfo) {
   formModel.value.extraProperties ??= {};
-  delete formModel.value.extraProperties[prop.key];
+  Reflect.deleteProperty(formModel.value.extraProperties, prop.key);
 }
 </script>
 

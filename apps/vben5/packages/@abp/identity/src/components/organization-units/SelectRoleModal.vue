@@ -5,11 +5,12 @@ import type { VbenFormProps } from '@vben/common-ui';
 
 import type { IdentityRoleDto } from '../../types/roles';
 
-import { defineEmits, defineOptions, nextTick, ref, toValue } from 'vue';
+import { nextTick, ref, toValue } from 'vue';
 
 import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
+import { getModalData } from '@abp/core';
 import { useVbenVxeGrid } from '@abp/ui';
 
 import { useOrganizationUnitsApi } from '../../api/useOrganizationUnitsApi';
@@ -47,7 +48,7 @@ const formOptions: VbenFormProps = {
   // 按下回车时是否提交表单
   submitOnEnter: true,
 };
-const [Modal, modalApi] = useVbenModal({
+const [Modal, modalApi] = useVbenModal<Record<string, any>>({
   closeOnClickModal: false,
   closeOnPressEscape: false,
   draggable: true,
@@ -87,7 +88,7 @@ const gridOptions: VxeGridProps<IdentityRoleDto> = {
     ajax: {
       query: async ({ page, sort }, formValues) => {
         const sorting = sort.order ? `${sort.field} ${sort.order}` : undefined;
-        const state = modalApi.getData<Record<string, any>>();
+        const state = getModalData(modalApi);
         return await getUnaddedRoleListApi({
           id: state.id,
           maxResultCount: page.pageSize,

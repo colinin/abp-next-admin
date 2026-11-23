@@ -51,9 +51,10 @@ const getIconWidth = computed(
 
 const getStyle = computed((): CSSProperties => ({ width: unref(getWidth) }));
 
-const getImageWrapperStyle = computed(
-  (): CSSProperties => ({ width: unref(getWidth), height: unref(getWidth) }),
-);
+const getImageWrapperStyle = computed((): CSSProperties => ({
+  width: unref(getWidth),
+  height: unref(getWidth),
+}));
 
 watchEffect(() => {
   sourceValue.value = props.value || '';

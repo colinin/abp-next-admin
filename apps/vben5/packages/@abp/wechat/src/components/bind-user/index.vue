@@ -34,9 +34,13 @@ const [Modal, modalApi] = useVbenModal({
 async function onInitLogin() {
   try {
     modalApi.setState({ loading: true });
+    const loginEl = wxLoginRef.value;
+    if (!loginEl) {
+      return;
+    }
     const agentConfig = await getAgentConfigApi();
     ww.createWWLoginPanel({
-      el: wxLoginRef.value!,
+      el: loginEl,
       params: {
         login_type: WWLoginType.corpApp,
         appid: agentConfig.corpId,

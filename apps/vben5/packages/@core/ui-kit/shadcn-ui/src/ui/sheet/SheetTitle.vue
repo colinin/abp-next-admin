@@ -1,24 +1,24 @@
 <script setup lang="ts">
 import type { DialogTitleProps } from 'reka-ui';
 
-import { computed } from 'vue';
+import type { HTMLAttributes } from 'vue';
 
 import { cn } from '@vben-core/shared/utils';
 
+import { reactiveOmit } from '@vueuse/core';
 import { DialogTitle } from 'reka-ui';
 
-const props = defineProps<DialogTitleProps & { class?: any }>();
+const props = defineProps<
+  DialogTitleProps & { class?: HTMLAttributes['class'] }
+>();
 
-const delegatedProps = computed(() => {
-  const { class: _, ...delegated } = props;
-
-  return delegated;
-});
+const delegatedProps = reactiveOmit(props, 'class');
 </script>
 
 <template>
   <DialogTitle
-    :class="cn('font-medium text-foreground', props.class)"
+    data-slot="sheet-title"
+    :class="cn('text-foreground font-medium', props.class)"
     v-bind="delegatedProps"
   >
     <slot></slot>

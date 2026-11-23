@@ -12,6 +12,7 @@ import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
 import {
+  getModalData,
   isNullOrWhiteSpace,
   useAbpStore,
   useLocalization,
@@ -64,7 +65,7 @@ const getLanguageOptions = computed(() => {
   });
 });
 
-const [Modal, modalApi] = useVbenModal({
+const [Modal, modalApi] = useVbenModal<TextTemplateDefinitionDto>({
   class: 'w-1/2',
   draggable: true,
   fullscreenButton: false,
@@ -76,9 +77,13 @@ const [Modal, modalApi] = useVbenModal({
   },
   onConfirm: async () => {
     await form.value?.validate();
+    const model = formModel.value;
+    if (!model) {
+      return;
+    }
     const api = isEditModel.value
-      ? updateApi(formModel.value!.name, formModel.value!)
-      : createApi(formModel.value!);
+      ? updateApi(model.name, model)
+      : createApi(model);
     modalApi.setState({ submitting: true });
     api
       .then((res) => {
@@ -102,7 +107,7 @@ const [Modal, modalApi] = useVbenModal({
 });
 
 async function onGet() {
-  const { name } = modalApi.getData<TextTemplateDefinitionDto>();
+  const { name } = getModalData(modalApi);
   if (isNullOrWhiteSpace(name)) {
     modalApi.setState({ title: $t('AbpTextTemplating.TextTemplates:AddNew') });
     formModel.value = {
@@ -151,25 +156,35 @@ async function onInitResources() {
 }
 
 function onIsInlineLocalizedChange(isInlineLocalized: boolean) {
-  if (isInlineLocalized) {
-    formModel.value!.localizationResourceName = undefined;
+  const model = formModel.value;
+  if (isInlineLocalized && model) {
+    model.localizationResourceName = undefined;
   }
 }
 
 function onIsLayoutChange(isLayout: boolean) {
-  if (isLayout) {
-    formModel.value!.layout = undefined;
+  const model = formModel.value;
+  if (isLayout && model) {
+    model.layout = undefined;
   }
 }
 
 function onPropChange(prop: PropertyInfo) {
-  formModel.value!.extraProperties ??= {};
-  formModel.value!.extraProperties[prop.key] = prop.value;
+  const model = formModel.value;
+  if (!model) {
+    return;
+  }
+  model.extraProperties ??= {};
+  model.extraProperties[prop.key] = prop.value;
 }
 
 function onPropDelete(prop: PropertyInfo) {
-  formModel.value!.extraProperties ??= {};
-  delete formModel.value!.extraProperties[prop.key];
+  const model = formModel.value;
+  if (!model) {
+    return;
+  }
+  model.extraProperties ??= {};
+  Reflect.deleteProperty(model.extraProperties, prop.key);
 }
 </script>
 

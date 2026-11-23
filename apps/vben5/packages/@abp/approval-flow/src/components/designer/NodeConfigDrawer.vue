@@ -403,7 +403,11 @@ function updateActionLabel(index: number, label: string) {
   }
 
   const actions = [...local.value.actions];
-  actions[index] = { ...actions[index]!, label };
+  const action = actions[index];
+  if (!action) {
+    return;
+  }
+  actions[index] = { ...action, label };
   patch({ actions });
 }
 

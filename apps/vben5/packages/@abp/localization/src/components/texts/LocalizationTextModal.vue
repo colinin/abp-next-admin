@@ -9,18 +9,12 @@ import type {
   TextDto,
 } from '../../types/texts';
 
-import {
-  defineEmits,
-  defineOptions,
-  defineProps,
-  ref,
-  toValue,
-  useTemplateRef,
-} from 'vue';
+import { ref, toValue, useTemplateRef } from 'vue';
 
 import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
+import { getModalData } from '@abp/core';
 import { Form, Input, message, Select, Textarea } from 'ant-design-vue';
 
 import { useTextsApi } from '../../api/useTextsApi';
@@ -51,7 +45,7 @@ const formModel = ref<TextDto>({ ...defaultModel });
 
 const { cancel, getApi, setApi } = useTextsApi();
 
-const [Modal, modalApi] = useVbenModal({
+const [Modal, modalApi] = useVbenModal<TextDifferenceDto>({
   class: 'w-1/2',
   draggable: true,
   fullscreenButton: false,
@@ -68,7 +62,7 @@ const [Modal, modalApi] = useVbenModal({
       modalApi.setState({
         title: $t('LocalizationManagement.Text:AddNew'),
       });
-      const modalData = modalApi.getData<TextDifferenceDto>();
+      const modalData = getModalData(modalApi);
       formModel.value = { ...modalData };
       await onGet();
     }
@@ -77,7 +71,7 @@ const [Modal, modalApi] = useVbenModal({
 });
 
 async function onGet() {
-  const dto = modalApi.getData<TextDifferenceDto>();
+  const dto = getModalData(modalApi);
   if (dto.targetCultureName) {
     isEditModal.value = true;
     await onLoad({
@@ -89,7 +83,7 @@ async function onGet() {
 }
 
 async function onLanguageChange(value: string) {
-  const dto = modalApi.getData<TextDifferenceDto>();
+  const dto = getModalData(modalApi);
   if (dto.targetCultureName) {
     await onLoad({
       cultureName: value,

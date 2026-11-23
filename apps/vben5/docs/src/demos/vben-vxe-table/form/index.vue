@@ -2,7 +2,7 @@
 import type { VbenFormProps } from '#/adapter/form';
 import type { VxeGridProps } from '#/adapter/vxe-table';
 
-import { message } from 'ant-design-vue';
+import { message } from 'antdv-next';
 
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
 
@@ -112,7 +112,7 @@ const gridOptions: VxeGridProps<RowType> = {
   },
   toolbarConfig: {
     // 是否显示搜索表单控制按钮
-    // @ts-ignore 正式环境时有完整的类型声明
+    // @ts-ignore - 正式环境时有完整的类型声明
     search: true,
   },
 };

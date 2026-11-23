@@ -46,10 +46,10 @@ import {
 } from './valueType';
 
 interface Props {
-  allowDelete: boolean;
-  allowEdit: boolean;
-  disabled: boolean;
-  value: string;
+  allowDelete?: boolean;
+  allowEdit?: boolean;
+  disabled?: boolean;
+  value?: string;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -59,10 +59,8 @@ const props = withDefaults(defineProps<Props>(), {
   value: '{}',
 });
 const emits = defineEmits<{
-  (event: 'update:value', data: string | undefined): void;
-  (event: 'change', data: string | undefined): void;
-  (event: 'change:valueType', data: string): void;
-  (event: 'change:validator', data: string): void;
+  (event: 'change' | 'update:value', data: string | undefined): void;
+  (event: 'change:validator' | 'change:valueType', data: string): void;
   (event: 'change:selection', data: SelectionStringValueItem[]): void;
 }>();
 const FormItemRest = Form.ItemRest;

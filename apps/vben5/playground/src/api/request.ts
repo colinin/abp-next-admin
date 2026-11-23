@@ -4,6 +4,7 @@
 import type { AxiosResponseHeaders, RequestClientOptions } from '@vben/request';
 
 import { useAppConfig } from '@vben/hooks';
+import { i18n } from '@vben/locales';
 import { preferences } from '@vben/preferences';
 import {
   authenticateResponseInterceptor,
@@ -14,7 +15,7 @@ import {
 import { useAccessStore } from '@vben/stores';
 import { cloneDeep } from '@vben/utils';
 
-import { message } from 'ant-design-vue';
+import { message } from 'antdv-next';
 import JSONBigInt from 'json-bigint';
 
 import { useAuthStore } from '#/store';
@@ -80,7 +81,8 @@ function createRequestClient(baseURL: string, options?: RequestClientOptions) {
       const accessStore = useAccessStore();
 
       config.headers.Authorization = formatToken(accessStore.accessToken);
-      config.headers['Accept-Language'] = preferences.app.locale;
+      config.headers['Accept-Language'] =
+        i18n.global.locale.value || preferences.app.locale;
       return config;
     },
   });

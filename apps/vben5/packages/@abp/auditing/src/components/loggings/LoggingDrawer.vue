@@ -28,7 +28,7 @@ const activedTab = ref('basic');
 const logModel = ref<Partial<LogDto>>({});
 
 const { getApi } = useLoggingsApi();
-const [Drawer, drawerApi] = useVbenDrawer({
+const [Drawer, drawerApi] = useVbenDrawer<LogDto>({
   class: 'w-auto',
   onCancel() {
     drawerApi.close();
@@ -42,8 +42,8 @@ const [Drawer, drawerApi] = useVbenDrawer({
         activedTab.value = 'basic';
         logModel.value = {} as LogDto;
         drawerApi.setState({ loading: true });
-        const dto = drawerApi.getData<LogDto>();
-        await onGet(dto.fields.id);
+        const dto = drawerApi.getData();
+        await onGet(dto?.fields.id);
       } finally {
         drawerApi.setState({ loading: false });
       }
@@ -101,7 +101,11 @@ const exceptionsGridOptions: VxeGridProps<LogExceptionDto> = {
 const [ExceptionsGrid] = useVbenVxeGrid({
   gridOptions: exceptionsGridOptions,
 });
-async function onGet(id: string) {
+async function onGet(id?: string) {
+  if (!id) {
+    logModel.value = {};
+    return;
+  }
   const dto = await getApi(id);
   logModel.value = dto;
 }
@@ -124,8 +128,8 @@ async function onGet(id: string) {
               {{ formatToDateTime(logModel.timeStamp) }}
             </DescriptionsItem>
             <DescriptionsItem :label="$t('AbpAuditLogging.Level')">
-              <Tag :color="logLevelOptions[logModel.level]?.color">
-                {{ logLevelOptions[logModel.level]?.label }}
+              <Tag :color="logLevelOptions[logModel.level!]?.color">
+                {{ logLevelOptions[logModel.level!]?.label }}
               </Tag>
             </DescriptionsItem>
             <DescriptionsItem :label="$t('AbpAuditLogging.Message')" :span="2">
@@ -186,7 +190,7 @@ async function onGet(id: string) {
           </Descriptions>
         </TabPane>
         <TabPane
-          v-if="logModel.exceptions?.length > 0"
+          v-if="(logModel.exceptions?.length ?? 0) > 0"
           key="exception"
           :tab="$t('AbpAuditLogging.Exceptions')"
         >

@@ -11,7 +11,7 @@ import { reactive, ref, useTemplateRef } from 'vue';
 import { useVbenDrawer } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { formatToDate } from '@abp/core';
+import { formatToDate, getModalData } from '@abp/core';
 import { PropertyTable } from '@abp/ui';
 import {
   Checkbox,
@@ -86,7 +86,7 @@ const jobArgsDisplayNameMap = ref<Record<string, string>>({});
 const form = useTemplateRef<FormInstance>('form');
 const formModel = ref<BackgroundJobInfoDto>({} as BackgroundJobInfoDto);
 const { createApi, getApi, getDefinitionsApi, updateApi } = useJobInfosApi();
-const [Drawer, drawerApi] = useVbenDrawer({
+const [Drawer, drawerApi] = useVbenDrawer<ModalState>({
   class: 'w-auto',
   onCancel() {
     drawerApi.close();
@@ -105,7 +105,7 @@ const [Drawer, drawerApi] = useVbenDrawer({
           priority: JobPriority.Normal,
         } as BackgroundJobInfoDto;
         drawerApi.setState({ loading: true });
-        const state = drawerApi.getData<ModalState>();
+        const state = getModalData(drawerApi);
         if (state?.id) {
           await onGet(state.id, state.isCopy);
         } else {
@@ -183,7 +183,7 @@ function onEditParam(record: JobParamter) {
 }
 
 function onDeleteParam(record: JobParamter) {
-  delete formModel.value.args[record.key];
+  Reflect.deleteProperty(formModel.value.args, record.key);
 }
 </script>
 

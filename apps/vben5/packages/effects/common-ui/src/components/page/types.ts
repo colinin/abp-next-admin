@@ -14,4 +14,10 @@ export interface PageProps {
    * @default 0
    */
   heightOffset?: number;
+  /**
+   * Whether the footer is anchored to the bottom of the page layout.
+   * The footer remains in flow so it cannot obscure page content.
+   * @default false
+   */
+  footerFixed?: boolean;
 }

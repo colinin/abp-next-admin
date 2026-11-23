@@ -26,7 +26,7 @@ const errorMsg = ref<string>();
 
 const { generatePreviewUrlApi } = useBlobsApi();
 
-const [Modal, modalApi] = useVbenModal({
+const [Modal, modalApi] = useVbenModal<BlobDto>({
   showCancelButton: false,
   showConfirmButton: false,
   fullscreen: true,
@@ -44,19 +44,22 @@ const [Modal, modalApi] = useVbenModal({
 async function onInit() {
   try {
     modalApi.lock();
-    const blob = modalApi.getData<BlobDto>();
-    fileName.value = blob.name;
-    previewUrl.value = await generatePreviewUrlApi(blob.id);
+    const blob = modalApi.getData();
+    if (blob) {
+      fileName.value = blob.name;
+      previewUrl.value = await generatePreviewUrlApi(blob.id);
+    }
   } finally {
     modalApi.unlock();
   }
 }
 
 async function handleDownload() {
-  downloadFileFromUrl({
-    fileName: fileName.value!,
-    source: previewUrl.value!,
-  });
+  previewUrl.value &&
+    downloadFileFromUrl({
+      fileName: fileName.value,
+      source: previewUrl.value,
+    });
 }
 
 function onError(error: Error) {

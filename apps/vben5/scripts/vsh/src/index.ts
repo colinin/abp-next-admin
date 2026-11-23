@@ -4,9 +4,9 @@ import { cac } from 'cac';
 
 import { version } from '../package.json';
 import { defineCheckCircularCommand } from './check-circular';
-import { defineDepcheckCommand } from './check-dep';
+import { defineCheckDepCommand } from './check-dep';
 import { defineCodeWorkspaceCommand } from './code-workspace';
-import { defineLintCommand } from './lint';
+import { defineLintCommand, LintError } from './lint';
 import { definePubLintCommand } from './publint';
 
 // 命令描述
@@ -30,30 +30,39 @@ async function main(): Promise<void> {
     definePubLintCommand(vsh);
     defineCodeWorkspaceCommand(vsh);
     defineCheckCircularCommand(vsh);
-    defineDepcheckCommand(vsh);
-
-    // Handle invalid commands
-    vsh.on('command:*', ([cmd]) => {
-      consola.error(
-        colors.red(`Invalid command: ${cmd}`),
-        '\n',
-        colors.yellow('Available commands:'),
-        '\n',
-        Object.entries(COMMAND_DESCRIPTIONS)
-          .map(([cmd, desc]) => `  ${colors.cyan(cmd)} - ${desc}`)
-          .join('\n'),
-      );
-      process.exit(1);
-    });
+    defineCheckDepCommand(vsh);
 
     // Set up CLI
     vsh.usage('vsh <command> [options]');
     vsh.help();
     vsh.version(version);
 
-    // Parse arguments
-    vsh.parse();
+    // Parse arguments without auto-running to detect unknown commands
+    // Note: cac v7 removed EventEmitter; use matchedCommand after parse instead
+    vsh.parse(undefined, { run: false });
+
+    if (!vsh.matchedCommand && vsh.args.length > 0) {
+      const unknownCmd = String(vsh.args[0]);
+      consola.error(
+        colors.red(`Invalid command: ${unknownCmd}`),
+        '\n',
+        colors.yellow('Available commands:'),
+        '\n',
+        Object.entries(COMMAND_DESCRIPTIONS)
+          .map(([name, desc]) => `  ${colors.cyan(name)} - ${desc}`)
+          .join('\n'),
+      );
+      process.exit(1);
+    }
+
+    await vsh.runMatchedCommand();
   } catch (error) {
+    // lint 检查失败是预期内的结果（格式/规范不达标），
+    // 直接展示可操作的错误信息，而非笼统的 "unexpected error"
+    if (error instanceof LintError) {
+      consola.error(error.message);
+      process.exit(1);
+    }
     consola.error(
       colors.red('An unexpected error occurred:'),
       '\n',

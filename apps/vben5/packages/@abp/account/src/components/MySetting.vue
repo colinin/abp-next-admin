@@ -120,7 +120,7 @@ const getUserInfo = computed((): null | UserInfo => {
     phoneNumber: userStore.userInfo.phoneNumber,
     phoneNumberVerified: userStore.userInfo.phoneNumberVerified,
     preferredUsername: userStore.userInfo.username,
-    role: userStore.userInfo.roles!,
+    role: userStore.userInfo.roles ?? [],
     sub: userStore.userInfo.userId,
     uniqueName: userStore.userInfo.username,
   };

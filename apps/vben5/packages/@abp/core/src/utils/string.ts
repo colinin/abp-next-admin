@@ -18,20 +18,21 @@ export function format(formatted: string, args: any[] | object) {
   if (Array.isArray(args)) {
     for (const [i, arg] of args.entries()) {
       const regexp = new RegExp(String.raw`\{` + i + String.raw`\}`, 'gi');
-      formatted = formatted.replace(regexp, arg);
+      formatted = formatted.replaceAll(regexp, arg);
     }
   } else if (typeof args === 'object') {
     Object.keys(args).forEach((key) => {
       const regexp = new RegExp(String.raw`\{` + key + String.raw`\}`, 'gi');
       const param = (args as any)[key];
-      formatted = formatted.replace(regexp, param);
+      formatted = formatted.replaceAll(regexp, param);
     });
   }
   return formatted;
 }
 
 export function getUnique(val: string) {
-  const arr = [...val];
-  const newArr = [...new Set(arr)];
-  return newArr.join('');
+  const segmenter = new Intl.Segmenter(undefined, { granularity: 'grapheme' });
+  const graphemes = [...segmenter.segment(val)].map((s) => s.segment);
+  const unique = [...new Set(graphemes)];
+  return unique.join('');
 }

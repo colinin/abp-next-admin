@@ -3,11 +3,12 @@ import type { FormInstance } from 'ant-design-vue';
 
 import type { ResourceDto } from '../../types/resources';
 
-import { defineEmits, defineOptions, ref, toValue, useTemplateRef } from 'vue';
+import { ref, toValue, useTemplateRef } from 'vue';
 
 import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
+import { getModalData } from '@abp/core';
 import { Checkbox, Form, Input, message } from 'ant-design-vue';
 
 import { useResourcesApi } from '../../api/useResourcesApi';
@@ -31,7 +32,7 @@ const form = useTemplateRef<FormInstance>('form');
 const formModel = ref<ResourceDto>({ ...defaultModel });
 
 const { cancel, createApi, getApi, updateApi } = useResourcesApi();
-const [Modal, modalApi] = useVbenModal({
+const [Modal, modalApi] = useVbenModal<ResourceDto>({
   class: 'w-1/2',
   draggable: true,
   fullscreenButton: false,
@@ -48,7 +49,7 @@ const [Modal, modalApi] = useVbenModal({
       modalApi.setState({
         title: $t('LocalizationManagement.Resource:AddNew'),
       });
-      const { name } = modalApi.getData<ResourceDto>();
+      const { name } = getModalData(modalApi);
       name && (await onGet(name));
     }
   },

@@ -6,25 +6,22 @@ const emitter = mitt();
 
 interface EventBus {
   /** 发布事件 */
-  publish(type: '*', event?: any): void;
-  /** 发布事件 */
-  publish<T = any>(type: EventType, event?: T): void;
+  publish: (type: EventType, event?: any) => void;
 
   /** 订阅事件 */
-  subscribe(type: '*', handler: WildcardHandler): void;
-  /** 订阅事件 */
-  subscribe<T = any>(type: EventType, handler: Handler<T>): void;
+  subscribe: <T = any>(type: EventType, handler: Handler<T>) => void;
 
   /** 退订事件 */
-  unSubscribe(type: '*', handler: WildcardHandler): void;
-  /** 退订事件 */
-  unSubscribe<T = any>(type: EventType, handler: Handler<T>): void;
+  unSubscribe: {
+    (type: '*', handler: WildcardHandler): void;
+    <T = any>(type: EventType, handler: Handler<T>): void;
+  };
 }
 
 export function useEventBus(): EventBus {
   return {
-    publish: emitter.emit,
-    subscribe: emitter.on,
-    unSubscribe: emitter.off,
+    publish: emitter.emit.bind(null),
+    subscribe: emitter.on.bind(null),
+    unSubscribe: emitter.off.bind(null),
   };
 }

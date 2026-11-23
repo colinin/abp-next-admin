@@ -409,7 +409,7 @@ async function save(publishForm = true): Promise<null | string> {
         formId = await createNewVersion(current.version + 1);
       } else {
         const keptIds = new Set(
-          fields.value.filter((field) => field.id).map((field) => field.id!),
+          fields.value.flatMap((field) => (field.id ? [field.id] : [])),
         );
 
         for (const field of current.fields ?? []) {
@@ -419,12 +419,13 @@ async function save(publishForm = true): Promise<null | string> {
         }
 
         for (const [index, field] of fields.value.entries()) {
-          const exists =
-            field.id && current.fields?.some((item) => item.id === field.id);
-          await (exists
+          const fieldId = field.id;
+          const isExistingField =
+            !!fieldId && current.fields?.some((item) => item.id === fieldId);
+          await (isExistingField && fieldId
             ? formsApi.updateFieldApi(
                 formId,
-                field.id!,
+                fieldId,
                 toUpdatePayload(field, index),
               )
             : formsApi.addFieldApi(formId, toAddPayload(field, index)));

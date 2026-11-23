@@ -14,6 +14,7 @@ import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
 import {
+  getModalData,
   useAuthorization,
   useLocalization,
   useLocalizationSerializer,
@@ -80,7 +81,7 @@ const modelOptions = ref<NonNullable<SelectProps['options']>>([]);
 const aiToolOptions = ref<NonNullable<SelectProps['options']>>([]);
 
 // 工作区编辑模态框
-const [Modal, modalApi] = useVbenModal({
+const [Modal, modalApi] = useVbenModal<WorkspaceDefinitionVto>({
   title: $t('AIManagement.Workspaces:New'),
   class: 'w-1/2',
   closeOnClickModal: false,
@@ -99,7 +100,7 @@ async function onInit() {
       title: $t('AIManagement.Workspaces:New'),
     });
     await Promise.all([onSearchAIToolOptions(), onInitProviderOptions()]);
-    const { id } = modalApi.getData<WorkspaceDefinitionVto>();
+    const { id } = getModalData(modalApi);
     if (!id) {
       isAllowUpdate.value = isGranted(WorkspaceDefinitionPermissions.Create);
       formModel.value = { ...defaultModel };

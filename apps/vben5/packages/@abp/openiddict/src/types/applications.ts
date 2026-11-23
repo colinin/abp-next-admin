@@ -57,6 +57,10 @@ type OpenIddictApplicationCreateDto = OpenIddictApplicationCreateOrUpdateDto;
 type OpenIddictApplicationUpdateDto = OpenIddictApplicationCreateOrUpdateDto;
 
 interface OpenIddictApplicationDto extends ExtensibleAuditedEntityDto<string> {
+  /** 是否内置（静态） */
+  isStatic?: boolean;
+  /** 是否必需 */
+  required?: boolean;
   applicationType?: string;
   clientId: string;
   clientSecret?: string;

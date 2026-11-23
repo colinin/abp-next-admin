@@ -8,6 +8,8 @@ import type {
 import { useVbenForm, useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
+import { getModalData } from '@abp/core';
+
 import { useOrganizationUnitsApi } from '../../api/useOrganizationUnitsApi';
 
 defineOptions({
@@ -56,7 +58,7 @@ const [Form, formApi] = useVbenForm({
   showDefaultActions: false,
 });
 
-const [Modal, modalApi] = useVbenModal({
+const [Modal, modalApi] = useVbenModal<Record<string, any>>({
   closeOnClickModal: false,
   closeOnPressEscape: false,
   draggable: true,
@@ -72,7 +74,7 @@ const [Modal, modalApi] = useVbenModal({
   },
   async onOpenChange(isOpen: boolean) {
     if (isOpen) {
-      const { id, parentId } = modalApi.getData<Record<string, any>>();
+      const { id, parentId } = getModalData(modalApi);
       if (id) {
         modalApi.setState({ loading: true });
         try {

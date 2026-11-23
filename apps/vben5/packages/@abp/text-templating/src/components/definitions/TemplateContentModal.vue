@@ -10,7 +10,7 @@ import { useVbenForm, useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
 import { MarkdownViewer } from '@abp/components/vditor';
-import { useAbpStore } from '@abp/core';
+import { getModalData, useAbpStore } from '@abp/core';
 import {
   Alert,
   Modal as AntdvModal,
@@ -62,7 +62,7 @@ const [Form, formApi] = useVbenForm({
   ],
   showDefaultActions: false,
 });
-const [Modal, modalApi] = useVbenModal({
+const [Modal, modalApi] = useVbenModal<TextTemplateDefinitionDto>({
   confirmText: $t('AbpTextTemplating.SaveContent'),
   fullscreen: true,
   fullscreenButton: false,
@@ -78,7 +78,7 @@ const [Modal, modalApi] = useVbenModal({
   onOpenChange: async (isOpen: boolean) => {
     textTemplate.value = undefined;
     if (isOpen) {
-      const textTemplateDefine = modalApi.getData<TextTemplateDefinitionDto>();
+      const textTemplateDefine = getModalData(modalApi);
       textTemplate.value = textTemplateDefine;
       await onGet();
     }
@@ -93,7 +93,7 @@ const [TemplateContentCurtuleModal, curtuleModalApi] = useVbenModal({
 async function onGet() {
   try {
     modalApi.setState({ loading: true });
-    const textTemplateDefine = modalApi.getData<TextTemplateDefinitionDto>();
+    const textTemplateDefine = getModalData(modalApi);
     const culture = textTemplateDefine.isInlineLocalized
       ? undefined
       : abpStore.application?.localization.currentCulture.cultureName;
@@ -109,7 +109,11 @@ function onRestoreToDefault() {
     centered: true,
     content: $t('AbpTextTemplating.RestoreToDefaultMessage'),
     onOk: async () => {
-      await restoreToDefaultApi(textTemplate.value!.name, {});
+      const template = textTemplate.value;
+      if (!template) {
+        return;
+      }
+      await restoreToDefaultApi(template.name, {});
       message.success($t('AbpTextTemplating.TemplateContentRestoredToDefault'));
       await onGet();
     },
@@ -125,12 +129,12 @@ function onCustomizePerCulture() {
 async function onSubmit(values: Record<string, string>) {
   try {
     modalApi.setState({ submitting: true });
-    const textTemplateDefine = modalApi.getData<TextTemplateDefinitionDto>();
+    const textTemplateDefine = getModalData(modalApi);
     const culture = textTemplateDefine.isInlineLocalized
       ? undefined
       : abpStore.application?.localization.currentCulture.cultureName;
     const dto = await updateApi(textTemplateDefine.name, {
-      content: values.content!,
+      content: values.content ?? '',
       culture,
     });
     emits('change', dto);

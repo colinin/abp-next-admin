@@ -25,12 +25,12 @@ export function useNotifications() {
   /** 释放通知 */
   function release() {
     _releaseEvents();
-    stop();
+    void stop();
   }
 
   function _init() {
     onStart(() => on(Events.GetNotification, _onNotifyReceived));
-    init({
+    void init({
       autoStart: true,
       serverUrl: '/signalr-hubs/notifications',
       useAccessToken: true,

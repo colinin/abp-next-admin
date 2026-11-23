@@ -37,7 +37,7 @@ import SubMenu from './sub-menu.vue';
 
 interface Props extends MenuProps {}
 
-defineOptions({ name: 'Menu' });
+defineOptions({ name: 'MenuUI' });
 
 const props = withDefaults(defineProps<Props>(), {
   accordion: true,
@@ -212,15 +212,15 @@ const enableScroll = computed(
   () => props.scrollToActive && props.mode === 'vertical' && !props.collapse,
 );
 
-const { scrollToActiveItem } = useMenuScroll(activePath, {
+useMenuScroll(activePath, {
   enable: enableScroll,
   delay: 320,
 });
 
 // 监听 activePath 变化，自动滚动到激活项
-watch(activePath, () => {
-  scrollToActiveItem();
-});
+// watch(activePath, () => {
+//   scrollToActiveItem();
+// });
 
 // 默认展开菜单
 function initMenu() {
@@ -747,7 +747,7 @@ $namespace: vben;
     width: 100%;
     height: var(--menu-item-height);
 
-    span {
+    .#{$namespace}-menu__name {
       @include menu-title;
     }
   }
@@ -823,10 +823,6 @@ $namespace: vben;
   font-size: var(--menu-font-size) !important;
 
   @include menu-item;
-
-  * {
-    font-size: inherit !important;
-  }
 
   &__icon-arrow {
     position: absolute;

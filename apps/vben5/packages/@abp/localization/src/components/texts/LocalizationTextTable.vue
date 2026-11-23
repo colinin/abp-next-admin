@@ -266,8 +266,11 @@ async function onChange(data: TextDto) {
   const input = await gridApi.formApi.getValues();
   onGet(input);
   // 资源变化刷新本地多语言缓存
-  const cultureName =
-    abpStore.application!.localization.currentCulture.cultureName;
+  const application = abpStore.application;
+  if (!application) {
+    return;
+  }
+  const cultureName = application.localization.currentCulture.cultureName;
   if (data.cultureName === cultureName) {
     const localization = await getLocalizationApi({
       cultureName,

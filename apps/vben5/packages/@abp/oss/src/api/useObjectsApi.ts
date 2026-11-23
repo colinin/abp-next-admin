@@ -15,7 +15,7 @@ export function useObjectsApi() {
     formData.append('fileName', input.fileName);
     formData.append('overwrite', String(input.overwrite));
     input.expirationTime &&
-      formData.append('expirationTime', input.expirationTime.toString());
+      formData.append('expirationTime', input.expirationTime);
     input.path && formData.append('path', input.path);
     input.file && formData.append('file', input.file);
     return request<OssObjectDto>(`/api/oss-management/objects`, {

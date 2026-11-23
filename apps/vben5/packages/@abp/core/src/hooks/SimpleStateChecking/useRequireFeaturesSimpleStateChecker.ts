@@ -14,8 +14,8 @@ export interface RequireFeaturesStateChecker {
 }
 
 export class RequireFeaturesSimpleStateChecker<
-    TState extends IHasSimpleStateCheckers<TState>,
-  >
+  TState extends IHasSimpleStateCheckers<TState>,
+>
   implements ISimpleStateChecker<TState>, RequireFeaturesStateChecker
 {
   _featureChecker: IFeatureChecker;

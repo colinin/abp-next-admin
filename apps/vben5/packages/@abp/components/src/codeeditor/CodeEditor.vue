@@ -30,9 +30,7 @@ const props = defineProps({
 });
 
 const emit = defineEmits<{
-  (event: 'change', value: string): void;
-  (event: 'formatError', error: string): void;
-  (event: 'update:value', value: string): void;
+  (event: 'change' | 'formatError' | 'update:value', value: string): void;
 }>();
 
 const getValue = computed(() => {

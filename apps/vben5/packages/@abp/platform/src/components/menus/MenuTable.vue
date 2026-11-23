@@ -192,7 +192,7 @@ const [Grid, gridApi] = useVbenVxeGrid({
   gridOptions,
 });
 
-const [MenuDrawer, drawerApi] = useVbenDrawer({
+const [MenuDrawer, drawerApi] = useVbenDrawer<MenuDrawerState>({
   connectedComponent: defineAsyncComponent(() => import('./MenuDrawer.vue')),
 });
 
@@ -221,7 +221,7 @@ function onExpandChange() {
 }
 
 function onCreate(row?: MenuDto) {
-  drawerApi.setData<MenuDrawerState>({
+  drawerApi.setData({
     editMenu: {
       layoutId: row?.layoutId,
       parentId: row?.id,
@@ -232,7 +232,7 @@ function onCreate(row?: MenuDto) {
 }
 
 function onUpdate(row: MenuDto) {
-  drawerApi.setData<MenuDrawerState>({
+  drawerApi.setData({
     editMenu: row,
     rootMenus: menus.value,
   });

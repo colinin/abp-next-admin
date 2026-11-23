@@ -1,0 +1,104 @@
+import { faker } from '@faker-js/faker';
+import { eventHandler, getQuery } from 'h3';
+import { verifyAccessToken } from '~/utils/jwt-utils';
+import { firstQueryInt, firstQueryString } from '~/utils/query';
+import { unAuthorizedResponse, usePageResponseSuccess } from '~/utils/response';
+
+const formatterCN = new Intl.DateTimeFormat('zh-CN', {
+  timeZone: 'Asia/Shanghai',
+  year: 'numeric',
+  month: '2-digit',
+  day: '2-digit',
+  hour: '2-digit',
+  minute: '2-digit',
+  second: '2-digit',
+});
+
+function generateMockDataList(count: number) {
+  const dataList = [];
+
+  for (let i = 0; i < count; i++) {
+    const dataItem: Record<string, any> = {
+      id: faker.string.uuid(),
+      name: faker.commerce.product(),
+      status: faker.helpers.arrayElement([0, 1]),
+      gender: faker.helpers.arrayElement([0, 1, 2]),
+      createTime: formatterCN.format(
+        faker.date.between({ from: '2022-01-01', to: '2025-01-01' }),
+      ),
+      deptId: faker.string.uuid(),
+      remark: faker.lorem.sentence(),
+    };
+
+    dataList.push(dataItem);
+  }
+
+  return dataList;
+}
+
+const mockData = generateMockDataList(100);
+
+export default eventHandler(async (event) => {
+  const userinfo = verifyAccessToken(event);
+  if (!userinfo) {
+    return unAuthorizedResponse(event);
+  }
+
+  const {
+    name,
+    id,
+    remark,
+    startTime,
+    endTime,
+    deptId,
+    gender,
+    status,
+    page,
+    pageSize,
+  } = getQuery(event);
+  // 统一经 firstQueryString 规范化：同名参数重复时取首个字符串值，
+  // 非字符串值按空串处理，后续逻辑只需面对 string（不再 as string）。
+  const nameValue = firstQueryString(name);
+  const idValue = firstQueryString(id);
+  const remarkValue = firstQueryString(remark);
+  const pageNumber = firstQueryInt(page, 1);
+  const pageSizeNumber = firstQueryInt(pageSize, 20);
+  const statusValue = firstQueryString(status);
+  const genderValue = firstQueryString(gender);
+  const startTimeValue = firstQueryString(startTime);
+  const endTimeValue = firstQueryString(endTime);
+  const deptIdValue = firstQueryString(deptId);
+
+  let listData = structuredClone(mockData);
+  if (nameValue) {
+    listData = listData.filter((item) =>
+      item.name.toLowerCase().includes(nameValue.toLowerCase()),
+    );
+  }
+  if (idValue) {
+    listData = listData.filter((item) =>
+      item.id.toLowerCase().includes(idValue.toLowerCase()),
+    );
+  }
+  if (remarkValue) {
+    listData = listData.filter((item) =>
+      item.remark?.toLowerCase()?.includes(remarkValue.toLowerCase()),
+    );
+  }
+  if (startTimeValue) {
+    listData = listData.filter((item) => item.createTime >= startTimeValue);
+  }
+  if (endTimeValue) {
+    listData = listData.filter((item) => item.createTime <= endTimeValue);
+  }
+  if (['0', '1'].includes(statusValue)) {
+    listData = listData.filter((item) => item.status === Number(statusValue));
+  }
+  if (deptIdValue) {
+    listData = listData.filter((item) => item.deptId === deptIdValue);
+  }
+  if (['0', '1', '2'].includes(genderValue)) {
+    listData = listData.filter((item) => item.gender === Number(genderValue));
+  }
+  return usePageResponseSuccess(pageNumber, pageSizeNumber, listData);
+});

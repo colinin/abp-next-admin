@@ -1,10 +1,8 @@
 <script setup lang="ts">
-import { defineEmits, defineOptions } from 'vue';
-
 import { useVbenForm, useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { toDate } from '@abp/core';
+import { getModalData, toDate } from '@abp/core';
 import { useMessage } from '@abp/ui';
 import { Alert } from 'ant-design-vue';
 
@@ -56,7 +54,7 @@ const [Form, formApi] = useVbenForm({
   showDefaultActions: false,
 });
 
-const [Modal, modalApi] = useVbenModal({
+const [Modal, modalApi] = useVbenModal<{ key: string }>({
   class: 'w-1/3',
   draggable: true,
   fullscreenButton: false,
@@ -70,7 +68,7 @@ const [Modal, modalApi] = useVbenModal({
     if (isOpen) {
       try {
         modalApi.setState({ loading: true });
-        const { key } = modalApi.getData();
+        const { key } = getModalData(modalApi);
         await onGet(key);
       } finally {
         modalApi.setState({ loading: false });

@@ -5,8 +5,7 @@ import type {
 } from '@abp/core';
 
 interface EditionDto
-  extends ExtensibleAuditedEntityDto<string>,
-    IHasConcurrencyStamp {
+  extends ExtensibleAuditedEntityDto<string>, IHasConcurrencyStamp {
   /** 显示名称 */
   displayName: string;
 }
@@ -19,8 +18,7 @@ interface EditionCreateOrUpdateBase {
 type EditionCreateDto = EditionCreateOrUpdateBase;
 
 interface EditionUpdateDto
-  extends EditionCreateOrUpdateBase,
-    IHasConcurrencyStamp {}
+  extends EditionCreateOrUpdateBase, IHasConcurrencyStamp {}
 
 interface GetEditionPagedListInput extends PagedAndSortedResultRequestDto {
   filter?: string;

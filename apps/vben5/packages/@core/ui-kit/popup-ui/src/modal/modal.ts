@@ -1,6 +1,6 @@
 import type { Component, Ref } from 'vue';
 
-import type { MaybePromise } from '@vben-core/typings';
+import type { ClassType, MaybePromise } from '@vben-core/typings';
 
 import type { ModalApi } from './modal-api';
 
@@ -30,7 +30,7 @@ export interface ModalProps {
    */
   centered?: boolean;
 
-  class?: string;
+  class?: ClassType;
 
   /**
    * 是否显示右上角的关闭按钮
@@ -60,7 +60,7 @@ export interface ModalProps {
    * 确定按钮文字
    */
   confirmText?: string;
-  contentClass?: string;
+  contentClass?: ClassType;
   /**
    * 弹窗描述
    */
@@ -79,7 +79,7 @@ export interface ModalProps {
    * @default true
    */
   footer?: boolean;
-  footerClass?: string;
+  footerClass?: ClassType;
   /**
    * 是否全屏
    * @default false
@@ -95,9 +95,9 @@ export interface ModalProps {
    * @default true
    */
   header?: boolean;
-  headerClass?: string;
+  headerClass?: ClassType;
   /**
-   * 弹窗是否显示
+   * 弹窗加载状态
    * @default false
    */
   loading?: boolean;
@@ -110,6 +110,11 @@ export interface ModalProps {
    * 是否自动聚焦
    */
   openAutoFocus?: boolean;
+  /**
+   * 拖动范围是否可以超出可视区
+   * @default false
+   */
+  overflow?: boolean;
   /**
    * 弹窗遮罩模糊效果
    */
@@ -145,23 +150,36 @@ export interface ModalProps {
 export interface ModalState extends ModalProps {
   /** 弹窗打开状态 */
   isOpen?: boolean;
-  /**
-   * 共享数据
-   */
-  sharedData?: Record<string, any>;
 }
 
-export type ExtendedModalApi = ModalApi & {
+export type ExtendedModalApi<TData = unknown> = ModalApi<TData> & {
   useStore: <T = NoInfer<ModalState>>(
     selector?: (state: NoInfer<ModalState>) => T,
   ) => Readonly<Ref<T>>;
 };
 
-export interface ModalApiOptions extends ModalState {
+type ModalComponentInstance<TComponent extends Component> =
+  TComponent extends abstract new (...args: any[]) => infer TInstance
+    ? TInstance
+    : never;
+
+export type InferModalData<TComponent extends Component> = [
+  ModalComponentInstance<TComponent>,
+] extends [never]
+  ? unknown
+  : ModalComponentInstance<TComponent> extends {
+        modalApi: ExtendedModalApi<infer TData>;
+      }
+    ? TData
+    : unknown;
+
+export interface ModalApiOptions<
+  TConnectedComponent extends Component = Component,
+> extends ModalState {
   /**
    * 独立的弹窗组件
    */
-  connectedComponent?: Component;
+  connectedComponent?: TConnectedComponent;
   /**
    * 关闭前的回调，返回 false 可以阻止关闭
    * @returns

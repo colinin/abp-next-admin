@@ -13,7 +13,16 @@ const routes: RouteRecordRaw[] = [
     path: '/system',
     children: [
       {
-        path: '/system/role',
+        path: 'user',
+        name: 'SystemUser',
+        meta: {
+          icon: 'mdi:user',
+          title: $t('system.user.title'),
+        },
+        component: () => import('#/views/system/user/list.vue'),
+      },
+      {
+        path: 'role',
         name: 'SystemRole',
         meta: {
           icon: 'mdi:account-group',
@@ -22,7 +31,7 @@ const routes: RouteRecordRaw[] = [
         component: () => import('#/views/system/role/list.vue'),
       },
       {
-        path: '/system/menu',
+        path: 'menu',
         name: 'SystemMenu',
         meta: {
           icon: 'mdi:menu',
@@ -31,13 +40,32 @@ const routes: RouteRecordRaw[] = [
         component: () => import('#/views/system/menu/list.vue'),
       },
       {
-        path: '/system/dept',
+        path: 'dept',
         name: 'SystemDept',
         meta: {
           icon: 'charm:organisation',
           title: $t('system.dept.title'),
         },
         component: () => import('#/views/system/dept/list.vue'),
+      },
+      {
+        path: 'dict',
+        name: 'SystemDict',
+        meta: {
+          icon: 'mdi:book-cog-outline',
+          title: $t('system.dict.title'),
+        },
+        component: () => import('#/views/system/dict/list.vue'),
+      },
+      {
+        path: 'dict/data/:code',
+        name: 'SystemDictData',
+        meta: {
+          activePath: '/system/dict',
+          hideInMenu: true,
+          title: $t('system.dict.dataTitle'),
+        },
+        component: () => import('#/views/system/dict/data.vue'),
       },
     ],
   },

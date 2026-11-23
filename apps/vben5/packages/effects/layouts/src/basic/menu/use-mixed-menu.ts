@@ -19,12 +19,13 @@ function useMixedMenu() {
   const mixExtraMenus = ref<MenuRecordRaw[]>([]);
   /** 记录当前顶级菜单下哪个子菜单最后激活 */
   const defaultSubMap = new Map<string, string>();
-  const { isMixedNav, isHeaderMixedNav } = usePreferences();
+  const { isMixedNav, isHeaderMixedNav, isMobile } = usePreferences();
 
   const needSplit = computed(
     () =>
-      (preferences.navigation.split && isMixedNav.value) ||
-      isHeaderMixedNav.value,
+      !isMobile.value &&
+      ((preferences.navigation.split && isMixedNav.value) ||
+        isHeaderMixedNav.value),
   );
 
   const sidebarVisible = computed(() => {
@@ -86,7 +87,7 @@ function useMixedMenu() {
    */
   const handleMenuSelect = (key: string, mode?: string) => {
     if (!needSplit.value || mode === 'vertical') {
-      navigation(key);
+      void navigation(key);
       return;
     }
     const rootMenu = menus.value.find((item) => item.path === key);
@@ -98,9 +99,9 @@ function useMixedMenu() {
     }
 
     if (_splitSideMenus.length === 0) {
-      navigation(key);
+      void navigation(key);
     } else if (rootMenu && preferences.sidebar.autoActivateChild) {
-      navigation(
+      void navigation(
         defaultSubMap.has(rootMenu.path)
           ? (defaultSubMap.get(rootMenu.path) as string)
           : rootMenu.path,
@@ -115,7 +116,7 @@ function useMixedMenu() {
    */
   const handleMenuOpen = (key: string, parentsPath: string[]) => {
     if (parentsPath.length <= 1 && preferences.sidebar.autoActivateChild) {
-      navigation(
+      void navigation(
         defaultSubMap.has(key) ? (defaultSubMap.get(key) as string) : key,
       );
     }
@@ -124,17 +125,24 @@ function useMixedMenu() {
   /**
    * 计算侧边菜单
    * @param path 路由路径
+   * @returns 当前路径是否命中菜单树
    */
-  function calcSideMenus(path: string = route.path) {
+  function calcSideMenus(path: string = route.path): boolean {
     let { rootMenu } = findRootMenuByPath(menus.value, path);
     if (!rootMenu) {
       rootMenu = menus.value.find((item) => item.path === path);
     }
-    const result = findRootMenuByPath(rootMenu?.children || [], path, 1);
+    if (!rootMenu) {
+      // 当前路由不在菜单树里（例如用户下拉进入的 /profile）：保留上一次的侧边菜单，
+      // 否则混合布局的侧边栏会整体消失。
+      return false;
+    }
+    const result = findRootMenuByPath(rootMenu.children || [], path, 1);
     mixedRootMenuPath.value = result.rootMenuPath ?? '';
     mixExtraMenus.value = result.rootMenu?.children ?? [];
-    rootMenuPath.value = rootMenu?.path ?? '';
-    splitSideMenus.value = rootMenu?.children ?? [];
+    rootMenuPath.value = rootMenu.path;
+    splitSideMenus.value = rootMenu.children ?? [];
+    return true;
   }
 
   watch(
@@ -144,9 +152,10 @@ function useMixedMenu() {
       if (willOpenedByWindow(currentPath)) {
         return;
       }
-      calcSideMenus(currentPath);
-      if (rootMenuPath.value)
+      // 未命中菜单的路径不能记进 defaultSubMap，否则 autoActivateChild 会把菜单外的页面当成默认子页。
+      if (calcSideMenus(currentPath) && rootMenuPath.value) {
         defaultSubMap.set(rootMenuPath.value, currentPath);
+      }
     },
     { immediate: true },
   );

@@ -16,16 +16,16 @@ interface State {
   returnUrl?: string;
   userId: string;
 }
-const formModel = ref({} as State);
+const formModel = ref<State>({} as State);
 
 const { cancel, confirmEmailApi } = useProfileApi();
-const [Modal, modalApi] = useVbenModal({
+const [Modal, modalApi] = useVbenModal<State>({
   onClosed: cancel,
   onConfirm: onSubmit,
   onOpenChange(isOpen) {
     if (isOpen) {
-      const state = modalApi.getData<State>();
-      formModel.value = state;
+      const state = modalApi.getData();
+      formModel.value = state ?? ({} as State);
     }
   },
   title: $t('AbpAccount.EmailConfirm'),

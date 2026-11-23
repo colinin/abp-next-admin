@@ -123,13 +123,14 @@ function realTimeCroppered() {
 
 // event: return base64 and width and height information after cropping
 function croppered() {
-  if (!cropper.value) {
+  const cropperInstance = cropper.value;
+  if (!cropperInstance) {
     return;
   }
-  const imgInfo = cropper.value.getData();
+  const imgInfo = cropperInstance.getData();
   const canvas = props.circled
-    ? getRoundedCanvas()
-    : cropper.value.getCroppedCanvas();
+    ? getRoundedCanvas(cropperInstance)
+    : cropperInstance.getCroppedCanvas();
   canvas.toBlob((blob) => {
     if (!blob) {
       return;
@@ -142,18 +143,20 @@ function croppered() {
         imgInfo,
       });
     };
-    // eslint-disable-next-line unicorn/prefer-add-event-listener
-    fileReader.onerror = () => {
+    fileReader.addEventListener('error', () => {
       emits('cropendError');
-    };
+    });
   }, 'image/png');
 }
 
 // Get a circular picture canvas
-function getRoundedCanvas() {
-  const sourceCanvas = cropper.value!.getCroppedCanvas();
+function getRoundedCanvas(cropperInstance: Cropper) {
+  const sourceCanvas = cropperInstance.getCroppedCanvas();
   const canvas = document.createElement('canvas');
-  const context = canvas.getContext('2d')!;
+  const context = canvas.getContext('2d');
+  if (!context) {
+    return canvas;
+  }
   const width = sourceCanvas.width;
   const height = sourceCanvas.height;
   canvas.width = width;

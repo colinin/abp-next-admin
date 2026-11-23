@@ -11,7 +11,12 @@ import { mapTree, traverseTreeValues, uniqueByField } from '@vben/utils';
 import { VbenIcon, VbenScrollbar } from '@vben-core/shadcn-ui';
 import { isHttpUrl } from '@vben-core/shared/utils';
 
-import { onKeyStroke, useLocalStorage, useThrottleFn } from '@vueuse/core';
+import {
+  onKeyStroke,
+  useEventListener,
+  useLocalStorage,
+  useThrottleFn,
+} from '@vueuse/core';
 
 defineOptions({
   name: 'SearchPanel',
@@ -34,6 +39,7 @@ const searchHistory = useLocalStorage<MenuRecordRaw[]>(
 const activeIndex = ref(-1);
 const searchItems = shallowRef<MenuRecordRaw[]>([]);
 const searchResults = ref<MenuRecordRaw[]>([]);
+const isNavigating = ref(false);
 
 const handleSearch = useThrottleFn(search, 200);
 
@@ -47,6 +53,8 @@ function search(searchKey: string) {
     searchResults.value = [];
     return;
   }
+  // 将搜索关键词转换为小写，确保大小写不敏感的搜索
+  searchKey = searchKey.toLowerCase();
 
   // 使用搜索关键词创建正则表达式
   const reg = createSearchReg(searchKey);
@@ -114,6 +122,7 @@ function handleUp() {
   if (searchResults.value.length === 0) {
     return;
   }
+  isNavigating.value = true;
   activeIndex.value--;
   if (activeIndex.value < 0) {
     activeIndex.value = searchResults.value.length - 1;
@@ -126,6 +135,7 @@ function handleDown() {
   if (searchResults.value.length === 0) {
     return;
   }
+  isNavigating.value = true;
   activeIndex.value++;
   if (activeIndex.value > searchResults.value.length - 1) {
     activeIndex.value = 0;
@@ -141,6 +151,7 @@ function handleClose() {
 
 // Activate when the mouse moves to a certain line
 function handleMouseenter(e: MouseEvent) {
+  if (isNavigating.value) return;
   const index = (e.target as HTMLElement)?.dataset.index;
   activeIndex.value = Number(index);
 }
@@ -196,7 +207,7 @@ watch(
     if (val) {
       handleSearch(val);
     } else {
-      searchResults.value = [...searchHistory.value];
+      searchResults.value = searchHistory.value;
     }
   },
 );
@@ -219,20 +230,24 @@ onMounted(() => {
   // esc close
   onKeyStroke('Escape', handleClose);
 });
+
+useEventListener('mousemove', () => {
+  isNavigating.value = false;
+});
 </script>
 
 <template>
   <VbenScrollbar>
-    <div class="!flex h-full justify-center px-2 sm:max-h-[450px]">
+    <div class="flex! h-full justify-center px-2 sm:max-h-112.5">
       <!-- 无搜索结果 -->
       <div
         v-if="keyword && searchResults.length === 0"
-        class="text-muted-foreground text-center"
+        class="text-center text-muted-foreground"
       >
         <SearchX class="mx-auto mt-4 size-12" />
-        <p class="mb-10 mt-6 text-xs">
+        <p class="mt-6 mb-10 text-xs">
           {{ $t('ui.widgets.search.noResults') }}
-          <span class="text-foreground text-sm font-medium">
+          <span class="text-sm font-medium text-foreground">
             "{{ keyword }}"
           </span>
         </p>
@@ -240,7 +255,7 @@ onMounted(() => {
       <!-- 历史搜索记录 & 没有搜索结果 -->
       <div
         v-if="!keyword && searchResults.length === 0"
-        class="text-muted-foreground text-center"
+        class="text-center text-muted-foreground"
       >
         <p class="my-10 text-xs">
           {{ $t('ui.widgets.search.noRecent') }}
@@ -250,7 +265,7 @@ onMounted(() => {
       <ul v-show="searchResults.length > 0" class="w-full">
         <li
           v-if="searchHistory.length > 0 && !keyword"
-          class="text-muted-foreground mb-2 text-xs"
+          class="mb-2 text-xs text-muted-foreground"
         >
           {{ $t('ui.widgets.search.recent') }}
         </li>
@@ -264,19 +279,15 @@ onMounted(() => {
           "
           :data-index="index"
           :data-search-item="index"
-          class="bg-accent flex-center group mb-3 w-full cursor-pointer rounded-lg px-4 py-4"
+          class="group mb-3 flex-center w-full cursor-pointer rounded-lg bg-accent p-4"
           @click="handleEnter"
           @mouseenter="handleMouseenter"
         >
-          <VbenIcon
-            :icon="item.icon"
-            class="mr-2 size-5 flex-shrink-0"
-            fallback
-          />
+          <VbenIcon :icon="item.icon" class="mr-2 size-5 shrink-0" fallback />
 
           <span class="flex-1">{{ item.name }}</span>
           <div
-            class="flex-center dark:hover:bg-accent hover:text-primary-foreground rounded-full p-1 hover:scale-110"
+            class="flex-center rounded-full p-1 hover:scale-110 hover:text-primary-foreground dark:hover:bg-accent"
             @click.stop="removeItem(index)"
           >
             <X class="size-4" />

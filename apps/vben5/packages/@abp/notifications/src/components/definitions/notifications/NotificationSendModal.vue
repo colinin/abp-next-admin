@@ -14,6 +14,7 @@ import {
 import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
+import { getModalData } from '@abp/core';
 import { PropertyTable } from '@abp/ui';
 import { Form, Input, message, Select, Tabs, Textarea } from 'ant-design-vue';
 
@@ -67,7 +68,7 @@ const getMarkdownToolbar = computed(() => {
   return undefined;
 });
 
-const [Modal, modalApi] = useVbenModal({
+const [Modal, modalApi] = useVbenModal<NotificationDefinitionDto>({
   class: 'w-1/2',
   draggable: true,
   fullscreenButton: false,
@@ -81,7 +82,7 @@ const [Modal, modalApi] = useVbenModal({
 });
 
 async function onInit() {
-  const dto = modalApi.getData<NotificationDefinitionDto>();
+  const dto = getModalData(modalApi);
   const notificationDto = await getApi(dto.name);
   notification.value = {
     ...notificationDto,

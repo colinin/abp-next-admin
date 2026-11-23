@@ -114,7 +114,7 @@ pnpm build
 
 ## ブラウザサポート
 
-ローカル開発には `Chrome 80+` ブラウザを推奨します
+Tailwind CSS v4.0 is designed for Safari 16.4+, Chrome 111+, and Firefox 128+
 
 モダンブラウザをサポートし、IEはサポートしません
 
@@ -128,7 +128,7 @@ pnpm build
 
 ## スター歴史
 
-[![Star History Chart](https://api.star-history.com/svg?repos=vbenjs/vue-vben-admin&type=Date)](https://star-history.com/#vbenjs/vue-vben-admin&Date)
+[![Star History Chart](https://star-history.dera.page/svg?repos=vbenjs/vue-vben-admin&type=Date)](https://star-history.dera.page/#vbenjs/vue-vben-admin&Date)
 
 ## 寄付
 

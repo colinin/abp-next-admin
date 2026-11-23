@@ -1,6 +1,11 @@
 export type FormulaMode = 'date-diff' | 'date-range' | 'number';
 export type FormulaUnit =
-  'day' | 'hour' | 'minute' | 'month' | 'second' | 'year';
+  | 'day'
+  | 'hour'
+  | 'minute'
+  | 'month'
+  | 'second'
+  | 'year';
 
 export interface FormulaConfig {
   left: string;

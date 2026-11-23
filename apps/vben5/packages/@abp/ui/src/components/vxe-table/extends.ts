@@ -32,7 +32,7 @@ function extendProxyOption(
   const { proxyConfig } = options;
   const configFn = (proxyConfig?.ajax as Recordable<any>)?.[key];
   if (!isFunction(configFn)) {
-    return options;
+    return;
   }
 
   const wrapperFn = async (

@@ -15,7 +15,11 @@ import { h, reactive, ref, toValue, useTemplateRef } from 'vue';
 import { useVbenDrawer } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { useLocalization, useLocalizationSerializer } from '@abp/core';
+import {
+  getModalData,
+  useLocalization,
+  useLocalizationSerializer,
+} from '@abp/core';
 import {
   DataAccessFilterLogic,
   DataAccessFilterOperate,
@@ -155,7 +159,7 @@ const dataAccessFilterOptions = reactive([
     value: DataAccessFilterOperate.NotEqual,
   },
 ]);
-const [Drawer, drawerApi] = useVbenDrawer({
+const [Drawer, drawerApi] = useVbenDrawer<IdentityRoleDto>({
   class: 'w-1/2',
   onConfirm: onSubmit,
   async onOpenChange(isOpen) {
@@ -180,7 +184,7 @@ const { deserialize } = useLocalizationSerializer();
 const { Lr } = useLocalization();
 
 async function onInitStrategys() {
-  const roleInfo = drawerApi.getData<IdentityRoleDto>();
+  const roleInfo = getModalData(drawerApi);
   const result = await getStrategysApi({
     subjectId: roleInfo.name,
     subjectName: 'R',
@@ -246,7 +250,7 @@ async function onSubmit() {
 }
 
 async function submitStrategys(input: RoleEntityRuleDto) {
-  const roleInfo = drawerApi.getData<IdentityRoleDto>();
+  const roleInfo = getModalData(drawerApi);
   await setStrategysApi({
     isEnabled: input.isEnabled,
     strategy: input.strategy,
@@ -256,7 +260,7 @@ async function submitStrategys(input: RoleEntityRuleDto) {
 }
 
 async function submitCustomRule(input: RoleEntityRuleDto) {
-  const roleInfo = drawerApi.getData<IdentityRoleDto>();
+  const roleInfo = getModalData(drawerApi);
   const api = input.id
     ? updateApi(input.id, {
         accessedProperties: input.accessedProperties,
@@ -283,7 +287,7 @@ async function onGetEntityType() {
   try {
     drawerApi.setState({ confirmLoading: true, loading: true });
     const { entityTypeId, operation } = formModel.value;
-    const roleInfo = drawerApi.getData<IdentityRoleDto>();
+    const roleInfo = getModalData(drawerApi);
     const ruleEntityRule = await getRoleEntityRuleApi({
       entityTypeId,
       operation,

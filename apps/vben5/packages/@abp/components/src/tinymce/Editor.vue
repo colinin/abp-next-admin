@@ -107,10 +107,8 @@ const props = defineProps({
   },
 });
 const emits = defineEmits<{
-  (event: 'change', content: any): void;
-  (event: 'update:modelValue', content: any): void;
+  (event: 'change' | 'initError' | 'update:modelValue', value: any): void;
   (event: 'inited', editor: Editor | Editor[]): void;
-  (event: 'initError', error: any): void;
 }>();
 const { buildShortUUID } = useTinymce();
 const attrs = useAttrs();
@@ -195,8 +193,9 @@ onDeactivated(() => {
 });
 
 function destory() {
-  if (tinymce !== null) {
-    tinymce?.remove?.(unref(initOptions).selector!);
+  const { selector } = unref(initOptions);
+  if (tinymce !== null && selector) {
+    tinymce?.remove?.(selector);
   }
 }
 

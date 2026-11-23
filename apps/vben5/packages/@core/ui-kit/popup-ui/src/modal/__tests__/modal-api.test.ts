@@ -12,21 +12,20 @@ vi.mock('@vben-core/shared/store', () => {
         return this._state;
       }
       private _state: ModalState;
+      private subscribers: Array<(state: ModalState) => void> = [];
 
-      private options: any;
-
-      constructor(initialState: ModalState, options: any) {
+      constructor(initialState: ModalState) {
         this._state = initialState;
-        this.options = options;
-      }
-
-      batch(cb: () => void) {
-        cb();
       }
 
       setState(fn: (prev: ModalState) => ModalState) {
         this._state = fn(this._state);
-        this.options.onUpdate();
+        this.subscribers.forEach((sub) => sub(this._state));
+      }
+
+      subscribe(fn: (state: ModalState) => void) {
+        this.subscribers.push(fn);
+        return { unsubscribe: () => {} };
       }
     },
   };
@@ -54,16 +53,17 @@ describe('modalApi', () => {
     expect(modalApi.store.state.isOpen).toBe(true);
   });
 
-  it('should close the modal if onBeforeClose allows it', () => {
-    modalApi.close();
+  it('should close the modal if onBeforeClose allows it', async () => {
+    modalApi.open();
+    await modalApi.close();
     expect(modalApi.store.state.isOpen).toBe(false);
   });
 
-  it('should not close the modal if onBeforeClose returns false', () => {
+  it('should not close the modal if onBeforeClose returns false', async () => {
     const onBeforeClose = vi.fn(() => false);
     const modalApiWithHook = new ModalApi({ onBeforeClose });
     modalApiWithHook.open();
-    modalApiWithHook.close();
+    await modalApiWithHook.close();
     expect(modalApiWithHook.store.state.isOpen).toBe(true);
     expect(onBeforeClose).toHaveBeenCalled();
   });
@@ -81,6 +81,16 @@ describe('modalApi', () => {
     const testData = { key: 'value' };
     modalApi.setData(testData);
     expect(modalApi.getData()).toEqual(testData);
+  });
+
+  it('should return undefined before shared data is set', () => {
+    expect(modalApi.getData()).toBeUndefined();
+  });
+
+  it('should preserve null shared data', () => {
+    const nullableModalApi = new ModalApi<null | Record<string, unknown>>();
+    nullableModalApi.setData(null);
+    expect(nullableModalApi.getData()).toBeNull();
   });
 
   it('should set state correctly using an object', () => {

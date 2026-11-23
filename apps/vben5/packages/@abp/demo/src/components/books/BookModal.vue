@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { EntityTypeInfoModel } from '@abp/data-protection';
 
-import type { FormSchema } from '../../../../../@core/ui-kit/form-ui/src/types';
+import type { FormFieldSchema } from '../../../../../@core/ui-kit/form-ui/src/types';
 import type { BookDto, CreateUpdateBookDto } from '../../types/books';
 
 import { nextTick, ref } from 'vue';
@@ -9,6 +9,7 @@ import { nextTick, ref } from 'vue';
 import { useVbenForm, useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
+import { getModalData } from '@abp/core';
 import { DataAccessOperation } from '@abp/data-protection';
 import { message } from 'ant-design-vue';
 
@@ -23,7 +24,7 @@ const { getPagedListApi } = useAuthorsApi();
 const { createApi, getApi, getEntityInfoApi, updateApi } = useBooksApi();
 
 const allowShowFields = ref<string[]>([]);
-const defaultFormSchema: FormSchema[] = [
+const defaultFormSchema: FormFieldSchema[] = [
   {
     component: 'Input',
     fieldName: 'id',
@@ -121,7 +122,7 @@ const [Form, formApi] = useVbenForm({
   showDefaultActions: false,
 });
 
-const [Modal, modalApi] = useVbenModal({
+const [Modal, modalApi] = useVbenModal<BookDto>({
   async onConfirm() {
     await formApi.validateAndSubmitForm();
   },
@@ -134,7 +135,7 @@ const [Modal, modalApi] = useVbenModal({
 });
 
 async function onInit() {
-  const { id } = modalApi.getData<BookDto>();
+  const { id } = getModalData(modalApi);
   if (!id) {
     nextTick(() => {
       formApi.setState({
@@ -179,7 +180,7 @@ function updateSchema(
 
 async function onGet() {
   formApi.resetForm();
-  const { id } = modalApi.getData<BookDto>();
+  const { id } = getModalData(modalApi);
   if (id) {
     const dto = await getApi(id);
     allowShowFields.value.forEach((field) => {

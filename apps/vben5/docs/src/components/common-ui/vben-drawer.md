@@ -50,12 +50,35 @@ Drawer 内的内容一般业务中，会比较复杂，所以我们可以将 dra
 
 <DemoPreview dir="demos/vben-drawer/shared-data" />
 
+### 数据类型约束
+
+推荐在 connected 子组件中声明一次数据类型并暴露 `drawerApi`，外部会从 `connectedComponent` 自动推导 `setData` 和 `getData` 的类型：
+
+```ts
+// connected 子组件
+const [Drawer, drawerApi] = useVbenDrawer<EditData>();
+defineExpose({ drawerApi });
+
+// 外部组件，无需重复声明 EditData
+const [Drawer, drawerApi] = useVbenDrawer({
+  connectedComponent: EditDrawer,
+});
+```
+
+无法从组件公开实例推导时，可以显式使用 `useVbenDrawer<EditData>()`。需要让多个文件共享同一契约时，可以在独立模块中预绑定：
+
+```ts
+export const useEditDrawer = createVbenDrawer<EditData>();
+```
+
+三种方式的优先级为：显式泛型、connected component 自动推导、`unknown`。普通 SFC 通过 `defineExpose` 支持自动推导；泛型 SFC、函数式组件或被标注为宽 `Component` 的组件应使用显式泛型或契约工厂。`getData()` 在尚未调用 `setData()` 时返回 `undefined`，业务允许 `null`、部分对象等值时，需要在数据泛型中准确声明。
+
 ::: info 注意
 
 - `VbenDrawer` 组件对于参数的处理优先级是 `slot` > `props` > `state`(通过api更新的状态以及useVbenDrawer参数)。如果你已经传入了 `slot` 或者 `props`，那么 `setState` 将不会生效，这种情况下你可以通过 `slot` 或者 `props` 来更新状态。
 - 如果你使用到了 `connectedComponent` 参数，那么会存在 2 个`useVbenDrawer`, 此时，如果同时设置了相同的参数，那么以内部为准（也就是没有设置 connectedComponent 的代码）。比如 同时设置了 `onConfirm`，那么以内部的 `onConfirm` 为准。`onOpenChange`事件除外，内外都会触发。
 - 使用了`connectedComponent`参数时，可以配置`destroyOnClose`属性来决定当关闭弹窗时，是否要销毁`connectedComponent`组件（重新创建`connectedComponent`组件，这将会把其内部所有的变量、状态、数据等恢复到初始状态。）。
-- 如果抽屉的默认行为不符合你的预期，可以在`src\bootstrap.ts`中修改`setDefaultDrawerProps`的参数来设置默认的属性，如默认隐藏全屏按钮，修改默认ZIndex等。
+- 如果抽屉的默认行为不符合你的预期，可以在对应应用的 `apps/<app>/src/bootstrap.ts` 中修改 `setDefaultDrawerProps` 的参数来设置默认属性，例如修改默认 `zIndex` 等。
 
 :::
 
@@ -116,7 +139,7 @@ const [Drawer, drawerApi] = useVbenDrawer({
 
 | 事件名 | 描述 | 类型 | 版本限制 |
 | --- | --- | --- | --- |
-| onBeforeClose | 关闭前触发，返回 `false`则禁止关闭 | `()=>boolean` | --- |
+| onBeforeClose | 关闭前触发，返回 `false` 或 Promise reject 则禁止关闭 | `()=>Promise<boolean \| undefined>\|boolean\|undefined` | >5.5.2 支持 Promise |
 | onCancel | 点击取消按钮触发 | `()=>void` | --- |
 | onClosed | 关闭动画播放完毕时触发 | `()=>void` | >5.5.2 |
 | onConfirm | 点击确认按钮触发 | `()=>void` | --- |
@@ -140,11 +163,11 @@ const [Drawer, drawerApi] = useVbenDrawer({
 
 | 方法 | 描述 | 类型 | 版本限制 |
 | --- | --- | --- | --- |
-| setState | 动态设置弹窗状态属性 | `(((prev: ModalState) => Partial<ModalState>)\| Partial<ModalState>)=>drawerApi` |
+| setState | 动态设置抽屉状态属性 | `(((prev: DrawerState) => Partial<DrawerState>)\| Partial<DrawerState>)=>drawerApi` |
 | open | 打开弹窗 | `()=>void` | --- |
 | close | 关闭弹窗 | `()=>void` | --- |
-| setData | 设置共享数据 | `<T>(data:T)=>drawerApi` | --- |
-| getData | 获取共享数据 | `<T>()=>T` | --- |
+| setData | 设置共享数据 | `(data:TData)=>drawerApi` | --- |
+| getData | 获取共享数据 | `()=>TData\|undefined` | --- |
 | useStore | 获取可响应式状态 | - | --- |
 | lock | 将抽屉标记为提交中，锁定当前状态 | `(isLock:boolean)=>drawerApi` | >5.5.3 |
 | unlock | lock方法的反操作，解除抽屉的锁定状态，也是lock(false)的别名 | `()=>drawerApi` | >5.5.3 |

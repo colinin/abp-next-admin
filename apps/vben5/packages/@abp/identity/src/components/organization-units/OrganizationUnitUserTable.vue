@@ -67,14 +67,15 @@ const gridOptions: VxeGridProps<IdentityUserDto> = {
   proxyConfig: {
     ajax: {
       query: async ({ page, sort }, formValues) => {
-        if (!props.selectedKey) {
+        const selectedKey = props.selectedKey;
+        if (!selectedKey) {
           return {
             totalCount: 0,
             items: [],
           };
         }
         const sorting = sort.order ? `${sort.field} ${sort.order}` : undefined;
-        return await getUserListApi(props.selectedKey!, {
+        return await getUserListApi(selectedKey, {
           sorting,
           maxResultCount: page.pageSize,
           skipCount: (page.currentPage - 1) * page.pageSize,
@@ -126,9 +127,13 @@ const onDelete = (row: IdentityUserDto) => {
       cancel('User closed cancel delete modal.');
     },
     onOk: async () => {
+      const selectedKey = props.selectedKey;
+      if (!selectedKey) {
+        return;
+      }
       gridApi.setLoading(true);
       try {
-        await removeOrganizationUnitApi(row.id, props.selectedKey!);
+        await removeOrganizationUnitApi(row.id, selectedKey);
         await gridApi.query();
       } finally {
         gridApi.setLoading(false);
@@ -146,11 +151,15 @@ const onShowMember = () => {
 };
 
 const onCreateMember = async (users: IdentityUserDto[]) => {
+  const selectedKey = props.selectedKey;
+  if (!selectedKey) {
+    return;
+  }
   userModalApi.setState({
     submitting: true,
   });
   try {
-    await addMembers(props.selectedKey!, {
+    await addMembers(selectedKey, {
       userIds: users.map((item) => item.id),
     });
     userModalApi.close();

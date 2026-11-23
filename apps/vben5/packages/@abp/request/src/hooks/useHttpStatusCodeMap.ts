@@ -51,7 +51,7 @@ export function useHttpStatusCodeMap() {
     [HttpStatusCode.UseProxy]: '305 - Use Proxy',
   };
 
-  function getHttpStatusColor(statusCode: HttpStatusCode) {
+  function getHttpStatusColor(statusCode: number): string {
     if (statusCode < 200) {
       return 'default';
     }
@@ -67,6 +67,7 @@ export function useHttpStatusCodeMap() {
     if (statusCode >= 500) {
       return 'error';
     }
+    return 'default';
   }
 
   return {

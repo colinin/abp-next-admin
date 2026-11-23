@@ -6,6 +6,7 @@ import { ref } from 'vue';
 import { useVbenForm, useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
+import { getModalData } from '@abp/core';
 import { message } from 'ant-design-vue';
 
 import { useEditionsApi } from '../../api';
@@ -37,7 +38,7 @@ const [Form, formApi] = useVbenForm({
   showDefaultActions: false,
 });
 
-const [Modal, modalApi] = useVbenModal({
+const [Modal, modalApi] = useVbenModal<EditionDto>({
   onClosed: cancel,
   async onConfirm() {
     await formApi.validateAndSubmitForm();
@@ -51,7 +52,7 @@ const [Modal, modalApi] = useVbenModal({
 });
 
 async function onGet() {
-  const { id } = modalApi.getData<EditionDto>();
+  const { id } = getModalData(modalApi);
   if (!id) {
     formApi.setValues({});
     edition.value = undefined;
@@ -72,8 +73,9 @@ async function onGet() {
 }
 
 async function onSubmit(values: Record<string, any>) {
-  const api = edition.value?.id
-    ? updateApi(edition.value!.id, {
+  const editionId = edition.value?.id;
+  const api = editionId
+    ? updateApi(editionId, {
         concurrencyStamp: values.concurrencyStamp,
         displayName: values.displayName,
       })

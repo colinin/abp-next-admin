@@ -61,14 +61,15 @@ const gridOptions: VxeGridProps<IdentityRoleDto> = {
   proxyConfig: {
     ajax: {
       query: async ({ page, sort }, formValues) => {
-        if (!props.selectedKey) {
+        const selectedKey = props.selectedKey;
+        if (!selectedKey) {
           return {
             totalCount: 0,
             items: [],
           };
         }
         const sorting = sort.order ? `${sort.field} ${sort.order}` : undefined;
-        return await getRoleListApi(props.selectedKey!, {
+        return await getRoleListApi(selectedKey, {
           sorting,
           maxResultCount: page.pageSize,
           skipCount: (page.currentPage - 1) * page.pageSize,
@@ -121,9 +122,13 @@ const onDelete = (row: IdentityRoleDto) => {
       cancel('User closed cancel delete modal.');
     },
     onOk: async () => {
+      const selectedKey = props.selectedKey;
+      if (!selectedKey) {
+        return;
+      }
       try {
         gridApi.setLoading(true);
-        await removeOrganizationUnitApi(row.id, props.selectedKey!);
+        await removeOrganizationUnitApi(row.id, selectedKey);
         await onRefresh();
       } finally {
         gridApi.setLoading(false);
@@ -141,11 +146,15 @@ const onShowRole = () => {
 };
 
 const onCreateRole = async (roles: IdentityRoleDto[]) => {
+  const selectedKey = props.selectedKey;
+  if (!selectedKey) {
+    return;
+  }
   try {
     roleModalApi.setState({
       submitting: true,
     });
-    await addRoles(props.selectedKey!, {
+    await addRoles(selectedKey, {
       roleIds: roles.map((item) => item.id),
     });
     roleModalApi.close();

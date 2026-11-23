@@ -13,21 +13,20 @@ vi.mock('@vben-core/shared/store', () => {
         return this._state;
       }
       private _state: DrawerState;
+      private subscribers: Array<(state: DrawerState) => void> = [];
 
-      private options: any;
-
-      constructor(initialState: DrawerState, options: any) {
+      constructor(initialState: DrawerState) {
         this._state = initialState;
-        this.options = options;
-      }
-
-      batch(cb: () => void) {
-        cb();
       }
 
       setState(fn: (prev: DrawerState) => DrawerState) {
         this._state = fn(this._state);
-        this.options.onUpdate();
+        this.subscribers.forEach((sub) => sub(this._state));
+      }
+
+      subscribe(fn: (state: DrawerState) => void) {
+        this.subscribers.push(fn);
+        return { unsubscribe: () => {} };
       }
     },
   };
@@ -53,16 +52,17 @@ describe('drawerApi', () => {
     expect(drawerApi.store.state.isOpen).toBe(true);
   });
 
-  it('should close the drawer if onBeforeClose allows it', () => {
-    drawerApi.close();
+  it('should close the drawer if onBeforeClose allows it', async () => {
+    drawerApi.open();
+    await drawerApi.close();
     expect(drawerApi.store.state.isOpen).toBe(false);
   });
 
-  it('should not close the drawer if onBeforeClose returns false', () => {
+  it('should not close the drawer if onBeforeClose returns false', async () => {
     const onBeforeClose = vi.fn(() => false);
     const drawerApiWithHook = new DrawerApi({ onBeforeClose });
     drawerApiWithHook.open();
-    drawerApiWithHook.close();
+    await drawerApiWithHook.close();
     expect(drawerApiWithHook.store.state.isOpen).toBe(true);
     expect(onBeforeClose).toHaveBeenCalled();
   });
@@ -80,6 +80,16 @@ describe('drawerApi', () => {
     const testData = { key: 'value' };
     drawerApi.setData(testData);
     expect(drawerApi.getData()).toEqual(testData);
+  });
+
+  it('should return undefined before shared data is set', () => {
+    expect(drawerApi.getData()).toBeUndefined();
+  });
+
+  it('should preserve null shared data', () => {
+    const nullableDrawerApi = new DrawerApi<null | Record<string, unknown>>();
+    nullableDrawerApi.setData(null);
+    expect(nullableDrawerApi.getData()).toBeNull();
   });
 
   it('should set state correctly using an object', () => {

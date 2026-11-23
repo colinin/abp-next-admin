@@ -15,8 +15,7 @@ import { Button, Card, DirectoryTree, Empty, Select } from 'ant-design-vue';
 import { useContainesApi } from '../../api';
 
 const emits = defineEmits<{
-  (event: 'bucketChange', data: string): void;
-  (event: 'folderChange', data: string): void;
+  (event: 'bucketChange' | 'folderChange', data: string): void;
 }>();
 
 interface Folder {
@@ -55,17 +54,21 @@ const folders = ref<Folder[]>([
 ]);
 
 const onLoadChildFolders: TreeProps['loadData'] = async (treeNode) => {
-  let path = '';
-  if (treeNode.dataRef?.path) {
-    path = path + treeNode.dataRef?.path;
+  const dataRef = treeNode.dataRef;
+  if (!dataRef) {
+    return;
   }
-  if (treeNode.dataRef?.name) {
-    path = path + treeNode.dataRef?.name;
+  let path = '';
+  if (dataRef.path) {
+    path = path + dataRef.path;
+  }
+  if (dataRef.name) {
+    path = path + dataRef.name;
   }
   try {
-    treeNode.dataRef!.children = await getFolders(bucket.value!, path);
+    dataRef.children = await getFolders(bucket.value, path);
   } catch {
-    treeNode.dataRef!.children = [];
+    dataRef.children = [];
   }
   folders.value = [...folders.value];
   loadedFolders.value = [...loadedFolders.value, treeNode.key.toString()];
@@ -115,8 +118,9 @@ function onFolderExpand(
 }
 
 function onFolderChange(selectedKeys: Key[]) {
-  if (selectedKeys.length === 1) {
-    emits('folderChange', selectedKeys[0]!.toString());
+  const [selectedKey] = selectedKeys;
+  if (selectedKeys.length === 1 && selectedKey !== undefined) {
+    emits('folderChange', selectedKey.toString());
   }
 }
 

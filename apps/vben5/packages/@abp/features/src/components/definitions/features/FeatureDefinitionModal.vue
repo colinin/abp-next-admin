@@ -10,21 +10,14 @@ import type { FormInstance } from 'ant-design-vue';
 import type { FeatureDefinitionDto } from '../../../types/definitions';
 import type { FeatureGroupDefinitionDto } from '../../../types/groups';
 
-import {
-  defineEmits,
-  defineOptions,
-  reactive,
-  ref,
-  toValue,
-  unref,
-  useTemplateRef,
-} from 'vue';
+import { reactive, ref, toValue, unref, useTemplateRef } from 'vue';
 
 import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 import { isBoolean, isString } from '@vben/utils';
 
 import {
+  getModalData,
   listToTree,
   useLocalization,
   useLocalizationSerializer,
@@ -150,7 +143,7 @@ const formRules = reactive({
   }),
 });
 
-const [Modal, modalApi] = useVbenModal({
+const [Modal, modalApi] = useVbenModal<FeatureDefinitionDto>({
   class: 'w-1/2',
   draggable: true,
   fullscreenButton: false,
@@ -190,8 +183,7 @@ const [Modal, modalApi] = useVbenModal({
       });
       try {
         modalApi.setState({ loading: true });
-        const { groupName, name, parentName } =
-          modalApi.getData<FeatureDefinitionDto>();
+        const { groupName, name, parentName } = getModalData(modalApi);
         formModel.value.parentName = parentName;
         name && (await onGet(name));
         await Promise.all([onInitGroups(groupName), onInitProviders()]);
@@ -254,7 +246,7 @@ function onPropChange(prop: PropertyInfo) {
 }
 function onPropDelete(prop: PropertyInfo) {
   formModel.value.extraProperties ??= {};
-  delete formModel.value.extraProperties[prop.key];
+  Reflect.deleteProperty(formModel.value.extraProperties, prop.key);
 }
 function onValueTypeNameChange(valueTypeName: string) {
   valueTypeNameRef.value = valueTypeName;

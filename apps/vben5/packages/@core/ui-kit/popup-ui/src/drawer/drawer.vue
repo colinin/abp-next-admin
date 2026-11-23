@@ -3,6 +3,7 @@ import type { DrawerProps, ExtendedDrawerApi } from './drawer';
 
 import {
   computed,
+  onActivated,
   onDeactivated,
   provide,
   ref,
@@ -104,9 +105,14 @@ const {
 // );
 
 /**
- * 在开启keepAlive情况下 直接通过浏览器按钮/手势等返回 不会关闭弹窗
+ * 缓存页面失活时暂停展示，保留内容区域抽屉的打开状态。
  */
+onActivated(() => {
+  isDeactivated.value = false;
+});
+
 onDeactivated(() => {
+  isDeactivated.value = true;
   // 如果弹窗没有被挂载到内容区域，则关闭弹窗
   if (!appendToMain.value) {
     props.drawerApi?.close();
@@ -148,9 +154,7 @@ function handleFocusOutside(e: Event) {
 }
 
 const getAppendTo = computed(() => {
-  return appendToMain.value
-    ? `#${ELEMENT_ID_MAIN_CONTENT}>div:not(.absolute)>div`
-    : undefined;
+  return appendToMain.value ? `#${ELEMENT_ID_MAIN_CONTENT}` : undefined;
 });
 
 /**
@@ -159,43 +163,66 @@ const getAppendTo = computed(() => {
 // 是否打开过
 const hasOpened = ref(false);
 const isClosed = ref(true);
+const isDeactivated = ref(false);
+const isVisible = computed(() => state?.value?.isOpen && !isDeactivated.value);
+let pendingOpened = false;
+
 watch(
   () => state?.value?.isOpen,
   (value) => {
-    isClosed.value = false;
+    pendingOpened = !!value;
+    if (value) isClosed.value = false;
     if (value && !unref(hasOpened)) {
       hasOpened.value = true;
     }
   },
+  { immediate: true },
 );
 function handleClosed() {
   isClosed.value = true;
   props.drawerApi?.onClosed();
 }
+function handleOpened() {
+  requestAnimationFrame(() => {
+    // Restoring a cached drawer must not repeat its logical opening callback.
+    if (pendingOpened && !isDeactivated.value) {
+      pendingOpened = false;
+      props.drawerApi?.onOpened();
+    }
+  });
+}
 const getForceMount = computed(() => {
-  return !unref(destroyOnClose) && unref(hasOpened);
+  // While inactive, unmountOnHide preserves content outside the interaction layer.
+  return !isDeactivated.value && !unref(destroyOnClose) && unref(hasOpened);
 });
 </script>
 <template>
   <Sheet
     :modal="false"
-    :open="state?.isOpen"
+    :open="isVisible"
+    :unmount-on-hide="!isDeactivated || !hasOpened"
     @update:open="() => drawerApi?.close()"
   >
     <SheetContent
       :append-to="getAppendTo"
       :class="
-        cn('flex w-[520px] flex-col', drawerClass, {
-          '!w-full': isMobile || placement === 'bottom' || placement === 'top',
-          'max-h-[100vh]': placement === 'bottom' || placement === 'top',
-          hidden: isClosed,
-        })
+        cn(
+          'flex w-130 flex-col',
+          {
+            'w-full!':
+              isMobile || placement === 'bottom' || placement === 'top',
+            'max-h-screen': placement === 'bottom' || placement === 'top',
+            hidden: isClosed || isDeactivated,
+          },
+          drawerClass,
+        )
       "
       :modal="modal"
       :open="state?.isOpen"
       :side="placement"
       :z-index="zIndex"
       :force-mount="getForceMount"
+      :inactive="isDeactivated"
       :overlay-blur="overlayBlur"
       @close-auto-focus="handleFocusOutside"
       @closed="handleClosed"
@@ -203,14 +230,14 @@ const getForceMount = computed(() => {
       @focus-outside="handleFocusOutside"
       @interact-outside="interactOutside"
       @open-auto-focus="handerOpenAutoFocus"
-      @opened="() => drawerApi?.onOpened()"
+      @opened="handleOpened"
       @pointer-down-outside="pointerDownOutside"
     >
       <SheetHeader
         v-if="showHeader"
         :class="
           cn(
-            '!flex flex-row items-center justify-between border-b px-6 py-5',
+            'flex! flex-row items-center justify-between border-b px-6 py-5',
             headerClass,
             {
               'px-4 py-3': closable,
@@ -224,7 +251,7 @@ const getForceMount = computed(() => {
             v-if="closable && closeIconPlacement === 'left'"
             as-child
             :disabled="submitting"
-            class="ml-[2px] cursor-pointer rounded-full opacity-80 transition-opacity hover:opacity-100 focus:outline-none disabled:pointer-events-none data-[state=open]:bg-secondary"
+            class="ml-0.5 cursor-pointer rounded-full opacity-80 transition-opacity hover:opacity-100 focus:outline-hidden disabled:pointer-events-none data-[state=open]:bg-secondary"
           >
             <slot name="close-icon">
               <VbenIconButton>
@@ -234,7 +261,7 @@ const getForceMount = computed(() => {
           </SheetClose>
           <Separator
             v-if="closable && closeIconPlacement === 'left'"
-            class="ml-1 mr-2 h-8"
+            class="mr-2 ml-1 h-8"
             decorative
             orientation="vertical"
           />
@@ -265,7 +292,7 @@ const getForceMount = computed(() => {
             v-if="closable && closeIconPlacement === 'right'"
             as-child
             :disabled="submitting"
-            class="ml-[2px] cursor-pointer rounded-full opacity-80 transition-opacity hover:opacity-100 focus:outline-none disabled:pointer-events-none data-[state=open]:bg-secondary"
+            class="ml-0.5 cursor-pointer rounded-full opacity-80 transition-opacity hover:opacity-100 focus:outline-hidden disabled:pointer-events-none data-[state=open]:bg-secondary"
           >
             <slot name="close-icon">
               <VbenIconButton>
@@ -311,7 +338,7 @@ const getForceMount = computed(() => {
             @click="() => drawerApi?.onCancel()"
           >
             <slot name="cancelText">
-              {{ cancelText || $t('cancel') }}
+              {{ cancelText || $t('common.cancel') }}
             </slot>
           </component>
           <slot name="center-footer"></slot>
@@ -322,7 +349,7 @@ const getForceMount = computed(() => {
             @click="() => drawerApi?.onConfirm()"
           >
             <slot name="confirmText">
-              {{ confirmText || $t('confirm') }}
+              {{ confirmText || $t('common.confirm') }}
             </slot>
           </component>
         </slot>

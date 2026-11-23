@@ -64,7 +64,9 @@ watch(
     await nextTick();
     const oldValue = editor?.getValue();
     if (value !== oldValue) {
-      const jsonVal = isNullOrWhiteSpace(value) ? '' : JSON.stringify(JSON.parse(value), null, 2);
+      const jsonVal = isNullOrWhiteSpace(value)
+        ? ''
+        : JSON.stringify(JSON.parse(value), null, 2);
       editor?.setValue(jsonVal || '');
       setTimeout(refresh, 50);
     }
@@ -107,7 +109,12 @@ async function init() {
     ...props.options,
   };
 
-  editor = CodeMirror(el.value!, {
+  const elValue = el.value;
+  if (!elValue) {
+    return;
+  }
+
+  editor = CodeMirror(elValue, {
     fixedGutter: true,
     lineNumbers: true,
     lineWrapping: true,
@@ -129,7 +136,7 @@ async function init() {
 onMounted(async () => {
   await nextTick();
   init();
-  useWindowSizeFn<void>(debounceRefresh);
+  useWindowSizeFn(debounceRefresh);
 });
 
 onUnmounted(() => {

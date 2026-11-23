@@ -11,9 +11,7 @@ import { useRequireFeaturesSimpleStateChecker } from './SimpleStateChecking/useR
 import { useRequireGlobalFeaturesSimpleStateChecker } from './SimpleStateChecking/useRequireGlobalFeaturesSimpleStateChecker';
 import { useRequirePermissionsSimpleStateChecker } from './SimpleStateChecking/useRequirePermissionsSimpleStateChecker';
 
-export function useSimpleStateCheck<
-  TState extends IHasSimpleStateCheckers<TState>,
->(): ISimpleStateCheckerSerializer {
+export function useSimpleStateCheck(): ISimpleStateCheckerSerializer {
   function deserialize<TState extends IHasSimpleStateCheckers<TState>>(
     jsonObject: any,
     state: TState,

@@ -4,7 +4,11 @@ import type { HeadConfig } from 'vitepress';
 import { resolve } from 'node:path';
 
 import {
+  injectCssLayerOrder,
+  THIRD_PARTY_CSS_LAYER_RULES,
   viteArchiverPlugin,
+  viteCssLayerPlugin,
+  viteDayjsPlugin,
   viteVxeTableImportsPlugin,
 } from '@vben/vite-config';
 
@@ -12,7 +16,7 @@ import {
   GitChangelog,
   GitChangelogMarkdownSection,
 } from '@nolebase/vitepress-plugin-git-changelog/vite';
-import tailwind from 'tailwindcss';
+import tailwindcss from '@tailwindcss/vite';
 import { defineConfig, postcssIsolateStyles } from 'vitepress';
 import {
   groupIconMdPlugin,
@@ -29,6 +33,13 @@ export const shared = defineConfig({
     preConfig(md) {
       md.use(demoPreviewPlugin);
       md.use(groupIconMdPlugin);
+    },
+    // VitePress 2 alpha 会把 code fence 套两层，导致两个复制按钮；只拆掉重复外壳。
+    config(md) {
+      const fence = md.renderer.rules.fence;
+      if (!fence) return;
+      md.renderer.rules.fence = (...args) =>
+        unwrapDuplicateCodeFence(fence(...args));
     },
   },
   pwa: pwa(),
@@ -50,6 +61,8 @@ export const shared = defineConfig({
     ],
   },
   title: 'Vben Admin',
+  // VitePress 构建自行生成 HTML，需在其构建钩子中补上最前置的层序声明。
+  transformHtml: injectCssLayerOrder,
   vite: {
     build: {
       chunkSizeWarningLimit: Infinity,
@@ -57,14 +70,11 @@ export const shared = defineConfig({
     },
     css: {
       postcss: {
-        plugins: [
-          tailwind(),
-          postcssIsolateStyles({ includeFiles: [/vp-doc\.css/] }),
-        ],
+        plugins: [postcssIsolateStyles({ includeFiles: [/vp-doc\.css/] })],
       },
       preprocessorOptions: {
         scss: {
-          api: 'modern',
+          // api: 'modern',
         },
       },
     },
@@ -72,6 +82,11 @@ export const shared = defineConfig({
       stringify: true,
     },
     plugins: [
+      viteDayjsPlugin(),
+      tailwindcss(),
+      // 第三方库样式（vxe / tippy.js / vue-json-pretty）包入 vxe / lib 层，
+      // 使 Tailwind 工具类可覆盖；层序声明见 @vben/tailwind-config 的 theme.css
+      viteCssLayerPlugin(THIRD_PARTY_CSS_LAYER_RULES),
       GitChangelog({
         mapAuthors: [
           {
@@ -87,9 +102,23 @@ export const shared = defineConfig({
             name: 'Li Kui',
             username: 'likui628',
           },
+          {
+            mapByNameAliases: ['Jin Mao', 'jinmao'],
+            name: 'Jin Mao',
+            username: 'jinmao88',
+          },
+          {
+            name: 'Netfan',
+            username: 'mynetfan',
+          },
+          {
+            mapByNameAliases: ['xingyu4j', 'xingyu'],
+            name: 'xingyu4j',
+            username: 'xingyu4j',
+          },
         ],
         repoURL: () => 'https://github.com/vbenjs/vue-vben-admin',
-      }),
+      }) as any,
       GitChangelogMarkdownSection(),
       viteArchiverPlugin({ outputDir: '.vitepress' }),
       groupIconVitePlugin(),
@@ -105,6 +134,7 @@ export const shared = defineConfig({
 
     ssr: {
       external: ['@vue/repl'],
+      noExternal: ['@v-c/picker'],
     },
   },
 });
@@ -115,7 +145,7 @@ function head(): HeadConfig[] {
     [
       'meta',
       {
-        content: 'vben, vitejs, vite, shacdn-ui, vue',
+        content: 'vben, vitejs, vite, shadcn-ui, vue',
         name: 'keywords',
       },
     ],
@@ -169,4 +199,11 @@ function pwa(): PwaOptions {
       maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
     },
   };
+}
+
+function unwrapDuplicateCodeFence(html: string): string {
+  const nested = html.match(
+    /^<div class="language-[^"]*"><button[^>]*\sclass="copy"[^>]*><\/button><span class="lang">[^<]*<\/span>(<div class="language-[^"]*"[\s\S]*)<\/div>\s*$/,
+  );
+  return nested?.[1] ?? html;
 }

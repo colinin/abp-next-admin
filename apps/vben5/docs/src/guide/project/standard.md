@@ -5,9 +5,9 @@
 - 如果你想向项目贡献代码，请确保你的代码符合项目的代码规范。
 - 如果你使用的是 `vscode`，需要安装以下插件：
   - [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) - 脚本代码检查
-  - [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) - 代码格式化
+  - [Oxc](https://marketplace.visualstudio.com/items?itemName=oxc.oxc-vscode) - Oxlint / Oxfmt 集成
   - [Code Spell Checker](https://marketplace.visualstudio.com/items?itemName=streetsidesoftware.code-spell-checker) - 单词语法检查
-  - [Stylelint](https://marketplace.visualstudio.com/items?itemName=stylelint.vscode-stylelint) - css 格式化
+  - [Stylelint](https://marketplace.visualstudio.com/items?itemName=stylelint.vscode-stylelint) - CSS 格式检查
 
 :::
 
@@ -23,59 +23,88 @@
 
 ## 工具
 
-项目的配置文件位于 `internal/lint-configs` 下，你可以在这里修改各种lint的配置。
+项目的配置文件位于 `internal/lint-configs` 下，你可以在这里修改各种 lint 的配置。
 
 项目内集成了以下几种代码校验工具：
 
-- [ESLint](https://eslint.org/) 用于 JavaScript 代码检查
+- [Oxfmt](https://oxc.rs/docs/guide/usage/formatter.html) 用于代码格式化
+- [Oxlint](https://oxc.rs/docs/guide/usage/linter.html) + [tsgolint](https://www.npmjs.com/package/oxlint-tsgolint) 用于 JavaScript / TypeScript 代码检查（含类型感知规则）
+- [ESLint](https://eslint.org/) 用于 Vue、JSONC、YAML 等规则检查
 - [Stylelint](https://stylelint.io/) 用于 CSS 样式检查
-- [Prettier](https://prettier.io/) 用于代码格式化
 - [Commitlint](https://commitlint.js.org/) 用于检查 git 提交信息的规范
 - [Publint](https://publint.dev/) 用于检查 npm 包的规范
 - [Cspell](https://cspell.org/) 用于检查拼写错误
 - [lefthook](https://github.com/evilmartians/lefthook) 用于管理 Git hooks，在提交前自动运行代码校验和格式化
 
-## ESLint
+## Oxfmt
 
-ESLint 是一个代码规范和错误检查工具，用于识别和报告 TypeScript 代码中的语法错误。
+Oxfmt 用于统一项目代码风格，统一缩进、引号、尾逗号等格式。
 
 ### 命令
 
 ```bash
-pnpm eslint .
+pnpm oxfmt
+pnpm oxfmt --check
 ```
 
 ### 配置
 
-eslint 配置文件为 `eslint.config.mjs`，其核心配置放在`internal/lint-configs/eslint-config`目录下，可以根据项目需求进行修改。
+Oxfmt 的根目录入口文件为 `oxfmt.config.ts`，其核心配置位于 `internal/lint-configs/oxfmt-config` 目录下，可以根据项目需求进行修改。
+
+## Oxlint
+
+Oxlint 是当前仓库的主要脚本 lint 工具，用于识别和报告 JavaScript / TypeScript 代码中的问题。
+
+### 类型感知规则
+
+Oxlint 通过 `oxlint-tsgolint`（基于 TypeScript 的 Go 实现）提供类型感知规则，
+覆盖 `@typescript-eslint` 类型感知规则的大部分能力（如 `no-floating-promises`、
+`unbound-method`、`no-unnecessary-type-assertion` 等）。
+
+类型感知通道由根配置的 `options.typeAware` 统一开启，所有 CLI 入口
+（lefthook、vsh lint）不再传 `--type-aware` 参数，配置即单一真源。
+
+### 命令
+
+```bash
+pnpm oxlint
+pnpm oxlint --fix
+```
+
+### 配置
+
+Oxlint 的核心配置位于 `internal/lint-configs/oxlint-config` 目录下，根目录入口文件为 `oxlint.config.ts`。
+
+## ESLint
+
+ESLint 用于补充 Vue、JSONC、YAML 等规则检查。
+
+Oxlint 已覆盖的规则由 `eslint-plugin-oxlint` 官方桥接自动置为 `off`
+（读取 oxlint 根配置自动生成关闭清单），无需手工维护两份规则映射。
+
+### 命令
+
+```bash
+pnpm eslint . --cache
+```
+
+### 配置
+
+ESLint 配置文件为 `eslint.config.mjs`，其核心配置放在 `internal/lint-configs/eslint-config` 目录下，可以根据项目需求进行修改。
 
 ## Stylelint
 
-Stylelint 用于校验项目内部 css 的风格,加上编辑器的自动修复，可以很好的统一项目内部 css 风格
+Stylelint 用于校验项目内部 CSS 的风格，加上编辑器的自动修复，可以很好的统一项目内部 CSS 风格。
 
 ### 命令
 
 ```bash
-pnpm stylelint "**/*.{vue,css,less.scss}"
+pnpm stylelint "**/*.{vue,css,less,scss}" --cache
 ```
 
 ### 配置
 
-Stylelint 配置文件为 `stylelint.config.mjs`，其核心配置放在`internal/lint-configs/stylelint-config`目录下，可以根据项目需求进行修改。
-
-## Prettier
-
-Prettier 可以用于统一项目代码风格，统一的缩进，单双引号，尾逗号等等风格
-
-### 命令
-
-```bash
-pnpm prettier .
-```
-
-### 配置
-
-Prettier 配置文件为 `.prettier.mjs`，其核心配置放在`internal/lint-configs/prettier-config`目录下，可以根据项目需求进行修改。
+Stylelint 配置文件为 `stylelint.config.mjs`，其核心配置放在 `internal/lint-configs/stylelint-config` 目录下，可以根据项目需求进行修改。
 
 ## CommitLint
 
@@ -83,26 +112,26 @@ Prettier 配置文件为 `.prettier.mjs`，其核心配置放在`internal/lint-c
 
 ### 配置
 
-CommitLint 配置文件为 `.commitlintrc.mjs`，其核心配置放在`internal/lint-configs/commitlint-config`目录下，可以根据项目需求进行修改。
+CommitLint 配置文件为 `.commitlintrc.js`，其核心配置放在 `internal/lint-configs/commitlint-config` 目录下，可以根据项目需求进行修改。
 
 ### Git 提交规范
 
 参考 [Angular](https://github.com/conventional-changelog/conventional-changelog/tree/master/packages/conventional-changelog-angular)
 
 - `feat` 增加新功能
-- `fix` 修复问题/BUG
+- `fix` 修复问题 / BUG
 - `style` 代码风格相关无影响运行结果的
-- `perf` 优化/性能提升
+- `perf` 优化 / 性能提升
 - `refactor` 重构
 - `revert` 撤销修改
 - `test` 测试相关
-- `docs` 文档/注释
-- `chore` 依赖更新/脚手架配置修改等
+- `docs` 文档 / 注释
+- `chore` 依赖更新 / 脚手架配置修改等
 - `workflow` 工作流改进
 - `ci` 持续集成
 - `types` 类型修改
 
-### 关闭Git提交规范检查
+### 关闭 Git 提交规范检查
 
 如果你想关闭 Git 提交规范检查，有两种方式：
 
@@ -112,21 +141,29 @@ CommitLint 配置文件为 `.commitlintrc.mjs`，其核心配置放在`internal/
 git commit -m 'feat: add home page' --no-verify
 ```
 
-```bash [永久关闭]
-# 在 .husky/commit-msg 内注释以下代码即可
-pnpm exec commitlint --edit "$1" # [!code --]
+```yaml [长期关闭]
+commit-msg:
+  commands:
+    # commitlint:
+    #   run: pnpm exec commitlint --edit $1
 ```
 
 :::
 
+如果修改了 `lefthook.yml`，请重新执行：
+
+```bash
+pnpm exec lefthook install
+```
+
 ## Publint
 
-Publint 是一个用于检查 npm 包的规范的工具，可以检查包的版本号是否符合规范，是否符合标准的 ESM 规范包等等。
+Publint 是一个用于检查 npm 包规范的工具，可以检查包的版本号、导出方式以及 ESM 包结构等问题。
 
 ### 命令
 
 ```bash
-pnpm vsh publint
+pnpm publint
 ```
 
 ## Cspell
@@ -136,7 +173,7 @@ Cspell 是一个用于检查拼写错误的工具，可以检查代码中的拼�
 ### 命令
 
 ```bash
-pnpm cspell lint \"**/*.ts\"  \"**/README.md\" \".changeset/*.md\" --no-progress
+pnpm check:cspell
 ```
 
 ### 配置
@@ -145,47 +182,47 @@ cspell 配置文件为 `cspell.json`，可以根据项目需求进行修改。
 
 ## Git Hook
 
-git hook 一般结合各种 lint，在 git 提交代码的时候进行代码风格校验，如果校验没通过，则不会进行提交。需要开发者自行修改后再次进行提交
+git hook 一般结合各种 lint，在 git 提交代码的时候进行代码风格校验，如果校验没通过，则不会进行提交。需要开发者自行修改后再次进行提交。
 
 ### lefthook
 
 有一个问题就是校验会校验全部代码，但是我们只想校验我们自己提交的代码，这个时候就可以使用 lefthook。
 
-最有效的解决方案就是将 Lint 校验放到本地，常见做法是使用 lefthook 在本地提交之前先做一次 Lint 校验。
+最有效的解决方案就是将 lint 校验放到本地，常见做法是使用 lefthook 在本地提交之前先做一次 lint 校验。
 
 项目在 `lefthook.yml` 内部定义了相应的 hooks：
 
-- `pre-commit`: 在提交前运行，用于代码格式化和检查
-  - `code-workspace`: 更新 VSCode 工作区配置
-  - `lint-md`: 格式化 Markdown 文件
-  - `lint-vue`: 格式化并检查 Vue 文件
-  - `lint-js`: 格式化并检查 JavaScript/TypeScript 文件
-  - `lint-style`: 格式化并检查样式文件
-  - `lint-package`: 格式化 package.json
-  - `lint-json`: 格式化其他 JSON 文件
-
+- `pre-commit`: 在提交前运行，仅对暂存文件做格式化与检查（秒级）
+  - `oxlint`: 检查并修复 JavaScript / TypeScript 文件（含类型感知规则）
+  - `oxfmt`: 格式化 JavaScript / TypeScript / JSON / Markdown 文件
+  - `eslint`: 补充检查并修复脚本文件（Vue、JSONC、YAML 等）
+  - `stylelint`: 检查并修复样式文件
+- `pre-push`: 在推送前运行全仓类型检查（除 `tsconfig`、`commitlint-config`、`stylelint-config` 三个纯配置包外，所有 workspace 包均已声明 `typecheck` 脚本）
+  - `typecheck`: 运行 `pnpm check:type`（turbo 缓存命中时秒级返回）
 - `post-merge`: 在合并后运行，用于自动安装依赖
   - `install`: 运行 `pnpm install` 安装新依赖
-
 - `commit-msg`: 在提交时运行，用于检查提交信息格式
   - `commitlint`: 使用 commitlint 检查提交信息
 
+当前 hooks 可通过以下命令安装：
+
+```bash
+pnpm exec lefthook install
+```
+
 #### 如何关闭 lefthook
 
-如果你想关闭 lefthook，有两种方式：
+如果你想临时关闭 lefthook，可以使用：
 
-::: code-group
-
-```bash [临时关闭]
+```bash
 git commit -m 'feat: add home page' --no-verify
 ```
 
-```bash [永久关闭]
-# 删除 lefthook.yml 文件即可
-rm lefthook.yml
-```
+如果想跳过推送前的全量类型检查，可以使用：
 
-:::
+```bash
+LEFTHOOK=0 git push
+```
 
 #### 如何修改 lefthook 配置
 
@@ -193,18 +230,17 @@ rm lefthook.yml
 
 ```yaml
 pre-commit:
-  parallel: true # 并行执行任务
-  jobs:
-    - name: lint-js
-      run: pnpm prettier --cache --ignore-unknown --write {staged_files}
+  parallel: true
+  commands:
+    lint-js:
+      run: pnpm oxfmt {staged_files} && pnpm oxlint --fix {staged_files} && pnpm eslint --cache --fix {staged_files}
       glob: '*.{js,jsx,ts,tsx}'
 ```
 
 其中：
 
 - `parallel`: 是否并行执行任务
-- `jobs`: 定义要执行的任务列表
-- `name`: 任务名称
+- `commands`: 定义要执行的任务列表
 - `run`: 要执行的命令
 - `glob`: 匹配的文件模式
 - `{staged_files}`: 表示暂存的文件列表

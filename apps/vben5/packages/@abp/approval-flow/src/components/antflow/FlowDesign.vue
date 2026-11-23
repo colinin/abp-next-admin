@@ -74,7 +74,7 @@ const canZoomIn = computed(() => scale.value < MAX_SCALE);
 const canZoomOut = computed(() => scale.value > MIN_SCALE);
 
 function cloneNode<T>(value: T): T {
-  // eslint-disable-next-line unicorn/prefer-structured-clone
+  // oxlint-disable-next-line unicorn/prefer-structured-clone
   return JSON.parse(JSON.stringify(value)) as T;
 }
 

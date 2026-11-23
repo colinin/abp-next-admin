@@ -17,7 +17,7 @@ export function listToTree<T = any>(
   list: any[],
   config: Partial<TreeHelperConfig> = {},
 ): T[] {
-  const conf = getConfig(config) as TreeHelperConfig;
+  const conf = getConfig(config);
   const map: { [key: string]: any } = {};
   const roots: any[] = [];
   const { id, pid, children } = conf;

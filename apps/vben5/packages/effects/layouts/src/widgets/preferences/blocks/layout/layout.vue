@@ -89,14 +89,14 @@ function activeClass(theme: string): string[] {
   <div class="flex w-full flex-wrap gap-5">
     <template v-for="theme in PRESET" :key="theme.name">
       <div
-        class="flex w-[100px] cursor-pointer flex-col"
+        class="flex w-25 cursor-pointer flex-col"
         @click="modelValue = theme.type"
       >
         <div :class="activeClass(theme.type)" class="outline-box flex-center">
           <component :is="components[theme.type]" />
         </div>
         <div
-          class="text-muted-foreground flex-center hover:text-foreground mt-2 text-center text-xs"
+          class="mt-2 flex-center text-center text-xs text-muted-foreground hover:text-foreground"
         >
           {{ theme.name }}
           <VbenTooltip v-if="theme.tip" side="bottom">

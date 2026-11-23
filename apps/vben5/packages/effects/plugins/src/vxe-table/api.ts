@@ -1,8 +1,13 @@
 import type { VxeGridInstance } from 'vxe-table';
 
-import type { ExtendedFormApi } from '@vben-core/form-ui';
+import type {
+  BaseFormComponentType,
+  ExtendedFormApi,
+  FormValues,
+} from '@vben-core/form-ui';
 
 import type { VxeGridProps } from './types';
+import type { ViewedRowHelper } from './viewed-row';
 
 import { toRaw } from 'vue';
 
@@ -18,47 +23,104 @@ import {
 function getDefaultState(): VxeGridProps {
   return {
     class: '',
+    formClass: '',
     gridClass: '',
     gridOptions: {},
     gridEvents: {},
     formOptions: undefined,
+    segmented: false,
     showSearchForm: true,
   };
 }
 
-export class VxeGridApi<T extends Record<string, any> = any> {
-  public formApi = {} as ExtendedFormApi;
+export class VxeGridApi<
+  T extends Record<string, any> = any,
+  D extends BaseFormComponentType = BaseFormComponentType,
+  P extends Record<string, any> = Record<string, never>,
+  TFormValues extends FormValues = FormValues,
+  TSubmitValues extends FormValues = TFormValues,
+> {
+  public formApi = {} as ExtendedFormApi<TFormValues, D, P, TSubmitValues>;
 
   // private prevState: null | VxeGridProps = null;
   public grid = {} as VxeGridInstance<T>;
-  public state: null | VxeGridProps<T> = null;
+  public state: null | VxeGridProps<T, D, P, TFormValues, TSubmitValues> = null;
 
-  public store: Store<VxeGridProps<T>>;
+  public store: Store<VxeGridProps<T, D, P, TFormValues, TSubmitValues>>;
+
+  /**
+   * 已读行 helper（在 mount 中初始化，业务能力全部封装在 useViewedRow 中）
+   */
+  public viewedRowHelper: null | ViewedRowHelper<T> = null;
 
   private isMounted = false;
 
   private stateHandler: StateHandler;
 
-  constructor(options: VxeGridProps = {}) {
+  constructor(options: VxeGridProps<T, D, P, TFormValues, TSubmitValues> = {}) {
     const storeState = { ...options };
 
     const defaultState = getDefaultState();
-    this.store = new Store<VxeGridProps>(
-      mergeWithArrayOverride(storeState, defaultState),
-      {
-        onUpdate: () => {
-          // this.prevState = this.state;
-          this.state = this.store.state;
-        },
-      },
+    this.store = new Store<VxeGridProps<T, D, P, TFormValues, TSubmitValues>>(
+      mergeWithArrayOverride(storeState, defaultState) as VxeGridProps<
+        T,
+        D,
+        P,
+        TFormValues,
+        TSubmitValues
+      >,
     );
+
+    this.store.subscribe((state) => {
+      // this.prevState = this.state;
+      this.state = state;
+    });
 
     this.state = this.store.state;
     this.stateHandler = new StateHandler();
     bindMethods(this);
   }
 
-  mount(instance: null | VxeGridInstance, formApi: ExtendedFormApi) {
+  /**
+   * 清除所有已读状态
+   */
+  clearViewedRows() {
+    this.viewedRowHelper?.clearViewed();
+  }
+
+  /**
+   * 获取所有已读的 key 集合（返回副本，避免外部修改内部状态）
+   */
+  getViewedKeys(): Set<number | string> {
+    const raw = this.viewedRowHelper?.viewedSet.value;
+    return raw ? new Set(raw) : new Set();
+  }
+
+  /**
+   * 判断某行是否已读
+   */
+  isRowViewed(record: T): boolean {
+    return this.viewedRowHelper?.isViewed(record) ?? false;
+  }
+
+  /**
+   * 批量标记行为已读
+   */
+  markKeysAsViewed(keys: Array<number | string>) {
+    this.viewedRowHelper?.markKeysAsViewed(keys);
+  }
+
+  /**
+   * 标记某行为已读
+   */
+  markRowAsViewed(record: T) {
+    this.viewedRowHelper?.markAsViewed(record);
+  }
+
+  mount(
+    instance: null | VxeGridInstance,
+    formApi: ExtendedFormApi<TFormValues, D, P, TSubmitValues>,
+  ) {
     if (!this.isMounted && instance) {
       this.grid = instance;
       this.formApi = formApi;
@@ -83,7 +145,18 @@ export class VxeGridApi<T extends Record<string, any> = any> {
     }
   }
 
-  setGridOptions(options: Partial<VxeGridProps['gridOptions']>) {
+  /**
+   * 移除指定 key 的已读状态
+   */
+  removeViewedKeys(keys: Array<number | string>) {
+    this.viewedRowHelper?.removeKeys(keys);
+  }
+
+  setGridOptions(
+    options: Partial<
+      VxeGridProps<T, D, P, TFormValues, TSubmitValues>['gridOptions']
+    >,
+  ) {
     this.setState({
       gridOptions: options,
     });
@@ -99,8 +172,10 @@ export class VxeGridApi<T extends Record<string, any> = any> {
 
   setState(
     stateOrFn:
-      | ((prev: VxeGridProps<T>) => Partial<VxeGridProps<T>>)
-      | Partial<VxeGridProps<T>>,
+      | ((
+          prev: VxeGridProps<T, D, P, TFormValues, TSubmitValues>,
+        ) => Partial<VxeGridProps<T, D, P, TFormValues, TSubmitValues>>)
+      | Partial<VxeGridProps<T, D, P, TFormValues, TSubmitValues>>,
   ) {
     if (isFunction(stateOrFn)) {
       this.store.setState((prev) => {
@@ -124,5 +199,6 @@ export class VxeGridApi<T extends Record<string, any> = any> {
   unmount() {
     this.isMounted = false;
     this.stateHandler.reset();
+    this.viewedRowHelper = null;
   }
 }

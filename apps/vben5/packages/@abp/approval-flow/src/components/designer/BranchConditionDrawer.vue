@@ -149,7 +149,7 @@ function save() {
 
   const expression =
     expressions.length === 1
-      ? expressions[0]!
+      ? (expressions[0] ?? '')
       : expressions
           .map((item) => `(${item})`)
           .join(logic.value === 'and' ? ' && ' : ' || ');

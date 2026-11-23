@@ -1,16 +1,25 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 /**
  * @description: base64 to blob
  */
 export function dataURLtoBlob(base64Buf: string): Blob {
   const arr = base64Buf.split(',');
+  if (arr.length !== 2) {
+    throw new Error('The string is not in a valid Base64 encoding format.');
+  }
   const typeItem = arr[0];
+  const data = arr[1];
+  if (!data) {
+    throw new Error('The string is not in a valid Base64 encoding format.');
+  }
   const mime = typeItem?.match(/:(.*?);/)?.[1];
-  const bstr = window.atob(arr[1]!);
+  const bstr = window.atob(data);
   let n = bstr.length;
   const u8arr = new Uint8Array(n);
   while (n--) {
-    u8arr[n] = bstr.codePointAt(n)!;
+    const point = bstr.codePointAt(n);
+    if (point) {
+      u8arr[n] = point;
+    }
   }
   return new Blob([u8arr], { type: mime });
 }
@@ -22,7 +31,7 @@ export function dataURLtoBlob(base64Buf: string): Blob {
 export function urlToBase64(url: string, mineType?: string): Promise<string> {
   return new Promise((resolve, reject) => {
     let canvas = document.createElement('CANVAS') as HTMLCanvasElement | null;
-    const ctx = canvas!.getContext('2d');
+    const ctx = canvas?.getContext('2d');
 
     const img = new Image();
     img.crossOrigin = '';

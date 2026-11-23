@@ -18,7 +18,7 @@ const routes: RouteRecordRaw[] = [
           title: $t('demos.naive'),
         },
         name: 'NaiveDemos',
-        path: '/demos/naive',
+        path: 'naive',
         component: () => import('#/views/demos/naive/index.vue'),
       },
       {
@@ -26,7 +26,7 @@ const routes: RouteRecordRaw[] = [
           title: $t('demos.table'),
         },
         name: 'Table',
-        path: '/demos/table',
+        path: 'table',
         component: () => import('#/views/demos/table/index.vue'),
       },
       {
@@ -34,8 +34,16 @@ const routes: RouteRecordRaw[] = [
           title: $t('demos.form'),
         },
         name: 'Form',
-        path: '/demos/form',
+        path: 'form',
         component: () => import('#/views/demos/form/basic.vue'),
+      },
+      {
+        meta: {
+          title: $t('demos.arrayForm'),
+        },
+        name: 'ArrayForm',
+        path: 'array-form',
+        component: () => import('#/views/demos/naive/array-form/index.vue'),
       },
     ],
   },

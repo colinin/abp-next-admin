@@ -13,6 +13,7 @@ import { computed, defineAsyncComponent, ref } from 'vue';
 import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
+import { getModalData } from '@abp/core';
 import {
   Button,
   Card,
@@ -87,7 +88,7 @@ const getPermissionNodeState = computed(() => {
 });
 
 const { cancel, getApi, updateApi } = usePermissionsApi();
-const [Modal, modalApi] = useVbenModal({
+const [Modal, modalApi] = useVbenModal<ModalState>({
   centered: true,
   class: 'w-1/2',
   closeOnClickModal: false,
@@ -106,8 +107,11 @@ const [Modal, modalApi] = useVbenModal({
       modalApi.setState({
         submitting: true,
       });
-      const providerName = modelState.value!.providerName;
-      const providerKey = modelState.value!.providerKey;
+      const state = modelState.value;
+      if (!state) {
+        return;
+      }
+      const { providerKey, providerName } = state;
       await updateApi(
         {
           providerKey,
@@ -130,7 +134,7 @@ const [Modal, modalApi] = useVbenModal({
     permissionTree.value = [];
     modelState.value = undefined;
     if (isOpen) {
-      const state = modalApi.getData<ModalState>();
+      const state = getModalData(modalApi);
       modelState.value = state;
       modalApi.setState({
         confirmLoading: true,

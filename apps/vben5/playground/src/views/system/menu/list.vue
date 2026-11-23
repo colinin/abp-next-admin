@@ -10,7 +10,7 @@ import { $t } from '@vben/locales';
 
 import { MenuBadge } from '@vben-core/menu-ui';
 
-import { Button, message } from 'ant-design-vue';
+import { Button, message } from 'antdv-next';
 
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
 import { deleteMenu, getMenuList, SystemMenuApi } from '#/api/system/menu';
@@ -122,7 +122,7 @@ function onDelete(row: SystemMenuApi.SystemMenu) {
       </template>
       <template #title="{ row }">
         <div class="flex w-full items-center gap-1">
-          <div class="size-5 flex-shrink-0">
+          <div class="size-5 shrink-0">
             <IconifyIcon
               v-if="row.type === 'button'"
               icon="carbon:security"

@@ -13,8 +13,7 @@ interface PermissionDefinitionCreateOrUpdateDto extends IHasExtraProperties {
   stateCheckers: string;
 }
 
-interface PermissionDefinitionCreateDto
-  extends PermissionDefinitionCreateOrUpdateDto {
+interface PermissionDefinitionCreateDto extends PermissionDefinitionCreateOrUpdateDto {
   groupName: string;
   name: string;
 }

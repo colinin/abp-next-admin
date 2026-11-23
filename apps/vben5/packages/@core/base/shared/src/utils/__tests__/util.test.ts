@@ -23,8 +23,9 @@ describe('bindMethods', () => {
   it('should bind methods to the instance correctly', () => {
     const instance = new TestClass('initial');
 
-    // 解构方法
-    const { getValue } = instance;
+    // bindMethods 在运行时为方法补上实例绑定；unbound-method 是静态规则，
+    // 看不到动态绑定，这里收窄成"可独立调用"的形状，运行时行为由断言验证。
+    const { getValue } = instance as { getValue: () => string };
 
     // 检查 getValue 是否能正确调用，并且 this 绑定了 instance
     expect(getValue()).toBe('initial');
@@ -33,7 +34,10 @@ describe('bindMethods', () => {
   it('should bind multiple methods', () => {
     const instance = new TestClass('initial');
 
-    const { getValue, setValue } = instance;
+    const { getValue, setValue } = instance as {
+      getValue: () => string;
+      setValue: (value: string) => void;
+    };
 
     // 检查 getValue 和 setValue 方法是否正确绑定了 this
     setValue('newValue');
@@ -138,8 +142,10 @@ describe('getNestedValue', () => {
     expect(result).toBe(2);
   });
 
-  it('should return the entire object if path is empty', () => {
-    expect(() => getNestedValue(data, '')()).toThrow();
+  it('should throw if path is empty', () => {
+    expect(() => getNestedValue(data, '')).toThrow(
+      'Path must be a non-empty string',
+    );
   });
 
   it('should handle paths with array indexes', () => {

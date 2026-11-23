@@ -84,10 +84,11 @@ watch(
 
 function handleResourceChange(value?: string, triggerChanged?: boolean) {
   state.displayNames = [];
-  const resources = abpStore.localization!.resources;
-  if (value && resources[value]) {
-    state.displayNames = Object.keys(resources[value].texts).map((key) => {
-      const labelText = resources[value]?.texts[key];
+  const resources = abpStore.localization?.resources;
+  const resource = value ? resources?.[value] : undefined;
+  if (resource) {
+    state.displayNames = Object.keys(resource.texts).map((key) => {
+      const labelText = resource.texts[key];
       return {
         label: labelText ?? key,
         value: key,

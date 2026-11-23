@@ -8,23 +8,32 @@ import type {
 } from '../typing';
 
 import viteVueI18nPlugin from '@intlify/unplugin-vue-i18n/vite';
+import tailwindcss from '@tailwindcss/vite';
 import viteVue from '@vitejs/plugin-vue';
 import viteVueJsx from '@vitejs/plugin-vue-jsx';
 import { visualizer as viteVisualizerPlugin } from 'rollup-plugin-visualizer';
+import viteDtsPlugin from 'unplugin-dts/vite';
 import viteCompressPlugin from 'vite-plugin-compression';
-import viteDtsPlugin from 'vite-plugin-dts';
-import { createHtmlPlugin as viteHtmlPlugin } from 'vite-plugin-html';
 import { VitePWA } from 'vite-plugin-pwa';
 import viteVueDevTools from 'vite-plugin-vue-devtools';
 
 import { viteArchiverPlugin } from './archiver';
+import {
+  injectCssLayerOrder,
+  THIRD_PARTY_CSS_LAYER_RULES,
+  viteCssLayerPlugin,
+} from './css-layer';
+import { viteDayjsPlugin } from './dayjs';
 import { viteExtraAppConfigPlugin } from './extra-app-config';
+import { viteFormFieldSlotMigrationWarningPlugin } from './form-field-slot-migration-warning';
+import { viteHtmlPlugin } from './html';
 import { viteImportMapPlugin } from './importmap';
 import { viteInjectAppLoadingPlugin } from './inject-app-loading';
 import { viteMetadataPlugin } from './inject-metadata';
 import { viteLicensePlugin } from './license';
 import { viteNitroMockPlugin } from './nitro-mock';
 import { vitePrintPlugin } from './print';
+import { viteTailwindReferencePlugin } from './tailwind-reference';
 import { viteVxeTableImportsPlugin } from './vxe-table';
 
 /**
@@ -60,6 +69,8 @@ async function loadCommonPlugins(
           },
         }),
         viteVueJsx(),
+        viteTailwindReferencePlugin(),
+        tailwindcss(),
       ],
     },
 
@@ -73,11 +84,13 @@ async function loadCommonPlugins(
     },
     {
       condition: isBuild && !!visualizer,
-      plugins: () => [<PluginOption>viteVisualizerPlugin({
+      plugins: () => [
+        viteVisualizerPlugin({
           filename: './node_modules/.cache/visualizer/stats.html',
           gzipSize: true,
           open: true,
-        })],
+        }) as PluginOption,
+      ],
     },
   ];
 }
@@ -99,6 +112,7 @@ async function loadApplicationPlugins(
     compressTypes,
     extraAppConfig,
     html,
+    dayjs,
     i18n,
     importmap,
     importmapOptions,
@@ -119,12 +133,23 @@ async function loadApplicationPlugins(
   return await loadConditionPlugins([
     ...commonPlugins,
     {
+      // 第三方库样式统一包层（vxe-table / vxe-pc-ui / tippy.js /
+      // vue-json-pretty → vxe / lib 层），使 Tailwind 工具类与 vben 自有
+      // 组件样式可以覆盖；层序见 css-layer.ts 与 theme.css。
+      condition: true,
+      plugins: () => viteCssLayerPlugin(THIRD_PARTY_CSS_LAYER_RULES),
+    },
+    {
       condition: i18n,
       plugins: async () => {
         return [
           viteVueI18nPlugin({
             compositionOnly: true,
             fullInstall: true,
+            include: [
+              '**/src/locales/langs/**/*.json',
+              '**/packages/locales/src/langs/**/*.json',
+            ],
             runtimeOnly: true,
           }),
         ];
@@ -137,10 +162,12 @@ async function loadApplicationPlugins(
       },
     },
     {
+      condition: !isBuild,
+      plugins: () => [viteFormFieldSlotMigrationWarningPlugin()],
+    },
+    {
       condition: vxeTableLazyImport,
-      plugins: async () => {
-        return [await viteVxeTableImportsPlugin()];
-      },
+      plugins: () => [viteVxeTableImportsPlugin()],
     },
     {
       condition: nitroMock,
@@ -193,7 +220,7 @@ async function loadApplicationPlugins(
     },
     {
       condition: !!html,
-      plugins: () => [viteHtmlPlugin({ minify: true })],
+      plugins: () => [viteHtmlPlugin(typeof html === 'object' ? html : {})],
     },
     {
       condition: isBuild && importmap,
@@ -213,6 +240,10 @@ async function loadApplicationPlugins(
         return [await viteArchiverPlugin(archiverPluginOptions)];
       },
     },
+    {
+      condition: dayjs,
+      plugins: () => [viteDayjsPlugin()],
+    },
   ]);
 }
 
@@ -225,21 +256,26 @@ async function loadLibraryPlugins(
   // 单独取，否则commonOptions拿不到
   const isBuild = options.isBuild;
   const { dts, ...commonOptions } = options;
+  const dtsOptions = typeof dts === 'object' ? dts : undefined;
   const commonPlugins = await loadCommonPlugins(commonOptions);
   return await loadConditionPlugins([
     ...commonPlugins,
     {
       condition: isBuild && !!dts,
-      plugins: () => [viteDtsPlugin({ logLevel: 'error' })],
+      plugins: () => [viteDtsPlugin(dtsOptions)],
     },
   ]);
 }
 
 export {
+  injectCssLayerOrder,
   loadApplicationPlugins,
   loadLibraryPlugins,
+  THIRD_PARTY_CSS_LAYER_RULES,
   viteArchiverPlugin,
   viteCompressPlugin,
+  viteCssLayerPlugin,
+  viteDayjsPlugin,
   viteDtsPlugin,
   viteHtmlPlugin,
   viteVisualizerPlugin,
