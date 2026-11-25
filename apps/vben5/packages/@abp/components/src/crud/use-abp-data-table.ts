@@ -6,6 +6,7 @@ import type {
 
 import type {
   AbpDataTableApi,
+  AbpDataTableComponent,
   AbpDataTableLoadParams,
   AbpDataTableOptions,
   AbpIdOf,
@@ -254,13 +255,15 @@ export function useAbpDataTable<
                     if (!auth) {
                       return true;
                     }
-                    return hasAccessByCodes(Array.isArray(auth) ? auth : [auth]);
+                    return hasAccessByCodes(
+                      Array.isArray(auth) ? auth : [auth],
+                    );
                   },
                 })),
           } as any,
         );
     },
-  });
+  }) as unknown as AbpDataTableComponent<TDto, TFormValues>; // 保留 Grid 的 props/slots 类型推导
 
   return [Table, tableApi] as const;
 }

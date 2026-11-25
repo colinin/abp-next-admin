@@ -1,5 +1,11 @@
 import type { useVbenVxeGrid } from '@abp/ui';
-import type { VxeGridProps as VxeTableGridProps } from 'vxe-table';
+import type {
+  VxeGridSlots,
+  VxeGridSlotTypes,
+  VxeGridProps as VxeTableGridProps,
+} from 'vxe-table';
+
+import type { DefineSetupFnComponent, SlotsType } from 'vue';
 
 import type {
   ActionItem,
@@ -104,6 +110,50 @@ export interface AbpDataTableOptions<
   dropdownActions?: (dto: TDto) => ActionItem[];
 }
 
+export type AbpDataTableComponentProps<
+  TDto extends AbpRecord = AbpRecord,
+  TFormValues extends FormValues = FormValues,
+> = Omit<
+  AbpDataTableOptions<TDto, TFormValues>,
+  | 'actionColumn'
+  | 'actions'
+  | 'delete'
+  | 'deleteAuth'
+  | 'deleteMany'
+  | 'deleteText'
+  | 'deleteWarnMessage'
+  | 'dropdownActions'
+  | 'edit'
+  | 'editAuth'
+  | 'editText'
+  | 'hasPermission'
+  | 'idKey'
+  | 'load'
+  | 'response'
+>;
+
+export type AbpDataTableSlots<TDto extends AbpRecord = AbpRecord> = {
+  [
+    K in keyof VxeGridSlots<TDto> as K extends 'form' ? never : K
+  ]?: VxeGridSlots<TDto>[K];
+} & {
+  /** 表格标题插槽 */
+  'table-title'?: undefined;
+  /** 工具栏左侧插槽 */
+  'toolbar-actions'?: VxeGridSlotTypes.DefaultSlotParams<TDto>;
+  /** 工具栏右侧插槽 */
+  'toolbar-tools'?: VxeGridSlotTypes.DefaultSlotParams<TDto>;
+};
+
+export type AbpDataTableComponent<
+  TDto extends AbpRecord = AbpRecord,
+  TFormValues extends FormValues = FormValues,
+> = DefineSetupFnComponent<
+  AbpDataTableComponentProps<TDto, TFormValues>,
+  Record<string, never>,
+  SlotsType<AbpDataTableSlots<TDto>>
+>;
+
 type VbenGridApi = ReturnType<typeof useVbenVxeGrid>[1];
 
 export type AbpDataTableApi<TDto extends AbpRecord = AbpRecord> =
@@ -117,6 +167,25 @@ export type AbpDataTableApi<TDto extends AbpRecord = AbpRecord> =
     /** 触发编辑 */
     edit: (dto: TDto) => void;
   };
+
+export interface AbpEditorModalSlots {
+  'append-footer'?: () => any;
+  cancelText?: () => any;
+  'center-footer'?: () => any;
+  confirmText?: () => any;
+  description?: () => any;
+  extra?: () => any;
+  footer?: () => any;
+  'prepend-footer'?: () => any;
+  title?: () => any;
+  titleTooltip?: () => any;
+}
+
+export type AbpEditorModalComponent = DefineSetupFnComponent<
+  ModalProps,
+  Record<string, never>,
+  SlotsType<AbpEditorModalSlots>
+>;
 
 export type AbpEditorMode = 'create' | 'edit' | 'view';
 

@@ -2,6 +2,7 @@ import type { FormValues } from '@vben/common-ui';
 
 import type {
   AbpEditorModalApi,
+  AbpEditorModalComponent,
   AbpEditorModalOptions,
   AbpEditorMode,
   AbpIdOf,
@@ -191,7 +192,7 @@ export function useAbpEditorModal<
           } as any,
         );
     },
-  });
+  }) as unknown as AbpEditorModalComponent; // 保留 Modal 的 props/slots 类型推导
 
   return [AbpEditorModal, modalApi] as const;
 }
