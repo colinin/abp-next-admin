@@ -30,6 +30,27 @@ const formOptions: VbenFormProps = {
   // 默认展开
   collapsed: true,
   collapsedRows: 2,
+  // 使用 codec 替代 fieldMappingTime
+  // codec: {
+  //   decode(values) {
+  //     let executionTime: [string, string] | undefined;
+  //     if (values.startTime !== undefined && values.endTime !== undefined) {
+  //       executionTime = [formatToDateTime(values.startTime), formatToDateTime(values.endTime)];
+  //     }
+  //     return {
+  //       ...values,
+  //       executionTime,
+  //     };
+  //   },
+  //   encode(values) {
+  //     return {
+  //       ...values,
+  //       startTime: values.executionTime?.[0].valueOf(),
+  //       endTime: values.executionTime?.[1].valueOf(),
+  //       executionTime: undefined,
+  //     };
+  //   },
+  // },
   fieldMappingTime: [
     [
       'executionTime',
@@ -42,6 +63,7 @@ const formOptions: VbenFormProps = {
       component: 'RangePicker',
       componentProps: {
         showTime: true,
+        valueFormat: 'YYYY-MM-DD HH:mm:ss'
       },
       fieldName: 'executionTime',
       formItemClass: 'col-span-2 items-baseline',
@@ -148,10 +170,10 @@ const gridOptions: VxeGridProps<AuditLogDto> = {
     },
     {
       align: 'left',
-      field: 'executionTime',
       formatter: ({ cellValue }) => {
         return cellValue ? formatToDateTime(cellValue) : cellValue;
       },
+      field: 'executionTime',
       sortable: true,
       title: $t('AbpAuditLogging.ExecutionTime'),
       width: 150,

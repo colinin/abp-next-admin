@@ -51,6 +51,22 @@ export function formatToDate(
 }
 
 /**
+ * @zh_CN 格式化日期或时间,根据格式自动解析
+ * @param date 需要格式化的日期
+ * @returns 返回格式化后的日期字符串
+ */
+export function formatToDateOrDateTime(date?: FormatDate): string {
+  if (isNumber(date)) {
+    date *= 1000;
+  }
+  const d = dayjs(date);
+  if (!d.isValid()) return String(date);
+
+  const isMidnight = d.hour() === 0 && d.minute() === 0 && d.second() === 0;
+  return isMidnight ? d.format('YYYY-MM-DD') : d.format('YYYY-MM-DD HH:mm:ss');
+}
+
+/**
  * @zh_CN 转换为日期
  * @param date 日期/字符串
  * @returns 日期
