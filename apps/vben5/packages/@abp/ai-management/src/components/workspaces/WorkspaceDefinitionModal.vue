@@ -311,7 +311,7 @@ async function onSubmit() {
                 :max="2.0"
                 :min="0.0"
                 :step="0.1"
-                class="w-full"
+                class="!w-full"
               />
             </FormItem>
             <FormItem
@@ -322,7 +322,7 @@ async function onSubmit() {
               <InputNumber
                 v-model:value="formModel.maxOutputTokens"
                 :min="0"
-                class="w-full"
+                class="!w-full"
               />
             </FormItem>
             <FormItem
@@ -335,7 +335,7 @@ async function onSubmit() {
                 :max="2.0"
                 :min="-2.0"
                 :step="0.1"
-                class="w-full"
+                class="!w-full"
               />
             </FormItem>
             <FormItem
@@ -348,7 +348,7 @@ async function onSubmit() {
                 :max="2.0"
                 :min="-2.0"
                 :step="0.1"
-                class="w-full"
+                class="!w-full"
               />
             </FormItem>
           </div>

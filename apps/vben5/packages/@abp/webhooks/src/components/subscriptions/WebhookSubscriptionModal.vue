@@ -254,7 +254,7 @@ function onPropDelete(prop: PropertyInfo) {
             name="timeoutDuration"
           >
             <InputNumber
-              class="w-full"
+              class="!w-full"
               v-model:value="formModel.timeoutDuration"
               :disabled="formModel.isStatic"
               :min="10"

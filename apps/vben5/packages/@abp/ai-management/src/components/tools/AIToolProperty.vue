@@ -45,14 +45,14 @@ const onPropDelete = (propertyInfo: PropertyInfo) => {
 <template>
   <InputNumber
     v-if="property.valueType === 'Number'"
-    class="w-full"
+    class="!w-full"
     :min="0"
     :value="model[property.name]"
     @change="onValueChange($event)"
   />
   <Input
     v-if="property.valueType === 'String'"
-    class="w-full"
+    class="!w-full"
     :min="0"
     :value="model[property.name]"
     @change="onValueChange($event.target.value)"
@@ -66,7 +66,7 @@ const onPropDelete = (propertyInfo: PropertyInfo) => {
   </Checkbox>
   <Select
     v-else-if="property.valueType === 'Select'"
-    class="w-full"
+    class="!w-full"
     :options="property.options"
     :field-names="{ label: 'name', value: 'value' }"
     :value="model[property.name]"

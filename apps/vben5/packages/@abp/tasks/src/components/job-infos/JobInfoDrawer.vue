@@ -204,7 +204,7 @@ function onDeleteParam(record: JobParamter) {
               :help="$t('TaskManagement.BackgroundJobs')"
             >
               <Select
-                class="w-full"
+                class="!w-full"
                 allow-clear
                 :options="jobDefinetions"
                 :field-names="{ label: 'displayName', value: 'name' }"
@@ -273,7 +273,7 @@ function onDeleteParam(record: JobParamter) {
               :label="$t('TaskManagement.DisplayName:BeginTime')"
             >
               <DatePicker
-                class="w-full"
+                class="!w-full"
                 value-format="YYYY-MM-DD"
                 allow-clear
                 v-model:value="formModel.beginTime"
@@ -284,7 +284,7 @@ function onDeleteParam(record: JobParamter) {
               :label="$t('TaskManagement.DisplayName:EndTime')"
             >
               <DatePicker
-                class="w-full"
+                class="!w-full"
                 value-format="YYYY-MM-DD"
                 allow-clear
                 v-model:value="formModel.endTime"
@@ -296,7 +296,7 @@ function onDeleteParam(record: JobParamter) {
               :extra="$t('TaskManagement.Description:JobType')"
             >
               <Select
-                class="w-full"
+                class="!w-full"
                 allow-clear
                 v-model:value="formModel.jobType"
                 :options="jobTypeOptions"
@@ -309,7 +309,7 @@ function onDeleteParam(record: JobParamter) {
               :label="$t('TaskManagement.DisplayName:Interval')"
               :extra="$t('TaskManagement.Description:Interval')"
             >
-              <InputNumber class="w-full" v-model:value="formModel.interval" />
+              <InputNumber class="!w-full" v-model:value="formModel.interval" />
             </FormItem>
             <FormItem
               v-else-if="formModel.jobType === JobType.Period"
@@ -326,7 +326,7 @@ function onDeleteParam(record: JobParamter) {
               :extra="$t('TaskManagement.Description:MaxCount')"
             >
               <InputNumber
-                class="w-full"
+                class="!w-full"
                 allow-clear
                 v-model:value="formModel.maxCount"
               />
@@ -337,7 +337,7 @@ function onDeleteParam(record: JobParamter) {
               :extra="$t('TaskManagement.Description:MaxTryCount')"
             >
               <InputNumber
-                class="w-full"
+                class="!w-full"
                 allow-clear
                 v-model:value="formModel.maxTryCount"
               />
@@ -348,7 +348,7 @@ function onDeleteParam(record: JobParamter) {
               :extra="$t('TaskManagement.Description:Priority')"
             >
               <Select
-                class="w-full"
+                class="!w-full"
                 allow-clear
                 v-model:value="formModel.priority"
                 :options="jobPriorityOptions"
@@ -360,7 +360,7 @@ function onDeleteParam(record: JobParamter) {
               :extra="$t('TaskManagement.Description:LockTimeOut')"
             >
               <InputNumber
-                class="w-full"
+                class="!w-full"
                 allow-clear
                 v-model:value="formModel.lockTimeOut"
               />

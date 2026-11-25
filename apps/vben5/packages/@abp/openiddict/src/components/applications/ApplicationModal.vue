@@ -418,7 +418,7 @@ function onUriDelete(uri: string) {
             :extra="$t('AbpOpenIddict.Description:AccessTokenLifetime')"
           >
             <InputNumber
-              class="w-full"
+              class="!w-full"
               min="300"
               v-model:value="formModel.settings.tokenLifetime.accessToken"
             />
@@ -429,7 +429,7 @@ function onUriDelete(uri: string) {
             :extra="$t('AbpOpenIddict.Description:AuthorizationCodeLifetime')"
           >
             <InputNumber
-              class="w-full"
+              class="!w-full"
               min="300"
               v-model:value="formModel.settings.tokenLifetime.authorizationCode"
             />
@@ -440,7 +440,7 @@ function onUriDelete(uri: string) {
             :extra="$t('AbpOpenIddict.Description:IdentityTokenLifetime')"
           >
             <InputNumber
-              class="w-full"
+              class="!w-full"
               min="300"
               v-model:value="formModel.settings.tokenLifetime.identityToken"
             />
@@ -451,7 +451,7 @@ function onUriDelete(uri: string) {
             :extra="$t('AbpOpenIddict.Description:RefreshTokenLifetime')"
           >
             <InputNumber
-              class="w-full"
+              class="!w-full"
               min="300"
               v-model:value="formModel.settings.tokenLifetime.refreshToken"
             />
@@ -462,7 +462,7 @@ function onUriDelete(uri: string) {
             :extra="$t('AbpOpenIddict.Description:DeviceCodeLifetime')"
           >
             <InputNumber
-              class="w-full"
+              class="!w-full"
               min="300"
               v-model:value="formModel.settings.tokenLifetime.deviceCode"
             />
@@ -473,7 +473,7 @@ function onUriDelete(uri: string) {
             :extra="$t('AbpOpenIddict.Description:UserCodeLifetime')"
           >
             <InputNumber
-              class="w-full"
+              class="!w-full"
               min="300"
               v-model:value="formModel.settings.tokenLifetime.userCode"
             />
