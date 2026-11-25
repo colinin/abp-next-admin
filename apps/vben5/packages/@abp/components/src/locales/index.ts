@@ -1,4 +1,3 @@
-
 import { loadLocalesMapFromDir } from '@vben/locales';
 
 const modules = import.meta.glob('./langs/**/*.json');

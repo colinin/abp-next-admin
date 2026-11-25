@@ -1,0 +1,12 @@
+{
+  "actions": "Actions",
+  "confirmTitle": "Are you sure?",
+  "create": "Create",
+  "delete": "Delete",
+  "deleteManyWarnMessage": "Multiple selected items will be deleted!",
+  "deleteSuccess": "Deleted successfully",
+  "deleteWarnMessage": "The item {0} will be deleted!",
+  "edit": "Edit",
+  "saveSuccess": "Saved successfully",
+  "view": "View"
+}

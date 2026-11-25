@@ -1,0 +1,12 @@
+{
+  "actions": "操作",
+  "confirmTitle": "确定吗？",
+  "create": "新增",
+  "delete": "删除",
+  "deleteManyWarnMessage": "选择的多个项目将被删除！",
+  "deleteSuccess": "删除成功",
+  "deleteWarnMessage": "项目 {0} 将被删除！",
+  "edit": "编辑",
+  "saveSuccess": "保存成功",
+  "view": "查看"
+}
