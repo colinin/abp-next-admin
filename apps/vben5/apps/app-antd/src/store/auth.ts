@@ -45,6 +45,7 @@ export const useAuthStore = defineStore('auth', () => {
       }
       return newToken;
     }
+    return undefined;
   }
 
   async function oidcLogin(args?: SigninRedirectArgs) {
@@ -58,14 +59,14 @@ export const useAuthStore = defineStore('auth', () => {
         accessToken: user.access_token,
         tokenType: user.token_type,
         refreshToken: user.refresh_token ?? '',
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        expiresIn: user.expires_in!,
+        expiresIn: user.expires_in,
       });
     } catch (error: any) {
       onError && onError(error as OAuthError);
     } finally {
       loginLoading.value = false;
     }
+    return undefined;
   }
 
   async function qrcodeLogin(
@@ -81,8 +82,7 @@ export const useAuthStore = defineStore('auth', () => {
           accessToken: user.access_token,
           tokenType: user.token_type,
           refreshToken: user.refresh_token ?? '',
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-          expiresIn: user.expires_in!,
+          expiresIn: user.expires_in,
         },
         onSuccess,
       );
@@ -104,8 +104,7 @@ export const useAuthStore = defineStore('auth', () => {
           accessToken: user.access_token,
           tokenType: user.token_type,
           refreshToken: user.refresh_token ?? '',
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-          expiresIn: user.expires_in!,
+          expiresIn: user.expires_in,
         },
         onSuccess,
       );
@@ -132,8 +131,7 @@ export const useAuthStore = defineStore('auth', () => {
           accessToken: user.access_token,
           tokenType: user.token_type,
           refreshToken: user.refresh_token ?? '',
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-          expiresIn: user.expires_in!,
+          expiresIn: user.expires_in,
         },
         onSuccess,
       );
@@ -163,8 +161,7 @@ export const useAuthStore = defineStore('auth', () => {
           accessToken: user.access_token,
           tokenType: user.token_type,
           refreshToken: user.refresh_token ?? '',
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-          expiresIn: user.expires_in!,
+          expiresIn: user.expires_in,
         },
         onSuccess,
       );
@@ -190,8 +187,7 @@ export const useAuthStore = defineStore('auth', () => {
           accessToken: user.access_token,
           tokenType: user.token_type,
           refreshToken: user.refresh_token ?? '',
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-          expiresIn: user.expires_in!,
+          expiresIn: user.expires_in,
         },
         onSuccess,
       );
@@ -216,19 +212,20 @@ export const useAuthStore = defineStore('auth', () => {
 
     publish(Events.UserLogout);
 
+    const currentRoute = router.currentRoute.value;
+    const alreadyOnLogin = currentRoute.path === LOGIN_PATH;
+
     // 回登录页带上当前路由地址
     await router.replace({
       path: LOGIN_PATH,
-      query: redirect
-        ? {
-            redirect: encodeURIComponent(router.currentRoute.value.fullPath),
-          }
-        : {},
+      query:
+        redirect && !alreadyOnLogin
+          ? { redirect: encodeURIComponent(currentRoute.fullPath) }
+          : {},
     });
   }
 
   async function fetchUserInfo() {
-    let userInfo: null | (UserInfo & { [key: string]: any }) = null;
     let userInfoRes: { [key: string]: any } = {};
     const user = await oAuthService.getUser();
     if (user) {
@@ -237,7 +234,7 @@ export const useAuthStore = defineStore('auth', () => {
     const abpConfig = await getConfigApi({
       includeLocalizationResources: false,
     });
-    userInfo = {
+    const userInfo: null | UserInfo = {
       userId: userInfoRes.sub ?? abpConfig.currentUser.id,
       username: userInfoRes.uniqueName ?? abpConfig.currentUser.userName,
       realName:

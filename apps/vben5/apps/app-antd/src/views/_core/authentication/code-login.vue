@@ -62,8 +62,8 @@ const formSchema = computed((): VbenFormSchema[] => {
 async function onSendCode() {
   const formApi = codeLogin.value?.getFormApi();
   const input = await formApi?.getValues();
-  await sendPhoneSigninCodeApi({
-    phoneNumber: input!.phoneNumber,
+  input && await sendPhoneSigninCodeApi({
+    phoneNumber: input.phoneNumber,
   });
 }
 /**

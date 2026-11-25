@@ -133,8 +133,8 @@ const formSchema = computed((): VbenFormSchema[] => {
 async function onSendCode() {
   const formApi = forgetPassword.value?.getFormApi();
   const input = await formApi?.getValues();
-  await sendPhoneResetPasswordCodeApi({
-    phoneNumber: input!.phoneNumber,
+  input && await sendPhoneResetPasswordCodeApi({
+    phoneNumber: input.phoneNumber,
   });
 }
 

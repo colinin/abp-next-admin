@@ -1,4 +1,3 @@
-import type { SupportedLanguagesType } from '@vben/locales';
 
 import { loadLocalesMapFromDir } from '@vben/locales';
 
@@ -14,7 +13,7 @@ const localesMap = loadLocalesMapFromDir(
  * @param lang 当前语言
  * @returns 资源集合
  */
-export async function loadPaltformMessages(lang: SupportedLanguagesType) {
+export async function loadPaltformMessages(lang: string) {
   const locales = localesMap[lang]?.();
   return locales;
 }

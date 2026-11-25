@@ -1,3 +1,4 @@
+import { i18n } from '@vben/locales';
 import { preferences } from '@vben/preferences';
 import {
   authenticateResponseInterceptor,
@@ -46,7 +47,10 @@ export function initRequestClient() {
   }
 
   function formatToken(token: null | string) {
-    return token ? `Bearer ${token}` : null;
+    if (token) {
+      return token.startsWith('Bearer') ? token : `Bearer ${token}`;
+    }
+    return null;
   }
   // 请求头处理
   requestClient.addRequestInterceptor({
@@ -55,10 +59,9 @@ export function initRequestClient() {
       const accessStore = useAccessStore();
       const timezoneStore = useTimezoneStore();
 
-      if (accessStore.accessToken) {
-        config.headers.Authorization = `${accessStore.accessToken}`;
-      }
-      config.headers['Accept-Language'] = preferences.app.locale;
+      config.headers.Authorization = formatToken(accessStore.accessToken);
+      config.headers['Accept-Language'] =
+        i18n.global.locale.value || preferences.app.locale;
       config.headers['X-Request-From'] = 'vben';
       if (abpStore.tenantId) {
         // see: https://github.com/abpframework/abp/blob/dev/framework/src/Volo.Abp.MultiTenancy.Abstractions/Volo/Abp/MultiTenancy/TenantResolverConsts.cs
@@ -76,7 +79,7 @@ export function initRequestClient() {
   });
 
   // response数据解构
-  requestClient.addResponseInterceptor<any>({
+  requestClient.addResponseInterceptor({
     fulfilled: (response) => {
       const { data, status } = response;
       const { hasWrapResult, getData } = useWrapperResult(response);
