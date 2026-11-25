@@ -14,6 +14,10 @@
     "**/*.css"
   ],
   "exports": {
+    "./crud": {
+      "types": "./src/crud/index.ts",
+      "default": "./src/crud/index.ts"
+    },
     "./codeeditor": {
       "types": "./src/codeeditor/index.ts",
       "default": "./src/codeeditor/index.ts"
@@ -41,11 +45,13 @@
   },
   "dependencies": {
     "@abp/core": "workspace:*",
+    "@abp/ui": "workspace:*",
     "@vben-core/form-ui": "workspace:*",
     "@vben-core/preferences": "workspace:*",
     "@vben-core/shadcn-ui": "workspace:*",
     "@vben-core/shared": "workspace:*",
     "@vben-core/typings": "workspace:*",
+    "@vben/access": "workspace:*",
     "@vben/common-ui": "workspace:*",
     "@vben/hooks": "workspace:*",
     "@vben/icons": "workspace:*",
@@ -60,7 +66,8 @@
     "lodash.isnumber": "catalog:",
     "tinymce": "catalog:",
     "vditor": "catalog:",
-    "vue": "catalog:"
+    "vue": "catalog:",
+    "vxe-table": "catalog:"
   },
   "devDependencies": {
     "@types/codemirror": "catalog:",
