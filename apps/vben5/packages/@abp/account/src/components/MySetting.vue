@@ -189,17 +189,17 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="h-full">
-    <Card :bordered="false">
-      <div class="flex">
-        <div class="basis-1/6">
+  <div class="h-full min-h-0">
+    <Card :bordered="false" class="h-full" :body-style="{ height: '100%' }">
+      <div class="flex h-full min-h-0">
+        <div class="basis-1/6 shrink-0 overflow-y-auto">
           <Menu
             v-model:selected-keys="selectedMenuKeys"
             :items="getEnabledMenus"
             mode="inline"
           />
         </div>
-        <div class="h-[800px] basis-5/6 overflow-y-scroll">
+        <div class="settings-content min-h-0 flex-1 overflow-y-auto pl-4">
           <BasicSettings
             v-if="selectedMenuKeys[0] === 'basic'"
             :profile="myProfile"
@@ -235,4 +235,20 @@ onMounted(async () => {
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.settings-content > :deep(.ant-card) {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.settings-content > :deep(.ant-card) > .ant-card-head {
+  flex: none;
+}
+
+.settings-content > :deep(.ant-card) > .ant-card-body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+</style>

@@ -58,7 +58,10 @@ const {
 
 const [Modal, modalApi] = useVbenModal<ModalState>({
   centered: true,
-  class: 'w-1/2',
+  class: 'w-1/2 h-[70vh]',
+  closeOnClickModal: false,
+  closeOnPressEscape: false,
+  draggable: true,
   async onConfirm() {
     await form.value?.validate();
     await onSubmit();
@@ -269,14 +272,22 @@ async function onSubmit() {
 </template>
 
 <style lang="scss" scoped>
+.ant-form {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
 :deep(.ant-tabs) {
-  height: 60vh;
+  flex: 1;
+  min-height: 0;
 
   .ant-tabs-nav {
     width: 14rem;
   }
 
   .ant-tabs-content-holder {
+    min-height: 0;
     overflow: hidden auto !important;
   }
 }

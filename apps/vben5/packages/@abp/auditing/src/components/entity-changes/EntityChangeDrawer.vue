@@ -20,7 +20,7 @@ interface State extends EntityChangeGetWithUsernameInput {
 
 const { getListWithUsernameApi } = useEntityChangesApi();
 const [Drawer, drawerApi] = useVbenDrawer<State>({
-  class: 'w-auto',
+  class: 'w-[800px]',
   onCancel() {
     drawerApi.close();
   },
@@ -50,9 +50,7 @@ const [Drawer, drawerApi] = useVbenDrawer<State>({
 
 <template>
   <Drawer>
-    <div style="max-width: 800px">
-      <EntityChangeTable :data="entityChanges" show-user-name />
-    </div>
+    <EntityChangeTable :data="entityChanges" show-user-name />
   </Drawer>
 </template>
 

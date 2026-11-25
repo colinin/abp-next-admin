@@ -178,12 +178,14 @@ onMounted(onGet);
                   <template v-if="detail.valueType === ValueType.String">
                     <InputPassword
                       v-if="detail.isEncrypted"
+                      class="!w-full"
                       v-model:value="detail.value"
                       :placeholder="detail.description"
                       @change="onValueChange(detail)"
                     />
                     <Input
                       v-else
+                      class="!w-full"
                       v-model:value="detail.value"
                       :placeholder="detail.description"
                       type="text"
@@ -197,7 +199,7 @@ onMounted(onGet);
                     "
                     v-model:value="detail.value"
                     :placeholder="detail.description"
-                    class="w-full"
+                    class="!w-full"
                     @change="onValueChange(detail)"
                   />
                   <DatePicker
@@ -206,11 +208,12 @@ onMounted(onGet);
                     :value="
                       detail.value ? dayjs(detail.value, 'YYYY-MM-DD') : ''
                     "
-                    style="width: 100%"
+                    class="!w-full"
                     @change="onDateChange($event, detail)"
                   />
                   <Select
                     v-if="detail.valueType === ValueType.Option"
+                    class="!w-full"
                     v-model:value="detail.value"
                     :filter-option="onFilterOption"
                     :field-names="{ label: 'name', value: 'value' }"
@@ -228,6 +231,7 @@ onMounted(onGet);
                   </Select> -->
                   <Checkbox
                     v-if="detail.valueType === ValueType.Boolean"
+                    class="!w-full"
                     :checked="detail.value?.toLowerCase() === 'true'"
                     @change="onCheckChange(detail)"
                   >
@@ -254,14 +258,43 @@ onMounted(onGet);
 </template>
 
 <style lang="scss" scoped>
+.ant-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+:deep(.ant-card-head) {
+  flex: none;
+}
+
+:deep(.ant-card-body) {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden !important;
+}
+
+:deep(.ant-form) {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+}
+
 :deep(.ant-tabs) {
-  height: 75vh;
+  flex: 1;
+  height: 100%;
+  min-height: 0;
 
   .ant-tabs-nav {
     width: 14rem;
   }
 
   .ant-tabs-content-holder {
+    min-height: 0;
     overflow: hidden auto !important;
   }
 }

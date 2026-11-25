@@ -393,10 +393,7 @@ async function onDeleteGrand(grantedInfo: PermissionProvider) {
   <Modal>
     <ColPage auto-content-height v-bind="props">
       <template #left>
-        <Card
-          :body-style="{ height: '80vh' }"
-          :title="$t('AbpPermissionManagement.AllPermissions')"
-        >
+        <Card :title="$t('AbpPermissionManagement.AllPermissions')">
           <template #extra>
             <InputSearch
               v-model:value="searchPermission"
@@ -404,7 +401,7 @@ async function onDeleteGrand(grantedInfo: PermissionProvider) {
               placeholder="搜索权限"
             />
           </template>
-          <div class="h-full overflow-y-auto">
+          <div class="min-h-0 flex-1 overflow-y-auto">
             <Tree
               :auto-expand-parent="autoExpandParent"
               :check-strictly="true"
@@ -458,7 +455,7 @@ async function onDeleteGrand(grantedInfo: PermissionProvider) {
             />
           </div>
         </template>
-        <Grid>
+        <Grid class="min-h-0 flex-1">
           <template #action="{ row }">
             <Popconfirm
               :title="$t('AbpUi.AreYouSure')"
@@ -481,4 +478,21 @@ async function onDeleteGrand(grantedInfo: PermissionProvider) {
   </Modal>
 </template>
 
-<style scoped></style>
+<style scoped>
+.ant-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+:deep(.ant-card-head) {
+  flex: none;
+}
+
+:deep(.ant-card-body) {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+}
+</style>

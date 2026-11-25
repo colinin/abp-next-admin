@@ -29,7 +29,7 @@ const logModel = ref<Partial<LogDto>>({});
 
 const { getApi } = useLoggingsApi();
 const [Drawer, drawerApi] = useVbenDrawer<LogDto>({
-  class: 'w-auto',
+  class: 'w-[800px]',
   onCancel() {
     drawerApi.close();
   },
@@ -75,8 +75,9 @@ const exceptionsGridOptions: VxeGridProps<LogExceptionDto> = {
     accordion: true,
     padding: true,
     trigger: 'row',
-    height: 300,
+    mode: 'inside'
   },
+  height: 'auto',
   exportConfig: {},
   keepSource: true,
   pagerConfig: {
@@ -113,9 +114,9 @@ async function onGet(id?: string) {
 
 <template>
   <Drawer>
-    <div style="width: 800px">
+    <div class="h-full min-h-0 flex flex-col">
       <Skeleton v-if="!logModel" />
-      <Tabs v-else v-model:active-key="activedTab">
+      <Tabs v-else class="full-height-tabs" v-model:active-key="activedTab">
         <TabPane key="basic" :tab="$t('AbpAuditLogging.Operation')">
           <Descriptions
             :colon="false"
@@ -217,6 +218,7 @@ async function onGet(id?: string) {
                     readonly
                     :auto-size="{ minRows: 10 }"
                     :value="row.stackTrace"
+                    :bordered="false"
                   />
                 </DescriptionsItem>
                 <DescriptionsItem :label="$t('AbpAuditLogging.HResult')">
@@ -234,4 +236,17 @@ async function onGet(id?: string) {
   </Drawer>
 </template>
 
-<style scoped></style>
+<style scoped>
+.full-height-tabs {
+  @apply flex-1 flex flex-col min-h-0;
+}
+
+.full-height-tabs :deep(.ant-tabs-content-holder),
+.full-height-tabs :deep(.ant-tabs-content) {
+  @apply flex flex-col flex-1 min-h-0;
+}
+
+.full-height-tabs :deep(.ant-tabs-tabpane) {
+  @apply h-full overflow-hidden;
+}
+</style>

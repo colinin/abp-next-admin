@@ -90,11 +90,10 @@ const getPermissionNodeState = computed(() => {
 const { cancel, getApi, updateApi } = usePermissionsApi();
 const [Modal, modalApi] = useVbenModal<ModalState>({
   centered: true,
-  class: 'w-1/2',
+  class: 'w-1/2 h-[70vh]',
   closeOnClickModal: false,
   closeOnPressEscape: false,
   draggable: true,
-  fullscreenButton: false,
   onCancel() {
     modalApi.close();
   },
@@ -292,7 +291,7 @@ function onSearchPermissionGrant() {
 
 <template>
   <Modal>
-    <div class="flex flex-col content-center justify-center">
+    <div class="flex h-full min-h-0 flex-col">
       <div class="flex items-center justify-between">
         <Checkbox
           :disabled="modelState?.readonly"
@@ -353,13 +352,15 @@ function onSearchPermissionGrant() {
 
 <style lang="scss" scoped>
 :deep(.ant-tabs) {
-  height: 60vh;
+  flex: 1;
+  min-height: 0;
 
   .ant-tabs-nav {
     width: 14rem;
   }
 
   .ant-tabs-content-holder {
+    min-height: 0;
     overflow: hidden auto !important;
   }
 }
