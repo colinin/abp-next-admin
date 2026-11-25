@@ -1,8 +1,12 @@
 <script setup lang="ts">
 import type { PrintDesignerInstance } from '@abp/print-designer';
-import type { VxeGridListeners, VxeGridProps, VxeGridPropTypes } from '@abp/ui';
 
 import type { VbenFormProps } from '@vben/common-ui';
+import type {
+  VxeGridListeners,
+  VxeGridProps,
+  VxeGridPropTypes,
+} from '@vben/plugins/vxe-table';
 
 import type { BookDto } from '../../types/books';
 
@@ -18,10 +22,10 @@ import {
 
 import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
+import { useVbenVxeGrid } from '@vben/plugins/vxe-table';
 
 import { DataAccessOperation } from '@abp/data-protection';
 import { PrintDesigner } from '@abp/print-designer';
-import { useVbenVxeGrid } from '@abp/ui';
 import {
   DeleteOutlined,
   EditOutlined,
@@ -111,6 +115,7 @@ const gridOptions: VxeGridProps<BookDto> = {
   columns: [...baseColumns, ...actionColumns],
   exportConfig: {},
   keepSource: true,
+  height: 'auto',
   proxyConfig: {
     ajax: {
       query: async ({ page, sort }, formValues) => {
@@ -171,7 +176,7 @@ async function onPrint(record: BookDto) {
   try {
     gridApi.setLoading(true);
     const designer = printDesigner.value;
-    await designer.previewWithName({
+    await designer.printWithName({
       templateName: '书籍标签',
       variables: record,
     });
