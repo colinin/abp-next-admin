@@ -108,7 +108,7 @@ async function onInitTenant(tenantId?: string) {
             :label="$t('WebhooksManagement.DisplayName:CreationTime')"
           >
             <DatePicker
-              class="w-full"
+              class="!w-full"
               value-format="YYYY-MM-DD HH:mm:ss"
               :value="formModel.creationTime"
               disabled
@@ -166,7 +166,7 @@ async function onInitTenant(tenantId?: string) {
             :label="$t('WebhooksManagement.DisplayName:CreationTime')"
           >
             <DatePicker
-              class="w-full"
+              class="!w-full"
               value-format="YYYY-MM-DD HH:mm:ss"
               :value="formModel.webhookEvent.creationTime"
               disabled
@@ -210,7 +210,7 @@ async function onInitTenant(tenantId?: string) {
           </FormItem>
           <FormItem :label="$t('WebhooksManagement.DisplayName:CreationTime')">
             <DatePicker
-              class="w-full"
+              class="!w-full"
               value-format="YYYY-MM-DD HH:mm:ss"
               :value="formatToDateTime(webhookSubscription.creationTime)"
               disabled

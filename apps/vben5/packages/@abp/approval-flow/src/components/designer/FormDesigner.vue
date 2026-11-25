@@ -619,7 +619,7 @@ defineExpose({ getFields, loadForm, save });
               <Select
                 :options="permissions"
                 :value="selectedField.permission"
-                class="w-full"
+                class="!w-full"
                 @update:value="
                   (value: any) => updateSelected({ permission: String(value) })
                 "
@@ -656,7 +656,7 @@ defineExpose({ getFields, loadForm, save });
                 <Select
                   :options="formulaModeOptions"
                   :value="selectedField.formula?.mode ?? 'number'"
-                  class="w-full"
+                  class="!w-full"
                   @update:value="(value: any) => updateFormula({ mode: value })"
                 />
               </div>
@@ -671,7 +671,7 @@ defineExpose({ getFields, loadForm, save });
                 <Select
                   :options="formulaFieldOptions"
                   :value="selectedField.formula?.left ?? ''"
-                  class="w-full"
+                  class="!w-full"
                   @update:value="
                     (value: any) => updateFormula({ left: String(value) })
                   "
@@ -684,7 +684,7 @@ defineExpose({ getFields, loadForm, save });
                 <Select
                   :options="formulaOperatorOptions"
                   :value="selectedField.formula?.operator ?? '+'"
-                  class="w-full"
+                  class="!w-full"
                   @update:value="
                     (value: any) => updateFormula({ operator: value })
                   "
@@ -697,7 +697,7 @@ defineExpose({ getFields, loadForm, save });
                 <Select
                   :options="formulaFieldOptions"
                   :value="selectedField.formula?.right ?? ''"
-                  class="w-full"
+                  class="!w-full"
                   @update:value="
                     (value: any) => updateFormula({ right: String(value) })
                   "
@@ -710,7 +710,7 @@ defineExpose({ getFields, loadForm, save });
                 <Select
                   :options="formulaUnitOptions"
                   :value="selectedField.formula?.unit ?? 'day'"
-                  class="w-full"
+                  class="!w-full"
                   @update:value="(value: any) => updateFormula({ unit: value })"
                 />
               </div>

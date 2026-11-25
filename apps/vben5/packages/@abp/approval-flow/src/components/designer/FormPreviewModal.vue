@@ -121,20 +121,20 @@ function onOpenChange(value: boolean) {
             v-else-if="field.type === 'number'"
             v-model:value="data[field.key]"
             :disabled="readonlyField(field)"
-            class="w-full"
+            class="!w-full"
           />
           <DatePicker
             v-else-if="field.type === 'date'"
             v-model:value="data[field.key]"
             :disabled="readonlyField(field)"
-            class="w-full"
+            class="!w-full"
             value-format="YYYY-MM-DD"
           />
           <DatePicker.RangePicker
             v-else-if="field.type === 'date-range'"
             v-model:value="data[field.key]"
             :disabled="readonlyField(field)"
-            class="w-full"
+            class="!w-full"
             value-format="YYYY-MM-DD"
           />
           <Select

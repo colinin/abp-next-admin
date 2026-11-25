@@ -187,7 +187,7 @@ function save() {
         <span class="condition-label">{{
           $t('antflow.designer.branch.relation')
         }}</span>
-        <Select v-model:value="logic" :options="logicOptions" class="w-full" />
+        <Select v-model:value="logic" :options="logicOptions" class="!w-full" />
       </div>
 
       <div class="condition-table">
@@ -206,7 +206,7 @@ function save() {
           <Select
             :options="fieldOptions()"
             :value="condition.fieldKey ?? undefined"
-            class="w-full"
+            class="!w-full"
             :placeholder="$t('antflow.designer.branch.selectField')"
             @update:value="
               (value) => (condition.fieldKey = value ? String(value) : null)
@@ -215,7 +215,7 @@ function save() {
           <Select
             :options="conditionOperators"
             :value="condition.operator ?? undefined"
-            class="w-full"
+            class="!w-full"
             @update:value="
               (value) => (condition.operator = value ? String(value) : '=')
             "
@@ -223,7 +223,7 @@ function save() {
           <Input
             v-if="!isValueHidden(condition.operator)"
             :value="condition.compareValue ?? ''"
-            class="w-full"
+            class="!w-full"
             :placeholder="$t('antflow.designer.branch.compareValue')"
             @update:value="(value) => (condition.compareValue = value)"
           />

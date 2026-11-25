@@ -468,7 +468,7 @@ loadParticipants();
             <Select
               :value="rule.kind"
               :options="ruleKindOptions"
-              class="w-full"
+              class="!w-full"
               @update:value="
                 (value: any) =>
                   updateRule(index, { kind: value as ApproverKind })
@@ -484,7 +484,7 @@ loadParticipants();
                   encodeParticipant(participant),
                 )
               "
-              class="w-full"
+              class="!w-full"
               :placeholder="$t('antflow.designer.nodeConfig.searchParticipant')"
               @search="searchUsers"
               @update:value="
@@ -500,7 +500,7 @@ loadParticipants();
                   encodeParticipant(participant),
                 )
               "
-              class="w-full"
+              class="!w-full"
               :placeholder="$t('antflow.designer.nodeConfig.selectRole')"
               @update:value="
                 (values: any) => onParticipantsChange(index, values as string[])
@@ -551,7 +551,7 @@ loadParticipants();
                   value: field.key,
                 }))
               "
-              class="w-full"
+              class="!w-full"
               :placeholder="$t('antflow.designer.nodeConfig.selectFormField')"
               @update:value="
                 (value: any) =>
@@ -583,7 +583,7 @@ loadParticipants();
               value: 'EscalateToManager',
             },
           ]"
-          class="w-full"
+          class="!w-full"
           @update:value="
             (value: any) => patch({ onEmpty: value as EmptyApproverPolicy })
           "
@@ -630,7 +630,7 @@ loadParticipants();
                 encodeParticipant(participant),
               )
             "
-            class="w-full"
+            class="!w-full"
             :placeholder="$t('antflow.designer.nodeConfig.searchParticipant')"
             @search="searchUsers"
             @update:value="
@@ -650,14 +650,14 @@ loadParticipants();
         <Divider orientation="left">
           {{ $t('antflow.designer.nodeConfig.conditionSettings') }}
         </Divider>
-        <Space class="w-full" direction="vertical">
+        <Space class="!w-full" direction="vertical">
           <Select
             :options="formFieldOptions"
             :value="local.condition?.fieldKey ?? undefined"
             :placeholder="$t('antflow.designer.nodeConfig.selectFormField')"
             @update:value="(value: any) => setConditionField(value)"
           />
-          <Space class="w-full">
+          <Space class="!w-full">
             <Select
               :options="conditionOperators"
               :value="local.condition?.operator ?? '='"

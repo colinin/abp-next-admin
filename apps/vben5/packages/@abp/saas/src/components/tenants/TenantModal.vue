@@ -280,7 +280,7 @@ onMounted(onSearchEditions);
       </FormItem>
       <FormItem name="enableTime" :label="$t('AbpSaas.DisplayName:EnableTime')">
         <DatePicker
-          class="w-full"
+          class="!w-full"
           value-format="YYYY-MM-DD"
           :disabled-date="getDisabledEnableTime"
           v-model:value="tenant.enableTime"
@@ -291,7 +291,7 @@ onMounted(onSearchEditions);
         :label="$t('AbpSaas.DisplayName:DisableTime')"
       >
         <DatePicker
-          class="w-full"
+          class="!w-full"
           value-format="YYYY-MM-DD"
           :disabled-date="getDisabledDisableTime"
           v-model:value="tenant.disableTime"

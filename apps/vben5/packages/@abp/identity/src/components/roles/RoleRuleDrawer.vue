@@ -358,7 +358,7 @@ function onPropertyTypeChange(
       </FormItem>
       <FormItem name="isEnabled" label="数据权限策略">
         <Select
-          class="w-full"
+          class="!w-full"
           :options="strategyOptions"
           v-model:value="formModel.strategy"
           @change="(value) => onStrategyChange(Number(value!))"
@@ -367,7 +367,7 @@ function onPropertyTypeChange(
       <template v-if="formModel.strategy === DataAccessStrategy.Custom">
         <FormItem required name="entityTypeId" label="实体类型">
           <Select
-            class="w-full"
+            class="!w-full"
             :options="entityTypes"
             :field-names="{ label: 'displayName', value: 'id' }"
             v-model:value="formModel.entityTypeId"
@@ -376,7 +376,7 @@ function onPropertyTypeChange(
         </FormItem>
         <FormItem required name="operation" label="操作">
           <Select
-            class="w-full"
+            class="!w-full"
             :options="operationOptions"
             v-model:value="formModel.operation"
             @change="onGetEntityType"
@@ -384,7 +384,7 @@ function onPropertyTypeChange(
         </FormItem>
         <FormItem name="accessedProperties" label="可访问字段">
           <Select
-            class="w-full"
+            class="!w-full"
             mode="multiple"
             :options="entityTypeProps"
             v-model:value="formModel.accessedProperties"
@@ -410,7 +410,7 @@ function onPropertyTypeChange(
                         >
                           <div class="basis-2/5">
                             <Select
-                              class="w-full"
+                              class="!w-full"
                               :options="entityTypeProps"
                               v-model:value="rule.field"
                               :field-names="{
@@ -425,7 +425,7 @@ function onPropertyTypeChange(
                           </div>
                           <div class="basis-1/5">
                             <Select
-                              class="w-full"
+                              class="!w-full"
                               :options="dataAccessFilterOptions"
                               v-model:value="rule.operate"
                             />
@@ -433,7 +433,7 @@ function onPropertyTypeChange(
                           <div class="basis-2/5">
                             <InputNumber
                               v-if="rule.javaScriptType === 'number'"
-                              class="w-full"
+                              class="!w-full"
                               v-model:value="rule.value"
                             />
                             <Switch
@@ -442,13 +442,13 @@ function onPropertyTypeChange(
                             />
                             <DatePicker
                               v-else-if="rule.javaScriptType === 'Date'"
-                              class="w-full"
+                              class="!w-full"
                               v-model:value="rule.value"
                               value-format="YYYY-MM-DDT00:00:00"
                             />
                             <Input
                               v-else
-                              class="w-full"
+                              class="!w-full"
                               v-model:value="rule.value"
                             />
                           </div>
@@ -473,7 +473,7 @@ function onPropertyTypeChange(
                         <div class="m-2 min-w-[60px]">
                           <Select
                             size="small"
-                            class="w-full"
+                            class="!w-full"
                             v-model:value="group.logic"
                             :options="logicOptions"
                           />
@@ -505,7 +505,7 @@ function onPropertyTypeChange(
                 <div class="m-2 min-w-[60px]">
                   <Select
                     size="small"
-                    class="w-full"
+                    class="!w-full"
                     v-model:value="formModel.filterGroup.logic"
                     :options="logicOptions"
                   />
