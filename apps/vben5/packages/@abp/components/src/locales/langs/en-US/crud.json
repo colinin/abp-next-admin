@@ -7,6 +7,8 @@
   "deleteSuccess": "Deleted successfully",
   "deleteWarnMessage": "The item {0} will be deleted!",
   "edit": "Edit",
+  "leaveConfirmTitle": "Are you sure?",
   "saveSuccess": "Saved successfully",
+  "unsavedChanges": "You have unsaved changes.",
   "view": "View"
 }

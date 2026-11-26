@@ -7,6 +7,8 @@
   "deleteSuccess": "删除成功",
   "deleteWarnMessage": "项目 {0} 将被删除！",
   "edit": "编辑",
+  "leaveConfirmTitle": "你确定吗？",
   "saveSuccess": "保存成功",
+  "unsavedChanges": "你有未保存的更改。",
   "view": "查看"
 }

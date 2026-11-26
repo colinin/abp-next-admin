@@ -10,8 +10,9 @@ import type {
 
 import { defineComponent, h, ref } from 'vue';
 
-import { useVbenForm, useVbenModal } from '@vben/common-ui';
+import { confirm, useVbenForm, useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
+import { isEqual } from '@vben/utils';
 
 import { useNotifications } from '@abp/core';
 
@@ -33,6 +34,7 @@ export function useAbpEditorModal<
 >(options: AbpEditorModalOptions<TDto, TFormValues>) {
   const mode = ref<AbpEditorMode>('create');
   const currentDto = ref<TDto>();
+  const initialValues = ref<TFormValues>();
   const userOnOpenChange = options.onOpenChange;
 
   const { toastSuccess, toastError } = useNotifications();
@@ -49,6 +51,9 @@ export function useAbpEditorModal<
     },
     onOpenChange: async (isOpen) => {
       await userOnOpenChange?.(isOpen);
+    },
+    onBeforeClose: async () => {
+      return await confirmBeforeClose();
     },
     onOpened: () => {
       void applyMode();
@@ -91,6 +96,7 @@ export function useAbpEditorModal<
     const values =
       mode.value === 'create' ? getDefaultValues() : (currentDto.value ?? {});
     await formApi.reset({ values });
+    initialValues.value = await formApi.getRawValues();
     formApi.setState((prev) => ({
       commonConfig: {
         ...prev.commonConfig,
@@ -101,6 +107,29 @@ export function useAbpEditorModal<
       showConfirmButton: !disabled,
       title: getTitle(),
     });
+  }
+
+  async function confirmBeforeClose(): Promise<boolean> {
+    if (mode.value === 'view' || !initialValues.value) {
+      return true;
+    }
+    const currentValues = await formApi.getRawValues();
+    if (isEqual(currentValues, initialValues.value)) {
+      return true;
+    }
+    try {
+      await confirm({
+        centered: true,
+        containerClass: '!w-[350px]',
+        content: $t('crud.unsavedChanges'),
+        escapeKeyClose: false,
+        icon: 'warning',
+        title: $t('crud.leaveConfirmTitle'),
+      });
+      return true;
+    } catch {
+      return false;
+    }
   }
 
   async function onSubmit(values: TFormValues) {
@@ -117,6 +146,7 @@ export function useAbpEditorModal<
       } else {
         return;
       }
+      initialValues.value = await formApi.getRawValues();
       toastSuccess($t('crud.saveSuccess'));
       await options.refresh?.();
       options.onSuccess?.(mode.value, dto);
