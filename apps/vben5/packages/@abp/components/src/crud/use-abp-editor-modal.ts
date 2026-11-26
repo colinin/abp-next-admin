@@ -34,6 +34,7 @@ export function useAbpEditorModal<
 >(options: AbpEditorModalOptions<TDto, TFormValues>) {
   const mode = ref<AbpEditorMode>('create');
   const currentDto = ref<TDto>();
+  const checkValueChanged = ref(false);
   const initialValues = ref<TFormValues>();
   const userOnOpenChange = options.onOpenChange;
 
@@ -50,6 +51,7 @@ export function useAbpEditorModal<
       await formApi.validateAndSubmit();
     },
     onOpenChange: async (isOpen) => {
+      checkValueChanged.value = isOpen;
       await userOnOpenChange?.(isOpen);
     },
     onBeforeClose: async () => {
@@ -110,7 +112,11 @@ export function useAbpEditorModal<
   }
 
   async function confirmBeforeClose(): Promise<boolean> {
-    if (mode.value === 'view' || !initialValues.value) {
+    if (
+      !checkValueChanged.value ||
+      mode.value === 'view' ||
+      !initialValues.value
+    ) {
       return true;
     }
     const currentValues = await formApi.getRawValues();
