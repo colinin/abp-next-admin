@@ -1,22 +1,18 @@
 <script setup lang="ts">
-import type { UploadProps } from 'ant-design-vue';
-
 import type { PropType } from 'vue';
 
-import type { CropendResult, Cropper } from './types';
+import { computed, nextTick, reactive, ref, watch } from 'vue';
 
-import { h, ref } from 'vue';
-
-import { useVbenModal } from '@vben/common-ui';
+import { useVbenModal, VCropper } from '@vben/common-ui';
 import { useNamespace } from '@vben/hooks';
 import { createIconifyIcon } from '@vben/icons';
 import { $t } from '@vben/locales';
 import { isFunction } from '@vben/utils';
 
-import { dataURLtoBlob } from '@abp/core';
-import { Avatar, Button, Space, Tooltip, Upload } from 'ant-design-vue';
+import { VbenAvatar, VbenButton, VbenTooltip } from '@vben-core/shadcn-ui';
 
-import CropperImage from './Cropper.vue';
+import { dataURLtoBlob } from '@abp/core';
+import { useDebounceFn } from '@vueuse/core';
 
 type ApiFunParams = { file: Blob; fileName: string; name: string };
 
@@ -43,189 +39,382 @@ const ZoomInIcon = createIconifyIcon('ant-design:zoom-in-outlined');
 const ZoomOutIcon = createIconifyIcon('ant-design:zoom-out-outlined');
 
 let fileName = '';
+const originalSrc = ref(props.src || '');
 const src = ref(props.src || '');
 const previewSource = ref('');
-const fileList = ref<UploadProps['fileList']>([]);
-const cropper = ref<Cropper>();
-let scaleX = 1;
-let scaleY = 1;
-
+const fileInputRef = ref<HTMLInputElement>();
+const cropperRef = ref<InstanceType<typeof VCropper>>();
+const transformState = reactive({
+  rotation: 0,
+  scaleX: 1,
+  scaleY: 1,
+  zoom: 1,
+});
 const { b, e } = useNamespace('cropper-am');
+
+const cropperAspectRatio = computed(() => (props.circled ? '1:1' : undefined));
+
 const [Modal, modalApi] = useVbenModal({
   class: 'w-[800px]',
+  confirmText: $t('cropper.confirmText'),
   fullscreen: false,
   fullscreenButton: false,
-  confirmText: $t('cropper.confirmText'),
   onConfirm: handleOk,
+  async onOpened() {
+    await nextTick();
+    schedulePreview();
+  },
   title: $t('cropper.title'),
 });
-function handleBeforeUpload(file: File) {
+
+function handleFileChange(event: Event) {
+  const input = event.target as HTMLInputElement;
+  const file = input.files?.[0];
+  if (!file) {
+    return;
+  }
   const reader = new FileReader();
   reader.readAsDataURL(file);
   src.value = '';
   previewSource.value = '';
   reader.addEventListener('load', (e) => {
-    src.value = (e.target?.result as string) ?? '';
+    originalSrc.value = (e.target?.result as string) ?? '';
+    src.value = originalSrc.value;
     fileName = file.name;
+    resetTransformState();
   });
-  return false;
-}
-function handleCropend({ imgBase64 }: CropendResult) {
-  previewSource.value = imgBase64;
+  input.value = '';
 }
 
-function handleReady(cropperInstance: Cropper) {
-  cropper.value = cropperInstance;
-}
-function handlerToolbar(event: string, arg?: number) {
-  if (!cropper.value) {
+function handleToolbar(action: string, arg?: number) {
+  if (!src.value) {
     return;
   }
-  if (event === 'scaleX') {
-    scaleX = arg = scaleX === -1 ? 1 : -1;
-  }
-  if (event === 'scaleY') {
-    scaleY = arg = scaleY === -1 ? 1 : -1;
-  }
-  switch (event) {
+  switch (action) {
     case 'reset': {
-      return cropper.value.reset();
+      resetTransformState();
+      src.value = originalSrc.value;
+      break;
     }
     case 'rotate': {
-      return cropper.value.rotate(arg ?? 0);
+      transformState.rotation = (transformState.rotation + (arg ?? 0)) % 360;
+      void applyTransforms();
+      break;
     }
     case 'scaleX': {
-      return cropper.value.scaleX(scaleX);
+      transformState.scaleX *= -1;
+      void applyTransforms();
+      break;
     }
     case 'scaleY': {
-      return cropper.value.scaleY(scaleY);
+      transformState.scaleY *= -1;
+      void applyTransforms();
+      break;
     }
     case 'zoom': {
-      return cropper.value.zoom(arg ?? 0);
+      const nextZoom = transformState.zoom + (arg ?? 0);
+      transformState.zoom = Math.min(3, Math.max(0.2, nextZoom));
+      void applyTransforms();
+      break;
     }
   }
+  previewSource.value = '';
+  schedulePreview();
 }
+
+function resetTransformState() {
+  transformState.rotation = 0;
+  transformState.scaleX = 1;
+  transformState.scaleY = 1;
+  transformState.zoom = 1;
+}
+
+async function applyTransforms() {
+  if (!originalSrc.value) {
+    src.value = '';
+    return;
+  }
+  const image = await loadImage(originalSrc.value);
+  const radians = (transformState.rotation * Math.PI) / 180;
+  const width = image.naturalWidth * transformState.zoom;
+  const height = image.naturalHeight * transformState.zoom;
+  const canvas = document.createElement('canvas');
+  canvas.width = Math.ceil(
+    Math.abs(width * Math.cos(radians)) + Math.abs(height * Math.sin(radians)),
+  );
+  canvas.height = Math.ceil(
+    Math.abs(width * Math.sin(radians)) + Math.abs(height * Math.cos(radians)),
+  );
+  const context = canvas.getContext('2d');
+  if (!context) {
+    return;
+  }
+  context.translate(canvas.width / 2, canvas.height / 2);
+  context.rotate(radians);
+  context.scale(transformState.scaleX, transformState.scaleY);
+  context.drawImage(image, -width / 2, -height / 2, width, height);
+  src.value = canvas.toDataURL('image/png');
+}
+
+function loadImage(source: string): Promise<HTMLImageElement> {
+  return new Promise((resolve, reject) => {
+    const image = new Image();
+    if (/^https?:\/\//.test(source)) {
+      image.crossOrigin = 'anonymous';
+    }
+    image.addEventListener('load', () => resolve(image));
+    image.addEventListener('error', () =>
+      reject(new Error(`Failed to load image: ${source}`)),
+    );
+    image.src = source;
+  });
+}
+
+async function cropImage(): Promise<string | undefined> {
+  if (!cropperRef.value) {
+    return undefined;
+  }
+  const result = await cropperRef.value.getCropImage('image/png', 1, 'base64');
+  if (typeof result !== 'string') {
+    return undefined;
+  }
+  return props.circled ? await makeCircledImage(result) : result;
+}
+
+async function updatePreview() {
+  try {
+    const result = await cropImage();
+    previewSource.value = result ?? '';
+  } catch {
+    previewSource.value = '';
+  }
+}
+
+function handleCropperImageLoad(event: Event) {
+  const target = event.target;
+  if (target instanceof HTMLImageElement) {
+    target.draggable = false;
+  }
+  schedulePreview();
+}
+
+const schedulePreview = useDebounceFn(updatePreview, 120);
+
+async function makeCircledImage(source: string): Promise<string> {
+  const image = await loadImage(source);
+  const size = Math.min(image.naturalWidth, image.naturalHeight);
+  const canvas = document.createElement('canvas');
+  canvas.width = size;
+  canvas.height = size;
+  const context = canvas.getContext('2d');
+  if (!context) {
+    return source;
+  }
+  context.drawImage(
+    image,
+    (image.naturalWidth - size) / 2,
+    (image.naturalHeight - size) / 2,
+    size,
+    size,
+    0,
+    0,
+    size,
+    size,
+  );
+  context.globalCompositeOperation = 'destination-in';
+  context.beginPath();
+  context.arc(size / 2, size / 2, size / 2, 0, 2 * Math.PI);
+  context.fill();
+  return canvas.toDataURL('image/png');
+}
+
 async function handleOk() {
   const uploadApi = props.uploadApi;
-  if (uploadApi && isFunction(uploadApi)) {
-    const blob = dataURLtoBlob(previewSource.value);
-    try {
-      modalApi.setState({ submitting: true });
-      await uploadApi({ name: 'file', file: blob, fileName });
-      emits('uploadSuccess', previewSource.value);
-      modalApi.close();
-    } finally {
-      modalApi.setState({ submitting: false });
-    }
+  if (!uploadApi || !isFunction(uploadApi)) {
+    return;
+  }
+  await updatePreview();
+  if (!previewSource.value) {
+    return;
+  }
+  const blob = dataURLtoBlob(previewSource.value);
+  try {
+    modalApi.setState({ submitting: true });
+    await uploadApi({ fileName, file: blob, name: 'file' });
+    emits('uploadSuccess', previewSource.value);
+    modalApi.close();
+  } finally {
+    modalApi.setState({ submitting: false });
   }
 }
+
+function selectImage() {
+  fileInputRef.value?.click();
+}
+
+watch(
+  () => props.src,
+  (value) => {
+    if (value === originalSrc.value) {
+      return;
+    }
+    originalSrc.value = value || '';
+    src.value = value || '';
+    previewSource.value = '';
+    resetTransformState();
+  },
+);
+
+watch(
+  () => props.circled,
+  () => {
+    previewSource.value = '';
+    schedulePreview();
+  },
+);
 </script>
 
 <template>
   <Modal>
     <div :class="b()">
       <div :class="e('left')">
-        <div :class="e('cropper')">
-          <CropperImage
+        <div
+          :class="e('cropper')"
+          @dragstart.prevent
+          @load.capture="handleCropperImageLoad"
+          @mouseup="schedulePreview"
+          @selectstart.prevent
+          @touchend="schedulePreview"
+        >
+          <VCropper
             v-if="src"
-            :src="src"
-            height="300px"
-            :circled="circled"
-            @cropend="handleCropend"
-            @ready="handleReady"
+            ref="cropperRef"
+            :aspect-ratio="cropperAspectRatio"
+            :height="300"
+            :img="src"
+            :width="440"
           />
         </div>
         <div :class="e('toolbar')">
-          <Upload
-            :file-list="fileList"
+          <input
+            ref="fileInputRef"
             accept="image/*"
-            :before-upload="handleBeforeUpload"
-          >
-            <Tooltip :title="$t('cropper.selectImage')" placement="bottom">
-              <Button size="small" :icon="h(UploadIcon)" type="primary" />
-            </Tooltip>
-          </Upload>
-          <Space>
-            <Tooltip :title="$t('cropper.btn_reset')" placement="bottom">
-              <Button
-                type="primary"
-                :icon="h(ResetIcon)"
-                size="small"
-                :disabled="!src"
-                @click="handlerToolbar('reset')"
-              />
-            </Tooltip>
-            <Tooltip :title="$t('cropper.btn_rotate_left')" placement="bottom">
-              <Button
-                type="primary"
-                :icon="h(RotateLeftIcon)"
-                size="small"
-                :disabled="!src"
-                @click="handlerToolbar('rotate', -45)"
-              />
-            </Tooltip>
-            <Tooltip :title="$t('cropper.btn_rotate_right')" placement="bottom">
-              <Button
-                type="primary"
-                :icon="h(RotateRightIcon)"
-                size="small"
-                :disabled="!src"
-                @click="handlerToolbar('rotate', 45)"
-              />
-            </Tooltip>
-            <Tooltip :title="$t('cropper.btn_scale_x')" placement="bottom">
-              <Button
-                type="primary"
-                :icon="h(ScaleXIcon)"
-                size="small"
-                :disabled="!src"
-                @click="handlerToolbar('scaleX')"
-              />
-            </Tooltip>
-            <Tooltip :title="$t('cropper.btn_scale_y')" placement="bottom">
-              <Button
-                type="primary"
-                :icon="h(ScaleYIcon)"
-                size="small"
-                :disabled="!src"
-                @click="handlerToolbar('scaleY')"
-              />
-            </Tooltip>
-            <Tooltip :title="$t('cropper.btn_zoom_in')" placement="bottom">
-              <Button
-                type="primary"
-                :icon="h(ZoomInIcon)"
-                size="small"
-                :disabled="!src"
-                @click="handlerToolbar('zoom', 0.1)"
-              />
-            </Tooltip>
-            <Tooltip :title="$t('cropper.btn_zoom_out')" placement="bottom">
-              <Button
-                type="primary"
-                :icon="h(ZoomOutIcon)"
-                size="small"
-                :disabled="!src"
-                @click="handlerToolbar('zoom', -0.1)"
-              />
-            </Tooltip>
-          </Space>
+            class="hidden"
+            type="file"
+            @change="handleFileChange"
+          />
+          <VbenTooltip side="bottom">
+            <template #trigger>
+              <VbenButton size="sm" @click="selectImage">
+                <UploadIcon class="size-4" />
+              </VbenButton>
+            </template>
+            {{ $t('cropper.selectImage') }}
+          </VbenTooltip>
+          <div class="flex items-center gap-2">
+            <VbenTooltip side="bottom">
+              <template #trigger>
+                <VbenButton
+                  :disabled="!src"
+                  size="sm"
+                  @click="handleToolbar('reset')"
+                >
+                  <ResetIcon class="size-4" />
+                </VbenButton>
+              </template>
+              {{ $t('cropper.btn_reset') }}
+            </VbenTooltip>
+            <VbenTooltip side="bottom">
+              <template #trigger>
+                <VbenButton
+                  :disabled="!src"
+                  size="sm"
+                  @click="handleToolbar('rotate', -45)"
+                >
+                  <RotateLeftIcon class="size-4" />
+                </VbenButton>
+              </template>
+              {{ $t('cropper.btn_rotate_left') }}
+            </VbenTooltip>
+            <VbenTooltip side="bottom">
+              <template #trigger>
+                <VbenButton
+                  :disabled="!src"
+                  size="sm"
+                  @click="handleToolbar('rotate', 45)"
+                >
+                  <RotateRightIcon class="size-4" />
+                </VbenButton>
+              </template>
+              {{ $t('cropper.btn_rotate_right') }}
+            </VbenTooltip>
+            <VbenTooltip side="bottom">
+              <template #trigger>
+                <VbenButton
+                  :disabled="!src"
+                  size="sm"
+                  @click="handleToolbar('scaleX')"
+                >
+                  <ScaleXIcon class="size-4" />
+                </VbenButton>
+              </template>
+              {{ $t('cropper.btn_scale_x') }}
+            </VbenTooltip>
+            <VbenTooltip side="bottom">
+              <template #trigger>
+                <VbenButton
+                  :disabled="!src"
+                  size="sm"
+                  @click="handleToolbar('scaleY')"
+                >
+                  <ScaleYIcon class="size-4" />
+                </VbenButton>
+              </template>
+              {{ $t('cropper.btn_scale_y') }}
+            </VbenTooltip>
+            <VbenTooltip side="bottom">
+              <template #trigger>
+                <VbenButton
+                  :disabled="!src"
+                  size="sm"
+                  @click="handleToolbar('zoom', 0.1)"
+                >
+                  <ZoomInIcon class="size-4" />
+                </VbenButton>
+              </template>
+              {{ $t('cropper.btn_zoom_in') }}
+            </VbenTooltip>
+            <VbenTooltip side="bottom">
+              <template #trigger>
+                <VbenButton
+                  :disabled="!src"
+                  size="sm"
+                  @click="handleToolbar('zoom', -0.1)"
+                >
+                  <ZoomOutIcon class="size-4" />
+                </VbenButton>
+              </template>
+              {{ $t('cropper.btn_zoom_out') }}
+            </VbenTooltip>
+          </div>
         </div>
       </div>
       <div :class="e('right')">
-        <div :class="e(`preview`)">
+        <div :class="e('preview')">
           <img
-            :src="previewSource"
             v-if="previewSource"
             :alt="$t('cropper.preview')"
+            :src="previewSource"
           />
         </div>
         <template v-if="previewSource">
-          <div :class="e(`group`)">
-            <Avatar :src="previewSource" size="large" />
-            <Avatar :src="previewSource" :size="48" />
-            <Avatar :src="previewSource" :size="64" />
-            <Avatar :src="previewSource" :size="80" />
+          <div :class="e('group')">
+            <VbenAvatar
+              v-for="size in [40, 48, 64, 80]"
+              :key="size"
+              :size="size"
+              :src="previewSource"
+            />
           </div>
         </template>
       </div>
@@ -253,27 +442,17 @@ $namespace: vben;
   }
 
   &__cropper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     height: 300px;
-    background: #eee;
-    background-image:
-      linear-gradient(
-        45deg,
-        rgb(0 0 0 / 25%) 25%,
-        transparent 0,
-        transparent 75%,
-        rgb(0 0 0 / 25%) 0
-      ),
-      linear-gradient(
-        45deg,
-        rgb(0 0 0 / 25%) 25%,
-        transparent 0,
-        transparent 75%,
-        rgb(0 0 0 / 25%) 0
-      );
-    background-position:
-      0 0,
-      12px 12px;
-    background-size: 24px 24px;
+    overflow: hidden;
+    user-select: none;
+
+    :deep(img) {
+      user-select: none;
+      -webkit-user-drag: none;
+    }
   }
 
   &__toolbar {

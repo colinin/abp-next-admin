@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import type { ButtonProps } from 'ant-design-vue/es/button';
-
 import type { CSSProperties, PropType } from 'vue';
+
+import type { VbenButtonProps } from '@vben-core/shadcn-ui';
 
 import { computed, ref, unref, watch, watchEffect } from 'vue';
 
@@ -10,7 +10,7 @@ import { useNamespace } from '@vben/hooks';
 import { createIconifyIcon } from '@vben/icons';
 import { useI18n } from '@vben/locales';
 
-import { Button } from 'ant-design-vue';
+import { VbenButton } from '@vben-core/shadcn-ui';
 
 import CropperModal from './CropperModal.vue';
 
@@ -24,7 +24,10 @@ const props = defineProps({
   width: { type: [String, Number], default: '200px' },
   value: { type: String, default: '' },
   showBtn: { type: Boolean, default: true },
-  btnProps: { type: Object as PropType<ButtonProps>, default: undefined },
+  btnProps: {
+    type: Object as PropType<VbenButtonProps>,
+    default: undefined,
+  },
   btnText: { type: String, default: '' },
   uploadApi: {
     type: Function as PropType<(file: File) => Promise<void>>,
@@ -52,8 +55,8 @@ const getIconWidth = computed(
 const getStyle = computed((): CSSProperties => ({ width: unref(getWidth) }));
 
 const getImageWrapperStyle = computed((): CSSProperties => ({
-  width: unref(getWidth),
   height: unref(getWidth),
+  width: unref(getWidth),
 }));
 
 watchEffect(() => {
@@ -78,7 +81,7 @@ function closeModal() {
   modalApi.close();
 }
 
-defineExpose({ openModal, closeModal });
+defineExpose({ closeModal, openModal });
 </script>
 
 <template>
@@ -90,26 +93,26 @@ defineExpose({ openModal, closeModal });
     >
       <div :class="e(`image-mask`)" :style="getImageWrapperStyle">
         <UploadIcon
-          :width="getIconWidth"
           :style="getImageWrapperStyle"
+          :width="getIconWidth"
           color="#d6d6d6"
         />
       </div>
-      <img :src="sourceValue" v-if="sourceValue" alt="avatar" />
+      <img v-if="sourceValue" :src="sourceValue" alt="avatar" />
     </div>
-    <Button
-      :class="e(`upload-btn`)"
-      @click="openModal"
+    <VbenButton
       v-if="showBtn"
       v-bind="btnProps"
+      :class="e(`upload-btn`)"
+      @click="openModal"
     >
       {{ btnText ? btnText : t('cropper.selectImage') }}
-    </Button>
+    </VbenButton>
 
     <Modal
-      @upload-success="handleUploadSuccess"
-      :upload-api="uploadApi"
       :src="sourceValue"
+      :upload-api="uploadApi"
+      @upload-success="handleUploadSuccess"
     />
   </div>
 </template>
