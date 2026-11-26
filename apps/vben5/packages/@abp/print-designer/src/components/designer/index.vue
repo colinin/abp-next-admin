@@ -116,7 +116,7 @@ async function setDefaultProps(
 
   if (defaultProps.print) {
     designer.setPrintDefaults({
-      printMode: 'browser'
+      printMode: 'browser',
     });
     try {
       // 本地/远程打印连接测试成功后再次设置一下打印模式,即可无需在设计器中再次设置打印模式
@@ -135,7 +135,10 @@ async function setDefaultProps(
         }
       }
     } catch (error) {
-      console.warn('Connection to the print client failed. Switching to web printing.', error);
+      console.warn(
+        'Connection to the print client failed. Switching to web printing.',
+        error,
+      );
     }
     if (!isClientContected.value) {
       designer.setPrintDefaults({

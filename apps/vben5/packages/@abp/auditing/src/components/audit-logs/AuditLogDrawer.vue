@@ -99,7 +99,7 @@ const actionsGridOptions: VxeGridProps<Action> = {
     accordion: true,
     padding: true,
     trigger: 'row',
-    mode: 'inside'
+    mode: 'inside',
   },
   exportConfig: {},
   keepSource: true,

@@ -63,7 +63,7 @@ const formOptions: VbenFormProps = {
       component: 'RangePicker',
       componentProps: {
         showTime: true,
-        valueFormat: 'YYYY-MM-DD HH:mm:ss'
+        valueFormat: 'YYYY-MM-DD HH:mm:ss',
       },
       fieldName: 'executionTime',
       formItemClass: 'col-span-2 items-baseline',

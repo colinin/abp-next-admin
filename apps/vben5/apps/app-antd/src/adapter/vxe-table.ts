@@ -72,13 +72,11 @@ async function initSetupAbpVxeTable() {
       !vxeUI.formats.get('AutoFormatDate') &&
         vxeUI.formats.add('AutoFormatDate', {
           tableCellFormatMethod(formatOpts) {
-            if (formatOpts.column.cellType === 'date' &&
-                formatOpts.cellValue
-            ) {
-              return formatToDateOrDateTime(formatOpts.cellValue)
+            if (formatOpts.column.cellType === 'date' && formatOpts.cellValue) {
+              return formatToDateOrDateTime(formatOpts.cellValue);
             }
             return formatOpts.cellValue;
-          }
+          },
         });
     },
     useVbenForm,

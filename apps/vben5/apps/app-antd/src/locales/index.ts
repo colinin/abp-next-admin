@@ -13,7 +13,11 @@ import {
   defineLocaleConfig,
 } from '@vben/locales';
 import { vxeLocaleAdapter, vxeLocales } from '@vben/plugins/vxe-table/locales';
-import { preferences, preferencesManager, updatePreferences } from '@vben/preferences';
+import {
+  preferences,
+  preferencesManager,
+  updatePreferences,
+} from '@vben/preferences';
 
 import { loadApprovalFlowMessages } from '@abp/approval-flow';
 import { loadComponentMessages } from '@abp/components/locales';
@@ -49,7 +53,9 @@ const localeConfig = defineLocaleConfig({
     },
   },
   loadMessages: async (lang) => {
-    const defaultLoader = createMessageLoader(import.meta.glob('./langs/**/*.json'));
+    const defaultLoader = createMessageLoader(
+      import.meta.glob('./langs/**/*.json'),
+    );
     const [
       appLocaleMessages,
       approvalFlowLocales,
@@ -64,12 +70,12 @@ const localeConfig = defineLocaleConfig({
       loadAbpLocale(lang),
     ]);
     return {
-    ...appLocaleMessages,
-    ...approvalFlowLocales?.default,
-    ...compLocales?.default,
-    ...platformLocales?.default,
-    ...abpLocales,
-  };
+      ...appLocaleMessages,
+      ...approvalFlowLocales?.default,
+      ...compLocales?.default,
+      ...platformLocales?.default,
+      ...abpLocales,
+    };
   },
 });
 

@@ -234,7 +234,7 @@ watch(
     :text="userStore.userInfo?.realName"
     @clear-preferences-and-logout="handleLogout"
     @logout="handleLogout"
->
+  >
     <template #user-dropdown>
       <div class="flex items-center pr-[4px]">
         <UserDropdown

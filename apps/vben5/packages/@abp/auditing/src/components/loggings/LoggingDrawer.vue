@@ -75,7 +75,7 @@ const exceptionsGridOptions: VxeGridProps<LogExceptionDto> = {
     accordion: true,
     padding: true,
     trigger: 'row',
-    mode: 'inside'
+    mode: 'inside',
   },
   height: 'auto',
   exportConfig: {},

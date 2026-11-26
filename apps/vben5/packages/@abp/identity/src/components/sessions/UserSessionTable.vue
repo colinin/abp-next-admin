@@ -77,7 +77,7 @@ const gridOptions = reactive<VxeGridProps<IdentitySessionDto>>({
     accordion: true,
     padding: true,
     trigger: 'row',
-    mode: 'inside'
+    mode: 'inside',
   },
   exportConfig: {},
   keepSource: true,
