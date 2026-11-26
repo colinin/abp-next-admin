@@ -201,7 +201,7 @@ const [DataTable, tableApi] = useAbpDataTable<EntityChangeDto>({
 });
 
 async function onExportToExcel() {
-  const input = await tableApi.formApi.getRawValues();
+  const input = await tableApi.formApi.getValues();
   const downloadUrl = getExportApiUrl(input);
   downloadFileFromUrl({ source: downloadUrl });
 }

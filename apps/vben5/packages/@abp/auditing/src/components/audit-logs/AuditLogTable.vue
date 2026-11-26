@@ -337,7 +337,7 @@ function onBulkDelete() {
 }
 
 async function onExportToExcel() {
-  const input = await gridApi.formApi.getRawValues();
+  const input = await gridApi.formApi.getValues();
   const downloadUrl = getExportApiUrl(input);
   downloadFileFromUrl({ source: downloadUrl });
 }
