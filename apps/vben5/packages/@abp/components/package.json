@@ -46,7 +46,6 @@
   "dependencies": {
     "@abp/core": "workspace:*",
     "@abp/ui": "workspace:*",
-    "@vben-core/form-ui": "workspace:*",
     "@vben-core/preferences": "workspace:*",
     "@vben-core/shadcn-ui": "workspace:*",
     "@vben-core/shared": "workspace:*",
@@ -60,9 +59,7 @@
     "@vben/types": "workspace:*",
     "@vben/utils": "workspace:*",
     "@vueuse/core": "catalog:",
-    "ant-design-vue": "catalog:",
     "codemirror": "catalog:",
-    "cropperjs": "catalog:",
     "lodash.isnumber": "catalog:",
     "tinymce": "catalog:",
     "vditor": "catalog:",
