@@ -149,8 +149,8 @@
       "path": "packages/@abp/signalr"
     },
     {
-      "name": "@abp/tasks",
-      "path": "packages/@abp/tasks"
+      "name": "@abp/task-management",
+      "path": "packages/@abp/task-management"
     },
     {
       "name": "@abp/text-templating",

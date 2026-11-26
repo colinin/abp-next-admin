@@ -1,12 +1,12 @@
 {
-  "name": "@abp/tasks",
+  "name": "@abp/task-management",
   "version": "10.0.2",
   "homepage": "https://github.com/colinin/abp-next-admin",
   "bugs": "https://github.com/colinin/abp-next-admin/issues",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/colinin/abp-next-admin.git",
-    "directory": "packages/@abp/tasks"
+    "directory": "packages/@abp/task-management"
   },
   "license": "MIT",
   "type": "module",
