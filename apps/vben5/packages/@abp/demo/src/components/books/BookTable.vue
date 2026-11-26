@@ -15,15 +15,23 @@ import type {
 
 import type { BookDto, CreateUpdateBookDto } from '../../types/books';
 
-import { h, nextTick, onMounted, reactive, ref, useTemplateRef } from 'vue';
+import {
+  computed,
+  h,
+  nextTick,
+  onMounted,
+  reactive,
+  ref,
+  useTemplateRef,
+} from 'vue';
 
+import { globalShareState } from '@vben/common-ui';
+import { createIconifyIcon } from '@vben/icons';
 import { $t } from '@vben/locales';
 
 import { useAbpDataTable, useAbpEditorModal } from '@abp/components/crud';
 import { DataAccessOperation } from '@abp/data-protection';
 import { PrintDesigner } from '@abp/print-designer';
-import { PlusOutlined, PrinterOutlined } from '@ant-design/icons-vue';
-import { Button } from 'ant-design-vue';
 
 import { useAuthorsApi } from '../../api/useAuthorsApi';
 import { useBooksApi } from '../../api/useBooksApi';
@@ -33,6 +41,12 @@ import { BookType } from '../../types/books';
 defineOptions({
   name: 'BookTable',
 });
+
+const PlusOutlined = createIconifyIcon('ant-design:plus-outlined');
+const PrinterOutlined = createIconifyIcon('ant-design:printer-outlined');
+const ButtonComponent = computed(
+  () => globalShareState.getComponents()?.Button,
+);
 
 const printDesigner = useTemplateRef<PrintDesignerInstance>('print-designer');
 const selectedKeys = ref<string[]>([]);
@@ -356,28 +370,34 @@ onMounted(onInit);
   <Table :table-title="$t('Demo.Book')">
     <template #toolbar-tools>
       <div class="flex flex-row gap-2">
-        <Button
+        <component
           v-access:code="[BookPermissions.Create]"
-          :icon="h(PlusOutlined)"
+          :is="ButtonComponent"
           type="primary"
           @click="onCreate"
         >
+          <PlusOutlined />
           {{ $t('Demo.NewBook') }}
-        </Button>
-        <Button
+        </component>
+        <component
           v-if="selectedKeys.length > 0"
+          :is="ButtonComponent"
           ghost
-          :icon="h(PrinterOutlined)"
           type="primary"
           @click="onPrintMany"
         >
+          <PrinterOutlined />
           {{ $t('Demo.Print') }}
-        </Button>
+        </component>
       </div>
     </template>
   </Table>
   <BookEditorModal />
-  <PrintDesigner class="pointer-events-none fixed overflow-hidden !w-[1px] !h-[1px]" ref="print-designer" headless />
+  <PrintDesigner
+    class="pointer-events-none fixed overflow-hidden !w-[1px] !h-[1px]"
+    ref="print-designer"
+    headless
+  />
 </template>
 
 <style scoped></style>

@@ -25,14 +25,13 @@
     "@abp/data-protection": "workspace:*",
     "@abp/print-designer": "workspace:*",
     "@abp/request": "workspace:*",
-    "@ant-design/icons-vue": "catalog:",
+    "@vben-core/shadcn-ui": "workspace:*",
     "@vben/access": "workspace:*",
     "@vben/common-ui": "workspace:*",
     "@vben/hooks": "workspace:*",
     "@vben/icons": "workspace:*",
     "@vben/locales": "workspace:*",
     "@vben/plugins": "workspace:*",
-    "ant-design-vue": "catalog:",
     "dayjs": "catalog:",
     "vue": "catalog:"
   }
