@@ -9,10 +9,15 @@ import { defineAsyncComponent, h, ref, toValue } from 'vue';
 
 import { useVbenDrawer } from '@vben/common-ui';
 import { $t } from '@vben/locales';
+import { downloadFileFromUrl } from '@vben/utils';
 
 import { formatToDateTime } from '@abp/core';
 import { useVbenVxeGrid } from '@abp/ui';
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons-vue';
+import {
+  DeleteOutlined,
+  EditOutlined,
+  FileExcelOutlined,
+} from '@ant-design/icons-vue';
 import { Button, message, Modal, Tag } from 'ant-design-vue';
 
 import { useAuditLogsApi } from '../../api/useAuditLogsApi';
@@ -23,7 +28,8 @@ import { httpMethodOptions, httpStatusCodeOptions } from './mapping';
 defineOptions({
   name: 'AuditLogTable',
 });
-const { deleteApi, deleteManyApi, getPagedListApi } = useAuditLogsApi();
+const { deleteApi, deleteManyApi, getExportApiUrl, getPagedListApi } =
+  useAuditLogsApi();
 
 const selectedKeys = ref<string[]>([]);
 const formOptions: VbenFormProps = {
@@ -330,6 +336,12 @@ function onBulkDelete() {
   });
 }
 
+async function onExportToExcel() {
+  const input = await gridApi.formApi.getRawValues();
+  const downloadUrl = getExportApiUrl(input);
+  downloadFileFromUrl({ source: downloadUrl });
+}
+
 function onFilter(field: string, value: any) {
   gridApi.formApi.setFieldValue(field, value);
   gridApi.formApi.validateAndSubmitForm();
@@ -339,17 +351,28 @@ function onFilter(field: string, value: any) {
 <template>
   <Grid :table-title="$t('AbpAuditLogging.AuditLog')">
     <template #toolbar-tools>
-      <Button
-        v-if="selectedKeys.length > 0"
-        :icon="h(DeleteOutlined)"
-        danger
-        ghost
-        type="primary"
-        v-access:code="[AuditLogPermissions.Delete]"
-        @click="onBulkDelete"
-      >
-        {{ $t('AbpUi.Delete') }}
-      </Button>
+      <div class="flex flex-row gap-2">
+        <Button
+          v-if="selectedKeys.length > 0"
+          :icon="h(DeleteOutlined)"
+          danger
+          ghost
+          type="primary"
+          v-access:code="[AuditLogPermissions.Delete]"
+          @click="onBulkDelete"
+        >
+          {{ $t('AbpUi.Delete') }}
+        </Button>
+        <Button
+          :icon="h(FileExcelOutlined)"
+          ghost
+          type="primary"
+          v-access:code="[AuditLogPermissions.Export]"
+          @click="onExportToExcel"
+        >
+          {{ $t('AbpAuditLogging.ExportToExcel') }}
+        </Button>
+      </div>
     </template>
     <template #clientIpAddress="{ row }">
       <Tag v-if="row.extraProperties?.Location" color="blue">

@@ -7,6 +7,7 @@ import type {
 } from '../types/audit-logs';
 
 import { useRequest } from '@abp/request';
+import qs from 'qs';
 
 export function useAuditLogsApi() {
   const { cancel, request } = useRequest();
@@ -19,6 +20,27 @@ export function useAuditLogsApi() {
     return request<AuditLogDto>(`/api/auditing/audit-log/${id}`, {
       method: 'GET',
     });
+  }
+
+  /**
+   * 导出审计日志列表
+   * @param input 参数
+   */
+  function exportApi(input: AuditLogGetListInput): Promise<Blob> {
+    return request<Blob>('/api/auditing/audit-log/export', {
+      method: 'GET',
+      params: input,
+      responseType: 'blob',
+    });
+  }
+
+  /**
+   * 获取导出审计日志列表请求Url
+   * @param input 参数
+   */
+  function getExportApiUrl(input: AuditLogGetListInput) {
+    const query = qs.stringify(input, { arrayFormat: 'brackets' });
+    return `/api/auditing/audit-log/export${query ? `?${query}` : ''}`;
   }
 
   /**
@@ -59,7 +81,9 @@ export function useAuditLogsApi() {
     cancel,
     deleteApi,
     deleteManyApi,
+    exportApi,
     getApi,
+    getExportApiUrl,
     getPagedListApi,
   };
 }
