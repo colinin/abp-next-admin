@@ -15,12 +15,12 @@ import type {
 import { defineComponent, h } from 'vue';
 
 import { useAccess } from '@vben/access';
-import { VbenTableAction } from '@vben/common-ui';
+import { confirm, VbenTableAction } from '@vben/common-ui';
 import { createIconifyIcon } from '@vben/icons';
 import { $t } from '@vben/locales';
 
+import { useNotifications } from '@abp/core';
 import { useVbenVxeGrid } from '@abp/ui';
-import { message, Modal } from 'ant-design-vue';
 
 function getByPath(source: any, path?: string) {
   if (!path) {
@@ -40,6 +40,7 @@ export function useAbpDataTable<
   TDto extends Record<string, any> = any,
   TFormValues extends FormValues = FormValues,
 >(options: AbpDataTableOptions<TDto, TFormValues>) {
+  const { toastSuccess } = useNotifications();
   const { hasAccessByCodes } = useAccess();
   const {
     actionColumn,
@@ -169,14 +170,18 @@ export function useAbpDataTable<
     const content = deleteWarnMessage
       ? deleteWarnMessage(dto)
       : $t('crud.deleteWarnMessage', [getId(dto)]);
-    Modal.confirm({
+    await confirm({
       centered: true,
       content,
-      onOk: async () => {
-        await deleteApi(dto);
-        message.success($t('crud.deleteSuccess'));
-        await refresh();
+      async beforeClose(scope) {
+        if (scope.isConfirm) {
+          await deleteApi(dto);
+          toastSuccess($t('crud.deleteSuccess'));
+          await refresh();
+        }
+        return true;
       },
+      icon: 'warning',
       title: $t('crud.confirmTitle'),
     });
   }
@@ -185,15 +190,19 @@ export function useAbpDataTable<
     if (!deleteManyApi) {
       return;
     }
-    Modal.confirm({
+    await confirm({
       centered: true,
       content: $t('crud.deleteManyWarnMessage'),
-      onOk: async () => {
-        await deleteManyApi(ids);
-        message.success($t('crud.deleteSuccess'));
-        (gridApi.grid as any)?.clearCheckboxRow?.();
-        await refresh();
+      async beforeClose(scope) {
+        if (scope.isConfirm) {
+          await deleteManyApi(ids);
+          toastSuccess($t('crud.deleteSuccess'));
+          (gridApi.grid as any)?.clearCheckboxRow?.();
+          await refresh();
+        }
+        return true;
       },
+      icon: 'warning',
       title: $t('crud.confirmTitle'),
     });
   }

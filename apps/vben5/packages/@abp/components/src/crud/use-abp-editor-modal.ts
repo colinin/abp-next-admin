@@ -13,7 +13,7 @@ import { defineComponent, h, ref } from 'vue';
 import { useVbenForm, useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { message } from 'ant-design-vue';
+import { useNotifications } from '@abp/core';
 
 function isRecord(value: unknown): value is Record<string, any> {
   return typeof value === 'object' && value !== null;
@@ -35,6 +35,7 @@ export function useAbpEditorModal<
   const currentDto = ref<TDto>();
   const userOnOpenChange = options.onOpenChange;
 
+  const { toastSuccess, toastError } = useNotifications();
   const [Form, formApi] = useVbenForm<TFormValues>({
     ...options.formOptions,
     handleSubmit: onSubmit,
@@ -116,7 +117,7 @@ export function useAbpEditorModal<
       } else {
         return;
       }
-      message.success($t('crud.saveSuccess'));
+      toastSuccess($t('crud.saveSuccess'));
       await options.refresh?.();
       options.onSuccess?.(mode.value, dto);
       await baseModalApi.close();
@@ -159,7 +160,7 @@ export function useAbpEditorModal<
       const dto = await resolveDto(data);
       openEditor(nextMode ?? 'edit', dto);
     } catch (error) {
-      message.error(error instanceof Error ? error.message : String(error));
+      toastError(error instanceof Error ? error.message : String(error));
     }
   };
   modalApi.create = async () => {
