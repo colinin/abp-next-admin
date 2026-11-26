@@ -32,6 +32,7 @@ minimumReleaseAge: 0
 
 overrides:
   '@ast-grep/napi': 'catalog:'
+  '@vue/compiler-sfc': 3.5.41
   '@ctrl/tinycolor': 'catalog:'
   clsx: 'catalog:'
   pinia: 'catalog:'
