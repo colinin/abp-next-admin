@@ -22,7 +22,7 @@ import { initTimezone } from './timezone-init';
 
 async function bootstrap(namespace: string) {
   // 初始化通知与toast
-  setupFeedbackBridge();
+  const feedbackDispose = setupFeedbackBridge();
 
   // 初始化组件适配器
   await initComponentAdapter();
@@ -87,6 +87,9 @@ async function bootstrap(namespace: string) {
   });
 
   app.mount('#app');
+  app.onUnmount(() => {
+    feedbackDispose();
+  });
 }
 
 export { bootstrap };
