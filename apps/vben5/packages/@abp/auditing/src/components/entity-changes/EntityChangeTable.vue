@@ -66,7 +66,7 @@ const columnsConfig = reactive<VxeGridPropTypes.Columns<EntityChangeDto>>([
       return cellValue ? formatToDateTime(cellValue) : cellValue;
     },
     sortable: true,
-    title: $t('AbpAuditLogging.StartTime'),
+    title: $t('AbpAuditLogging.ChangeTime'),
     width: 200,
   },
   {

@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { Page } from '@vben/common-ui';
 
-import { AuditLogTable } from '@abp/auditing';
+import { AuditLogPage } from '@abp/auditing';
 
 defineOptions({
   name: 'Vben5AuditingAuditLogs',
@@ -9,7 +9,7 @@ defineOptions({
 </script>
 
 <template>
-  <Page>
-    <AuditLogTable />
+  <Page auto-content-height content-class="bg-background">
+    <AuditLogPage />
   </Page>
 </template>
