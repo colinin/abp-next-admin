@@ -617,6 +617,7 @@ export type ComponentType =
   | 'ApiSelect'
   | 'ApiTreeSelect'
   | 'AutoComplete'
+  | 'Button'
   | 'Cascader'
   | 'Checkbox'
   | 'CheckboxGroup'
@@ -658,6 +659,7 @@ export interface ComponentPropsMap {
   ApiSelect: ApiComponentSharedProps & SelectProps;
   ApiTreeSelect: ApiComponentSharedProps & TreeSelectProps;
   AutoComplete: AutoCompleteProps;
+  Button: ButtonProps;
   Cascader: CascaderProps;
   ColorPicker: ColorPickerProps;
   Checkbox: CheckboxProps;
@@ -713,6 +715,7 @@ async function initComponentAdapter() {
       visibleEvent: 'onVisibleChange',
     }),
     AutoComplete,
+    Button,
     Cascader,
     Checkbox,
     CheckboxGroup,
