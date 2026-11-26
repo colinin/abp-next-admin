@@ -124,7 +124,7 @@ export function useAbpEditorModal<
     const values =
       mode.value === 'create' ? getDefaultValues() : (currentDto.value ?? {});
     await formApi.reset({ values });
-    initialValues.value = await formApi.getRawValues();
+    initialValues.value = await formApi.getValues();
     formApi.setState((prev) => ({
       commonConfig: {
         ...prev.commonConfig,
@@ -146,7 +146,7 @@ export function useAbpEditorModal<
     ) {
       return true;
     }
-    const currentValues = await formApi.getRawValues();
+    const currentValues = await formApi.getValues();
     if (isEqual(currentValues, initialValues.value)) {
       return true;
     }
@@ -179,7 +179,7 @@ export function useAbpEditorModal<
       } else {
         return;
       }
-      initialValues.value = await formApi.getRawValues();
+      initialValues.value = await formApi.getValues();
       toastSuccess($t('crud.saveSuccess'));
       await options.refresh?.();
       options.onSuccess?.(mode.value, dto);
