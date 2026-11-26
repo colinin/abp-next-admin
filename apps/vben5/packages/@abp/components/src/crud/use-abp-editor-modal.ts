@@ -16,6 +16,18 @@ import { isEqual } from '@vben/utils';
 
 import { useNotifications } from '@abp/core';
 
+const FORM_ACTION_SLOT_NAMES = new Set([
+  'default',
+  'expand-after',
+  'expand-before',
+  'reset-before',
+  'submit-before',
+]);
+
+function toCamelCaseSlotName(name: string) {
+  return name.replaceAll(/-([a-z])/g, (_, char: string) => char.toUpperCase());
+}
+
 function isRecord(value: unknown): value is Record<string, any> {
   return typeof value === 'object' && value !== null;
 }
@@ -37,10 +49,16 @@ export function useAbpEditorModal<
   const checkValueChanged = ref(false);
   const initialValues = ref<TFormValues>();
   const userOnOpenChange = options.onOpenChange;
+  const submitButtonOptions = {
+    ...options.formOptions.submitButtonOptions,
+    show: !options.create && !options.update,
+  };
 
   const { toastSuccess, toastError } = useNotifications();
+
   const [Form, formApi] = useVbenForm<TFormValues>({
     ...options.formOptions,
+    submitButtonOptions,
     handleSubmit: onSubmit,
     showDefaultActions: false,
   });
@@ -73,12 +91,13 @@ export function useAbpEditorModal<
   }
 
   function getTitle(): string {
+    let titleValue = '';
     if (options.title) {
-      return options.title(mode.value, currentDto.value);
+      titleValue = options.title(mode.value, currentDto.value) ?? '';
     }
-    const titleValue = currentDto.value
-      ? options.titleKey(currentDto.value)
-      : '';
+    if (!titleValue && currentDto.value && options.titleKey) {
+      titleValue = options.titleKey(currentDto.value);
+    }
     if (mode.value === 'create') {
       return $t('crud.create');
     }
@@ -86,6 +105,13 @@ export function useAbpEditorModal<
       return titleValue ? `${$t('crud.view')} ${titleValue}` : $t('crud.view');
     }
     return titleValue ? `${$t('crud.edit')} ${titleValue}` : $t('crud.edit');
+  }
+
+  function getDescription(): string | undefined {
+    if (options.description) {
+      return options.description(mode.value, currentDto.value);
+    }
+    return undefined;
   }
 
   async function applyMode() {
@@ -108,6 +134,7 @@ export function useAbpEditorModal<
     baseModalApi.setState({
       showConfirmButton: !disabled,
       title: getTitle(),
+      description: getDescription(),
     });
   }
 
@@ -146,9 +173,9 @@ export function useAbpEditorModal<
     try {
       baseModalApi.setState({ submitting: true });
       if (mode.value === 'create') {
-        await options.create(values);
+        options.create && (await options.create(values));
       } else if (dto) {
-        await options.update(options.idKey(dto), values);
+        options.update && (await options.update(options.idKey(dto), values));
       } else {
         return;
       }
@@ -219,17 +246,36 @@ export function useAbpEditorModal<
     name: 'AbpEditorModal',
     inheritAttrs: false,
     setup(_, { attrs, slots }) {
-      return () =>
-        h(
+      return () => {
+        const formSlots: Record<string, any> = {};
+        const modalSlots: Record<string, any> = {};
+        for (const [name, slot] of Object.entries(slots)) {
+          if (name.startsWith('form-')) {
+            const formSlotName = name.slice('form-'.length);
+            if (formSlotName) {
+              formSlots[formSlotName] = slot;
+              if (!FORM_ACTION_SLOT_NAMES.has(formSlotName)) {
+                const camelCaseName = toCamelCaseSlotName(formSlotName);
+                if (camelCaseName !== formSlotName) {
+                  formSlots[camelCaseName] = slot;
+                }
+              }
+            }
+          } else {
+            modalSlots[name] = slot;
+          }
+        }
+        return h(
           Modal as any,
           attrs as any,
           {
-            ...slots,
-            default: () => h(Form as any),
+            ...modalSlots,
+            default: () => h(Form as any, {}, formSlots),
           } as any,
         );
+      };
     },
-  }) as unknown as AbpEditorModalComponent; // 保留 Modal 的 props/slots 类型推导
+  }) as unknown as AbpEditorModalComponent<TFormValues>; // 保留 Modal 的 props/slots 类型推导
 
   return [AbpEditorModal, modalApi] as const;
 }

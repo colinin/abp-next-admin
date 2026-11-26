@@ -122,6 +122,7 @@ export function useAbpDataTable<
       align: 'center',
       field: 'action',
       fixed: 'right',
+      minWidth: actionColumn?.width ?? 150,
       slots: { default: 'action' },
       title: actionColumn?.title ?? $t('crud.actions'),
       width: actionColumn?.width ?? 150,
