@@ -17,9 +17,6 @@
     ".": {
       "types": "./src/index.ts",
       "default": "./src/index.ts"
-    },
-    "./global": {
-      "types": "./global.d.ts"
     }
   },
   "dependencies": {
