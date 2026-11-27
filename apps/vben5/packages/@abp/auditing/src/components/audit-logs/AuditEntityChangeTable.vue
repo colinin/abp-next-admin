@@ -196,7 +196,7 @@ const [DataTable, tableApi] = useAbpDataTable<EntityChangeDto>({
   },
   load(params) {
     return getPagedListApi({
-      sorting: params.sorting,
+      sorting: params.sortable?.sorting,
       skipCount: params.pager.skipCount,
       maxResultCount: params.pager.maxResultCount,
       ...params.searchValues,

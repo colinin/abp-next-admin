@@ -233,11 +233,11 @@ const [Table, tableApi] = useAbpDataTable<BookDto>({
       },
     },
   },
-  load: async ({ pager, searchValues, sorting }) =>
+  load: async ({ pager, searchValues, sortable }) =>
     await getPagedListApi({
       maxResultCount: pager.maxResultCount,
       skipCount: pager.skipCount,
-      sorting,
+      sorting: sortable?.sorting,
       ...searchValues,
     }),
 });

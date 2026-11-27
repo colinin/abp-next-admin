@@ -262,11 +262,11 @@ const [DataTable, tableApi] = useAbpDataTable<AuditLogDto>({
   },
   gridOptions,
   rowKey: 'id',
-  load: ({ pager, searchValues, sorting }) =>
+  load: ({ pager, searchValues, sortable }) =>
     getPagedListApi({
       maxResultCount: pager.maxResultCount,
       skipCount: pager.skipCount,
-      sorting,
+      sorting: sortable?.sorting,
       ...searchValues,
     }),
 });
