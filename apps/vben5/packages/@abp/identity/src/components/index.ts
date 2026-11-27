@@ -4,4 +4,5 @@ export { default as RoleTable } from './roles/RoleTable.vue';
 export { default as SecurityLogTable } from './security-logs/SecurityLogTable.vue';
 export { default as SessionTable } from './sessions/SessionTable.vue';
 export { default as UserSessionTable } from './sessions/UserSessionTable.vue';
+export { default as UserPage } from './users/UserPage.vue';
 export { default as UserTable } from './users/UserTable.vue';
