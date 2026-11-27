@@ -1,13 +1,21 @@
 import type {
+  VxeGridListeners,
+  VxeGridProps,
+  VxeGridPropTypes,
+} from 'vxe-table';
+
+import type {
   ActionItem,
   BaseFormComponentType,
   FormValues,
 } from '@vben/common-ui';
+import type { DeepPartial } from '@vben/types';
 
 import type { AbpIdOf } from '../types';
 import type {
   AbpDataTableApi,
   AbpDataTableComponent,
+  AbpDataTableGridEvents,
   AbpDataTableLoadParams,
   AbpDataTableOptions,
 } from './types';
@@ -56,7 +64,8 @@ export function useAbpDataTable<
     editAuth,
     editText,
     editIcon,
-    gridEvents,
+    gridEvents: userGridEventsOption,
+    gridOptions: gridOptionsOption,
     load,
     response,
     rowKey,
@@ -68,11 +77,15 @@ export function useAbpDataTable<
 
   const listPath = response?.list ?? 'items';
   const totalPath = response?.total ?? 'totalCount';
-  const gridOptions: any = gridProps.gridOptions ?? {};
-  const pagerEnabled = gridOptions.pagerConfig?.enabled !== false;
+  const baseGridOptions: DeepPartial<VxeGridProps<TDto>> = (gridOptionsOption ??
+    {}) as DeepPartial<VxeGridProps<TDto>>;
+  const pagerEnabled = baseGridOptions.pagerConfig?.enabled !== false;
   let isClientPagination = false;
 
-  async function query(params: any, formValues: TFormValues) {
+  async function query(
+    params: VxeGridPropTypes.ProxyAjaxQueryParams<TDto>,
+    formValues: TFormValues,
+  ) {
     const page = params?.page ?? { currentPage: 1, pageSize: 10 };
     const pager: AbpDataTableLoadParams['pager'] = {
       maxResultCount: page.pageSize,
@@ -123,10 +136,10 @@ export function useAbpDataTable<
     };
   }
 
-  const columns = [...(gridOptions.columns ?? [])];
+  const columns = [...(baseGridOptions.columns ?? [])];
   if (
     actionColumn !== false &&
-    !columns.some((column: any) => column.field === 'action')
+    !columns.some((column) => column?.field === 'action')
   ) {
     columns.push({
       align: 'center',
@@ -139,12 +152,67 @@ export function useAbpDataTable<
     });
   }
 
-  const userGridEvents = gridEvents ?? {};
+  const userGridEvents: AbpDataTableGridEvents<TDto> =
+    userGridEventsOption ?? {};
   const { onCheckboxChange, ...vxeGridEvents } = userGridEvents;
 
-  function handleCheckboxChange(params: any) {
+  let clearCheckboxSelection = () => {};
+  let queryGrid = () => {};
+
+  function handleCheckboxChange(params: { records?: TDto[] }) {
     onCheckboxChange?.(params?.records ?? []);
   }
+
+  const gridEvents: VxeGridListeners<TDto> = {
+    ...vxeGridEvents,
+    checkboxAll: (params) => {
+      userGridEvents.checkboxAll?.(params);
+      handleCheckboxChange(params);
+    },
+    checkboxChange: (params) => {
+      userGridEvents.checkboxChange?.(params);
+      handleCheckboxChange(params);
+    },
+    dataChange: (params) => {
+      clearCheckboxSelection();
+      userGridEvents.dataChange?.(params);
+      handleCheckboxChange({ records: [] });
+    },
+    sortChange: (params) => {
+      userGridEvents.sortChange?.(params);
+      if (!isClientPagination) {
+        queryGrid();
+      }
+    },
+  };
+
+  const gridOptions: DeepPartial<VxeGridProps<TDto>> = {
+    ...baseGridOptions,
+    rowConfig: {
+      keyField: rowKey ?? 'id',
+      ...baseGridOptions.rowConfig,
+    },
+    columns,
+    pagerConfig: {
+      pageSize: 10,
+      pageSizes: [10, 25, 50, 100],
+      ...baseGridOptions.pagerConfig,
+    },
+    proxyConfig: {
+      ...baseGridOptions.proxyConfig,
+      sort: false,
+      autoLoad: baseGridOptions.proxyConfig?.autoLoad ?? true,
+      ajax: {
+        ...baseGridOptions.proxyConfig?.ajax,
+        query,
+      },
+      response: {
+        ...baseGridOptions.proxyConfig?.response,
+        list: 'items',
+        total: 'totalCount',
+      },
+    },
+  };
 
   const [Grid, gridApi] = useVbenVxeGrid<
     TDto,
@@ -153,56 +221,16 @@ export function useAbpDataTable<
     TFormValues
   >({
     ...gridProps,
-    gridEvents: {
-      ...vxeGridEvents,
-      checkboxAll: (params: any) => {
-        userGridEvents.checkboxAll?.(params);
-        handleCheckboxChange(params);
-      },
-      checkboxChange: (params: any) => {
-        userGridEvents.checkboxChange?.(params);
-        handleCheckboxChange(params);
-      },
-      dataChange: (params: any) => {
-        void gridApi.grid.clearCheckboxRow();
-        userGridEvents.dataChange?.(params);
-        handleCheckboxChange({ records: [] });
-      },
-      sortChange: (params: any) => {
-        userGridEvents.sortChange?.(params);
-        if (!isClientPagination) {
-          void gridApi.query();
-        }
-      },
-    },
-    gridOptions: {
-      ...gridOptions,
-      rowConfig: {
-        keyField: rowKey ?? 'id',
-        ...gridOptions.rowConfig,
-      },
-      columns,
-      pagerConfig: {
-        pageSize: 10,
-        pageSizes: [10, 25, 50, 100],
-        ...gridOptions.pagerConfig,
-      },
-      proxyConfig: {
-        ...gridOptions.proxyConfig,
-        sort: false,
-        autoLoad: gridOptions.proxyConfig?.autoLoad ?? true,
-        ajax: {
-          ...gridOptions.proxyConfig?.ajax,
-          query,
-        },
-        response: {
-          ...gridOptions.proxyConfig?.response,
-          list: 'items',
-          total: 'totalCount',
-        },
-      },
-    },
+    gridEvents,
+    gridOptions,
   });
+
+  clearCheckboxSelection = () => {
+    void gridApi.grid.clearCheckboxRow();
+  };
+  queryGrid = () => {
+    void gridApi.query();
+  };
 
   async function refresh() {
     await gridApi.query();
@@ -292,29 +320,23 @@ export function useAbpDataTable<
     inheritAttrs: false,
     setup(_, { attrs, slots }) {
       return () =>
-        h(
-          Grid as any,
-          attrs as any,
-          {
-            ...slots,
-            action:
-              slots.action ??
-              ((params: any) =>
-                h(VbenTableAction, {
-                  actions: getActions(params.row as TDto),
-                  dropdownActions: getDropdownActions(params.row as TDto),
-                  align: 'center',
-                  hasPermission(auth) {
-                    if (!auth) {
-                      return true;
-                    }
-                    return hasAccessByCodes(
-                      Array.isArray(auth) ? auth : [auth],
-                    );
-                  },
-                })),
-          } as any,
-        );
+        h(Grid, attrs, {
+          ...slots,
+          action:
+            slots.action ??
+            ((params: { row: TDto }) =>
+              h(VbenTableAction, {
+                actions: getActions(params.row),
+                dropdownActions: getDropdownActions(params.row),
+                align: 'center',
+                hasPermission(auth) {
+                  if (!auth) {
+                    return true;
+                  }
+                  return hasAccessByCodes(Array.isArray(auth) ? auth : [auth]);
+                },
+              })),
+        });
     },
   }) as unknown as AbpDataTableComponent<TDto, TFormValues>; // 保留 Grid 的 props/slots 类型推导
 
