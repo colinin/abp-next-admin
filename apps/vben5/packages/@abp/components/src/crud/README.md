@@ -285,6 +285,37 @@ Rules:
 
 Form slot props are typed from `VbenFormSlots<TFormValues>`.
 
+### Tabbed forms
+
+Provide `tabs` in `formOptions` and assign each schema item to a tab with `tabKey`:
+
+```ts
+const [Modal] = useAbpEditorModal<BookDto, BookForm>({
+  idKey: (dto) => dto.id,
+  formOptions: {
+    tabs: [
+      { key: 'basic', title: 'Basic' },
+      { key: 'advanced', title: 'Advanced' },
+    ],
+    schema: [
+      { component: 'Input', fieldName: 'name', label: 'Name', tabKey: 'basic' },
+      {
+        component: 'Input',
+        fieldName: 'description',
+        label: 'Description',
+        tabKey: 'advanced',
+      },
+    ],
+  },
+});
+```
+
+- Tabs are rendered with `@vben-core/shadcn-ui`.
+- `key` must be unique and match `schema.tabKey`.
+- Schema items without `tabKey` are placed in the first tab.
+- A single Vben Form is used for all tabs; fields remain mounted and are validated and submitted together.
+- Switching tabs only hides the fields that do not belong to the active tab.
+
 ### Unsaved changes
 
 When the form value differs from the value captured on open, closing the modal asks for confirmation:

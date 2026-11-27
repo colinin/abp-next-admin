@@ -283,6 +283,37 @@ modalApi.view(dto); // 查看
 
 Form 插槽参数类型由 `VbenFormSlots<TFormValues>` 推导。
 
+### Tabs 分标签卡表单
+
+在 `formOptions` 中提供 `tabs`，并通过 schema 的 `tabKey` 指定字段所属 Tab：
+
+```ts
+const [Modal] = useAbpEditorModal<BookDto, BookForm>({
+  idKey: (dto) => dto.id,
+  formOptions: {
+    tabs: [
+      { key: 'basic', title: '基本信息' },
+      { key: 'advanced', title: '高级设置' },
+    ],
+    schema: [
+      { component: 'Input', fieldName: 'name', label: '名称', tabKey: 'basic' },
+      {
+        component: 'Input',
+        fieldName: 'description',
+        label: '描述',
+        tabKey: 'advanced',
+      },
+    ],
+  },
+});
+```
+
+- Tab 使用 `@vben-core/shadcn-ui` 渲染。
+- `key` 必须唯一，并与 `schema.tabKey` 对应。
+- 未设置 `tabKey` 的字段会放入第一个 Tab。
+- 所有 Tab 共用一个 Vben Form，字段始终保持挂载，提交时统一校验。
+- 切换 Tab 只隐藏不属于当前 Tab 的字段。
+
 ### 未保存变更提示
 
 表单值与打开时记录的快照不一致时，关闭弹窗会弹出确认：

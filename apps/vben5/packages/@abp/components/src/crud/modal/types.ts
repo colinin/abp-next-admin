@@ -7,10 +7,40 @@ import type {
   FormValues,
   ModalProps,
   VbenFormProps,
+  VbenFormSchema,
   VbenFormSlots,
 } from '@vben/common-ui';
 
 import type { AbpIdOf, AbpRecord } from '../types';
+
+/** 编辑弹窗中的 Tab 配置 */
+export interface AbpEditorTab {
+  /** Tab 唯一标识，对应 schema.tabKey */
+  key: string;
+  /** Tab 标题 */
+  title: string;
+  /** 是否禁用 */
+  disabled?: boolean;
+}
+
+/** 带 Tab 归属的 Form schema */
+export type AbpEditorFormSchema<TFormValues extends FormValues = FormValues> = {
+  /** 该字段所属的 Tab key，未设置时归入第一个 Tab */
+  tabKey?: string;
+} & VbenFormSchema<BaseFormComponentType, Record<string, never>, TFormValues>;
+
+/** 编辑弹窗 Form 配置，在 Vben Form 基础上增加 tabs */
+export type AbpEditorModalFormOptions<
+  TFormValues extends FormValues = FormValues,
+> = {
+  /** Tab 列表，未设置时使用普通表单 */
+  tabs?: AbpEditorTab[];
+  /** 表单 schema，每项可通过 tabKey 指定所属 Tab */
+  schema?: AbpEditorFormSchema<TFormValues>[];
+} & Omit<
+  VbenFormProps<BaseFormComponentType, Record<string, never>, TFormValues>,
+  'schema'
+>;
 
 export interface AbpEditorModalBaseSlots {
   'append-footer'?: () => any;
@@ -74,11 +104,7 @@ export interface AbpEditorModalOptions<
   TFormValues extends FormValues = FormValues,
 > {
   /** vben 表单配置 */
-  formOptions: VbenFormProps<
-    BaseFormComponentType,
-    Record<string, never>,
-    TFormValues
-  >;
+  formOptions: AbpEditorModalFormOptions<TFormValues>;
   /** 新增 API */
   create?: (input: TFormValues) => Promise<any>;
   /** 修改 API，id 由 idKey 计算 */
