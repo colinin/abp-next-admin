@@ -18,6 +18,8 @@ import type {
   VbenFormSlots,
 } from '@vben/common-ui';
 
+import type { VbenIcon } from '@vben-core/shadcn-ui';
+
 export type AbpRecord = Record<string, any>;
 
 export type AbpId = number | string;
@@ -97,12 +99,16 @@ export interface AbpDataTableOptions<
   edit?: (dto: TDto) => void;
   /** 编辑按钮权限码 */
   editAuth?: ActionItem['auth'];
-  /** 删除按钮权限码 */
-  deleteAuth?: ActionItem['auth'];
   /** 编辑按钮文案 */
   editText?: string;
+  /** 编辑按钮图标组件 */
+  editIcon?: typeof VbenIcon.icon;
+  /** 删除按钮权限码 */
+  deleteAuth?: ActionItem['auth'];
   /** 删除按钮文案 */
   deleteText?: string;
+  /** 删除按钮图标组件 */
+  deleteIcon?: typeof VbenIcon.icon;
   /** 操作列配置，传 false 不生成默认操作列 */
   actionColumn?: AbpDataTableActionColumnOptions | false;
   /** 追加操作项 */

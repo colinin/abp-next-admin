@@ -49,11 +49,13 @@ export function useAbpDataTable<
     deleteMany: deleteManyApi,
     deleteAuth,
     deleteText,
+    deleteIcon,
     deleteWarnMessage,
     dropdownActions,
     edit,
     editAuth,
     editText,
+    editIcon,
     idKey,
     load,
     response,
@@ -221,7 +223,7 @@ export function useAbpDataTable<
         key: 'edit',
         auth: editAuth,
         onClick: () => edit(row),
-        icon: createIconifyIcon('ant-design:edit-outlined'),
+        icon: editIcon ?? createIconifyIcon('ant-design:edit-outlined'),
         text: editText ?? $t('crud.edit'),
       });
     }
@@ -233,7 +235,7 @@ export function useAbpDataTable<
         onClick: () => {
           void tableApi.delete(row);
         },
-        icon: createIconifyIcon('ant-design:delete-outlined'),
+        icon: deleteIcon ?? createIconifyIcon('ant-design:delete-outlined'),
         text: deleteText ?? $t('crud.delete'),
       });
     }
