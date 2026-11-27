@@ -3,25 +3,43 @@ import type { TabsListProps } from 'reka-ui';
 
 import type { HTMLAttributes } from 'vue';
 
+import { computed } from 'vue';
+
 import { cn } from '@vben-core/shared/utils';
 
 import { reactiveOmit } from '@vueuse/core';
 import { TabsList } from 'reka-ui';
 
-const props = defineProps<
-  TabsListProps & { class?: HTMLAttributes['class'] }
->();
+const props = withDefaults(
+  defineProps<
+    TabsListProps & {
+      class?: HTMLAttributes['class'];
+      variant?: 'default' | 'line';
+    }
+  >(),
+  {
+    variant: 'default',
+  },
+);
 
-const delegatedProps = reactiveOmit(props, 'class');
+const delegatedProps = reactiveOmit(props, 'class', 'variant');
+
+const variantClass = computed(() =>
+  props.variant === 'line'
+    ? 'gap-1 rounded-none bg-transparent'
+    : 'rounded-md bg-muted',
+);
 </script>
 
 <template>
   <TabsList
     data-slot="tabs-list"
+    :data-variant="variant"
     v-bind="delegatedProps"
     :class="
       cn(
-        'bg-muted text-muted-foreground inline-flex h-9 w-fit items-center justify-center rounded-md p-1',
+        'group/tabs-list text-muted-foreground inline-flex h-9 w-fit items-center justify-center p-1',
+        variantClass,
         props.class,
       )
     "
