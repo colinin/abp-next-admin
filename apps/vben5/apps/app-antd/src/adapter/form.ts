@@ -22,6 +22,7 @@ async function initSetupVbenForm() {
         IconPicker: 'modelValue',
         Radio: 'checked',
         Switch: 'checked',
+        Transfer: 'targetKeys',
         Upload: 'fileList',
       },
     },

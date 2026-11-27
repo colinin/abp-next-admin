@@ -25,6 +25,7 @@ import type {
   SwitchProps,
   TextAreaProps,
   TimePickerProps,
+  TransferProps,
   TreeSelectProps,
   UploadChangeParam,
   UploadFile,
@@ -139,6 +140,9 @@ const TimePicker = defineAsyncComponent(
   () => import('ant-design-vue/es/time-picker'),
 );
 const Tree = defineAsyncComponent(() => import('ant-design-vue/es/tree'));
+const Transfer = defineAsyncComponent(
+  () => import('ant-design-vue/es/transfer'),
+);
 
 const TreeSelect = defineAsyncComponent(
   () => import('ant-design-vue/es/tree-select'),
@@ -649,6 +653,7 @@ export type ComponentType =
   | 'TenantSelect'
   | 'Textarea'
   | 'TimePicker'
+  | 'Transfer'
   | 'Tree'
   | 'TreeSelect'
   | 'Upload'
@@ -687,6 +692,7 @@ export interface ComponentPropsMap {
   Textarea: TextAreaProps;
   TimePicker: TimePickerProps;
   TreeSelect: TreeSelectProps;
+  Transfer: TransferProps;
   Upload: AdapterUploadProps;
 }
 
@@ -760,6 +766,7 @@ async function initComponentAdapter() {
     TimePicker,
     Tree,
     TreeSelect: withDefaultPlaceholder(TreeSelect, 'select'),
+    Transfer,
     Upload: withPreviewUpload(),
     FeatureStateCheck,
     GlobalFeatureStateCheck,
