@@ -5,60 +5,43 @@ import type { VbenFormProps } from '@vben/common-ui';
 
 import type { AuditLogDto } from '../../types/audit-logs';
 
-import { defineAsyncComponent, h, ref, toValue } from 'vue';
+import { defineAsyncComponent, h, ref } from 'vue';
 
 import { useVbenDrawer } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 import { downloadFileFromUrl } from '@vben/utils';
 
-import { formatToDateTime, useNotifications } from '@abp/core';
-import { useVbenVxeGrid } from '@abp/ui';
+import { useAbpDataTable } from '@abp/components/crud/table';
+import { formatToDateTime } from '@abp/core';
 import {
   DeleteOutlined,
-  EditOutlined,
   FileExcelOutlined,
 } from '@ant-design/icons-vue';
-import { Button, Modal, Tag } from 'ant-design-vue';
+import { Button, Tag } from 'ant-design-vue';
 
 import { useAuditLogsApi } from '../../api/useAuditLogsApi';
 import { AuditLogPermissions } from '../../constants/permissions';
 import { useAuditlogs } from '../../hooks/useAuditlogs';
 import { httpMethodOptions, httpStatusCodeOptions } from './mapping';
+
 defineOptions({
   name: 'AuditLogTable',
 });
 
-const { toastSuccess } = useNotifications();
-
 const { deleteApi, deleteManyApi, getExportApiUrl, getPagedListApi } =
   useAuditLogsApi();
+const { getHttpMethodColor, getHttpStatusCodeColor } = useAuditlogs();
 
 const selectedKeys = ref<string[]>([]);
-const formOptions: VbenFormProps = {
-  // 默认展开
+const [AuditLogDrawer, logDrawerApi] = useVbenDrawer({
+  connectedComponent: defineAsyncComponent(
+    () => import('./AuditLogDrawer.vue'),
+  ),
+});
+
+const searchFormOptions: VbenFormProps = {
   collapsed: true,
   collapsedRows: 2,
-  // 使用 codec 替代 fieldMappingTime
-  // codec: {
-  //   decode(values) {
-  //     let executionTime: [string, string] | undefined;
-  //     if (values.startTime !== undefined && values.endTime !== undefined) {
-  //       executionTime = [formatToDateTime(values.startTime), formatToDateTime(values.endTime)];
-  //     }
-  //     return {
-  //       ...values,
-  //       executionTime,
-  //     };
-  //   },
-  //   encode(values) {
-  //     return {
-  //       ...values,
-  //       startTime: values.executionTime?.[0].valueOf(),
-  //       endTime: values.executionTime?.[1].valueOf(),
-  //       executionTime: undefined,
-  //     };
-  //   },
-  // },
   fieldMappingTime: [
     [
       'executionTime',
@@ -140,17 +123,13 @@ const formOptions: VbenFormProps = {
     {
       component: 'Checkbox',
       componentProps: {
-        render: () => {
-          return h('span', $t('AbpAuditLogging.HasException'));
-        },
+        render: () => h('span', $t('AbpAuditLogging.HasException')),
       },
       fieldName: 'hasException',
       label: $t('AbpAuditLogging.HasException'),
     },
   ],
-  // 控制表单是否显示折叠按钮
   showCollapseButton: true,
-  // 按下回车时是否提交表单
   submitOnEnter: true,
   wrapperClass: 'grid-cols-4',
 };
@@ -178,9 +157,8 @@ const gridOptions: VxeGridProps<AuditLogDto> = {
     },
     {
       align: 'left',
-      formatter: ({ cellValue }) => {
-        return cellValue ? formatToDateTime(cellValue) : cellValue;
-      },
+      formatter: ({ cellValue }) =>
+        cellValue ? formatToDateTime(cellValue) : cellValue,
       field: 'executionTime',
       sortable: true,
       title: $t('AbpAuditLogging.ExecutionTime'),
@@ -236,45 +214,14 @@ const gridOptions: VxeGridProps<AuditLogDto> = {
       title: $t('AbpAuditLogging.BrowserInfo'),
       width: 300,
     },
-    {
-      field: 'action',
-      fixed: 'right',
-      slots: { default: 'action' },
-      title: $t('AbpUi.Actions'),
-      width: 220,
-    },
   ],
   exportConfig: {},
   keepSource: true,
-  proxyConfig: {
-    ajax: {
-      query: async ({ page, sort }, formValues) => {
-        const sorting = sort.order ? `${sort.field} ${sort.order}` : undefined;
-        return await getPagedListApi({
-          sorting,
-          maxResultCount: page.pageSize,
-          skipCount: (page.currentPage - 1) * page.pageSize,
-          ...formValues,
-        });
-      },
-    },
-    response: {
-      total: 'totalCount',
-      list: 'items',
-    },
-  },
-  sortConfig: {
-    remote: true,
-    allowBtn: true,
-  },
   toolbarConfig: {
     custom: true,
     export: true,
-    // import: true,
     refresh: true,
-    refreshOptions: {
-      code: 'query',
-    },
+    refreshOptions: { code: 'query' },
     zoom: true,
   },
 };
@@ -286,72 +233,55 @@ const gridEvents: VxeGridListeners<AuditLogDto> = {
   checkboxChange: (params) => {
     selectedKeys.value = params.records.map((x) => x.id);
   },
-  sortChange: () => {
-    gridApi.query();
-  },
 };
 
-const [Grid, gridApi] = useVbenVxeGrid({
-  formOptions,
-  gridEvents,
-  gridOptions,
-});
-
-const { getHttpMethodColor, getHttpStatusCodeColor } = useAuditlogs();
-const [AuditLogDrawer, logDrawerApi] = useVbenDrawer({
-  connectedComponent: defineAsyncComponent(
-    () => import('./AuditLogDrawer.vue'),
-  ),
-});
-
-function onUpdate(row: AuditLogDto) {
+function showLog(row: AuditLogDto) {
   logDrawerApi.setData(row);
   logDrawerApi.open();
 }
 
-async function onDelete(row: AuditLogDto) {
-  Modal.confirm({
-    centered: true,
-    content: $t('AbpUi.ItemWillBeDeletedMessage'),
-    onOk: async () => {
-      await deleteApi(row.id);
-      toastSuccess($t('AbpUi.DeletedSuccessfully'));
-      gridApi.query();
-    },
-    title: $t('AbpUi.AreYouSure'),
-  });
-}
-
-function onBulkDelete() {
-  Modal.confirm({
-    centered: true,
-    content: $t('component.table.selectedItemWellBeDeleted'),
-    onOk: async () => {
-      await deleteManyApi({
-        ids: toValue(selectedKeys),
-      });
-      selectedKeys.value = [];
-      toastSuccess($t('AbpUi.DeletedSuccessfully'));
-      gridApi.query();
-    },
-    title: $t('AbpUi.AreYouSure'),
-  });
+async function onBulkDelete() {
+  await tableApi.deleteMany(selectedKeys.value);
 }
 
 async function onExportToExcel() {
-  const input = await gridApi.formApi.getValues();
-  const downloadUrl = getExportApiUrl(input);
-  downloadFileFromUrl({ source: downloadUrl });
+  const input = await tableApi.formApi.getValues();
+  downloadFileFromUrl({ source: getExportApiUrl(input) });
 }
 
 function onFilter(field: string, value: any) {
-  gridApi.formApi.setFieldValue(field, value);
-  gridApi.formApi.validateAndSubmitForm();
+  tableApi.formApi.setFieldValue(field, value);
+  tableApi.formApi.validateAndSubmit();
 }
+
+const [DataTable, tableApi] = useAbpDataTable<AuditLogDto>({
+  actionColumn: {
+    title: $t('AbpUi.Actions'),
+    width: 220,
+  },
+  editAuth: [AuditLogPermissions.Default],
+  editText: $t('AbpAuditLogging.ShowLogDialog'),
+  edit: showLog,
+  deleteAuth: [AuditLogPermissions.Delete],
+  delete: (dto) => deleteApi(dto.id),
+  deleteMany: (ids) => deleteManyApi({ ids }),
+  deleteWarnMessage: () => $t('AbpUi.ItemWillBeDeletedMessage'),
+  formOptions: searchFormOptions,
+  gridEvents,
+  gridOptions,
+  idKey: (dto) => dto.id,
+  load: ({ pager, searchValues, sorting }) =>
+    getPagedListApi({
+      maxResultCount: pager.maxResultCount,
+      skipCount: pager.skipCount,
+      sorting,
+      ...searchValues,
+    }),
+});
 </script>
 
 <template>
-  <Grid :table-title="$t('AbpAuditLogging.AuditLog')">
+  <DataTable :table-title="$t('AbpAuditLogging.AuditLog')">
     <template #toolbar-tools>
       <div class="flex flex-row gap-2">
         <Button
@@ -376,12 +306,14 @@ function onFilter(field: string, value: any) {
         </Button>
       </div>
     </template>
+
     <template #clientIpAddress="{ row }">
       <Tag v-if="row.extraProperties?.Location" color="blue">
         {{ row.extraProperties?.Location }}
       </Tag>
       <span>{{ row.clientIpAddress }}</span>
     </template>
+
     <template #url="{ row }">
       <Tag
         :color="getHttpStatusCodeColor(row.httpStatusCode)"
@@ -401,33 +333,12 @@ function onFilter(field: string, value: any) {
         class="link"
         href="javaScript:void(0);"
         @click="onFilter('url', row.url)"
-        >{{ row.url }}
+      >
+        {{ row.url }}
       </a>
     </template>
-    <template #action="{ row }">
-      <div class="flex flex-row">
-        <Button
-          :icon="h(EditOutlined)"
-          block
-          type="link"
-          v-access:code="[AuditLogPermissions.Default]"
-          @click="onUpdate(row)"
-        >
-          {{ $t('AbpAuditLogging.ShowLogDialog') }}
-        </Button>
-        <Button
-          :icon="h(DeleteOutlined)"
-          block
-          danger
-          type="link"
-          v-access:code="[AuditLogPermissions.Delete]"
-          @click="onDelete(row)"
-        >
-          {{ $t('AbpUi.Delete') }}
-        </Button>
-      </div>
-    </template>
-  </Grid>
+  </DataTable>
+
   <AuditLogDrawer />
 </template>
 
