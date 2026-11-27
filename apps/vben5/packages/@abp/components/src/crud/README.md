@@ -154,7 +154,7 @@ If `total` is missing, empty or invalid, the table falls back to **frontend pagi
 | `load` | Required. Loads rows using `pager`, `searchValues`, `sorting`. |
 | `delete` | Delete one row. Receives the DTO. |
 | `deleteMany` | Delete multiple rows by id. |
-| `idKey` | Returns the primary key from a DTO. Defaults to `dto.id`. |
+| `rowKey` | Field used as the vxe-table row key. Defaults to `id`; use it for custom primary-key field names. |
 | `deleteWarnMessage` | Custom delete confirmation text. |
 | `response` | Custom list/total paths. |
 | `edit` | Called by the default edit action. Usually `modalApi.open(row)`. |
@@ -165,7 +165,7 @@ If `total` is missing, empty or invalid, the table falls back to **frontend pagi
 | `actionColumn` | Action column title/width, or `false` to disable the default action column. |
 | `formOptions` | Search form options. |
 | `gridOptions` | vxe-grid options. `columns` are merged with the generated action column. |
-| `gridEvents` | vxe-grid events. |
+| `gridEvents` | Typed vxe-grid events. Includes `onCheckboxChange(rows)` when a checkbox column is used. |
 | `tableTitle` / `tableTitleHelp` | Table title and help text. |
 | `hasPermission` | Permission checker used by the action column. |
 
@@ -200,6 +200,8 @@ const [Table, tableApi] = useAbpDataTable<BookDto>({ ... });
 | `deleteMany(ids)` | Confirm and delete multiple rows.        |
 | `edit(dto)`       | Invoke the configured `edit` callback.   |
 | `query()`         | Run the underlying vxe-grid proxy query. |
+
+Selection is cleared whenever the table data changes, and after `delete` / `deleteMany`.
 
 ### Slots
 

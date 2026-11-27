@@ -5,15 +5,18 @@ import { useAbpDataTable } from '../use-abp-data-table';
 interface Dto {
   id: string;
   name: string;
+  uuid?: string;
 }
 
 const state = vi.hoisted(() => ({
   confirm: vi.fn(async (_options?: any) => undefined),
   gridApi: null as any,
+  gridEvents: null as any,
   gridOptions: null as any,
   load: vi.fn(),
   toastSuccess: vi.fn(),
   deleteApi: vi.fn(),
+  deleteManyApi: vi.fn(),
 }));
 
 vi.mock('@vben/common-ui', () => ({
@@ -39,6 +42,7 @@ vi.mock('@abp/core', () => ({
 
 vi.mock('@abp/ui', () => ({
   useVbenVxeGrid: vi.fn((options: any) => {
+    state.gridEvents = options.gridEvents;
     state.gridOptions = options.gridOptions;
     const api = {
       grid: { clearCheckboxRow: vi.fn() },
@@ -55,7 +59,9 @@ describe('useAbpDataTable', () => {
     state.load.mockReset();
     state.toastSuccess.mockClear();
     state.deleteApi.mockReset();
+    state.deleteManyApi.mockReset();
     state.gridApi = null;
+    state.gridEvents = null;
     state.gridOptions = null;
   });
 
@@ -102,6 +108,15 @@ describe('useAbpDataTable', () => {
     expect(state.gridOptions.columns).toHaveLength(1);
   });
 
+  it('uses a custom row key for selection preservation', () => {
+    useAbpDataTable<Dto>({
+      gridOptions: { columns: [] },
+      load: state.load,
+      rowKey: 'uuid',
+    });
+
+    expect(state.gridOptions.rowConfig.keyField).toBe('uuid');
+  });
   it('translates ABP paging and sorting into load parameters', async () => {
     state.load.mockResolvedValue({
       items: [{ id: '1', name: 'Book' }],
@@ -153,9 +168,39 @@ describe('useAbpDataTable', () => {
     });
   });
 
-  it('confirms before deleting a row and refreshes the grid', async () => {
+  it('emits selection changes from gridEvents', () => {
+    const onCheckboxChange = vi.fn();
+    useAbpDataTable<Dto>({
+      gridEvents: { onCheckboxChange },
+      gridOptions: { columns: [] },
+      load: state.load,
+    });
+
+    state.gridEvents.checkboxChange({ records: [{ id: '1' }] });
+    expect(onCheckboxChange).toHaveBeenCalledWith([{ id: '1' }]);
+  });
+
+  it('clears selection whenever table data changes', () => {
+    const onCheckboxChange = vi.fn();
+    const dataChange = vi.fn();
+    useAbpDataTable<Dto>({
+      gridEvents: { dataChange, onCheckboxChange },
+      gridOptions: { columns: [] },
+      load: state.load,
+    });
+
+    state.gridEvents.dataChange({});
+
+    expect(dataChange).toHaveBeenCalled();
+    expect(state.gridApi.grid.clearCheckboxRow).toHaveBeenCalled();
+    expect(onCheckboxChange).toHaveBeenCalledWith([]);
+  });
+
+  it('confirms before deleting a row and clears selection', async () => {
+    const onCheckboxChange = vi.fn();
     const [, tableApi] = useAbpDataTable<Dto>({
       delete: state.deleteApi,
+      gridEvents: { onCheckboxChange },
       gridOptions: { columns: [] },
       load: state.load,
     });
@@ -168,5 +213,29 @@ describe('useAbpDataTable', () => {
     expect(state.deleteApi).toHaveBeenCalledWith({ id: '1', name: 'Book' });
     expect(state.toastSuccess).toHaveBeenCalledWith('crud.deleteSuccess');
     expect(state.gridApi.query).toHaveBeenCalled();
+
+    state.gridEvents.dataChange({});
+    expect(state.gridApi.grid.clearCheckboxRow).toHaveBeenCalled();
+    expect(onCheckboxChange).toHaveBeenCalledWith([]);
+  });
+
+  it('clears selection after bulk delete', async () => {
+    const onCheckboxChange = vi.fn();
+    const [, tableApi] = useAbpDataTable<Dto>({
+      deleteMany: state.deleteManyApi,
+      gridEvents: { onCheckboxChange },
+      gridOptions: { columns: [] },
+      load: state.load,
+    });
+
+    await tableApi.deleteMany(['1', '2']);
+    const confirmOptions = state.confirm.mock.calls[0]?.[0];
+    await confirmOptions.beforeClose({ isConfirm: true });
+
+    expect(state.deleteManyApi).toHaveBeenCalledWith(['1', '2']);
+
+    state.gridEvents.dataChange({});
+    expect(state.gridApi.grid.clearCheckboxRow).toHaveBeenCalled();
+    expect(onCheckboxChange).toHaveBeenCalledWith([]);
   });
 });

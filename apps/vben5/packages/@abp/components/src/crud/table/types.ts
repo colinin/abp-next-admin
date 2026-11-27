@@ -1,4 +1,4 @@
-import type { useVbenVxeGrid } from '@abp/ui';
+import type { useVbenVxeGrid, VxeGridListeners } from '@abp/ui';
 import type {
   VxeGridSlots,
   VxeGridSlotTypes,
@@ -38,6 +38,17 @@ export interface AbpDataTableResponseOptions {
   total?: string;
 }
 
+export type AbpRowKey<TDto extends AbpRecord = AbpRecord> = Extract<
+  keyof TDto,
+  string
+>;
+
+export type AbpDataTableGridEvents<TDto extends AbpRecord = AbpRecord> =
+  VxeGridListeners<TDto> & {
+    /** 表格选择项变化时触发 */
+    onCheckboxChange?: (rows: TDto[]) => void;
+  };
+
 export interface AbpDataTableActionColumnOptions {
   title?: string;
   width?: number;
@@ -56,7 +67,7 @@ export interface AbpDataTableOptions<
   /** vxe-grid 配置 */
   gridOptions?: VxeTableGridProps<TDto>;
   /** vxe-grid 事件 */
-  gridEvents?: Record<string, any>;
+  gridEvents?: AbpDataTableGridEvents<TDto>;
   /** 表格标题 */
   tableTitle?: string;
   /** 表格标题帮助 */
@@ -79,8 +90,8 @@ export interface AbpDataTableOptions<
   delete?: (dto: TDto) => Promise<any>;
   /** 删除多个 */
   deleteMany?: (ids: AbpIdOf<TDto>[]) => Promise<any>;
-  /** 从 DTO 获取主键 */
-  idKey?: (dto: TDto) => AbpIdOf<TDto>;
+  /** 行主键字段名，用于主键读取、删除和 checkbox 选择保留，默认 id */
+  rowKey?: AbpRowKey<TDto>;
   /** 单条删除提示，未提供时使用 ABP 默认文案 */
   deleteWarnMessage?: (dto: TDto) => string;
   /** 响应解析配置 */
@@ -124,9 +135,9 @@ export type AbpDataTableComponentProps<
   | 'editAuth'
   | 'editText'
   | 'hasPermission'
-  | 'idKey'
   | 'load'
   | 'response'
+  | 'rowKey'
 >;
 
 export type AbpDataTableSlots<TDto extends AbpRecord = AbpRecord> = {

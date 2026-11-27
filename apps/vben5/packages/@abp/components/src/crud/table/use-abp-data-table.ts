@@ -56,15 +56,15 @@ export function useAbpDataTable<
     editAuth,
     editText,
     editIcon,
-    idKey,
+    gridEvents,
     load,
     response,
+    rowKey,
     ...gridProps
   } = options;
 
-  const getId = (idKey ?? ((dto: TDto) => dto.id)) as (
-    dto: TDto,
-  ) => AbpIdOf<TDto>;
+  const idField = (rowKey ?? 'id') as keyof TDto;
+  const getId = ((dto: TDto) => dto[idField]) as (dto: TDto) => AbpIdOf<TDto>;
 
   const listPath = response?.list ?? 'items';
   const totalPath = response?.total ?? 'totalCount';
@@ -131,6 +131,13 @@ export function useAbpDataTable<
     });
   }
 
+  const userGridEvents = gridEvents ?? {};
+  const { onCheckboxChange, ...vxeGridEvents } = userGridEvents;
+
+  function handleCheckboxChange(params: any) {
+    onCheckboxChange?.(params?.records ?? []);
+  }
+
   const [Grid, gridApi] = useVbenVxeGrid<
     TDto,
     BaseFormComponentType,
@@ -138,8 +145,28 @@ export function useAbpDataTable<
     TFormValues
   >({
     ...gridProps,
+    gridEvents: {
+      ...vxeGridEvents,
+      checkboxAll: (params: any) => {
+        userGridEvents.checkboxAll?.(params);
+        handleCheckboxChange(params);
+      },
+      checkboxChange: (params: any) => {
+        userGridEvents.checkboxChange?.(params);
+        handleCheckboxChange(params);
+      },
+      dataChange: (params: any) => {
+        void gridApi.grid.clearCheckboxRow();
+        userGridEvents.dataChange?.(params);
+        handleCheckboxChange({ records: [] });
+      },
+    },
     gridOptions: {
       ...gridOptions,
+      rowConfig: {
+        keyField: rowKey ?? 'id',
+        ...gridOptions.rowConfig,
+      },
       columns,
       pagerConfig: {
         pageSize: 10,
@@ -200,7 +227,6 @@ export function useAbpDataTable<
         if (scope.isConfirm) {
           await deleteManyApi(ids);
           toastSuccess($t('crud.deleteSuccess'));
-          (gridApi.grid as any)?.clearCheckboxRow?.();
           await refresh();
         }
         return true;

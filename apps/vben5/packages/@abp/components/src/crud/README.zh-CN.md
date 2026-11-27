@@ -152,7 +152,7 @@ useAbpDataTable<BookDto>({
 | `load` | 必填，加载数据 |
 | `delete` | 单条删除，接收 DTO |
 | `deleteMany` | 批量删除，接收 id 数组 |
-| `idKey` | 从 DTO 获取主键，默认 `dto.id` |
+| `rowKey` | vxe-table 行主键字段，默认 `id`；自定义主键字段时使用 |
 | `deleteWarnMessage` | 自定义删除确认文案 |
 | `response` | 自定义列表/总数字段路径 |
 | `edit` | 默认编辑操作回调，通常调用 `modalApi.open(row)` |
@@ -163,7 +163,7 @@ useAbpDataTable<BookDto>({
 | `actionColumn` | 操作列标题/宽度；传 `false` 关闭默认操作列 |
 | `formOptions` | 搜索表单配置 |
 | `gridOptions` | vxe-grid 配置，`columns` 会与自动操作列合并 |
-| `gridEvents` | vxe-grid 事件 |
+| `gridEvents` | 带类型的 vxe-grid 事件；使用 checkbox 列时支持 `onCheckboxChange(rows)` |
 | `tableTitle` / `tableTitleHelp` | 表格标题和帮助 |
 | `hasPermission` | 操作列权限判断 |
 
@@ -198,6 +198,8 @@ const [Table, tableApi] = useAbpDataTable<BookDto>({ ... });
 | `deleteMany(ids)` | 确认并批量删除         |
 | `edit(dto)`       | 调用配置的编辑回调     |
 | `query()`         | 执行底层 vxe-grid 查询 |
+
+表格数据变化时会清空选择；`delete` / `deleteMany` 执行后也会清空选择。
 
 ### 插槽
 
