@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { VxeGridListeners, VxeGridProps } from '@abp/ui';
+import type { VxeGridProps } from '@abp/ui';
 
 import type { VbenFormProps } from '@vben/common-ui';
 
@@ -13,10 +13,7 @@ import { downloadFileFromUrl } from '@vben/utils';
 
 import { useAbpDataTable } from '@abp/components/crud/table';
 import { formatToDateTime } from '@abp/core';
-import {
-  DeleteOutlined,
-  FileExcelOutlined,
-} from '@ant-design/icons-vue';
+import { DeleteOutlined, FileExcelOutlined } from '@ant-design/icons-vue';
 import { Button, Tag } from 'ant-design-vue';
 
 import { useAuditLogsApi } from '../../api/useAuditLogsApi';
@@ -226,15 +223,6 @@ const gridOptions: VxeGridProps<AuditLogDto> = {
   },
 };
 
-const gridEvents: VxeGridListeners<AuditLogDto> = {
-  checkboxAll: (params) => {
-    selectedKeys.value = params.records.map((x) => x.id);
-  },
-  checkboxChange: (params) => {
-    selectedKeys.value = params.records.map((x) => x.id);
-  },
-};
-
 function showLog(row: AuditLogDto) {
   logDrawerApi.setData(row);
   logDrawerApi.open();
@@ -267,9 +255,13 @@ const [DataTable, tableApi] = useAbpDataTable<AuditLogDto>({
   deleteMany: (ids) => deleteManyApi({ ids }),
   deleteWarnMessage: () => $t('AbpUi.ItemWillBeDeletedMessage'),
   formOptions: searchFormOptions,
-  gridEvents,
+  gridEvents: {
+    onCheckboxChange(rows) {
+      selectedKeys.value = rows.map((x) => x.id);
+    },
+  },
   gridOptions,
-  idKey: (dto) => dto.id,
+  rowKey: 'id',
   load: ({ pager, searchValues, sorting }) =>
     getPagedListApi({
       maxResultCount: pager.maxResultCount,

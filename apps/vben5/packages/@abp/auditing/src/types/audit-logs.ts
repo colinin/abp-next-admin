@@ -21,7 +21,6 @@ interface AuditLogDeleteManyInput {
 }
 
 interface AuditLogDto {
-  [key: string]: any;
   actions?: Action[];
   applicationName?: string;
   browserInfo?: string;
