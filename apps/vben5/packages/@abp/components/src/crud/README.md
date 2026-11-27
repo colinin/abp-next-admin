@@ -59,11 +59,11 @@ const [Table, tableApi] = useAbpDataTable<BookDto>({
       { field: 'price', title: 'Price', sortable: true },
     ],
   },
-  load: ({ pager, searchValues, sorting }) =>
+  load: ({ pager, searchValues, sortable }) =>
     getPagedListApi({
       maxResultCount: pager.maxResultCount,
       skipCount: pager.skipCount,
-      sorting,
+      sorting: sortable?.sorting,
       ...searchValues,
     }),
   delete: (dto) => deleteApi(dto.id),
@@ -151,7 +151,7 @@ If `total` is missing, empty or invalid, the table falls back to **frontend pagi
 
 | Option | Description |
 | --- | --- |
-| `load` | Required. Loads rows using `pager`, `searchValues`, `sorting`. |
+| `load` | Required. Loads rows using `pager`, `searchValues`, `sortable`. |
 | `delete` | Delete one row. Receives the DTO. |
 | `deleteMany` | Delete multiple rows by id. |
 | `rowKey` | Field used as the vxe-table row key. Defaults to `id`; use it for custom primary-key field names. |
@@ -202,6 +202,8 @@ const [Table, tableApi] = useAbpDataTable<BookDto>({ ... });
 | `query()`         | Run the underlying vxe-grid proxy query. |
 
 Selection is cleared whenever the table data changes, and after `delete` / `deleteMany`.
+
+`sortChange` triggers a paged query for server-side pagination. Client-side pagination keeps local sorting and does not re-query.
 
 ### Slots
 

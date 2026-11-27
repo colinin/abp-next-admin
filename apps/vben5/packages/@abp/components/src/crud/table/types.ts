@@ -18,6 +18,15 @@ import type { VbenIcon } from '@vben-core/shadcn-ui';
 
 import type { AbpIdOf, AbpRecord } from '../types';
 
+export interface AbpDataTableSortable {
+  /** 排序字段 */
+  field: string;
+  /** 排序方向 */
+  order: string;
+  /** 已拼接好的排序字符串，例如 name asc */
+  sorting: string;
+}
+
 export interface AbpDataTableLoadParams {
   /** 分页参数 */
   pager: {
@@ -26,8 +35,8 @@ export interface AbpDataTableLoadParams {
   };
   /** 查询表单参数 */
   searchValues: Record<string, any>;
-  /** 排序参数，例如 `name asc` */
-  sorting?: string;
+  /** 排序参数 */
+  sortable?: AbpDataTableSortable;
 }
 
 /** 响应解析配置 */

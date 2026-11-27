@@ -70,6 +70,7 @@ export function useAbpDataTable<
   const totalPath = response?.total ?? 'totalCount';
   const gridOptions: any = gridProps.gridOptions ?? {};
   const pagerEnabled = gridOptions.pagerConfig?.enabled !== false;
+  let isClientPagination = false;
 
   async function query(params: any, formValues: TFormValues) {
     const page = params?.page ?? { currentPage: 1, pageSize: 10 };
@@ -77,14 +78,18 @@ export function useAbpDataTable<
       maxResultCount: page.pageSize,
       skipCount: (page.currentPage - 1) * page.pageSize,
     };
-    const sorting = params?.sort?.order
-      ? `${params.sort.field} ${params.sort.order}`
+    const sortable = params?.sort?.order
+      ? {
+          field: params.sort.field,
+          order: params.sort.order,
+          sorting: `${params.sort.field} ${params.sort.order}`,
+        }
       : undefined;
 
     const result = await load({
       pager,
       searchValues: (formValues ?? {}) as Record<string, any>,
-      sorting,
+      sortable,
     });
 
     const rawList = getByPath(result, listPath);
@@ -98,9 +103,12 @@ export function useAbpDataTable<
       Number.isFinite(total) &&
       total >= 0;
 
-    if (totalValid) {
+    if (totalValid && pagerEnabled) {
+      isClientPagination = false;
       return { items, totalCount: total };
     }
+
+    isClientPagination = true;
 
     // 总数为空/非法：前端分页
     if (!pagerEnabled) {
@@ -160,6 +168,12 @@ export function useAbpDataTable<
         userGridEvents.dataChange?.(params);
         handleCheckboxChange({ records: [] });
       },
+      sortChange: (params: any) => {
+        userGridEvents.sortChange?.(params);
+        if (!isClientPagination) {
+          void gridApi.query();
+        }
+      },
     },
     gridOptions: {
       ...gridOptions,
@@ -175,6 +189,7 @@ export function useAbpDataTable<
       },
       proxyConfig: {
         ...gridOptions.proxyConfig,
+        sort: false,
         autoLoad: gridOptions.proxyConfig?.autoLoad ?? true,
         ajax: {
           ...gridOptions.proxyConfig?.ajax,

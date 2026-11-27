@@ -59,11 +59,11 @@ const [Table, tableApi] = useAbpDataTable<BookDto>({
       { field: 'price', title: '单价', sortable: true },
     ],
   },
-  load: ({ pager, searchValues, sorting }) =>
+  load: ({ pager, searchValues, sortable }) =>
     getPagedListApi({
       maxResultCount: pager.maxResultCount,
       skipCount: pager.skipCount,
-      sorting,
+      sorting: sortable?.sorting,
       ...searchValues,
     }),
   delete: (dto) => deleteApi(dto.id),
@@ -149,7 +149,7 @@ useAbpDataTable<BookDto>({
 
 | 配置 | 说明 |
 | --- | --- |
-| `load` | 必填，加载数据 |
+| `load` | 必填，使用 `pager`、`searchValues`、`sortable` 加载数据 |
 | `delete` | 单条删除，接收 DTO |
 | `deleteMany` | 批量删除，接收 id 数组 |
 | `rowKey` | vxe-table 行主键字段，默认 `id`；自定义主键字段时使用 |
@@ -200,6 +200,8 @@ const [Table, tableApi] = useAbpDataTable<BookDto>({ ... });
 | `query()`         | 执行底层 vxe-grid 查询 |
 
 表格数据变化时会清空选择；`delete` / `deleteMany` 执行后也会清空选择。
+
+服务端分页时 `sortChange` 会重新发起分页查询；客户端分页保持本地排序，不重新请求。
 
 ### 插槽
 

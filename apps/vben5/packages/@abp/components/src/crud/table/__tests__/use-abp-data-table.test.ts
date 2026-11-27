@@ -139,7 +139,11 @@ describe('useAbpDataTable', () => {
     expect(state.load).toHaveBeenCalledWith({
       pager: { maxResultCount: 10, skipCount: 10 },
       searchValues: { filter: 'book' },
-      sorting: 'name asc',
+      sortable: {
+        field: 'name',
+        order: 'asc',
+        sorting: 'name asc',
+      },
     });
     expect(result).toEqual({
       items: [{ id: '1', name: 'Book' }],
@@ -196,6 +200,36 @@ describe('useAbpDataTable', () => {
     expect(onCheckboxChange).toHaveBeenCalledWith([]);
   });
 
+  it('queries on sortChange for server pagination', async () => {
+    state.load.mockResolvedValue({ items: [], totalCount: 0 });
+    const sortChange = vi.fn();
+    useAbpDataTable<Dto>({
+      gridEvents: { sortChange },
+      gridOptions: { columns: [] },
+      load: state.load,
+    });
+
+    await state.gridOptions.proxyConfig.ajax.query({}, {});
+    state.gridApi.query.mockClear();
+    state.gridEvents.sortChange({ field: 'name', order: 'asc' });
+
+    expect(sortChange).toHaveBeenCalled();
+    expect(state.gridApi.query).toHaveBeenCalled();
+  });
+
+  it('keeps client-side sorting local', async () => {
+    state.load.mockResolvedValue({ items: [] });
+    useAbpDataTable<Dto>({
+      gridOptions: { columns: [] },
+      load: state.load,
+    });
+
+    await state.gridOptions.proxyConfig.ajax.query({}, {});
+    state.gridApi.query.mockClear();
+    state.gridEvents.sortChange({ field: 'name', order: 'asc' });
+
+    expect(state.gridApi.query).not.toHaveBeenCalled();
+  });
   it('confirms before deleting a row and clears selection', async () => {
     const onCheckboxChange = vi.fn();
     const [, tableApi] = useAbpDataTable<Dto>({
