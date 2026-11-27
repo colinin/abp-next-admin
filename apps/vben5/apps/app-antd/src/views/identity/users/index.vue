@@ -6,7 +6,7 @@ import { useRouter } from 'vue-router';
 import { Page } from '@vben/common-ui';
 import { useTabbarStore } from '@vben/stores';
 
-import { UserPage } from '@abp/identity';
+import { UserTable } from '@abp/identity';
 
 import { useAuthStore } from '#/store/auth';
 
@@ -34,6 +34,6 @@ async function handleImpersonation(user: IdentityUserDto) {
 
 <template>
   <Page>
-    <UserPage @impersonation="handleImpersonation" />
+    <UserTable @impersonation="handleImpersonation" />
   </Page>
 </template>
