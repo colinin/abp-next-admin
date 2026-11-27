@@ -11,7 +11,7 @@ import { reactive, ref, useTemplateRef } from 'vue';
 import { useVbenDrawer } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { formatToDate, getModalData } from '@abp/core';
+import { formatToDate, getModalData, useNotifications } from '@abp/core';
 import { PropertyTable } from '@abp/ui';
 import {
   Checkbox,
@@ -20,7 +20,6 @@ import {
   FormItem,
   Input,
   InputNumber,
-  message,
   Select,
   Tabs,
   Textarea,
@@ -28,13 +27,16 @@ import {
 
 import { useJobInfosApi } from '../../api/useJobInfosApi';
 import { JobPriority, JobSource, JobType } from '../../types/job-infos';
-
 defineOptions({
   name: 'JobInfoDrawer',
 });
+
 const emits = defineEmits<{
   (event: 'change', data: BackgroundJobInfoDto): void;
 }>();
+
+const { toastSuccess } = useNotifications();
+
 const TabPane = Tabs.TabPane;
 interface JobParamter {
   key: string;
@@ -153,7 +155,7 @@ async function onSubmit() {
       ? updateApi(formModel.value.id, formModel.value)
       : createApi(formModel.value);
     const dto = await api;
-    message.success($t('AbpUi.SavedSuccessfully'));
+    toastSuccess($t('AbpUi.SavedSuccessfully'));
     emits('change', dto);
     drawerApi.close();
   } finally {

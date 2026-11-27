@@ -14,7 +14,7 @@ import { createIconifyIcon } from '@vben/icons';
 import { $t } from '@vben/locales';
 
 import { AuditLogPermissions, EntityChangeDrawer } from '@abp/auditing';
-import { useFeatures } from '@abp/core';
+import { useFeatures, useNotifications } from '@abp/core';
 import { FeatureModal } from '@abp/features';
 import { useVbenVxeGrid } from '@abp/ui';
 import {
@@ -23,14 +23,15 @@ import {
   EllipsisOutlined,
   PlusOutlined,
 } from '@ant-design/icons-vue';
-import { Button, Dropdown, Menu, message, Modal } from 'ant-design-vue';
+import { Button, Dropdown, Menu, Modal } from 'ant-design-vue';
 
 import { useEditionsApi } from '../../api/useEditionsApi';
 import { EditionsPermissions } from '../../constants/permissions';
-
 defineOptions({
   name: 'EditionTable',
 });
+
+const { toastSuccess } = useNotifications();
 
 const MenuItem = Menu.Item;
 const AuditLogIcon = createIconifyIcon('fluent-mdl2:compliance-audit');
@@ -153,7 +154,7 @@ const onDelete = (row: EditionDto) => {
     },
     onOk: async () => {
       await deleteApi(row.id);
-      message.success($t('AbpUi.DeletedSuccessfully'));
+      toastSuccess($t('AbpUi.DeletedSuccessfully'));
       await gridApi.query();
     },
     title: $t('AbpUi.AreYouSure'),

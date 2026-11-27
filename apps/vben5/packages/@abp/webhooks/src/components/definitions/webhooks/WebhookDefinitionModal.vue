@@ -21,6 +21,7 @@ import {
   useAuthorization,
   useLocalization,
   useLocalizationSerializer,
+  useNotifications,
 } from '@abp/core';
 import {
   useFeatureDefinitionsApi,
@@ -31,7 +32,6 @@ import {
   Checkbox,
   Form,
   Input,
-  message,
   Select,
   Tabs,
   TreeSelect,
@@ -39,13 +39,15 @@ import {
 
 import { useWebhookGroupDefinitionsApi } from '../../../api';
 import { useWebhookDefinitionsApi } from '../../../api/useWebhookDefinitionsApi';
-
 defineOptions({
   name: 'WebhookDefinitionModal',
 });
+
 const emits = defineEmits<{
   (event: 'change', data: WebhookDefinitionDto): void;
 }>();
+
+const { toastSuccess } = useNotifications();
 
 const FormItem = Form.Item;
 const TabPane = Tabs.TabPane;
@@ -138,7 +140,7 @@ const [Modal, modalApi] = useVbenModal<WebhookDefinitionDto>({
       modalApi.setState({ submitting: true });
       const res = await api;
       emits('change', res);
-      message.success($t('AbpUi.SavedSuccessfully'));
+      toastSuccess($t('AbpUi.SavedSuccessfully'));
       modalApi.close();
     } finally {
       modalApi.setState({ submitting: false });

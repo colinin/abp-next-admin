@@ -4,20 +4,20 @@ import { ref } from 'vue';
 import { useVbenForm, useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { getModalData } from '@abp/core';
-import { message } from 'ant-design-vue';
+import { getModalData, useNotifications } from '@abp/core';
 import Cookies from 'universal-cookie';
 
 import { useMultiTenancyApi } from '../../api/useMultiTenancyApi';
+const emits = defineEmits<{
+  (event: 'change', data?: Tenant): void;
+}>();
+
+const { toastWarning } = useNotifications();
 
 interface Tenant {
   id?: string;
   name?: string;
 }
-
-const emits = defineEmits<{
-  (event: 'change', data?: Tenant): void;
-}>();
 
 const tenant = ref<Tenant>();
 const { findTenantByNameApi } = useMultiTenancyApi();
@@ -60,13 +60,13 @@ async function onSubmit(values: Record<string, any>) {
     if (values.name) {
       const result = await findTenantByNameApi(values.name);
       if (!result.success) {
-        message.warning(
+        toastWarning(
           $t('AbpUiMultiTenancy.GivenTenantIsNotExist', [values.name]),
         );
         return;
       }
       if (!result.isActive) {
-        message.warning(
+        toastWarning(
           $t('AbpUiMultiTenancy.GivenTenantIsNotAvailable', [values.name]),
         );
         return;

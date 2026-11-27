@@ -6,12 +6,12 @@ import { computed, ref, watch } from 'vue';
 
 import { $t, useI18n } from '@vben/locales';
 
+import { useNotifications } from '@abp/core';
 import {
   Button,
   Card,
   Empty,
   Input,
-  message,
   Select,
   Space,
   Switch,
@@ -26,6 +26,19 @@ import {
   parseFormula,
   serializeFormula,
 } from './formula';
+const props = defineProps<{
+  code?: string;
+  formId?: null | string;
+  name?: string;
+}>();
+
+const emit = defineEmits<{
+  'update:code': [string];
+  'update:formId': [null | string];
+  'update:name': [string];
+}>();
+
+const { toastError, toastWarning, toastSuccess } = useNotifications();
 
 interface DesignField {
   formula?: FormulaConfig;
@@ -38,18 +51,6 @@ interface DesignField {
   permission: string;
   type: string;
 }
-
-const props = defineProps<{
-  code?: string;
-  formId?: null | string;
-  name?: string;
-}>();
-
-const emit = defineEmits<{
-  'update:code': [string];
-  'update:formId': [null | string];
-  'update:name': [string];
-}>();
 
 const formsApi = useApprovalFormsApi();
 const { locale, t } = useI18n();
@@ -160,7 +161,7 @@ async function loadForm(formId: null | string, force = false) {
     formPublished.value = !!definition.isPublished;
     selectedIndex.value = fields.value.length > 0 ? 0 : null;
   } catch {
-    message.error($t('antflow.designer.form.loadFailed'));
+    toastError($t('antflow.designer.form.loadFailed'));
   } finally {
     loading.value = false;
   }
@@ -389,11 +390,11 @@ async function save(publishForm = true): Promise<null | string> {
   }
 
   if (!formCode.value.trim()) {
-    message.warning($t('antflow.designer.form.codeRequired'));
+    toastWarning($t('antflow.designer.form.codeRequired'));
     return null;
   }
   if (fields.value.length === 0) {
-    message.warning($t('antflow.designer.form.fieldRequired'));
+    toastWarning($t('antflow.designer.form.fieldRequired'));
     return null;
   }
 
@@ -438,10 +439,10 @@ async function save(publishForm = true): Promise<null | string> {
 
     await formsApi.publishApi(formId);
     dirty.value = false;
-    message.success($t('antflow.designer.form.saved'));
+    toastSuccess($t('antflow.designer.form.saved'));
     return formId;
   } catch {
-    message.error($t('antflow.designer.form.saveFailed'));
+    toastError($t('antflow.designer.form.saveFailed'));
     return null;
   } finally {
     saving.value = false;

@@ -7,9 +7,11 @@ import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 import { downloadFileFromUrl } from '@vben/utils';
 
-import { Button, Empty, message, Spin } from 'ant-design-vue';
+import { useNotifications } from '@abp/core';
+import { Button, Empty, Spin } from 'ant-design-vue';
 
 import { useBlobsApi } from '../../api/useBlobsApi';
+const { toastError, toastWarning } = useNotifications();
 
 type FileType = 'excel' | 'image' | 'pdf' | 'ppt' | 'text' | 'word';
 
@@ -119,7 +121,7 @@ function isFileSizeValid(content: Blob): boolean {
 }
 
 function onError(error?: string) {
-  message.error(`${$t('BlobManagement.Blobs:PreviewError')}: ${error}`);
+  toastError(`${$t('BlobManagement.Blobs:PreviewError')}: ${error}`);
 }
 
 // 清理资源
@@ -195,7 +197,7 @@ async function onInit() {
   } catch (error) {
     console.error('Preview error:', error);
     errorMessage.value = $t('BlobManagement.Blobs:PreviewError');
-    message.error(errorMessage.value);
+    toastError(errorMessage.value);
   } finally {
     isLoading.value = false;
     modalApi.unlock();
@@ -213,7 +215,7 @@ async function processFileContent(content: Blob) {
         blobText.value = `${blobText.value.slice(0, Math.max(0, maxLength))}\n\n... ${$t(
           'BlobManagement.Blobs:TextTruncated',
         )}`;
-        message.warning($t('BlobManagement.Blobs:TextTooLarge'));
+        toastWarning($t('BlobManagement.Blobs:TextTooLarge'));
       }
     } catch (error) {
       console.error('Read text error:', error);

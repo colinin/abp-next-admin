@@ -14,6 +14,7 @@ import { computed, ref, watch } from 'vue';
 
 import { $t } from '@vben/locales';
 
+import { useNotifications } from '@abp/core';
 import {
   Button,
   DatePicker,
@@ -23,7 +24,6 @@ import {
   FormItem,
   Input,
   InputNumber,
-  message,
   RadioGroup,
   Select,
   Space,
@@ -32,7 +32,6 @@ import {
 
 import { useApprovalParticipantsApi } from '../../api/useApprovalParticipantsApi';
 import { createRule } from './model';
-
 const props = defineProps<{
   formFields?: FormFieldDto[];
   node: ApprovalFlowNode | null;
@@ -43,6 +42,8 @@ const emit = defineEmits<{
   'update:node': [ApprovalFlowNode];
   'update:open': [boolean];
 }>();
+
+const { toastWarning } = useNotifications();
 
 const participantsApi = useApprovalParticipantsApi();
 const local = ref<ApprovalFlowNode | null>(null);
@@ -147,7 +148,7 @@ async function searchUsers(filter: string) {
   try {
     users.value = (await participantsApi.searchUsersAsync(filter)) ?? [];
   } catch {
-    message.warning($t('antflow.designer.nodeConfig.searchFailed'));
+    toastWarning($t('antflow.designer.nodeConfig.searchFailed'));
   }
 }
 

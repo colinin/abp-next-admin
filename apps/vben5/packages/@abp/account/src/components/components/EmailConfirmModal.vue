@@ -4,9 +4,11 @@ import { ref } from 'vue';
 import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { Form, Input, message } from 'ant-design-vue';
+import { useNotifications } from '@abp/core';
+import { Form, Input } from 'ant-design-vue';
 
 import { useProfileApi } from '../../api/useProfileApi';
+const { toastSuccess } = useNotifications();
 
 const FormItem = Form.Item;
 
@@ -36,7 +38,7 @@ async function onSubmit() {
     await confirmEmailApi({
       confirmToken: encodeURIComponent(formModel.value.confirmToken),
     });
-    message.success($t('AbpAccount.YourEmailIsSuccessfullyConfirm'));
+    toastSuccess($t('AbpAccount.YourEmailIsSuccessfullyConfirm'));
     modalApi.close();
     if (formModel.value.returnUrl) {
       window.location.href = formModel.value.returnUrl;

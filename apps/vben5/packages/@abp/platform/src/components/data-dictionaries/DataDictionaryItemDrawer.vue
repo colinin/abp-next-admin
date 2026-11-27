@@ -8,7 +8,12 @@ import { defineAsyncComponent, h, ref } from 'vue';
 import { useVbenDrawer, useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { getModalData, isNullOrWhiteSpace, sortby } from '@abp/core';
+import {
+  getModalData,
+  isNullOrWhiteSpace,
+  sortby,
+  useNotifications,
+} from '@abp/core';
 import { useVbenVxeGrid } from '@abp/ui';
 import {
   CheckOutlined,
@@ -17,10 +22,11 @@ import {
   EditOutlined,
   PlusOutlined,
 } from '@ant-design/icons-vue';
-import { Button, message, Modal } from 'ant-design-vue';
+import { Button, Modal } from 'ant-design-vue';
 
 import { useDataDictionariesApi } from '../../api';
 import { ValueType } from '../../types/dataDictionaries';
+const { toastSuccess } = useNotifications();
 
 const { deleteItemApi, getApi } = useDataDictionariesApi();
 
@@ -207,7 +213,7 @@ function onDelete(row: DataItemDto) {
         gridApi.setLoading(true);
         const { id } = getModalData(drawerApi);
         await deleteItemApi(id, row.name);
-        message.success($t('AbpUi.DeletedSuccessfully'));
+        toastSuccess($t('AbpUi.DeletedSuccessfully'));
         onGet();
       } finally {
         gridApi.setLoading(false);

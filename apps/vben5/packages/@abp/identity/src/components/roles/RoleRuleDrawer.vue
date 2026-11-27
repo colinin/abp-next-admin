@@ -19,6 +19,7 @@ import {
   getModalData,
   useLocalization,
   useLocalizationSerializer,
+  useNotifications,
 } from '@abp/core';
 import {
   DataAccessFilterLogic,
@@ -39,11 +40,11 @@ import {
   FormItemRest,
   Input,
   InputNumber,
-  message,
   Popconfirm,
   Select,
   Switch,
 } from 'ant-design-vue';
+const { toastSuccess } = useNotifications();
 
 const defaultModel: RoleEntityRuleDto = {
   accessedProperties: [],
@@ -242,7 +243,7 @@ async function onSubmit() {
     await (input.strategy === DataAccessStrategy.Custom
       ? submitCustomRule(input)
       : submitStrategys(input));
-    message.success($t('AbpUi.SavedSuccessfully'));
+    toastSuccess($t('AbpUi.SavedSuccessfully'));
     drawerApi.close();
   } finally {
     drawerApi.setState({ confirmLoading: false });

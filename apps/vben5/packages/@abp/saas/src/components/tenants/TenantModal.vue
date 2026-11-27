@@ -14,14 +14,13 @@ import { computed, onMounted, ref, useTemplateRef } from 'vue';
 import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { getModalData, useValidation } from '@abp/core';
+import { getModalData, useNotifications, useValidation } from '@abp/core';
 import {
   Checkbox,
   DatePicker,
   Form,
   Input,
   InputPassword,
-  message,
   Select,
   Textarea,
 } from 'ant-design-vue';
@@ -31,13 +30,16 @@ import debounce from 'lodash.debounce';
 import { useEditionsApi } from '../../api/useEditionsApi';
 import { useTenantsApi } from '../../api/useTenantsApi';
 import ConnectionStringTable from './ConnectionStringTable.vue';
-
 defineProps<{
   dataBaseOptions: { label: string; value: string }[];
 }>();
+
 const emits = defineEmits<{
   (event: 'change', val: TenantDto): void;
 }>();
+
+const { toastSuccess } = useNotifications();
+
 const FormItem = Form.Item;
 
 /** 租户表单模型：新增与编辑共用，包含创建时的扩展字段 */
@@ -168,7 +170,7 @@ async function onSubmit() {
       ? updateApi(tenant.value.id, tenant.value as TenantUpdateDto)
       : createApi(tenant.value as unknown as TenantCreateDto);
     const dto = await api;
-    message.success($t('AbpUi.SavedSuccessfully'));
+    toastSuccess($t('AbpUi.SavedSuccessfully'));
     emits('change', dto);
     modalApi.close();
   } finally {

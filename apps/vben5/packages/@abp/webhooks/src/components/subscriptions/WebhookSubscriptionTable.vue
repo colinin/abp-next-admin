@@ -11,7 +11,7 @@ import { useAccess } from '@vben/access';
 import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { formatToDateTime } from '@abp/core';
+import { formatToDateTime, useNotifications } from '@abp/core';
 import { useTenantsApi } from '@abp/saas';
 import { useVbenVxeGrid } from '@abp/ui';
 import {
@@ -21,15 +21,16 @@ import {
   EditOutlined,
   PlusOutlined,
 } from '@ant-design/icons-vue';
-import { Button, message, Modal, Tag } from 'ant-design-vue';
+import { Button, Modal, Tag } from 'ant-design-vue';
 import debounce from 'lodash.debounce';
 
 import { useSubscriptionsApi } from '../../api/useSubscriptionsApi';
 import { WebhookSubscriptionPermissions } from '../../constants/permissions';
-
 defineOptions({
   name: 'WebhookSubscriptionTable',
 });
+
+const { toastSuccess } = useNotifications();
 
 const { hasAccessByCodes } = useAccess();
 const { getPagedListApi: getTenantsApi } = useTenantsApi();
@@ -280,7 +281,7 @@ function onDelete(row: WebhookSubscriptionDto) {
     },
     onOk: async () => {
       await deleteApi(row.id);
-      message.success($t('AbpUi.DeletedSuccessfully'));
+      toastSuccess($t('AbpUi.DeletedSuccessfully'));
       await gridApi.query();
     },
     title: $t('AbpUi.AreYouSure'),

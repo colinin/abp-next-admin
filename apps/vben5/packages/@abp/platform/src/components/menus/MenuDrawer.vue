@@ -13,17 +13,19 @@ import {
   formatToDateTime,
   getModalData,
   isNullOrWhiteSpace,
+  useNotifications,
 } from '@abp/core';
-import { Button, Card, message, Steps } from 'ant-design-vue';
+import { Button, Card, Steps } from 'ant-design-vue';
 
 import { useMenusApi } from '../../api';
 import { useDataDictionariesApi } from '../../api/useDataDictionariesApi';
 import { useLayoutsApi } from '../../api/useLayoutsApi';
 import { ValueType } from '../../types/dataDictionaries';
-
 const emits = defineEmits<{
   (event: 'change', data: MenuDto): void;
 }>();
+
+const { toastSuccess } = useNotifications();
 
 const Step = Steps.Step;
 
@@ -431,7 +433,7 @@ async function onSubmit() {
           redirect: basicInput.redirect,
         });
     const dto = await api;
-    message.success($t('AbpUi.SavedSuccessfully'));
+    toastSuccess($t('AbpUi.SavedSuccessfully'));
     emits('change', dto);
     drawerApi.close();
   } finally {

@@ -14,14 +14,14 @@ import { ref, toValue, useTemplateRef } from 'vue';
 import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { getModalData } from '@abp/core';
-import { Form, Input, message, Select, Textarea } from 'ant-design-vue';
+import { getModalData, useNotifications } from '@abp/core';
+import { Form, Input, Select, Textarea } from 'ant-design-vue';
 
 import { useTextsApi } from '../../api/useTextsApi';
-
 defineOptions({
   name: 'LocalizationTextModal',
 });
+
 withDefaults(
   defineProps<{
     languages?: LanguageDto[];
@@ -32,9 +32,13 @@ withDefaults(
     resources: () => [],
   },
 );
+
 const emits = defineEmits<{
   (event: 'change', data: TextDto): void;
 }>();
+
+const { toastSuccess } = useNotifications();
+
 const FormItem = Form.Item;
 
 const defaultModel = {} as TextDto;
@@ -112,7 +116,7 @@ async function onSubmit() {
     modalApi.setState({ submitting: true });
     const input = toValue(formModel);
     await setApi(input);
-    message.success($t('AbpUi.SavedSuccessfully'));
+    toastSuccess($t('AbpUi.SavedSuccessfully'));
     emits('change', input);
     modalApi.close();
   } finally {

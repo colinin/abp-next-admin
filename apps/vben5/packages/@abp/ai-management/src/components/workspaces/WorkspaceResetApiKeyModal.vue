@@ -7,15 +7,15 @@ import { ref } from 'vue';
 import { useVbenForm, useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { useMessage } from '@abp/ui';
+import { useNotifications } from '@abp/core';
 
 import { useWorkspaceDefinitionsApi } from '../../api/useWorkspaceDefinitionsApi';
-
 const emit = defineEmits<{
   (event: 'change', data: WorkspaceDefinitionRecordDto): void;
 }>();
 
-const message = useMessage();
+const { toastSuccess } = useNotifications();
+
 const { getApi, updateApi } = useWorkspaceDefinitionsApi();
 
 const formModel = ref<WorkspaceDefinitionRecordDto>();
@@ -55,7 +55,7 @@ async function onSubmit(values: Record<string, string>) {
       ...formModel.value!,
       apiKey: values.apiKey,
     });
-    message.success($t('AbpUi.SavedSuccessfully'));
+    toastSuccess($t('AbpUi.SavedSuccessfully'));
     emit('change', dto);
     modalApi.close();
   } finally {

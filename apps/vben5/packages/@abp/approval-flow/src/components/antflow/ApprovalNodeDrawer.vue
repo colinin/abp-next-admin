@@ -6,6 +6,7 @@ import { computed, reactive, ref, watch } from 'vue';
 
 import { $t } from '@vben/locales';
 
+import { useNotifications } from '@abp/core';
 import {
   Alert,
   Button,
@@ -13,7 +14,6 @@ import {
   CheckboxGroup,
   Drawer,
   Input,
-  message,
   Modal,
   Radio,
   RadioGroup,
@@ -25,29 +25,6 @@ import {
 
 import ButtonPerm from './ButtonPerm.vue';
 import { NodeType } from './types';
-
-interface AntFlowAssigneeLike {
-  displayName?: null | string;
-  id?: null | string;
-  name?: null | string;
-  provider?: null | string;
-  targetId?: null | string;
-  type?: null | number | string;
-  userId?: null | string;
-}
-
-interface NodePropertyLike {
-  assigneeList?: AntFlowAssigneeLike[];
-  assigneeType?: null | number;
-  buttons?: Record<string, number[]>;
-  directorLevel?: null | number;
-  fieldPrems?: unknown[];
-  noHeaderAction?: null | number | string;
-  onEmpty?: null | string;
-  ruleKind?: null | string;
-  signType?: null | number | string;
-}
-
 const props = withDefaults(
   defineProps<{
     modelValue?: boolean;
@@ -70,6 +47,30 @@ const emit = defineEmits<{
   'update:node': [AntFlowNode];
   'update:open': [boolean];
 }>();
+
+const { toastWarning } = useNotifications();
+
+interface AntFlowAssigneeLike {
+  displayName?: null | string;
+  id?: null | string;
+  name?: null | string;
+  provider?: null | string;
+  targetId?: null | string;
+  type?: null | number | string;
+  userId?: null | string;
+}
+
+interface NodePropertyLike {
+  assigneeList?: AntFlowAssigneeLike[];
+  assigneeType?: null | number;
+  buttons?: Record<string, number[]>;
+  directorLevel?: null | number;
+  fieldPrems?: unknown[];
+  noHeaderAction?: null | number | string;
+  onEmpty?: null | string;
+  ruleKind?: null | string;
+  signType?: null | number | string;
+}
 
 const visible = computed(() => props.open || props.modelValue);
 const activeTab = ref('approver');
@@ -317,11 +318,11 @@ function generateDisplayName(): string {
 
 function validate(): boolean {
   if (!draft.nodeName.trim()) {
-    message.warning($t('antflow.approvalNode.nodeNameRequired'));
+    toastWarning($t('antflow.approvalNode.nodeNameRequired'));
     return false;
   }
   if ([1, 2].includes(draft.assigneeType) && draft.assigneeList.length === 0) {
-    message.warning(
+    toastWarning(
       draft.assigneeType === 2
         ? $t('antflow.approvalNode.selectRole')
         : $t('antflow.approvalNode.selectApprover'),

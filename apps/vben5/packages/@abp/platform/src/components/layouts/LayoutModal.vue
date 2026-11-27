@@ -8,14 +8,19 @@ import type {
 import { useVbenForm, useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { getModalData, isNullOrWhiteSpace, listToTree } from '@abp/core';
-import { message } from 'ant-design-vue';
+import {
+  getModalData,
+  isNullOrWhiteSpace,
+  listToTree,
+  useNotifications,
+} from '@abp/core';
 
 import { useDataDictionariesApi, useLayoutsApi } from '../../api';
-
 const emits = defineEmits<{
   (event: 'change', data: LayoutDto): void;
 }>();
+
+const { toastSuccess } = useNotifications();
 
 const { createApi, getApi, updateApi } = useLayoutsApi();
 const {
@@ -159,7 +164,7 @@ async function onSubmit(values: Record<string, any>) {
       ? updateApi(values.id, values as LayoutUpdateDto)
       : createApi(values as LayoutCreateDto);
     const dto = await api;
-    message.success($t('AbpUi.SavedSuccessfully'));
+    toastSuccess($t('AbpUi.SavedSuccessfully'));
     emits('change', dto);
     modalApi.close();
   } finally {

@@ -10,26 +10,20 @@ import { ref, toValue, useTemplateRef } from 'vue';
 import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { getModalData } from '@abp/core';
+import { getModalData, useNotifications } from '@abp/core';
 import { LocalizableInput, PropertyTable } from '@abp/ui';
-import {
-  Checkbox,
-  Form,
-  Input,
-  message,
-  Select,
-  Tabs,
-  Textarea,
-} from 'ant-design-vue';
+import { Checkbox, Form, Input, Select, Tabs, Textarea } from 'ant-design-vue';
 
 import { useDefinitionsApi } from '../../api/useDefinitionsApi';
-
 defineOptions({
   name: 'SettingDefinitionModal',
 });
+
 const emits = defineEmits<{
   (event: 'change', data: SettingDefinitionDto): void;
 }>();
+
+const { toastSuccess } = useNotifications();
 
 const FormItem = Form.Item;
 const TabPane = Tabs.TabPane;
@@ -62,7 +56,7 @@ const [Modal, modalApi] = useVbenModal<SettingDefinitionDto>({
     modalApi.setState({ submitting: true });
     api
       .then((res) => {
-        message.success($t('AbpUi.SavedSuccessfully'));
+        toastSuccess($t('AbpUi.SavedSuccessfully'));
         emits('change', res);
         modalApi.close();
       })

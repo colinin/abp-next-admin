@@ -12,6 +12,7 @@ import { reactive, ref } from 'vue';
 
 import { $t } from '@vben/locales';
 
+import { useNotifications } from '@abp/core';
 import { useVbenVxeGrid } from '@abp/ui';
 import {
   Button,
@@ -21,7 +22,6 @@ import {
   FormItem,
   Input,
   InputNumber,
-  message,
   Modal,
   Select,
   Space,
@@ -31,6 +31,7 @@ import {
 import { VxeGrid } from 'vxe-table';
 
 import { useApprovalFormsApi } from '../../api/useApprovalFormsApi';
+const { toastWarning, toastError, toastSuccess } = useNotifications();
 
 const formFieldTypes = [
   {
@@ -269,7 +270,7 @@ function openEdit(target: FormDefinitionDto) {
 
 async function submitEdit() {
   if (!form.name || !form.code) {
-    message.warning($t('ElsaNextApprovalFlow.FormDefinitions:NameRequired'));
+    toastWarning($t('ElsaNextApprovalFlow.FormDefinitions:NameRequired'));
     return;
   }
 
@@ -290,7 +291,7 @@ async function submitEdit() {
     editOpen.value = false;
     await load();
   } catch {
-    message.error($t('ElsaNextApprovalFlow.FormDefinitions:SaveFailed'));
+    toastError($t('ElsaNextApprovalFlow.FormDefinitions:SaveFailed'));
   } finally {
     saving.value = false;
   }
@@ -299,10 +300,10 @@ async function submitEdit() {
 async function publish(target: FormDefinitionDto) {
   try {
     await formsApi.publishApi(target.id);
-    message.success($t('ElsaNextApprovalFlow.FormDefinitions:PublishSuccess'));
+    toastSuccess($t('ElsaNextApprovalFlow.FormDefinitions:PublishSuccess'));
     await load();
   } catch {
-    message.error($t('ElsaNextApprovalFlow.FormDefinitions:PublishFailed'));
+    toastError($t('ElsaNextApprovalFlow.FormDefinitions:PublishFailed'));
   }
 }
 
@@ -362,7 +363,7 @@ async function submitField() {
     return;
   }
   if (!fieldForm.key || !fieldForm.label) {
-    message.warning($t('ElsaNextApprovalFlow.FormDefinitions:FieldRequired'));
+    toastWarning($t('ElsaNextApprovalFlow.FormDefinitions:FieldRequired'));
     return;
   }
 
@@ -399,7 +400,7 @@ async function submitField() {
     fieldOpen.value = false;
     await load();
   } catch {
-    message.error($t('ElsaNextApprovalFlow.FormDefinitions:FieldSaveFailed'));
+    toastError($t('ElsaNextApprovalFlow.FormDefinitions:FieldSaveFailed'));
   } finally {
     saving.value = false;
   }
@@ -418,7 +419,7 @@ async function removeField(field: FormFieldDto) {
     fields.value = detail.fields ?? [];
     await load();
   } catch {
-    message.error($t('ElsaNextApprovalFlow.FormDefinitions:FieldDeleteFailed'));
+    toastError($t('ElsaNextApprovalFlow.FormDefinitions:FieldDeleteFailed'));
   }
 }
 

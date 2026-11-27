@@ -14,7 +14,7 @@ import { createIconifyIcon } from '@vben/icons';
 import { $t } from '@vben/locales';
 
 import { AuditLogPermissions, EntityChangeDrawer } from '@abp/auditing';
-import { useFeatures } from '@abp/core';
+import { useFeatures, useNotifications } from '@abp/core';
 import { FeatureModal } from '@abp/features';
 import { useVbenVxeGrid } from '@abp/ui';
 import {
@@ -24,11 +24,10 @@ import {
   LoginOutlined,
   PlusOutlined,
 } from '@ant-design/icons-vue';
-import { Button, Dropdown, Menu, message, Modal } from 'ant-design-vue';
+import { Button, Dropdown, Menu, Modal } from 'ant-design-vue';
 
 import { useTenantsApi } from '../../api/useTenantsApi';
 import { TenantsPermissions } from '../../constants/permissions';
-
 defineOptions({
   name: 'EditionTable',
 });
@@ -36,6 +35,8 @@ defineOptions({
 const emit = defineEmits<{
   (event: 'impersonation', tenant: TenantDto): void;
 }>();
+
+const { toastSuccess } = useNotifications();
 
 const MenuItem = Menu.Item;
 const MenuDivider = Menu.Divider;
@@ -187,7 +188,7 @@ const onDelete = (row: TenantDto) => {
     },
     onOk: async () => {
       await deleteApi(row.id);
-      message.success($t('AbpUi.DeletedSuccessfully'));
+      toastSuccess($t('AbpUi.DeletedSuccessfully'));
       await gridApi.query();
     },
     title: $t('AbpUi.AreYouSure'),

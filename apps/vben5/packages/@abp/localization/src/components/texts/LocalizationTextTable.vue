@@ -11,8 +11,8 @@ import { defineAsyncComponent, h, onMounted, reactive, ref } from 'vue';
 import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { sortby, useAbpStore } from '@abp/core';
-import { useMessage, useVbenVxeGrid } from '@abp/ui';
+import { sortby, useAbpStore, useNotifications } from '@abp/core';
+import { useVbenVxeGrid } from '@abp/ui';
 import {
   DeleteOutlined,
   EditOutlined,
@@ -26,10 +26,11 @@ import { useLocalizationsApi } from '../../api/useLocalizationsApi';
 import { useResourcesApi } from '../../api/useResourcesApi';
 import { useTextsApi } from '../../api/useTextsApi';
 import { TextsPermissions } from '../../constants/permissions';
-
 defineOptions({
   name: 'LocalizationTextTable',
 });
+
+const { toastSuccess } = useNotifications();
 
 const dataSource = ref<TextDifferenceDto[]>([]);
 const resources = ref<ResourceDto[]>([]);
@@ -45,7 +46,6 @@ const targetValueOptions = reactive([
   },
 ]);
 
-const message = useMessage();
 const abpStore = useAbpStore();
 const { getListApi, deleteApi } = useTextsApi();
 const { getPagedListApi: getLanguagesApi } = useLanguagesApi();
@@ -255,7 +255,7 @@ function onDelete(row: TextDifferenceDto) {
         cultureName: row.cultureName,
         key: row.key,
       });
-      message.success($t('AbpUi.DeletedSuccessfully'));
+      toastSuccess($t('AbpUi.DeletedSuccessfully'));
       await onChange(row);
     },
     title: $t('AbpUi.AreYouSure'),

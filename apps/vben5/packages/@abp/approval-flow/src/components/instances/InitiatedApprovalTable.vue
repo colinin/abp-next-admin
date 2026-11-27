@@ -13,8 +13,9 @@ import { ref } from 'vue';
 
 import { $t } from '@vben/locales';
 
+import { useNotifications } from '@abp/core';
 import { useVbenVxeGrid } from '@abp/ui';
-import { Button, message, Modal, Space, Tag } from 'ant-design-vue';
+import { Button, Modal, Space, Tag } from 'ant-design-vue';
 import { VxeGrid } from 'vxe-table';
 
 import { useApprovalInstancesApi } from '../../api/useApprovalInstancesApi';
@@ -28,6 +29,7 @@ import {
   statusText,
 } from './approval-table-utils';
 import ApprovalInstanceDetailModal from './ApprovalInstanceDetailModal.vue';
+const { toastError, toastSuccess } = useNotifications();
 
 const instancesApi = useApprovalInstancesApi();
 const templatesApi = useApprovalTemplatesApi();
@@ -183,7 +185,7 @@ async function openRestart(instance: ApprovalInstanceDto) {
     restartData.value = parseFormData(instance.formDataJson);
     restartOpen.value = true;
   } catch {
-    message.error(
+    toastError(
       $t('ElsaNextApprovalFlow.ApprovalFlow:Initiated:TemplateLoadFailed'),
     );
   }
@@ -194,9 +196,7 @@ function withdraw(instance: ApprovalInstanceDto) {
     content: $t('ElsaNextApprovalFlow.ApprovalFlow:Initiated:WithdrawConfirm'),
     onOk: async () => {
       await instancesApi.withdrawApi(instance.id);
-      message.success(
-        $t('ElsaNextApprovalFlow.ApprovalFlow:Initiated:Withdrawn'),
-      );
+      toastSuccess($t('ElsaNextApprovalFlow.ApprovalFlow:Initiated:Withdrawn'));
       await gridApi.query();
     },
     title: $t('ElsaNextApprovalFlow.ApprovalFlow:Initiated:WithdrawTitle'),
@@ -213,7 +213,7 @@ async function openRecords(instance: ApprovalInstanceDto) {
     records.value = result?.items ?? [];
     recordsOpen.value = true;
   } catch {
-    message.error(
+    toastError(
       $t('ElsaNextApprovalFlow.ApprovalFlow:Initiated:RecordsLoadFailed'),
     );
   }

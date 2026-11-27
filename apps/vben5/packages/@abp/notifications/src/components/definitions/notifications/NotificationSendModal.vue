@@ -14,14 +14,15 @@ import {
 import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { getModalData } from '@abp/core';
+import { getModalData, useNotifications } from '@abp/core';
 import { PropertyTable } from '@abp/ui';
-import { Form, Input, message, Select, Tabs, Textarea } from 'ant-design-vue';
+import { Form, Input, Select, Tabs, Textarea } from 'ant-design-vue';
 
 import { useNotificationDefinitionsApi } from '../../../api';
 import { useNotificationsApi } from '../../../api/useNotificationsApi';
 import { NotificationContentType, NotificationSeverity } from '../../../types';
 import { useEnumMaps } from './useEnumMaps';
+const { toastSuccess } = useNotifications();
 
 const FormItem = Form.Item;
 const TabPane = Tabs.TabPane;
@@ -106,7 +107,7 @@ async function onSubmit() {
       name: input.name,
       severity: input.severity,
     });
-    message.success($t('Notifications.SendSuccessfully'));
+    toastSuccess($t('Notifications.SendSuccessfully'));
     modalApi.close();
   } finally {
     modalApi.setState({ submitting: false });

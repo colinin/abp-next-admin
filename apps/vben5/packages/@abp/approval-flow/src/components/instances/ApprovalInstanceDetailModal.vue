@@ -11,14 +11,13 @@ import { computed, ref, watch } from 'vue';
 
 import { $t } from '@vben/locales';
 
-import { formatToDateTime } from '@abp/core';
+import { formatToDateTime, useNotifications } from '@abp/core';
 import {
   Button,
   Descriptions,
   DescriptionsItem,
   Empty,
   Input,
-  message,
   Modal,
   Radio,
   RadioGroup,
@@ -35,7 +34,6 @@ import { useApprovalInstancesApi } from '../../api/useApprovalInstancesApi';
 import { useApprovalParticipantsApi } from '../../api/useApprovalParticipantsApi';
 import { formatDuration } from './approval-table-utils';
 import ApprovalFlowViewer from './ApprovalFlowViewer.vue';
-
 const props = defineProps<{
   instanceId?: null | string;
   open: boolean;
@@ -46,6 +44,8 @@ const emit = defineEmits<{
   decided: [];
   'update:open': [boolean];
 }>();
+
+const { toastError, toastWarning, toastSuccess } = useNotifications();
 
 const instancesApi = useApprovalInstancesApi();
 const formsApi = useApprovalFormsApi();
@@ -123,9 +123,7 @@ watch(
         await loadParticipants();
       }
     } catch {
-      message.error(
-        $t('ElsaNextApprovalFlow.ApprovalFlow:Instance:LoadFailed'),
-      );
+      toastError($t('ElsaNextApprovalFlow.ApprovalFlow:Instance:LoadFailed'));
     } finally {
       loading.value = false;
     }
@@ -179,7 +177,7 @@ async function submit() {
     return;
   }
   if (needsParticipant.value && !participantId.value) {
-    message.warning(
+    toastWarning(
       actionKey.value === 'Transfer'
         ? $t('ElsaNextApprovalFlow.ApprovalFlow:Instance:SelectTransferee')
         : $t('ElsaNextApprovalFlow.ApprovalFlow:Instance:SelectAddApprover'),
@@ -229,13 +227,11 @@ async function submit() {
       }
     }
 
-    message.success($t('ElsaNextApprovalFlow.ApprovalFlow:Instance:Submitted'));
+    toastSuccess($t('ElsaNextApprovalFlow.ApprovalFlow:Instance:Submitted'));
     emit('decided');
     emit('update:open', false);
   } catch {
-    message.error(
-      $t('ElsaNextApprovalFlow.ApprovalFlow:Instance:SubmitFailed'),
-    );
+    toastError($t('ElsaNextApprovalFlow.ApprovalFlow:Instance:SubmitFailed'));
   } finally {
     submitting.value = false;
   }

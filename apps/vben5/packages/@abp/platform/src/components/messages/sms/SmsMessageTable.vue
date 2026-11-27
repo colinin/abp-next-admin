@@ -12,18 +12,19 @@ import { useAccess } from '@vben/access';
 import { createIconifyIcon } from '@vben/icons';
 import { $t } from '@vben/locales';
 
-import { formatToDateTime } from '@abp/core';
+import { formatToDateTime, useNotifications } from '@abp/core';
 import { useVbenVxeGrid } from '@abp/ui';
 import { DeleteOutlined, EllipsisOutlined } from '@ant-design/icons-vue';
-import { Button, Dropdown, Menu, message, Modal, Tag } from 'ant-design-vue';
+import { Button, Dropdown, Menu, Modal, Tag } from 'ant-design-vue';
 
 import { useSmsMessagesApi } from '../../../api/useSmsMessagesApi';
 import { SmsMessagesPermissions } from '../../../constants/permissions';
 import { MessageStatus } from '../../../types/messages';
-
 defineOptions({
   name: 'EmailMessageTable',
 });
+
+const { toastSuccess } = useNotifications();
 
 const MenuItem = Menu.Item;
 const SendMessageIcon = createIconifyIcon('ant-design:send-outlined');
@@ -218,7 +219,7 @@ function onDelete(row: SmsMessageDto) {
       try {
         gridApi.setLoading(true);
         await deleteApi(row.id);
-        message.success($t('AbpUi.DeletedSuccessfully'));
+        toastSuccess($t('AbpUi.DeletedSuccessfully'));
         gridApi.query();
       } finally {
         gridApi.setLoading(false);
@@ -236,7 +237,7 @@ async function onSend(row: SmsMessageDto) {
       try {
         gridApi.setLoading(true);
         await sendApi(row.id);
-        message.success($t('AppPlatform.SuccessfullySent'));
+        toastSuccess($t('AppPlatform.SuccessfullySent'));
         gridApi.query();
       } finally {
         gridApi.setLoading(false);

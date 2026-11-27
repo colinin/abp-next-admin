@@ -9,18 +9,20 @@ import { ref, toValue, useTemplateRef } from 'vue';
 import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { getModalData } from '@abp/core';
+import { getModalData, useNotifications } from '@abp/core';
 import { LocalizableInput, PropertyTable } from '@abp/ui';
-import { Checkbox, Form, Input, message, Tabs } from 'ant-design-vue';
+import { Checkbox, Form, Input, Tabs } from 'ant-design-vue';
 
 import { useNotificationGroupDefinitionsApi } from '../../../api/useNotificationGroupDefinitionsApi';
-
 defineOptions({
   name: 'NotificationGroupDefinitionModal',
 });
+
 const emits = defineEmits<{
   (event: 'change', data: NotificationGroupDefinitionDto): void;
 }>();
+
+const { toastSuccess } = useNotifications();
 
 const FormItem = Form.Item;
 const TabPane = Tabs.TabPane;
@@ -55,7 +57,7 @@ const [Modal, modalApi] = useVbenModal<NotificationGroupDefinitionDto>({
     modalApi.setState({ submitting: true });
     api
       .then((res) => {
-        message.success($t('AbpUi.SavedSuccessfully'));
+        toastSuccess($t('AbpUi.SavedSuccessfully'));
         emits('change', res);
         modalApi.close();
       })

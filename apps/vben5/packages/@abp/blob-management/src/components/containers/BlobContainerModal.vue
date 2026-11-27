@@ -4,10 +4,9 @@ import type { BlobContainerDto } from '../../types/containers';
 import { useVbenForm, useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { message } from 'ant-design-vue';
+import { useNotifications } from '@abp/core';
 
 import { useBlobContainersApi } from '../../api/useBlobContainersApi';
-
 defineOptions({
   name: 'BlobContainerModal',
 });
@@ -15,6 +14,8 @@ defineOptions({
 const emits = defineEmits<{
   (event: 'change', data: BlobContainerDto): void;
 }>();
+
+const { toastSuccess } = useNotifications();
 
 const { cancel, createApi } = useBlobContainersApi();
 
@@ -41,7 +42,7 @@ async function onSubmit(values: Record<string, any>) {
   try {
     modalApi.setState({ submitting: true });
     const dto = await createApi({ name: values.name });
-    message.success($t('AbpUi.SavedSuccessfully'));
+    toastSuccess($t('AbpUi.SavedSuccessfully'));
     emits('change', dto);
     modalApi.close();
   } finally {

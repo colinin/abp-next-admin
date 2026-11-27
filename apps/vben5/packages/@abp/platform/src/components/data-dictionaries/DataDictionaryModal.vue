@@ -8,14 +8,14 @@ import type {
 import { useVbenForm, useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { getModalData, listToTree } from '@abp/core';
-import { message } from 'ant-design-vue';
+import { getModalData, listToTree, useNotifications } from '@abp/core';
 
 import { useDataDictionariesApi } from '../../api';
-
 const emits = defineEmits<{
   (event: 'change', data: DataDto): void;
 }>();
+
+const { toastSuccess } = useNotifications();
 
 const { createApi, getAllApi, getApi, updateApi } = useDataDictionariesApi();
 
@@ -122,7 +122,7 @@ async function onSubmit(values: Record<string, any>) {
       ? updateApi(values.id, values as DataUpdateDto)
       : createApi(values as DataCreateDto);
     const dto = await api;
-    message.success($t('AbpUi.SavedSuccessfully'));
+    toastSuccess($t('AbpUi.SavedSuccessfully'));
     emits('change', dto);
     modalApi.close();
   } finally {

@@ -2,10 +2,11 @@
 import { useVbenForm, useVbenModal, z } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
+import { useNotifications } from '@abp/core';
 import { usePasswordValidator } from '@abp/identity';
-import { message } from 'ant-design-vue';
 
 import { useProfileApi } from '../../api';
+const { toastSuccess } = useNotifications();
 
 const { validate } = usePasswordValidator();
 const { changePasswordApi } = useProfileApi();
@@ -93,7 +94,7 @@ async function onSubmit(values: Record<string, any>) {
       currentPassword: values.currentPassword,
       newPassword: values.newPassword,
     });
-    message.success($t('AbpIdentity.PasswordChangedMessage'));
+    toastSuccess($t('AbpIdentity.PasswordChangedMessage'));
     modalApi.close();
   } finally {
     modalApi.setState({ submitting: false });

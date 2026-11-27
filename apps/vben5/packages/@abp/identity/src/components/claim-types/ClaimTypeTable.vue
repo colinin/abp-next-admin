@@ -14,22 +14,23 @@ import { createIconifyIcon } from '@vben/icons';
 import { $t } from '@vben/locales';
 
 import { AuditLogPermissions, EntityChangeDrawer } from '@abp/auditing';
-import { useFeatures } from '@abp/core';
+import { useFeatures, useNotifications } from '@abp/core';
 import { useVbenVxeGrid } from '@abp/ui';
 import {
   DeleteOutlined,
   EditOutlined,
   EllipsisOutlined,
 } from '@ant-design/icons-vue';
-import { Button, Dropdown, Menu, message, Modal } from 'ant-design-vue';
+import { Button, Dropdown, Menu, Modal } from 'ant-design-vue';
 
 import { useClaimTypesApi } from '../../api/useClaimTypesApi';
 import { IdentityClaimTypePermissions } from '../../constants/permissions';
 import { ValueType } from '../../types/claim-types';
-
 defineOptions({
   name: 'ClaimTypeTable',
 });
+
+const { toastSuccess } = useNotifications();
 
 const MenuItem = Menu.Item;
 const ClaimTypeModal = defineAsyncComponent(
@@ -198,7 +199,7 @@ const onDelete = (row: IdentityClaimTypeDto) => {
     },
     onOk: async () => {
       await deleteApi(row.id);
-      message.success($t('AbpUi.DeletedSuccessfully'));
+      toastSuccess($t('AbpUi.DeletedSuccessfully'));
       gridApi.query();
     },
     title: $t('AbpUi.AreYouSure'),

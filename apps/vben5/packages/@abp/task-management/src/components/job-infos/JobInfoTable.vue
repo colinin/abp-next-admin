@@ -13,7 +13,7 @@ import { useVbenDrawer } from '@vben/common-ui';
 import { createIconifyIcon } from '@vben/icons';
 import { $t } from '@vben/locales';
 
-import { formatToDateTime } from '@abp/core';
+import { formatToDateTime, useNotifications } from '@abp/core';
 import { useVbenVxeGrid } from '@abp/ui';
 import {
   CopyOutlined,
@@ -28,7 +28,6 @@ import {
   Menu,
   MenuDivider,
   MenuItem,
-  message,
   Modal,
   Tag,
 } from 'ant-design-vue';
@@ -37,10 +36,11 @@ import { useJobInfosApi } from '../../api/useJobInfosApi';
 import { BackgroundJobsPermissions } from '../../constants/permissions';
 import { useJobEnumsMap } from '../../hooks/useJobEnumsMap';
 import { JobSource, JobStatus, JobType } from '../../types/job-infos';
-
 defineOptions({
   name: 'GdprTable',
 });
+
+const { toastSuccess } = useNotifications();
 
 const PauseIcon = createIconifyIcon('material-symbols:pause-outline');
 const ResumeIcon = createIconifyIcon('material-symbols:resume-outline');
@@ -446,7 +446,7 @@ function onDelete(row: BackgroundJobInfoDto) {
       gridApi.setLoading(true);
       try {
         await deleteApi(row.id);
-        message.success($t('AbpUi.DeletedSuccessfully'));
+        toastSuccess($t('AbpUi.DeletedSuccessfully'));
         await gridApi.query();
       } finally {
         gridApi.setLoading(false);
@@ -466,7 +466,7 @@ function onBulkDelete() {
         await bulkDeleteApi({
           jobIds: selectedKeys.value,
         });
-        message.success($t('AbpUi.SavedSuccessfully'));
+        toastSuccess($t('AbpUi.SavedSuccessfully'));
         await gridApi.query();
       } finally {
         gridApi.setLoading(false);
@@ -486,7 +486,7 @@ function onBulkStop() {
         await bulkStopApi({
           jobIds: selectedKeys.value,
         });
-        message.success($t('AbpUi.SavedSuccessfully'));
+        toastSuccess($t('AbpUi.SavedSuccessfully'));
         await gridApi.query();
       } finally {
         gridApi.setLoading(false);
@@ -506,7 +506,7 @@ function onBulkStart() {
         await bulkStartApi({
           jobIds: selectedKeys.value,
         });
-        message.success($t('AbpUi.SavedSuccessfully'));
+        toastSuccess($t('AbpUi.SavedSuccessfully'));
         await gridApi.query();
       } finally {
         gridApi.setLoading(false);
@@ -581,7 +581,7 @@ function onJobStatusChange(
       gridApi.setLoading(true);
       try {
         await api(job.id);
-        message.success($t('AbpUi.SavedSuccessfully'));
+        toastSuccess($t('AbpUi.SavedSuccessfully'));
         await gridApi.query();
       } finally {
         gridApi.setLoading(false);

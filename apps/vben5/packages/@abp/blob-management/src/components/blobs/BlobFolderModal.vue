@@ -4,19 +4,19 @@ import type { BlobDto } from '../../types/blobs';
 import { useVbenForm, useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { getModalData } from '@abp/core';
-import { message } from 'ant-design-vue';
+import { getModalData, useNotifications } from '@abp/core';
 
 import { useBlobsApi } from '../../api/useBlobsApi';
+const emits = defineEmits<{
+  (event: 'change', data: BlobDto): void;
+}>();
+
+const { toastSuccess } = useNotifications();
 
 interface ModalState {
   containerId: string;
   parentId?: string;
 }
-
-const emits = defineEmits<{
-  (event: 'change', data: BlobDto): void;
-}>();
 
 const { createFolderApi } = useBlobsApi();
 
@@ -48,7 +48,7 @@ async function onSubmit(values: Record<string, any>) {
       parentId: state.parentId,
       name: values.name,
     });
-    message.success($t('AbpUi.SavedSuccessfully'));
+    toastSuccess($t('AbpUi.SavedSuccessfully'));
     emits('change', dto);
     modalApi.close();
   } finally {

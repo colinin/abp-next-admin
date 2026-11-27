@@ -10,20 +10,22 @@ import { ref, toValue } from 'vue';
 import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { getModalData } from '@abp/core';
-import { Form, Input, message, Tabs, Transfer } from 'ant-design-vue';
+import { getModalData, useNotifications } from '@abp/core';
+import { Form, Input, Tabs, Transfer } from 'ant-design-vue';
 
 import { useScopesApi } from '../../api/useScopesApi';
 import { useScopeTransfer } from '../../hooks/useScopeTransfer';
 import DisplayNameTable from '../display-names/DisplayNameTable.vue';
 import PropertyTable from '../properties/PropertyTable.vue';
-
 defineOptions({
   name: 'ScopeModal',
 });
+
 const emits = defineEmits<{
   (event: 'change', data: OpenIddictScopeDto): void;
 }>();
+
+const { toastSuccess } = useNotifications();
 
 const FormItem = Form.Item;
 const TabPane = Tabs.TabPane;
@@ -62,7 +64,7 @@ const [Modal, modalApi] = useVbenModal<OpenIddictScopeDto>({
     try {
       modalApi.lock();
       const res = await api;
-      message.success($t('AbpUi.SavedSuccessfully'));
+      toastSuccess($t('AbpUi.SavedSuccessfully'));
       emits('change', res);
       modalApi.close();
     } finally {

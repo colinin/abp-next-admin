@@ -9,19 +9,19 @@ import { computed, ref, toValue, useTemplateRef } from 'vue';
 import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { getModalData, useValidation } from '@abp/core';
+import { getModalData, useNotifications, useValidation } from '@abp/core';
 import {
   Card,
   Checkbox,
   Form,
   Input,
   InputNumber,
-  message,
   Select,
   Tabs,
 } from 'ant-design-vue';
 
 import { useFeaturesApi } from '../../api/useFeaturesApi';
+const { toastSuccess } = useNotifications();
 
 const FormItem = Form.Item;
 const TabPane = Tabs.TabPane;
@@ -198,7 +198,7 @@ async function onSubmit() {
       },
       input,
     );
-    message.success($t('AbpUi.SavedSuccessfully'));
+    toastSuccess($t('AbpUi.SavedSuccessfully'));
     await onGet();
   } finally {
     modalApi.setState({ submitting: false });

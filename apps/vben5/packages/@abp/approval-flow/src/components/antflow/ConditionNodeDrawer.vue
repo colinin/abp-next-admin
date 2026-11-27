@@ -5,6 +5,7 @@ import { computed, reactive, toRaw, watch } from 'vue';
 
 import { $t } from '@vben/locales';
 
+import { useNotifications } from '@abp/core';
 import {
   Alert,
   Button,
@@ -12,11 +13,35 @@ import {
   Drawer,
   Empty,
   Input,
-  message,
   Select,
   Switch,
   Tag,
 } from 'ant-design-vue';
+const props = withDefaults(
+  defineProps<{
+    formFields?: FormFieldOption[];
+    /** AntFlow style visibility alias of `open`. */
+    modelValue?: boolean;
+    node?: AntFlowNode | null;
+    open?: boolean;
+    readonly?: boolean;
+  }>(),
+  {
+    formFields: () => [],
+    modelValue: false,
+    node: null,
+    open: false,
+    readonly: false,
+  },
+);
+
+const emit = defineEmits<{
+  'update:modelValue': [boolean];
+  'update:node': [AntFlowNode];
+  'update:open': [boolean];
+}>();
+
+const { toastWarning } = useNotifications();
 
 /**
  * Optional form field descriptor used to offer the available field keys and
@@ -75,30 +100,6 @@ interface ConditionGroupDraft {
   rows: ConditionRowDraft[];
   uid: string;
 }
-
-const props = withDefaults(
-  defineProps<{
-    formFields?: FormFieldOption[];
-    /** AntFlow style visibility alias of `open`. */
-    modelValue?: boolean;
-    node?: AntFlowNode | null;
-    open?: boolean;
-    readonly?: boolean;
-  }>(),
-  {
-    formFields: () => [],
-    modelValue: false,
-    node: null,
-    open: false,
-    readonly: false,
-  },
-);
-
-const emit = defineEmits<{
-  'update:modelValue': [boolean];
-  'update:node': [AntFlowNode];
-  'update:open': [boolean];
-}>();
 
 const visible = computed(() => props.open || props.modelValue);
 
@@ -345,7 +346,7 @@ function confirm() {
 
   if (!draft.isDefault) {
     if (conditionCount.value === 0) {
-      message.warning($t('antflow.condition.validation'));
+      toastWarning($t('antflow.condition.validation'));
       return;
     }
 
@@ -355,7 +356,7 @@ function confirm() {
       ),
     );
     if (invalidGroup) {
-      message.warning($t('antflow.condition.fieldRequired'));
+      toastWarning($t('antflow.condition.fieldRequired'));
       return;
     }
 
@@ -365,7 +366,7 @@ function confirm() {
       ),
     );
     if (missingValue) {
-      message.warning($t('antflow.condition.valueRequired'));
+      toastWarning($t('antflow.condition.valueRequired'));
       return;
     }
   }

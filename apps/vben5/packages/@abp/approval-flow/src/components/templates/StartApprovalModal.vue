@@ -9,13 +9,13 @@ import { computed, reactive, ref, watch } from 'vue';
 
 import { $t } from '@vben/locales';
 
+import { useNotifications } from '@abp/core';
 import {
   DatePicker,
   Form,
   FormItem,
   Input,
   InputNumber,
-  message,
   Modal,
   RadioGroup,
   Select,
@@ -25,7 +25,6 @@ import {
 import { useApprovalFormsApi } from '../../api/useApprovalFormsApi';
 import { useApprovalInstancesApi } from '../../api/useApprovalInstancesApi';
 import { calculateFormula, parseFormula } from '../designer/formula';
-
 const props = defineProps<{
   initialData?: null | Record<string, unknown>;
   open: boolean;
@@ -36,6 +35,8 @@ const emit = defineEmits<{
   started: [];
   'update:open': [boolean];
 }>();
+
+const { toastError, toastWarning, toastSuccess } = useNotifications();
 
 const instancesApi = useApprovalInstancesApi();
 const formsApi = useApprovalFormsApi();
@@ -87,7 +88,7 @@ watch(
           data[field.key] = initial === undefined ? switchDefault : initial;
         }
       } catch {
-        message.error(
+        toastError(
           $t('ElsaNextApprovalFlow.ApprovalFlow:Start:FormLoadFailed'),
         );
       } finally {
@@ -130,9 +131,7 @@ async function submit() {
     return;
   }
   if (!title.value.trim()) {
-    message.warning(
-      $t('ElsaNextApprovalFlow.ApprovalFlow:Start:TitleRequired'),
-    );
+    toastWarning($t('ElsaNextApprovalFlow.ApprovalFlow:Start:TitleRequired'));
     return;
   }
 
@@ -148,7 +147,7 @@ async function submit() {
       field.isRequired &&
       (value === undefined || value === null || value === '')
     ) {
-      message.warning(
+      toastWarning(
         $t('ElsaNextApprovalFlow.ApprovalFlow:Start:FieldRequired', [
           field.label,
         ]),
@@ -177,11 +176,11 @@ async function submit() {
       templateId: props.template.id,
       title: title.value.trim(),
     });
-    message.success($t('ElsaNextApprovalFlow.ApprovalFlow:Start:Started'));
+    toastSuccess($t('ElsaNextApprovalFlow.ApprovalFlow:Start:Started'));
     emit('started');
     emit('update:open', false);
   } catch {
-    message.error($t('ElsaNextApprovalFlow.ApprovalFlow:Start:Failed'));
+    toastError($t('ElsaNextApprovalFlow.ApprovalFlow:Start:Failed'));
   } finally {
     submitting.value = false;
   }

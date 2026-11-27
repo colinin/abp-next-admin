@@ -10,21 +10,22 @@ import { defineAsyncComponent, h } from 'vue';
 import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { useAuthorization } from '@abp/core';
+import { useAuthorization, useNotifications } from '@abp/core';
 import { useVbenVxeGrid } from '@abp/ui';
 import {
   DeleteOutlined,
   EditOutlined,
   PlusOutlined,
 } from '@ant-design/icons-vue';
-import { Button, message, Modal } from 'ant-design-vue';
+import { Button, Modal } from 'ant-design-vue';
 
 import { useLayoutsApi } from '../../api/useLayoutsApi';
 import { LayoutPermissions } from '../../constants/permissions';
-
 defineOptions({
   name: 'LayoutTable',
 });
+
+const { toastSuccess } = useNotifications();
 
 const { isGranted } = useAuthorization();
 const { deleteApi, getPagedListApi } = useLayoutsApi();
@@ -188,7 +189,7 @@ function onDelete(row: LayoutDto) {
       try {
         gridApi.setLoading(true);
         await deleteApi(row.id);
-        message.success($t('AbpUi.DeletedSuccessfully'));
+        toastSuccess($t('AbpUi.DeletedSuccessfully'));
         gridApi.query();
       } finally {
         gridApi.setLoading(false);

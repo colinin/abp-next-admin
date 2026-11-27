@@ -17,6 +17,7 @@ import {
   sortby,
   useLocalization,
   useLocalizationSerializer,
+  useNotifications,
 } from '@abp/core';
 import { useVbenVxeGrid } from '@abp/ui';
 import {
@@ -27,16 +28,18 @@ import {
   EllipsisOutlined,
   PlusOutlined,
 } from '@ant-design/icons-vue';
-import { Button, Dropdown, Menu, message, Modal } from 'ant-design-vue';
+import { Button, Dropdown, Menu, Modal } from 'ant-design-vue';
 import { VxeGrid } from 'vxe-table';
 
 import { useFeatureDefinitionsApi } from '../../../api/useFeatureDefinitionsApi';
 import { useFeatureGroupDefinitionsApi } from '../../../api/useFeatureGroupDefinitionsApi';
 import { FeatureDefinitionsPermissions } from '../../../constants/permissions';
-
 defineOptions({
   name: 'FeatureDefinitionTable',
 });
+
+const { toastSuccess } = useNotifications();
+
 const MenuItem = Menu.Item;
 
 interface FeatureVo {
@@ -284,7 +287,7 @@ function onDelete(row: FeatureDefinitionDto) {
     content: `${$t('AbpUi.ItemWillBeDeletedMessageWithFormat', [row.name])}`,
     onOk: async () => {
       await deleteApi(row.name);
-      message.success($t('AbpUi.DeletedSuccessfully'));
+      toastSuccess($t('AbpUi.DeletedSuccessfully'));
       onGet();
     },
     title: $t('AbpUi.AreYouSure'),

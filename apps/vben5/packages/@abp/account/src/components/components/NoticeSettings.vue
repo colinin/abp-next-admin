@@ -3,6 +3,7 @@ import { onMounted, ref } from 'vue';
 
 import { $t } from '@vben/locales';
 
+import { useNotifications } from '@abp/core';
 import { useMySubscribesApi, useNotificationsApi } from '@abp/notifications';
 import {
   Card,
@@ -11,9 +12,9 @@ import {
   List,
   ListItem,
   ListItemMeta,
-  message,
   Switch,
 } from 'ant-design-vue';
+const { toastSuccess } = useNotifications();
 
 interface NotificationItem {
   description?: string;
@@ -67,7 +68,7 @@ async function onSubscribed(notification: NotificationItem, checked: boolean) {
       ? subscribeApi(notification.name)
       : unSubscribeApi(notification.name);
     await api;
-    message.success($t('AbpUi.SavedSuccessfully'));
+    toastSuccess($t('AbpUi.SavedSuccessfully'));
   } catch {
     notification.isSubscribe = !checked;
   } finally {

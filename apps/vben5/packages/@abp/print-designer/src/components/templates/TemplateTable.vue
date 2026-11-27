@@ -11,17 +11,22 @@ import { useVbenModal } from '@vben/common-ui';
 import { createIconifyIcon } from '@vben/icons';
 import { $t } from '@vben/locales';
 
-import { formatToDateTime, useAuthorization } from '@abp/core';
+import {
+  formatToDateTime,
+  useAuthorization,
+  useNotifications,
+} from '@abp/core';
 import { useVbenVxeGrid } from '@abp/ui';
 import {
   DeleteOutlined,
   EditOutlined,
   PlusOutlined,
 } from '@ant-design/icons-vue';
-import { Button, message, Modal } from 'ant-design-vue';
+import { Button, Modal } from 'ant-design-vue';
 
 import { useTemplatesApi } from '../../api/useTemplatesApi';
 import { TemplatePermissions } from '../../constants/permissions';
+const { toastSuccess } = useNotifications();
 
 const DesignIcon = createIconifyIcon(
   'material-symbols-light:design-services-outline',
@@ -197,7 +202,7 @@ function onDelete(row: TemplateDto) {
       try {
         gridApi.setLoading(true);
         await deleteApi(row.id);
-        message.success($t('AbpUi.DeletedSuccessfully'));
+        toastSuccess($t('AbpUi.DeletedSuccessfully'));
         gridApi.query();
       } finally {
         gridApi.setLoading(false);

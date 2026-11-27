@@ -11,21 +11,26 @@ import type {
 import { useVbenForm, useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { formatToDate, formatToDateTime, getModalData } from '@abp/core';
-import { message } from 'ant-design-vue';
+import {
+  formatToDate,
+  formatToDateTime,
+  getModalData,
+  useNotifications,
+} from '@abp/core';
 import cloneDeep from 'lodash.clonedeep';
 
 import { useDataDictionariesApi } from '../../api';
 import { ValueType } from '../../types';
+const emits = defineEmits<{
+  (event: 'change'): void;
+}>();
+
+const { toastSuccess } = useNotifications();
 
 interface ModalState {
   data: DataDto;
   item: DataItemDto;
 }
-
-const emits = defineEmits<{
-  (event: 'change'): void;
-}>();
 
 const { createItemApi, updateItemApi } = useDataDictionariesApi();
 
@@ -165,7 +170,7 @@ async function onSubmit(values: Record<string, any>) {
       ? updateItemApi(state.data.id, input.name, input as DataItemUpdateDto)
       : createItemApi(state.data.id, input as DataItemCreateDto);
     await api;
-    message.success($t('AbpUi.SavedSuccessfully'));
+    toastSuccess($t('AbpUi.SavedSuccessfully'));
     emits('change');
     modalApi.close();
   } finally {

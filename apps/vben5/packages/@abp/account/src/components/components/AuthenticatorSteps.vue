@@ -10,18 +10,22 @@ import { computed, reactive, ref, toValue, useTemplateRef } from 'vue';
 
 import { $t } from '@vben/locales';
 
+import { useNotifications } from '@abp/core';
 import { useClipboard } from '@vueuse/core';
 import { useQRCode } from '@vueuse/integrations/useQRCode';
-import { Button, Card, Form, Input, message, Steps } from 'ant-design-vue';
+import { Button, Card, Form, Input, Steps } from 'ant-design-vue';
 
 import { useProfileApi } from '../../api/useProfileApi';
-
 const props = defineProps<{
   authenticator: AuthenticatorDto;
 }>();
+
 const emits = defineEmits<{
   (event: 'done'): void;
 }>();
+
+const { toastSuccess } = useNotifications();
+
 const FormItem = Form.Item;
 
 const { verifyAuthenticatorCodeApi } = useProfileApi();
@@ -60,14 +64,14 @@ async function onCopy(text?: string) {
     return;
   }
   await copy(text);
-  message.success($t('AbpUi.CopiedToTheClipboard'));
+  toastSuccess($t('AbpUi.CopiedToTheClipboard'));
 }
 async function onValidCode() {
   await form.value?.validate();
   try {
     loading.value = true;
     const dto = await verifyAuthenticatorCodeApi(toValue(validCodeInput));
-    message.success($t('AbpAccount.AuthenticatorCodeValidSuccessfully'));
+    toastSuccess($t('AbpAccount.AuthenticatorCodeValidSuccessfully'));
     recoveryCodes.value = dto.recoveryCodes;
     codeValidated.value = true;
     onNextStep();

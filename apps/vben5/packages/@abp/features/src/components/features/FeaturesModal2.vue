@@ -8,8 +8,8 @@ import { computed, ref, toValue, useTemplateRef } from 'vue';
 import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { getModalData } from '@abp/core';
-import { Form, message, Tabs } from 'ant-design-vue';
+import { getModalData, useNotifications } from '@abp/core';
+import { Form, Tabs } from 'ant-design-vue';
 
 import { useFeaturesApi } from '../../api/useFeaturesApi';
 import FeatureGroup from './FeatureGroup.vue';
@@ -19,6 +19,7 @@ import {
   processAllFeatures,
   updateVisibility,
 } from './useFeatureTree';
+const { toastSuccess } = useNotifications();
 
 const TabPane = Tabs.TabPane;
 
@@ -146,7 +147,7 @@ async function onSubmit() {
       },
       input,
     );
-    message.success($t('AbpUi.SavedSuccessfully'));
+    toastSuccess($t('AbpUi.SavedSuccessfully'));
     await onGet();
   } finally {
     modalApi.setState({ submitting: false });

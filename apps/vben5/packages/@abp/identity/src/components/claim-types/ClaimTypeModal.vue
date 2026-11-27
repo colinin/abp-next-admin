@@ -9,25 +9,20 @@ import { reactive, ref, toValue } from 'vue';
 import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { getModalData } from '@abp/core';
-import {
-  Checkbox,
-  Form,
-  Input,
-  message,
-  Select,
-  Textarea,
-} from 'ant-design-vue';
+import { getModalData, useNotifications } from '@abp/core';
+import { Checkbox, Form, Input, Select, Textarea } from 'ant-design-vue';
 
 import { useClaimTypesApi } from '../../api/useClaimTypesApi';
 import { ValueType } from '../../types/claim-types';
-
 defineOptions({
   name: 'ClaimTypeModal',
 });
+
 const emits = defineEmits<{
   (event: 'change', data: IdentityClaimTypeDto): void;
 }>();
+
+const { toastSuccess } = useNotifications();
 
 const FormItem = Form.Item;
 
@@ -74,7 +69,7 @@ const [Modal, modalApi] = useVbenModal<IdentityClaimTypeDto>({
     modalApi.setState({ submitting: true });
     api
       .then((res) => {
-        message.success($t('AbpUi.Success'));
+        toastSuccess($t('AbpUi.Success'));
         emits('change', res);
         modalApi.close();
       })

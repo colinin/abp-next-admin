@@ -12,22 +12,28 @@ import { useVbenDrawer } from '@vben/common-ui';
 import { IconifyIcon } from '@vben/icons';
 import { $t } from '@vben/locales';
 
-import { listToTree, sortby, useAuthorization } from '@abp/core';
+import {
+  listToTree,
+  sortby,
+  useAuthorization,
+  useNotifications,
+} from '@abp/core';
 import { useVbenVxeGrid } from '@abp/ui';
 import {
   DeleteOutlined,
   EditOutlined,
   PlusOutlined,
 } from '@ant-design/icons-vue';
-import { Button, message, Modal } from 'ant-design-vue';
+import { Button, Modal } from 'ant-design-vue';
 
 import { useLayoutsApi } from '../../api';
 import { useMenusApi } from '../../api/useMenusApi';
 import { MenuPermissions } from '../../constants/permissions';
-
 defineOptions({
   name: 'MenuTable',
 });
+
+const { toastSuccess } = useNotifications();
 
 const { isGranted } = useAuthorization();
 const { deleteApi, getAllApi } = useMenusApi();
@@ -250,7 +256,7 @@ function onDelete(row: MenuDto) {
       try {
         gridApi.setLoading(true);
         await deleteApi(row.id);
-        message.success($t('AbpUi.DeletedSuccessfully'));
+        toastSuccess($t('AbpUi.DeletedSuccessfully'));
         onGet();
       } finally {
         gridApi.setLoading(false);

@@ -12,10 +12,10 @@ import { useVbenModal } from '@vben/common-ui';
 import { createIconifyIcon } from '@vben/icons';
 import { $t } from '@vben/locales';
 
-import { formatToDateTime } from '@abp/core';
+import { formatToDateTime, useNotifications } from '@abp/core';
 import { useVbenVxeGrid } from '@abp/ui';
 import { DeleteOutlined, DownOutlined } from '@ant-design/icons-vue';
-import { Button, Dropdown, Menu, message, Modal } from 'ant-design-vue';
+import { Button, Dropdown, Menu, Modal } from 'ant-design-vue';
 
 import { useMyNotifilersApi } from '../../api/useMyNotifilersApi';
 import { useNotificationSerializer } from '../../hooks';
@@ -23,10 +23,12 @@ import {
   NotificationReadState,
   NotificationType,
 } from '../../types/notifications';
-
 defineOptions({
   name: 'MyNotificationTable',
 });
+
+const { toastSuccess } = useNotifications();
+
 const { cancel, deleteMyNotifilerApi, getMyNotifilersApi, markReadStateApi } =
   useMyNotifilersApi();
 
@@ -263,7 +265,7 @@ const onDelete = (row: Notification) => {
     },
     onOk: async () => {
       await deleteMyNotifilerApi(row.id);
-      message.success($t('AbpUi.DeletedSuccessfully'));
+      toastSuccess($t('AbpUi.DeletedSuccessfully'));
       await gridApi.query();
     },
     title: $t('AbpUi.AreYouSure'),

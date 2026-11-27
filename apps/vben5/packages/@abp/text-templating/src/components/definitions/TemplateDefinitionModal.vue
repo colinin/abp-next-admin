@@ -17,19 +17,22 @@ import {
   useAbpStore,
   useLocalization,
   useLocalizationSerializer,
+  useNotifications,
 } from '@abp/core';
 import { useResourcesApi } from '@abp/localization';
 import { LocalizableInput, PropertyTable } from '@abp/ui';
-import { Checkbox, Form, Input, message, Select, Tabs } from 'ant-design-vue';
+import { Checkbox, Form, Input, Select, Tabs } from 'ant-design-vue';
 
 import { useTemplateDefinitionsApi } from '../../api';
-
 defineOptions({
   name: 'TemplateDefinitionModal',
 });
+
 const emits = defineEmits<{
   (event: 'change', data: TextTemplateDefinitionDto): void;
 }>();
+
+const { toastSuccess } = useNotifications();
 
 const FormItem = Form.Item;
 const TabPane = Tabs.TabPane;
@@ -87,7 +90,7 @@ const [Modal, modalApi] = useVbenModal<TextTemplateDefinitionDto>({
     modalApi.setState({ submitting: true });
     api
       .then((res) => {
-        message.success($t('AbpUi.SavedSuccessfully'));
+        toastSuccess($t('AbpUi.SavedSuccessfully'));
         emits('change', res);
         modalApi.close();
       })

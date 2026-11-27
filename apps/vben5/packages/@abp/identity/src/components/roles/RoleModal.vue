@@ -8,17 +8,19 @@ import { ref, toValue } from 'vue';
 import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { getModalData } from '@abp/core';
-import { Checkbox, Form, Input, message } from 'ant-design-vue';
+import { getModalData, useNotifications } from '@abp/core';
+import { Checkbox, Form, Input } from 'ant-design-vue';
 
 import { useRolesApi } from '../../api/useRolesApi';
-
 defineOptions({
   name: 'RoleModal',
 });
+
 const emits = defineEmits<{
   (event: 'change', data: IdentityRoleDto): void;
 }>();
+
+const { toastSuccess } = useNotifications();
 
 const FormItem = Form.Item;
 
@@ -49,7 +51,7 @@ const [Modal, modalApi] = useVbenModal<IdentityRoleDto>({
     modalApi.setState({ submitting: true });
     api
       .then((res) => {
-        message.success($t('AbpUi.Success'));
+        toastSuccess($t('AbpUi.Success'));
         emits('change', res);
         modalApi.close();
       })

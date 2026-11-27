@@ -11,23 +11,24 @@ import { $t } from '@vben/locales';
 import { preferences } from '@vben/preferences';
 import { useUserStore } from '@vben/stores';
 
-import { formatToDateTime } from '@abp/core';
+import { formatToDateTime, useNotifications } from '@abp/core';
 import {
   NotificationReadState,
   useMyNotifilersApi,
   useNotificationSerializer,
 } from '@abp/notifications';
-import { Empty, message } from 'ant-design-vue';
+import { Empty } from 'ant-design-vue';
 
 import { useMyFavoriteMenusApi } from '../../api/useMyFavoriteMenusApi';
 import WorkbenchHeader from './components/WorkbenchHeader.vue';
 import WorkbenchQuickNav from './components/WorkbenchQuickNav.vue';
 import WorkbenchTodo from './components/WorkbenchTodo.vue';
 import WorkbenchTrends from './components/WorkbenchTrends.vue';
-
 defineEmits<{
   (event: 'navTo', menu: FavoriteMenu): void;
 }>();
+
+const { toastSuccess } = useNotifications();
 
 const userStore = useUserStore();
 const { getMyNotifilersApi } = useMyNotifilersApi();
@@ -161,7 +162,7 @@ function onCreatingFavoriteMenu() {
 async function onDeleteFavoriteMenu(menu: FavoriteMenu) {
   await deleteFavoriteMenuApi(menu.id);
   await onInitFavoriteMenus();
-  message.success($t('AbpUi.SuccessfullyDeleted'));
+  toastSuccess($t('AbpUi.SuccessfullyDeleted'));
 }
 
 onMounted(onInit);

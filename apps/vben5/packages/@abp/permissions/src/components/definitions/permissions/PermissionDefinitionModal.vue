@@ -21,13 +21,13 @@ import {
   listToTree,
   useLocalization,
   useLocalizationSerializer,
+  useNotifications,
 } from '@abp/core';
 import { LocalizableInput, PropertyTable, SimpleStateChecking } from '@abp/ui';
 import {
   Checkbox,
   Form,
   Input,
-  message,
   Select,
   Tabs,
   TreeSelect,
@@ -36,13 +36,15 @@ import {
 import { usePermissionDefinitionsApi } from '../../../api/usePermissionDefinitionsApi';
 import { usePermissionGroupDefinitionsApi } from '../../../api/usePermissionGroupDefinitionsApi';
 import { useTypesMap } from './types';
-
 defineOptions({
   name: 'PermissionDefinitionModal',
 });
+
 const emits = defineEmits<{
   (event: 'change', data: PermissionDefinitionDto): void;
 }>();
+
+const { toastSuccess } = useNotifications();
 
 const FormItem = Form.Item;
 const TabPane = Tabs.TabPane;
@@ -108,7 +110,7 @@ const [Modal, modalApi] = useVbenModal<PermissionDefinitionDto>({
     modalApi.setState({ submitting: true });
     api
       .then((res) => {
-        message.success($t('AbpUi.SavedSuccessfully'));
+        toastSuccess($t('AbpUi.SavedSuccessfully'));
         emits('change', res);
         modalApi.close();
       })

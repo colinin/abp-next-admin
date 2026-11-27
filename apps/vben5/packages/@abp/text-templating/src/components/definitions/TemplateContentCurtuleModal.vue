@@ -7,17 +7,20 @@ import type { TextTemplateDefinitionDto } from '../../types/definitions';
 import { useVbenForm, useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { getModalData, useAbpStore } from '@abp/core';
-import { Modal as AntdvModal, Button, Card, message } from 'ant-design-vue';
+import { getModalData, useAbpStore, useNotifications } from '@abp/core';
+import { Modal as AntdvModal, Button, Card } from 'ant-design-vue';
 
 import { useTemplateContentsApi } from '../../api';
-
 defineProps<{
   title: string;
 }>();
+
 const emits = defineEmits<{
   (event: 'change', data: TextTemplateContentDto): void;
 }>();
+
+const { toastSuccess } = useNotifications();
+
 const abpStore = useAbpStore();
 const { getApi, restoreToDefaultApi, updateApi } = useTemplateContentsApi();
 
@@ -171,7 +174,7 @@ async function onSubmit(values: Record<string, string>) {
       culture: values.culture,
     });
     emits('change', dto);
-    message.success($t('AbpTextTemplating.TemplateContentUpdated'));
+    toastSuccess($t('AbpTextTemplating.TemplateContentUpdated'));
     modalApi.close();
   } finally {
     modalApi.setState({ submitting: false });
@@ -188,7 +191,7 @@ function onRestoreToDefault() {
       await restoreToDefaultApi(name, {
         culture: formValues.culture,
       });
-      message.success($t('AbpTextTemplating.TemplateContentRestoredToDefault'));
+      toastSuccess($t('AbpTextTemplating.TemplateContentRestoredToDefault'));
       await onInit();
     },
     title: $t('AbpTextTemplating.RestoreToDefault'),

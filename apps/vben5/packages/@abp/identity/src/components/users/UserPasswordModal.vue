@@ -7,18 +7,20 @@ import { h } from 'vue';
 import { useVbenForm, useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { getModalData } from '@abp/core';
-import { Button, message } from 'ant-design-vue';
+import { getModalData, useNotifications } from '@abp/core';
+import { Button } from 'ant-design-vue';
 
 import { useUsersApi } from '../../api/useUsersApi';
 import { useRandomPassword } from '../../hooks';
-
 defineOptions({
   name: 'UserPasswordModal',
 });
+
 const emits = defineEmits<{
   (event: 'change'): void;
 }>();
+
+const { toastSuccess } = useNotifications();
 
 const { generatePassword } = useRandomPassword();
 const { cancel, changePasswordApi } = useUsersApi();
@@ -91,7 +93,7 @@ const [Modal, modalApi] = useVbenModal<IdentityUserDto>({
 async function onSubmit(input: Record<string, any>) {
   const { id } = getModalData(modalApi);
   await changePasswordApi(id, { password: input.password });
-  message.success($t('AbpUi.SavedSuccessfully'));
+  toastSuccess($t('AbpUi.SavedSuccessfully'));
   emits('change');
   modalApi.close();
 }

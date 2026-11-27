@@ -7,7 +7,7 @@ import { useVbenDrawer } from '@vben/common-ui';
 import { createIconifyIcon } from '@vben/icons';
 import { $t } from '@vben/locales';
 
-import { formatToDateTime, getModalData } from '@abp/core';
+import { formatToDateTime, getModalData, useNotifications } from '@abp/core';
 import { PropertyTable } from '@abp/ui';
 import {
   Button,
@@ -18,7 +18,6 @@ import {
   List,
   ListItem,
   ListItemMeta,
-  message,
   Popconfirm,
   TabPane,
   Tabs,
@@ -29,6 +28,7 @@ import { useJobInfosApi } from '../../api/useJobInfosApi';
 import { useJobLogsApi } from '../../api/useJobLogsApi';
 import { useJobEnumsMap } from '../../hooks/useJobEnumsMap';
 import { JobType } from '../../types';
+const { toastSuccess } = useNotifications();
 
 const DeleteOutlined = createIconifyIcon('ant-design:delete-outlined');
 const SuccessIcon = createIconifyIcon('grommet-icons:status-good');
@@ -112,7 +112,7 @@ async function onDeleteLog(jobLog: BackgroundJobLogDto) {
   drawerApi.setState({ loading: true });
   try {
     await deleteJobLogApi(jobLog.id);
-    message.success($t('AbpUi.DeletedSuccessfully'));
+    toastSuccess($t('AbpUi.DeletedSuccessfully'));
     await onGetLogs(paginationInfo.value.current);
   } finally {
     drawerApi.setState({ loading: false });

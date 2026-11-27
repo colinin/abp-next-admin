@@ -8,17 +8,19 @@ import { ref, toValue, useTemplateRef } from 'vue';
 import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { getModalData } from '@abp/core';
-import { Checkbox, Form, Input, message } from 'ant-design-vue';
+import { getModalData, useNotifications } from '@abp/core';
+import { Checkbox, Form, Input } from 'ant-design-vue';
 
 import { useResourcesApi } from '../../api/useResourcesApi';
-
 defineOptions({
   name: 'LocalizationResourceModal',
 });
+
 const emits = defineEmits<{
   (event: 'change', data: ResourceDto): void;
 }>();
+
+const { toastSuccess } = useNotifications();
 
 const FormItem = Form.Item;
 
@@ -74,7 +76,7 @@ async function onSubmit() {
     const input = toValue(formModel);
     const api = input.id ? updateApi(input.name, input) : createApi(input);
     const dto = await api;
-    message.success($t('AbpUi.SavedSuccessfully'));
+    toastSuccess($t('AbpUi.SavedSuccessfully'));
     emits('change', dto);
     modalApi.close();
   } finally {

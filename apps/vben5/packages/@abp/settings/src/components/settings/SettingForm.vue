@@ -9,7 +9,7 @@ import { computed, onMounted, ref, toValue } from 'vue';
 
 import { $t } from '@vben/locales';
 
-import { formatToDate, useFeatures } from '@abp/core';
+import { formatToDate, useFeatures, useNotifications } from '@abp/core';
 import {
   Button,
   Card,
@@ -21,7 +21,6 @@ import {
   Input,
   InputNumber,
   InputPassword,
-  message,
   Select,
   Tabs,
 } from 'ant-design-vue';
@@ -29,17 +28,21 @@ import dayjs from 'dayjs';
 
 import { SettingManagementEnable } from '../../constants/features';
 import { ValueType } from '../../types';
-
 defineOptions({
   name: 'SettingForm',
 });
+
 const props = defineProps<{
   getApi: () => Promise<SettingGroup[]>;
   submitApi: (input: SettingsUpdateInput) => Promise<void>;
 }>();
+
 const emits = defineEmits<{
   (event: 'change', data: SettingsUpdateInput): void;
 }>();
+
+const { toastSuccess } = useNotifications();
+
 const FormItem = Form.Item;
 const TabPane = Tabs.TabPane;
 const CollapsePanel = Collapse.Panel;
@@ -77,7 +80,7 @@ async function onSubmit() {
     const input = toValue(settingsUpdateInput);
     await props.submitApi(input);
     emits('change', input);
-    message.success($t('AbpSettingManagement.SavedSuccessfully'));
+    toastSuccess($t('AbpSettingManagement.SavedSuccessfully'));
   } finally {
     submiting.value = false;
   }

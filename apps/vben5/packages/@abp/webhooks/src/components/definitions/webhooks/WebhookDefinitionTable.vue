@@ -15,6 +15,7 @@ import {
   sortby,
   useLocalization,
   useLocalizationSerializer,
+  useNotifications,
 } from '@abp/core';
 import { useVbenVxeGrid } from '@abp/ui';
 import {
@@ -24,16 +25,17 @@ import {
   EditOutlined,
   PlusOutlined,
 } from '@ant-design/icons-vue';
-import { Button, message, Modal, Tag } from 'ant-design-vue';
+import { Button, Modal, Tag } from 'ant-design-vue';
 import { VxeGrid } from 'vxe-table';
 
 import { useWebhookDefinitionsApi } from '../../../api/useWebhookDefinitionsApi';
 import { useWebhookGroupDefinitionsApi } from '../../../api/useWebhookGroupDefinitionsApi';
 import { WebhookDefinitionsPermissions } from '../../../constants/permissions';
-
 defineOptions({
   name: 'WebhookDefinitionTable',
 });
+
+const { toastSuccess } = useNotifications();
 
 interface DefinitionItem {
   children: DefinitionItem[];
@@ -273,7 +275,7 @@ function onDelete(row: WebhookDefinitionDto) {
     content: `${$t('AbpUi.ItemWillBeDeletedMessageWithFormat', [row.name])}`,
     onOk: async () => {
       await deleteApi(row.name);
-      message.success($t('AbpUi.DeletedSuccessfully'));
+      toastSuccess($t('AbpUi.DeletedSuccessfully'));
       onGet();
     },
     title: $t('AbpUi.AreYouSure'),

@@ -11,7 +11,12 @@ import { useAccess } from '@vben/access';
 import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { formatToDateTime, getModalData, useSettings } from '@abp/core';
+import {
+  formatToDateTime,
+  getModalData,
+  useNotifications,
+  useSettings,
+} from '@abp/core';
 import {
   Checkbox,
   Descriptions,
@@ -20,7 +25,6 @@ import {
   Form,
   Input,
   InputPassword,
-  message,
   Tabs,
   Transfer,
   Tree,
@@ -28,13 +32,15 @@ import {
 
 import { useOrganizationUnitsApi } from '../../api/useOrganizationUnitsApi';
 import { useUsersApi } from '../../api/useUsersApi';
-
 defineOptions({
   name: 'UserModal',
 });
+
 const emits = defineEmits<{
   (event: 'change', data: IdentityUserDto): void;
 }>();
+
+const { toastSuccess } = useNotifications();
 
 const FormItem = Form.Item;
 const TabPane = Tabs.TabPane;
@@ -95,7 +101,7 @@ const [Modal, modalApi] = useVbenModal<IdentityUserDto>({
     modalApi.setState({ submitting: true });
     api
       .then((res) => {
-        message.success($t('AbpUi.SavedSuccessfully'));
+        toastSuccess($t('AbpUi.SavedSuccessfully'));
         emits('change', res);
         modalApi.close();
       })

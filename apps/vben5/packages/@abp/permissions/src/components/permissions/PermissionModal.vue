@@ -13,16 +13,8 @@ import { computed, defineAsyncComponent, ref } from 'vue';
 import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { getModalData } from '@abp/core';
-import {
-  Button,
-  Card,
-  Checkbox,
-  Divider,
-  message,
-  Tabs,
-  Tree,
-} from 'ant-design-vue';
+import { getModalData, useNotifications } from '@abp/core';
+import { Button, Card, Checkbox, Divider, Tabs, Tree } from 'ant-design-vue';
 
 import { usePermissionsApi } from '../../api/usePermissionsApi';
 import {
@@ -35,7 +27,6 @@ import {
   getPermissionsCount,
   toPermissionList,
 } from '../../utils';
-
 defineOptions({
   name: 'PermissionModal',
 });
@@ -43,6 +34,8 @@ defineOptions({
 const emits = defineEmits<{
   (event: 'change', name: string, key?: string): void;
 }>();
+
+const { toastSuccess } = useNotifications();
 
 const TabPane = Tabs.TabPane;
 
@@ -120,7 +113,7 @@ const [Modal, modalApi] = useVbenModal<ModalState>({
           permissions,
         },
       );
-      message.success($t('AbpUi.SavedSuccessfully'));
+      toastSuccess($t('AbpUi.SavedSuccessfully'));
       modalApi.close();
       emits('change', providerName, providerKey);
     } finally {

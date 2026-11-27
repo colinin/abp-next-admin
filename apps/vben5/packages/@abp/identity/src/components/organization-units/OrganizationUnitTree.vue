@@ -12,6 +12,7 @@ import { useVbenModal } from '@vben/common-ui';
 import { createIconifyIcon } from '@vben/icons';
 import { $t } from '@vben/locales';
 
+import { useNotifications } from '@abp/core';
 import { PermissionModal } from '@abp/permissions';
 import {
   DeleteOutlined,
@@ -19,18 +20,9 @@ import {
   PlusOutlined,
   RedoOutlined,
 } from '@ant-design/icons-vue';
-import {
-  Button,
-  Card,
-  Dropdown,
-  Menu,
-  message,
-  Modal,
-  Tree,
-} from 'ant-design-vue';
+import { Button, Card, Dropdown, Menu, Modal, Tree } from 'ant-design-vue';
 
 import { useOrganizationUnitsApi } from '../../api/useOrganizationUnitsApi';
-
 defineOptions({
   name: 'OrganizationUnitTree',
 });
@@ -38,6 +30,8 @@ defineOptions({
 const emits = defineEmits<{
   (event: 'selected', id?: string): void;
 }>();
+
+const { toastSuccess } = useNotifications();
 
 const { deleteApi, getApi, getChildrenApi, getRootListApi, moveTo } =
   useOrganizationUnitsApi();
@@ -140,7 +134,7 @@ function onDelete(id: string) {
     maskClosable: false,
     onOk: async () => {
       await deleteApi(id);
-      message.success($t('AbpUi.DeletedSuccessfully'));
+      toastSuccess($t('AbpUi.DeletedSuccessfully'));
       onRefresh();
     },
     title: $t('AbpUi.AreYouSure'),

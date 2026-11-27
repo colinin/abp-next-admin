@@ -9,8 +9,8 @@ import { ref, watch } from 'vue';
 
 import { $t } from '@vben/locales';
 
-import { Button, Input, message, Modal, Select } from 'ant-design-vue';
-
+import { useNotifications } from '@abp/core';
+import { Button, Input, Modal, Select } from 'ant-design-vue';
 const props = defineProps<{
   branch: ApprovalFlowBranch | null;
   fields: FormFieldDto[];
@@ -21,6 +21,8 @@ const emit = defineEmits<{
   'update:branch': [ApprovalFlowBranch];
   'update:open': [boolean];
 }>();
+
+const { toastWarning } = useNotifications();
 
 const conditionOperators = [
   { label: $t('antflow.designer.branch.equal'), value: '=' },
@@ -143,7 +145,7 @@ function save() {
     .filter((expression): expression is string => !!expression);
 
   if (expressions.length !== conditions.value.length) {
-    message.warning($t('antflow.designer.branch.validation'));
+    toastWarning($t('antflow.designer.branch.validation'));
     return;
   }
 

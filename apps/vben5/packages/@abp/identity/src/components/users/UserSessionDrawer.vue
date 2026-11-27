@@ -6,10 +6,11 @@ import { defineAsyncComponent, ref } from 'vue';
 import { useVbenDrawer } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { getModalData } from '@abp/core';
-import { message, Modal } from 'ant-design-vue';
+import { getModalData, useNotifications } from '@abp/core';
+import { Modal } from 'ant-design-vue';
 
 import { useUserSessionsApi } from '../../api/useUserSessionsApi';
+const { toastSuccess } = useNotifications();
 
 const UserSessionTable = defineAsyncComponent(
   () => import('../sessions/UserSessionTable.vue'),
@@ -51,7 +52,7 @@ async function onRevoke(session: IdentitySessionDto) {
     },
     onOk: async () => {
       await revokeSessionApi(session.sessionId);
-      message.success($t('AbpIdentity.SuccessfullyRevoked'));
+      toastSuccess($t('AbpIdentity.SuccessfullyRevoked'));
       await onRefresh();
     },
     title: $t('AbpUi.AreYouSure'),

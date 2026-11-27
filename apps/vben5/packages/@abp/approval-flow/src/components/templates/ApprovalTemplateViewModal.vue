@@ -10,10 +10,10 @@ import { ref, watch } from 'vue';
 
 import { $t } from '@vben/locales';
 
+import { useNotifications } from '@abp/core';
 import {
   Descriptions,
   DescriptionsItem,
-  message,
   Modal,
   Spin,
   Tabs,
@@ -23,7 +23,6 @@ import { VxeGrid } from 'vxe-table';
 
 import { useApprovalFormsApi } from '../../api/useApprovalFormsApi';
 import ApprovalFlowDesigner from '../designer/ApprovalFlowDesigner.vue';
-
 const props = defineProps<{
   open: boolean;
   template: ApprovalTemplateDto | null;
@@ -32,6 +31,8 @@ const props = defineProps<{
 const emit = defineEmits<{
   'update:open': [boolean];
 }>();
+
+const { toastError } = useNotifications();
 
 const formsApi = useApprovalFormsApi();
 const loading = ref(false);
@@ -86,7 +87,7 @@ watch(
       const form = await formsApi.getApi(template.formDefinitionId);
       fields.value = form.fields ?? [];
     } catch {
-      message.error(
+      toastError(
         $t('ElsaNextApprovalFlow.ApprovalFlow:TemplateView:FormLoadFailed'),
       );
     } finally {

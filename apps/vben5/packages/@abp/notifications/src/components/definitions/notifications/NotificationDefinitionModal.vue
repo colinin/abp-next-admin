@@ -18,9 +18,10 @@ import {
   getModalData,
   useLocalization,
   useLocalizationSerializer,
+  useNotifications,
 } from '@abp/core';
 import { LocalizableInput, PropertyTable } from '@abp/ui';
-import { Checkbox, Form, Input, message, Select, Tabs } from 'ant-design-vue';
+import { Checkbox, Form, Input, Select, Tabs } from 'ant-design-vue';
 
 import {
   useNotificationGroupDefinitionsApi,
@@ -33,13 +34,15 @@ import {
   NotificationType,
 } from '../../../types';
 import { useEnumMaps } from './useEnumMaps';
-
 defineOptions({
   name: 'NotificationDefinitionModal',
 });
+
 const emits = defineEmits<{
   (event: 'change', data: NotificationDefinitionDto): void;
 }>();
+
+const { toastSuccess } = useNotifications();
 
 const FormItem = Form.Item;
 const TabPane = Tabs.TabPane;
@@ -99,7 +102,7 @@ const [Modal, modalApi] = useVbenModal<NotificationDefinitionDto>({
       modalApi.setState({ submitting: true });
       const res = await api;
       emits('change', res);
-      message.success($t('AbpUi.SavedSuccessfully'));
+      toastSuccess($t('AbpUi.SavedSuccessfully'));
       modalApi.close();
     } finally {
       modalApi.setState({ submitting: false });

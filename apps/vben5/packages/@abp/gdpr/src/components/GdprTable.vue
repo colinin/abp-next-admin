@@ -7,17 +7,18 @@ import { h } from 'vue';
 
 import { $t } from '@vben/locales';
 
-import { formatToDateTime, useAbpStore } from '@abp/core';
+import { formatToDateTime, useAbpStore, useNotifications } from '@abp/core';
 import { useVbenVxeGrid } from '@abp/ui';
 import { DeleteOutlined, DownloadOutlined } from '@ant-design/icons-vue';
-import { Button, message, Modal, Tag } from 'ant-design-vue';
+import { Button, Modal, Tag } from 'ant-design-vue';
 import dayJs from 'dayjs';
 
 import { useGdprRequestsApi } from '../api/useGdprRequestsApi';
-
 defineOptions({
   name: 'GdprTable',
 });
+
+const { toastSuccess } = useNotifications();
 
 interface GdprRequestRow extends GdprRequestDto {
   /** 是否已就绪 */
@@ -180,7 +181,7 @@ const onDelete = (row: GdprRequestDto) => {
       gridApi.setLoading(true);
       try {
         await deleteApi(row.id);
-        message.success($t('AbpUi.DeletedSuccessfully'));
+        toastSuccess($t('AbpUi.DeletedSuccessfully'));
         await gridApi.query();
       } finally {
         gridApi.setLoading(false);

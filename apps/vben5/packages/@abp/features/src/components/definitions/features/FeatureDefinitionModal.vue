@@ -21,6 +21,7 @@ import {
   listToTree,
   useLocalization,
   useLocalizationSerializer,
+  useNotifications,
   useValidation,
   ValidationEnum,
 } from '@abp/core';
@@ -30,7 +31,6 @@ import {
   Form,
   Input,
   InputNumber,
-  message,
   Select,
   Tabs,
   Textarea,
@@ -39,13 +39,15 @@ import {
 
 import { useFeatureDefinitionsApi } from '../../../api/useFeatureDefinitionsApi';
 import { useFeatureGroupDefinitionsApi } from '../../../api/useFeatureGroupDefinitionsApi';
-
 defineOptions({
   name: 'FeatureDefinitionModal',
 });
+
 const emits = defineEmits<{
   (event: 'change', data: FeatureDefinitionDto): void;
 }>();
+
+const { toastSuccess } = useNotifications();
 
 const FormItem = Form.Item;
 const TabPane = Tabs.TabPane;
@@ -162,7 +164,7 @@ const [Modal, modalApi] = useVbenModal<FeatureDefinitionDto>({
     modalApi.setState({ submitting: true });
     api
       .then((res) => {
-        message.success($t('AbpUi.SavedSuccessfully'));
+        toastSuccess($t('AbpUi.SavedSuccessfully'));
         emits('change', res);
         modalApi.close();
       })

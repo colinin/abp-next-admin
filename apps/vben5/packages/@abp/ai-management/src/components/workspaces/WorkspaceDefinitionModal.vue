@@ -18,8 +18,9 @@ import {
   useAuthorization,
   useLocalization,
   useLocalizationSerializer,
+  useNotifications,
 } from '@abp/core';
-import { LocalizableInput, useMessage } from '@abp/ui';
+import { LocalizableInput } from '@abp/ui';
 import {
   AutoComplete,
   Checkbox,
@@ -35,10 +36,12 @@ import debounce from 'lodash.debounce';
 import { useAIToolsApi } from '../../api/useAIToolsApi';
 import { useWorkspaceDefinitionsApi } from '../../api/useWorkspaceDefinitionsApi';
 import { WorkspaceDefinitionPermissions } from '../../constants/permissions';
-
 const emit = defineEmits<{
   (event: 'change', data: WorkspaceDefinitionVto): void;
 }>();
+
+const { toastSuccess } = useNotifications();
+
 const FormItem = Form.Item;
 const TabPane = Tabs.TabPane;
 
@@ -59,7 +62,6 @@ const defaultModel: WorkspaceDefinitionVto = {
   extraProperties: {},
 };
 
-const message = useMessage();
 const { isGranted } = useAuthorization();
 const { Lr } = useLocalization();
 const { deserialize: deserializeLocalizableString } =
@@ -172,7 +174,7 @@ async function onSubmit() {
       ? updateApi(formModel.value.id, formModel.value)
       : createApi(formModel.value));
     formModel.value = vto;
-    message.success($t('AbpUi.SavedSuccessfully'));
+    toastSuccess($t('AbpUi.SavedSuccessfully'));
     emit('change', vto);
     modalApi.close();
   } finally {

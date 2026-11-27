@@ -9,12 +9,14 @@ import { ref } from 'vue';
 
 import { $t } from '@vben/locales';
 
+import { useNotifications } from '@abp/core';
 import { useVbenVxeGrid } from '@abp/ui';
-import { Button, message, Modal, Space, Tag } from 'ant-design-vue';
+import { Button, Modal, Space, Tag } from 'ant-design-vue';
 
 import { useApprovalTemplatesApi } from '../../api/useApprovalTemplatesApi';
 import ApprovalFlowWizard from '../antflow/ApprovalWizard.vue';
 import StartApprovalModal from './StartApprovalModal.vue';
+const { toastSuccess } = useNotifications();
 
 const templatesApi = useApprovalTemplatesApi();
 
@@ -133,7 +135,7 @@ function openStart(template: ApprovalTemplateDto) {
 }
 
 function onStarted() {
-  message.success($t('ElsaNextApprovalFlow.ApprovalFlow:Templates:Started'));
+  toastSuccess($t('ElsaNextApprovalFlow.ApprovalFlow:Templates:Started'));
 }
 
 async function removeTemplate(template: ApprovalTemplateDto) {
@@ -143,9 +145,7 @@ async function removeTemplate(template: ApprovalTemplateDto) {
     ]),
     onOk: async () => {
       await templatesApi.deleteApi(template.id);
-      message.success(
-        $t('ElsaNextApprovalFlow.ApprovalFlow:Templates:Deleted'),
-      );
+      toastSuccess($t('ElsaNextApprovalFlow.ApprovalFlow:Templates:Deleted'));
       await gridApi.query();
     },
     title: $t('ElsaNextApprovalFlow.ApprovalFlow:Templates:DeleteTitle'),

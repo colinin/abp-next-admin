@@ -7,17 +7,18 @@ import { useVbenForm, useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
 import { CodeEditor } from '@abp/components/codeeditor';
-import { getModalData } from '@abp/core';
-import { message } from 'ant-design-vue';
+import { getModalData, useNotifications } from '@abp/core';
 
 import { useApplicationsApi } from '../../api/useApplicationsApi';
-
 defineOptions({
   name: 'ApplicationSecretModal',
 });
+
 const emits = defineEmits<{
   (event: 'change', data: OpenIddictApplicationDto): void;
 }>();
+
+const { toastSuccess } = useNotifications();
 
 const applicationModel = ref<OpenIddictApplicationDto>();
 
@@ -122,7 +123,7 @@ async function onSubmit(input: Record<string, any>) {
       clientSecret: input.clientSecret,
       jsonWebKeySet: input.jsonWebKeySet,
     });
-    message.success($t('AbpUi.SavedSuccessfully'));
+    toastSuccess($t('AbpUi.SavedSuccessfully'));
     emits('change', dto);
     modalApi.close();
   } finally {

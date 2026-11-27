@@ -16,6 +16,7 @@ import {
   sortby,
   useLocalization,
   useLocalizationSerializer,
+  useNotifications,
 } from '@abp/core';
 import { useVbenVxeGrid } from '@abp/ui';
 import {
@@ -26,7 +27,7 @@ import {
   EllipsisOutlined,
   PlusOutlined,
 } from '@ant-design/icons-vue';
-import { Button, Dropdown, Menu, message, Modal, Tag } from 'ant-design-vue';
+import { Button, Dropdown, Menu, Modal, Tag } from 'ant-design-vue';
 import { VxeGrid } from 'vxe-table';
 
 import { useNotificationDefinitionsApi } from '../../../api/useNotificationDefinitionsApi';
@@ -36,10 +37,11 @@ import {
   NotificationPermissions,
 } from '../../../constants/permissions';
 import { useEnumMaps } from './useEnumMaps';
-
 defineOptions({
   name: 'NotificationDefinitionTable',
 });
+
+const { toastSuccess } = useNotifications();
 
 interface DefinitionItem {
   allowSubscriptionToClients: boolean;
@@ -339,7 +341,7 @@ function onDelete(row: DefinitionItem) {
     content: `${$t('AbpUi.ItemWillBeDeletedMessageWithFormat', [row.name])}`,
     onOk: async () => {
       await deleteApi(row.name);
-      message.success($t('AbpUi.DeletedSuccessfully'));
+      toastSuccess($t('AbpUi.DeletedSuccessfully'));
       onGet();
     },
     title: $t('AbpUi.AreYouSure'),

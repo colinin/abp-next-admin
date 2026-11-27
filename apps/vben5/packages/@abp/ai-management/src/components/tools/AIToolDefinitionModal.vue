@@ -24,16 +24,17 @@ import {
 import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { useAuthorization } from '@abp/core';
-import { LocalizableInput, useMessage } from '@abp/ui';
+import { useAuthorization, useNotifications } from '@abp/core';
+import { LocalizableInput } from '@abp/ui';
 import { Checkbox, Form, Input, Select, Tabs } from 'ant-design-vue';
 
 import { useAIToolsApi } from '../../api/useAIToolsApi';
 import { AIToolDefinitionPermissions } from '../../constants/permissions';
-
 const emit = defineEmits<{
   (event: 'change', data: AIToolDefinitionVto): void;
 }>();
+
+const { toastSuccess } = useNotifications();
 
 const AIToolProperty = defineAsyncComponent(
   () => import('./AIToolProperty.vue'),
@@ -58,7 +59,6 @@ const defaultModel: AIToolDefinitionVto = {
   extraProperties: {},
 };
 
-const message = useMessage();
 const { isGranted } = useAuthorization();
 const { createApi, updateApi, getApi, getAvailableProviderListApi } =
   useAIToolsApi();
@@ -211,7 +211,7 @@ async function onSubmit() {
       ? updateApi(formModel.value.id, formModel.value)
       : createApi(formModel.value));
     formModel.value = vto;
-    message.success($t('AbpUi.SavedSuccessfully'));
+    toastSuccess($t('AbpUi.SavedSuccessfully'));
     emit('change', vto);
     modalApi.close();
   } finally {

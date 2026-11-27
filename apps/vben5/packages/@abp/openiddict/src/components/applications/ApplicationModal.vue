@@ -23,7 +23,7 @@ import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
 import { CodeEditor } from '@abp/components/codeeditor';
-import { getModalData } from '@abp/core';
+import { getModalData, useNotifications } from '@abp/core';
 import { DownOutlined } from '@ant-design/icons-vue';
 import {
   Checkbox,
@@ -33,7 +33,6 @@ import {
   InputNumber,
   InputPassword,
   Menu,
-  message,
   Select,
   Tabs,
   Transfer,
@@ -44,13 +43,15 @@ import { useOpenIdApi } from '../../api/useOpenIdApi';
 import { useScopeTransfer } from '../../hooks/useScopeTransfer';
 import DisplayNameTable from '../display-names/DisplayNameTable.vue';
 import PropertyTable from '../properties/PropertyTable.vue';
-
 defineOptions({
   name: 'ApplicationModal',
 });
+
 const emits = defineEmits<{
   (event: 'change', data: OpenIddictApplicationDto): void;
 }>();
+
+const { toastSuccess } = useNotifications();
 
 const FormItem = Form.Item;
 const MenuItem = Menu.Item;
@@ -167,7 +168,7 @@ const [Modal, modalApi] = useVbenModal<OpenIddictApplicationDto>({
     modalApi.setState({ submitting: true });
     api
       .then((res) => {
-        message.success($t('AbpUi.SavedSuccessfully'));
+        toastSuccess($t('AbpUi.SavedSuccessfully'));
         emits('change', res);
         modalApi.close();
       })

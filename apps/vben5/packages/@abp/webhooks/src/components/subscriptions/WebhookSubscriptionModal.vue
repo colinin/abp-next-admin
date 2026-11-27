@@ -14,7 +14,7 @@ import { useAccess } from '@vben/access';
 import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { getModalData, isNullOrWhiteSpace } from '@abp/core';
+import { getModalData, isNullOrWhiteSpace, useNotifications } from '@abp/core';
 import { useTenantsApi } from '@abp/saas';
 import { PropertyTable } from '@abp/ui';
 import {
@@ -23,7 +23,6 @@ import {
   Input,
   InputNumber,
   InputPassword,
-  message,
   Select,
   Tabs,
   Textarea,
@@ -32,13 +31,15 @@ import {
 import debounce from 'lodash.debounce';
 
 import { useSubscriptionsApi } from '../../api/useSubscriptionsApi';
-
 defineOptions({
   name: 'WebhookSubscriptionModal',
 });
+
 const emits = defineEmits<{
   (event: 'change', data: WebhookSubscriptionDto): void;
 }>();
+
+const { toastSuccess } = useNotifications();
 
 const FormItem = Form.Item;
 const FormItemRest = Form.ItemRest;
@@ -89,7 +90,7 @@ const [Modal, modalApi] = useVbenModal<WebhookSubscriptionDto>({
       modalApi.setState({ submitting: true });
       const res = await api;
       emits('change', res);
-      message.success($t('AbpUi.SavedSuccessfully'));
+      toastSuccess($t('AbpUi.SavedSuccessfully'));
       modalApi.close();
     } finally {
       modalApi.setState({ submitting: false });

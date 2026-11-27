@@ -10,14 +10,10 @@ import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 import { useUserStore } from '@vben/stores';
 
-import { Card, Menu, message, Modal } from 'ant-design-vue';
+import { useNotifications } from '@abp/core';
+import { Card, Menu, Modal } from 'ant-design-vue';
 
 import { useProfileApi } from '../api/useProfileApi';
-
-interface MenuItem {
-  key: string;
-  label: string;
-}
 const props = defineProps<{
   bindItems?: BindItem[];
   disableAuthenticator?: boolean;
@@ -28,10 +24,18 @@ const props = defineProps<{
   disableSession?: boolean;
   disableSystemSetting?: boolean;
 }>();
+
 const emits = defineEmits<{
   (event: 'onBindInit'): void;
   (event: 'onConfirm', params: Record<string, any>): void;
 }>();
+
+const { toastSuccess } = useNotifications();
+
+interface MenuItem {
+  key: string;
+  label: string;
+}
 const AuthenticatorSettings = defineAsyncComponent(
   () => import('./components/AuthenticatorSettings.vue'),
 );
@@ -167,7 +171,7 @@ async function onUpdateProfile(input: UpdateProfileDto) {
     content: $t('AbpAccount.PersonalSettingsSaved'),
     onOk: async () => {
       await updateApi(input);
-      message.success(
+      toastSuccess(
         $t('AbpAccount.PersonalSettingsChangedConfirmationModalTitle'),
       );
       // 刷新页面重载用户信息

@@ -14,7 +14,7 @@ import { createIconifyIcon } from '@vben/icons';
 import { $t } from '@vben/locales';
 
 import { AuditLogPermissions, EntityChangeDrawer } from '@abp/auditing';
-import { useFeatures } from '@abp/core';
+import { useFeatures, useNotifications } from '@abp/core';
 import { PermissionModal } from '@abp/permissions';
 import { useVbenVxeGrid } from '@abp/ui';
 import {
@@ -23,14 +23,15 @@ import {
   EllipsisOutlined,
   PlusOutlined,
 } from '@ant-design/icons-vue';
-import { Button, Dropdown, Menu, message, Modal } from 'ant-design-vue';
+import { Button, Dropdown, Menu, Modal } from 'ant-design-vue';
 
 import { useApplicationsApi } from '../../api/useApplicationsApi';
 import { ApplicationsPermissions } from '../../constants/permissions';
-
 defineOptions({
   name: 'ApplicationTable',
 });
+
+const { toastSuccess } = useNotifications();
 
 const MenuItem = Menu.Item;
 
@@ -197,7 +198,7 @@ const onDelete = (row: OpenIddictApplicationDto) => {
     content: `${$t('AbpUi.ItemWillBeDeletedMessageWithFormat', [row.clientId])}`,
     onOk: async () => {
       await deleteApi(row.id);
-      message.success($t('AbpUi.DeletedSuccessfully'));
+      toastSuccess($t('AbpUi.DeletedSuccessfully'));
       await gridApi.query();
     },
     title: $t('AbpUi.AreYouSure'),

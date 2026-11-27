@@ -9,18 +9,20 @@ import { ref, toValue, useTemplateRef } from 'vue';
 import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { getModalData } from '@abp/core';
+import { getModalData, useNotifications } from '@abp/core';
 import { LocalizableInput, PropertyTable } from '@abp/ui';
-import { Form, Input, message, Tabs } from 'ant-design-vue';
+import { Form, Input, Tabs } from 'ant-design-vue';
 
 import { usePermissionGroupDefinitionsApi } from '../../../api/usePermissionGroupDefinitionsApi';
-
 defineOptions({
   name: 'PermissionGroupDefinitionModal',
 });
+
 const emits = defineEmits<{
   (event: 'change', data: PermissionGroupDefinitionDto): void;
 }>();
+
+const { toastSuccess } = useNotifications();
 
 const FormItem = Form.Item;
 const TabPane = Tabs.TabPane;
@@ -54,7 +56,7 @@ const [Modal, modalApi] = useVbenModal<PermissionGroupDefinitionDto>({
     modalApi.setState({ submitting: true });
     api
       .then((res) => {
-        message.success($t('AbpUi.SavedSuccessfully'));
+        toastSuccess($t('AbpUi.SavedSuccessfully'));
         emits('change', res);
         modalApi.close();
       })

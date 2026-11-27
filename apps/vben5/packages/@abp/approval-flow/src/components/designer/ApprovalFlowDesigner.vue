@@ -11,7 +11,8 @@ import { computed, onMounted, ref } from 'vue';
 
 import { $t } from '@vben/locales';
 
-import { Button, Empty, message, Modal, Space } from 'ant-design-vue';
+import { useNotifications } from '@abp/core';
+import { Button, Empty, Modal, Space } from 'ant-design-vue';
 
 import { useApprovalFormsApi } from '../../api/useApprovalFormsApi';
 import { useApprovalTemplatesApi } from '../../api/useApprovalTemplatesApi';
@@ -21,7 +22,6 @@ import BranchFlow from './BranchFlow.vue';
 import FormPreviewModal from './FormPreviewModal.vue';
 import { createBranch, createNode, parseModel, summarizeNode } from './model';
 import NodeConfigDrawer from './NodeConfigDrawer.vue';
-
 const props = defineProps<{
   embedded?: boolean;
   flowJson?: null | string;
@@ -31,6 +31,8 @@ const props = defineProps<{
   statusMap?: Record<string, string>;
   templateId?: string;
 }>();
+
+const { toastError, toastWarning, toastSuccess } = useNotifications();
 
 const templatesApi = useApprovalTemplatesApi();
 const formsApi = useApprovalFormsApi();
@@ -107,7 +109,7 @@ async function loadTemplate() {
       }
     }
   } catch {
-    message.error($t('antflow.designer.common.loadFailed'));
+    toastError($t('antflow.designer.common.loadFailed'));
   } finally {
     loading.value = false;
   }
@@ -373,7 +375,7 @@ function resetZoom() {
 
 async function saveDesign(): Promise<null | string> {
   if (!props.templateId) {
-    message.warning($t('antflow.designer.common.saveFirst'));
+    toastWarning($t('antflow.designer.common.saveFirst'));
     return null;
   }
 
@@ -385,10 +387,10 @@ async function saveDesign(): Promise<null | string> {
     await templatesApi.saveDesignApi(props.templateId, {
       flowDefinitionJson: json,
     });
-    message.success($t('antflow.designer.common.saveSuccess'));
+    toastSuccess($t('antflow.designer.common.saveSuccess'));
     return json;
   } catch {
-    message.error($t('antflow.designer.common.saveFailed'));
+    toastError($t('antflow.designer.common.saveFailed'));
     return null;
   } finally {
     saving.value = false;
@@ -405,9 +407,9 @@ async function publish() {
     await templatesApi.publishApi(props.templateId, {
       formDefinitionId: model.value.formDefinitionId ?? null,
     });
-    message.success($t('antflow.designer.common.publishSuccess'));
+    toastSuccess($t('antflow.designer.common.publishSuccess'));
   } catch {
-    message.error($t('antflow.designer.common.publishFailed'));
+    toastError($t('antflow.designer.common.publishFailed'));
   } finally {
     saving.value = false;
   }
@@ -415,7 +417,7 @@ async function publish() {
 
 function confirmPublish() {
   if (!props.templateId) {
-    message.warning($t('antflow.designer.common.saveFirst'));
+    toastWarning($t('antflow.designer.common.saveFirst'));
     return;
   }
 

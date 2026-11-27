@@ -11,23 +11,25 @@ import { useVbenDrawer } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 import { downloadFileFromUrl } from '@vben/utils';
 
-import { formatToDateTime } from '@abp/core';
+import { formatToDateTime, useNotifications } from '@abp/core';
 import { useVbenVxeGrid } from '@abp/ui';
 import {
   DeleteOutlined,
   EditOutlined,
   FileExcelOutlined,
 } from '@ant-design/icons-vue';
-import { Button, message, Modal, Tag } from 'ant-design-vue';
+import { Button, Modal, Tag } from 'ant-design-vue';
 
 import { useAuditLogsApi } from '../../api/useAuditLogsApi';
 import { AuditLogPermissions } from '../../constants/permissions';
 import { useAuditlogs } from '../../hooks/useAuditlogs';
 import { httpMethodOptions, httpStatusCodeOptions } from './mapping';
-
 defineOptions({
   name: 'AuditLogTable',
 });
+
+const { toastSuccess } = useNotifications();
+
 const { deleteApi, deleteManyApi, getExportApiUrl, getPagedListApi } =
   useAuditLogsApi();
 
@@ -313,7 +315,7 @@ async function onDelete(row: AuditLogDto) {
     content: $t('AbpUi.ItemWillBeDeletedMessage'),
     onOk: async () => {
       await deleteApi(row.id);
-      message.success($t('AbpUi.DeletedSuccessfully'));
+      toastSuccess($t('AbpUi.DeletedSuccessfully'));
       gridApi.query();
     },
     title: $t('AbpUi.AreYouSure'),
@@ -329,7 +331,7 @@ function onBulkDelete() {
         ids: toValue(selectedKeys),
       });
       selectedKeys.value = [];
-      message.success($t('AbpUi.DeletedSuccessfully'));
+      toastSuccess($t('AbpUi.DeletedSuccessfully'));
       gridApi.query();
     },
     title: $t('AbpUi.AreYouSure'),
