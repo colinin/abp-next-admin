@@ -709,7 +709,7 @@ const [DataTable, tableApi] = useAbpDataTable<IdentityUserDto>({
   dropdownActions: getDropdownActions,
   formOptions: searchFormOptions,
   gridOptions,
-  idKey: (dto) => dto.id,
+  rowKey: 'id',
   load: ({ pager, searchValues, sorting }) =>
     getPagedListApi({
       maxResultCount: pager.maxResultCount,
