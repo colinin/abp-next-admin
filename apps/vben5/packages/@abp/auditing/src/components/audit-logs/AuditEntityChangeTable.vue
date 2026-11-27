@@ -5,6 +5,7 @@ import type { EntityChangeDto } from '../../types/entity-changes';
 
 import { h } from 'vue';
 
+import { createIconifyIcon } from '@vben/icons';
 import { $t } from '@vben/locales';
 import { downloadFileFromUrl } from '@vben/utils';
 
@@ -80,6 +81,8 @@ const [DataTable, tableApi] = useAbpDataTable<EntityChangeDto>({
   edit(dto) {
     modalApi.view(dto.id);
   },
+  editIcon: createIconifyIcon('ant-design:search-outlined'),
+  editText: $t('AbpAuditLogging.ChangeDetails'),
   formOptions: {
     codec: {
       decode(values) {
