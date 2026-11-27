@@ -19,6 +19,7 @@ The modules are exported through their own subpaths:
 
 - `@abp/components/crud/table` — `useAbpDataTable` and table types;
 - `@abp/components/crud/modal` — `useAbpEditorModal` and modal types;
+- `@abp/components/crud/drawer` — `useAbpEditorDrawer` and drawer types;
 - `@abp/components/crud` — backwards-compatible barrel that re-exports both modules and the shared `AbpRecord` / `AbpId` / `AbpIdOf` types.
 
 ## Quick start
@@ -315,6 +316,25 @@ const [Modal] = useAbpEditorModal<BookDto, BookForm>({
 - Schema items without `tabKey` are placed in the first tab.
 - A single Vben Form is used for all tabs; fields remain mounted and are validated and submitted together.
 - Switching tabs only hides the fields that do not belong to the active tab.
+
+### Drawer editor
+
+`useAbpEditorDrawer` mirrors `useAbpEditorModal` with a Vben Drawer container:
+
+```ts
+import { useAbpEditorDrawer } from '@abp/components/crud/drawer';
+
+const [Drawer, drawerApi] = useAbpEditorDrawer<BookDto, BookForm>({
+  idKey: (dto) => dto.id,
+  drawerOptions: { placement: 'right' },
+  formOptions: { schema: [] },
+  get: getApi,
+  create: createApi,
+  update: updateApi,
+});
+```
+
+It supports the same `formOptions.tabs`, `schema.tabKey`, `#form-*` slots, create/edit/view APIs and unsaved-change confirmation. Use `drawerOptions` instead of `modalOptions`.
 
 ### Unsaved changes
 

@@ -18,6 +18,10 @@
       "types": "./src/crud/index.ts",
       "default": "./src/crud/index.ts"
     },
+    "./crud/drawer": {
+      "types": "./src/crud/drawer/index.ts",
+      "default": "./src/crud/drawer/index.ts"
+    },
     "./crud/modal": {
       "types": "./src/crud/modal/index.ts",
       "default": "./src/crud/modal/index.ts"

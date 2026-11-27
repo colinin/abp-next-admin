@@ -1,4 +1,4 @@
-import type { ExtendedFormApi, FormValues } from '@vben/common-ui';
+import type { FormValues } from '@vben/common-ui';
 
 import type { AbpIdOf } from '../types';
 import type {
@@ -10,25 +10,14 @@ import type {
 
 import { defineComponent, h, ref } from 'vue';
 
-import { confirm, useVbenForm, useVbenModal } from '@vben/common-ui';
+import { confirm, useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 import { isEqual } from '@vben/utils';
 
-import { Tabs, TabsList, TabsTrigger } from '@vben-core/shadcn-ui';
-
 import { useNotifications } from '@abp/core';
 
-const FORM_ACTION_SLOT_NAMES = new Set([
-  'default',
-  'expand-after',
-  'expand-before',
-  'reset-before',
-  'submit-before',
-]);
-
-function toCamelCaseSlotName(name: string) {
-  return name.replaceAll(/-([a-z])/g, (_, char: string) => char.toUpperCase());
-}
+import { splitEditorSlots } from '../form/slots';
+import { useAbpEditorForm } from '../form/use-abp-editor-form';
 
 function isRecord(value: unknown): value is Record<string, any> {
   return typeof value === 'object' && value !== null;
@@ -58,89 +47,11 @@ export function useAbpEditorModal<
 
   const { toastSuccess, toastError } = useNotifications();
 
-  const tabs = options.formOptions.tabs ?? [];
-  const hasTabs = tabs.length > 0;
-  const firstTabKey = tabs[0]?.key ?? '';
-  const activeTabKey = ref(firstTabKey);
-  const formSchema = options.formOptions.schema ?? [];
-
-  function getTabIndex(tabKey?: string) {
-    if (!hasTabs) {
-      return 0;
-    }
-    const key = tabKey ?? firstTabKey;
-    const index = tabs.findIndex((tab) => tab.key === key);
-    return Math.max(index, 0);
-  }
-
-  function addTabClass(item: any, tabKey?: string) {
-    const classes = new Set(
-      String(item.formItemClass ?? '')
-        .split(/\s+/)
-        .filter(Boolean),
-    );
-    classes.add('abp-editor-tab-field');
-    classes.add(`abp-editor-tab-field-${getTabIndex(tabKey)}`);
-    return {
-      ...item,
-      formItemClass: [...classes].join(' '),
-    };
-  }
-
-  function decorateSchema(
-    schema: any[],
-    inheritedTabKey: string = firstTabKey,
-  ): any[] {
-    return schema.map((item) => {
-      const tabKey = item.tabKey ?? inheritedTabKey;
-      if (item.type === 'group' && Array.isArray(item.children)) {
-        return {
-          ...addTabClass(item, tabKey),
-          children: decorateSchema(item.children, tabKey),
-        };
-      }
-      return addTabClass(item, tabKey);
-    });
-  }
-
-  function getTabSchema(schema: any[]) {
-    return hasTabs ? decorateSchema(schema) : schema;
-  }
-
-  const [Form, rawFormApi] = useVbenForm<TFormValues>({
-    ...options.formOptions,
-    schema: getTabSchema(formSchema),
-    handleSubmit: onSubmit,
+  const { formApi, renderFormContent, resetActiveTab } = useAbpEditorForm({
+    formOptions: options.formOptions,
+    onSubmit,
     submitButtonOptions,
-    showDefaultActions: false,
   });
-
-  const formApi = new Proxy(rawFormApi, {
-    get(target, property, receiver) {
-      if (property === 'setState') {
-        return (updater: any) => {
-          if (typeof updater === 'function') {
-            target.setState((prev: any) => {
-              const next = updater(prev);
-              return next?.schema
-                ? { ...next, schema: getTabSchema(next.schema) }
-                : next;
-            });
-          } else {
-            target.setState(
-              updater?.schema
-                ? { ...updater, schema: getTabSchema(updater.schema) }
-                : updater,
-            );
-          }
-        };
-      }
-      if (property === 'updateSchema') {
-        return (schema: any[]) => target.updateSchema(getTabSchema(schema));
-      }
-      return Reflect.get(target, property, receiver);
-    },
-  }) as ExtendedFormApi<TFormValues>;
 
   const [Modal, baseModalApi] = useVbenModal<TDto>({
     ...options.modalOptions,
@@ -269,9 +180,7 @@ export function useAbpEditorModal<
   }
 
   function openEditor(nextMode: AbpEditorMode, data?: TDto) {
-    if (hasTabs) {
-      activeTabKey.value = firstTabKey;
-    }
+    resetActiveTab();
     mode.value = nextMode;
     currentDto.value = data;
     baseModalApi.setState({
@@ -329,91 +238,18 @@ export function useAbpEditorModal<
     inheritAttrs: false,
     setup(_, { attrs, slots }) {
       return () => {
-        const formSlots: Record<string, any> = {};
-        const modalSlots: Record<string, any> = {};
-        for (const [name, slot] of Object.entries(slots)) {
-          if (name.startsWith('form-')) {
-            const formSlotName = name.slice('form-'.length);
-            if (formSlotName) {
-              formSlots[formSlotName] = slot;
-              if (!FORM_ACTION_SLOT_NAMES.has(formSlotName)) {
-                const camelCaseName = toCamelCaseSlotName(formSlotName);
-                if (camelCaseName !== formSlotName) {
-                  formSlots[camelCaseName] = slot;
-                }
-              }
-            }
-          } else {
-            modalSlots[name] = slot;
-          }
-        }
-        const renderForm = () => h(Form as any, {}, formSlots);
-
-        let formContent;
-        if (hasTabs) {
-          const tabStyles = tabs
-            .map(
-              (_, index) =>
-                `.abp-editor-tabs-form[data-active-tab="${index}"] .abp-editor-tab-field:not(.abp-editor-tab-field-${index}) { display: none; }`,
-            )
-            .join('\n');
-
-          formContent = h(
-            Tabs as any,
-            {
-              class: 'w-full',
-              modelValue: activeTabKey.value,
-              'onUpdate:modelValue': (value: string) => {
-                activeTabKey.value = value;
-              },
-            },
-            {
-              default: () => [
-                h('style', { textContent: tabStyles }),
-                h(
-                  TabsList as any,
-                  { class: 'w-full' },
-                  {
-                    default: () =>
-                      tabs.map((tab) =>
-                        h(
-                          TabsTrigger as any,
-                          {
-                            key: tab.key,
-                            disabled: tab.disabled,
-                            value: tab.key,
-                          },
-                          { default: () => tab.title },
-                        ),
-                      ),
-                  },
-                ),
-                h(
-                  'div',
-                  {
-                    class: 'abp-editor-tabs-form',
-                    'data-active-tab': String(getTabIndex(activeTabKey.value)),
-                  },
-                  { default: renderForm },
-                ),
-              ],
-            },
-          );
-        } else {
-          formContent = renderForm();
-        }
-
+        const { containerSlots, formSlots } = splitEditorSlots(slots);
         return h(
           Modal as any,
           attrs as any,
           {
-            ...modalSlots,
-            default: () => formContent,
+            ...containerSlots,
+            default: () => renderFormContent(formSlots),
           } as any,
         );
       };
     },
-  }) as unknown as AbpEditorModalComponent<TFormValues>; // 保留 Modal 的 props/slots 类型推导
+  }) as unknown as AbpEditorModalComponent<TFormValues>;
 
   return [AbpEditorModal, modalApi] as const;
 }

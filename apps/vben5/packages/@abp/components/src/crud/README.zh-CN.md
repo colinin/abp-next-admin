@@ -19,6 +19,7 @@ import { useAbpDataTable } from '@abp/components/crud/table';
 
 - `@abp/components/crud/table`：`useAbpDataTable` 及表格类型；
 - `@abp/components/crud/modal`：`useAbpEditorModal` 及弹窗类型；
+- `@abp/components/crud/drawer`：`useAbpEditorDrawer` 及抽屉类型；
 - `@abp/components/crud`：兼容入口，统一再导出两个模块以及共享的 `AbpRecord` / `AbpId` / `AbpIdOf` 类型。
 
 ## 快速开始
@@ -313,6 +314,25 @@ const [Modal] = useAbpEditorModal<BookDto, BookForm>({
 - 未设置 `tabKey` 的字段会放入第一个 Tab。
 - 所有 Tab 共用一个 Vben Form，字段始终保持挂载，提交时统一校验。
 - 切换 Tab 只隐藏不属于当前 Tab 的字段。
+
+### 抽屉编辑器
+
+`useAbpEditorDrawer` 与 `useAbpEditorModal` 能力一致，只是容器换成 Vben Drawer：
+
+```ts
+import { useAbpEditorDrawer } from '@abp/components/crud/drawer';
+
+const [Drawer, drawerApi] = useAbpEditorDrawer<BookDto, BookForm>({
+  idKey: (dto) => dto.id,
+  drawerOptions: { placement: 'right' },
+  formOptions: { schema: [] },
+  get: getApi,
+  create: createApi,
+  update: updateApi,
+});
+```
+
+同样支持 `formOptions.tabs`、`schema.tabKey`、`#form-*` 插槽、新增/编辑/查看以及未保存变更确认；配置项使用 `drawerOptions`。
 
 ### 未保存变更提示
 
