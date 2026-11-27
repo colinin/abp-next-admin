@@ -9,9 +9,8 @@ import { AuthenticationForgetPassword, z } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
 import { useAccountApi } from '@abp/account';
-import { isPhone } from '@abp/core';
+import { isPhone, useNotifications } from '@abp/core';
 import { usePasswordValidator } from '@abp/identity';
-import { message } from 'ant-design-vue';
 
 interface FormModel {
   currentPassword: string;
@@ -24,6 +23,8 @@ interface ForgetPasswordExpose {
 }
 
 defineOptions({ name: 'ForgetPassword' });
+
+const { toastSuccess } = useNotifications();
 
 const router = useRouter();
 const { validate } = usePasswordValidator();
@@ -147,7 +148,7 @@ async function handleSubmit(values: Recordable<any>) {
       phoneNumber: values.phoneNumber,
       newPassword: values.newPassword,
     });
-    message.success($t('AbpAccount.YourPasswordIsSuccessfullyReset'));
+    toastSuccess($t('AbpAccount.YourPasswordIsSuccessfullyReset'));
     router.push('/auth/login');
   } finally {
     loading.value = false;

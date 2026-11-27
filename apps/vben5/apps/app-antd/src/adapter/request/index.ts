@@ -7,9 +7,8 @@ import {
 import { useAccessStore, useTimezoneStore } from '@vben/stores';
 
 import { useOAuthError } from '@abp/account';
-import { useAbpStore } from '@abp/core';
+import { useAbpStore, useNotifications } from '@abp/core';
 import { requestClient, useWrapperResult } from '@abp/request';
-import { message } from 'ant-design-vue';
 
 import { useAuthStore } from '#/store';
 
@@ -110,17 +109,18 @@ export function initRequestClient() {
   // 通用的错误处理,如果没有进入上面的错误处理逻辑，就会进入这里
   requestClient.addResponseInterceptor(
     errorMessageResponseInterceptor((msg: string, error) => {
-      // 这里可以根据业务进行定制,你可以拿到 error 内的信息进行定制化处理，根据不同的 code 做不同的提示，而不是直接使用 message.error 提示 msg
+      const { toastError } = useNotifications();
+      // 这里可以根据业务进行定制,你可以拿到 error 内的信息进行定制化处理，根据不同的 code 做不同的提示，而不是直接使用 toastError 提示 msg
       // 当前mock接口返回的错误字段是 error 或者 message
       const responseData = error?.response?.data ?? {};
       if (responseData?.error_description) {
         const { formatError } = useOAuthError();
-        message.error(formatError(responseData) || msg);
+        toastError(formatError(responseData) || msg);
         return;
       }
       const errorMessage = responseData?.error ?? responseData?.message ?? '';
       // 如果没有错误信息，则会根据状态码进行提示
-      message.error(errorMessage || msg);
+      toastError(errorMessage || msg);
     }),
   );
 }

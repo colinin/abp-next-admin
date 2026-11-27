@@ -10,8 +10,7 @@ import { preferences } from '@vben/preferences';
 import { resetAllStores, useAccessStore, useUserStore } from '@vben/stores';
 
 import { useOAuthService, useProfileApi } from '@abp/account';
-import { Events, useAbpStore, useEventBus } from '@abp/core';
-import { notification } from 'ant-design-vue';
+import { Events, useAbpStore, useEventBus, useNotifications } from '@abp/core';
 import { defineStore } from 'pinia';
 
 import { useAbpConfigApi } from '#/api/core/useAbpConfigApi';
@@ -26,6 +25,7 @@ export const useAuthStore = defineStore('auth', () => {
   const abpStore = useAbpStore();
   const router = useRouter();
   const oAuthService = useOAuthService();
+  const { notifySuccess } = useNotifications();
 
   const loginLoading = ref(false);
 
@@ -298,10 +298,10 @@ export const useAuthStore = defineStore('auth', () => {
       }
 
       if (userInfo?.realName) {
-        notification.success({
-          description: `${$t('authentication.loginSuccessDesc')}:${userInfo?.realName}`,
-          duration: 3,
-          message: $t('authentication.loginSuccess'),
+        notifySuccess({
+          content: `${$t('authentication.loginSuccessDesc')}:${userInfo?.realName}`,
+          duration: 3000,
+          title: $t('authentication.loginSuccess'),
         });
       }
     }

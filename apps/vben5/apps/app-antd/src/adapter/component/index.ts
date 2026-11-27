@@ -68,10 +68,13 @@ import { IconifyIcon } from '@vben/icons';
 import { $t } from '@vben/locales';
 import { isEmpty } from '@vben/utils';
 
+import { useNotifications } from '@abp/core';
 import { FeatureStateCheck, GlobalFeatureStateCheck } from '@abp/features';
 import { PermissionStateCheck } from '@abp/permissions';
 import { TenantSelect } from '@abp/saas';
-import { message, Modal, notification } from 'ant-design-vue';
+import { Modal } from 'ant-design-vue';
+
+const { notifySuccess, toastError } = useNotifications();
 
 type AdapterUploadProps = UploadProps & {
   aspectRatio?: string;
@@ -262,7 +265,7 @@ async function previewImage(
     if (url) {
       window.open(url, '_blank');
     } else {
-      message.error($t('ui.formRules.previewWarning'));
+      toastError($t('ui.formRules.previewWarning'));
     }
     return;
   }
@@ -451,7 +454,7 @@ const withPreviewUpload = () => {
       ) => {
         // 文件大小限制
         if (maxSize.value && (file.size || 0) / 1024 / 1024 > maxSize.value) {
-          message.error($t('ui.formRules.sizeLimit', [maxSize.value]));
+          toastError($t('ui.formRules.sizeLimit', [maxSize.value]));
           file.status = 'removed';
           return false;
         }
@@ -771,10 +774,10 @@ async function initComponentAdapter() {
   globalShareState.defineMessage({
     // 复制成功消息提示
     copyPreferencesSuccess: (title, content) => {
-      notification.success({
-        description: content,
-        message: title,
-        placement: 'bottomRight',
+      notifySuccess({
+        content,
+        data: { position: 'bottom-right' },
+        title,
       });
     },
   });

@@ -8,7 +8,8 @@ import { useRefresh } from '@vben/hooks';
 import { $t } from '@vben/locales';
 
 import { MySetting, useExternalLoginsApi } from '@abp/account';
-import { message, Modal } from 'ant-design-vue';
+import { useNotifications } from '@abp/core';
+import { Modal } from 'ant-design-vue';
 
 defineOptions({
   name: 'Vben5AccountMySettings',
@@ -17,6 +18,7 @@ defineOptions({
 const { bindWorkWeixinApi, getExternalLoginsApi, removeExternalLoginApi } =
   useExternalLoginsApi();
 const { refresh } = useRefresh();
+const { toastSuccess } = useNotifications();
 
 const [WechatWorkUserBindModal, weComBindModal] = useVbenModal({
   connectedComponent: defineAsyncComponent(async () => {
@@ -31,7 +33,7 @@ async function onBindWorkWeixin(code: string) {
   try {
     await bindWorkWeixinApi({ code });
     weComBindModal.close();
-    message.success($t('AbpAccount.BindSuccessfully'));
+    toastSuccess($t('AbpAccount.BindSuccessfully'));
     refresh();
   } finally {
     weComBindModal.setState({ submitting: false });
@@ -39,7 +41,7 @@ async function onBindWorkWeixin(code: string) {
 }
 
 async function onBindComfirm(_params: Record<string, any>) {
-  message.success($t('AbpAccount.BindSuccessfully'));
+  toastSuccess($t('AbpAccount.BindSuccessfully'));
   window.close();
 }
 
@@ -53,7 +55,7 @@ async function onRemoveBind(provider: string, key: string) {
         loginProvider: provider,
         providerKey: key,
       });
-      message.success($t('AbpAccount.CancelBindSuccessfully'));
+      toastSuccess($t('AbpAccount.CancelBindSuccessfully'));
       refresh();
     },
   });
