@@ -1,11 +1,11 @@
 import type { FormValues } from '@vben/common-ui';
 
+import type { AbpIdOf } from '../types';
 import type {
   AbpEditorModalApi,
   AbpEditorModalComponent,
   AbpEditorModalOptions,
   AbpEditorMode,
-  AbpIdOf,
 } from './types';
 
 import { defineComponent, h, ref } from 'vue';

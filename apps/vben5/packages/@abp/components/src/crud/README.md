@@ -11,17 +11,23 @@ English | [简体中文](./README.zh-CN.md)
 ## Import
 
 ```ts
-import { useAbpDataTable, useAbpEditorModal } from '@abp/components/crud';
+import { useAbpEditorModal } from '@abp/components/crud/modal';
+import { useAbpDataTable } from '@abp/components/crud/table';
 ```
 
-The package is exported through the `./crud` subpath of `@abp/components`.
+The modules are exported through their own subpaths:
+
+- `@abp/components/crud/table` — `useAbpDataTable` and table types;
+- `@abp/components/crud/modal` — `useAbpEditorModal` and modal types;
+- `@abp/components/crud` — backwards-compatible barrel that re-exports both modules and the shared `AbpRecord` / `AbpId` / `AbpIdOf` types.
 
 ## Quick start
 
 ```ts
 import type { BookDto, CreateUpdateBookDto } from './types';
 
-import { useAbpDataTable, useAbpEditorModal } from '@abp/components/crud';
+import { useAbpEditorModal } from '@abp/components/crud/modal';
+import { useAbpDataTable } from '@abp/components/crud/table';
 import { useBooksApi } from './useBooksApi';
 
 const {

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { AbpEditorOpenContext } from '@abp/components/crud';
+import type { AbpEditorOpenContext } from '@abp/components/crud/modal';
 import type { EntityTypeInfoModel } from '@abp/data-protection';
 import type { PrintDesignerInstance } from '@abp/print-designer';
 
@@ -29,7 +29,8 @@ import { globalShareState } from '@vben/common-ui';
 import { createIconifyIcon } from '@vben/icons';
 import { $t } from '@vben/locales';
 
-import { useAbpDataTable, useAbpEditorModal } from '@abp/components/crud';
+import { useAbpEditorModal } from '@abp/components/crud/modal';
+import { useAbpDataTable } from '@abp/components/crud/table';
 import { DataAccessOperation } from '@abp/data-protection';
 import { PrintDesigner } from '@abp/print-designer';
 

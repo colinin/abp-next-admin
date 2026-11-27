@@ -4,12 +4,12 @@ import type {
   FormValues,
 } from '@vben/common-ui';
 
+import type { AbpIdOf } from '../types';
 import type {
   AbpDataTableApi,
   AbpDataTableComponent,
   AbpDataTableLoadParams,
   AbpDataTableOptions,
-  AbpIdOf,
 } from './types';
 
 import { defineComponent, h } from 'vue';

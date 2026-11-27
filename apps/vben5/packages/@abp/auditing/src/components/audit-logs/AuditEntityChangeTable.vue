@@ -9,7 +9,8 @@ import { createIconifyIcon } from '@vben/icons';
 import { $t } from '@vben/locales';
 import { downloadFileFromUrl } from '@vben/utils';
 
-import { useAbpDataTable, useAbpEditorModal } from '@abp/components/crud';
+import { useAbpEditorModal } from '@abp/components/crud/modal';
+import { useAbpDataTable } from '@abp/components/crud/table';
 import { formatToDateTime } from '@abp/core';
 import { FileExcelOutlined } from '@ant-design/icons-vue';
 import { Button, Table, Tag } from 'ant-design-vue';

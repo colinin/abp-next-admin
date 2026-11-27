@@ -18,6 +18,14 @@
       "types": "./src/crud/index.ts",
       "default": "./src/crud/index.ts"
     },
+    "./crud/modal": {
+      "types": "./src/crud/modal/index.ts",
+      "default": "./src/crud/modal/index.ts"
+    },
+    "./crud/table": {
+      "types": "./src/crud/table/index.ts",
+      "default": "./src/crud/table/index.ts"
+    },
     "./codeeditor": {
       "types": "./src/codeeditor/index.ts",
       "default": "./src/codeeditor/index.ts"

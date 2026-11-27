@@ -11,17 +11,23 @@
 ## 导入
 
 ```ts
-import { useAbpDataTable, useAbpEditorModal } from '@abp/components/crud';
+import { useAbpEditorModal } from '@abp/components/crud/modal';
+import { useAbpDataTable } from '@abp/components/crud/table';
 ```
 
-组件通过 `@abp/components` 的 `./crud` 子路径导出。
+组件按模块子路径导出：
+
+- `@abp/components/crud/table`：`useAbpDataTable` 及表格类型；
+- `@abp/components/crud/modal`：`useAbpEditorModal` 及弹窗类型；
+- `@abp/components/crud`：兼容入口，统一再导出两个模块以及共享的 `AbpRecord` / `AbpId` / `AbpIdOf` 类型。
 
 ## 快速开始
 
 ```ts
 import type { BookDto, CreateUpdateBookDto } from './types';
 
-import { useAbpDataTable, useAbpEditorModal } from '@abp/components/crud';
+import { useAbpEditorModal } from '@abp/components/crud/modal';
+import { useAbpDataTable } from '@abp/components/crud/table';
 import { useBooksApi } from './useBooksApi';
 
 const {
