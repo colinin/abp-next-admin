@@ -39,7 +39,7 @@ export function useSessions() {
         content: message,
         centered: true,
         afterClose: () => {
-          authStore.logout();
+          void authStore.logout();
         },
       });
     }

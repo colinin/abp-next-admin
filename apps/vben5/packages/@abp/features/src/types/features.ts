@@ -9,13 +9,13 @@ interface IValueValidator {
   [key: string]: any;
   isValid(value?: any): boolean;
   name: string;
-  properties: Dictionary<string, any>;
+  properties: Dictionary<string>;
 }
 
 interface IStringValueType {
   [key: string]: any;
   name: string;
-  properties: Dictionary<string, any>;
+  properties: Dictionary<string>;
   validator: IValueValidator;
 }
 

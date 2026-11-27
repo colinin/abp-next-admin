@@ -6,7 +6,7 @@ import { ref } from 'vue';
 import { useVbenDrawer } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { formatToDateTime } from '@abp/core';
+import { formatToDateTime, getModalData } from '@abp/core';
 import { Descriptions } from 'ant-design-vue';
 
 import { useSecurityLogsApi } from '../../api/useSecurityLogsApi';
@@ -21,7 +21,7 @@ const formModel = ref<SecurityLogDto>({} as SecurityLogDto);
 
 const { cancel, getApi } = useSecurityLogsApi();
 
-const [Drawer, drawerApi] = useVbenDrawer({
+const [Drawer, drawerApi] = useVbenDrawer<SecurityLogDto>({
   class: 'w-auto',
   onBeforeClose() {
     cancel('Security log drawer has closed!');
@@ -35,7 +35,7 @@ const [Drawer, drawerApi] = useVbenDrawer({
     if (isOpen) {
       try {
         drawerApi.setState({ loading: true });
-        const dto = drawerApi.getData<SecurityLogDto>();
+        const dto = getModalData(drawerApi);
         await onGet(dto.id);
       } finally {
         drawerApi.setState({ loading: false });

@@ -3,3 +3,7 @@ public
 __tests__
 coverage
 packages/@abp/components
+.codex
+.claude
+.agent
+.agents

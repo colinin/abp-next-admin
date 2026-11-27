@@ -28,7 +28,7 @@ withDefaults(
   },
 );
 
-const inputValue = defineModel<string[]>();
+const inputValue = defineModel<string[] | undefined>({ default: undefined });
 
 const slots = useSlots();
 </script>
@@ -53,7 +53,7 @@ const slots = useSlots();
     </span>
     <VbenCheckButtonGroup
       v-model="inputValue"
-      class="h-8 w-[165px]"
+      class="h-8 w-41.25"
       :options="items"
       :disabled="disabled"
       :multiple="multiple"

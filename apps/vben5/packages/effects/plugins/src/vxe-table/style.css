@@ -1,117 +1,204 @@
-:root .vxe-grid {
-  --vxe-ui-font-color: hsl(var(--foreground));
-  --vxe-ui-font-primary-color: hsl(var(--primary));
+@reference "@vben/tailwind-config/theme";
 
-  /* --vxe-ui-font-lighten-color: #babdc0;
-  --vxe-ui-font-darken-color: #86898e; */
-  --vxe-ui-font-disabled-color: hsl(var(--foreground) / 50%);
+@layer components {
+  :root .vxe-grid {
+    --vxe-ui-font-color: hsl(var(--foreground));
+    --vxe-ui-font-primary-color: hsl(var(--primary));
 
-  /* base */
-  --vxe-ui-base-popup-border-color: hsl(var(--border));
-  --vxe-ui-input-disabled-color: hsl(var(--border) / 60%);
+    /* --vxe-ui-font-lighten-color: #babdc0;
+    --vxe-ui-font-darken-color: #86898e; */
+    --vxe-ui-font-disabled-color: hsl(var(--foreground) / 50%);
 
-  /* --vxe-ui-base-popup-box-shadow: 0px 12px 30px 8px rgb(0 0 0 / 50%); */
+    /* base */
+    --vxe-ui-base-popup-border-color: hsl(var(--border));
+    --vxe-ui-input-disabled-color: hsl(var(--border) / 60%);
 
-  /* layout */
-  --vxe-ui-layout-background-color: hsl(var(--background));
-  --vxe-ui-table-resizable-line-color: hsl(var(--heavy));
+    /* --vxe-ui-base-popup-box-shadow: 0px 12px 30px 8px rgb(0 0 0 / 50%); */
 
-  /* --vxe-ui-table-fixed-left-scrolling-box-shadow: 8px 0px 10px -5px hsl(var(--accent));
-  --vxe-ui-table-fixed-right-scrolling-box-shadow: -8px 0px 10px -5px hsl(var(--accent)); */
+    /* layout */
+    --vxe-ui-layout-background-color: hsl(var(--background));
+    --vxe-ui-table-resizable-line-color: hsl(var(--heavy));
 
-  /* input */
-  --vxe-ui-input-border-color: hsl(var(--border));
+    /* --vxe-ui-table-fixed-left-scrolling-box-shadow: 8px 0px 10px -5px hsl(var(--accent));
+    --vxe-ui-table-fixed-right-scrolling-box-shadow: -8px 0px 10px -5px hsl(var(--accent)); */
 
-  /* --vxe-ui-input-placeholder-color: #8d9095; */
+    /* input */
+    --vxe-ui-input-border-color: hsl(var(--border));
 
-  /* --vxe-ui-input-disabled-background-color: #262727; */
+    /* --vxe-ui-input-placeholder-color: #8d9095; */
 
-  /* loading */
-  --vxe-ui-loading-background-color: hsl(var(--overlay-content));
+    /* --vxe-ui-input-disabled-background-color: #262727; */
 
-  /* table */
-  --vxe-ui-table-header-background-color: hsl(var(--accent));
-  --vxe-ui-table-border-color: hsl(var(--border));
-  --vxe-ui-table-row-hover-background-color: hsl(var(--accent-hover));
-  --vxe-ui-table-row-striped-background-color: hsl(var(--accent) / 60%);
-  --vxe-ui-table-row-hover-striped-background-color: hsl(var(--accent));
-  --vxe-ui-table-row-radio-checked-background-color: hsl(var(--accent));
-  --vxe-ui-table-row-hover-radio-checked-background-color: hsl(
-    var(--accent-hover)
-  );
-  --vxe-ui-table-row-checkbox-checked-background-color: hsl(var(--accent));
-  --vxe-ui-table-row-hover-checkbox-checked-background-color: hsl(
-    var(--accent-hover)
-  );
-  --vxe-ui-table-row-current-background-color: hsl(var(--accent));
-  --vxe-ui-table-row-hover-current-background-color: hsl(var(--accent-hover));
-  --vxe-ui-font-primary-tinge-color: hsl(var(--primary));
-  --vxe-ui-font-primary-lighten-color: hsl(var(--primary) / 60%);
-  --vxe-ui-font-primary-darken-color: hsl(var(--primary));
+    /* loading */
+    --vxe-ui-loading-background-color: hsl(var(--overlay-content));
 
-  height: auto !important;
+    /* table */
+    --vxe-ui-table-header-background-color: hsl(var(--accent));
+    --vxe-ui-table-border-color: hsl(var(--border));
+    --vxe-ui-table-row-hover-background-color: hsl(var(--accent-hover));
+    --vxe-ui-table-row-striped-background-color: hsl(var(--accent) / 60%);
+    --vxe-ui-table-row-hover-striped-background-color: hsl(var(--accent));
+    --vxe-ui-table-row-radio-checked-background-color: hsl(var(--accent));
+    --vxe-ui-table-row-hover-radio-checked-background-color: hsl(
+      var(--accent-hover)
+    );
+    --vxe-ui-table-row-checkbox-checked-background-color: hsl(var(--accent));
+    --vxe-ui-table-row-hover-checkbox-checked-background-color: hsl(
+      var(--accent-hover)
+    );
+    --vxe-ui-table-row-current-background-color: hsl(var(--accent));
+    --vxe-ui-table-row-hover-current-background-color: hsl(var(--accent-hover));
+    --vxe-ui-font-primary-tinge-color: hsl(var(--primary));
+    --vxe-ui-font-primary-lighten-color: hsl(var(--primary) / 60%);
+    --vxe-ui-font-primary-darken-color: hsl(var(--primary));
 
-  /* --vxe-ui-table-fixed-scrolling-box-shadow-color: rgb(0 0 0 / 80%); */
-}
+    height: auto !important;
 
-.vxe-pager {
-  .vxe-pager--prev-btn:not(.is--disabled):active,
-  .vxe-pager--next-btn:not(.is--disabled):active,
-  .vxe-pager--num-btn:not(.is--disabled):active,
-  .vxe-pager--jump-prev:not(.is--disabled):active,
-  .vxe-pager--jump-next:not(.is--disabled):active,
-  .vxe-pager--prev-btn:not(.is--disabled):focus,
-  .vxe-pager--next-btn:not(.is--disabled):focus,
-  .vxe-pager--num-btn:not(.is--disabled):focus,
-  .vxe-pager--jump-prev:not(.is--disabled):focus,
-  .vxe-pager--jump-next:not(.is--disabled):focus {
-    color: hsl(var(--accent-foreground));
-    background-color: hsl(var(--accent));
-    border: 1px solid hsl(var(--border));
-    box-shadow: 0 0 0 1px hsl(var(--border));
+    /* --vxe-ui-table-fixed-scrolling-box-shadow-color: rgb(0 0 0 / 80%); */
+  }
+
+  .vxe-pager {
+    .vxe-pager--prev-btn:not(.is--disabled):active,
+    .vxe-pager--next-btn:not(.is--disabled):active,
+    .vxe-pager--num-btn:not(.is--disabled):active,
+    .vxe-pager--jump-prev:not(.is--disabled):active,
+    .vxe-pager--jump-next:not(.is--disabled):active,
+    .vxe-pager--prev-btn:not(.is--disabled):focus,
+    .vxe-pager--next-btn:not(.is--disabled):focus,
+    .vxe-pager--num-btn:not(.is--disabled):focus,
+    .vxe-pager--jump-prev:not(.is--disabled):focus,
+    .vxe-pager--jump-next:not(.is--disabled):focus {
+      color: hsl(var(--accent-foreground));
+      background-color: hsl(var(--accent));
+      border: 1px solid hsl(var(--border));
+      box-shadow: 0 0 0 1px hsl(var(--border));
+    }
+
+    .vxe-pager--wrapper {
+      display: flex;
+      align-items: center;
+    }
+
+    .vxe-pager--sizes {
+      margin-right: auto;
+    }
   }
 
   .vxe-pager--wrapper {
-    display: flex;
-    align-items: center;
+    @apply justify-center md:justify-end;
   }
 
-  .vxe-pager--sizes {
-    margin-right: auto;
+  .vxe-tools--operate {
+    margin-right: 0.25rem;
+    margin-left: 0.75rem;
   }
-}
 
-.vxe-pager--wrapper {
-  @apply justify-center md:justify-end;
-}
+  .vxe-table-custom--checkbox-option:hover {
+    background: none !important;
+  }
 
-.vxe-tools--operate {
-  margin-right: 0.25rem;
-  margin-left: 0.75rem;
-}
+  .vxe-toolbar {
+    padding: 0;
+  }
 
-.vxe-table-custom--checkbox-option:hover {
-  background: none !important;
-}
+  .vxe-buttons--wrapper:not(:empty),
+  .vxe-tools--operate:not(:empty),
+  .vxe-tools--wrapper:not(:empty) {
+    padding: 0.6em 0;
+  }
 
-.vxe-toolbar {
-  padding: 0;
-}
+  /* 统一间距只应用于 Vben Grid,不改变独立 VXE 分页器/工具栏。 */
+  .vxe-grid[data-vben-grid] .vxe-grid--pager-wrapper > .vxe-pager {
+    height: auto;
+    min-height: 28px;
+  }
 
-.vxe-buttons--wrapper:not(:empty),
-.vxe-tools--operate:not(:empty),
-.vxe-tools--wrapper:not(:empty) {
-  padding: 0.6em 0;
-}
+  .vxe-grid[data-vben-grid] .vxe-grid--toolbar-wrapper > .vxe-toolbar {
+    padding: 0.5rem 0;
 
-.vxe-tools--operate:not(:has(button)) {
-  margin-left: 0;
-}
+    .vxe-buttons--wrapper,
+    .vxe-tools--operate,
+    .vxe-tools--wrapper {
+      padding: 0;
+    }
+  }
 
-.vxe-grid--layout-header-wrapper {
-  overflow: visible;
-}
+  .vxe-tools--operate:not(:has(button)) {
+    margin-left: 0;
+  }
 
-.vxe-grid--layout-body-content-wrapper {
-  overflow: hidden;
+  /* 4.23.12 原生即为 visible;该声明保证通栏分隔条(文档流负 margin)在
+     后续版本原生改为裁剪时仍可越出表单容器 */
+  .vxe-grid--layout-header-wrapper {
+    overflow: visible;
+  }
+
+  .vxe-grid--layout-body-content-wrapper {
+    overflow: hidden;
+  }
+
+  /* ===== 分段模式(segmented: zone/card 或显式 sectionOptions.body) =====
+     标记与变量由组件绑在 VxeGrid 根节点上;直接子级选择器限定实例,
+     不影响嵌套 Grid。变量缺省时回退为现状外观(transparent / 0 / 根级
+     --vxe-ui-layout-background-color 的取值)。位于 components 层:
+     覆盖 vxe 层的第三方样式,同时可被 utilities 层的工具类覆盖 */
+  .vxe-grid[data-vben-grid-sectioned] > .vxe-grid--layout-body-wrapper {
+    --vxe-ui-layout-background-color: var(
+      --vben-grid-body-background,
+      hsl(var(--background))
+    );
+
+    background-color: var(--vben-grid-body-background, transparent);
+    border-radius: var(--vben-grid-body-radius, 0);
+  }
+
+  /* 双卡全屏:VXE 会给 .is--maximize 涂 --vxe-ui-layout-background-color,
+     与卡片同色时两卡失去视觉区分,全屏根底色单独退为 background-deep */
+  .vxe-grid[data-vben-grid-sectioned='card'].is--maximize {
+    background-color: var(
+      --vben-grid-fullscreen-bg,
+      hsl(var(--background-deep))
+    );
+  }
+
+  /* 双卡下段卡片的内边距:水平作用于 body wrapper,上下作用于首尾可测量 wrapper 的
+     padding(计入 VXE 测量的 offsetHeight,外部 margin 不会计入)。垂直方向禁止改用 body wrapper 的
+     padding——不在 VXE auto 高度计算内,会导致表格溢出/裁切。
+     可在任意祖先(或经 gridClass 任意属性语法在根节点)覆盖
+     --vben-grid-body-padding 快速调整;使用直接子级链,
+     避免影响嵌套 Grid */
+  .vxe-grid[data-vben-grid-sectioned='card'] > .vxe-grid--layout-body-wrapper {
+    padding-inline: var(--vben-grid-body-padding, 0.5rem);
+  }
+
+  .vxe-grid[data-vben-grid-top-inset]
+    > .vxe-grid--layout-body-wrapper
+    > .vxe-grid--layout-body-content-wrapper
+    > .vxe-grid--top-wrapper:first-child {
+    padding-top: var(--vben-grid-body-padding, 0.5rem);
+  }
+
+  .vxe-grid[data-vben-grid-sectioned='card']
+    > .vxe-grid--layout-body-wrapper
+    > .vxe-grid--layout-body-content-wrapper
+    > .vxe-grid--toolbar-wrapper:first-child
+    > .vxe-toolbar {
+    padding-top: var(--vben-grid-body-padding, 0.5rem);
+  }
+
+  .vxe-grid[data-vben-grid-sectioned='card']
+    > .vxe-grid--layout-body-wrapper
+    > .vxe-grid--layout-body-content-wrapper
+    > :is(.vxe-grid--pager-wrapper, .vxe-grid--bottom-wrapper):last-child {
+    padding-bottom: var(--vben-grid-body-padding, 0.5rem);
+  }
+
+  /* 已读行默认样式 */
+  .vxe-row--viewed {
+    color: hsl(var(--foreground) / 50%);
+
+    .vxe-body--column {
+      opacity: 0.9;
+    }
+  }
 }

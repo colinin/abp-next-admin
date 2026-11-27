@@ -14,6 +14,7 @@ import { computed, ref, watch } from 'vue';
 
 import { $t } from '@vben/locales';
 
+import { useNotifications } from '@abp/core';
 import {
   Button,
   DatePicker,
@@ -23,7 +24,6 @@ import {
   FormItem,
   Input,
   InputNumber,
-  message,
   RadioGroup,
   Select,
   Space,
@@ -32,7 +32,6 @@ import {
 
 import { useApprovalParticipantsApi } from '../../api/useApprovalParticipantsApi';
 import { createRule } from './model';
-
 const props = defineProps<{
   formFields?: FormFieldDto[];
   node: ApprovalFlowNode | null;
@@ -43,6 +42,8 @@ const emit = defineEmits<{
   'update:node': [ApprovalFlowNode];
   'update:open': [boolean];
 }>();
+
+const { toastWarning } = useNotifications();
 
 const participantsApi = useApprovalParticipantsApi();
 const local = ref<ApprovalFlowNode | null>(null);
@@ -147,7 +148,7 @@ async function searchUsers(filter: string) {
   try {
     users.value = (await participantsApi.searchUsersAsync(filter)) ?? [];
   } catch {
-    message.warning($t('antflow.designer.nodeConfig.searchFailed'));
+    toastWarning($t('antflow.designer.nodeConfig.searchFailed'));
   }
 }
 
@@ -403,7 +404,11 @@ function updateActionLabel(index: number, label: string) {
   }
 
   const actions = [...local.value.actions];
-  actions[index] = { ...actions[index]!, label };
+  const action = actions[index];
+  if (!action) {
+    return;
+  }
+  actions[index] = { ...action, label };
   patch({ actions });
 }
 
@@ -464,7 +469,7 @@ loadParticipants();
             <Select
               :value="rule.kind"
               :options="ruleKindOptions"
-              class="w-full"
+              class="!w-full"
               @update:value="
                 (value: any) =>
                   updateRule(index, { kind: value as ApproverKind })
@@ -480,7 +485,7 @@ loadParticipants();
                   encodeParticipant(participant),
                 )
               "
-              class="w-full"
+              class="!w-full"
               :placeholder="$t('antflow.designer.nodeConfig.searchParticipant')"
               @search="searchUsers"
               @update:value="
@@ -496,7 +501,7 @@ loadParticipants();
                   encodeParticipant(participant),
                 )
               "
-              class="w-full"
+              class="!w-full"
               :placeholder="$t('antflow.designer.nodeConfig.selectRole')"
               @update:value="
                 (values: any) => onParticipantsChange(index, values as string[])
@@ -547,7 +552,7 @@ loadParticipants();
                   value: field.key,
                 }))
               "
-              class="w-full"
+              class="!w-full"
               :placeholder="$t('antflow.designer.nodeConfig.selectFormField')"
               @update:value="
                 (value: any) =>
@@ -579,7 +584,7 @@ loadParticipants();
               value: 'EscalateToManager',
             },
           ]"
-          class="w-full"
+          class="!w-full"
           @update:value="
             (value: any) => patch({ onEmpty: value as EmptyApproverPolicy })
           "
@@ -626,7 +631,7 @@ loadParticipants();
                 encodeParticipant(participant),
               )
             "
-            class="w-full"
+            class="!w-full"
             :placeholder="$t('antflow.designer.nodeConfig.searchParticipant')"
             @search="searchUsers"
             @update:value="
@@ -646,14 +651,14 @@ loadParticipants();
         <Divider orientation="left">
           {{ $t('antflow.designer.nodeConfig.conditionSettings') }}
         </Divider>
-        <Space class="w-full" direction="vertical">
+        <Space class="!w-full" direction="vertical">
           <Select
             :options="formFieldOptions"
             :value="local.condition?.fieldKey ?? undefined"
             :placeholder="$t('antflow.designer.nodeConfig.selectFormField')"
             @update:value="(value: any) => setConditionField(value)"
           />
-          <Space class="w-full">
+          <Space class="!w-full">
             <Select
               :options="conditionOperators"
               :value="local.condition?.operator ?? '='"

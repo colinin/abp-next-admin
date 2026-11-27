@@ -3,10 +3,10 @@ import type { ModalApiOptions, ModalState } from './modal';
 import { Store } from '@vben-core/shared/store';
 import { bindMethods, isFunction } from '@vben-core/shared/utils';
 
-export class ModalApi {
+export class ModalApi<TData = unknown> {
   // 共享数据
-  public sharedData: Record<'payload', any> = {
-    payload: {},
+  public sharedData: Record<'payload', TData | undefined> = {
+    payload: undefined,
   };
   public store: Store<ModalState>;
 
@@ -46,6 +46,7 @@ export class ModalApi {
       contentClass: '',
       destroyOnClose: true,
       draggable: false,
+      overflow: false,
       footer: true,
       footerClass: '',
       fullscreen: false,
@@ -62,25 +63,19 @@ export class ModalApi {
       animationType: 'slide',
     };
 
-    this.store = new Store<ModalState>(
-      {
-        ...defaultState,
-        ...storeState,
-      },
-      {
-        onUpdate: () => {
-          const state = this.store.state;
+    this.store = new Store<ModalState>({
+      ...defaultState,
+      ...storeState,
+    });
 
-          // 每次更新状态时，都会调用 onOpenChange 回调函数
-          if (state?.isOpen === this.state?.isOpen) {
-            this.state = state;
-          } else {
-            this.state = state;
-            this.api.onOpenChange?.(!!state?.isOpen);
-          }
-        },
-      },
-    );
+    this.store.subscribe((state) => {
+      // 每次更新状态时，都会调用 onOpenChange 回调函数
+      const prevIsOpen = this.state?.isOpen;
+      this.state = state;
+      if (state?.isOpen !== prevIsOpen) {
+        this.api.onOpenChange?.(!!state?.isOpen);
+      }
+    });
 
     this.state = this.store.state;
 
@@ -111,8 +106,8 @@ export class ModalApi {
     }
   }
 
-  getData<T extends object = Record<string, any>>() {
-    return (this.sharedData?.payload ?? {}) as T;
+  getData(): TData | undefined {
+    return this.sharedData.payload;
   }
 
   /**
@@ -131,7 +126,7 @@ export class ModalApi {
     if (this.api.onCancel) {
       this.api.onCancel?.();
     } else {
-      this.close();
+      void this.close();
     }
   }
 
@@ -168,7 +163,7 @@ export class ModalApi {
     }));
   }
 
-  setData<T>(payload: T) {
+  setData(payload: TData) {
     this.sharedData.payload = payload;
     return this;
   }

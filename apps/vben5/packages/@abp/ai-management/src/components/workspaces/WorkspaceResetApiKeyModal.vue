@@ -1,4 +1,5 @@
 <script setup lang="ts">
+// oxlint-disable typescript/no-non-null-assertion
 import type { WorkspaceDefinitionRecordDto } from '../../types/workspaces';
 
 import { ref } from 'vue';
@@ -6,15 +7,15 @@ import { ref } from 'vue';
 import { useVbenForm, useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { useMessage } from '@abp/ui';
+import { useNotifications } from '@abp/core';
 
 import { useWorkspaceDefinitionsApi } from '../../api/useWorkspaceDefinitionsApi';
-
 const emit = defineEmits<{
   (event: 'change', data: WorkspaceDefinitionRecordDto): void;
 }>();
 
-const message = useMessage();
+const { toastSuccess } = useNotifications();
+
 const { getApi, updateApi } = useWorkspaceDefinitionsApi();
 
 const formModel = ref<WorkspaceDefinitionRecordDto>();
@@ -32,17 +33,18 @@ const [Form, formApi] = useVbenForm({
   handleSubmit: onSubmit,
 });
 
-const [Modal, modalApi] = useVbenModal({
+const [Modal, modalApi] = useVbenModal<WorkspaceDefinitionRecordDto>({
   title: $t('AIManagement.ResetApiKey'),
-  async onOpenChange(isOpen) {
-    if (isOpen) {
-      const { id } = modalApi.getData<WorkspaceDefinitionRecordDto>();
-      const dto = await getApi(id);
+  async onOpened() {
+    formModel.value = undefined;
+    const data = modalApi.getData();
+    if (data?.id) {
+      const dto = await getApi(data.id);
       formModel.value = dto;
     }
   },
   async onConfirm() {
-    await formApi.validateAndSubmitForm();
+    await formApi.validateAndSubmit();
   },
 });
 
@@ -53,7 +55,7 @@ async function onSubmit(values: Record<string, string>) {
       ...formModel.value!,
       apiKey: values.apiKey,
     });
-    message.success($t('AbpUi.SavedSuccessfully'));
+    toastSuccess($t('AbpUi.SavedSuccessfully'));
     emit('change', dto);
     modalApi.close();
   } finally {

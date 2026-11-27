@@ -13,7 +13,11 @@ export type SupervisorLevel = 'LevelN' | 'Nearest' | 'TopMost';
 export type EmptyApproverPolicy = 'EscalateToManager' | 'Skip';
 export type ApprovalActionEffect = 'Approve' | 'Neutral' | 'Reject';
 export type ApprovalFlowNodeKind =
-  'approval' | 'cc' | 'condition' | 'end' | 'start';
+  | 'approval'
+  | 'cc'
+  | 'condition'
+  | 'end'
+  | 'start';
 
 export interface ParticipantRef {
   displayName?: null | string;

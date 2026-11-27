@@ -14,7 +14,12 @@ import { createIconifyIcon } from '@vben/icons';
 import { $t } from '@vben/locales';
 
 import { AuditLogPermissions, EntityChangeDrawer } from '@abp/auditing';
-import { formatToDateTime, useAbpStore, useFeatures } from '@abp/core';
+import {
+  formatToDateTime,
+  useAbpStore,
+  useFeatures,
+  useNotifications,
+} from '@abp/core';
 import { PermissionModal } from '@abp/permissions';
 import { MenuAllotModal } from '@abp/platform';
 import { useVbenVxeGrid } from '@abp/ui';
@@ -27,14 +32,13 @@ import {
   PlusOutlined,
   UnlockOutlined,
 } from '@ant-design/icons-vue';
-import { Button, Dropdown, Menu, message, Modal, Tag } from 'ant-design-vue';
+import { Button, Dropdown, Menu, Modal, Tag } from 'ant-design-vue';
 
 import { useUsersApi } from '../../api/useUsersApi';
 import {
   IdentitySessionPermissions,
   IdentityUserPermissions,
 } from '../../constants/permissions';
-
 defineOptions({
   name: 'UserTable',
 });
@@ -42,6 +46,8 @@ defineOptions({
 const emit = defineEmits<{
   (event: 'impersonation', user: IdentityUserDto): void;
 }>();
+
+const { toastSuccess } = useNotifications();
 
 const UserModal = defineAsyncComponent(() => import('./UserModal.vue'));
 const LockModal = defineAsyncComponent(() => import('./UserLockModal.vue'));
@@ -287,7 +293,7 @@ const handleDelete = (row: IdentityUserDto) => {
     },
     onOk: async () => {
       await deleteApi(row.id);
-      message.success($t('AbpUi.DeletedSuccessfully'));
+      toastSuccess($t('AbpUi.DeletedSuccessfully'));
       await gridApi.query();
     },
     title: $t('AbpUi.AreYouSure'),

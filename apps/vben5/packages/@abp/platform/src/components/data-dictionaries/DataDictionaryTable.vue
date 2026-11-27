@@ -10,7 +10,12 @@ import { useVbenDrawer, useVbenModal } from '@vben/common-ui';
 import { createIconifyIcon } from '@vben/icons';
 import { $t } from '@vben/locales';
 
-import { listToTree, sortby, useAuthorization } from '@abp/core';
+import {
+  listToTree,
+  sortby,
+  useAuthorization,
+  useNotifications,
+} from '@abp/core';
 import { useVbenVxeGrid } from '@abp/ui';
 import {
   DeleteOutlined,
@@ -18,14 +23,15 @@ import {
   EllipsisOutlined,
   PlusOutlined,
 } from '@ant-design/icons-vue';
-import { Button, Dropdown, Menu, message, Modal } from 'ant-design-vue';
+import { Button, Dropdown, Menu, Modal } from 'ant-design-vue';
 
 import { useDataDictionariesApi } from '../../api/useDataDictionariesApi';
 import { DataDictionaryPermissions } from '../../constants/permissions';
-
 defineOptions({
   name: 'DataDictionaryTable',
 });
+
+const { toastSuccess } = useNotifications();
 
 const MenuItem = Menu.Item;
 const ItemsIcon = createIconifyIcon('material-symbols:align-items-stretch');
@@ -202,7 +208,7 @@ function onDelete(row: DataDto) {
       try {
         gridApi.setLoading(true);
         await deleteApi(row.id);
-        message.success($t('AbpUi.DeletedSuccessfully'));
+        toastSuccess($t('AbpUi.DeletedSuccessfully'));
         onGet();
       } finally {
         gridApi.setLoading(false);

@@ -12,7 +12,11 @@ import { useAccess } from '@vben/access';
 import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { useLocalization, useLocalizationSerializer } from '@abp/core';
+import {
+  useLocalization,
+  useLocalizationSerializer,
+  useNotifications,
+} from '@abp/core';
 import { useVbenVxeGrid } from '@abp/ui';
 import {
   CheckOutlined,
@@ -23,14 +27,15 @@ import {
   PlusOutlined,
   RedoOutlined,
 } from '@ant-design/icons-vue';
-import { Button, Dropdown, Menu, message, Modal } from 'ant-design-vue';
+import { Button, Dropdown, Menu, Modal } from 'ant-design-vue';
 
 import { useWorkspaceDefinitionsApi } from '../../api/useWorkspaceDefinitionsApi';
 import { WorkspaceDefinitionPermissions } from '../../constants/permissions';
-
 defineOptions({
   name: 'WorkspaceDefinitionTable',
 });
+
+const { toastSuccess } = useNotifications();
 
 const MenuItem = Menu.Item;
 
@@ -183,7 +188,7 @@ async function onDelete(row: WorkspaceDefinitionRecordDto) {
     content: $t('AbpUi.ItemWillBeDeletedMessage'),
     onOk: async () => {
       await deleteApi(row.id);
-      message.success($t('AbpUi.DeletedSuccessfully'));
+      toastSuccess($t('AbpUi.DeletedSuccessfully'));
       gridApi.query();
     },
     title: $t('AbpUi.AreYouSure'),

@@ -10,23 +10,24 @@ import type { FormInstance } from 'ant-design-vue';
 import type { PermissionDefinitionDto } from '../../../types/definitions';
 import type { PermissionGroupDefinitionDto } from '../../../types/groups';
 
-import { defineEmits, defineOptions, ref, toValue, useTemplateRef } from 'vue';
+import { ref, toValue, useTemplateRef } from 'vue';
 
 import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
 import {
+  getModalData,
   isNullOrWhiteSpace,
   listToTree,
   useLocalization,
   useLocalizationSerializer,
+  useNotifications,
 } from '@abp/core';
 import { LocalizableInput, PropertyTable, SimpleStateChecking } from '@abp/ui';
 import {
   Checkbox,
   Form,
   Input,
-  message,
   Select,
   Tabs,
   TreeSelect,
@@ -35,13 +36,15 @@ import {
 import { usePermissionDefinitionsApi } from '../../../api/usePermissionDefinitionsApi';
 import { usePermissionGroupDefinitionsApi } from '../../../api/usePermissionGroupDefinitionsApi';
 import { useTypesMap } from './types';
-
 defineOptions({
   name: 'PermissionDefinitionModal',
 });
+
 const emits = defineEmits<{
   (event: 'change', data: PermissionDefinitionDto): void;
 }>();
+
+const { toastSuccess } = useNotifications();
 
 const FormItem = Form.Item;
 const TabPane = Tabs.TabPane;
@@ -85,7 +88,7 @@ const {
   getAssignableProvidersApi,
   updateApi,
 } = usePermissionDefinitionsApi();
-const [Modal, modalApi] = useVbenModal({
+const [Modal, modalApi] = useVbenModal<PermissionDefinitionDto>({
   class: 'w-1/2',
   closeOnClickModal: false,
   draggable: true,
@@ -107,7 +110,7 @@ const [Modal, modalApi] = useVbenModal({
     modalApi.setState({ submitting: true });
     api
       .then((res) => {
-        message.success($t('AbpUi.SavedSuccessfully'));
+        toastSuccess($t('AbpUi.SavedSuccessfully'));
         emits('change', res);
         modalApi.close();
       })
@@ -128,8 +131,7 @@ const [Modal, modalApi] = useVbenModal({
       });
       try {
         modalApi.setState({ loading: true });
-        const { groupName, name, parentName } =
-          modalApi.getData<PermissionDefinitionDto>();
+        const { groupName, name, parentName } = getModalData(modalApi);
         name && (await onGet(name));
         await Promise.all([onInitGroups(groupName), onInitProviders()]);
         formModel.value.parentName = parentName;
@@ -193,7 +195,7 @@ function onPropChange(prop: PropertyInfo) {
 }
 function onPropDelete(prop: PropertyInfo) {
   formModel.value.extraProperties ??= {};
-  delete formModel.value.extraProperties[prop.key];
+  Reflect.deleteProperty(formModel.value.extraProperties, prop.key);
 }
 </script>
 

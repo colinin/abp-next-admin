@@ -10,7 +10,7 @@ import { useVbenDrawer } from '@vben/common-ui';
 
 import { CodeEditor } from '@abp/components/codeeditor';
 import { Tinymce } from '@abp/components/tinymce';
-import { formatToDateTime, isNullOrWhiteSpace } from '@abp/core';
+import { formatToDateTime, getModalData, isNullOrWhiteSpace } from '@abp/core';
 import { useHttpStatusCodeMap } from '@abp/request';
 import { useTenantsApi } from '@abp/saas';
 import {
@@ -43,7 +43,7 @@ const { getApi: getTenantApi } = useTenantsApi();
 const { getApi: getSubscriptionApi } = useSubscriptionsApi();
 const { getHttpStatusColor, httpStatusCodeMap } = useHttpStatusCodeMap();
 
-const [Drawer, drawerApi] = useVbenDrawer({
+const [Drawer, drawerApi] = useVbenDrawer<WebhookSendRecordDto>({
   class: 'w-1/2',
   async onOpenChange(isOpen) {
     formModel.value = undefined;
@@ -56,7 +56,7 @@ const [Drawer, drawerApi] = useVbenDrawer({
 });
 
 async function onInit() {
-  const dto = drawerApi.getData<WebhookSendRecordDto>();
+  const dto = getModalData(drawerApi);
   if (isNullOrWhiteSpace(dto.id)) {
     return;
   }
@@ -108,7 +108,7 @@ async function onInitTenant(tenantId?: string) {
             :label="$t('WebhooksManagement.DisplayName:CreationTime')"
           >
             <DatePicker
-              class="w-full"
+              class="!w-full"
               value-format="YYYY-MM-DD HH:mm:ss"
               :value="formModel.creationTime"
               disabled
@@ -166,7 +166,7 @@ async function onInitTenant(tenantId?: string) {
             :label="$t('WebhooksManagement.DisplayName:CreationTime')"
           >
             <DatePicker
-              class="w-full"
+              class="!w-full"
               value-format="YYYY-MM-DD HH:mm:ss"
               :value="formModel.webhookEvent.creationTime"
               disabled
@@ -210,7 +210,7 @@ async function onInitTenant(tenantId?: string) {
           </FormItem>
           <FormItem :label="$t('WebhooksManagement.DisplayName:CreationTime')">
             <DatePicker
-              class="w-full"
+              class="!w-full"
               value-format="YYYY-MM-DD HH:mm:ss"
               :value="formatToDateTime(webhookSubscription.creationTime)"
               disabled

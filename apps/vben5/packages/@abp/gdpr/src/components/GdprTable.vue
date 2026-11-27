@@ -7,17 +7,23 @@ import { h } from 'vue';
 
 import { $t } from '@vben/locales';
 
-import { formatToDateTime, useAbpStore } from '@abp/core';
+import { formatToDateTime, useAbpStore, useNotifications } from '@abp/core';
 import { useVbenVxeGrid } from '@abp/ui';
 import { DeleteOutlined, DownloadOutlined } from '@ant-design/icons-vue';
-import { Button, message, Modal, Tag } from 'ant-design-vue';
+import { Button, Modal, Tag } from 'ant-design-vue';
 import dayJs from 'dayjs';
 
 import { useGdprRequestsApi } from '../api/useGdprRequestsApi';
-
 defineOptions({
   name: 'GdprTable',
 });
+
+const { toastSuccess } = useNotifications();
+
+interface GdprRequestRow extends GdprRequestDto {
+  /** 是否已就绪 */
+  isReadly: boolean;
+}
 
 const {
   cancel,
@@ -29,7 +35,7 @@ const {
 } = useGdprRequestsApi();
 
 const abpStore = useAbpStore();
-const gridOptions: VxeGridProps<GdprRequestDto> = {
+const gridOptions: VxeGridProps<GdprRequestRow> = {
   columns: [
     {
       align: 'left',
@@ -91,7 +97,7 @@ const gridOptions: VxeGridProps<GdprRequestDto> = {
   },
 };
 
-const gridEvents: VxeGridListeners<GdprRequestDto> = {
+const gridEvents: VxeGridListeners<GdprRequestRow> = {
   cellClick: () => {},
   sortChange: () => {
     gridApi.query();
@@ -148,10 +154,14 @@ const onDeleteData = () => {
 
 const onDownload = async (row: GdprRequestDto) => {
   const blob = await downloadPersonalDataApi(row.id);
+  const application = abpStore.application;
+  if (!application) {
+    return;
+  }
   const url = window.URL.createObjectURL(blob);
   const link = document.createElement('a');
   link.href = url;
-  const { userName } = abpStore.application!.currentUser;
+  const { userName } = application.currentUser;
   const fileName = `${$t('AbpGdpr.PersonalData')}_${userName}_${formatToDateTime(row.readyTime)}.xlsx`;
   link.setAttribute('download', decodeURIComponent(fileName));
   document.body.append(link);
@@ -171,7 +181,7 @@ const onDelete = (row: GdprRequestDto) => {
       gridApi.setLoading(true);
       try {
         await deleteApi(row.id);
-        message.success($t('AbpUi.DeletedSuccessfully'));
+        toastSuccess($t('AbpUi.DeletedSuccessfully'));
         await gridApi.query();
       } finally {
         gridApi.setLoading(false);

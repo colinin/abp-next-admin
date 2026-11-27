@@ -1,8 +1,11 @@
 import type { Notification, NotificationInfo } from '../types/notifications';
 
-import { Events, useEventBus } from '@abp/core';
+import {
+  Events,
+  useNotifications as useAppNotifications,
+  useEventBus,
+} from '@abp/core';
 import { useSignalR } from '@abp/signalr';
-import { notification } from 'ant-design-vue';
 
 import {
   NotificationContentType,
@@ -25,12 +28,12 @@ export function useNotifications() {
   /** 释放通知 */
   function release() {
     _releaseEvents();
-    stop();
+    void stop();
   }
 
   function _init() {
     onStart(() => on(Events.GetNotification, _onNotifyReceived));
-    init({
+    void init({
       autoStart: true,
       serverUrl: '/signalr-hubs/notifications',
       useAccessToken: true,
@@ -69,34 +72,23 @@ export function useNotifications() {
         }
       }
     }
+    const notify = useAppNotifications();
     switch (notifier.severity) {
       case NotificationSeverity.Error:
       case NotificationSeverity.Fatal: {
-        notification.error({
-          description: message,
-          message: notifier.title,
-        });
+        notify.notifyError({ content: message, title: notifier.title });
         break;
       }
       case NotificationSeverity.Info: {
-        notification.info({
-          description: message,
-          message: notifier.title,
-        });
+        notify.notifyInfo({ content: message, title: notifier.title });
         break;
       }
       case NotificationSeverity.Success: {
-        notification.success({
-          description: message,
-          message: notifier.title,
-        });
+        notify.notifySuccess({ content: message, title: notifier.title });
         break;
       }
       case NotificationSeverity.Warn: {
-        notification.warning({
-          description: message,
-          message: notifier.title,
-        });
+        notify.notifyWarning({ content: message, title: notifier.title });
         break;
       }
     }

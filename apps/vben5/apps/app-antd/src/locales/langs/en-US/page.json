@@ -5,6 +5,7 @@
     "codeLogin": "Code Login",
     "qrcodeLogin": "Qr Code Login",
     "forgetPassword": "Forget Password",
+    "profile": "Profile",
     "oidcLogin": "Open Connect",
     "oidcLoginMessage": "Please click \"OK\" to jump to the Certification center for login.",
     "processingLogin": "Processing Login..."

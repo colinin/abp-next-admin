@@ -16,8 +16,7 @@ interface OrganizationUnitDto extends AuditedEntityDto<string> {
 }
 
 /** 组织机构分页查询对象 */
-interface GetOrganizationUnitPagedListInput
-  extends PagedAndSortedResultRequestDto {
+interface GetOrganizationUnitPagedListInput extends PagedAndSortedResultRequestDto {
   /** 过滤字符 */
   filter?: string;
 }

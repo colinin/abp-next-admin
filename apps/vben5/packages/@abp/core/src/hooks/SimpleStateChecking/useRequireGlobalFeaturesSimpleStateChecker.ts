@@ -14,8 +14,8 @@ export interface RequireGlobalFeaturesStateChecker {
 }
 
 export class RequireGlobalFeaturesSimpleStateChecker<
-    TState extends IHasSimpleStateCheckers<TState>,
-  >
+  TState extends IHasSimpleStateCheckers<TState>,
+>
   implements ISimpleStateChecker<TState>, RequireGlobalFeaturesStateChecker
 {
   _globalFeatureChecker: IGlobalFeatureChecker;

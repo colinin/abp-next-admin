@@ -9,7 +9,11 @@ import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 import { downloadFileFromUrl } from '@vben/utils';
 
-import { formatToDateTime, isNullOrWhiteSpace } from '@abp/core';
+import {
+  formatToDateTime,
+  isNullOrWhiteSpace,
+  useNotifications,
+} from '@abp/core';
 import { useVbenVxeGrid } from '@abp/ui';
 import {
   DeleteOutlined,
@@ -17,11 +21,10 @@ import {
   EyeOutlined,
   UploadOutlined,
 } from '@ant-design/icons-vue';
-import { Button, Card, message, Modal } from 'ant-design-vue';
+import { Button, Card, Modal } from 'ant-design-vue';
 
 import { useBlobsApi } from '../../api/useBlobsApi';
 import { BlobType } from '../../types/blobs';
-
 defineOptions({
   name: 'FileList',
 });
@@ -30,6 +33,8 @@ const props = defineProps<{
   containerId: string;
   folderId?: string;
 }>();
+
+const { toastSuccess } = useNotifications();
 
 const kbUnit = 1 * 1024;
 const mbUnit = kbUnit * 1024;
@@ -214,7 +219,7 @@ function onDelete(row: BlobDto) {
     onCancel: () => {},
     onOk: async () => {
       await deleteApi(row.id);
-      message.success($t('AbpUi.DeletedSuccessfully'));
+      toastSuccess($t('AbpUi.DeletedSuccessfully'));
       await gridApi.query();
     },
     title: $t('AbpUi.AreYouSure'),

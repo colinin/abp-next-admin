@@ -15,8 +15,9 @@ import {
   sortby,
   useLocalization,
   useLocalizationSerializer,
+  useNotifications,
 } from '@abp/core';
-import { useMessage, useVbenVxeGrid } from '@abp/ui';
+import { useVbenVxeGrid } from '@abp/ui';
 import {
   DeleteOutlined,
   EditOutlined,
@@ -30,10 +31,11 @@ import { usePermissionDefinitionsApi } from '../../../api/usePermissionDefinitio
 import { usePermissionGroupDefinitionsApi } from '../../../api/usePermissionGroupDefinitionsApi';
 import { PermissionDefinitionsPermissions } from '../../../constants/permissions';
 import { useTypesMap } from './types';
-
 defineOptions({
   name: 'PermissionDefinitionTable',
 });
+
+const { toastSuccess } = useNotifications();
 
 const MenuItem = Menu.Item;
 
@@ -56,7 +58,6 @@ interface PermissionGroupVo {
 
 const permissionGroups = ref<PermissionGroupVo[]>([]);
 
-const message = useMessage();
 const { hasAccessByCodes } = useAccess();
 const { Lr } = useLocalization();
 const { deserialize } = useLocalizationSerializer();
@@ -283,7 +284,7 @@ function onDelete(row: PermissionGroupVo) {
     content: `${$t('AbpUi.ItemWillBeDeletedMessageWithFormat', [row.name])}`,
     onOk: async () => {
       await deleteApi(row.name);
-      message.success($t('AbpUi.DeletedSuccessfully'));
+      toastSuccess($t('AbpUi.DeletedSuccessfully'));
       onGet();
     },
     title: $t('AbpUi.AreYouSure'),

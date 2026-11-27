@@ -87,23 +87,23 @@ const [Form, formApi] = useVbenForm({
   showDefaultActions: false,
   handleSubmit: onSubmit,
 });
-const [Modal, modalApi] = useVbenModal({
+const [Modal, modalApi] = useVbenModal<ModalState>({
   draggable: true,
   closeOnClickModal: false,
   closeOnPressEscape: false,
   async onConfirm() {
-    await formApi.validateAndSubmitForm();
+    await formApi.validateAndSubmit();
   },
 });
 async function onSubmit(values: Record<string, any>) {
   modalApi.setState({ submitting: true });
   try {
-    const state = modalApi.getData<ModalState>();
+    const state = modalApi.getData();
     await authStore.authLogin({
-      username: state.username,
-      password: state.password,
+      username: state?.username,
+      password: state?.password,
       NewPassword: values.newPassword,
-      ChangePasswordToken: state.changePasswordToken,
+      ChangePasswordToken: state?.changePasswordToken,
     });
   } finally {
     modalApi.setState({ submitting: false });

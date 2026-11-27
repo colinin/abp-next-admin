@@ -22,7 +22,7 @@ export const NodeType = {
   ParallelApproveNode: 7,
 } as const;
 
-export type NodeType = (typeof NodeType)[keyof typeof NodeType];
+export type AntFlowNodeType = (typeof NodeType)[keyof typeof NodeType];
 
 /** Placeholder used by the node card when a node has no display name yet. */
 export const placeholderList: Record<number, string> = {
@@ -41,7 +41,7 @@ export type AntFlowAddKind = 'approval' | 'cc' | 'condition';
 /** Detail-view status keys supported by `NodeWarp` (green/red/blue/gray). */
 export type AntFlowNodeStatus = 'approved' | 'current' | 'pending' | 'rejected';
 
-export type AntFlowStatusMap = Record<string, AntFlowNodeStatus | string>;
+export type AntFlowStatusMap = Record<string, string>;
 
 export interface AntFlowAssignee {
   displayName?: string;

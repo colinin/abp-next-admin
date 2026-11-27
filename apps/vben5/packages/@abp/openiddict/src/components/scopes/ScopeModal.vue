@@ -5,30 +5,38 @@ import type { OpenIddictScopeDto } from '../../types/scopes';
 import type { DisplayNameInfo } from '../display-names/types';
 import type { PropertyInfo } from '../properties/types';
 
-import { defineEmits, defineOptions, ref, toValue } from 'vue';
+import { ref, toValue } from 'vue';
 
 import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { Form, Input, message, Tabs, Transfer } from 'ant-design-vue';
+import { getModalData, useNotifications } from '@abp/core';
+import { Form, Input, Tabs, Transfer } from 'ant-design-vue';
 
 import { useScopesApi } from '../../api/useScopesApi';
 import { useScopeTransfer } from '../../hooks/useScopeTransfer';
 import DisplayNameTable from '../display-names/DisplayNameTable.vue';
 import PropertyTable from '../properties/PropertyTable.vue';
-
 defineOptions({
   name: 'ScopeModal',
 });
+
 const emits = defineEmits<{
   (event: 'change', data: OpenIddictScopeDto): void;
 }>();
+
+const { toastSuccess } = useNotifications();
 
 const FormItem = Form.Item;
 const TabPane = Tabs.TabPane;
 
 type TabKeys =
-  'authorize' | 'basic' | 'description' | 'displayName' | 'props' | 'resource';
+  | 'authorize'
+  | 'basic'
+  | 'description'
+  | 'displayName'
+  | 'props'
+  | 'resource';
 
 const defaultModel = {} as OpenIddictScopeDto;
 
@@ -38,7 +46,7 @@ const activeTab = ref<TabKeys>('basic');
 
 const { cancel, createApi, getApi, updateApi } = useScopesApi();
 const { availableResources, initAssignableScopes } = useScopeTransfer();
-const [Modal, modalApi] = useVbenModal({
+const [Modal, modalApi] = useVbenModal<OpenIddictScopeDto>({
   class: 'w-1/2',
   draggable: true,
   fullscreenButton: false,
@@ -56,7 +64,7 @@ const [Modal, modalApi] = useVbenModal({
     try {
       modalApi.lock();
       const res = await api;
-      message.success($t('AbpUi.SavedSuccessfully'));
+      toastSuccess($t('AbpUi.SavedSuccessfully'));
       emits('change', res);
       modalApi.close();
     } finally {
@@ -73,7 +81,7 @@ const [Modal, modalApi] = useVbenModal({
       try {
         modalApi.setState({ loading: true });
         await initAssignableScopes();
-        const { id } = modalApi.getData<OpenIddictScopeDto>();
+        const { id } = getModalData(modalApi);
         id && (await onGet(id));
       } finally {
         modalApi.setState({ loading: false });
@@ -95,7 +103,7 @@ function onDescriptionChange(displayName: DisplayNameInfo) {
 }
 function onDescriptionDelete(displayName: DisplayNameInfo) {
   formModel.value.descriptions ??= {};
-  delete formModel.value.descriptions[displayName.culture];
+  Reflect.deleteProperty(formModel.value.descriptions, displayName.culture);
 }
 function onDisplayNameChange(displayName: DisplayNameInfo) {
   formModel.value.displayNames ??= {};
@@ -103,7 +111,7 @@ function onDisplayNameChange(displayName: DisplayNameInfo) {
 }
 function onDisplayNameDelete(displayName: DisplayNameInfo) {
   formModel.value.displayNames ??= {};
-  delete formModel.value.displayNames[displayName.culture];
+  Reflect.deleteProperty(formModel.value.displayNames, displayName.culture);
 }
 function onPropChange(prop: PropertyInfo) {
   formModel.value.properties ??= {};
@@ -111,7 +119,7 @@ function onPropChange(prop: PropertyInfo) {
 }
 function onPropDelete(prop: PropertyInfo) {
   formModel.value.properties ??= {};
-  delete formModel.value.properties[prop.key];
+  Reflect.deleteProperty(formModel.value.properties, prop.key);
 }
 </script>
 

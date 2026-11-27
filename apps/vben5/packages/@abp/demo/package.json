@@ -20,18 +20,18 @@
     }
   },
   "dependencies": {
+    "@abp/components": "workspace:*",
     "@abp/core": "workspace:*",
     "@abp/data-protection": "workspace:*",
     "@abp/print-designer": "workspace:*",
     "@abp/request": "workspace:*",
-    "@abp/ui": "workspace:*",
-    "@ant-design/icons-vue": "catalog:",
+    "@vben-core/shadcn-ui": "workspace:*",
     "@vben/access": "workspace:*",
     "@vben/common-ui": "workspace:*",
     "@vben/hooks": "workspace:*",
     "@vben/icons": "workspace:*",
     "@vben/locales": "workspace:*",
-    "ant-design-vue": "catalog:",
+    "@vben/plugins": "workspace:*",
     "dayjs": "catalog:",
     "vue": "catalog:"
   }

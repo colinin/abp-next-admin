@@ -22,19 +22,19 @@ const props = withDefaults(defineProps<PropertyProps>(), {
   disabled: false,
 });
 const emits = defineEmits<{
-  (event: 'change', data: PropertyInfo): void;
-  (event: 'delete', data: PropertyInfo): void;
+  (event: 'change' | 'delete', data: PropertyInfo): void;
 }>();
 const DeleteOutlined = createIconifyIcon('ant-design:delete-outlined');
 const EditOutlined = createIconifyIcon('ant-design:edit-outlined');
 const PlusOutlined = createIconifyIcon('ant-design:plus-outlined');
 
 const getDataResource = computed((): PropertyInfo[] => {
-  if (!props.data) return [];
-  return Object.keys(props.data).map((item) => {
+  const data = props.data;
+  if (!data) return [];
+  return Object.keys(data).map((item) => {
     return {
       key: item,
-      value: props.data![item]!,
+      value: data[item] ?? '',
     };
   });
 });
@@ -90,15 +90,15 @@ function onEdit(prop: Record<string, string>) {
 
 function onDelete(prop: Record<string, string>) {
   emits('delete', {
-    key: prop.key!,
-    value: prop.value!,
+    key: prop.key ?? '',
+    value: prop.value ?? '',
   });
 }
 
 function onChange(prop: Record<string, string>) {
   emits('change', {
-    key: prop.key!,
-    value: prop.value!,
+    key: prop.key ?? '',
+    value: prop.value ?? '',
   });
 }
 </script>

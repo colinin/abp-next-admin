@@ -4,6 +4,7 @@ export * from './useFeatures';
 export * from './useGlobalFeatures';
 export * from './useLocalization';
 export * from './useLocalizationSerializer';
+export * from './useNotifications';
 export * from './useSettings';
 export * from './useSimpleStateCheck';
 export * from './useValidation';

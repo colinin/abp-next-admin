@@ -8,6 +8,9 @@ import { ref } from 'vue';
 import { acceptHMRUpdate, defineStore } from 'pinia';
 import Cookies from 'universal-cookie';
 
+// 引入持久化插件的类型扩展，使 defineStore 支持 persist 选项
+import 'pinia-plugin-persistedstate';
+
 export const useAbpStore = defineStore(
   'abp',
   () => {

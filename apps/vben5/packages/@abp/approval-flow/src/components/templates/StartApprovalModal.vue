@@ -9,13 +9,13 @@ import { computed, reactive, ref, watch } from 'vue';
 
 import { $t } from '@vben/locales';
 
+import { useNotifications } from '@abp/core';
 import {
   DatePicker,
   Form,
   FormItem,
   Input,
   InputNumber,
-  message,
   Modal,
   RadioGroup,
   Select,
@@ -25,7 +25,6 @@ import {
 import { useApprovalFormsApi } from '../../api/useApprovalFormsApi';
 import { useApprovalInstancesApi } from '../../api/useApprovalInstancesApi';
 import { calculateFormula, parseFormula } from '../designer/formula';
-
 const props = defineProps<{
   initialData?: null | Record<string, unknown>;
   open: boolean;
@@ -36,6 +35,8 @@ const emit = defineEmits<{
   started: [];
   'update:open': [boolean];
 }>();
+
+const { toastError, toastWarning, toastSuccess } = useNotifications();
 
 const instancesApi = useApprovalInstancesApi();
 const formsApi = useApprovalFormsApi();
@@ -72,7 +73,7 @@ watch(
     title.value = props.template?.displayName ?? '';
     businessKey.value = '';
     for (const key of Object.keys(data)) {
-      delete data[key];
+      Reflect.deleteProperty(data, key);
     }
     fields.value = [];
 
@@ -83,15 +84,13 @@ watch(
         fields.value = form.fields ?? [];
         for (const field of fields.value) {
           const initial = props.initialData?.[field.key];
-          data[field.key] =
-            initial === undefined
-              ? (field.type === 'switch'
-                ? false
-                : undefined)
-              : initial;
+          const switchDefault = field.type === 'switch' ? false : undefined;
+          data[field.key] = initial === undefined ? switchDefault : initial;
         }
       } catch {
-        message.error($t('ElsaNextApprovalFlow.ApprovalFlow:Start:FormLoadFailed'));
+        toastError(
+          $t('ElsaNextApprovalFlow.ApprovalFlow:Start:FormLoadFailed'),
+        );
       } finally {
         loading.value = false;
       }
@@ -132,7 +131,7 @@ async function submit() {
     return;
   }
   if (!title.value.trim()) {
-    message.warning($t('ElsaNextApprovalFlow.ApprovalFlow:Start:TitleRequired'));
+    toastWarning($t('ElsaNextApprovalFlow.ApprovalFlow:Start:TitleRequired'));
     return;
   }
 
@@ -148,7 +147,11 @@ async function submit() {
       field.isRequired &&
       (value === undefined || value === null || value === '')
     ) {
-      message.warning($t('ElsaNextApprovalFlow.ApprovalFlow:Start:FieldRequired', [field.label]));
+      toastWarning(
+        $t('ElsaNextApprovalFlow.ApprovalFlow:Start:FieldRequired', [
+          field.label,
+        ]),
+      );
       return;
     }
   }
@@ -173,11 +176,11 @@ async function submit() {
       templateId: props.template.id,
       title: title.value.trim(),
     });
-    message.success($t('ElsaNextApprovalFlow.ApprovalFlow:Start:Started'));
+    toastSuccess($t('ElsaNextApprovalFlow.ApprovalFlow:Start:Started'));
     emit('started');
     emit('update:open', false);
   } catch {
-    message.error($t('ElsaNextApprovalFlow.ApprovalFlow:Start:Failed'));
+    toastError($t('ElsaNextApprovalFlow.ApprovalFlow:Start:Failed'));
   } finally {
     submitting.value = false;
   }
@@ -242,20 +245,20 @@ async function submit() {
               v-else-if="field.type === 'number'"
               v-model:value="data[field.key]"
               :disabled="readonlyField(field)"
-              class="w-full"
+              class="!w-full"
             />
             <DatePicker
               v-else-if="field.type === 'date'"
               v-model:value="data[field.key]"
               :disabled="readonlyField(field)"
-              class="w-full"
+              class="!w-full"
               value-format="YYYY-MM-DD"
             />
             <DatePicker.RangePicker
               v-else-if="field.type === 'date-range'"
               v-model:value="data[field.key]"
               :disabled="readonlyField(field)"
-              class="w-full"
+              class="!w-full"
               value-format="YYYY-MM-DD"
             />
             <Select

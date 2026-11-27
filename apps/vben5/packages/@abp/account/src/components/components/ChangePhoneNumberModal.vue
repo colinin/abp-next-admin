@@ -2,13 +2,14 @@
 import { useVbenForm, useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { message } from 'ant-design-vue';
+import { useNotifications } from '@abp/core';
 
 import { useProfileApi } from '../../api';
-
 const emits = defineEmits<{
   (event: 'change', data: string): void;
 }>();
+
+const { toastSuccess } = useNotifications();
 
 const { changePhoneNumberApi, sendChangePhoneNumberCodeApi } = useProfileApi();
 
@@ -49,7 +50,7 @@ const [Modal, modalApi] = useVbenModal({
 async function onSendCode() {
   const result = await formApi.validateField('newPhoneNumber');
   if (!result.valid) {
-    throw new Error(result.errors.join('\n'));
+    throw new Error('Invalid input for newPhoneNumber');
   }
   const input = await formApi.getValues();
   await sendChangePhoneNumberCodeApi({
@@ -64,7 +65,7 @@ async function onSubmit(values: Record<string, any>) {
       code: values.code,
       newPhoneNumber: values.newPhoneNumber,
     });
-    message.success($t('AbpAccount.PhoneNumberChangedMessage'));
+    toastSuccess($t('AbpAccount.PhoneNumberChangedMessage'));
     emits('change', values.newPhoneNumber);
     modalApi.close();
   } finally {

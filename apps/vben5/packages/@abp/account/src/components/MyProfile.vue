@@ -10,7 +10,7 @@ import { $t } from '@vben/locales';
 import { preferences } from '@vben/preferences';
 import { useUserStore } from '@vben/stores';
 
-import { useSettings } from '@abp/core';
+import { useNotifications, useSettings } from '@abp/core';
 import { UploadOutlined } from '@ant-design/icons-vue';
 import {
   Avatar,
@@ -19,12 +19,12 @@ import {
   Form,
   Input,
   Menu,
-  message,
   Modal,
   Upload,
 } from 'ant-design-vue';
 
 import { useProfileApi } from '../api/useProfileApi';
+const { toastSuccess } = useNotifications();
 
 const FormItem = Form.Item;
 
@@ -60,7 +60,7 @@ async function onSubmit() {
     content: $t('AbpAccount.PersonalSettingsSaved'),
     onOk: async () => {
       const profile = await updateApi(toValue(formModel));
-      message.success(
+      toastSuccess(
         $t('AbpAccount.PersonalSettingsChangedConfirmationModalTitle'),
       );
       formModel.value = profile;

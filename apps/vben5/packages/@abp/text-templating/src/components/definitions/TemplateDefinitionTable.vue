@@ -12,7 +12,12 @@ import { useAccess } from '@vben/access';
 import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { sortby, useLocalization, useLocalizationSerializer } from '@abp/core';
+import {
+  sortby,
+  useLocalization,
+  useLocalizationSerializer,
+  useNotifications,
+} from '@abp/core';
 import { useVbenVxeGrid } from '@abp/ui';
 import {
   CheckOutlined,
@@ -22,14 +27,15 @@ import {
   EllipsisOutlined,
   PlusOutlined,
 } from '@ant-design/icons-vue';
-import { Button, Dropdown, Menu, message, Modal } from 'ant-design-vue';
+import { Button, Dropdown, Menu, Modal } from 'ant-design-vue';
 
 import { useTemplateDefinitionsApi } from '../../api/useTemplateDefinitionsApi';
 import { WebhookDefinitionsPermissions } from '../../constants/permissions';
-
 defineOptions({
   name: 'TemplateDefinitionTable',
 });
+
+const { toastSuccess } = useNotifications();
 
 const MenuItem = Menu.Item;
 
@@ -243,7 +249,7 @@ function onDelete(row: TextTemplateDefinitionDto) {
     content: `${$t('AbpUi.ItemWillBeDeletedMessageWithFormat', [row.name])}`,
     onOk: async () => {
       await deleteApi(row.name);
-      message.success($t('AbpUi.DeletedSuccessfully'));
+      toastSuccess($t('AbpUi.DeletedSuccessfully'));
       onGet();
     },
     title: $t('AbpUi.AreYouSure'),

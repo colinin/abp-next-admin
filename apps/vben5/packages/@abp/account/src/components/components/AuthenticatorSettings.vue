@@ -8,18 +8,12 @@ import { h, onMounted, ref } from 'vue';
 
 import { $t } from '@vben/locales';
 
-import {
-  Alert,
-  Button,
-  Card,
-  List,
-  message,
-  Modal,
-  Skeleton,
-} from 'ant-design-vue';
+import { useNotifications } from '@abp/core';
+import { Alert, Button, Card, List, Modal, Skeleton } from 'ant-design-vue';
 
 import { useProfileApi } from '../../api/useProfileApi';
 import AuthenticatorSteps from './AuthenticatorSteps.vue';
+const { toastSuccess } = useNotifications();
 
 const ListItem = List.Item;
 const ListItemMeta = List.Item.Meta;
@@ -52,7 +46,7 @@ async function onResetAuthenticator() {
     onOk: async () => {
       await resetAuthenticatorApi();
       await onGetAuthenticator();
-      message.success($t('AbpAccount.YourAuthenticatorIsSuccessfullyReset'));
+      toastSuccess($t('AbpAccount.YourAuthenticatorIsSuccessfullyReset'));
     },
     title: $t('AbpUi.AreYouSure'),
   });
@@ -69,7 +63,7 @@ async function onResetRecoveryCode() {
         content: renderRecoveryCodes(dto.recoveryCodes),
       });
       await onGetRecoveryCodeCount();
-      message.success($t('AbpAccount.YourRecoveryCodeIsSuccessfullyReset'));
+      toastSuccess($t('AbpAccount.YourRecoveryCodeIsSuccessfullyReset'));
     },
     title: $t('AbpUi.AreYouSure'),
   });

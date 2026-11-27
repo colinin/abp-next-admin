@@ -16,7 +16,6 @@ const emits = defineEmits<{
 
 const entityTypes = ref<EntityTypeInfoDto[]>([]);
 const [Form, formApi] = useVbenForm({
-  handleSubmit: onSubmit,
   schema: [
     {
       component: 'Select',
@@ -58,19 +57,15 @@ async function onInit(filter?: string) {
   entityTypes.value = items;
 }
 
-async function onSubmit(values: Record<string, any>) {
-  console.log(values);
-}
-
 onMounted(onInit);
 </script>
 
 <template>
   <Modal>
     <Form>
-      <template #entityTypeId="{ model, field }">
+      <template #entityTypeId="slotProps">
         <Select
-          v-model:value="model[field]"
+          v-bind="slotProps.componentProps"
           :options="entityTypes"
           :field-names="{ label: 'displayName', value: 'id' }"
           @change="(value) => emits('entityChange', value!.toString())"

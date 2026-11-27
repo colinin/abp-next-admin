@@ -12,19 +12,21 @@ import { computed, h, onMounted, ref } from 'vue';
 import { useAccess } from '@vben/access';
 import { $t } from '@vben/locales';
 
-import { formatToDateTime, useAbpStore } from '@abp/core';
+import { formatToDateTime, useAbpStore, useNotifications } from '@abp/core';
 import { useVbenVxeGrid } from '@abp/ui';
 import { DeleteOutlined } from '@ant-design/icons-vue';
-import { Button, message, Modal, Select, Tag } from 'ant-design-vue';
+import { Button, Modal, Select, Tag } from 'ant-design-vue';
 import debounce from 'lodash.debounce';
 
 import { useUsersApi } from '../../api/useUsersApi';
 import { useUserSessionsApi } from '../../api/useUserSessionsApi';
 import { IdentitySessionPermissions } from '../../constants/permissions';
-
 defineOptions({
   name: 'SessionTable',
 });
+
+const { toastSuccess } = useNotifications();
+
 const { hasAccessByCodes } = useAccess();
 const { getPagedListApi: getUserListApi } = useUsersApi();
 const { cancel, getSessionsApi, revokeSessionApi } = useUserSessionsApi();
@@ -211,7 +213,7 @@ const onDelete = (row: IdentitySessionDto) => {
     },
     onOk: async () => {
       await revokeSessionApi(row.sessionId);
-      message.success($t('AbpIdentity.SuccessfullyRevoked'));
+      toastSuccess($t('AbpIdentity.SuccessfullyRevoked'));
       await gridApi.query();
     },
     title: $t('AbpUi.AreYouSure'),

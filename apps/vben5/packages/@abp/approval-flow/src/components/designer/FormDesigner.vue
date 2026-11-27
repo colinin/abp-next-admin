@@ -6,12 +6,12 @@ import { computed, ref, watch } from 'vue';
 
 import { $t, useI18n } from '@vben/locales';
 
+import { useNotifications } from '@abp/core';
 import {
   Button,
   Card,
   Empty,
   Input,
-  message,
   Select,
   Space,
   Switch,
@@ -26,6 +26,19 @@ import {
   parseFormula,
   serializeFormula,
 } from './formula';
+const props = defineProps<{
+  code?: string;
+  formId?: null | string;
+  name?: string;
+}>();
+
+const emit = defineEmits<{
+  'update:code': [string];
+  'update:formId': [null | string];
+  'update:name': [string];
+}>();
+
+const { toastError, toastWarning, toastSuccess } = useNotifications();
 
 interface DesignField {
   formula?: FormulaConfig;
@@ -38,18 +51,6 @@ interface DesignField {
   permission: string;
   type: string;
 }
-
-const props = defineProps<{
-  code?: string;
-  formId?: null | string;
-  name?: string;
-}>();
-
-const emit = defineEmits<{
-  'update:code': [string];
-  'update:formId': [null | string];
-  'update:name': [string];
-}>();
 
 const formsApi = useApprovalFormsApi();
 const { locale, t } = useI18n();
@@ -160,7 +161,7 @@ async function loadForm(formId: null | string, force = false) {
     formPublished.value = !!definition.isPublished;
     selectedIndex.value = fields.value.length > 0 ? 0 : null;
   } catch {
-    message.error($t('antflow.designer.form.loadFailed'));
+    toastError($t('antflow.designer.form.loadFailed'));
   } finally {
     loading.value = false;
   }
@@ -389,11 +390,11 @@ async function save(publishForm = true): Promise<null | string> {
   }
 
   if (!formCode.value.trim()) {
-    message.warning($t('antflow.designer.form.codeRequired'));
+    toastWarning($t('antflow.designer.form.codeRequired'));
     return null;
   }
   if (fields.value.length === 0) {
-    message.warning($t('antflow.designer.form.fieldRequired'));
+    toastWarning($t('antflow.designer.form.fieldRequired'));
     return null;
   }
 
@@ -409,7 +410,7 @@ async function save(publishForm = true): Promise<null | string> {
         formId = await createNewVersion(current.version + 1);
       } else {
         const keptIds = new Set(
-          fields.value.filter((field) => field.id).map((field) => field.id!),
+          fields.value.flatMap((field) => (field.id ? [field.id] : [])),
         );
 
         for (const field of current.fields ?? []) {
@@ -419,12 +420,13 @@ async function save(publishForm = true): Promise<null | string> {
         }
 
         for (const [index, field] of fields.value.entries()) {
-          const exists =
-            field.id && current.fields?.some((item) => item.id === field.id);
-          await (exists
+          const fieldId = field.id;
+          const isExistingField =
+            !!fieldId && current.fields?.some((item) => item.id === fieldId);
+          await (isExistingField && fieldId
             ? formsApi.updateFieldApi(
                 formId,
-                field.id!,
+                fieldId,
                 toUpdatePayload(field, index),
               )
             : formsApi.addFieldApi(formId, toAddPayload(field, index)));
@@ -437,10 +439,10 @@ async function save(publishForm = true): Promise<null | string> {
 
     await formsApi.publishApi(formId);
     dirty.value = false;
-    message.success($t('antflow.designer.form.saved'));
+    toastSuccess($t('antflow.designer.form.saved'));
     return formId;
   } catch {
-    message.error($t('antflow.designer.form.saveFailed'));
+    toastError($t('antflow.designer.form.saveFailed'));
     return null;
   } finally {
     saving.value = false;
@@ -618,7 +620,7 @@ defineExpose({ getFields, loadForm, save });
               <Select
                 :options="permissions"
                 :value="selectedField.permission"
-                class="w-full"
+                class="!w-full"
                 @update:value="
                   (value: any) => updateSelected({ permission: String(value) })
                 "
@@ -655,7 +657,7 @@ defineExpose({ getFields, loadForm, save });
                 <Select
                   :options="formulaModeOptions"
                   :value="selectedField.formula?.mode ?? 'number'"
-                  class="w-full"
+                  class="!w-full"
                   @update:value="(value: any) => updateFormula({ mode: value })"
                 />
               </div>
@@ -670,7 +672,7 @@ defineExpose({ getFields, loadForm, save });
                 <Select
                   :options="formulaFieldOptions"
                   :value="selectedField.formula?.left ?? ''"
-                  class="w-full"
+                  class="!w-full"
                   @update:value="
                     (value: any) => updateFormula({ left: String(value) })
                   "
@@ -683,7 +685,7 @@ defineExpose({ getFields, loadForm, save });
                 <Select
                   :options="formulaOperatorOptions"
                   :value="selectedField.formula?.operator ?? '+'"
-                  class="w-full"
+                  class="!w-full"
                   @update:value="
                     (value: any) => updateFormula({ operator: value })
                   "
@@ -696,7 +698,7 @@ defineExpose({ getFields, loadForm, save });
                 <Select
                   :options="formulaFieldOptions"
                   :value="selectedField.formula?.right ?? ''"
-                  class="w-full"
+                  class="!w-full"
                   @update:value="
                     (value: any) => updateFormula({ right: String(value) })
                   "
@@ -709,7 +711,7 @@ defineExpose({ getFields, loadForm, save });
                 <Select
                   :options="formulaUnitOptions"
                   :value="selectedField.formula?.unit ?? 'day'"
-                  class="w-full"
+                  class="!w-full"
                   @update:value="(value: any) => updateFormula({ unit: value })"
                 />
               </div>

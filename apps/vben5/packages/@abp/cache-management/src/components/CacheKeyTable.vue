@@ -9,8 +9,8 @@ import { useAccess } from '@vben/access';
 import { confirm, useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { sortby } from '@abp/core';
-import { useMessage, useVbenVxeGrid } from '@abp/ui';
+import { sortby, useNotifications } from '@abp/core';
+import { useVbenVxeGrid } from '@abp/ui';
 import {
   DeleteOutlined,
   EditOutlined,
@@ -20,10 +20,11 @@ import { Button } from 'ant-design-vue';
 
 import { useCacheManagementApi } from '../api/useCacheManagementApi';
 import { CachingManagementPermissions } from '../constants/permissions';
-
 defineOptions({
   name: 'CacheKeyTable',
 });
+
+const { toastSuccess } = useNotifications();
 
 interface CacheVto {
   key: string;
@@ -32,7 +33,6 @@ interface CacheVto {
 const cacheKeys = ref<CacheVto[]>([]);
 const selectKeys = ref<string[]>([]);
 
-const message = useMessage();
 const { hasAccessByCodes } = useAccess();
 const { bulkRemoveApi, getKeysApi, removeApi } = useCacheManagementApi();
 
@@ -205,7 +205,7 @@ function onBulkDelete() {
       if (isConfirm) {
         try {
           await bulkRemoveApi({ keys: selectKeys.value });
-          message.success($t('AbpUi.DeletedSuccessfully'));
+          toastSuccess($t('AbpUi.DeletedSuccessfully'));
           onGet();
           return true;
         } catch {
@@ -226,7 +226,7 @@ function onDelete(row: CacheVto) {
       if (isConfirm) {
         try {
           await removeApi({ key: row.key });
-          message.success($t('AbpUi.DeletedSuccessfully'));
+          toastSuccess($t('AbpUi.DeletedSuccessfully'));
           onGet();
           return true;
         } catch {

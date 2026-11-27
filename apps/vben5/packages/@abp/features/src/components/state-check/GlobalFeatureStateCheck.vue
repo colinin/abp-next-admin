@@ -10,10 +10,10 @@ const modelValue = defineModel<{
   globalFeatureNames: string[];
   requiresAll: boolean;
 }>({
-  default: {
+  default: () => ({
     globalFeatureNames: [],
     requiresAll: false,
-  },
+  }),
 });
 
 const abpStore = useAbpStore();

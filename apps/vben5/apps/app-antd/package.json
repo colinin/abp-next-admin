@@ -47,7 +47,7 @@
     "@abp/request": "workspace:*",
     "@abp/saas": "workspace:*",
     "@abp/settings": "workspace:*",
-    "@abp/tasks": "workspace:*",
+    "@abp/task-management": "workspace:*",
     "@abp/text-templating": "workspace:*",
     "@abp/ui": "workspace:*",
     "@abp/webhooks": "workspace:*",

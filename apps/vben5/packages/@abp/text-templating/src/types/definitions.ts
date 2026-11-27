@@ -1,8 +1,7 @@
 import type { ExtensibleObject, IHasConcurrencyStamp } from '@abp/core';
 
 interface TextTemplateDefinitionDto
-  extends ExtensibleObject,
-    IHasConcurrencyStamp {
+  extends ExtensibleObject, IHasConcurrencyStamp {
   defaultCultureName?: string;
   displayName: string;
   isInlineLocalized: boolean;
@@ -24,14 +23,12 @@ interface TextTemplateDefinitionCreateOrUpdateDto {
   renderEngine?: string;
 }
 
-interface TextTemplateDefinitionCreateDto
-  extends TextTemplateDefinitionCreateOrUpdateDto {
+interface TextTemplateDefinitionCreateDto extends TextTemplateDefinitionCreateOrUpdateDto {
   name: string;
 }
 
 interface TextTemplateDefinitionUpdateDto
-  extends IHasConcurrencyStamp,
-    TextTemplateDefinitionCreateOrUpdateDto {}
+  extends IHasConcurrencyStamp, TextTemplateDefinitionCreateOrUpdateDto {}
 
 interface TextTemplateDefinitionGetListInput {
   filter?: string;

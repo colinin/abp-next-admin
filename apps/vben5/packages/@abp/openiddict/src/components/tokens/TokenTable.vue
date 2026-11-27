@@ -14,19 +14,20 @@ import { useVbenModal } from '@vben/common-ui';
 import { createIconifyIcon } from '@vben/icons';
 import { $t } from '@vben/locales';
 
-import { formatToDateTime } from '@abp/core';
+import { formatToDateTime, useNotifications } from '@abp/core';
 import { useVbenVxeGrid } from '@abp/ui';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons-vue';
-import { Button, message, Modal, Select } from 'ant-design-vue';
+import { Button, Modal, Select } from 'ant-design-vue';
 import debounce from 'lodash.debounce';
 
 import { useApplicationsApi } from '../../api/useApplicationsApi';
 import { useTokensApi } from '../../api/useTokensApi';
 import { TokensPermissions } from '../../constants/permissions';
-
 defineOptions({
   name: 'TokenTable',
 });
+
+const { toastSuccess } = useNotifications();
 
 const CheckIcon = createIconifyIcon('ant-design:check-outlined');
 const CloseIcon = createIconifyIcon('ant-design:close-outlined');
@@ -240,7 +241,7 @@ function onDelete(row: OpenIddictTokenDto) {
     content: `${$t('AbpUi.ItemWillBeDeletedMessage')}`,
     onOk: async () => {
       await deleteApi(row.id);
-      message.success($t('AbpUi.DeletedSuccessfully'));
+      toastSuccess($t('AbpUi.DeletedSuccessfully'));
       gridApi.query();
     },
     title: $t('AbpUi.AreYouSure'),

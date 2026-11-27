@@ -72,7 +72,7 @@ interface TokenResult {
   /** 访问令牌 */
   accessToken: string;
   /** 过期时间 */
-  expiresIn: number;
+  expiresIn?: number;
   /** 刷新令牌 */
   refreshToken: string;
   /** 令牌类型 */

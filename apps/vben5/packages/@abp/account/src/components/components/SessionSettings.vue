@@ -5,10 +5,12 @@ import { onMounted, ref } from 'vue';
 
 import { $t } from '@vben/locales';
 
+import { useNotifications } from '@abp/core';
 import { UserSessionTable } from '@abp/identity';
-import { Card, message, Modal } from 'ant-design-vue';
+import { Card, Modal } from 'ant-design-vue';
 
 import { useMySessionApi } from '../../api/useMySessionApi';
+const { toastSuccess } = useNotifications();
 
 const { cancel, getSessionsApi, revokeSessionApi } = useMySessionApi();
 
@@ -29,7 +31,7 @@ async function onRevoke(session: IdentitySessionDto) {
     },
     onOk: async () => {
       await revokeSessionApi(session.sessionId);
-      message.success($t('AbpIdentity.SuccessfullyRevoked'));
+      toastSuccess($t('AbpIdentity.SuccessfullyRevoked'));
       await getSessions();
     },
     title: $t('AbpUi.AreYouSure'),

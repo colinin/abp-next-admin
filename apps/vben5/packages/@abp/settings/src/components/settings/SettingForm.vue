@@ -9,7 +9,7 @@ import { computed, onMounted, ref, toValue } from 'vue';
 
 import { $t } from '@vben/locales';
 
-import { formatToDate, useFeatures } from '@abp/core';
+import { formatToDate, useFeatures, useNotifications } from '@abp/core';
 import {
   Button,
   Card,
@@ -21,7 +21,6 @@ import {
   Input,
   InputNumber,
   InputPassword,
-  message,
   Select,
   Tabs,
 } from 'ant-design-vue';
@@ -29,17 +28,21 @@ import dayjs from 'dayjs';
 
 import { SettingManagementEnable } from '../../constants/features';
 import { ValueType } from '../../types';
-
 defineOptions({
   name: 'SettingForm',
 });
+
 const props = defineProps<{
   getApi: () => Promise<SettingGroup[]>;
   submitApi: (input: SettingsUpdateInput) => Promise<void>;
 }>();
+
 const emits = defineEmits<{
   (event: 'change', data: SettingsUpdateInput): void;
 }>();
+
+const { toastSuccess } = useNotifications();
+
 const FormItem = Form.Item;
 const TabPane = Tabs.TabPane;
 const CollapsePanel = Collapse.Panel;
@@ -77,7 +80,7 @@ async function onSubmit() {
     const input = toValue(settingsUpdateInput);
     await props.submitApi(input);
     emits('change', input);
-    message.success($t('AbpSettingManagement.SavedSuccessfully'));
+    toastSuccess($t('AbpSettingManagement.SavedSuccessfully'));
   } finally {
     submiting.value = false;
   }
@@ -106,7 +109,10 @@ function onValueChange(setting: SettingDetail) {
       value: String(setting.value),
     });
   } else {
-    settingsUpdateInput.value.settings[index]!.value = String(setting.value);
+    const current = settingsUpdateInput.value.settings[index];
+    if (current) {
+      current.value = String(setting.value);
+    }
   }
 }
 
@@ -175,12 +181,14 @@ onMounted(onGet);
                   <template v-if="detail.valueType === ValueType.String">
                     <InputPassword
                       v-if="detail.isEncrypted"
+                      class="!w-full"
                       v-model:value="detail.value"
                       :placeholder="detail.description"
                       @change="onValueChange(detail)"
                     />
                     <Input
                       v-else
+                      class="!w-full"
                       v-model:value="detail.value"
                       :placeholder="detail.description"
                       type="text"
@@ -194,7 +202,7 @@ onMounted(onGet);
                     "
                     v-model:value="detail.value"
                     :placeholder="detail.description"
-                    class="w-full"
+                    class="!w-full"
                     @change="onValueChange(detail)"
                   />
                   <DatePicker
@@ -203,11 +211,12 @@ onMounted(onGet);
                     :value="
                       detail.value ? dayjs(detail.value, 'YYYY-MM-DD') : ''
                     "
-                    style="width: 100%"
+                    class="!w-full"
                     @change="onDateChange($event, detail)"
                   />
                   <Select
                     v-if="detail.valueType === ValueType.Option"
+                    class="!w-full"
                     v-model:value="detail.value"
                     :filter-option="onFilterOption"
                     :field-names="{ label: 'name', value: 'value' }"
@@ -225,6 +234,7 @@ onMounted(onGet);
                   </Select> -->
                   <Checkbox
                     v-if="detail.valueType === ValueType.Boolean"
+                    class="!w-full"
                     :checked="detail.value?.toLowerCase() === 'true'"
                     @change="onCheckChange(detail)"
                   >
@@ -251,14 +261,43 @@ onMounted(onGet);
 </template>
 
 <style lang="scss" scoped>
+.ant-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+:deep(.ant-card-head) {
+  flex: none;
+}
+
+:deep(.ant-card-body) {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden !important;
+}
+
+:deep(.ant-form) {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+}
+
 :deep(.ant-tabs) {
-  height: 75vh;
+  flex: 1;
+  height: 100%;
+  min-height: 0;
 
   .ant-tabs-nav {
     width: 14rem;
   }
 
   .ant-tabs-content-holder {
+    min-height: 0;
     overflow: hidden auto !important;
   }
 }

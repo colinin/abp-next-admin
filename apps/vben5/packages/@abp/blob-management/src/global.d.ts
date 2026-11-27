@@ -1,4 +1,16 @@
-declare module 'vue-simple-uploader';
+declare module 'vue-simple-uploader' {
+  import type { DefineComponent } from 'vue';
+
+  const uploader: {
+    Uploader: DefineComponent<any>;
+    UploaderBtn: DefineComponent<any>;
+    UploaderDrop: DefineComponent<any>;
+    UploaderList: DefineComponent<any>;
+    UploaderUnsupport: DefineComponent<any>;
+  };
+
+  export default uploader;
+}
 
 declare module '@vue-office/docx' {
   import { DefineComponent } from 'vue';

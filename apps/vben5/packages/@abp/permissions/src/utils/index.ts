@@ -109,6 +109,7 @@ export function getParentList(
       }
     }
   }
+  return undefined;
 }
 
 export function toPermissionList(treeList: PermissionTree[]) {

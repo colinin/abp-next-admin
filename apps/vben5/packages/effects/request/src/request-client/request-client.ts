@@ -47,7 +47,10 @@ class RequestClient {
   public isRefreshing = false;
   public postSSE: SSE['postSSE'];
   // 刷新token队列
-  public refreshTokenQueue: ((token: string) => void)[] = [];
+  public refreshTokenQueue: ((
+    token: null | string,
+    error?: unknown,
+  ) => void)[] = [];
   public requestSSE: SSE['requestSSE'];
   public upload: FileUploader['upload'];
 
@@ -146,18 +149,14 @@ class RequestClient {
     url: string,
     config: RequestClientConfig,
   ): Promise<T> {
-    try {
-      const response: AxiosResponse<T> = await this.instance({
-        url,
-        ...config,
-        ...(config.paramsSerializer
-          ? { paramsSerializer: getParamsSerializer(config.paramsSerializer) }
-          : {}),
-      });
-      return response as T;
-    } catch (error: any) {
-      throw error.response ? error.response.data : error;
-    }
+    const response: AxiosResponse<T> = await this.instance({
+      url,
+      ...config,
+      ...(config.paramsSerializer
+        ? { paramsSerializer: getParamsSerializer(config.paramsSerializer) }
+        : {}),
+    });
+    return response as T;
   }
 }
 

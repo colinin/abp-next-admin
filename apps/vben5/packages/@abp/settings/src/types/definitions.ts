@@ -22,8 +22,7 @@ interface SettingDefinitionGetListInput {
 }
 
 interface SettingDefinitionCreateOrUpdateDto
-  extends IHasConcurrencyStamp,
-    IHasExtraProperties {
+  extends IHasConcurrencyStamp, IHasExtraProperties {
   defaultValue?: string;
   description?: string;
   displayName: string;
@@ -33,8 +32,7 @@ interface SettingDefinitionCreateOrUpdateDto
   providers: string[];
 }
 
-interface SettingDefinitionCreateDto
-  extends SettingDefinitionCreateOrUpdateDto {
+interface SettingDefinitionCreateDto extends SettingDefinitionCreateOrUpdateDto {
   name: string;
 }
 

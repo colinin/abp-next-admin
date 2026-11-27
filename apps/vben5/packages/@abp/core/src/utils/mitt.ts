@@ -1,4 +1,3 @@
-/* eslint-disable array-callback-return */
 /**
  * copy to https://github.com/developit/mitt
  * Expand clear method
@@ -25,9 +24,7 @@ export interface Emitter {
   all: EventHandlerMap;
 
   clear(): void;
-  emit(type: '*', event?: any): void;
-
-  emit<T = any>(type: EventType, event?: T): void;
+  emit(type: EventType, event?: any): void;
   off(type: '*', handler: WildcardHandler): void;
 
   off<T = any>(type: EventType, handler: Handler<T>): void;
@@ -66,15 +63,13 @@ export default function mitt(all?: EventHandlerMap): Emitter {
      * @param {Any} [evt] Any value (object is recommended and powerful), passed to each handler
      * @memberOf mitt
      */
-    emit<T = any>(type: EventType, evt: T) {
+    emit(type: EventType, evt: any) {
       [...((all?.get(type) || []) as EventHandlerList)].map((handler) => {
-        handler(evt);
+        return handler(evt);
       });
-      [...((all?.get('*') || []) as WildCardEventHandlerList)].map(
-        (handler) => {
-          handler(type, evt);
-        },
-      );
+      [...(all?.get('*') || [])].map((handler) => {
+        return handler(type, evt);
+      });
     },
 
     /**

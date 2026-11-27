@@ -14,14 +14,13 @@ import { computed, onMounted, ref, useTemplateRef } from 'vue';
 import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { useValidation } from '@abp/core';
+import { getModalData, useNotifications, useValidation } from '@abp/core';
 import {
   Checkbox,
   DatePicker,
   Form,
   Input,
   InputPassword,
-  message,
   Select,
   Textarea,
 } from 'ant-design-vue';
@@ -31,24 +30,37 @@ import debounce from 'lodash.debounce';
 import { useEditionsApi } from '../../api/useEditionsApi';
 import { useTenantsApi } from '../../api/useTenantsApi';
 import ConnectionStringTable from './ConnectionStringTable.vue';
-
 defineProps<{
   dataBaseOptions: { label: string; value: string }[];
 }>();
+
 const emits = defineEmits<{
   (event: 'change', val: TenantDto): void;
 }>();
+
+const { toastSuccess } = useNotifications();
+
 const FormItem = Form.Item;
+
+/** 租户表单模型：新增与编辑共用，包含创建时的扩展字段 */
+interface TenantFormModel extends TenantDto {
+  adminEmailAddress?: string;
+  adminPassword?: string;
+  connectionStrings: TenantConnectionStringDto[];
+  defaultConnectionString?: string;
+  provider?: string;
+  useSharedDatabase: boolean;
+}
 
 const defaultModel = {
   connectionStrings: [],
   isActive: true,
   useSharedDatabase: true,
-} as unknown as TenantDto;
+} as unknown as TenantFormModel;
 
 const { fieldDoNotValidEmailAddress, fieldRequired } = useValidation();
 const form = useTemplateRef<FormExpose>('form');
-const tenant = ref({ ...defaultModel });
+const tenant = ref<TenantFormModel>({ ...defaultModel });
 const editions = ref<EditionDto[]>([]);
 const activeTabKey = ref('basic');
 
@@ -110,7 +122,7 @@ const { cancel, checkConnectionString, createApi, getApi, updateApi } =
   useTenantsApi();
 const { getPagedListApi: getEditions } = useEditionsApi();
 
-const [Modal, modalApi] = useVbenModal({
+const [Modal, modalApi] = useVbenModal<TenantDto>({
   class: 'w-[600px]',
   onClosed: cancel,
   async onConfirm() {
@@ -127,7 +139,7 @@ const [Modal, modalApi] = useVbenModal({
 });
 
 async function onGet() {
-  const { id } = modalApi.getData<TenantDto>();
+  const { id } = getModalData(modalApi);
   if (!id) {
     tenant.value = { ...defaultModel };
     modalApi.setState({ title: $t('AbpSaas.NewTenant') });
@@ -139,7 +151,7 @@ async function onGet() {
     modalApi.setState({
       title: `${$t('AbpSaas.Tenants')} - ${editionDto.name}`,
     });
-    tenant.value = editionDto;
+    tenant.value = { ...defaultModel, ...editionDto };
   } finally {
     modalApi.setState({ loading: false });
   }
@@ -150,15 +162,15 @@ async function onSubmit() {
     modalApi.setState({ submitting: true });
     if (!tenant.value.id && !tenant.value.useSharedDatabase) {
       await checkConnectionString({
-        connectionString: tenant.value.defaultConnectionString,
-        provider: tenant.value.provider,
+        connectionString: tenant.value.defaultConnectionString ?? '',
+        provider: tenant.value.provider ?? '',
       });
     }
     const api = tenant.value.id
       ? updateApi(tenant.value.id, tenant.value as TenantUpdateDto)
       : createApi(tenant.value as unknown as TenantCreateDto);
     const dto = await api;
-    message.success($t('AbpUi.SavedSuccessfully'));
+    toastSuccess($t('AbpUi.SavedSuccessfully'));
     emits('change', dto);
     modalApi.close();
   } finally {
@@ -180,13 +192,12 @@ function onNameChange(name?: string) {
 function onConnectionChange(data: TenantConnectionStringDto) {
   return new Promise<void>((resolve) => {
     tenant.value.connectionStrings ??= [];
-    let connectionString = tenant.value.connectionStrings.find(
+    const connectionString = tenant.value.connectionStrings.find(
       (x: TenantConnectionStringDto) => x.name === data.name,
     );
     if (connectionString) {
       connectionString.value = data.value;
     } else {
-      connectionString = data;
       tenant.value.connectionStrings = [
         ...tenant.value.connectionStrings,
         data,
@@ -271,7 +282,7 @@ onMounted(onSearchEditions);
       </FormItem>
       <FormItem name="enableTime" :label="$t('AbpSaas.DisplayName:EnableTime')">
         <DatePicker
-          class="w-full"
+          class="!w-full"
           value-format="YYYY-MM-DD"
           :disabled-date="getDisabledEnableTime"
           v-model:value="tenant.enableTime"
@@ -282,7 +293,7 @@ onMounted(onSearchEditions);
         :label="$t('AbpSaas.DisplayName:DisableTime')"
       >
         <DatePicker
-          class="w-full"
+          class="!w-full"
           value-format="YYYY-MM-DD"
           :disabled-date="getDisabledDisableTime"
           v-model:value="tenant.disableTime"

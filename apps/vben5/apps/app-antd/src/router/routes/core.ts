@@ -5,7 +5,6 @@ import { preferences } from '@vben/preferences';
 
 import { AuthPageLayout, BasicLayout } from '#/layouts';
 import { $t } from '#/locales';
-import Login from '#/views/_core/authentication/login.vue';
 
 /** 全局404页面 */
 const fallbackNotFoundRoute: RouteRecordRaw = {
@@ -62,7 +61,7 @@ const coreRoutes: RouteRecordRaw[] = [
       {
         name: 'Login',
         path: 'login',
-        component: Login,
+        component: () => import('#/views/_core/authentication/login.vue'),
         meta: {
           title: $t('page.auth.login'),
         },

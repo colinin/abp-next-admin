@@ -24,16 +24,17 @@ import {
 import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { useAuthorization } from '@abp/core';
-import { LocalizableInput, useMessage } from '@abp/ui';
+import { useAuthorization, useNotifications } from '@abp/core';
+import { LocalizableInput } from '@abp/ui';
 import { Checkbox, Form, Input, Select, Tabs } from 'ant-design-vue';
 
 import { useAIToolsApi } from '../../api/useAIToolsApi';
 import { AIToolDefinitionPermissions } from '../../constants/permissions';
-
 const emit = defineEmits<{
   (event: 'change', data: AIToolDefinitionVto): void;
 }>();
+
+const { toastSuccess } = useNotifications();
 
 const AIToolProperty = defineAsyncComponent(
   () => import('./AIToolProperty.vue'),
@@ -58,7 +59,6 @@ const defaultModel: AIToolDefinitionVto = {
   extraProperties: {},
 };
 
-const message = useMessage();
 const { isGranted } = useAuthorization();
 const { createApi, updateApi, getApi, getAvailableProviderListApi } =
   useAIToolsApi();
@@ -105,8 +105,11 @@ const getDependencyProperties = computed<AIToolPropertyDescriptorDto[]>(() => {
   );
   return properties.filter((p) => {
     for (let index = 0; index < p.dependencies.length; index++) {
-      const depend = p.dependencies[index]!;
-      if (formModel.value.extraProperties[depend.name] === depend.value) {
+      const depend = p.dependencies[index];
+      if (
+        depend &&
+        formModel.value.extraProperties[depend.name] === depend.value
+      ) {
         return true;
       }
     }
@@ -124,7 +127,7 @@ watch(
 );
 
 // 工作区编辑模态框
-const [Modal, modalApi] = useVbenModal({
+const [Modal, modalApi] = useVbenModal<AIToolDefinitionVto>({
   title: $t('AIManagement.Tools:New'),
   class: 'w-1/2',
   closeOnClickModal: false,
@@ -144,13 +147,13 @@ async function onInit() {
       showConfirmButton: true,
     });
     await onInitProviderOptions();
-    const { id } = modalApi.getData<AIToolDefinitionVto>();
-    if (!id) {
+    const vto = modalApi.getData();
+    if (!vto?.id) {
       formModel.value = { ...defaultModel };
       currentAIToolProvider.value = undefined;
       return;
     }
-    const dto = await getApi(id);
+    const dto = await getApi(vto.id);
     formModel.value = dto;
     currentAIToolProvider.value = aiToolProviders.value.find(
       (p) => p.name === dto.provider,
@@ -208,7 +211,7 @@ async function onSubmit() {
       ? updateApi(formModel.value.id, formModel.value)
       : createApi(formModel.value));
     formModel.value = vto;
-    message.success($t('AbpUi.SavedSuccessfully'));
+    toastSuccess($t('AbpUi.SavedSuccessfully'));
     emit('change', vto);
     modalApi.close();
   } finally {

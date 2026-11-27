@@ -24,9 +24,10 @@ export function buildFeatureTree(features: FeatureDto[]): TreeNode[] {
   // 建立父子关系
   features.forEach((feature) => {
     const node = nodeMap.get(feature.name);
-    if (node && feature.parentName && nodeMap.has(feature.parentName)) {
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      const parent = nodeMap.get(feature.parentName)!;
+    const parent = feature.parentName
+      ? nodeMap.get(feature.parentName)
+      : undefined;
+    if (node && parent) {
       parent.children.push(node);
       node.parent = parent;
       node.level = parent.level + 1;

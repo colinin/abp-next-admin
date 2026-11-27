@@ -21,6 +21,7 @@ import {
   nextTick,
   onBeforeUnmount,
   onMounted,
+  ref,
   useTemplateRef,
   watch,
 } from 'vue';
@@ -37,13 +38,14 @@ const props = withDefaults(defineProps<PrintDesignerOptions>(), {
   brandVariable: () => ({}),
   /** 默认打印模式为本地客户端打印 */
   print: () => ({
-    printMode: 'local',
+    printMode: 'browser',
     localSettings: {
       wsAddress: 'wss://127.0.0.1:1122/ws',
     },
   }),
 });
 
+const isClientContected = ref(false);
 const { locale, theme } = usePreferences();
 const fetcher = usePrintDotFetcher();
 const { getApi, getByNameApi } = useTemplatesApi();
@@ -94,6 +96,7 @@ async function setDefaultProps(
   designer: PrintDesignerElement,
   defaultProps: PrintDesignerOptions,
 ) {
+  isClientContected.value = false;
   if (defaultProps.branding) {
     designer.setBranding(defaultProps.branding);
   }
@@ -112,12 +115,36 @@ async function setDefaultProps(
   }
 
   if (defaultProps.print) {
-    designer.setPrintDefaults(defaultProps.print);
-    if (defaultProps.print.printMode !== 'browser') {
+    designer.setPrintDefaults({
+      printMode: 'browser',
+    });
+    try {
       // 本地/远程打印连接测试成功后再次设置一下打印模式,即可无需在设计器中再次设置打印模式
-      await designer.fetchLocalPrinters();
+      switch (defaultProps.print.printMode) {
+        case 'local': {
+          await designer.fetchLocalPrinters();
+          isClientContected.value = true;
+          designer.setPrintDefaults(defaultProps.print);
+          break;
+        }
+        case 'remote': {
+          await designer.fetchRemotePrinters();
+          isClientContected.value = true;
+          designer.setPrintDefaults(defaultProps.print);
+          break;
+        }
+      }
+    } catch (error) {
+      console.warn(
+        'Connection to the print client failed. Switching to web printing.',
+        error,
+      );
+    }
+    if (!isClientContected.value) {
       designer.setPrintDefaults({
-        printMode: defaultProps.print.printMode,
+        printMode: 'browser',
+        localSettings: undefined,
+        remoteSettings: undefined,
       });
     }
   }
@@ -193,7 +220,6 @@ async function printWithTemplate(
     ext: template.ext,
   });
   await el.setVariables(request.variables);
-  const printMode = request.mode ?? props.print?.printMode;
   request.options ??= {
     copies: 1,
     colorMode: '',
@@ -208,13 +234,6 @@ async function printWithTemplate(
     trayBin: '',
     printer: '',
   };
-  if (printMode === 'local' && !request.options.printer) {
-    const printers = await el.fetchLocalPrinters();
-    request.options.printer = printers.find((p) => p.isDefault === true)?.name;
-  } else if (printMode === 'remote' && !request.options.printer) {
-    const printers = await el.fetchRemotePrinters();
-    request.options.printer = printers.find((p) => p.isDefault === true)?.name;
-  }
   await el.print(request);
 }
 
@@ -247,7 +266,6 @@ async function printBatchWithTemplate(
     ...template.data,
     ext: template.ext,
   });
-  const printMode = request.mode ?? props.print?.printMode;
   request.options ??= {
     copies: 1,
     colorMode: '',
@@ -262,27 +280,6 @@ async function printBatchWithTemplate(
     trayBin: '',
     printer: '',
   };
-  if (
-    printMode === 'local' &&
-    (!request.options.printer || !request.label?.printer)
-  ) {
-    const printers = await el.fetchLocalPrinters();
-    const defaultPrinter = printers.find((p) => p.isDefault === true)?.name;
-    request.options.printer = defaultPrinter;
-    if (request.label) {
-      request.label.printer = defaultPrinter;
-    }
-  } else if (
-    printMode === 'remote' &&
-    (!request.options.printer || !request.label?.printer)
-  ) {
-    const printers = await el.fetchRemotePrinters();
-    const defaultPrinter = printers.find((p) => p.isDefault === true)?.name;
-    request.options.printer = defaultPrinter;
-    if (request.label) {
-      request.label.printer = defaultPrinter;
-    }
-  }
   await el.printBatch(data, request);
 }
 

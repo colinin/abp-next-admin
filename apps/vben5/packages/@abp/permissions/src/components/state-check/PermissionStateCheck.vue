@@ -36,10 +36,10 @@ const modelValue = defineModel<{
   permissions: string[];
   requiresAll: boolean;
 }>({
-  default: {
+  default: () => ({
     permissions: [],
     requiresAll: false,
-  },
+  }),
 });
 const getPermissionOptions = computed(() => {
   const permissionOptions: TreeData[] = [];

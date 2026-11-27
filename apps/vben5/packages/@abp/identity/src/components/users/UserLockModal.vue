@@ -5,6 +5,8 @@ import type { IdentityUserDto } from '../../types/users';
 import { useVbenForm, useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
+import { getModalData } from '@abp/core';
+
 import { useUsersApi } from '../../api/useUsersApi';
 
 defineOptions({
@@ -76,7 +78,7 @@ const [Form, formApi] = useVbenForm({
   showDefaultActions: false,
 });
 
-const [Modal, modalApi] = useVbenModal({
+const [Modal, modalApi] = useVbenModal<IdentityUserDto>({
   closeOnClickModal: false,
   closeOnPressEscape: false,
   draggable: true,
@@ -93,7 +95,7 @@ const [Modal, modalApi] = useVbenModal({
   async onOpenChange(isOpen: boolean) {
     let title = $t('AbpIdentity.Lock');
     if (isOpen) {
-      const { id, userName } = modalApi.getData<IdentityUserDto>();
+      const { id, userName } = getModalData(modalApi);
       title += ` - ${userName}`;
       formApi.setValues({
         userId: id,

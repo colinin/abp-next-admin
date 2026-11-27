@@ -59,7 +59,7 @@ export function useTemplateDefinitionsApi() {
     input?: TextTemplateDefinitionGetListInput,
   ): Promise<ListResultDto<TextTemplateDefinitionDto>> {
     return request<ListResultDto<TextTemplateDefinitionDto>>(
-      `/api/text-templating/template/definitions/${name}`,
+      `/api/text-templating/template/definitions`,
       {
         method: 'GET',
         params: input,

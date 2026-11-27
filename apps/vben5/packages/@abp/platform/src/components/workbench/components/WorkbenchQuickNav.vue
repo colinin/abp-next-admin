@@ -30,8 +30,7 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const emits = defineEmits<{
-  (event: 'click', menu: FavoriteMenu): void;
-  (event: 'delete', menu: FavoriteMenu): void;
+  (event: 'click' | 'delete', menu: FavoriteMenu): void;
   (event: 'add'): void;
 }>();
 

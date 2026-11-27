@@ -13,7 +13,7 @@ import { useVbenDrawer } from '@vben/common-ui';
 import { createIconifyIcon } from '@vben/icons';
 import { $t } from '@vben/locales';
 
-import { formatToDateTime } from '@abp/core';
+import { formatToDateTime, useNotifications } from '@abp/core';
 import { useHttpStatusCodeMap } from '@abp/request';
 import { useTenantsApi } from '@abp/saas';
 import { useVbenVxeGrid } from '@abp/ui';
@@ -22,15 +22,16 @@ import {
   EditOutlined,
   EllipsisOutlined,
 } from '@ant-design/icons-vue';
-import { Button, Dropdown, Menu, message, Modal, Tag } from 'ant-design-vue';
+import { Button, Dropdown, Menu, Modal, Tag } from 'ant-design-vue';
 import debounce from 'lodash.debounce';
 
 import { useSendAttemptsApi } from '../../api/useSendAttemptsApi';
 import { WebhooksSendAttemptsPermissions } from '../../constants/permissions';
-
 defineOptions({
   name: 'WebhookSendAttemptTable',
 });
+
+const { toastSuccess } = useNotifications();
 
 const MenuItem = Menu.Item;
 const SendMessageIcon = createIconifyIcon('ant-design:send-outlined');
@@ -259,7 +260,7 @@ function onDelete(row: WebhookSendRecordDto) {
     },
     onOk: async () => {
       await deleteApi(row.id);
-      message.success($t('AbpUi.DeletedSuccessfully'));
+      toastSuccess($t('AbpUi.DeletedSuccessfully'));
       await gridApi.query();
     },
     title: $t('AbpUi.AreYouSure'),
@@ -283,7 +284,7 @@ async function onSend(row: WebhookSendRecordDto) {
       try {
         gridApi.setLoading(true);
         await reSendApi(row.id);
-        message.success($t('WebhooksManagement.SuccessfullySent'));
+        toastSuccess($t('WebhooksManagement.SuccessfullySent'));
         await gridApi.query();
       } finally {
         gridApi.setLoading(false);
@@ -300,7 +301,7 @@ async function onSendMany(keys: string[]) {
       try {
         gridApi.setLoading(true);
         await bulkReSendApi({ recordIds: keys });
-        message.success($t('WebhooksManagement.SuccessfullySent'));
+        toastSuccess($t('WebhooksManagement.SuccessfullySent'));
         // 重新查询
         await gridApi.query();
       } finally {
@@ -318,7 +319,7 @@ async function onDeleteMany(keys: string[]) {
       try {
         gridApi.setLoading(true);
         await bulkDeleteApi({ recordIds: keys });
-        message.success($t('AbpUi.DeletedSuccessfully'));
+        toastSuccess($t('AbpUi.DeletedSuccessfully'));
         // 清理选中的key
         selectedKeys.value = selectedKeys.value.filter(
           (key) => !keys.includes(key),

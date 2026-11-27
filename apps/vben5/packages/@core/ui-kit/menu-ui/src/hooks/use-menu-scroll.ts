@@ -20,7 +20,7 @@ export function useMenuScroll(
     if (!isEnabled) return;
 
     const activeElement = document.querySelector(
-      `aside li[role=menuitem].is-active`,
+      `aside a[role=menuitem].is-active`,
     );
     if (activeElement) {
       activeElement.scrollIntoView({
@@ -37,7 +37,7 @@ export function useMenuScroll(
     const isEnabled = typeof enable === 'boolean' ? enable : enable.value;
     if (!isEnabled) return;
 
-    debouncedScroll();
+    void debouncedScroll();
   });
 
   return {

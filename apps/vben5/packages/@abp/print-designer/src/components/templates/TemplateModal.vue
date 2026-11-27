@@ -8,15 +8,14 @@ import type {
 import { useVbenForm, useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { isNullOrWhiteSpace } from '@abp/core';
-import { message } from 'ant-design-vue';
+import { getModalData, isNullOrWhiteSpace, useNotifications } from '@abp/core';
 
 import { useTemplatesApi } from '../../api/useTemplatesApi';
-
 const emits = defineEmits<{
-  (event: 'new', data: TemplateDto): void;
-  (event: 'change', data: TemplateDto): void;
+  (event: 'change' | 'new', data: TemplateDto): void;
 }>();
+
+const { toastSuccess } = useNotifications();
 
 const { createApi, getApi, updateApi } = useTemplatesApi();
 
@@ -55,7 +54,7 @@ const [Form, formApi] = useVbenForm({
   ],
   showDefaultActions: false,
 });
-const [Modal, modalApi] = useVbenModal({
+const [Modal, modalApi] = useVbenModal<TemplateDto>({
   closeOnClickModal: false,
   closeOnPressEscape: false,
   draggable: true,
@@ -71,7 +70,7 @@ const [Modal, modalApi] = useVbenModal({
 
 async function onGet() {
   formApi.resetForm();
-  const { id } = modalApi.getData<TemplateDto>();
+  const { id } = getModalData(modalApi);
   if (isNullOrWhiteSpace(id)) {
     modalApi.setState({ title: $t('PrintDesigner.Templates:Create') });
     return;
@@ -95,7 +94,7 @@ async function onSubmit(values: Record<string, any>) {
       ? updateApi(values.id, values as TemplateUpdateDto)
       : createApi(values as TemplateCreateDto);
     const dto = await api;
-    message.success($t('AbpUi.SavedSuccessfully'));
+    toastSuccess($t('AbpUi.SavedSuccessfully'));
     if (!values.id) {
       emits('new', dto);
     }

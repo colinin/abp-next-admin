@@ -1,28 +1,36 @@
 <script setup lang="ts">
-import type { GenericObject } from 'vee-validate';
-import type { ZodTypeAny } from 'zod';
+import type { ZodType } from 'zod';
 
 import type {
   FormCommonConfig,
+  FormFieldSchema,
+  FormGroupSchema,
   FormRenderProps,
-  FormSchema,
   FormShape,
 } from '../types';
+import type { NormalizedFormFieldSchema } from './schema';
 
-import { computed } from 'vue';
+import { computed, reactive, toRaw, toRefs } from 'vue';
 
-import { Form } from '@vben-core/shadcn-ui';
-import {
-  cn,
-  isFunction,
-  isString,
-  mergeWithArrayOverride,
-} from '@vben-core/shared/utils';
+import { cn, isString } from '@vben-core/shared/utils';
 
 import { provideFormRenderProps } from './context';
 import { useExpandable } from './expandable';
 import FormField from './form-field.vue';
+import FormGroup from './form-group.vue';
 import { getBaseRules, getDefaultValueInZodStack } from './helper';
+import {
+  createFormFieldSchema,
+  getFormFieldSchemas,
+  isFormGroupSchema,
+} from './schema';
+import { useFormLabelWidth } from './utils';
+
+interface NormalizedFormGroupSchema extends FormGroupSchema {
+  fields: NormalizedFormFieldSchema[];
+  hidden: boolean;
+  key: string;
+}
 
 interface Props extends FormRenderProps {}
 
@@ -41,53 +49,61 @@ const emits = defineEmits<{
   submit: [event: any];
 }>();
 
-const wrapperClass = computed(() => {
+function getWrapperClass(gridClass?: string) {
   const cls = ['flex'];
   if (props.layout === 'inline') {
     cls.push('flex-wrap gap-x-2');
   } else {
     cls.push(props.compact ? 'gap-x-2' : 'gap-x-4', 'flex-col grid');
   }
-  return cn(...cls, props.wrapperClass);
-});
+  // 紧凑搜索表单可由容器接管行间距,独立表单保持原有字段底部留白。
+  if (props.compact) {
+    cls.push('gap-y-[var(--vben-form-compact-row-gap,0px)]');
+  }
+  return cn(...cls, gridClass);
+}
 
-provideFormRenderProps(props);
+const wrapperClass = computed(() => getWrapperClass(props.wrapperClass));
+
+provideFormRenderProps(reactive({ ...toRefs(props), ...useFormLabelWidth() }));
 
 // @ts-expect-error unused
 const { isCalculated, keepFormItemIndex, wrapperRef } = useExpandable(props);
 
+const formFieldSchemas = computed(() => {
+  return getFormFieldSchemas(props.schema ?? []);
+});
+
 const shapes = computed(() => {
   const resultShapes: FormShape[] = [];
-  props.schema?.forEach((schema) => {
+  formFieldSchemas.value.forEach((schema) => {
     const { fieldName } = schema;
-    const rules = schema.rules as ZodTypeAny;
+    const rules = toRaw(schema.rules) as ZodType;
 
-    let typeName = '';
-    if (rules && !isString(rules)) {
-      typeName = rules._def.typeName;
-    }
-
-    const baseRules = getBaseRules(rules) as ZodTypeAny;
+    const baseRules = getBaseRules(rules) as ZodType;
 
     resultShapes.push({
       default: getDefaultValueInZodStack(rules),
       fieldName,
-      required: !['ZodNullable', 'ZodOptional'].includes(typeName),
+      required: Boolean(rules && !isString(rules) && !rules.isOptional()),
       rules: baseRules,
     });
   });
   return resultShapes;
 });
 
-const formComponent = computed(() => (props.form ? 'form' : Form));
+const formComponent = 'form';
 
 const formComponentProps = computed(() => {
   return props.form
     ? {
-        onSubmit: props.form.handleSubmit((val) => emits('submit', val)),
+        onSubmit: props.form.handleSubmit(() => emits('submit', undefined)),
       }
     : {
-        onSubmit: (val: GenericObject) => emits('submit', val),
+        onSubmit: (event: Event) => {
+          event.preventDefault();
+          emits('submit', event);
+        },
       };
 });
 
@@ -95,88 +111,90 @@ const formCollapsed = computed(() => {
   return props.collapsed && isCalculated.value;
 });
 
-const computedSchema = computed(
-  (): (Omit<FormSchema, 'formFieldProps'> & {
-    commonComponentProps: Record<string, any>;
-    formFieldProps: Record<string, any>;
-  })[] => {
-    const {
-      colon = false,
-      componentProps = {},
-      controlClass = '',
-      disabled,
-      disabledOnChangeListener = true,
-      disabledOnInputListener = true,
-      emptyStateValue = undefined,
-      formFieldProps = {},
-      formItemClass = '',
-      hideLabel = false,
-      hideRequiredMark = false,
-      labelClass = '',
-      labelWidth = 100,
-      modelPropName = '',
-      wrapperClass = '',
-    } = mergeWithArrayOverride(props.commonConfig, props.globalCommonConfig);
-    return (props.schema || []).map((schema, index) => {
-      const keepIndex = keepFormItemIndex.value;
+function normalizeFieldSchema(schema: FormFieldSchema, hidden = false) {
+  return createFormFieldSchema(schema as never, {
+    commonConfig: props.commonConfig,
+    globalCommonConfig: props.globalCommonConfig,
+    hidden,
+  });
+}
 
+const computedSchema = computed(
+  (): Array<NormalizedFormFieldSchema | NormalizedFormGroupSchema> => {
+    const keepIndex = keepFormItemIndex.value;
+    const result: Array<NormalizedFormFieldSchema | NormalizedFormGroupSchema> =
+      [];
+
+    (props.schema ?? []).forEach((schema, index) => {
       const hidden =
-        // 折叠状态 & 显示折叠按钮 & 当前索引大于保留索引
+        // 折叠状态 & 显示折叠按钮 & 当前索引大于保留索引（分组按一个顶层项计算）
         props.showCollapseButton && !!formCollapsed.value && keepIndex
           ? keepIndex <= index
           : false;
 
-      // 处理函数形式的formItemClass
-      let resolvedSchemaFormItemClass = schema.formItemClass;
-      if (isFunction(schema.formItemClass)) {
-        try {
-          resolvedSchemaFormItemClass = schema.formItemClass();
-        } catch (error) {
-          console.error('Error calling formItemClass function:', error);
-          resolvedSchemaFormItemClass = '';
+      if (isFormGroupSchema(schema)) {
+        if (schema.hide || schema.children.length === 0) {
+          return;
         }
+        result.push({
+          ...schema,
+          fields: schema.children.map((field) => normalizeFieldSchema(field)),
+          hidden,
+          key: schema.name ?? `group-${index}`,
+        });
+        return;
       }
 
-      return {
-        colon,
-        disabled,
-        disabledOnChangeListener,
-        disabledOnInputListener,
-        emptyStateValue,
-        hideLabel,
-        hideRequiredMark,
-        labelWidth,
-        modelPropName,
-        wrapperClass,
-        ...schema,
-        commonComponentProps: componentProps,
-        componentProps: schema.componentProps,
-        controlClass: cn(controlClass, schema.controlClass),
-        formFieldProps: {
-          ...formFieldProps,
-          ...schema.formFieldProps,
-        },
-        formItemClass: cn(
-          'flex-shrink-0',
-          { hidden },
-          formItemClass,
-          resolvedSchemaFormItemClass,
-        ),
-        labelClass: cn(labelClass, schema.labelClass),
-      };
+      result.push(normalizeFieldSchema(schema, hidden));
     });
+
+    return result;
   },
 );
+
+function isNormalizedFormGroupSchema(
+  schema: NormalizedFormFieldSchema | NormalizedFormGroupSchema,
+): schema is NormalizedFormGroupSchema {
+  return isFormGroupSchema(schema);
+}
+
+function getGroupWrapperClass(schema: NormalizedFormGroupSchema) {
+  return getWrapperClass(schema.wrapperClass ?? props.wrapperClass);
+}
 </script>
 
 <template>
   <component :is="formComponent" v-bind="formComponentProps">
     <div ref="wrapperRef" :class="wrapperClass">
-      <template v-for="cSchema in computedSchema" :key="cSchema.fieldName">
+      <template
+        v-for="cSchema in computedSchema"
+        :key="
+          isNormalizedFormGroupSchema(cSchema) ? cSchema.key : cSchema.fieldName
+        "
+      >
+        <FormGroup
+          v-if="isNormalizedFormGroupSchema(cSchema)"
+          :content-class="getGroupWrapperClass(cSchema)"
+          :hidden="cSchema.hidden"
+          :schema="cSchema"
+        >
+          <FormField
+            v-for="fieldSchema in cSchema.fields"
+            :key="fieldSchema.fieldName"
+            v-bind="fieldSchema"
+            :class="fieldSchema.formItemClass"
+            :rules="fieldSchema.rules"
+          >
+            <template #default="slotProps">
+              <slot v-bind="slotProps" :name="fieldSchema.fieldName"></slot>
+            </template>
+          </FormField>
+        </FormGroup>
         <!-- <div v-if="$slots[cSchema.fieldName]" :class="cSchema.formItemClass">
           <slot :definition="cSchema" :name="cSchema.fieldName"> </slot>
         </div> -->
         <FormField
+          v-else
           v-bind="cSchema"
           :class="cSchema.formItemClass"
           :rules="cSchema.rules"

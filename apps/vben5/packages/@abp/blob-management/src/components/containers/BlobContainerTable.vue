@@ -10,16 +10,17 @@ import { defineAsyncComponent, h, ref } from 'vue';
 import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { formatToDateTime } from '@abp/core';
+import { formatToDateTime, useNotifications } from '@abp/core';
 import { useVbenVxeGrid } from '@abp/ui';
 import { DeleteOutlined, PlusOutlined } from '@ant-design/icons-vue';
-import { Button, message, Modal } from 'ant-design-vue';
+import { Button, Modal } from 'ant-design-vue';
 
 import { useBlobContainersApi } from '../../api/useBlobContainersApi';
-
 defineOptions({
   name: 'BlobContainerTable',
 });
+
+const { toastSuccess } = useNotifications();
 
 const { cancel, deleteApi, getPagedListApi } = useBlobContainersApi();
 
@@ -155,7 +156,7 @@ function onDelete(row: BlobContainerDto) {
     },
     onOk: async () => {
       await deleteApi(row.id);
-      message.success($t('AbpUi.DeletedSuccessfully'));
+      toastSuccess($t('AbpUi.DeletedSuccessfully'));
       await gridApi.query();
     },
     title: $t('AbpUi.AreYouSure'),

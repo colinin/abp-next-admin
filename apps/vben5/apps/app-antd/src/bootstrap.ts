@@ -12,18 +12,26 @@ import { useTitle } from '@vueuse/core';
 import { $t, setupI18n } from '#/locales';
 
 import { initComponentAdapter } from './adapter/component';
+import { setupFeedbackBridge } from './adapter/feedback';
 import { initSetupVbenForm } from './adapter/form';
 import { initRequestClient } from './adapter/request';
+import { initSetupAbpVxeTable } from './adapter/vxe-table';
 import App from './app.vue';
 import { router } from './router';
 import { initTimezone } from './timezone-init';
 
 async function bootstrap(namespace: string) {
+  // 初始化通知与toast
+  const feedbackDispose = setupFeedbackBridge();
+
   // 初始化组件适配器
   await initComponentAdapter();
 
   // 初始化表单组件
   await initSetupVbenForm();
+
+  // 初始化vxe-table组件
+  await initSetupAbpVxeTable();
 
   // 初始化axios
   initRequestClient();
@@ -71,7 +79,7 @@ async function bootstrap(namespace: string) {
   // 动态更新标题
   watchEffect(() => {
     if (preferences.app.dynamicTitle) {
-      const routeTitle = router.currentRoute.value.meta?.title;
+      const routeTitle = router.currentRoute.value.meta?.title as string;
       const pageTitle =
         (routeTitle ? `${$t(routeTitle)} - ` : '') + preferences.app.name;
       useTitle(pageTitle);
@@ -79,6 +87,9 @@ async function bootstrap(namespace: string) {
   });
 
   app.mount('#app');
+  app.onUnmount(() => {
+    feedbackDispose();
+  });
 }
 
 export { bootstrap };

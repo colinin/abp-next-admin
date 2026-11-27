@@ -8,20 +8,23 @@ import { preferences } from '@vben/preferences';
 import { useUserStore } from '@vben/stores';
 
 import { CropperAvatar } from '@abp/components/cropper';
-import { buildUUID, useSettings } from '@abp/core';
-import { Button, Card, Form, Input, message } from 'ant-design-vue';
+import { buildUUID, useNotifications, useSettings } from '@abp/core';
+import { Button, Card, Form, Input } from 'ant-design-vue';
 
 import { useProfileApi } from '../../api/useProfileApi';
-
-type ApiFunParams = { file: Blob; fileName?: string; name: string };
-
 const props = defineProps<{
   profile: ProfileDto;
 }>();
+
 const emits = defineEmits<{
   (event: 'pictureChange'): void;
   (event: 'submit', profile: UpdateProfileDto): void;
 }>();
+
+const { toastSuccess } = useNotifications();
+
+type ApiFunParams = { file: Blob; fileName?: string; name: string };
+
 const FormItem = Form.Item;
 
 const formModel = ref({} as ProfileDto);
@@ -50,7 +53,7 @@ async function onUploadAvatar(params: ApiFunParams) {
     if (userStore.userInfo?.avatar) {
       URL.revokeObjectURL(userStore.userInfo.avatar);
     }
-    message.success($t('AbpUi.SavedSuccessfully'));
+    toastSuccess($t('AbpUi.SavedSuccessfully'));
   } finally {
     pictureState.value.uploading = false;
   }

@@ -8,8 +8,8 @@ import { h, ref } from 'vue';
 import { confirm, useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { sortby } from '@abp/core';
-import { useMessage, useVbenVxeGrid } from '@abp/ui';
+import { sortby, useNotifications } from '@abp/core';
+import { useVbenVxeGrid } from '@abp/ui';
 import {
   CheckOutlined,
   CloseOutlined,
@@ -20,13 +20,13 @@ import {
 import { Button } from 'ant-design-vue';
 
 import { useLinkUsersApi } from '../api/useLinkUsersApi';
-
 const emit = defineEmits<{
   (event: 'link', token: string): void;
   (event: 'login', userId: string, tenantId?: string): void;
 }>();
 
-const message = useMessage();
+const { toastSuccess } = useNotifications();
+
 const { getListApi, generateLinkTokenApi, unLinkApi } = useLinkUsersApi();
 
 const linkUsers = ref<LinkUserDto[]>([]);
@@ -143,7 +143,7 @@ async function onDeleteLink(record: LinkUserDto) {
           userId: record.linkUserId,
           tenantId: record.linkTenantId,
         });
-        message.success($t('AbpUi.DeletedSuccessfully'));
+        toastSuccess($t('AbpUi.DeletedSuccessfully'));
         await onInit();
       }
     },

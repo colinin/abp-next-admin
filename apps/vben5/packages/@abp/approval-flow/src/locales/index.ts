@@ -1,5 +1,3 @@
-import type { SupportedLanguagesType } from '@vben/locales';
-
 import { loadLocalesMapFromDir } from '@vben/locales';
 
 const modules = import.meta.glob('./langs/**/*.json');
@@ -14,7 +12,7 @@ const localesMap = loadLocalesMapFromDir(
  * @param lang Current language.
  * @returns Localization resources.
  */
-export function loadApprovalFlowMessages(lang: SupportedLanguagesType) {
+export function loadApprovalFlowMessages(lang: string) {
   const locales = localesMap[lang]?.();
   return locales;
 }

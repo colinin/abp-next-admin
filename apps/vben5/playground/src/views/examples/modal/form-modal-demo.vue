@@ -1,13 +1,17 @@
 <script lang="ts" setup>
 import { useVbenModal } from '@vben/common-ui';
 
-import { message } from 'ant-design-vue';
+import { message } from 'antdv-next';
 
 import { useVbenForm } from '#/adapter/form';
 
 defineOptions({
   name: 'FormModelDemo',
 });
+
+interface FormModalData {
+  values?: Record<string, unknown>;
+}
 
 const [Form, formApi] = useVbenForm({
   handleSubmit: onSubmit,
@@ -33,6 +37,7 @@ const [Form, formApi] = useVbenForm({
     {
       component: 'Select',
       componentProps: {
+        class: 'w-full',
         options: [
           { label: '选项1', value: '1' },
           { label: '选项2', value: '2' },
@@ -47,25 +52,27 @@ const [Form, formApi] = useVbenForm({
   showDefaultActions: false,
 });
 
-const [Modal, modalApi] = useVbenModal({
+const [Modal, modalApi] = useVbenModal<FormModalData>({
   fullscreenButton: false,
   onCancel() {
     modalApi.close();
   },
   onConfirm: async () => {
-    await formApi.validateAndSubmitForm();
+    await formApi.validateAndSubmit();
     // modalApi.close();
   },
   onOpenChange(isOpen: boolean) {
     if (isOpen) {
-      const { values } = modalApi.getData<Record<string, any>>();
-      if (values) {
-        formApi.setValues(values);
+      const data = modalApi.getData();
+      if (data?.values) {
+        formApi.setValues(data.values);
       }
     }
   },
   title: '内嵌表单示例',
 });
+
+defineExpose({ modalApi });
 
 function onSubmit(values: Record<string, any>) {
   message.loading({

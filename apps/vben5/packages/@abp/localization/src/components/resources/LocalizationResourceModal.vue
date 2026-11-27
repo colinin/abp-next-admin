@@ -3,21 +3,24 @@ import type { FormInstance } from 'ant-design-vue';
 
 import type { ResourceDto } from '../../types/resources';
 
-import { defineEmits, defineOptions, ref, toValue, useTemplateRef } from 'vue';
+import { ref, toValue, useTemplateRef } from 'vue';
 
 import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { Checkbox, Form, Input, message } from 'ant-design-vue';
+import { getModalData, useNotifications } from '@abp/core';
+import { Checkbox, Form, Input } from 'ant-design-vue';
 
 import { useResourcesApi } from '../../api/useResourcesApi';
-
 defineOptions({
   name: 'LocalizationResourceModal',
 });
+
 const emits = defineEmits<{
   (event: 'change', data: ResourceDto): void;
 }>();
+
+const { toastSuccess } = useNotifications();
 
 const FormItem = Form.Item;
 
@@ -31,7 +34,7 @@ const form = useTemplateRef<FormInstance>('form');
 const formModel = ref<ResourceDto>({ ...defaultModel });
 
 const { cancel, createApi, getApi, updateApi } = useResourcesApi();
-const [Modal, modalApi] = useVbenModal({
+const [Modal, modalApi] = useVbenModal<ResourceDto>({
   class: 'w-1/2',
   draggable: true,
   fullscreenButton: false,
@@ -48,7 +51,7 @@ const [Modal, modalApi] = useVbenModal({
       modalApi.setState({
         title: $t('LocalizationManagement.Resource:AddNew'),
       });
-      const { name } = modalApi.getData<ResourceDto>();
+      const { name } = getModalData(modalApi);
       name && (await onGet(name));
     }
   },
@@ -73,7 +76,7 @@ async function onSubmit() {
     const input = toValue(formModel);
     const api = input.id ? updateApi(input.name, input) : createApi(input);
     const dto = await api;
-    message.success($t('AbpUi.SavedSuccessfully'));
+    toastSuccess($t('AbpUi.SavedSuccessfully'));
     emits('change', dto);
     modalApi.close();
   } finally {

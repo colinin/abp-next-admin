@@ -1,23 +1,21 @@
 <script setup lang="ts">
-import { defineEmits, defineOptions } from 'vue';
-
 import { useVbenForm, useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { toDate } from '@abp/core';
-import { useMessage } from '@abp/ui';
+import { getModalData, toDate, useNotifications } from '@abp/core';
 import { Alert } from 'ant-design-vue';
 
 import { useCacheManagementApi } from '../api/useCacheManagementApi';
-
 defineOptions({
   name: 'CacheRefreshModal',
 });
+
 const emit = defineEmits<{
   (event: 'change', key: string): void;
 }>();
 
-const message = useMessage();
+const { toastSuccess } = useNotifications();
+
 const { getKeyValueApi, refreshApi } = useCacheManagementApi();
 
 const [Form, formApi] = useVbenForm({
@@ -56,7 +54,7 @@ const [Form, formApi] = useVbenForm({
   showDefaultActions: false,
 });
 
-const [Modal, modalApi] = useVbenModal({
+const [Modal, modalApi] = useVbenModal<{ key: string }>({
   class: 'w-1/3',
   draggable: true,
   fullscreenButton: false,
@@ -70,7 +68,7 @@ const [Modal, modalApi] = useVbenModal({
     if (isOpen) {
       try {
         modalApi.setState({ loading: true });
-        const { key } = modalApi.getData();
+        const { key } = getModalData(modalApi);
         await onGet(key);
       } finally {
         modalApi.setState({ loading: false });
@@ -95,7 +93,7 @@ async function onSubmit(input: Record<string, any>) {
       key: input.key,
       absoluteExpiration: input.absoluteExpiration,
     });
-    message.success($t('AbpUi.SavedSuccessfully'));
+    toastSuccess($t('AbpUi.SavedSuccessfully'));
     emit('change', input.key);
     modalApi.close();
   } finally {

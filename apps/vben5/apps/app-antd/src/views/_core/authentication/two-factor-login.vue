@@ -1,4 +1,5 @@
 <script setup lang="ts">
+// oxlint-disable typescript/no-non-null-assertion
 import type { TwoFactorProvider } from '@abp/account';
 import type { FormExpose } from 'ant-design-vue/es/form/Form';
 
@@ -25,7 +26,7 @@ interface TwoFactorState {
   phoneNumber: string;
 }
 
-const formModel = ref({} as TwoFactorState);
+const formModel = ref<Partial<TwoFactorState>>({});
 const form = useTemplateRef<FormExpose>('formRef');
 const twoFactorProviders = ref<TwoFactorProvider[]>([]);
 const sendValidCodeLoading = ref(false);
@@ -47,16 +48,17 @@ const {
   sendPhoneSigninCodeApi,
 } = useAccountApi();
 
-const [Modal, modalApi] = useVbenModal({
+const [Modal, modalApi] = useVbenModal<TwoFactorState>({
   title: $t('abp.oauth.twoFactor.title'),
   fullscreenButton: false,
   closeOnClickModal: false,
   closeOnPressEscape: false,
   onConfirm: onLogin,
-  async onOpenChange(isOpen) {
-    if (isOpen) {
-      const state = modalApi.getData<TwoFactorState>();
-      formModel.value = state;
+  async onOpened() {
+    twoFactorProviders.value = [];
+    const state = modalApi.getData();
+    formModel.value = state ?? {};
+    if (state?.userId) {
       const { items } = await getTwoFactorProvidersApi({
         userId: state.userId,
       });
@@ -91,7 +93,7 @@ async function onSendEmail() {
   await form.value?.validateFields('email');
   await onSendCode(() =>
     sendEmailSigninCodeApi({
-      emailAddress: formModel.value.email,
+      emailAddress: formModel.value.email!,
     }),
   );
 }
@@ -100,7 +102,7 @@ async function onSendSms() {
   await form.value?.validateFields('phoneNumber');
   await onSendCode(() =>
     sendPhoneSigninCodeApi({
-      phoneNumber: formModel.value.phoneNumber,
+      phoneNumber: formModel.value.phoneNumber!,
     }),
   );
 }

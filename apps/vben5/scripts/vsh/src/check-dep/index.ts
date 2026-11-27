@@ -1,162 +1,148 @@
 import type { CAC } from 'cac';
 
-import { getPackages } from '@vben/node-utils';
+import { mkdtemp, rm, writeFile } from 'node:fs/promises';
+import { createRequire } from 'node:module';
+import { tmpdir } from 'node:os';
+import { dirname, join } from 'node:path';
 
-import depcheck from 'depcheck';
+import { execa } from '@vben/node-utils';
 
-// 默认配置
+const require = createRequire(import.meta.url);
+const knipMain = require.resolve('knip');
+const knipCli = join(dirname(knipMain), '..', 'bin', 'knip.js');
+
 const DEFAULT_CONFIG = {
-  // 需要忽略的依赖匹配
-  ignoreMatches: [
-    'vite',
-    'vitest',
-    'unbuild',
-    '@vben/tsconfig',
-    '@vben/vite-config',
-    '@vben/tailwind-config',
-    '@types/*',
+  ignore: ['dist/**', 'docs/**', 'node_modules/**', 'public/**'],
+  ignoreBinaries: [] as string[],
+  ignoreDependencies: [
+    '@iconify/json',
     '@vben-core/design',
-  ],
-  // 需要忽略的包
-  ignorePackages: [
-    '@vben/backend-mock',
     '@vben/commitlint-config',
     '@vben/eslint-config',
-    '@vben/node-utils',
-    '@vben/prettier-config',
     '@vben/stylelint-config',
     '@vben/tailwind-config',
-    '@vben/tsconfig',
     '@vben/vite-config',
-    '@vben/vsh',
+    '@vben/oxlint-config',
+    'playwright',
+    'rimraf',
+    'tailwindcss',
   ],
-  // 需要忽略的文件模式
-  ignorePatterns: ['dist', 'node_modules', 'public'],
+  ignoreWorkspaces: ['internal/lint-configs/*', 'scripts/*'],
 };
 
-interface DepcheckResult {
-  dependencies: string[];
-  devDependencies: string[];
-  missing: Record<string, string[]>;
+interface KnipDependency {
+  col: number;
+  line: number;
+  name: string;
+  pos: number;
 }
 
-interface DepcheckConfig {
-  ignoreMatches?: string[];
-  ignorePackages?: string[];
-  ignorePatterns?: string[];
+interface KnipFileIssue {
+  dependencies: KnipDependency[];
+  devDependencies: KnipDependency[];
+  file: string;
+  optionalPeerDependencies: KnipDependency[];
+  unlisted: KnipDependency[];
+  unresolved: KnipDependency[];
 }
 
-interface PackageInfo {
-  dir: string;
-  packageJson: {
-    name: string;
-  };
-}
-
-/**
- * 清理依赖检查结果
- * @param unused - 依赖检查结果
- */
-function cleanDepcheckResult(unused: DepcheckResult): void {
-  // 删除file:前缀的依赖提示，该依赖是本地依赖
-  Reflect.deleteProperty(unused.missing, 'file:');
-
-  // 清理路径依赖
-  Object.keys(unused.missing).forEach((key) => {
-    unused.missing[key] = (unused.missing[key] || []).filter(
-      (item: string) => !item.startsWith('/'),
-    );
-    if (unused.missing[key].length === 0) {
-      Reflect.deleteProperty(unused.missing, key);
-    }
-  });
+interface KnipResult {
+  issues: KnipFileIssue[];
 }
 
 /**
  * 格式化依赖检查结果
- * @param pkgName - 包名
- * @param unused - 依赖检查结果
+ * @param result - 依赖检查结果
+ * @returns 发现的问题总数
  */
-function formatDepcheckResult(pkgName: string, unused: DepcheckResult): void {
-  const hasIssues =
-    Object.keys(unused.missing).length > 0 ||
-    unused.dependencies.length > 0 ||
-    unused.devDependencies.length > 0;
+function formatResult(result: KnipResult): number {
+  let issueCount = 0;
 
-  if (!hasIssues) {
-    return;
+  for (const issue of result.issues) {
+    const sections: [string, KnipDependency[]][] = [
+      ['Unused dependencies', issue.dependencies],
+      ['Unused devDependencies', issue.devDependencies],
+      ['Unused optional peer dependencies', issue.optionalPeerDependencies],
+      ['Unlisted dependencies', issue.unlisted],
+      ['Unresolved imports', issue.unresolved],
+    ];
+    const printable = sections.filter(([, deps]) => deps.length > 0);
+
+    if (printable.length === 0) {
+      continue;
+    }
+
+    issueCount += printable.reduce((total, [, deps]) => total + deps.length, 0);
+    console.log(`\n📦 ${issue.file}`);
+
+    for (const [title, deps] of printable) {
+      console.log(`⚠️ ${title}:`);
+      for (const dep of deps) {
+        console.log(`  - ${dep.name}`);
+      }
+    }
   }
 
-  console.log('\n📦 Package:', pkgName);
-
-  if (Object.keys(unused.missing).length > 0) {
-    console.log('❌ Missing dependencies:');
-    Object.entries(unused.missing).forEach(([dep, files]) => {
-      console.log(`  - ${dep}:`);
-      files.forEach((file) => console.log(`    → ${file}`));
-    });
+  if (issueCount === 0) {
+    console.log('\n✅ Dependency check completed, no issues found');
   }
 
-  if (unused.dependencies.length > 0) {
-    console.log('⚠️ Unused dependencies:');
-    unused.dependencies.forEach((dep) => console.log(`  - ${dep}`));
-  }
-
-  if (unused.devDependencies.length > 0) {
-    console.log('⚠️ Unused devDependencies:');
-    unused.devDependencies.forEach((dep) => console.log(`  - ${dep}`));
-  }
+  return issueCount;
 }
 
 /**
  * 运行依赖检查
- * @param config - 配置选项
  */
-async function runDepcheck(config: DepcheckConfig = {}): Promise<void> {
+async function runKnipCheck(): Promise<void> {
+  const cwd = process.cwd();
+  const tempDir = await mkdtemp(join(tmpdir(), 'vsh-check-dep-'));
+  const configFile = join(tempDir, 'knip.json');
+
   try {
-    const finalConfig = {
-      ...DEFAULT_CONFIG,
-      ...config,
-    };
+    await writeFile(configFile, JSON.stringify(DEFAULT_CONFIG));
 
-    const { packages } = await getPackages();
+    const args = [
+      knipCli,
+      '--config',
+      configFile,
+      '--include',
+      'dependencies,unlisted,unresolved',
+      '--reporter',
+      'json',
+      '--no-config-hints',
+    ];
 
-    let hasIssues = false;
+    // knip 以退出码 1 表示发现 error 级问题,这里不因非零退出而抛错,
+    // 统一解析 stdout 中的 JSON 报告。
+    const result = await execa(process.execPath, args, { cwd, reject: false });
 
-    await Promise.all(
-      packages.map(async (pkg: PackageInfo) => {
-        // 跳过需要忽略的包
-        if (finalConfig.ignorePackages.includes(pkg.packageJson.name)) {
-          return;
-        }
-
-        const unused = await depcheck(pkg.dir, {
-          ignoreMatches: finalConfig.ignoreMatches,
-          ignorePatterns: finalConfig.ignorePatterns,
-        });
-
-        cleanDepcheckResult(unused);
-
-        const pkgHasIssues =
-          Object.keys(unused.missing).length > 0 ||
-          unused.dependencies.length > 0 ||
-          unused.devDependencies.length > 0;
-
-        if (pkgHasIssues) {
-          hasIssues = true;
-          formatDepcheckResult(pkg.packageJson.name, unused);
-        }
-      }),
-    );
-
-    if (!hasIssues) {
-      console.log('\n✅ Dependency check completed, no issues found');
+    if (result.exitCode !== 0 && result.exitCode !== 1) {
+      console.error(
+        '❌ Dependency check failed:',
+        result.stderr || result.shortMessage || 'knip exited unexpectedly',
+      );
+      process.exitCode = 1;
+      return;
     }
-  } catch (error) {
-    console.error(
-      '❌ Dependency check failed:',
-      error instanceof Error ? error.message : error,
-    );
+
+    let knipResult: KnipResult;
+    try {
+      knipResult = JSON.parse(result.stdout);
+    } catch {
+      console.error('❌ Dependency check failed: unable to parse knip output');
+      process.exitCode = 1;
+      return;
+    }
+
+    formatResult(knipResult);
+
+    // 信任 knip 的失败判定:即使发现的问题不属于任何打印分节,
+    // 命令也必须以非零退出,避免门禁漏判。
+    if (result.exitCode === 1) {
+      process.exitCode = 1;
+    }
+  } finally {
+    await rm(tempDir, { force: true, recursive: true });
   }
 }
 
@@ -164,31 +150,13 @@ async function runDepcheck(config: DepcheckConfig = {}): Promise<void> {
  * 定义依赖检查命令
  * @param cac - CAC实例
  */
-function defineDepcheckCommand(cac: CAC): void {
+function defineCheckDepCommand(cac: CAC): void {
   cac
     .command('check-dep')
-    .option(
-      '--ignore-packages <packages>',
-      'Packages to ignore, comma separated',
-    )
-    .option(
-      '--ignore-matches <matches>',
-      'Dependency patterns to ignore, comma separated',
-    )
-    .option(
-      '--ignore-patterns <patterns>',
-      'File patterns to ignore, comma separated',
-    )
-    .usage('Analyze project dependencies')
-    .action(async ({ ignoreMatches, ignorePackages, ignorePatterns }) => {
-      const config: DepcheckConfig = {
-        ...(ignorePackages && { ignorePackages: ignorePackages.split(',') }),
-        ...(ignoreMatches && { ignoreMatches: ignoreMatches.split(',') }),
-        ...(ignorePatterns && { ignorePatterns: ignorePatterns.split(',') }),
-      };
-
-      await runDepcheck(config);
+    .usage('Analyze project dependencies using knip')
+    .action(async () => {
+      await runKnipCheck();
     });
 }
 
-export { defineDepcheckCommand, type DepcheckConfig };
+export { defineCheckDepCommand, formatResult, runKnipCheck };

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+// oxlint-disable typescript/no-non-null-assertion
 import type {
   BubbleListProps,
   ConversationsProps,
@@ -19,8 +20,8 @@ import {
   useAuthorization,
   useLocalization,
   useLocalizationSerializer,
+  useNotifications,
 } from '@abp/core';
-import { useMessage } from '@abp/ui';
 import { DeleteOutlined, PlusOutlined } from '@ant-design/icons-vue';
 import { useDebounceFn, useInterval, useWindowSize } from '@vueuse/core';
 import { Button, Space, theme, Typography } from 'ant-design-vue';
@@ -43,11 +44,12 @@ import {
   ChatPermissions,
   ConversationPermissions,
 } from '../../constants/permissions';
+defineOptions({ name: 'PlaygroundIndependentSetup' });
+
+const { toastWarning } = useNotifications();
 
 type BubbleDataType = NonNullable<BubbleListProps['items']>[number];
 type Conversation = NonNullable<ConversationsProps['items']>[number];
-
-defineOptions({ name: 'PlaygroundIndependentSetup' });
 
 const { getPagedListApi: getConversationMessagesApi, sendMessageApi } =
   useChatsApi();
@@ -60,7 +62,6 @@ const {
 const { getPagedListApi: getWorkspaceDefinitionsApi } =
   useWorkspaceDefinitionsApi();
 
-const messageApi = useMessage();
 const { token } = theme.useToken();
 const { height } = useWindowSize();
 const { isGranted } = useAuthorization();
@@ -407,7 +408,7 @@ const [agent] = useXAgent<string, { message: string }, string>({
     } catch (error: any) {
       agentRequestLoading.value = false;
       onError(new Error(error.message));
-      messageApi.warn(error.message);
+      toastWarning(error.message);
     }
   },
 });

@@ -7,12 +7,14 @@ import { onMounted, ref } from 'vue';
 
 import { $t } from '@vben/locales';
 
+import { useNotifications } from '@abp/core';
 import { useVbenVxeGrid } from '@abp/ui';
-import { Button, message } from 'ant-design-vue';
+import { Button } from 'ant-design-vue';
 
 import { useApprovalTasksApi } from '../../api/useApprovalTasksApi';
 import { formatDateTime } from './approval-table-utils';
 import ApprovalInstanceDetailModal from './ApprovalInstanceDetailModal.vue';
+const { toastError } = useNotifications();
 
 const tasksApi = useApprovalTasksApi();
 
@@ -93,7 +95,7 @@ async function loadTasks() {
     allTasks.value = result.items ?? [];
     await gridApi.query();
   } catch {
-    message.error($t('ElsaNextApprovalFlow.ApprovalFlow:Pending:LoadFailed'));
+    toastError($t('ElsaNextApprovalFlow.ApprovalFlow:Pending:LoadFailed'));
   }
 }
 

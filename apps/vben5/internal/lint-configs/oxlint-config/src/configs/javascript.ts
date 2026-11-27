@@ -1,0 +1,139 @@
+import type { OxlintConfig } from 'oxlint';
+
+// 原生 extends 不向根配置投递 env/globals（1.90 实测），这两个对象由
+// javascript 配置与根 oxlint.config.ts 同时消费，须从包导出共享。
+const env = {
+  browser: true,
+  es2021: true,
+  node: true,
+};
+
+const globals = {
+  document: 'readonly',
+  navigator: 'readonly',
+  window: 'readonly',
+} as const;
+
+const javascript: OxlintConfig = {
+  categories: {
+    correctness: 'error',
+    suspicious: 'warn',
+  },
+  env,
+  globals,
+  rules: {
+    'accessor-pairs': [
+      'error',
+      {
+        enforceForClassMembers: true,
+        setWithoutGet: true,
+      },
+    ],
+    'array-callback-return': 'error',
+    'block-scoped-var': 'error',
+    'default-case-last': 'error',
+    eqeqeq: ['error', 'always'],
+    // 抛出嵌套三元运算格式错误，禁止使用嵌套三元运算。
+    'no-nested-ternary': 'error',
+    'new-cap': [
+      'error',
+      {
+        capIsNew: false,
+        newIsCap: true,
+        properties: true,
+      },
+    ],
+    'no-alert': 'error',
+    'no-array-constructor': 'error',
+    'no-case-declarations': 'error',
+    'no-console': ['error', { allow: ['warn', 'error'] }],
+    'no-empty': ['error', { allowEmptyCatch: true }],
+    'no-fallthrough': 'error',
+    'no-new-func': 'error',
+    'no-object-constructor': 'error',
+    'no-labels': ['error', { allowLoop: false, allowSwitch: false }],
+    'no-lone-blocks': 'error',
+    'no-multi-str': 'error',
+    'no-proto': 'error',
+    'no-prototype-builtins': 'error',
+    'no-redeclare': ['error', { builtinGlobals: false }],
+    'no-regex-spaces': 'error',
+    'no-self-compare': 'error',
+    'no-sequences': 'error',
+    'no-shadow': 'off',
+    'eslint/no-empty-function': [
+      'error',
+      {
+        allow: ['arrowFunctions', 'functions', 'methods'],
+      },
+    ],
+    'no-template-curly-in-string': 'error',
+    'no-throw-literal': 'error',
+    'no-unexpected-multiline': 'error',
+    'no-unused-expressions': [
+      'error',
+      {
+        allowShortCircuit: true,
+        allowTaggedTemplates: true,
+        allowTernary: true,
+      },
+    ],
+    'eslint/no-unused-vars': [
+      'error',
+      {
+        argsIgnorePattern: '^_',
+        varsIgnorePattern: '^_',
+      },
+    ],
+    'no-var': 'error',
+    'no-new-wrappers': 'error',
+    'no-restricted-globals': [
+      'error',
+      { message: 'Use `globalThis` instead.', name: 'global' },
+      { message: 'Use `globalThis` instead.', name: 'self' },
+    ],
+    'no-useless-call': 'error',
+    'no-useless-computed-key': 'error',
+    'no-useless-constructor': 'error',
+    'no-useless-return': 'error',
+    'prefer-const': [
+      'error',
+      {
+        destructuring: 'all',
+        ignoreReadBeforeAssign: true,
+      },
+    ],
+    'prefer-exponentiation-operator': 'error',
+    'prefer-promise-reject-errors': 'error',
+    'prefer-rest-params': 'error',
+    'prefer-spread': 'error',
+    'prefer-template': 'error',
+    'preserve-caught-error': [
+      'error',
+      {
+        requireCatchParameter: false,
+      },
+    ],
+    'symbol-description': 'error',
+    'unicode-bom': ['error', 'never'],
+    'use-isnan': [
+      'error',
+      {
+        enforceForIndexOf: true,
+        enforceForSwitchCase: true,
+      },
+    ],
+    'valid-typeof': [
+      'error',
+      {
+        requireStringLiterals: true,
+      },
+    ],
+    'vars-on-top': 'error',
+    yoda: ['error', 'never'],
+  },
+};
+
+export { env as oxlintEnv, globals as oxlintGlobals };
+
+export { javascript };

@@ -1,8 +1,14 @@
+import type { FormValues } from '@vben/common-ui';
 import type { VxeTableGridOptions } from '@vben/plugins/vxe-table';
+
+import type { ComponentPropsMap, ComponentType } from './component';
 
 import { h } from 'vue';
 
-import { setupVbenVxeTable, useVbenVxeGrid } from '@vben/plugins/vxe-table';
+import {
+  setupVbenVxeTable,
+  useVbenVxeGrid as useGrid,
+} from '@vben/plugins/vxe-table';
 
 import { Button, Image } from 'tdesign-vue-next';
 
@@ -65,6 +71,23 @@ setupVbenVxeTable({
   useVbenForm,
 });
 
-export { useVbenVxeGrid };
+export const useVbenVxeGrid = <
+  T extends Record<string, any>,
+  TFormValues extends FormValues = FormValues,
+  TSubmitValues extends FormValues = TFormValues,
+>(
+  ...rest: Parameters<
+    typeof useGrid<
+      T,
+      ComponentType,
+      ComponentPropsMap,
+      TFormValues,
+      TSubmitValues
+    >
+  >
+) =>
+  useGrid<T, ComponentType, ComponentPropsMap, TFormValues, TSubmitValues>(
+    ...rest,
+  );
 
 export type * from '@vben/plugins/vxe-table';

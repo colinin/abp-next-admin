@@ -13,15 +13,8 @@ import { computed, defineAsyncComponent, ref } from 'vue';
 import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import {
-  Button,
-  Card,
-  Checkbox,
-  Divider,
-  message,
-  Tabs,
-  Tree,
-} from 'ant-design-vue';
+import { getModalData, useNotifications } from '@abp/core';
+import { Button, Card, Checkbox, Divider, Tabs, Tree } from 'ant-design-vue';
 
 import { usePermissionsApi } from '../../api/usePermissionsApi';
 import {
@@ -34,7 +27,6 @@ import {
   getPermissionsCount,
   toPermissionList,
 } from '../../utils';
-
 defineOptions({
   name: 'PermissionModal',
 });
@@ -42,6 +34,8 @@ defineOptions({
 const emits = defineEmits<{
   (event: 'change', name: string, key?: string): void;
 }>();
+
+const { toastSuccess } = useNotifications();
 
 const TabPane = Tabs.TabPane;
 
@@ -87,13 +81,12 @@ const getPermissionNodeState = computed(() => {
 });
 
 const { cancel, getApi, updateApi } = usePermissionsApi();
-const [Modal, modalApi] = useVbenModal({
+const [Modal, modalApi] = useVbenModal<ModalState>({
   centered: true,
-  class: 'w-1/2',
+  class: 'w-1/2 h-[70vh]',
   closeOnClickModal: false,
   closeOnPressEscape: false,
   draggable: true,
-  fullscreenButton: false,
   onCancel() {
     modalApi.close();
   },
@@ -106,8 +99,11 @@ const [Modal, modalApi] = useVbenModal({
       modalApi.setState({
         submitting: true,
       });
-      const providerName = modelState.value!.providerName;
-      const providerKey = modelState.value!.providerKey;
+      const state = modelState.value;
+      if (!state) {
+        return;
+      }
+      const { providerKey, providerName } = state;
       await updateApi(
         {
           providerKey,
@@ -117,7 +113,7 @@ const [Modal, modalApi] = useVbenModal({
           permissions,
         },
       );
-      message.success($t('AbpUi.SavedSuccessfully'));
+      toastSuccess($t('AbpUi.SavedSuccessfully'));
       modalApi.close();
       emits('change', providerName, providerKey);
     } finally {
@@ -130,7 +126,7 @@ const [Modal, modalApi] = useVbenModal({
     permissionTree.value = [];
     modelState.value = undefined;
     if (isOpen) {
-      const state = modalApi.getData<ModalState>();
+      const state = getModalData(modalApi);
       modelState.value = state;
       modalApi.setState({
         confirmLoading: true,
@@ -288,7 +284,7 @@ function onSearchPermissionGrant() {
 
 <template>
   <Modal>
-    <div class="flex flex-col content-center justify-center">
+    <div class="flex h-full min-h-0 flex-col">
       <div class="flex items-center justify-between">
         <Checkbox
           :disabled="modelState?.readonly"
@@ -349,13 +345,15 @@ function onSearchPermissionGrant() {
 
 <style lang="scss" scoped>
 :deep(.ant-tabs) {
-  height: 60vh;
+  flex: 1;
+  min-height: 0;
 
   .ant-tabs-nav {
     width: 14rem;
   }
 
   .ant-tabs-content-holder {
+    min-height: 0;
     overflow: hidden auto !important;
   }
 }

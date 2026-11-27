@@ -2,11 +2,17 @@ import type { Linter } from 'eslint';
 
 import { interopDefault } from '../util';
 
+/**
+ * @typescript-eslint 的规则已迁移到 oxlint（typescript 插件）。
+ * 这里仅保留 TS 解析器，供其它 eslint 插件（perfectionist、n 等）解析 TS/TSX 文件。
+ * 因不再有类型感知规则，已移除 parserOptions.project，eslint 解析更快。
+ *
+ * 注意：移除 @typescript-eslint 插件后，unused-imports/no-unused-vars 会退回核心实现，
+ * 无法识别 TS 类型签名里的形参（会误报）。故对 TS/TSX/Vue 统一关闭该规则，
+ * 未使用变量改由 oxlint 的 no-unused-vars（类型感知）负责。
+ */
 export async function typescript(): Promise<Linter.Config[]> {
-  const [pluginTs, parserTs] = await Promise.all([
-    interopDefault(import('@typescript-eslint/eslint-plugin')),
-    interopDefault(import('@typescript-eslint/parser')),
-  ] as const);
+  const parserTs = await interopDefault(import('@typescript-eslint/parser'));
 
   return [
     {
@@ -14,56 +20,23 @@ export async function typescript(): Promise<Linter.Config[]> {
       languageOptions: {
         parser: parserTs,
         parserOptions: {
-          createDefaultProgram: false,
           ecmaFeatures: {
             jsx: true,
           },
           ecmaVersion: 'latest',
           extraFileExtensions: ['.vue'],
           jsxPragma: 'React',
-          project: './tsconfig.*.json',
           sourceType: 'module',
         },
       },
-      plugins: {
-        '@typescript-eslint': pluginTs as any,
-      },
       rules: {
-        ...pluginTs.configs['eslint-recommended']?.overrides?.[0]?.rules,
-        ...pluginTs.configs.strict?.rules,
-        '@typescript-eslint/ban-ts-comment': [
-          'error',
-          {
-            'ts-check': false,
-            'ts-expect-error': 'allow-with-description',
-            'ts-ignore': 'allow-with-description',
-            'ts-nocheck': 'allow-with-description',
-          },
-        ],
-
-        // '@typescript-eslint/consistent-type-definitions': ['warn', 'interface'],
-        '@typescript-eslint/consistent-type-definitions': 'off',
-        '@typescript-eslint/explicit-function-return-type': 'off',
-        '@typescript-eslint/explicit-module-boundary-types': 'off',
-        '@typescript-eslint/no-empty-function': [
-          'error',
-          {
-            allow: ['arrowFunctions', 'functions', 'methods'],
-          },
-        ],
-        '@typescript-eslint/no-explicit-any': 'off',
-        '@typescript-eslint/no-namespace': 'off',
-        '@typescript-eslint/no-non-null-assertion': 'error',
-        '@typescript-eslint/no-unused-expressions': 'off',
-        '@typescript-eslint/no-unused-vars': [
-          'error',
-          {
-            argsIgnorePattern: '^_',
-            varsIgnorePattern: '^_',
-          },
-        ],
-        '@typescript-eslint/no-use-before-define': 'off',
-        '@typescript-eslint/no-var-requires': 'error',
+        'unused-imports/no-unused-vars': 'off',
+      },
+    },
+    {
+      // Vue `<script>` 的未使用变量同样交给 oxlint，避免核心规则误报 TS 类型签名形参
+      files: ['**/*.vue'],
+      rules: {
         'unused-imports/no-unused-vars': 'off',
       },
     },

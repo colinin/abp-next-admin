@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import type { HubConnection, IHttpConnectionOptions } from '@microsoft/signalr';
 
 import { useAccessStore } from '@vben/stores';
@@ -59,10 +58,12 @@ export function useSignalR() {
 
   /** 启动连接 */
   async function start(): Promise<void> {
-    _throwIfNotInit();
+    if (connection === null) {
+      throw new Error('unable to send message, connection not initialized!');
+    }
     publish('signalR:beforeStart');
     try {
-      await connection!.start();
+      await connection.start();
       publish('signalR:onStart');
     } catch (error) {
       publish('signalR:onError', error);
@@ -71,10 +72,12 @@ export function useSignalR() {
 
   /** 关闭连接 */
   async function stop(): Promise<void> {
-    _throwIfNotInit();
+    if (connection === null) {
+      throw new Error('unable to send message, connection not initialized!');
+    }
     publish('signalR:beforeStop');
     try {
-      await connection!.stop();
+      await connection.stop();
       publish('signalR:onStop');
     } catch (error) {
       publish('signalR:onError', error);
@@ -82,22 +85,22 @@ export function useSignalR() {
   }
 
   /** 连接前事件 */
-  function beforeStart<T = any>(callback: (event?: T) => void) {
+  function beforeStart(callback: (event?: any) => void) {
     subscribe('signalR:beforeStart', callback);
   }
 
   /** 连接后事件 */
-  function onStart<T = any>(callback: (event?: T) => void) {
+  function onStart(callback: (event?: any) => void) {
     subscribe('signalR:onStart', callback);
   }
 
   /** 关闭连接前事件 */
-  function beforeStop<T = any>(callback: (event?: T) => void) {
+  function beforeStop(callback: (event?: any) => void) {
     subscribe('signalR:beforeStop', callback);
   }
 
   /** 关闭连接后事件 */
-  function onStop<T = any>(callback: (event?: T) => void) {
+  function onStop(callback: (event?: any) => void) {
     subscribe('signalR:onStop', callback);
   }
 
@@ -123,20 +126,18 @@ export function useSignalR() {
 
   /** 发送消息 */
   function send(methodName: string, ...args: any[]): Promise<void> {
-    _throwIfNotInit();
-    return connection!.send(methodName, ...args);
+    if (connection === null) {
+      throw new Error('unable to send message, connection not initialized!');
+    }
+    return connection.send(methodName, ...args);
   }
 
   /** 调用函数 */
   function invoke<T = any>(methodName: string, ...args: any[]): Promise<T> {
-    _throwIfNotInit();
-    return connection!.invoke(methodName, ...args);
-  }
-
-  function _throwIfNotInit() {
     if (connection === null) {
       throw new Error('unable to send message, connection not initialized!');
     }
+    return connection.invoke(methodName, ...args);
   }
 
   return {

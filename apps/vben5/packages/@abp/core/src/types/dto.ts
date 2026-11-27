@@ -25,26 +25,6 @@ interface WrapResult<T> {
   /** 返回数据 */
   result: T;
 }
-/** 远程服务验证错误描述 */
-interface RemoteServiceValidationErrorInfo {
-  /** 字段名称列表 */
-  members: string[];
-  /** 错误消息 */
-  message: string;
-}
-/** 远程服务错误描述（仅适用于接口代理） */
-interface RemoteServiceErrorInfo {
-  /** 错误代码 */
-  code?: string;
-  /** 异常数据 */
-  data?: { [key: string]: any };
-  /** 错误详情 */
-  details?: string;
-  /** 错误消息 */
-  message?: string;
-  /** 验证错误列表 */
-  validationErrors: RemoteServiceValidationErrorInfo[];
-}
 /** 扩展属性数据传输对象 */
 interface ExtensibleObject {
   /** 扩展属性 */
@@ -293,14 +273,14 @@ interface ExtensionPropertyUiDto {
 }
 /** 扩展属性（用于请求代理，忽略） */
 interface ExtensionPropertyAttributeDto {
-  config: Dictionary<string, any>;
+  config: Dictionary<string>;
   typeSimple: string;
 }
 /** 扩展属性（用于请求代理，忽略） */
 interface ExtensionPropertyDto {
   api: ExtensionPropertyApiDto;
   attributes: ExtensionPropertyAttributeDto[];
-  configuration: Dictionary<string, any>;
+  configuration: Dictionary<string>;
   defaultValue: any;
   displayName?: LocalizableStringDto;
   type: string;
@@ -309,12 +289,12 @@ interface ExtensionPropertyDto {
 }
 /** 扩展属性（用于请求代理，忽略） */
 interface EntityExtensionDto {
-  configuration: Dictionary<string, any>;
+  configuration: Dictionary<string>;
   properties: Dictionary<string, ExtensionPropertyDto>;
 }
 /** 扩展属性（用于请求代理，忽略） */
 interface ModuleExtensionDto {
-  configuration: Dictionary<string, any>;
+  configuration: Dictionary<string>;
   entities: Dictionary<string, EntityExtensionDto>;
 }
 /** 扩展属性（用于请求代理，忽略） */
@@ -408,7 +388,6 @@ export type {
   PagedAndSortedResultRequestDto,
   PagedResultDto,
   PagedResultRequestDto,
-  RemoteServiceErrorInfo,
   SortedResultRequest,
   TimingDto,
   WrapResult,

@@ -5,30 +5,25 @@ import type { FormInstance } from 'ant-design-vue';
 
 import type { SettingDefinitionDto } from '../../types/definitions';
 
-import { defineEmits, defineOptions, ref, toValue, useTemplateRef } from 'vue';
+import { ref, toValue, useTemplateRef } from 'vue';
 
 import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
+import { getModalData, useNotifications } from '@abp/core';
 import { LocalizableInput, PropertyTable } from '@abp/ui';
-import {
-  Checkbox,
-  Form,
-  Input,
-  message,
-  Select,
-  Tabs,
-  Textarea,
-} from 'ant-design-vue';
+import { Checkbox, Form, Input, Select, Tabs, Textarea } from 'ant-design-vue';
 
 import { useDefinitionsApi } from '../../api/useDefinitionsApi';
-
 defineOptions({
   name: 'SettingDefinitionModal',
 });
+
 const emits = defineEmits<{
   (event: 'change', data: SettingDefinitionDto): void;
 }>();
+
+const { toastSuccess } = useNotifications();
 
 const FormItem = Form.Item;
 const TabPane = Tabs.TabPane;
@@ -46,7 +41,7 @@ const availableProviders = ref<NameValue<string>[]>([]);
 const { createApi, getApi, getAssignableProvidersApi, updateApi } =
   useDefinitionsApi();
 
-const [Modal, modalApi] = useVbenModal({
+const [Modal, modalApi] = useVbenModal<SettingDefinitionDto>({
   class: 'w-1/2',
   draggable: true,
   fullscreenButton: false,
@@ -61,7 +56,7 @@ const [Modal, modalApi] = useVbenModal({
     modalApi.setState({ submitting: true });
     api
       .then((res) => {
-        message.success($t('AbpUi.SavedSuccessfully'));
+        toastSuccess($t('AbpUi.SavedSuccessfully'));
         emits('change', res);
         modalApi.close();
       })
@@ -80,7 +75,7 @@ const [Modal, modalApi] = useVbenModal({
       });
       try {
         modalApi.setState({ loading: true });
-        const { name } = modalApi.getData<SettingDefinitionDto>();
+        const { name } = getModalData(modalApi);
         name && (await onGet(name));
         await onInitProviders();
       } finally {
@@ -109,7 +104,7 @@ function onPropChange(prop: PropertyInfo) {
 }
 function onPropDelete(prop: PropertyInfo) {
   formModel.value.extraProperties ??= {};
-  delete formModel.value.extraProperties[prop.key];
+  Reflect.deleteProperty(formModel.value.extraProperties, prop.key);
 }
 </script>
 

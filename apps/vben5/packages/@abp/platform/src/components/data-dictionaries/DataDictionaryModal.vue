@@ -8,14 +8,14 @@ import type {
 import { useVbenForm, useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { listToTree } from '@abp/core';
-import { message } from 'ant-design-vue';
+import { getModalData, listToTree, useNotifications } from '@abp/core';
 
 import { useDataDictionariesApi } from '../../api';
-
 const emits = defineEmits<{
   (event: 'change', data: DataDto): void;
 }>();
+
+const { toastSuccess } = useNotifications();
 
 const { createApi, getAllApi, getApi, updateApi } = useDataDictionariesApi();
 
@@ -84,7 +84,7 @@ const [Form, formApi] = useVbenForm({
   ],
   showDefaultActions: false,
 });
-const [Modal, modalApi] = useVbenModal({
+const [Modal, modalApi] = useVbenModal<DataDto>({
   onConfirm: async () => {
     await formApi.validateAndSubmitForm();
   },
@@ -99,7 +99,7 @@ async function onGet() {
   try {
     modalApi.setState({ loading: true });
     formApi.resetForm();
-    const { displayName, id, parentId } = modalApi.getData<DataDto>();
+    const { displayName, id, parentId } = getModalData(modalApi);
     let title = $t('AppPlatform.Data:AddNew');
     if (id) {
       const dto = await getApi(id);
@@ -122,7 +122,7 @@ async function onSubmit(values: Record<string, any>) {
       ? updateApi(values.id, values as DataUpdateDto)
       : createApi(values as DataCreateDto);
     const dto = await api;
-    message.success($t('AbpUi.SavedSuccessfully'));
+    toastSuccess($t('AbpUi.SavedSuccessfully'));
     emits('change', dto);
     modalApi.close();
   } finally {

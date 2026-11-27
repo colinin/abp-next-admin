@@ -14,8 +14,7 @@ defineProps<{
   userInfo: null | UserInfo;
 }>();
 const emits = defineEmits<{
-  (event: 'changePassword'): void;
-  (event: 'changePhoneNumber'): void;
+  (event: 'changePassword' | 'changePhoneNumber'): void;
 }>();
 const ListItem = List.Item;
 const ListItemMeta = List.Item.Meta;
@@ -25,7 +24,7 @@ const {
   getTwoFactorEnabledApi,
   sendEmailConfirmLinkApi,
 } = useProfileApi();
-const twoFactor = ref<TwoFactorEnabledDto>();
+const twoFactor = ref<TwoFactorEnabledDto>({ enabled: false });
 const loading = ref(false);
 
 const sendMailInternal = ref(0);
@@ -48,7 +47,7 @@ async function onTwoFactorChange(enabled: boolean) {
     loading.value = true;
     await changeTwoFactorEnabledApi({ enabled });
   } catch {
-    twoFactor.value!.enabled = !enabled;
+    twoFactor.value.enabled = !enabled;
   } finally {
     loading.value = false;
   }

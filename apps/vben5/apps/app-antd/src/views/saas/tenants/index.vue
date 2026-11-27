@@ -52,9 +52,9 @@ const [Form, formApi] = useVbenForm({
   handleSubmit: onImpersonationSubmit,
 });
 
-const [Modal, modalApi] = useVbenModal({
+const [Modal, modalApi] = useVbenModal<ImpersonationModalState>({
   async onConfirm() {
-    await formApi.validateAndSubmitForm();
+    await formApi.validateAndSubmit();
   },
   async onOpenChange(isOpen) {
     if (isOpen) {
@@ -64,14 +64,17 @@ const [Modal, modalApi] = useVbenModal({
 });
 
 async function handleImpersonation(tenant: TenantDto) {
-  modalApi.setData<ImpersonationModalState>({
+  modalApi.setData({
     tenantId: tenant.id,
   });
   modalApi.open();
 }
 
 async function onImpersonationSubmit(values: Record<string, string>) {
-  const state = modalApi.getData<ImpersonationModalState>();
+  const state = modalApi.getData();
+  if (!state) {
+    return;
+  }
   try {
     modalApi.lock();
     await authStore.impersonationUserLogin(

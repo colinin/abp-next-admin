@@ -21,25 +21,20 @@
   },
   "dependencies": {
     "@abp/core": "workspace:*",
-    "@vben-core/form-ui": "workspace:*",
     "@vben-core/preferences": "workspace:*",
     "@vben-core/shadcn-ui": "workspace:*",
     "@vben-core/shared": "workspace:*",
     "@vben-core/typings": "workspace:*",
     "@vben/common-ui": "workspace:*",
     "@vben/constants": "workspace:*",
-    "@vben/hooks": "workspace:*",
     "@vben/icons": "workspace:*",
     "@vben/locales": "workspace:*",
-    "@vben/preferences": "workspace:*",
-    "@vben/types": "workspace:*",
+    "@vben/plugins": "workspace:*",
     "@vben/utils": "workspace:*",
     "@vueuse/core": "catalog:",
     "ant-design-vue": "catalog:",
     "lodash.clonedeep": "catalog:",
-    "vue": "catalog:",
-    "vxe-pc-ui": "catalog:",
-    "vxe-table": "catalog:"
+    "vue": "catalog:"
   },
   "devDependencies": {
     "@types/lodash.clonedeep": "catalog:"

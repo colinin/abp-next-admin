@@ -33,7 +33,7 @@ withDefaults(
   },
 );
 
-const inputValue = defineModel<number>();
+const inputValue = defineModel<number | undefined>({ default: undefined });
 
 const slots = useSlots();
 </script>
@@ -63,7 +63,7 @@ const slots = useSlots();
       </VbenTooltip>
     </span>
 
-    <NumberField v-model="inputValue" v-bind="$attrs" class="w-[165px]">
+    <NumberField v-model="inputValue" v-bind="$attrs" class="w-41.25">
       <NumberFieldContent>
         <NumberFieldDecrement />
         <NumberFieldInput />

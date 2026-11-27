@@ -15,7 +15,12 @@ import { h, reactive, ref, toValue, useTemplateRef } from 'vue';
 import { useVbenDrawer } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { useLocalization, useLocalizationSerializer } from '@abp/core';
+import {
+  getModalData,
+  useLocalization,
+  useLocalizationSerializer,
+  useNotifications,
+} from '@abp/core';
 import {
   DataAccessFilterLogic,
   DataAccessFilterOperate,
@@ -35,11 +40,11 @@ import {
   FormItemRest,
   Input,
   InputNumber,
-  message,
   Popconfirm,
   Select,
   Switch,
 } from 'ant-design-vue';
+const { toastSuccess } = useNotifications();
 
 const defaultModel: RoleEntityRuleDto = {
   accessedProperties: [],
@@ -155,7 +160,7 @@ const dataAccessFilterOptions = reactive([
     value: DataAccessFilterOperate.NotEqual,
   },
 ]);
-const [Drawer, drawerApi] = useVbenDrawer({
+const [Drawer, drawerApi] = useVbenDrawer<IdentityRoleDto>({
   class: 'w-1/2',
   onConfirm: onSubmit,
   async onOpenChange(isOpen) {
@@ -180,7 +185,7 @@ const { deserialize } = useLocalizationSerializer();
 const { Lr } = useLocalization();
 
 async function onInitStrategys() {
-  const roleInfo = drawerApi.getData<IdentityRoleDto>();
+  const roleInfo = getModalData(drawerApi);
   const result = await getStrategysApi({
     subjectId: roleInfo.name,
     subjectName: 'R',
@@ -238,7 +243,7 @@ async function onSubmit() {
     await (input.strategy === DataAccessStrategy.Custom
       ? submitCustomRule(input)
       : submitStrategys(input));
-    message.success($t('AbpUi.SavedSuccessfully'));
+    toastSuccess($t('AbpUi.SavedSuccessfully'));
     drawerApi.close();
   } finally {
     drawerApi.setState({ confirmLoading: false });
@@ -246,7 +251,7 @@ async function onSubmit() {
 }
 
 async function submitStrategys(input: RoleEntityRuleDto) {
-  const roleInfo = drawerApi.getData<IdentityRoleDto>();
+  const roleInfo = getModalData(drawerApi);
   await setStrategysApi({
     isEnabled: input.isEnabled,
     strategy: input.strategy,
@@ -256,7 +261,7 @@ async function submitStrategys(input: RoleEntityRuleDto) {
 }
 
 async function submitCustomRule(input: RoleEntityRuleDto) {
-  const roleInfo = drawerApi.getData<IdentityRoleDto>();
+  const roleInfo = getModalData(drawerApi);
   const api = input.id
     ? updateApi(input.id, {
         accessedProperties: input.accessedProperties,
@@ -283,7 +288,7 @@ async function onGetEntityType() {
   try {
     drawerApi.setState({ confirmLoading: true, loading: true });
     const { entityTypeId, operation } = formModel.value;
-    const roleInfo = drawerApi.getData<IdentityRoleDto>();
+    const roleInfo = getModalData(drawerApi);
     const ruleEntityRule = await getRoleEntityRuleApi({
       entityTypeId,
       operation,
@@ -354,7 +359,7 @@ function onPropertyTypeChange(
       </FormItem>
       <FormItem name="isEnabled" label="数据权限策略">
         <Select
-          class="w-full"
+          class="!w-full"
           :options="strategyOptions"
           v-model:value="formModel.strategy"
           @change="(value) => onStrategyChange(Number(value!))"
@@ -363,7 +368,7 @@ function onPropertyTypeChange(
       <template v-if="formModel.strategy === DataAccessStrategy.Custom">
         <FormItem required name="entityTypeId" label="实体类型">
           <Select
-            class="w-full"
+            class="!w-full"
             :options="entityTypes"
             :field-names="{ label: 'displayName', value: 'id' }"
             v-model:value="formModel.entityTypeId"
@@ -372,7 +377,7 @@ function onPropertyTypeChange(
         </FormItem>
         <FormItem required name="operation" label="操作">
           <Select
-            class="w-full"
+            class="!w-full"
             :options="operationOptions"
             v-model:value="formModel.operation"
             @change="onGetEntityType"
@@ -380,7 +385,7 @@ function onPropertyTypeChange(
         </FormItem>
         <FormItem name="accessedProperties" label="可访问字段">
           <Select
-            class="w-full"
+            class="!w-full"
             mode="multiple"
             :options="entityTypeProps"
             v-model:value="formModel.accessedProperties"
@@ -406,7 +411,7 @@ function onPropertyTypeChange(
                         >
                           <div class="basis-2/5">
                             <Select
-                              class="w-full"
+                              class="!w-full"
                               :options="entityTypeProps"
                               v-model:value="rule.field"
                               :field-names="{
@@ -421,7 +426,7 @@ function onPropertyTypeChange(
                           </div>
                           <div class="basis-1/5">
                             <Select
-                              class="w-full"
+                              class="!w-full"
                               :options="dataAccessFilterOptions"
                               v-model:value="rule.operate"
                             />
@@ -429,7 +434,7 @@ function onPropertyTypeChange(
                           <div class="basis-2/5">
                             <InputNumber
                               v-if="rule.javaScriptType === 'number'"
-                              class="w-full"
+                              class="!w-full"
                               v-model:value="rule.value"
                             />
                             <Switch
@@ -438,13 +443,13 @@ function onPropertyTypeChange(
                             />
                             <DatePicker
                               v-else-if="rule.javaScriptType === 'Date'"
-                              class="w-full"
+                              class="!w-full"
                               v-model:value="rule.value"
                               value-format="YYYY-MM-DDT00:00:00"
                             />
                             <Input
                               v-else
-                              class="w-full"
+                              class="!w-full"
                               v-model:value="rule.value"
                             />
                           </div>
@@ -469,7 +474,7 @@ function onPropertyTypeChange(
                         <div class="m-2 min-w-[60px]">
                           <Select
                             size="small"
-                            class="w-full"
+                            class="!w-full"
                             v-model:value="group.logic"
                             :options="logicOptions"
                           />
@@ -501,7 +506,7 @@ function onPropertyTypeChange(
                 <div class="m-2 min-w-[60px]">
                   <Select
                     size="small"
-                    class="w-full"
+                    class="!w-full"
                     v-model:value="formModel.filterGroup.logic"
                     :options="logicOptions"
                   />

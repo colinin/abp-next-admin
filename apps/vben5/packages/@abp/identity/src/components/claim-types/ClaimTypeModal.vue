@@ -4,29 +4,25 @@ import type { DefaultOptionType } from 'ant-design-vue/es/select';
 
 import type { IdentityClaimTypeDto } from '../../types/claim-types';
 
-import { defineEmits, defineOptions, reactive, ref, toValue } from 'vue';
+import { reactive, ref, toValue } from 'vue';
 
 import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import {
-  Checkbox,
-  Form,
-  Input,
-  message,
-  Select,
-  Textarea,
-} from 'ant-design-vue';
+import { getModalData, useNotifications } from '@abp/core';
+import { Checkbox, Form, Input, Select, Textarea } from 'ant-design-vue';
 
 import { useClaimTypesApi } from '../../api/useClaimTypesApi';
 import { ValueType } from '../../types/claim-types';
-
 defineOptions({
   name: 'ClaimTypeModal',
 });
+
 const emits = defineEmits<{
   (event: 'change', data: IdentityClaimTypeDto): void;
 }>();
+
+const { toastSuccess } = useNotifications();
 
 const FormItem = Form.Item;
 
@@ -56,7 +52,7 @@ const valueTypeOptions = reactive<DefaultOptionType[]>([
 ]);
 
 const { cancel, createApi, getApi, updateApi } = useClaimTypesApi();
-const [Modal, modalApi] = useVbenModal({
+const [Modal, modalApi] = useVbenModal<IdentityClaimTypeDto>({
   draggable: true,
   fullscreenButton: false,
   onCancel() {
@@ -73,7 +69,7 @@ const [Modal, modalApi] = useVbenModal({
     modalApi.setState({ submitting: true });
     api
       .then((res) => {
-        message.success($t('AbpUi.Success'));
+        toastSuccess($t('AbpUi.Success'));
         emits('change', res);
         modalApi.close();
       })
@@ -88,7 +84,7 @@ const [Modal, modalApi] = useVbenModal({
         showConfirmButton: false,
         title: $t('AbpIdentity.IdentityClaim:New'),
       });
-      const claimTypeDto = modalApi.getData<IdentityClaimTypeDto>();
+      const claimTypeDto = getModalData(modalApi);
       if (claimTypeDto?.id) {
         modalApi.setState({ loading: true });
         try {

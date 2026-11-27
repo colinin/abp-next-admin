@@ -14,6 +14,7 @@ import {
   useAuthorization,
   useLocalization,
   useLocalizationSerializer,
+  useNotifications,
 } from '@abp/core';
 import { useVbenVxeGrid } from '@abp/ui';
 import {
@@ -23,14 +24,16 @@ import {
   EditOutlined,
   PlusOutlined,
 } from '@ant-design/icons-vue';
-import { Button, message, Modal } from 'ant-design-vue';
+import { Button, Modal } from 'ant-design-vue';
 
 import { useAIToolsApi } from '../../api/useAIToolsApi';
 import { AIToolDefinitionPermissions } from '../../constants/permissions';
-
 defineOptions({
   name: 'WorkspaceDefinitionTable',
 });
+
+const { toastSuccess } = useNotifications();
+
 const { deleteApi, getPagedListApi } = useAIToolsApi();
 const { isGranted } = useAuthorization();
 const { Lr } = useLocalization();
@@ -175,7 +178,7 @@ async function onDelete(row: AIToolDefinitionRecordDto) {
     content: $t('AbpUi.ItemWillBeDeletedMessage'),
     onOk: async () => {
       await deleteApi(row.id);
-      message.success($t('AbpUi.DeletedSuccessfully'));
+      toastSuccess($t('AbpUi.DeletedSuccessfully'));
       gridApi.query();
     },
     title: $t('AbpUi.AreYouSure'),

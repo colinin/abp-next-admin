@@ -8,6 +8,7 @@ import { useVbenForm, useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
 import { CodeEditor } from '@abp/components/codeeditor';
+import { getModalData } from '@abp/core';
 import { UserLookupPermissions, useUserLookupApi } from '@abp/identity';
 import { Select } from 'ant-design-vue';
 
@@ -93,7 +94,7 @@ const [Form, formApi] = useVbenForm({
 
   showDefaultActions: false,
 });
-const [Modal, modalApi] = useVbenModal({
+const [Modal, modalApi] = useVbenModal<OpenIddictAuthorizationDto>({
   class: 'w-1/2',
   draggable: true,
   fullscreenButton: false,
@@ -107,7 +108,7 @@ const [Modal, modalApi] = useVbenModal({
     if (isOpen) {
       try {
         modalApi.setState({ loading: true });
-        const { id } = modalApi.getData<OpenIddictAuthorizationDto>();
+        const { id } = getModalData(modalApi);
         await onGet(id);
       } finally {
         modalApi.setState({ loading: false });
@@ -120,17 +121,22 @@ const [Modal, modalApi] = useVbenModal({
 
 async function onGet(id: string) {
   const authorization = await getAuthorization(id);
-  const application = await getApplication(authorization.applicationId!);
+  const { applicationId, subject } = authorization;
+  const application = applicationId
+    ? await getApplication(applicationId)
+    : undefined;
   let subjectInfo: IdentityUserDto | undefined;
-  if (hasAccessByCodes([UserLookupPermissions.Default])) {
-    subjectInfo = await userLookupApi.findByIdApi(authorization.subject!);
+  if (subject && hasAccessByCodes([UserLookupPermissions.Default])) {
+    subjectInfo = await userLookupApi.findByIdApi(subject);
   }
   formApi.setValues({
     ...authorization,
-    applicationId: `${application.clientId}(${authorization.applicationId})`,
+    applicationId: application
+      ? `${application.clientId}(${applicationId})`
+      : applicationId,
     subject: subjectInfo?.userName
-      ? `${subjectInfo.userName}(${authorization.subject})`
-      : authorization.subject,
+      ? `${subjectInfo.userName}(${subject})`
+      : subject,
   });
 }
 </script>

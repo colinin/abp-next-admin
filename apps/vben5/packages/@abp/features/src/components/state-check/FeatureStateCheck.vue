@@ -39,10 +39,10 @@ const modelValue = defineModel<{
   featureNames: string[];
   requiresAll: boolean;
 }>({
-  default: {
+  default: () => ({
     featureNames: [],
     requiresAll: false,
-  },
+  }),
 });
 
 const getFeatureOptions = computed(() => {

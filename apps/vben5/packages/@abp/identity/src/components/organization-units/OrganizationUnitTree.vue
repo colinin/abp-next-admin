@@ -12,6 +12,7 @@ import { useVbenModal } from '@vben/common-ui';
 import { createIconifyIcon } from '@vben/icons';
 import { $t } from '@vben/locales';
 
+import { useNotifications } from '@abp/core';
 import { PermissionModal } from '@abp/permissions';
 import {
   DeleteOutlined,
@@ -19,18 +20,9 @@ import {
   PlusOutlined,
   RedoOutlined,
 } from '@ant-design/icons-vue';
-import {
-  Button,
-  Card,
-  Dropdown,
-  Menu,
-  message,
-  Modal,
-  Tree,
-} from 'ant-design-vue';
+import { Button, Card, Dropdown, Menu, Modal, Tree } from 'ant-design-vue';
 
 import { useOrganizationUnitsApi } from '../../api/useOrganizationUnitsApi';
-
 defineOptions({
   name: 'OrganizationUnitTree',
 });
@@ -38,6 +30,8 @@ defineOptions({
 const emits = defineEmits<{
   (event: 'selected', id?: string): void;
 }>();
+
+const { toastSuccess } = useNotifications();
 
 const { deleteApi, getApi, getChildrenApi, getRootListApi, moveTo } =
   useOrganizationUnitsApi();
@@ -88,15 +82,18 @@ async function onRefresh() {
 async function onLoad(node: EventDataNode) {
   const nodeKey = String(node.key);
   const { items } = await getChildrenApi({ id: nodeKey });
-  node.dataRef!.isLeaf = items.length === 0;
-  node.dataRef!.children = items.map((item): DataNode => {
-    return {
-      isLeaf: false,
-      key: item.id,
-      title: item.displayName,
-      children: [],
-    };
-  });
+  const dataRef = node.dataRef;
+  if (dataRef) {
+    dataRef.isLeaf = items.length === 0;
+    dataRef.children = items.map((item): DataNode => {
+      return {
+        isLeaf: false,
+        key: item.id,
+        title: item.displayName,
+        children: [],
+      };
+    });
+  }
   organizationUnits.value = [...organizationUnits.value];
   loadedKeys.value.push(nodeKey);
 }
@@ -137,7 +134,7 @@ function onDelete(id: string) {
     maskClosable: false,
     onOk: async () => {
       await deleteApi(id);
-      message.success($t('AbpUi.DeletedSuccessfully'));
+      toastSuccess($t('AbpUi.DeletedSuccessfully'));
       onRefresh();
     },
     title: $t('AbpUi.AreYouSure'),
@@ -146,7 +143,7 @@ function onDelete(id: string) {
 
 /** 右键菜单点击事件 */
 function onMenuClick(id: string, eventKey: Key) {
-  actionsMap[eventKey]!(id);
+  actionsMap[eventKey]?.(id);
 }
 
 /** 组织机构选择变化事件 */

@@ -1,13 +1,22 @@
 <script setup lang="ts">
+import type { AbpEditorOpenContext } from '@abp/components/crud/modal';
+import type { EntityTypeInfoModel } from '@abp/data-protection';
 import type { PrintDesignerInstance } from '@abp/print-designer';
-import type { VxeGridListeners, VxeGridProps, VxeGridPropTypes } from '@abp/ui';
 
-import type { VbenFormProps } from '@vben/common-ui';
+import type {
+  BaseFormComponentType,
+  VbenFormProps,
+  VbenFormSchema,
+} from '@vben/common-ui';
+import type {
+  VxeGridListeners,
+  VxeGridPropTypes,
+} from '@vben/plugins/vxe-table';
 
-import type { BookDto } from '../../types/books';
+import type { BookDto, CreateUpdateBookDto } from '../../types/books';
 
 import {
-  defineAsyncComponent,
+  computed,
   h,
   nextTick,
   onMounted,
@@ -16,33 +25,105 @@ import {
   useTemplateRef,
 } from 'vue';
 
-import { useVbenModal } from '@vben/common-ui';
+import { globalShareState } from '@vben/common-ui';
+import { createIconifyIcon } from '@vben/icons';
 import { $t } from '@vben/locales';
 
+import { useAbpEditorModal } from '@abp/components/crud/modal';
+import { useAbpDataTable } from '@abp/components/crud/table';
 import { DataAccessOperation } from '@abp/data-protection';
 import { PrintDesigner } from '@abp/print-designer';
-import { useVbenVxeGrid } from '@abp/ui';
-import {
-  DeleteOutlined,
-  EditOutlined,
-  PlusOutlined,
-  PrinterOutlined,
-} from '@ant-design/icons-vue';
-import { Button, message, Modal } from 'ant-design-vue';
 
+import { useAuthorsApi } from '../../api/useAuthorsApi';
 import { useBooksApi } from '../../api/useBooksApi';
 import { BookPermissions } from '../../constants/permissions';
+import { BookType } from '../../types/books';
 
 defineOptions({
   name: 'BookTable',
 });
 
+const PlusOutlined = createIconifyIcon('ant-design:plus-outlined');
+const PrinterOutlined = createIconifyIcon('ant-design:printer-outlined');
+const ButtonComponent = computed(
+  () => globalShareState.getComponents()?.Button,
+);
+
 const printDesigner = useTemplateRef<PrintDesignerInstance>('print-designer');
 const selectedKeys = ref<string[]>([]);
+const {
+  deleteApi,
+  getApi,
+  getEntityInfoApi,
+  getPagedListApi,
+  createApi,
+  updateApi,
+} = useBooksApi();
+const { getPagedListApi: getAuthorsApi } = useAuthorsApi();
 
-const { deleteApi, getEntityInfoApi, getPagedListApi } = useBooksApi();
+const defaultFormSchema: VbenFormSchema<
+  BaseFormComponentType,
+  Record<string, never>,
+  CreateUpdateBookDto
+>[] = [
+  {
+    component: 'Input',
+    fieldName: 'name',
+    label: $t('Demo.DisplayName:Name'),
+    rules: 'required',
+  },
+  {
+    component: 'Select',
+    componentProps: {
+      options: [
+        { label: $t('Demo.BookType:Undefined'), value: BookType.Undefined },
+        { label: $t('Demo.BookType:Adventure'), value: BookType.Adventure },
+        { label: $t('Demo.BookType:Biography'), value: BookType.Biography },
+        { label: $t('Demo.BookType:Dystopia'), value: BookType.Dystopia },
+        { label: $t('Demo.BookType:Fantastic'), value: BookType.Fantastic },
+        { label: $t('Demo.BookType:Horror'), value: BookType.Horror },
+        { label: $t('Demo.BookType:Science'), value: BookType.Science },
+        {
+          label: $t('Demo.BookType:ScienceFiction'),
+          value: BookType.ScienceFiction,
+        },
+        { label: $t('Demo.BookType:Poetry'), value: BookType.Poetry },
+      ],
+    },
+    fieldName: 'type',
+    label: $t('Demo.DisplayName:Type'),
+    rules: 'selectRequired',
+  },
+  {
+    component: 'DatePicker',
+    componentProps: {
+      valueFormat: 'YYYY-MM-DD',
+    },
+    fieldName: 'publishDate',
+    label: $t('Demo.DisplayName:PublishDate'),
+    rules: 'selectRequired',
+  },
+  {
+    component: 'InputNumber',
+    fieldName: 'price',
+    label: $t('Demo.DisplayName:Price'),
+    rules: 'required',
+  },
+  {
+    component: 'ApiSelect',
+    componentProps: {
+      api: getAuthorsApi,
+      labelField: 'name',
+      resultField: 'items',
+      valueField: 'id',
+    },
+    fieldName: 'authorId',
+    label: $t('Demo.DisplayName:AuthorId'),
+    rules: 'selectRequired',
+  },
+];
+
 const formOptions: VbenFormProps = {
-  // 默认展开
   collapsed: false,
   resetButtonOptions: {
     show: false,
@@ -59,20 +140,19 @@ const formOptions: VbenFormProps = {
       label: $t('AbpUi.Search'),
     },
   ],
-  // 控制表单是否显示折叠按钮
   showCollapseButton: false,
-  // 按下回车时是否提交表单
   submitOnEnter: true,
 };
-const actionColumns = reactive<VxeGridPropTypes.Columns<BookDto>>([
-  {
-    field: 'action',
-    fixed: 'right',
-    slots: { default: 'action' },
-    title: $t('AbpUi.Actions'),
-    width: 180,
-  },
-]);
+
+const actionColumn = {
+  align: 'center' as const,
+  field: 'action',
+  fixed: 'right' as const,
+  slots: { default: 'action' },
+  title: $t('AbpUi.Actions'),
+  width: 180,
+};
+
 const baseColumns = reactive<VxeGridPropTypes.Columns<BookDto>>([
   {
     align: 'center',
@@ -94,6 +174,8 @@ const baseColumns = reactive<VxeGridPropTypes.Columns<BookDto>>([
   {
     align: 'left',
     field: 'publishDate',
+    cellType: 'date',
+    formatter: 'AutoFormatDate',
     minWidth: 200,
     sortable: true,
     title: $t('Demo.DisplayName:PublishDate'),
@@ -107,35 +189,6 @@ const baseColumns = reactive<VxeGridPropTypes.Columns<BookDto>>([
   },
 ]);
 
-const gridOptions: VxeGridProps<BookDto> = {
-  columns: [...baseColumns, ...actionColumns],
-  exportConfig: {},
-  keepSource: true,
-  proxyConfig: {
-    ajax: {
-      query: async ({ page, sort }, formValues) => {
-        const sorting = sort.order ? `${sort.field} ${sort.order}` : undefined;
-        return await getPagedListApi({
-          sorting,
-          maxResultCount: page.pageSize,
-          skipCount: (page.currentPage - 1) * page.pageSize,
-          ...formValues,
-        });
-      },
-    },
-    response: {
-      total: 'totalCount',
-      list: 'items',
-    },
-  },
-  toolbarConfig: {
-    refresh: true,
-    refreshOptions: {
-      code: 'query',
-    },
-  },
-};
-
 const gridEvents: VxeGridListeners<BookDto> = {
   checkboxAll: (params) => {
     selectedKeys.value = params.records.map((x) => x.id);
@@ -147,21 +200,106 @@ const gridEvents: VxeGridListeners<BookDto> = {
     selectedKeys.value = [];
   },
   sortChange: () => {
-    gridApi.query();
+    tableApi.refresh();
   },
 };
-const [Grid, gridApi] = useVbenVxeGrid({
+
+const [Table, tableApi] = useAbpDataTable<BookDto>({
+  actionColumn: false,
+  dropdownActions: (row) => [
+    {
+      onClick: () => onPrint(row),
+      icon: h(PrinterOutlined),
+      text: $t('Demo.Print'),
+    },
+  ],
+  delete: (dto) => deleteApi(dto.id),
+  deleteAuth: BookPermissions.Delete,
+  deleteWarnMessage: (row) =>
+    $t('AbpUi.ItemWillBeDeletedMessageWithFormat', [row.name]),
+  edit: (row) => bookModalApi.open(row),
+  editAuth: BookPermissions.Update,
   formOptions,
   gridEvents,
-  gridOptions,
+  gridOptions: {
+    columns: [...baseColumns, actionColumn],
+    exportConfig: {},
+    height: 'auto',
+    keepSource: true,
+    toolbarConfig: {
+      refresh: true,
+      refreshOptions: {
+        code: 'query',
+      },
+    },
+  },
+  load: async ({ pager, searchValues, sortable }) =>
+    await getPagedListApi({
+      maxResultCount: pager.maxResultCount,
+      skipCount: pager.skipCount,
+      sorting: sortable?.sorting,
+      ...searchValues,
+    }),
 });
-const [BookModal, modalApi] = useVbenModal({
-  connectedComponent: defineAsyncComponent(() => import('./BookModal.vue')),
+
+async function onEditorOpen(
+  context: AbpEditorOpenContext<BookDto, CreateUpdateBookDto>,
+) {
+  const { dto, formApi, mode } = context;
+  if (mode === 'create' || !dto) {
+    formApi.setState({ schema: defaultFormSchema });
+    await nextTick();
+    return;
+  }
+
+  const [readRule, writeRule] = await Promise.all([
+    getEntityInfoApi({ operation: DataAccessOperation.Read }),
+    getEntityInfoApi({ operation: DataAccessOperation.Write }),
+  ]);
+  updateSchema(formApi, readRule, writeRule);
+  await nextTick();
+}
+
+function updateSchema(
+  formApi: AbpEditorOpenContext<BookDto, CreateUpdateBookDto>['formApi'],
+  readRule: EntityTypeInfoModel,
+  writeRule: EntityTypeInfoModel,
+) {
+  const readProps = new Set(readRule.properties.map((x) => x.javaScriptName));
+  const writeProps = new Set(writeRule.properties.map((x) => x.javaScriptName));
+  const schema: typeof defaultFormSchema = defaultFormSchema
+    .filter((item) => readProps.has(item.fieldName ?? ''))
+    .map((item) => ({
+      ...item,
+      disabled: !writeProps.has(item.fieldName ?? ''),
+    }));
+  formApi.setState({ schema });
+}
+
+const [BookEditorModal, bookModalApi] = useAbpEditorModal<
+  BookDto,
+  CreateUpdateBookDto
+>({
+  create: createApi,
+  formOptions: {
+    commonConfig: {
+      colon: true,
+      controlClass: 'w-full',
+    },
+    schema: defaultFormSchema,
+  },
+  get: getApi,
+  idKey: (dto) => dto.id,
+  onOpen: onEditorOpen,
+  refresh: async () => {
+    await tableApi.refresh();
+  },
+  titleKey: (dto) => dto.name,
+  update: updateApi,
 });
 
 function onCreate() {
-  modalApi.setData({});
-  modalApi.open();
+  void bookModalApi.create();
 }
 
 async function onPrint(record: BookDto) {
@@ -169,14 +307,14 @@ async function onPrint(record: BookDto) {
     return;
   }
   try {
-    gridApi.setLoading(true);
+    tableApi.setLoading(true);
     const designer = printDesigner.value;
-    await designer.previewWithName({
+    await designer.printWithName({
       templateName: '书籍标签',
       variables: record,
     });
   } finally {
-    gridApi.setLoading(false);
+    tableApi.setLoading(false);
   }
 }
 
@@ -185,9 +323,9 @@ async function onPrintMany() {
     return;
   }
   try {
-    gridApi.setLoading(true);
+    tableApi.setLoading(true);
     const designer = printDesigner.value;
-    const data = gridApi.grid.getCheckboxRecords();
+    const data = tableApi.grid.getCheckboxRecords();
     await designer.printBatchWithName(
       data.map((d) => {
         return {
@@ -202,27 +340,8 @@ async function onPrintMany() {
       },
     );
   } finally {
-    gridApi.setLoading(false);
+    tableApi.setLoading(false);
   }
-}
-
-function onEdit(record: BookDto) {
-  modalApi.setData(record);
-  modalApi.open();
-}
-
-async function onDelete(record: BookDto) {
-  Modal.confirm({
-    centered: true,
-    content: $t('AbpUi.ItemWillBeDeletedMessageWithFormat', [record.name]),
-    maskClosable: true,
-    onOk: async () => {
-      await deleteApi(record.id);
-      message.success($t('AbpUi.DeletedSuccessfully'));
-      await gridApi.query();
-    },
-    title: $t('AbpUi.AreYouSure'),
-  });
 }
 
 async function onInit() {
@@ -236,10 +355,10 @@ async function onInit() {
     entityRule.properties.map((x) => x.javaScriptName),
   );
   nextTick(() => {
-    gridApi.setGridOptions({
+    tableApi.setGridOptions({
       columns: [
         ...baseColumns.filter((x) => !x.field || allowProperties.has(x.field)),
-        ...actionColumns,
+        actionColumn,
       ],
     });
   });
@@ -249,62 +368,37 @@ onMounted(onInit);
 </script>
 
 <template>
-  <Grid :table-title="$t('Demo.Book')">
+  <Table :table-title="$t('Demo.Book')">
     <template #toolbar-tools>
       <div class="flex flex-row gap-2">
-        <Button
-          type="primary"
+        <component
           v-access:code="[BookPermissions.Create]"
-          :icon="h(PlusOutlined)"
+          :is="ButtonComponent"
+          type="primary"
           @click="onCreate"
         >
+          <PlusOutlined />
           {{ $t('Demo.NewBook') }}
-        </Button>
-        <Button
+        </component>
+        <component
           v-if="selectedKeys.length > 0"
-          type="primary"
-          :icon="h(PrinterOutlined)"
+          :is="ButtonComponent"
           ghost
+          type="primary"
           @click="onPrintMany"
         >
+          <PrinterOutlined />
           {{ $t('Demo.Print') }}
-        </Button>
+        </component>
       </div>
     </template>
-    <template #action="{ row }">
-      <div class="flex flex-row">
-        <Button
-          :icon="h(PrinterOutlined)"
-          type="link"
-          block
-          @click="onPrint(row)"
-        >
-          {{ $t('Demo.Print') }}
-        </Button>
-        <Button
-          v-access:code="[BookPermissions.Update]"
-          :icon="h(EditOutlined)"
-          type="link"
-          block
-          @click="onEdit(row)"
-        >
-          {{ $t('AbpUi.Edit') }}
-        </Button>
-        <Button
-          v-access:code="[BookPermissions.Delete]"
-          :icon="h(DeleteOutlined)"
-          type="link"
-          danger
-          block
-          @click="onDelete(row)"
-        >
-          {{ $t('AbpUi.Delete') }}
-        </Button>
-      </div>
-    </template>
-  </Grid>
-  <BookModal @change="() => gridApi.query()" />
-  <PrintDesigner ref="print-designer" headless />
+  </Table>
+  <BookEditorModal />
+  <PrintDesigner
+    class="pointer-events-none fixed overflow-hidden !w-[1px] !h-[1px]"
+    ref="print-designer"
+    headless
+  />
 </template>
 
-<style lang="scss" scoped></style>
+<style scoped></style>

@@ -11,8 +11,7 @@ type TenantConnectionStringDto = NameValue<string>;
 type TenantConnectionStringSetInput = NameValue<string>;
 
 interface TenantDto
-  extends ExtensibleAuditedEntityDto<string>,
-    IHasConcurrencyStamp {
+  extends ExtensibleAuditedEntityDto<string>, IHasConcurrencyStamp {
   /** 禁用时间 */
   disableTime?: string;
   /** 版本Id */
@@ -61,8 +60,7 @@ interface TenantConnectionStringCheckInput {
 }
 
 interface TenantUpdateDto
-  extends IHasConcurrencyStamp,
-    TenantCreateOrUpdateBase {}
+  extends IHasConcurrencyStamp, TenantCreateOrUpdateBase {}
 
 export type {
   GetTenantPagedListInput,

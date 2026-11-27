@@ -10,20 +10,15 @@ import { useVbenForm, useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
 import { MarkdownViewer } from '@abp/components/vditor';
-import { useAbpStore } from '@abp/core';
-import {
-  Alert,
-  Modal as AntdvModal,
-  Button,
-  Card,
-  message,
-} from 'ant-design-vue';
+import { getModalData, useAbpStore, useNotifications } from '@abp/core';
+import { Alert, Modal as AntdvModal, Button, Card } from 'ant-design-vue';
 
 import { useTemplateContentsApi } from '../../api/useTemplateContentsApi';
-
 const emits = defineEmits<{
   (event: 'change', data: TextTemplateContentDto): void;
 }>();
+
+const { toastSuccess } = useNotifications();
 
 const { cancel, getApi, restoreToDefaultApi, updateApi } =
   useTemplateContentsApi();
@@ -62,7 +57,7 @@ const [Form, formApi] = useVbenForm({
   ],
   showDefaultActions: false,
 });
-const [Modal, modalApi] = useVbenModal({
+const [Modal, modalApi] = useVbenModal<TextTemplateDefinitionDto>({
   confirmText: $t('AbpTextTemplating.SaveContent'),
   fullscreen: true,
   fullscreenButton: false,
@@ -78,7 +73,7 @@ const [Modal, modalApi] = useVbenModal({
   onOpenChange: async (isOpen: boolean) => {
     textTemplate.value = undefined;
     if (isOpen) {
-      const textTemplateDefine = modalApi.getData<TextTemplateDefinitionDto>();
+      const textTemplateDefine = getModalData(modalApi);
       textTemplate.value = textTemplateDefine;
       await onGet();
     }
@@ -93,7 +88,7 @@ const [TemplateContentCurtuleModal, curtuleModalApi] = useVbenModal({
 async function onGet() {
   try {
     modalApi.setState({ loading: true });
-    const textTemplateDefine = modalApi.getData<TextTemplateDefinitionDto>();
+    const textTemplateDefine = getModalData(modalApi);
     const culture = textTemplateDefine.isInlineLocalized
       ? undefined
       : abpStore.application?.localization.currentCulture.cultureName;
@@ -109,8 +104,12 @@ function onRestoreToDefault() {
     centered: true,
     content: $t('AbpTextTemplating.RestoreToDefaultMessage'),
     onOk: async () => {
-      await restoreToDefaultApi(textTemplate.value!.name, {});
-      message.success($t('AbpTextTemplating.TemplateContentRestoredToDefault'));
+      const template = textTemplate.value;
+      if (!template) {
+        return;
+      }
+      await restoreToDefaultApi(template.name, {});
+      toastSuccess($t('AbpTextTemplating.TemplateContentRestoredToDefault'));
       await onGet();
     },
     title: $t('AbpTextTemplating.RestoreToDefault'),
@@ -125,16 +124,16 @@ function onCustomizePerCulture() {
 async function onSubmit(values: Record<string, string>) {
   try {
     modalApi.setState({ submitting: true });
-    const textTemplateDefine = modalApi.getData<TextTemplateDefinitionDto>();
+    const textTemplateDefine = getModalData(modalApi);
     const culture = textTemplateDefine.isInlineLocalized
       ? undefined
       : abpStore.application?.localization.currentCulture.cultureName;
     const dto = await updateApi(textTemplateDefine.name, {
-      content: values.content!,
+      content: values.content ?? '',
       culture,
     });
     emits('change', dto);
-    message.success($t('AbpTextTemplating.TemplateContentUpdated'));
+    toastSuccess($t('AbpTextTemplating.TemplateContentUpdated'));
     modalApi.close();
   } finally {
     modalApi.setState({ submitting: false });

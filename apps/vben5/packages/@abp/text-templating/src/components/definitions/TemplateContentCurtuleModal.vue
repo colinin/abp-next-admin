@@ -7,17 +7,20 @@ import type { TextTemplateDefinitionDto } from '../../types/definitions';
 import { useVbenForm, useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { useAbpStore } from '@abp/core';
-import { Modal as AntdvModal, Button, Card, message } from 'ant-design-vue';
+import { getModalData, useAbpStore, useNotifications } from '@abp/core';
+import { Modal as AntdvModal, Button, Card } from 'ant-design-vue';
 
 import { useTemplateContentsApi } from '../../api';
-
 defineProps<{
   title: string;
 }>();
+
 const emits = defineEmits<{
   (event: 'change', data: TextTemplateContentDto): void;
 }>();
+
+const { toastSuccess } = useNotifications();
+
 const abpStore = useAbpStore();
 const { getApi, restoreToDefaultApi, updateApi } = useTemplateContentsApi();
 
@@ -97,7 +100,7 @@ const [TargetForm, targetFormApi] = useVbenForm({
   ],
   showDefaultActions: false,
 });
-const [Modal, modalApi] = useVbenModal({
+const [Modal, modalApi] = useVbenModal<TextTemplateDefinitionDto>({
   confirmText: $t('AbpTextTemplating.SaveContent'),
   fullscreen: true,
   fullscreenButton: false,
@@ -133,7 +136,7 @@ async function onInit() {
         fieldName: 'culture',
       },
     ]);
-    const { name } = modalApi.getData<TextTemplateDefinitionDto>();
+    const { name } = getModalData(modalApi);
     const { content } = await getApi({
       culture,
       name,
@@ -147,8 +150,11 @@ async function onInit() {
   }
 }
 
-async function onCultureChange(formApi: ExtendedFormApi, culture?: string) {
-  const { name } = modalApi.getData<TextTemplateDefinitionDto>();
+async function onCultureChange(
+  formApi: ExtendedFormApi<any, any, any, any>,
+  culture?: string,
+) {
+  const { name } = getModalData(modalApi);
   const { content } = await getApi({
     culture,
     name,
@@ -162,13 +168,13 @@ async function onCultureChange(formApi: ExtendedFormApi, culture?: string) {
 async function onSubmit(values: Record<string, string>) {
   try {
     modalApi.setState({ submitting: true });
-    const { name } = modalApi.getData<TextTemplateDefinitionDto>();
+    const { name } = getModalData(modalApi);
     const dto = await updateApi(name, {
-      content: values.content!,
+      content: values.content ?? '',
       culture: values.culture,
     });
     emits('change', dto);
-    message.success($t('AbpTextTemplating.TemplateContentUpdated'));
+    toastSuccess($t('AbpTextTemplating.TemplateContentUpdated'));
     modalApi.close();
   } finally {
     modalApi.setState({ submitting: false });
@@ -180,12 +186,12 @@ function onRestoreToDefault() {
     centered: true,
     content: $t('AbpTextTemplating.RestoreToDefaultMessage'),
     onOk: async () => {
-      const { name } = modalApi.getData<TextTemplateDefinitionDto>();
+      const { name } = getModalData(modalApi);
       const formValues = await sourceFormApi.getValues();
       await restoreToDefaultApi(name, {
         culture: formValues.culture,
       });
-      message.success($t('AbpTextTemplating.TemplateContentRestoredToDefault'));
+      toastSuccess($t('AbpTextTemplating.TemplateContentRestoredToDefault'));
       await onInit();
     },
     title: $t('AbpTextTemplating.RestoreToDefault'),

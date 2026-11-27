@@ -8,17 +8,24 @@ import { ref } from 'vue';
 import { useVbenDrawer, useVbenForm } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { formatToDate, formatToDateTime, isNullOrWhiteSpace } from '@abp/core';
-import { Button, Card, message, Steps } from 'ant-design-vue';
+import {
+  formatToDate,
+  formatToDateTime,
+  getModalData,
+  isNullOrWhiteSpace,
+  useNotifications,
+} from '@abp/core';
+import { Button, Card, Steps } from 'ant-design-vue';
 
 import { useMenusApi } from '../../api';
 import { useDataDictionariesApi } from '../../api/useDataDictionariesApi';
 import { useLayoutsApi } from '../../api/useLayoutsApi';
 import { ValueType } from '../../types/dataDictionaries';
-
 const emits = defineEmits<{
   (event: 'change', data: MenuDto): void;
 }>();
+
+const { toastSuccess } = useNotifications();
 
 const Step = Steps.Step;
 
@@ -153,7 +160,7 @@ const [MetaForm, metaFormApi] = useVbenForm({
   schema: [],
   showDefaultActions: false,
 });
-const [Drawer, drawerApi] = useVbenDrawer({
+const [Drawer, drawerApi] = useVbenDrawer<MenuDrawerState>({
   class: 'w-2/3',
   onConfirm: onSubmit,
   onOpenChange: async (isOpen) => {
@@ -173,7 +180,7 @@ async function onNextStep() {
 
 async function onInit() {
   metaFormApi.removeSchemaByFields(menuMetas.value.map((x) => x.name));
-  const { editMenu, rootMenus } = drawerApi.getData<MenuDrawerState>();
+  const { editMenu, rootMenus } = getModalData(drawerApi);
   basicFormApi.resetForm();
   metaFormApi.resetForm();
   activeTabKey.value = 'basic';
@@ -183,17 +190,19 @@ async function onInit() {
   menuMetas.value = [];
   currentStep.value = 0;
   onInitRootMenus(rootMenus);
-  if (!isNullOrWhiteSpace(editMenu?.layoutId)) {
-    await onLayoutChange(editMenu!.layoutId);
-    await basicFormApi.setFieldValue('layoutId', editMenu!.layoutId);
+  const editMenuLayoutId = editMenu?.layoutId;
+  if (editMenuLayoutId && !isNullOrWhiteSpace(editMenuLayoutId)) {
+    await onLayoutChange(editMenuLayoutId);
+    await basicFormApi.setFieldValue('layoutId', editMenuLayoutId);
   }
-  if (isNullOrWhiteSpace(editMenu?.id)) {
-    await basicFormApi.setFieldValue('parentId', editMenu!.parentId);
-    await onParentIdChange(editMenu!.parentId);
+  const editMenuId = editMenu?.id;
+  if (!editMenuId || isNullOrWhiteSpace(editMenuId)) {
+    await basicFormApi.setFieldValue('parentId', editMenu?.parentId);
+    await onParentIdChange(editMenu?.parentId);
     drawerApi.setState({ title: $t('AppPlatform.Menu:AddNew') });
     return;
   }
-  const dto = await getApi(editMenu!.id);
+  const dto = await getApi(editMenuId);
   await basicFormApi.setValues(dto);
   // 编辑模式无需使用前缀
   await onParentIdChange(undefined);
@@ -236,7 +245,7 @@ async function onLayoutChange(layoutId?: string) {
     const layoutDto = await getLayoutApi(layoutId);
     const dataDto = await getDataDictionaryApi(layoutDto.dataId);
     basicFormApi.setFieldValue('component', layoutDto.path);
-    menuMetas.value = dataDto.items.sort();
+    menuMetas.value = dataDto.items.toSorted();
     onInitMetaFormSchemas();
   } finally {
     drawerApi.setState({ loading: false });
@@ -424,7 +433,7 @@ async function onSubmit() {
           redirect: basicInput.redirect,
         });
     const dto = await api;
-    message.success($t('AbpUi.SavedSuccessfully'));
+    toastSuccess($t('AbpUi.SavedSuccessfully'));
     emits('change', dto);
     drawerApi.close();
   } finally {

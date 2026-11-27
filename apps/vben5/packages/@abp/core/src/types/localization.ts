@@ -1,10 +1,6 @@
 interface StringLocalizer {
-  L(key: string, args?: any[] | Record<string, any> | undefined): string;
-  Lr(
-    resource: string,
-    key: string,
-    args?: any[] | Record<string, any> | undefined,
-  ): string;
+  L(key: string, args?: any[] | Record<string, any>): string;
+  Lr(resource: string, key: string, args?: any[] | Record<string, any>): string;
 }
 
 export type { StringLocalizer };

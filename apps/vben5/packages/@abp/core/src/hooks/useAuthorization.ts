@@ -2,6 +2,8 @@ import type { IPermissionChecker } from '../types/permissions';
 
 import { computed } from 'vue';
 
+import { isString } from '@vben/utils';
+
 import { useAbpStore } from '../store/abp';
 
 export function useAuthorization(): IPermissionChecker {
@@ -13,7 +15,7 @@ export function useAuthorization(): IPermissionChecker {
   function isGranted(name: string | string[], requiresAll?: boolean): boolean {
     const grantedPolicies = getGrantedPolicies.value;
     if (Array.isArray(name)) {
-      if (requiresAll === undefined || requiresAll === true) {
+      if (requiresAll === undefined || requiresAll) {
         return name.every((name) => grantedPolicies[name]);
       }
       return name.some((name) => grantedPolicies[name]);
@@ -24,7 +26,7 @@ export function useAuthorization(): IPermissionChecker {
   function authorize(name: string | string[]): void {
     if (!isGranted(name)) {
       throw new Error(
-        `Authorization failed! Given policy has not granted: ${name}`,
+        `Authorization failed! Given policy has not granted: ${isString(name) ? name : name.join(';')}`,
       );
     }
   }

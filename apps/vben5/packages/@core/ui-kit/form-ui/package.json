@@ -1,6 +1,6 @@
 {
   "name": "@vben-core/form-ui",
-  "version": "5.6.0",
+  "version": "5.8.0",
   "homepage": "https://github.com/vbenjs/vue-vben-admin",
   "bugs": "https://github.com/vbenjs/vue-vben-admin/issues",
   "repository": {
@@ -11,8 +11,9 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "build": "pnpm unbuild",
-    "prepublishOnly": "npm run build"
+    "build": "pnpm exec tsdown",
+    "prepublishOnly": "npm run build",
+    "typecheck": "vue-tsc --noEmit"
   },
   "files": [
     "dist"
@@ -22,31 +23,39 @@
   ],
   "main": "./dist/index.mjs",
   "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./src/index.ts",
       "development": "./src/index.ts",
+      "production": "./src/index.ts",
       "default": "./dist/index.mjs"
     }
   },
   "publishConfig": {
     "exports": {
       ".": {
+        "types": "./dist/index.d.ts",
         "default": "./dist/index.mjs"
       }
     }
   },
   "dependencies": {
+    "@tanstack/store": "catalog:",
+    "@tanstack/vue-form": "catalog:",
     "@vben-core/composables": "workspace:*",
     "@vben-core/icons": "workspace:*",
     "@vben-core/shadcn-ui": "workspace:*",
     "@vben-core/shared": "workspace:*",
     "@vben-core/typings": "workspace:*",
-    "@vee-validate/zod": "catalog:",
     "@vueuse/core": "catalog:",
-    "vee-validate": "catalog:",
     "vue": "catalog:",
     "zod": "catalog:",
     "zod-defaults": "catalog:"
+  },
+  "devDependencies": {
+    "@vue/test-utils": "catalog:",
+    "element-plus": "catalog:",
+    "unplugin-vue": "catalog:"
   }
 }

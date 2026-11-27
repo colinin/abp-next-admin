@@ -3,6 +3,8 @@ export const AuditLogPermissions = {
   Default: 'AbpAuditing.AuditLog',
   /** 删除 */
   Delete: 'AbpAuditing.AuditLog.Delete',
+  /** 导出 */
+  Export: 'AbpAuditing.AuditLog.Export',
 };
 /** 系统日志权限 */
 export const SystemLogPermissions = {

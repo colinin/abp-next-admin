@@ -8,13 +8,13 @@ import type {
   WebhookSubscriptionDto,
 } from '../../types';
 
-import { defineEmits, defineOptions, ref, toValue, useTemplateRef } from 'vue';
+import { ref, toValue, useTemplateRef } from 'vue';
 
 import { useAccess } from '@vben/access';
 import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { isNullOrWhiteSpace } from '@abp/core';
+import { getModalData, isNullOrWhiteSpace, useNotifications } from '@abp/core';
 import { useTenantsApi } from '@abp/saas';
 import { PropertyTable } from '@abp/ui';
 import {
@@ -23,7 +23,6 @@ import {
   Input,
   InputNumber,
   InputPassword,
-  message,
   Select,
   Tabs,
   Textarea,
@@ -32,13 +31,15 @@ import {
 import debounce from 'lodash.debounce';
 
 import { useSubscriptionsApi } from '../../api/useSubscriptionsApi';
-
 defineOptions({
   name: 'WebhookSubscriptionModal',
 });
+
 const emits = defineEmits<{
   (event: 'change', data: WebhookSubscriptionDto): void;
 }>();
+
+const { toastSuccess } = useNotifications();
 
 const FormItem = Form.Item;
 const FormItemRest = Form.ItemRest;
@@ -49,7 +50,6 @@ const TabPane = Tabs.TabPane;
 const defaultModel: WebhookSubscriptionDto = {
   creationTime: new Date(),
   displayName: '',
-  extraProperties: {},
   id: '',
   isActive: true,
   isStatic: false,
@@ -70,7 +70,7 @@ const { getPagedListApi: getTenantsApi } = useTenantsApi();
 const { cancel, createApi, getAllAvailableWebhooksApi, getApi, updateApi } =
   useSubscriptionsApi();
 
-const [Modal, modalApi] = useVbenModal({
+const [Modal, modalApi] = useVbenModal<WebhookSubscriptionDto>({
   class: 'w-1/2',
   draggable: true,
   fullscreenButton: false,
@@ -90,7 +90,7 @@ const [Modal, modalApi] = useVbenModal({
       modalApi.setState({ submitting: true });
       const res = await api;
       emits('change', res);
-      message.success($t('AbpUi.SavedSuccessfully'));
+      toastSuccess($t('AbpUi.SavedSuccessfully'));
       modalApi.close();
     } finally {
       modalApi.setState({ submitting: false });
@@ -107,7 +107,7 @@ const [Modal, modalApi] = useVbenModal({
         title: $t('WebhooksManagement.Subscriptions:AddNew'),
       });
       try {
-        const { id } = modalApi.getData<WebhookSubscriptionDto>();
+        const { id } = getModalData(modalApi);
         await onInit();
         !isNullOrWhiteSpace(id) && (await onGet(id));
       } finally {
@@ -160,7 +160,7 @@ function onPropChange(prop: PropertyInfo) {
 }
 function onPropDelete(prop: PropertyInfo) {
   formModel.value.headers ??= {};
-  delete formModel.value.headers[prop.key];
+  Reflect.deleteProperty(formModel.value.headers, prop.key);
 }
 </script>
 
@@ -255,7 +255,7 @@ function onPropDelete(prop: PropertyInfo) {
             name="timeoutDuration"
           >
             <InputNumber
-              class="w-full"
+              class="!w-full"
               v-model:value="formModel.timeoutDuration"
               :disabled="formModel.isStatic"
               :min="10"

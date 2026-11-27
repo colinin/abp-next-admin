@@ -4,19 +4,20 @@ import { ref } from 'vue';
 import { useVbenForm, useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { message } from 'ant-design-vue';
+import { getModalData, useNotifications } from '@abp/core';
 import Cookies from 'universal-cookie';
 
 import { useMultiTenancyApi } from '../../api/useMultiTenancyApi';
+const emits = defineEmits<{
+  (event: 'change', data?: Tenant): void;
+}>();
+
+const { toastWarning } = useNotifications();
 
 interface Tenant {
   id?: string;
   name?: string;
 }
-
-const emits = defineEmits<{
-  (event: 'change', data?: Tenant): void;
-}>();
 
 const tenant = ref<Tenant>();
 const { findTenantByNameApi } = useMultiTenancyApi();
@@ -37,7 +38,7 @@ const [Form, formApi] = useVbenForm({
   ],
   showDefaultActions: false,
 });
-const [Modal, modalApi] = useVbenModal({
+const [Modal, modalApi] = useVbenModal<Tenant>({
   onCancel() {
     emits('change', tenant.value);
   },
@@ -46,7 +47,7 @@ const [Modal, modalApi] = useVbenModal({
   },
   onOpenChange(isOpen) {
     if (isOpen) {
-      const { name } = modalApi.getData<Tenant>();
+      const { name } = getModalData(modalApi);
       formApi.setFieldValue('name', name);
     }
   },
@@ -59,13 +60,13 @@ async function onSubmit(values: Record<string, any>) {
     if (values.name) {
       const result = await findTenantByNameApi(values.name);
       if (!result.success) {
-        message.warning(
+        toastWarning(
           $t('AbpUiMultiTenancy.GivenTenantIsNotExist', [values.name]),
         );
         return;
       }
       if (!result.isActive) {
-        message.warning(
+        toastWarning(
           $t('AbpUiMultiTenancy.GivenTenantIsNotAvailable', [values.name]),
         );
         return;

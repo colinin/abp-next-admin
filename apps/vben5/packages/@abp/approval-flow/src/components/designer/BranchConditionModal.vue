@@ -9,8 +9,8 @@ import { ref, watch } from 'vue';
 
 import { $t } from '@vben/locales';
 
-import { Button, Input, message, Modal, Select } from 'ant-design-vue';
-
+import { useNotifications } from '@abp/core';
+import { Button, Input, Modal, Select } from 'ant-design-vue';
 const props = defineProps<{
   branch: ApprovalFlowBranch | null;
   fields: FormFieldDto[];
@@ -21,6 +21,8 @@ const emit = defineEmits<{
   'update:branch': [ApprovalFlowBranch];
   'update:open': [boolean];
 }>();
+
+const { toastWarning } = useNotifications();
 
 const conditionOperators = [
   { label: $t('antflow.designer.branch.equal'), value: '=' },
@@ -143,13 +145,13 @@ function save() {
     .filter((expression): expression is string => !!expression);
 
   if (expressions.length !== conditions.value.length) {
-    message.warning($t('antflow.designer.branch.validation'));
+    toastWarning($t('antflow.designer.branch.validation'));
     return;
   }
 
   const expression =
     expressions.length === 1
-      ? expressions[0]!
+      ? (expressions[0] ?? '')
       : expressions
           .map((item) => `(${item})`)
           .join(logic.value === 'and' ? ' && ' : ' || ');
@@ -188,7 +190,7 @@ function save() {
         <span class="condition-label">{{
           $t('antflow.designer.branch.relation')
         }}</span>
-        <Select v-model:value="logic" :options="logicOptions" class="w-full" />
+        <Select v-model:value="logic" :options="logicOptions" class="!w-full" />
       </div>
 
       <div class="condition-table">
@@ -207,7 +209,7 @@ function save() {
           <Select
             :options="fieldOptions()"
             :value="condition.fieldKey ?? undefined"
-            class="w-full"
+            class="!w-full"
             :placeholder="$t('antflow.designer.branch.selectField')"
             @update:value="
               (value) => (condition.fieldKey = value ? String(value) : null)
@@ -216,7 +218,7 @@ function save() {
           <Select
             :options="conditionOperators"
             :value="condition.operator ?? undefined"
-            class="w-full"
+            class="!w-full"
             @update:value="
               (value) => (condition.operator = value ? String(value) : '=')
             "
@@ -224,7 +226,7 @@ function save() {
           <Input
             v-if="!isValueHidden(condition.operator)"
             :value="condition.compareValue ?? ''"
-            class="w-full"
+            class="!w-full"
             :placeholder="$t('antflow.designer.branch.compareValue')"
             @update:value="(value) => (condition.compareValue = value)"
           />

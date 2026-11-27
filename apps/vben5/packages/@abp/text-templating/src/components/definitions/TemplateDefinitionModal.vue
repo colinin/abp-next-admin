@@ -12,23 +12,27 @@ import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
 import {
+  getModalData,
   isNullOrWhiteSpace,
   useAbpStore,
   useLocalization,
   useLocalizationSerializer,
+  useNotifications,
 } from '@abp/core';
 import { useResourcesApi } from '@abp/localization';
 import { LocalizableInput, PropertyTable } from '@abp/ui';
-import { Checkbox, Form, Input, message, Select, Tabs } from 'ant-design-vue';
+import { Checkbox, Form, Input, Select, Tabs } from 'ant-design-vue';
 
 import { useTemplateDefinitionsApi } from '../../api';
-
 defineOptions({
   name: 'TemplateDefinitionModal',
 });
+
 const emits = defineEmits<{
   (event: 'change', data: TextTemplateDefinitionDto): void;
 }>();
+
+const { toastSuccess } = useNotifications();
 
 const FormItem = Form.Item;
 const TabPane = Tabs.TabPane;
@@ -64,7 +68,7 @@ const getLanguageOptions = computed(() => {
   });
 });
 
-const [Modal, modalApi] = useVbenModal({
+const [Modal, modalApi] = useVbenModal<TextTemplateDefinitionDto>({
   class: 'w-1/2',
   draggable: true,
   fullscreenButton: false,
@@ -76,13 +80,17 @@ const [Modal, modalApi] = useVbenModal({
   },
   onConfirm: async () => {
     await form.value?.validate();
+    const model = formModel.value;
+    if (!model) {
+      return;
+    }
     const api = isEditModel.value
-      ? updateApi(formModel.value!.name, formModel.value!)
-      : createApi(formModel.value!);
+      ? updateApi(model.name, model)
+      : createApi(model);
     modalApi.setState({ submitting: true });
     api
       .then((res) => {
-        message.success($t('AbpUi.SavedSuccessfully'));
+        toastSuccess($t('AbpUi.SavedSuccessfully'));
         emits('change', res);
         modalApi.close();
       })
@@ -102,7 +110,7 @@ const [Modal, modalApi] = useVbenModal({
 });
 
 async function onGet() {
-  const { name } = modalApi.getData<TextTemplateDefinitionDto>();
+  const { name } = getModalData(modalApi);
   if (isNullOrWhiteSpace(name)) {
     modalApi.setState({ title: $t('AbpTextTemplating.TextTemplates:AddNew') });
     formModel.value = {
@@ -151,25 +159,35 @@ async function onInitResources() {
 }
 
 function onIsInlineLocalizedChange(isInlineLocalized: boolean) {
-  if (isInlineLocalized) {
-    formModel.value!.localizationResourceName = undefined;
+  const model = formModel.value;
+  if (isInlineLocalized && model) {
+    model.localizationResourceName = undefined;
   }
 }
 
 function onIsLayoutChange(isLayout: boolean) {
-  if (isLayout) {
-    formModel.value!.layout = undefined;
+  const model = formModel.value;
+  if (isLayout && model) {
+    model.layout = undefined;
   }
 }
 
 function onPropChange(prop: PropertyInfo) {
-  formModel.value!.extraProperties ??= {};
-  formModel.value!.extraProperties[prop.key] = prop.value;
+  const model = formModel.value;
+  if (!model) {
+    return;
+  }
+  model.extraProperties ??= {};
+  model.extraProperties[prop.key] = prop.value;
 }
 
 function onPropDelete(prop: PropertyInfo) {
-  formModel.value!.extraProperties ??= {};
-  delete formModel.value!.extraProperties[prop.key];
+  const model = formModel.value;
+  if (!model) {
+    return;
+  }
+  model.extraProperties ??= {};
+  Reflect.deleteProperty(model.extraProperties, prop.key);
 }
 </script>
 

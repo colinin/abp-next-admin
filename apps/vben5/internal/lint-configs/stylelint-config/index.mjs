@@ -36,12 +36,7 @@ export default {
       files: ['*.scss', '**/*.scss'],
     },
   ],
-  plugins: [
-    'stylelint-order',
-    '@stylistic/stylelint-plugin',
-    'stylelint-prettier',
-    'stylelint-scss',
-  ],
+  plugins: ['stylelint-order', '@stylistic/stylelint-plugin', 'stylelint-scss'],
   rules: {
     'at-rule-no-deprecated': null,
     'at-rule-no-unknown': [
@@ -67,6 +62,12 @@ export default {
           'use',
           'forward',
           'return',
+          'reference',
+          'plugin',
+          'source',
+          'theme',
+          'utility',
+          'custom-variant',
         ],
       },
     ],
@@ -78,6 +79,7 @@ export default {
     'nesting-selector-no-missing-scoping-root': null,
     'no-descending-specificity': null,
     'no-empty-source': null,
+    'no-invalid-position-declaration': null,
     'order/order': [
       [
         'dollar-variables',
@@ -100,7 +102,6 @@ export default {
       ],
       { severity: 'error' },
     ],
-    'prettier/prettier': true,
     'rule-empty-line-before': [
       'always',
       {
@@ -130,12 +131,18 @@ export default {
           'use',
           'forward',
           'return',
+          'reference',
+          'plugin',
+          'source',
+          'theme',
+          'utility',
+          'custom-variant',
         ],
       },
     ],
     'scss/operator-no-newline-after': null,
     'selector-class-pattern':
-      '^(?:(?:o|c|u|t|s|is|has|_|js|qa)-)?[a-zA-Z0-9]+(?:-[a-zA-Z0-9]+)*(?:__[a-zA-Z0-9]+(?:-[a-zA-Z0-9]+)*)?(?:--[a-zA-Z0-9]+(?:-[a-zA-Z0-9]+)*)?(?:[.+])?$',
+      '^-?(?:(?:o|c|u|t|s|is|has|_|js|qa)-)?[a-zA-Z0-9]+(?:-[a-zA-Z0-9]+)*(?:__[a-zA-Z0-9]+(?:-[a-zA-Z0-9]+)*)?(?:--[a-zA-Z0-9]+(?:-[a-zA-Z0-9]+)*)?(?:[.+])?$',
 
     'selector-not-notation': null,
   },

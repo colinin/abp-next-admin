@@ -4,7 +4,7 @@
 
 This document explains how to use Mock data and interact with the server in a development environment, involving technologies such as:
 
-- [Nitro](https://nitro.unjs.io/) A lightweight backend server that can be deployed anywhere, used as a Mock server in the project.
+- [Nitro](https://nitro.build/) A lightweight backend server that can be deployed anywhere, used as a Mock server in the project.
 - [axios](https://axios-http.com/docs/intro) Used to send HTTP requests to interact with the server.
 
 :::
@@ -63,16 +63,18 @@ Based on the above configuration, we can use `/api` as the prefix for API reques
 ```ts
 import axios from 'axios';
 
-axios.get('/api/user').then((res) => {
-  console.log(res);
-});
+axios
+  .post('/api/auth/login', { username: 'vben', password: '123456' })
+  .then((res) => {
+    console.log(res);
+  });
 ```
 
-At this point, the request will be proxied to `http://localhost:5320/api/user`.
+At this point, the request will be proxied to `http://localhost:5320/api/auth/login`.
 
 ::: warning Note
 
-From the browser's console Network tab, the request appears as `http://localhost:5555/api/user`. This is because the proxy configuration does not change the local request's URL.
+From the browser's console Network tab, the request appears as `http://localhost:5555/api/auth/login`. This is because the proxy configuration does not change the local request's URL.
 
 :::
 
@@ -98,7 +100,7 @@ VITE_GLOB_API_URL=https://mock-napi.vben.pro/api
 
 ::: tip How to Dynamically Modify API Endpoint in Production
 
-Variables starting with `VITE_GLOB_*` in the `.env` file are injected into the `_app.config.js` file during packaging. After packaging, you can modify the corresponding API addresses in `dist/_app.config.js` and refresh the page to apply the changes. This eliminates the need to package multiple times for different environments, allowing a single package to be deployed across multiple API environments.
+Variables starting with `VITE_GLOB_*` in the `.env` file are injected into the `_app-config-{version}-{hash}.js` file during packaging. After packaging, you can modify the corresponding API addresses in `dist/_app-config-{version}-{hash}.js` and refresh the page to apply the changes. This eliminates the need to package multiple times for different environments, allowing a single package to be deployed across multiple API environments.
 
 :::
 
@@ -174,7 +176,7 @@ import {
 } from '@vben/request';
 import { useAccessStore } from '@vben/stores';
 
-import { message } from 'ant-design-vue';
+import { message } from 'antdv-next';
 
 import { useAuthStore } from '#/store';
 
@@ -338,13 +340,13 @@ The new version no longer supports mock in the production environment. Please us
 
 Mock data is an indispensable part of frontend development, serving as a key link in separating frontend and backend development. By agreeing on interfaces with the server side in advance and simulating request data and even logic, frontend development can proceed independently, without being blocked by the backend development process.
 
-The project uses [Nitro](https://nitro.unjs.io/) for local mock data processing. The principle is to start an additional backend service locally, which is a real backend service that can handle requests and return data.
+The project uses [Nitro](https://nitro.build/) for local mock data processing. The principle is to start an additional backend service locally, which is a real backend service that can handle requests and return data.
 
 ### Using Nitro
 
 The mock service code is located in the `apps/backend-mock` directory. It does not need to be started manually and is already integrated into the project. You only need to run `pnpm dev` in the project root directory. After running successfully, the console will print `http://localhost:5320/api`, and you can access this address to view the mock service.
 
-[Nitro](https://nitro.unjs.io/) syntax is simple, and you can configure and develop according to your needs. For specific configurations, you can refer to the [Nitro documentation](https://nitro.unjs.io/).
+[Nitro](https://nitro.build/) syntax is simple, and you can configure and develop according to your needs. For specific configurations, you can refer to the [Nitro documentation](https://nitro.build/docs/).
 
 ## Disabling Mock Service
 

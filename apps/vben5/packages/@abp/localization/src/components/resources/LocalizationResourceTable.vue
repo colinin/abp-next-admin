@@ -10,22 +10,23 @@ import { defineAsyncComponent, h } from 'vue';
 import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { useAbpStore } from '@abp/core';
+import { useAbpStore, useNotifications } from '@abp/core';
 import { useVbenVxeGrid } from '@abp/ui';
 import {
   DeleteOutlined,
   EditOutlined,
   PlusOutlined,
 } from '@ant-design/icons-vue';
-import { Button, message, Modal } from 'ant-design-vue';
+import { Button, Modal } from 'ant-design-vue';
 
 import { useLocalizationsApi } from '../../api/useLocalizationsApi';
 import { useResourcesApi } from '../../api/useResourcesApi';
 import { ResourcesPermissions } from '../../constants/permissions';
-
 defineOptions({
   name: 'LocalizationResourceTable',
 });
+
+const { toastSuccess } = useNotifications();
 
 const abpStore = useAbpStore();
 const { deleteApi, getPagedListApi } = useResourcesApi();
@@ -133,7 +134,7 @@ function onDelete(row: ResourceDto) {
     content: `${$t('AbpUi.ItemWillBeDeletedMessageWithFormat', [row.name])}`,
     onOk: async () => {
       await deleteApi(row.name);
-      message.success($t('AbpUi.DeletedSuccessfully'));
+      toastSuccess($t('AbpUi.DeletedSuccessfully'));
       onChange();
     },
     title: $t('AbpUi.AreYouSure'),
@@ -142,7 +143,11 @@ function onDelete(row: ResourceDto) {
 
 async function onChange() {
   // 资源变化刷新本地多语言缓存
-  const cultureName = abpStore.localization!.currentCulture.cultureName;
+  const currentLocalization = abpStore.localization;
+  if (!currentLocalization) {
+    return;
+  }
+  const cultureName = currentLocalization.currentCulture.cultureName;
   const localization = await getLocalizationApi({
     cultureName,
   });

@@ -9,19 +9,19 @@ import { computed, ref, toValue, useTemplateRef } from 'vue';
 import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { useValidation } from '@abp/core';
+import { getModalData, useNotifications, useValidation } from '@abp/core';
 import {
   Card,
   Checkbox,
   Form,
   Input,
   InputNumber,
-  message,
   Select,
   Tabs,
 } from 'ant-design-vue';
 
 import { useFeaturesApi } from '../../api/useFeaturesApi';
+const { toastSuccess } = useNotifications();
 
 const FormItem = Form.Item;
 const TabPane = Tabs.TabPane;
@@ -56,9 +56,12 @@ const {
   fieldRequired,
 } = useValidation();
 
-const [Modal, modalApi] = useVbenModal({
+const [Modal, modalApi] = useVbenModal<ModalState>({
   centered: true,
-  class: 'w-1/2',
+  class: 'w-1/2 h-[70vh]',
+  closeOnClickModal: false,
+  closeOnPressEscape: false,
+  draggable: true,
   async onConfirm() {
     await form.value?.validate();
     await onSubmit();
@@ -67,8 +70,9 @@ const [Modal, modalApi] = useVbenModal({
     if (isOpen) {
       formModel.value = { groups: [] };
       await onGet();
-      if (formModel.value?.groups.length > 0) {
-        activeTabKey.value = formModel.value.groups[0]?.name!;
+      const firstGroup = formModel.value?.groups[0];
+      if (firstGroup) {
+        activeTabKey.value = firstGroup.name;
       }
     }
   },
@@ -168,7 +172,7 @@ function createRules(field: string, validator: Validator) {
 async function onGet() {
   try {
     modalApi.setState({ loading: true });
-    const state = modalApi.getData<ModalState>();
+    const state = getModalData(modalApi);
     const { groups } = await getApi({
       providerKey: state.providerKey,
       providerName: state.providerName,
@@ -185,7 +189,7 @@ async function onSubmit() {
   try {
     modalApi.setState({ submitting: true });
     const model = toValue(formModel);
-    const state = modalApi.getData<ModalState>();
+    const state = getModalData(modalApi);
     const input = getFeatureInput(model.groups);
     await updateApi(
       {
@@ -194,7 +198,7 @@ async function onSubmit() {
       },
       input,
     );
-    message.success($t('AbpUi.SavedSuccessfully'));
+    toastSuccess($t('AbpUi.SavedSuccessfully'));
     await onGet();
   } finally {
     modalApi.setState({ submitting: false });
@@ -268,14 +272,22 @@ async function onSubmit() {
 </template>
 
 <style lang="scss" scoped>
+.ant-form {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
 :deep(.ant-tabs) {
-  height: 60vh;
+  flex: 1;
+  min-height: 0;
 
   .ant-tabs-nav {
     width: 14rem;
   }
 
   .ant-tabs-content-holder {
+    min-height: 0;
     overflow: hidden auto !important;
   }
 }

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { BaseFormComponentType } from '@vben/common-ui';
+
 import type {
   DataDto,
   DataItemCreateDto,
@@ -9,25 +11,30 @@ import type {
 import { useVbenForm, useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { formatToDate, formatToDateTime } from '@abp/core';
-import { message } from 'ant-design-vue';
+import {
+  formatToDate,
+  formatToDateTime,
+  getModalData,
+  useNotifications,
+} from '@abp/core';
 import cloneDeep from 'lodash.clonedeep';
 
 import { useDataDictionariesApi } from '../../api';
 import { ValueType } from '../../types';
+const emits = defineEmits<{
+  (event: 'change'): void;
+}>();
+
+const { toastSuccess } = useNotifications();
 
 interface ModalState {
   data: DataDto;
   item: DataItemDto;
 }
 
-const emits = defineEmits<{
-  (event: 'change'): void;
-}>();
-
 const { createItemApi, updateItemApi } = useDataDictionariesApi();
 
-const [Form, formApi] = useVbenForm({
+const [Form, formApi] = useVbenForm<BaseFormComponentType>({
   commonConfig: {
     componentProps: {
       class: 'w-full',
@@ -108,7 +115,7 @@ const [Form, formApi] = useVbenForm({
   ],
   showDefaultActions: false,
 });
-const [Modal, modalApi] = useVbenModal({
+const [Modal, modalApi] = useVbenModal<ModalState>({
   async onConfirm() {
     await formApi.validateAndSubmitForm();
   },
@@ -121,7 +128,7 @@ const [Modal, modalApi] = useVbenModal({
 
 function onInit() {
   formApi.resetForm();
-  const state = modalApi.getData<ModalState>();
+  const state = getModalData(modalApi);
   let title = $t('AppPlatform.Data:AppendItem');
   if (state.item?.id) {
     onValueTypeChange(state.item.valueType);
@@ -156,14 +163,14 @@ function onInit() {
 async function onSubmit(values: Record<string, any>) {
   try {
     modalApi.setState({ submitting: true });
-    const state = modalApi.getData<ModalState>();
+    const state = getModalData(modalApi);
     const input = cloneDeep(values);
     input.defaultValue = mapToDefaultValue(input.valueType, input.defaultValue);
     const api = input.id
       ? updateItemApi(state.data.id, input.name, input as DataItemUpdateDto)
       : createItemApi(state.data.id, input as DataItemCreateDto);
     await api;
-    message.success($t('AbpUi.SavedSuccessfully'));
+    toastSuccess($t('AbpUi.SavedSuccessfully'));
     emits('change');
     modalApi.close();
   } finally {
@@ -234,7 +241,7 @@ function mapToDefaultValue(valueType: ValueType, defaultValue?: any) {
       return (defaultValue as string[]).join(',');
     }
     case ValueType.Boolean: {
-      return (defaultValue as Boolean).toString();
+      return (defaultValue as boolean).toString();
     }
     case ValueType.Date: {
       return formatToDate(defaultValue);
@@ -243,7 +250,7 @@ function mapToDefaultValue(valueType: ValueType, defaultValue?: any) {
       return formatToDateTime(defaultValue);
     }
     case ValueType.Numeic: {
-      return (defaultValue as Number).toString();
+      return (defaultValue as number).toString();
     }
   }
   return defaultValue;

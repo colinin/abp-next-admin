@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { DataNode } from 'ant-design-vue/es/tree';
+import type { DataNode } from 'antdv-next/dist/tree';
 
 import type { Recordable } from '@vben/types';
 
@@ -10,7 +10,7 @@ import { computed, nextTick, ref } from 'vue';
 import { Tree, useVbenDrawer } from '@vben/common-ui';
 import { IconifyIcon } from '@vben/icons';
 
-import { Spin } from 'ant-design-vue';
+import { Spin } from 'antdv-next';
 
 import { useVbenForm } from '#/adapter/form';
 import { getMenuList } from '#/api/system/menu';
@@ -32,7 +32,7 @@ const permissions = ref<DataNode[]>([]);
 const loadingPermissions = ref(false);
 
 const id = ref();
-const [Drawer, drawerApi] = useVbenDrawer({
+const [Drawer, drawerApi] = useVbenDrawer<null | SystemRoleApi.SystemRole>({
   async onConfirm() {
     const { valid } = await formApi.validate();
     if (!valid) return;
@@ -50,13 +50,14 @@ const [Drawer, drawerApi] = useVbenDrawer({
 
   async onOpenChange(isOpen) {
     if (isOpen) {
-      const data = drawerApi.getData<SystemRoleApi.SystemRole>();
-      formApi.resetForm();
+      const data = drawerApi.getData();
+      formApi.reset();
 
       if (data) {
         formData.value = data;
         id.value = data.id;
       } else {
+        formData.value = undefined;
         id.value = undefined;
       }
 
@@ -71,6 +72,8 @@ const [Drawer, drawerApi] = useVbenDrawer({
     }
   },
 });
+
+defineExpose({ drawerApi });
 
 async function loadPermissions() {
   loadingPermissions.value = true;
@@ -101,14 +104,14 @@ function getNodeClass(node: Recordable<any>) {
   <Drawer :title="getDrawerTitle">
     <Form>
       <template #permissions="slotProps">
-        <Spin :spinning="loadingPermissions" wrapper-class-name="w-full">
+        <Spin :spinning="loadingPermissions" :classes="{ root: 'w-full' }">
           <Tree
             :tree-data="permissions"
             multiple
             bordered
             :default-expanded-level="2"
             :get-node-class="getNodeClass"
-            v-bind="slotProps"
+            v-bind="slotProps.componentProps"
             value-field="id"
             label-field="meta.title"
             icon-field="meta.icon"
@@ -126,17 +129,13 @@ function getNodeClass(node: Recordable<any>) {
 <style lang="css" scoped>
 :deep(.ant-tree-title) {
   .tree-actions {
-    display: none;
-    margin-left: 20px;
+    @apply ml-5 hidden;
   }
 }
 
 :deep(.ant-tree-title:hover) {
   .tree-actions {
-    display: flex;
-    flex: auto;
-    justify-content: flex-end;
-    margin-left: 20px;
+    @apply ml-5 flex flex-auto justify-end;
   }
 }
 </style>

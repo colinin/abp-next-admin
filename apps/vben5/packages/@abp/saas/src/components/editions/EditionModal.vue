@@ -6,13 +6,14 @@ import { ref } from 'vue';
 import { useVbenForm, useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { message } from 'ant-design-vue';
+import { getModalData, useNotifications } from '@abp/core';
 
 import { useEditionsApi } from '../../api';
-
 const emits = defineEmits<{
   (event: 'change', val: EditionDto): void;
 }>();
+
+const { toastSuccess } = useNotifications();
 
 const edition = ref<EditionDto>();
 
@@ -37,7 +38,7 @@ const [Form, formApi] = useVbenForm({
   showDefaultActions: false,
 });
 
-const [Modal, modalApi] = useVbenModal({
+const [Modal, modalApi] = useVbenModal<EditionDto>({
   onClosed: cancel,
   async onConfirm() {
     await formApi.validateAndSubmitForm();
@@ -51,7 +52,7 @@ const [Modal, modalApi] = useVbenModal({
 });
 
 async function onGet() {
-  const { id } = modalApi.getData<EditionDto>();
+  const { id } = getModalData(modalApi);
   if (!id) {
     formApi.setValues({});
     edition.value = undefined;
@@ -72,8 +73,9 @@ async function onGet() {
 }
 
 async function onSubmit(values: Record<string, any>) {
-  const api = edition.value?.id
-    ? updateApi(edition.value!.id, {
+  const editionId = edition.value?.id;
+  const api = editionId
+    ? updateApi(editionId, {
         concurrencyStamp: values.concurrencyStamp,
         displayName: values.displayName,
       })
@@ -83,7 +85,7 @@ async function onSubmit(values: Record<string, any>) {
   try {
     modalApi.setState({ submitting: true });
     const dto = await api;
-    message.success($t('AbpUi.SavedSuccessfully'));
+    toastSuccess($t('AbpUi.SavedSuccessfully'));
     emits('change', dto);
     modalApi.close();
   } finally {

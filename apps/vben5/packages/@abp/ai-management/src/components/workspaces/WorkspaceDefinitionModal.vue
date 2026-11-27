@@ -14,11 +14,13 @@ import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
 import {
+  getModalData,
   useAuthorization,
   useLocalization,
   useLocalizationSerializer,
+  useNotifications,
 } from '@abp/core';
-import { LocalizableInput, useMessage } from '@abp/ui';
+import { LocalizableInput } from '@abp/ui';
 import {
   AutoComplete,
   Checkbox,
@@ -34,10 +36,12 @@ import debounce from 'lodash.debounce';
 import { useAIToolsApi } from '../../api/useAIToolsApi';
 import { useWorkspaceDefinitionsApi } from '../../api/useWorkspaceDefinitionsApi';
 import { WorkspaceDefinitionPermissions } from '../../constants/permissions';
-
 const emit = defineEmits<{
   (event: 'change', data: WorkspaceDefinitionVto): void;
 }>();
+
+const { toastSuccess } = useNotifications();
+
 const FormItem = Form.Item;
 const TabPane = Tabs.TabPane;
 
@@ -58,7 +62,6 @@ const defaultModel: WorkspaceDefinitionVto = {
   extraProperties: {},
 };
 
-const message = useMessage();
 const { isGranted } = useAuthorization();
 const { Lr } = useLocalization();
 const { deserialize: deserializeLocalizableString } =
@@ -80,7 +83,7 @@ const modelOptions = ref<NonNullable<SelectProps['options']>>([]);
 const aiToolOptions = ref<NonNullable<SelectProps['options']>>([]);
 
 // 工作区编辑模态框
-const [Modal, modalApi] = useVbenModal({
+const [Modal, modalApi] = useVbenModal<WorkspaceDefinitionVto>({
   title: $t('AIManagement.Workspaces:New'),
   class: 'w-1/2',
   closeOnClickModal: false,
@@ -99,7 +102,7 @@ async function onInit() {
       title: $t('AIManagement.Workspaces:New'),
     });
     await Promise.all([onSearchAIToolOptions(), onInitProviderOptions()]);
-    const { id } = modalApi.getData<WorkspaceDefinitionVto>();
+    const { id } = getModalData(modalApi);
     if (!id) {
       isAllowUpdate.value = isGranted(WorkspaceDefinitionPermissions.Create);
       formModel.value = { ...defaultModel };
@@ -171,7 +174,7 @@ async function onSubmit() {
       ? updateApi(formModel.value.id, formModel.value)
       : createApi(formModel.value));
     formModel.value = vto;
-    message.success($t('AbpUi.SavedSuccessfully'));
+    toastSuccess($t('AbpUi.SavedSuccessfully'));
     emit('change', vto);
     modalApi.close();
   } finally {
@@ -310,7 +313,7 @@ async function onSubmit() {
                 :max="2.0"
                 :min="0.0"
                 :step="0.1"
-                class="w-full"
+                class="!w-full"
               />
             </FormItem>
             <FormItem
@@ -321,7 +324,7 @@ async function onSubmit() {
               <InputNumber
                 v-model:value="formModel.maxOutputTokens"
                 :min="0"
-                class="w-full"
+                class="!w-full"
               />
             </FormItem>
             <FormItem
@@ -334,7 +337,7 @@ async function onSubmit() {
                 :max="2.0"
                 :min="-2.0"
                 :step="0.1"
-                class="w-full"
+                class="!w-full"
               />
             </FormItem>
             <FormItem
@@ -347,7 +350,7 @@ async function onSubmit() {
                 :max="2.0"
                 :min="-2.0"
                 :step="0.1"
-                class="w-full"
+                class="!w-full"
               />
             </FormItem>
           </div>

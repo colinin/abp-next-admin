@@ -10,14 +10,10 @@ import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 import { useUserStore } from '@vben/stores';
 
-import { Card, Menu, message, Modal } from 'ant-design-vue';
+import { useNotifications } from '@abp/core';
+import { Card, Menu, Modal } from 'ant-design-vue';
 
 import { useProfileApi } from '../api/useProfileApi';
-
-interface MenuItem {
-  key: string;
-  label: string;
-}
 const props = defineProps<{
   bindItems?: BindItem[];
   disableAuthenticator?: boolean;
@@ -28,10 +24,18 @@ const props = defineProps<{
   disableSession?: boolean;
   disableSystemSetting?: boolean;
 }>();
+
 const emits = defineEmits<{
   (event: 'onBindInit'): void;
   (event: 'onConfirm', params: Record<string, any>): void;
 }>();
+
+const { toastSuccess } = useNotifications();
+
+interface MenuItem {
+  key: string;
+  label: string;
+}
 const AuthenticatorSettings = defineAsyncComponent(
   () => import('./components/AuthenticatorSettings.vue'),
 );
@@ -120,7 +124,7 @@ const getUserInfo = computed((): null | UserInfo => {
     phoneNumber: userStore.userInfo.phoneNumber,
     phoneNumberVerified: userStore.userInfo.phoneNumberVerified,
     preferredUsername: userStore.userInfo.username,
-    role: userStore.userInfo.roles!,
+    role: userStore.userInfo.roles ?? [],
     sub: userStore.userInfo.userId,
     uniqueName: userStore.userInfo.username,
   };
@@ -167,7 +171,7 @@ async function onUpdateProfile(input: UpdateProfileDto) {
     content: $t('AbpAccount.PersonalSettingsSaved'),
     onOk: async () => {
       await updateApi(input);
-      message.success(
+      toastSuccess(
         $t('AbpAccount.PersonalSettingsChangedConfirmationModalTitle'),
       );
       // 刷新页面重载用户信息
@@ -189,17 +193,17 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="h-full">
-    <Card :bordered="false">
-      <div class="flex">
-        <div class="basis-1/6">
+  <div class="h-full min-h-0">
+    <Card :bordered="false" class="h-full" :body-style="{ height: '100%' }">
+      <div class="flex h-full min-h-0">
+        <div class="basis-1/6 shrink-0 overflow-y-auto">
           <Menu
             v-model:selected-keys="selectedMenuKeys"
             :items="getEnabledMenus"
             mode="inline"
           />
         </div>
-        <div class="h-[800px] basis-5/6 overflow-y-scroll">
+        <div class="settings-content min-h-0 flex-1 overflow-y-auto pl-4">
           <BasicSettings
             v-if="selectedMenuKeys[0] === 'basic'"
             :profile="myProfile"
@@ -235,4 +239,20 @@ onMounted(async () => {
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.settings-content > :deep(.ant-card) {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.settings-content > :deep(.ant-card) > .ant-card-head {
+  flex: none;
+}
+
+.settings-content > :deep(.ant-card) > .ant-card-body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+</style>

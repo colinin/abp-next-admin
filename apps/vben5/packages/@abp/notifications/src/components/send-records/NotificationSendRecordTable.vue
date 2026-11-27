@@ -15,8 +15,9 @@ import {
   formatToDateTime,
   useLocalization,
   useLocalizationSerializer,
+  useNotifications,
 } from '@abp/core';
-import { useMessage, useVbenVxeGrid } from '@abp/ui';
+import { useVbenVxeGrid } from '@abp/ui';
 import { DeleteOutlined } from '@ant-design/icons-vue';
 import { Button, Tag, Tooltip } from 'ant-design-vue';
 
@@ -25,10 +26,11 @@ import { useNotificationsApi } from '../../api/useNotificationsApi';
 import { useNotificationSendRecordsApi } from '../../api/useNotificationSendRecordsApi';
 import { useNotificationSerializer } from '../../hooks';
 import { NotificationSendState } from '../../types/send-records';
-
 defineOptions({
   name: 'NotificationSendRecordTable',
 });
+
+const { toastSuccess } = useNotifications();
 
 const SendMessageIcon = createIconifyIcon('ant-design:send-outlined');
 interface SendStateInfo {
@@ -42,7 +44,6 @@ const { deleteApi, reSendApi, getPagedListApi } =
 const { getListApi: getNotificationDefinitionsApi } =
   useNotificationDefinitionsApi();
 
-const message = useMessage();
 const { Lr } = useLocalization();
 const { deserialize: deserializeNotification } = useNotificationSerializer();
 const { deserialize: deserializeLocalizableString } =
@@ -279,7 +280,7 @@ function onDelete(row: NotificationSendRecordDto) {
     beforeClose: async ({ isConfirm }) => {
       if (isConfirm) {
         await deleteApi(row.id);
-        message.success($t('AbpUi.DeletedSuccessfully'));
+        toastSuccess($t('AbpUi.DeletedSuccessfully'));
         await gridApi.query();
       }
       return true;
@@ -298,7 +299,7 @@ async function onSend(row: NotificationSendRecordDto) {
         try {
           gridApi.setLoading(true);
           await reSendApi(row.id);
-          message.success($t('Notifications.SendSuccessfully'));
+          toastSuccess($t('Notifications.SendSuccessfully'));
           await gridApi.query();
         } finally {
           gridApi.setLoading(false);

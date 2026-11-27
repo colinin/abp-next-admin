@@ -14,12 +14,12 @@ import {
 
 import { $t } from '@vben/locales';
 
+import { useNotifications } from '@abp/core';
 import {
   Button,
   Card,
   Descriptions,
   DescriptionsItem,
-  message,
   Modal,
   Result,
   Select,
@@ -34,7 +34,6 @@ import { useApprovalTemplatesApi } from '../../api/useApprovalTemplatesApi';
 import FormDesigner from '../designer/FormDesigner.vue';
 import BasicSetting from './BasicSetting.vue';
 import { oldToAntFlow } from './model';
-
 const props = withDefaults(
   defineProps<{
     readonly?: boolean;
@@ -51,6 +50,8 @@ const emit = defineEmits<{
   done: [string];
   'update:templateId': [string];
 }>();
+
+const { toastError, toastWarning, toastSuccess } = useNotifications();
 
 /**
  * FlowDesign is imported lazily: the canvas (and its drawers) only ships with
@@ -186,7 +187,7 @@ async function loadTemplate() {
     await nextTick();
     formDesignerRef.value?.loadForm?.(formId.value, true);
   } catch {
-    message.error($t('antflow.wizard.loadFailed'));
+    toastError($t('antflow.wizard.loadFailed'));
   } finally {
     loading.value = false;
   }
@@ -229,7 +230,7 @@ function goStep(target: number) {
 
 async function saveBasic(): Promise<boolean> {
   if (!basic.displayName.trim()) {
-    message.warning($t('antflow.wizard.nameRequired'));
+    toastWarning($t('antflow.wizard.nameRequired'));
     return false;
   }
 
@@ -244,7 +245,7 @@ async function saveBasic(): Promise<boolean> {
       });
     } else {
       if (!basic.name.trim()) {
-        message.warning($t('antflow.wizard.codeRequired'));
+        toastWarning($t('antflow.wizard.codeRequired'));
         return false;
       }
 
@@ -268,7 +269,7 @@ async function saveBasic(): Promise<boolean> {
     }
     return true;
   } catch {
-    message.error($t('antflow.wizard.basicSaveFailed'));
+    toastError($t('antflow.wizard.basicSaveFailed'));
     return false;
   }
 }
@@ -327,7 +328,7 @@ async function saveDesign(): Promise<boolean> {
   const root = getFlowRoot();
   if (!root) {
     currentStep.value = 2;
-    message.warning($t('antflow.wizard.designRequired'));
+    toastWarning($t('antflow.wizard.designRequired'));
     return false;
   }
 
@@ -338,7 +339,7 @@ async function saveDesign(): Promise<boolean> {
     });
     return true;
   } catch {
-    message.error($t('antflow.wizard.designSaveFailed'));
+    toastError($t('antflow.wizard.designSaveFailed'));
     return false;
   }
 }
@@ -359,7 +360,7 @@ async function save() {
     if (!(await saveDesign())) {
       return;
     }
-    message.success($t('antflow.wizard.saved'));
+    toastSuccess($t('antflow.wizard.saved'));
   } finally {
     saving.value = false;
   }
@@ -382,7 +383,7 @@ async function publish() {
     const errors = flowDesignRef.value?.validatePublish?.() ?? [];
     if (errors.length > 0) {
       currentStep.value = 2;
-      message.warning(
+      toastWarning(
         $t('antflow.wizard.incompleteNodes').replace(
           '{0}',
           String(errors.length),
@@ -404,10 +405,10 @@ async function publish() {
       formDefinitionId: useForm.value ? formId.value : null,
     });
     published.value = true;
-    message.success($t('antflow.wizard.published'));
+    toastSuccess($t('antflow.wizard.published'));
     emit('done', templateId);
   } catch {
-    message.error($t('antflow.wizard.publishFailed'));
+    toastError($t('antflow.wizard.publishFailed'));
   } finally {
     publishing.value = false;
   }

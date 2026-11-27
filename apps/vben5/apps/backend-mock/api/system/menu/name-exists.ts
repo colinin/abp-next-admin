@@ -1,6 +1,8 @@
+import { eventHandler, getQuery } from 'h3';
 import { verifyAccessToken } from '~/utils/jwt-utils';
 import { MOCK_MENU_LIST } from '~/utils/mock-data';
-import { unAuthorizedResponse } from '~/utils/response';
+import { firstQueryString } from '~/utils/query';
+import { unAuthorizedResponse, useResponseSuccess } from '~/utils/response';
 
 const namesMap: Record<string, any> = {};
 
@@ -20,9 +22,10 @@ export default eventHandler(async (event) => {
     return unAuthorizedResponse(event);
   }
   const { id, name } = getQuery(event);
+  const nameValue = firstQueryString(name);
+  const idValue = firstQueryString(id);
 
-  return (name as string) in namesMap &&
-    (!id || namesMap[name as string] !== String(id))
+  return nameValue in namesMap && (!id || namesMap[nameValue] !== idValue)
     ? useResponseSuccess(true)
     : useResponseSuccess(false);
 });

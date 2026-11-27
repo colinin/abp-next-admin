@@ -9,10 +9,10 @@ import { defineAsyncComponent, h } from 'vue';
 import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
+import { useNotifications } from '@abp/core';
 import { useVbenVxeGrid } from '@abp/ui';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons-vue';
-import { Button, message, Popconfirm } from 'ant-design-vue';
-
+import { Button, Popconfirm } from 'ant-design-vue';
 defineOptions({
   name: 'ClaimTable',
 });
@@ -26,7 +26,10 @@ const {
   updateApi,
   updatePolicy,
 } = defineProps<ClaimModalProps>();
+
 const emits = defineEmits<ClaimModalEvents>();
+
+const { toastSuccess } = useNotifications();
 
 const ClaimModal = defineAsyncComponent(() => import('./ClaimModal.vue'));
 
@@ -91,7 +94,7 @@ async function onDelete(row: IdentityClaimDto) {
     claimType: row.claimType,
     claimValue: row.claimValue,
   });
-  message.success($t('AbpUi.DeletedSuccessfully'));
+  toastSuccess($t('AbpUi.DeletedSuccessfully'));
   query();
   emits('onDelete');
 }

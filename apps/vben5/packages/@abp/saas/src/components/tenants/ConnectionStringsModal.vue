@@ -6,14 +6,15 @@ import { ref } from 'vue';
 import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { message } from 'ant-design-vue';
+import { getModalData, useNotifications } from '@abp/core';
 
 import { useTenantsApi } from '../../api/useTenantsApi';
 import ConnectionStringTable from './ConnectionStringTable.vue';
-
 defineProps<{
   dataBaseOptions: { label: string; value: string }[];
 }>();
+
+const { toastSuccess } = useNotifications();
 
 const connectionStrings = ref<TenantConnectionStringDto[]>([]);
 
@@ -23,13 +24,13 @@ const {
   getConnectionStringsApi,
   setConnectionStringApi,
 } = useTenantsApi();
-const [Modal, modalApi] = useVbenModal({
+const [Modal, modalApi] = useVbenModal<TenantDto>({
   class: 'w-[800px]',
   onClosed: cancel,
   async onOpenChange(isOpen) {
     connectionStrings.value = [];
     if (isOpen) {
-      const dto = modalApi.getData<TenantDto>();
+      const dto = getModalData(modalApi);
       await onGet(dto.id);
     }
   },
@@ -39,22 +40,22 @@ async function onGet(id: string) {
   connectionStrings.value = items;
 }
 async function onChange(data: TenantConnectionStringDto) {
-  const dto = modalApi.getData<TenantDto>();
+  const dto = getModalData(modalApi);
   try {
     modalApi.setState({ submitting: true });
     await setConnectionStringApi(dto.id, data);
-    message.success($t('AbpUi.SavedSuccessfully'));
+    toastSuccess($t('AbpUi.SavedSuccessfully'));
     await onGet(dto.id);
   } finally {
     modalApi.setState({ submitting: false });
   }
 }
 async function onDelete(data: TenantConnectionStringDto) {
-  const dto = modalApi.getData<TenantDto>();
+  const dto = getModalData(modalApi);
   try {
     modalApi.setState({ submitting: true });
     await deleteConnectionStringApi(dto.id, data.name);
-    message.success($t('AbpUi.DeletedSuccessfully'));
+    toastSuccess($t('AbpUi.DeletedSuccessfully'));
     await onGet(dto.id);
   } finally {
     modalApi.setState({ submitting: false });

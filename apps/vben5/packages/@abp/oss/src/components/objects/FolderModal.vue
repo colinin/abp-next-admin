@@ -4,18 +4,19 @@ import type { OssObjectDto } from '../../types/objects';
 import { useVbenForm, useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { message } from 'ant-design-vue';
+import { getModalData, useNotifications } from '@abp/core';
 
 import { useObjectsApi } from '../../api';
+const emits = defineEmits<{
+  (event: 'change', data: OssObjectDto): void;
+}>();
+
+const { toastSuccess } = useNotifications();
 
 interface ModalState {
   bucket: string;
   path?: string;
 }
-
-const emits = defineEmits<{
-  (event: 'change', data: OssObjectDto): void;
-}>();
 
 const { createApi } = useObjectsApi();
 
@@ -32,7 +33,7 @@ const [Form, formApi] = useVbenForm({
   showDefaultActions: false,
 });
 
-const [Modal, modalApi] = useVbenModal({
+const [Modal, modalApi] = useVbenModal<ModalState>({
   onConfirm: async () => {
     await formApi.validateAndSubmitForm();
   },
@@ -40,7 +41,7 @@ const [Modal, modalApi] = useVbenModal({
 
 async function onSubmit(values: Record<string, any>) {
   try {
-    const state = modalApi.getData<ModalState>();
+    const state = getModalData(modalApi);
     modalApi.setState({ submitting: true });
     const dto = await createApi({
       bucket: state.bucket,
@@ -48,7 +49,7 @@ async function onSubmit(values: Record<string, any>) {
       overwrite: false,
       path: state.path,
     });
-    message.success($t('AbpUi.SavedSuccessfully'));
+    toastSuccess($t('AbpUi.SavedSuccessfully'));
     emits('change', dto);
     modalApi.close();
   } finally {

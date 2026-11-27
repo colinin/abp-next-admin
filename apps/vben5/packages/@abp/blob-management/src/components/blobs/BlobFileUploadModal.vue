@@ -10,7 +10,7 @@ import { useRefresh } from '@vben/hooks';
 import { $t } from '@vben/locales';
 import { useAccessStore } from '@vben/stores';
 
-import { isNullOrWhiteSpace } from '@abp/core';
+import { getModalData, isNullOrWhiteSpace } from '@abp/core';
 import {
   CaretRightOutlined,
   DeleteOutlined,
@@ -38,7 +38,7 @@ const uploaderWrap = useTemplateRef<any>('uploaderWrap');
 const { refresh } = useRefresh();
 const accessStore = useAccessStore();
 
-const [Modal, modalApi] = useVbenModal({
+const [Modal, modalApi] = useVbenModal<ModalState>({
   class: 'w-1/2',
   closeOnClickModal: false,
   closeOnPressEscape: false,
@@ -78,7 +78,7 @@ const options = ref({
 });
 
 function onInit() {
-  const state = modalApi.getData<ModalState>();
+  const state = getModalData(modalApi);
   options.value = {
     ...options.value,
     headers: {

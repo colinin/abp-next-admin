@@ -10,17 +10,18 @@ import { defineAsyncComponent, h, ref, toValue } from 'vue';
 import { useVbenDrawer } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { formatToDateTime } from '@abp/core';
+import { formatToDateTime, useNotifications } from '@abp/core';
 import { useVbenVxeGrid } from '@abp/ui';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons-vue';
-import { Button, message, Modal, Tag } from 'ant-design-vue';
+import { Button, Modal, Tag } from 'ant-design-vue';
 
 import { useSecurityLogsApi } from '../../api/useSecurityLogsApi';
 import { SecurityLogPermissions } from '../../constants/permissions';
-
 defineOptions({
   name: 'SecurityLogTable',
 });
+
+const { toastSuccess } = useNotifications();
 
 const { cancel, deleteApi, deleteManyApi, getPagedListApi } =
   useSecurityLogsApi();
@@ -230,7 +231,7 @@ function onDelete(row: SecurityLogDto) {
     },
     onOk: async () => {
       await deleteApi(row.id);
-      message.success($t('AbpUi.DeletedSuccessfully'));
+      toastSuccess($t('AbpUi.DeletedSuccessfully'));
       gridApi.query();
     },
     title: $t('AbpUi.AreYouSure'),
@@ -246,7 +247,7 @@ function onBulkDelete() {
         ids: toValue(selectedKeys),
       });
       selectedKeys.value = [];
-      message.success($t('AbpUi.DeletedSuccessfully'));
+      toastSuccess($t('AbpUi.DeletedSuccessfully'));
       gridApi.query();
     },
     title: $t('AbpUi.AreYouSure'),

@@ -4,6 +4,7 @@ import type { ExtendedModalApi, ModalProps } from './modal';
 import {
   computed,
   nextTick,
+  onActivated,
   onDeactivated,
   provide,
   ref,
@@ -12,11 +13,7 @@ import {
   watch,
 } from 'vue';
 
-import {
-  useIsMobile,
-  usePriorityValues,
-  useSimpleLocale,
-} from '@vben-core/composables';
+import { usePriorityValues, useSimpleLocale } from '@vben-core/composables';
 import { Expand, Shrink } from '@vben-core/icons';
 import {
   Dialog,
@@ -57,13 +54,12 @@ const headerRef = ref();
 // @ts-expect-error unused
 const footerRef = ref();
 
-const id = useId();
-
-provide('DISMISSABLE_MODAL_ID', id);
-
 const { $t } = useSimpleLocale();
-const { isMobile } = useIsMobile();
 const state = props.modalApi?.useStore?.();
+
+const id = useId();
+// 遮罩层通过该 id 标记，仅当点击发生在当前 Modal 的遮罩上时才允许关闭
+provide('DISMISSABLE_MODAL_ID', id);
 
 const {
   appendToMain,
@@ -81,6 +77,7 @@ const {
   description,
   destroyOnClose,
   draggable,
+  overflow,
   footer: showFooter,
   footerClass,
   fullscreen,
@@ -100,7 +97,7 @@ const {
   zIndex,
 } = usePriorityValues(props, state);
 
-const shouldFullscreen = computed(() => fullscreen.value || isMobile.value);
+const shouldFullscreen = computed(() => fullscreen.value);
 
 const shouldDraggable = computed(
   () => draggable.value && !shouldFullscreen.value && header.value,
@@ -111,9 +108,7 @@ const shouldCentered = computed(
 );
 
 const getAppendTo = computed(() => {
-  return appendToMain.value
-    ? `#${ELEMENT_ID_MAIN_CONTENT}>div:not(.absolute)>div`
-    : undefined;
+  return appendToMain.value ? `#${ELEMENT_ID_MAIN_CONTENT}` : undefined;
 });
 
 const { dragging, transform } = useModalDraggable(
@@ -122,14 +117,19 @@ const { dragging, transform } = useModalDraggable(
   shouldDraggable,
   getAppendTo,
   shouldCentered,
+  overflow,
 );
 
 const firstOpened = ref(false);
 const isClosed = ref(true);
+const isDeactivated = ref(false);
+const isVisible = computed(() => state?.value?.isOpen && !isDeactivated.value);
+let pendingOpened = false;
 
 watch(
   () => state?.value?.isOpen,
   async (v) => {
+    pendingOpened = !!v;
     if (v) {
       isClosed.value = false;
       if (!firstOpened.value) firstOpened.value = true;
@@ -160,9 +160,14 @@ watch(
 // );
 
 /**
- * 在开启keepAlive情况下 直接通过浏览器按钮/手势等返回 不会关闭弹窗
+ * 缓存页面失活时暂停展示，保留内容区域弹窗的打开状态。
  */
+onActivated(() => {
+  isDeactivated.value = false;
+});
+
 onDeactivated(() => {
+  isDeactivated.value = true;
   // 如果弹窗没有被挂载到内容区域，则关闭弹窗
   if (!appendToMain.value) {
     props.modalApi?.close();
@@ -214,13 +219,22 @@ function handleFocusOutside(e: Event) {
   e.stopPropagation();
 }
 
+function handleCloseAutoFocus(_e: Event) {
+  // allow reka-ui to return focus to the trigger element on close
+}
+
 const getForceMount = computed(() => {
-  return !unref(destroyOnClose) && unref(firstOpened);
+  // 失活时由 unmountOnHide 保留实例，让隐藏弹窗退出交互层栈。
+  return !isDeactivated.value && !unref(destroyOnClose) && unref(firstOpened);
 });
 
 const handleOpened = () => {
   requestAnimationFrame(() => {
-    props.modalApi?.onOpened();
+    // Restoring a cached modal must not repeat its logical opening callback.
+    if (pendingOpened && !isDeactivated.value) {
+      pendingOpened = false;
+      props.modalApi?.onOpened();
+    }
   });
 };
 
@@ -232,7 +246,8 @@ function handleClosed() {
 <template>
   <Dialog
     :modal="false"
-    :open="state?.isOpen"
+    :open="isVisible"
+    :unmount-on-hide="!isDeactivated || !firstOpened"
     @update:open="() => (!submitting ? modalApi?.close() : undefined)"
   >
     <DialogContent
@@ -240,29 +255,32 @@ function handleClosed() {
       :append-to="getAppendTo"
       :class="
         cn(
-          'left-0 right-0 top-[10vh] mx-auto flex max-h-[80%] w-[520px] flex-col p-0',
-          shouldFullscreen ? 'sm:rounded-none' : 'sm:rounded-[var(--radius)]',
-          modalClass,
+          'inset-x-0 top-[10vh] mx-auto flex w-130 flex-col p-0',
+          shouldFullscreen ? 'rounded-none' : 'rounded-(--radius)',
           {
             'border border-border': bordered,
             'shadow-3xl': !bordered,
-            'left-0 top-0 size-full max-h-full !translate-x-0 !translate-y-0':
+            'max-h-[min(80%,calc(100dvh-20px))] max-w-[calc(100vw-20px)]':
+              !shouldFullscreen,
+            'top-0 left-0 size-full! max-h-full! max-w-full! transform-[translate(0,0)]!':
               shouldFullscreen,
             'top-1/2': centered && !shouldFullscreen,
             'duration-300': !dragging,
-            hidden: isClosed,
+            hidden: isClosed || isDeactivated,
           },
+          modalClass,
         )
       "
       :force-mount="getForceMount"
+      :inactive="isDeactivated"
       :modal="modal"
       :open="state?.isOpen"
-      :show-close="closable"
+      :show-close-button="closable"
       :animation-type="animationType"
       :z-index="zIndex"
       :overlay-blur="overlayBlur"
       close-class="top-3"
-      @close-auto-focus="handleFocusOutside"
+      @close-auto-focus="handleCloseAutoFocus"
       @closed="handleClosed"
       :close-disabled="submitting"
       @escape-key-down="escapeKeyDown"
@@ -318,14 +336,20 @@ function handleClosed() {
         <slot></slot>
       </div>
       <VbenLoading v-if="showLoading || submitting" spinning />
-      <VbenIconButton
-        v-if="fullscreenButton"
-        class="flex-center absolute right-10 top-3 hidden size-6 rounded-full px-1 text-lg text-foreground/80 opacity-70 transition-opacity hover:bg-accent hover:text-accent-foreground hover:opacity-100 focus:outline-none disabled:pointer-events-none sm:block"
-        @click="handleFullscreen"
+      <div
+        v-if="fullscreenButton || $slots.extra"
+        class="absolute top-3 right-10 flex items-center gap-1"
       >
-        <Shrink v-if="fullscreen" class="size-3.5" />
-        <Expand v-else class="size-3.5" />
-      </VbenIconButton>
+        <slot name="extra"></slot>
+        <VbenIconButton
+          v-if="fullscreenButton"
+          class="flex-center size-6 rounded-full px-1 text-lg text-foreground/80 opacity-70 transition-opacity hover:bg-accent hover:text-accent-foreground hover:opacity-100 focus:outline-hidden disabled:pointer-events-none"
+          @click="handleFullscreen"
+        >
+          <Shrink v-if="fullscreen" class="size-3.5" />
+          <Expand v-else class="size-3.5" />
+        </VbenIconButton>
+      </div>
 
       <DialogFooter
         ref="footerRef"
@@ -345,12 +369,12 @@ function handleClosed() {
           <component
             :is="components.DefaultButton || VbenButton"
             v-if="showCancelButton"
-            variant="ghost"
+            variant="outline"
             :disabled="submitting"
             @click="() => modalApi?.onCancel()"
           >
             <slot name="cancelText">
-              {{ cancelText || $t('cancel') }}
+              {{ cancelText || $t('common.cancel') }}
             </slot>
           </component>
           <slot name="center-footer"></slot>
@@ -362,7 +386,7 @@ function handleClosed() {
             @click="() => modalApi?.onConfirm()"
           >
             <slot name="confirmText">
-              {{ confirmText || $t('confirm') }}
+              {{ confirmText || $t('common.confirm') }}
             </slot>
           </component>
         </slot>

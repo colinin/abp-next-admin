@@ -8,8 +8,7 @@ import { ref } from 'vue';
 import { useVbenForm, useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { listToTree } from '@abp/core';
-import { message } from 'ant-design-vue';
+import { getModalData, listToTree, useNotifications } from '@abp/core';
 
 import {
   useDataDictionariesApi,
@@ -17,11 +16,6 @@ import {
   useRoleMenusApi,
   useUserMenusApi,
 } from '../../api';
-
-interface ModalState {
-  identity: string;
-}
-
 defineOptions({
   name: 'MenuAllotModal',
 });
@@ -29,6 +23,12 @@ defineOptions({
 const props = defineProps<{
   subject: MenuSubject;
 }>();
+
+const { toastSuccess } = useNotifications();
+
+interface ModalState {
+  identity: string;
+}
 
 const checkedMenuIds = ref<string[]>([]);
 const expandMenuIds = ref<string[]>([]);
@@ -114,7 +114,7 @@ const [Form, formApi] = useVbenForm({
   ],
   showDefaultActions: false,
 });
-const [Modal, modalApi] = useVbenModal({
+const [Modal, modalApi] = useVbenModal<ModalState>({
   onConfirm: async () => {
     await formApi.validateAndSubmitForm();
   },
@@ -166,7 +166,7 @@ async function onInitMenus(framework?: string) {
     formApi.setFieldValue('menuIds', []);
     return;
   }
-  const state = modalApi.getData<ModalState>();
+  const state = getModalData(modalApi);
   const api =
     props.subject === 'user'
       ? getUserMenusApi({
@@ -211,7 +211,7 @@ async function onInitMenus(framework?: string) {
 async function onSubmit(values: Record<string, any>) {
   try {
     modalApi.setState({ submitting: true });
-    const state = modalApi.getData<ModalState>();
+    const state = getModalData(modalApi);
     const api =
       props.subject === 'user'
         ? setUserMenusApi({
@@ -227,7 +227,7 @@ async function onSubmit(values: Record<string, any>) {
             startupMenuId: values.startupMenuId,
           });
     await api;
-    message.success($t('AbpUi.SavedSuccessfully'));
+    toastSuccess($t('AbpUi.SavedSuccessfully'));
     modalApi.close();
   } finally {
     modalApi.setState({ submitting: false });

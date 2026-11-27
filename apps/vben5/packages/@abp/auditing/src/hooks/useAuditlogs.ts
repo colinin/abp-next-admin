@@ -9,17 +9,17 @@ export function useAuditlogs() {
 
   const changeTypeColorMap = {
     [ChangeType.Created]: { color: '#87d068', value: L('Created') },
-    [ChangeType.Deleted]: { color: 'red', value: L('Deleted') },
+    [ChangeType.Deleted]: { color: '#ff4d4f', value: L('Deleted') },
     [ChangeType.Updated]: { color: '#108ee9', value: L('Updated') },
   };
 
   const methodColorMap: { [key: string]: string } = {
-    DELETE: 'red',
-    GET: 'blue',
-    OPTIONS: 'cyan',
-    PATCH: 'pink',
-    POST: 'green',
-    PUT: 'orange',
+    DELETE: '#ff4d4f',
+    GET: '#108ee9',
+    OPTIONS: '#13c2c2',
+    PATCH: '#eb2f96',
+    POST: '#52c41a',
+    PUT: '#fa8c16',
   };
   const getChangeTypeColor = computed(() => {
     return (changeType: ChangeType) => changeTypeColorMap[changeType].color;
@@ -44,12 +44,12 @@ export function useAuditlogs() {
         return '#108ee9';
       }
       if (statusCode >= 400 && statusCode < 500) {
-        return 'orange';
+        return '#fa8c16';
       }
       if (statusCode >= 500) {
-        return 'red';
+        return '#ff4d4f';
       }
-      return 'cyan';
+      return '#13c2c2';
     };
   });
 

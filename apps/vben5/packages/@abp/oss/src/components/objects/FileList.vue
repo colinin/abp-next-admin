@@ -9,19 +9,22 @@ import { useAccess } from '@vben/access';
 import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { formatToDateTime, isNullOrWhiteSpace } from '@abp/core';
+import {
+  formatToDateTime,
+  isNullOrWhiteSpace,
+  useNotifications,
+} from '@abp/core';
 import { useVbenVxeGrid } from '@abp/ui';
 import {
   DeleteOutlined,
   DownloadOutlined,
   UploadOutlined,
 } from '@ant-design/icons-vue';
-import { Button, message, Modal } from 'ant-design-vue';
+import { Button, Modal } from 'ant-design-vue';
 
 import { useObjectsApi } from '../../api';
 import { useContainesApi } from '../../api/useContainesApi';
 import { OssObjectPermissions } from '../../constants/permissions';
-
 defineOptions({
   name: 'FileList',
 });
@@ -30,6 +33,8 @@ const props = defineProps<{
   bucket: string;
   path: string;
 }>();
+
+const { toastSuccess } = useNotifications();
 
 const kbUnit = 1 * 1024;
 const mbUnit = kbUnit * 1024;
@@ -203,7 +208,7 @@ function onDelete(row: OssObjectDto) {
         object: row.name,
         path: row.path,
       });
-      message.success($t('AbpUi.DeletedSuccessfully'));
+      toastSuccess($t('AbpUi.DeletedSuccessfully'));
       await gridApi.query();
     },
     title: $t('AbpUi.AreYouSure'),

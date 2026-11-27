@@ -77,7 +77,7 @@ export function useTabbar() {
   // 点击tab,跳转路由
   const handleClick = (key: string) => {
     const { fullPath, path } = tabbarStore.getTabByKey(key);
-    router.push(fullPath || path);
+    void router.push(fullPath || path);
   };
 
   // 关闭tab
@@ -90,7 +90,7 @@ export function useTabbar() {
       ...tab,
       meta: {
         ...tab?.meta,
-        title: $t(tab?.meta?.title as string),
+        title: $t(tab?.meta?.title),
       },
     };
   }
@@ -109,6 +109,8 @@ export function useTabbar() {
       const meta = route.matched?.[route.matched.length - 1]?.meta;
       tabbarStore.addTab({
         ...route,
+        // key 用合并后的 route.meta 计算，父级的 fullPathKey 同样生效
+        key: getTabKey(route),
         meta: meta || route.meta,
       });
     },
@@ -155,7 +157,9 @@ export function useTabbar() {
           toggleMaximize();
         },
         icon: contentIsMaximize.value ? Minimize2 : Fullscreen,
-        key: contentIsMaximize.value ? 'restore-maximize' : 'maximize',
+        // 最大化与还原是同一个菜单项，key 保持恒定，
+        // 否则状态切换后会与 getMenuList 白名单里的 'maximize' 失配而被过滤掉。
+        key: 'maximize',
         text: contentIsMaximize.value
           ? $t('preferences.tabbar.contextMenu.restoreMaximize')
           : $t('preferences.tabbar.contextMenu.maximize'),
@@ -214,7 +218,14 @@ export function useTabbar() {
       },
     ];
 
-    return menus.filter((item) => tabbarStore.getMenuList.includes(item.key));
+    const menuList = tabbarStore.getMenuList;
+    return menus.filter(
+      (item) =>
+        menuList.includes(item.key) ||
+        (contentIsMaximize.value &&
+          item.key === 'maximize' &&
+          menuList.includes('restore-maximize')),
+    );
   };
 
   return {

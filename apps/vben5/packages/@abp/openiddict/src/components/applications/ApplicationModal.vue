@@ -13,8 +13,6 @@ import type { PropertyInfo } from '../properties/types';
 import {
   computed,
   defineAsyncComponent,
-  defineEmits,
-  defineOptions,
   reactive,
   ref,
   shallowRef,
@@ -25,6 +23,7 @@ import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
 import { CodeEditor } from '@abp/components/codeeditor';
+import { getModalData, useNotifications } from '@abp/core';
 import { DownOutlined } from '@ant-design/icons-vue';
 import {
   Checkbox,
@@ -34,7 +33,6 @@ import {
   InputNumber,
   InputPassword,
   Menu,
-  message,
   Select,
   Tabs,
   Transfer,
@@ -45,20 +43,27 @@ import { useOpenIdApi } from '../../api/useOpenIdApi';
 import { useScopeTransfer } from '../../hooks/useScopeTransfer';
 import DisplayNameTable from '../display-names/DisplayNameTable.vue';
 import PropertyTable from '../properties/PropertyTable.vue';
-
 defineOptions({
   name: 'ApplicationModal',
 });
+
 const emits = defineEmits<{
   (event: 'change', data: OpenIddictApplicationDto): void;
 }>();
+
+const { toastSuccess } = useNotifications();
 
 const FormItem = Form.Item;
 const MenuItem = Menu.Item;
 const TabPane = Tabs.TabPane;
 
 type TabKeys =
-  'authorize' | 'basic' | 'dispalyName' | 'endpoint' | 'props' | 'scope';
+  | 'authorize'
+  | 'basic'
+  | 'dispalyName'
+  | 'endpoint'
+  | 'props'
+  | 'scope';
 
 const defaultModel: OpenIddictApplicationDto = {
   applicationType: 'web',
@@ -145,7 +150,7 @@ const getResponseTypes = computed(() => {
 const { discoveryApi } = useOpenIdApi();
 const { cancel, createApi, getApi, updateApi } = useApplicationsApi();
 const { availableResources, initAssignableScopes } = useScopeTransfer();
-const [Modal, modalApi] = useVbenModal({
+const [Modal, modalApi] = useVbenModal<OpenIddictApplicationDto>({
   class: 'w-1/2',
   draggable: true,
   fullscreenButton: false,
@@ -163,7 +168,7 @@ const [Modal, modalApi] = useVbenModal({
     modalApi.setState({ submitting: true });
     api
       .then((res) => {
-        message.success($t('AbpUi.SavedSuccessfully'));
+        toastSuccess($t('AbpUi.SavedSuccessfully'));
         emits('change', res);
         modalApi.close();
       })
@@ -183,7 +188,7 @@ const [Modal, modalApi] = useVbenModal({
       try {
         modalApi.setState({ loading: true });
         await onInit();
-        const claimTypeDto = modalApi.getData<OpenIddictApplicationDto>();
+        const claimTypeDto = getModalData(modalApi);
         if (claimTypeDto?.id) {
           const dto = await getApi(claimTypeDto.id);
           formModel.value = dto;
@@ -211,7 +216,7 @@ function onDisplayNameChange(displayName: DisplayNameInfo) {
 }
 function onDisplayNameDelete(displayName: DisplayNameInfo) {
   formModel.value.displayNames ??= {};
-  delete formModel.value.displayNames[displayName.culture];
+  Reflect.deleteProperty(formModel.value.displayNames, displayName.culture);
 }
 function onPropChange(prop: PropertyInfo) {
   formModel.value.properties ??= {};
@@ -219,7 +224,7 @@ function onPropChange(prop: PropertyInfo) {
 }
 function onPropDelete(prop: PropertyInfo) {
   formModel.value.properties ??= {};
-  delete formModel.value.properties[prop.key];
+  Reflect.deleteProperty(formModel.value.properties, prop.key);
 }
 function onSwitchUri(info: MenuInfo) {
   activeTab.value = 'endpoint';
@@ -414,7 +419,7 @@ function onUriDelete(uri: string) {
             :extra="$t('AbpOpenIddict.Description:AccessTokenLifetime')"
           >
             <InputNumber
-              class="w-full"
+              class="!w-full"
               min="300"
               v-model:value="formModel.settings.tokenLifetime.accessToken"
             />
@@ -425,7 +430,7 @@ function onUriDelete(uri: string) {
             :extra="$t('AbpOpenIddict.Description:AuthorizationCodeLifetime')"
           >
             <InputNumber
-              class="w-full"
+              class="!w-full"
               min="300"
               v-model:value="formModel.settings.tokenLifetime.authorizationCode"
             />
@@ -436,7 +441,7 @@ function onUriDelete(uri: string) {
             :extra="$t('AbpOpenIddict.Description:IdentityTokenLifetime')"
           >
             <InputNumber
-              class="w-full"
+              class="!w-full"
               min="300"
               v-model:value="formModel.settings.tokenLifetime.identityToken"
             />
@@ -447,7 +452,7 @@ function onUriDelete(uri: string) {
             :extra="$t('AbpOpenIddict.Description:RefreshTokenLifetime')"
           >
             <InputNumber
-              class="w-full"
+              class="!w-full"
               min="300"
               v-model:value="formModel.settings.tokenLifetime.refreshToken"
             />
@@ -458,7 +463,7 @@ function onUriDelete(uri: string) {
             :extra="$t('AbpOpenIddict.Description:DeviceCodeLifetime')"
           >
             <InputNumber
-              class="w-full"
+              class="!w-full"
               min="300"
               v-model:value="formModel.settings.tokenLifetime.deviceCode"
             />
@@ -469,7 +474,7 @@ function onUriDelete(uri: string) {
             :extra="$t('AbpOpenIddict.Description:UserCodeLifetime')"
           >
             <InputNumber
-              class="w-full"
+              class="!w-full"
               min="300"
               v-model:value="formModel.settings.tokenLifetime.userCode"
             />

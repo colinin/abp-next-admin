@@ -18,16 +18,16 @@ defineOptions({
 
 const props = defineProps<DisplayNameProps>();
 const emits = defineEmits<{
-  (event: 'change', data: DisplayNameInfo): void;
-  (event: 'delete', data: DisplayNameInfo): void;
+  (event: 'change' | 'delete', data: DisplayNameInfo): void;
 }>();
 
 const getDataResource = computed((): DisplayNameInfo[] => {
-  if (!props.data) return [];
-  return Object.keys(props.data).map((item) => {
+  const data = props.data;
+  if (!data) return [];
+  return Object.keys(data).map((item) => {
     return {
       culture: item,
-      displayName: props.data![item]!,
+      displayName: data[item] ?? '',
     };
   });
 });

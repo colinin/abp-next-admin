@@ -114,7 +114,7 @@ Reference [vue](https://github.com/vuejs/vue/blob/dev/.github/COMMIT_CONVENTION.
 
 ## Browser Support
 
-The `Chrome 80+` browser is recommended for local development
+Tailwind CSS v4.0 is designed for Safari 16.4+, Chrome 111+, and Firefox 128+
 
 Support modern browsers, not IE
 
@@ -128,7 +128,7 @@ Support modern browsers, not IE
 
 ## Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=vbenjs/vue-vben-admin&type=Date)](https://star-history.com/#vbenjs/vue-vben-admin&Date)
+[![Star History Chart](https://star-history.dera.page/svg?repos=vbenjs/vue-vben-admin&type=Date)](https://star-history.dera.page/#vbenjs/vue-vben-admin&Date)
 
 ## Donate
 

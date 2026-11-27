@@ -4,7 +4,6 @@ import type { VxeGridListeners, VxeGridProps } from '@abp/ui';
 import type { VbenFormProps } from '@vben/common-ui';
 
 import type { WebhookDefinitionDto } from '../../../types/definitions';
-import type { WebhookGroupDefinitionDto } from '../../../types/groups';
 
 import { defineAsyncComponent, h, onMounted, ref } from 'vue';
 
@@ -16,6 +15,7 @@ import {
   sortby,
   useLocalization,
   useLocalizationSerializer,
+  useNotifications,
 } from '@abp/core';
 import { useVbenVxeGrid } from '@abp/ui';
 import {
@@ -25,16 +25,17 @@ import {
   EditOutlined,
   PlusOutlined,
 } from '@ant-design/icons-vue';
-import { Button, message, Modal, Tag } from 'ant-design-vue';
+import { Button, Modal, Tag } from 'ant-design-vue';
 import { VxeGrid } from 'vxe-table';
 
 import { useWebhookDefinitionsApi } from '../../../api/useWebhookDefinitionsApi';
 import { useWebhookGroupDefinitionsApi } from '../../../api/useWebhookGroupDefinitionsApi';
 import { WebhookDefinitionsPermissions } from '../../../constants/permissions';
-
 defineOptions({
   name: 'WebhookDefinitionTable',
 });
+
+const { toastSuccess } = useNotifications();
 
 interface DefinitionItem {
   children: DefinitionItem[];
@@ -80,7 +81,7 @@ const formOptions: VbenFormProps = {
   submitOnEnter: true,
 };
 
-const gridOptions: VxeGridProps<WebhookGroupDefinitionDto> = {
+const gridOptions: VxeGridProps<DefinitionGroup> = {
   columns: [
     {
       align: 'center',
@@ -201,7 +202,7 @@ const subGridColumns: VxeGridProps<WebhookDefinitionDto>['columns'] = [
   },
 ];
 
-const gridEvents: VxeGridListeners<WebhookGroupDefinitionDto> = {
+const gridEvents: VxeGridListeners<DefinitionGroup> = {
   sortChange: () => {
     gridApi.query();
   },
@@ -274,7 +275,7 @@ function onDelete(row: WebhookDefinitionDto) {
     content: `${$t('AbpUi.ItemWillBeDeletedMessageWithFormat', [row.name])}`,
     onOk: async () => {
       await deleteApi(row.name);
-      message.success($t('AbpUi.DeletedSuccessfully'));
+      toastSuccess($t('AbpUi.DeletedSuccessfully'));
       onGet();
     },
     title: $t('AbpUi.AreYouSure'),

@@ -13,7 +13,12 @@ import { useVbenModal } from '@vben/common-ui';
 import { createIconifyIcon } from '@vben/icons';
 import { $t } from '@vben/locales';
 
-import { sortby, useLocalization, useLocalizationSerializer } from '@abp/core';
+import {
+  sortby,
+  useLocalization,
+  useLocalizationSerializer,
+  useNotifications,
+} from '@abp/core';
 import { useVbenVxeGrid } from '@abp/ui';
 import {
   DeleteOutlined,
@@ -21,17 +26,18 @@ import {
   EllipsisOutlined,
   PlusOutlined,
 } from '@ant-design/icons-vue';
-import { Button, Dropdown, Menu, message, Modal } from 'ant-design-vue';
+import { Button, Dropdown, Menu, Modal } from 'ant-design-vue';
 
 import { useNotificationGroupDefinitionsApi } from '../../../api/useNotificationGroupDefinitionsApi';
 import {
   GroupDefinitionsPermissions,
   NotificationDefinitionsPermissions,
 } from '../../../constants/permissions';
-
 defineOptions({
   name: 'NotificationGroupDefinitionTable',
 });
+
+const { toastSuccess } = useNotifications();
 
 const MenuItem = Menu.Item;
 const DefinitionIcon = createIconifyIcon('nimbus:notification');
@@ -184,7 +190,7 @@ function onDelete(row: NotificationGroupDefinitionDto) {
     content: `${$t('AbpUi.ItemWillBeDeletedMessageWithFormat', [row.name])}`,
     onOk: async () => {
       await deleteApi(row.name);
-      message.success($t('AbpUi.DeletedSuccessfully'));
+      toastSuccess($t('AbpUi.DeletedSuccessfully'));
       onGet();
     },
     title: $t('AbpUi.AreYouSure'),

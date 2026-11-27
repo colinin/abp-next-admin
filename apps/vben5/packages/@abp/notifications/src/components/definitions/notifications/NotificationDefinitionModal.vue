@@ -9,14 +9,19 @@ import type {
   NotificationTemplateDto,
 } from '../../../types/definitions';
 
-import { defineEmits, defineOptions, ref, toValue, useTemplateRef } from 'vue';
+import { ref, toValue, useTemplateRef } from 'vue';
 
 import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { useLocalization, useLocalizationSerializer } from '@abp/core';
+import {
+  getModalData,
+  useLocalization,
+  useLocalizationSerializer,
+  useNotifications,
+} from '@abp/core';
 import { LocalizableInput, PropertyTable } from '@abp/ui';
-import { Checkbox, Form, Input, message, Select, Tabs } from 'ant-design-vue';
+import { Checkbox, Form, Input, Select, Tabs } from 'ant-design-vue';
 
 import {
   useNotificationGroupDefinitionsApi,
@@ -29,13 +34,15 @@ import {
   NotificationType,
 } from '../../../types';
 import { useEnumMaps } from './useEnumMaps';
-
 defineOptions({
   name: 'NotificationDefinitionModal',
 });
+
 const emits = defineEmits<{
   (event: 'change', data: NotificationDefinitionDto): void;
 }>();
+
+const { toastSuccess } = useNotifications();
 
 const FormItem = Form.Item;
 const TabPane = Tabs.TabPane;
@@ -75,7 +82,7 @@ const { getListApi: getGroupDefinitionsApi } =
   useNotificationGroupDefinitionsApi();
 const { Lr } = useLocalization();
 const { deserialize } = useLocalizationSerializer();
-const [Modal, modalApi] = useVbenModal({
+const [Modal, modalApi] = useVbenModal<NotificationDefinitionDto>({
   class: 'w-1/2',
   draggable: true,
   fullscreenButton: false,
@@ -95,7 +102,7 @@ const [Modal, modalApi] = useVbenModal({
       modalApi.setState({ submitting: true });
       const res = await api;
       emits('change', res);
-      message.success($t('AbpUi.SavedSuccessfully'));
+      toastSuccess($t('AbpUi.SavedSuccessfully'));
       modalApi.close();
     } finally {
       modalApi.setState({ submitting: false });
@@ -112,8 +119,7 @@ const [Modal, modalApi] = useVbenModal({
         title: $t('Notifications.NotificationDefinitions:AddNew'),
       });
       try {
-        const { groupName, name } =
-          modalApi.getData<NotificationDefinitionDto>();
+        const { groupName, name } = getModalData(modalApi);
         await onInit(groupName);
         name && (await onGet(name));
       } finally {
@@ -149,8 +155,9 @@ async function onInit(groupName?: string) {
       displayName: Lr(displayName.resourceName, displayName.name),
     };
   });
-  if (getGroupsRes.items.length === 1) {
-    formModel.value.groupName = getGroupsRes.items[0]!.name;
+  const firstGroup = getGroupsRes.items[0];
+  if (firstGroup) {
+    formModel.value.groupName = firstGroup.name;
   }
 }
 function onPropChange(prop: PropertyInfo) {
@@ -159,7 +166,7 @@ function onPropChange(prop: PropertyInfo) {
 }
 function onPropDelete(prop: PropertyInfo) {
   formModel.value.extraProperties ??= {};
-  delete formModel.value.extraProperties[prop.key];
+  Reflect.deleteProperty(formModel.value.extraProperties, prop.key);
 }
 </script>
 

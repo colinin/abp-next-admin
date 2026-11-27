@@ -1,5 +1,5 @@
-<!-- eslint-disable prettier/prettier -->
 <script setup lang="ts">
+// oxlint-disable no-nested-ternary
 import type {
   ApprovalFlowModel,
   ApprovalFlowNode,
@@ -126,9 +126,9 @@ const statusMap = computed<Record<string, string>>(() => {
     map[endNode.value.id] =
       props.instanceStatus === 'Approved'
         ? 'approved'
-        : (props.instanceStatus === 'Rejected'
+        : props.instanceStatus === 'Rejected'
           ? 'rejected'
-          : 'pending');
+          : 'pending';
   }
 
   return map;

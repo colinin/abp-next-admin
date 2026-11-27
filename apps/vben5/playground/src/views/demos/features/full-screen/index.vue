@@ -4,7 +4,7 @@ import { ref } from 'vue';
 import { Page } from '@vben/common-ui';
 
 import { useFullscreen } from '@vueuse/core';
-import { Button, Card } from 'ant-design-vue';
+import { Button, Card } from 'antdv-next';
 
 const domRef = ref<HTMLElement>();
 
@@ -37,7 +37,7 @@ const { isFullscreen: isDomFullscreen, toggle: toggleDom } =
 
     <div
       ref="domRef"
-      class="mx-auto mt-10 flex h-64 w-1/2 items-center justify-center rounded-md bg-yellow-400"
+      class="mx-auto mt-10 flex-center h-64 w-1/2 rounded-md bg-yellow-400"
     >
       <Button class="mr-2" type="primary" @click="toggleDom">
         {{ isDomFullscreen ? 'Exit Dom Full Screen' : 'Enter Dom Full Screen' }}

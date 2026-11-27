@@ -7,8 +7,8 @@ import { generateAccessible } from '@vben/access';
 import { useAppConfig } from '@vben/hooks';
 import { preferences } from '@vben/preferences';
 
+import { useNotifications } from '@abp/core';
 import { useMenuTransform, useMyMenusApi } from '@abp/platform';
-import { message } from 'ant-design-vue';
 
 import { BasicLayout, IFrameView } from '#/layouts';
 import { $t } from '#/locales';
@@ -17,6 +17,7 @@ const forbiddenComponent = () => import('#/views/_core/fallback/forbidden.vue');
 
 async function generateAccess(options: GenerateMenuAndRoutesOptions) {
   const { getAllApi } = useMyMenusApi();
+  const { toastLoading } = useNotifications();
   const { transformRoutes } = useMenuTransform();
   const pageMap: ComponentRecordType = import.meta.glob('../views/**/*.vue');
   const { uiFramework } = useAppConfig(import.meta.env, import.meta.env.PROD);
@@ -29,9 +30,9 @@ async function generateAccess(options: GenerateMenuAndRoutesOptions) {
   return await generateAccessible(preferences.app.accessMode, {
     ...options,
     fetchMenuListAsync: async () => {
-      message.loading({
-        content: `${$t('common.loadingMenu')}...`,
-        duration: 1.5,
+      toastLoading({
+        duration: 1500,
+        message: `${$t('common.loadingMenu')}...`,
       });
       const { items } = await getAllApi({
         framework: uiFramework,

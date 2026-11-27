@@ -18,6 +18,30 @@ import {
 } from 'oidc-client-ts';
 import SecureLS from 'secure-ls';
 
+type SecureLSStorage = {
+  get(key: string): any;
+  set(key: string, value: unknown): void;
+  remove(key: string): void;
+  getAllKeys(): string[];
+  clear(): void;
+  storage: Storage;
+};
+
+type SecureLSCtor = new (config?: {
+  encodingType?: string;
+  encryptionSecret?: string;
+  isCompression?: boolean;
+  metaKey?: string;
+}) => SecureLSStorage;
+
+const secureLSModule = SecureLS as unknown as {
+  default?: SecureLSCtor;
+  SecureLS?: SecureLSCtor;
+};
+
+const SecureLSConstructor =
+  secureLSModule.default ?? secureLSModule.SecureLS ?? SecureLS;
+
 class AbpUserManager extends UserManager {
   async _fetchUser(logger: Logger, body: URLSearchParams) {
     const { request } = useRequest();
@@ -187,11 +211,10 @@ const env = import.meta.env.PROD ? 'prod' : 'dev';
 const appVersion = import.meta.env.VITE_APP_VERSION;
 const namespace = `${import.meta.env.VITE_APP_NAMESPACE}-${appVersion}-${env}`;
 
-const ls = new SecureLS({
+const ls = new SecureLSConstructor({
   encodingType: 'aes',
   encryptionSecret: import.meta.env.VITE_APP_STORE_SECURE_KEY,
   isCompression: true,
-  // @ts-ignore secure-ls does not have a type definition for this
   metaKey: `${namespace}-secure-oidc`,
 });
 const oidcSettings: UserManagerSettings = {

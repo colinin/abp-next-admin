@@ -12,6 +12,8 @@ import {
   VbenIconButton,
 } from '@vben-core/shadcn-ui';
 
+withDefaults(defineProps<{ showButton?: boolean }>(), { showButton: true });
+
 const TimezoneIcon = createIconifyIcon('fluent-mdl2:world-clock');
 
 const timezoneStore = useTimezoneStore();
@@ -47,19 +49,22 @@ const [Modal, modalApi] = useVbenModal({
   },
 });
 
-const handleClick = () => {
+function open() {
   modalApi.open();
-};
+}
+
+defineExpose({ open });
 </script>
 
 <template>
   <div>
     <VbenIconButton
+      v-if="showButton"
       :tooltip="$t('ui.widgets.timezone.setTimezone')"
       class="hover:animate-[shrink_0.3s_ease-in-out]"
-      @click="handleClick"
+      @click="open"
     >
-      <TimezoneIcon class="text-foreground size-4" />
+      <TimezoneIcon class="size-4 text-foreground" />
     </VbenIconButton>
     <Modal :title="$t('ui.widgets.timezone.setTimezone')">
       <div class="timezone-container">
@@ -82,6 +87,6 @@ const handleClick = () => {
 
 <style scoped>
 .timezone-container {
-  padding-left: 20px;
+  @apply pl-5;
 }
 </style>

@@ -14,7 +14,13 @@ import { createIconifyIcon } from '@vben/icons';
 import { $t } from '@vben/locales';
 
 import { AuditLogPermissions, EntityChangeDrawer } from '@abp/auditing';
-import { Events, useAbpStore, useEventBus, useFeatures } from '@abp/core';
+import {
+  Events,
+  useAbpStore,
+  useEventBus,
+  useFeatures,
+  useNotifications,
+} from '@abp/core';
 import { PermissionModal } from '@abp/permissions';
 import { MenuAllotModal } from '@abp/platform';
 import { useVbenVxeGrid } from '@abp/ui';
@@ -23,14 +29,15 @@ import {
   EditOutlined,
   EllipsisOutlined,
 } from '@ant-design/icons-vue';
-import { Button, Dropdown, Menu, message, Modal, Tag } from 'ant-design-vue';
+import { Button, Dropdown, Menu, Modal, Tag } from 'ant-design-vue';
 
 import { useRolesApi } from '../../api/useRolesApi';
 import { IdentityRolePermissions } from '../../constants/permissions';
-
 defineOptions({
   name: 'RoleTable',
 });
+
+const { toastSuccess } = useNotifications();
 
 const MenuItem = Menu.Item;
 const MenuOutlined = createIconifyIcon('heroicons-outline:menu-alt-3');
@@ -162,7 +169,7 @@ const handleDelete = (row: IdentityRoleDto) => {
     },
     onOk: async () => {
       await deleteApi(row.id);
-      message.success($t('AbpUi.DeletedSuccessfully'));
+      toastSuccess($t('AbpUi.DeletedSuccessfully'));
       gridApi.query();
     },
     title: $t('AbpUi.AreYouSure'),

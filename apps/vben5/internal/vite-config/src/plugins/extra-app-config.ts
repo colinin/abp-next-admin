@@ -13,7 +13,7 @@ interface PluginOptions {
   root: string;
 }
 
-const GLOBAL_CONFIG_FILE_NAME = '_app.config.js';
+const GLOBAL_CONFIG_FILE_NAME = '_app-config';
 const VBEN_ADMIN_PRO_APP_CONF = '_VBEN_ADMIN_PRO_APP_CONF_';
 
 /**
@@ -27,9 +27,10 @@ async function viteExtraAppConfigPlugin({
 }: PluginOptions): Promise<PluginOption | undefined> {
   let publicPath: string;
   let source: string;
+  let hash: string;
 
   if (!isBuild) {
-    return;
+    return undefined;
   }
 
   const { version = '' } = await readPackageJSON(root);
@@ -38,29 +39,34 @@ async function viteExtraAppConfigPlugin({
     async configResolved(config) {
       publicPath = ensureTrailingSlash(config.base);
       source = await getConfigSource();
+      hash = generatorContentHash(source, 8);
     },
     async generateBundle() {
       try {
         this.emitFile({
-          fileName: GLOBAL_CONFIG_FILE_NAME,
+          fileName: `${GLOBAL_CONFIG_FILE_NAME}-${version}-${hash}.js`,
           source,
           type: 'asset',
         });
 
         console.log(colors.cyan(`✨configuration file is build successfully!`));
       } catch (error) {
+        // 不复用 @vben-core/shared 的 getErrorMessage：那会让本包构建产物
+        // 运行时导入 shared 的 dist，而消费方（各 app/design 的
+        // vite.config.ts）不在 package.json 声明本包，turbo 图中与
+        // shared#build 没有顺序边——CI 全量 build 时会撞上 shared 重建
+        // 清空 dist 的窗口，ERR_MODULE_NOT_FOUND（post-update 实测）。
+        const reason = error instanceof Error ? error.message : String(error);
         console.log(
           colors.red(
-            `configuration file configuration file failed to package:\n${error}`,
+            `configuration file configuration file failed to package:\n${reason}`,
           ),
         );
       }
     },
     name: 'vite:extra-app-config',
     async transformIndexHtml(html) {
-      const hash = `v=${version}-${generatorContentHash(source, 8)}`;
-
-      const appConfigSrc = `${publicPath}${GLOBAL_CONFIG_FILE_NAME}?${hash}`;
+      const appConfigSrc = `${publicPath}${GLOBAL_CONFIG_FILE_NAME}-${version}-${hash}.js`;
 
       return {
         html,

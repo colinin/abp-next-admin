@@ -3,7 +3,7 @@ import { ref } from 'vue';
 
 import { useVbenModal } from '@vben/common-ui';
 
-import { Button, message } from 'ant-design-vue';
+import { Button, message } from 'antdv-next';
 
 const list = ref<number[]>([]);
 
@@ -38,7 +38,7 @@ function handleUpdate(len?: number) {
     <div
       v-for="item in list"
       :key="item"
-      class="flex-center h-[220px] w-full bg-muted even:bg-heavy"
+      class="flex-center h-55 w-full bg-muted even:bg-heavy"
     >
       {{ item }}
     </div>

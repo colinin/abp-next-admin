@@ -8,15 +8,16 @@ import { useAppConfig } from '@vben/hooks';
 import { IconifyIcon } from '@vben/icons';
 import { $t } from '@vben/locales';
 
-import { listToTree } from '@abp/core';
-import { message, TreeSelect } from 'ant-design-vue';
+import { listToTree, useNotifications } from '@abp/core';
+import { TreeSelect } from 'ant-design-vue';
 
 import { useMyFavoriteMenusApi } from '../../../api/useMyFavoriteMenusApi';
 import { useMyMenusApi } from '../../../api/useMyMenusApi';
-
 const emits = defineEmits<{
   (event: 'change', data: UserFavoriteMenuDto): void;
 }>();
+
+const { toastSuccess } = useNotifications();
 
 const ColorPicker = defineAsyncComponent(() =>
   import('vue3-colorpicker').then((res) => {
@@ -95,7 +96,7 @@ async function onSubmit(values: Record<string, any>) {
       icon: values.icon,
       aliasName: values.aliasName,
     });
-    message.success($t('AbpUi.SavedSuccessfully'));
+    toastSuccess($t('AbpUi.SavedSuccessfully'));
     emits('change', menuDto);
     modalApi.close();
   } finally {
@@ -109,8 +110,8 @@ async function onSubmit(values: Record<string, any>) {
     <Form>
       <template #color="slotProps">
         <div class="flex flex-row items-center">
-          <ColorPicker v-bind="slotProps" format="hex" />
-          <span>({{ slotProps.value }})</span>
+          <ColorPicker v-bind="slotProps.componentProps" format="hex" />
+          <span>({{ slotProps.modelValue }})</span>
         </div>
       </template>
       <template #menuId="slotProps">
@@ -118,7 +119,7 @@ async function onSubmit(values: Record<string, any>) {
           allow-clear
           class="w-full"
           tree-icon
-          v-bind="slotProps"
+          v-bind="slotProps.componentProps"
           :field-names="{ label: 'displayName', value: 'id' }"
           :tree-data="availableMenus"
         >

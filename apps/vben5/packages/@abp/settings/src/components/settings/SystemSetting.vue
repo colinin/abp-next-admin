@@ -6,16 +6,17 @@ import { ref } from 'vue';
 import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { isEmail } from '@abp/core';
+import { isEmail, useNotifications } from '@abp/core';
 import { FeatureModal } from '@abp/features';
-import { Button, Form, InputSearch, message, Modal } from 'ant-design-vue';
+import { Button, Form, InputSearch, Modal } from 'ant-design-vue';
 
 import { useSettingsApi } from '../../api/useSettingsApi';
 import SettingForm from './SettingForm.vue';
-
 defineOptions({
   name: 'SystemSettingForm',
 });
+
+const { toastSuccess } = useNotifications();
 
 const FormItem = Form.Item;
 
@@ -49,7 +50,7 @@ async function onSendMail(email: string) {
   try {
     sending.value = true;
     await sendTestEmailApi(email);
-    message.success($t('AbpSettingManagement.SuccessfullySent'));
+    toastSuccess($t('AbpSettingManagement.SuccessfullySent'));
   } finally {
     sending.value = false;
   }

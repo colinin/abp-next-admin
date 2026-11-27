@@ -9,7 +9,7 @@ interface RoleDtoBase {
   name: string;
 }
 
-interface IdentityRoleDto extends RoleDtoBase, IHasConcurrencyStamp {
+interface IdentityRoleDto extends IHasConcurrencyStamp, RoleDtoBase {
   [key: string]: any;
   id: string;
   isStatic: boolean;
@@ -21,7 +21,7 @@ interface GetRolePagedListInput extends PagedAndSortedResultRequestDto {
 
 type IdentityRoleCreateDto = RoleDtoBase;
 
-interface IdentityRoleUpdateDto extends RoleDtoBase, IHasConcurrencyStamp {}
+interface IdentityRoleUpdateDto extends IHasConcurrencyStamp, RoleDtoBase {}
 
 interface ChangeRoleOrganizationUnitDto {
   organizationUnitIds: string[];

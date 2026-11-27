@@ -7,16 +7,18 @@ import { useVbenForm, useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
 import { CodeEditor } from '@abp/components/codeeditor';
-import { message } from 'ant-design-vue';
+import { getModalData, useNotifications } from '@abp/core';
 
 import { useApplicationsApi } from '../../api/useApplicationsApi';
-
 defineOptions({
   name: 'ApplicationSecretModal',
 });
+
 const emits = defineEmits<{
   (event: 'change', data: OpenIddictApplicationDto): void;
 }>();
+
+const { toastSuccess } = useNotifications();
 
 const applicationModel = ref<OpenIddictApplicationDto>();
 
@@ -77,7 +79,7 @@ const [Form, formApi] = useVbenForm({
   ],
   showDefaultActions: false,
 });
-const [Modal, modalApi] = useVbenModal({
+const [Modal, modalApi] = useVbenModal<OpenIddictApplicationDto>({
   draggable: true,
   fullscreenButton: false,
   onCancel() {
@@ -94,7 +96,7 @@ const [Modal, modalApi] = useVbenModal({
     if (isOpen) {
       try {
         modalApi.setState({ loading: true });
-        const { clientId, id } = modalApi.getData<OpenIddictApplicationDto>();
+        const { clientId, id } = getModalData(modalApi);
         await onGet(id);
         title += ` - ${clientId}`;
       } finally {
@@ -110,14 +112,18 @@ async function onGet(id: string) {
   applicationModel.value = dto;
 }
 async function onSubmit(input: Record<string, any>) {
+  const model = applicationModel.value;
+  if (!model) {
+    return;
+  }
   try {
     modalApi.setState({ submitting: true });
-    const dto = await updateApi(applicationModel.value!.id, {
-      ...applicationModel.value!,
+    const dto = await updateApi(model.id, {
+      ...model,
       clientSecret: input.clientSecret,
       jsonWebKeySet: input.jsonWebKeySet,
     });
-    message.success($t('AbpUi.SavedSuccessfully'));
+    toastSuccess($t('AbpUi.SavedSuccessfully'));
     emits('change', dto);
     modalApi.close();
   } finally {

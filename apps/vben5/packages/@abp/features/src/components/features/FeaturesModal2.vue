@@ -8,7 +8,8 @@ import { computed, ref, toValue, useTemplateRef } from 'vue';
 import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { Form, message, Tabs } from 'ant-design-vue';
+import { getModalData, useNotifications } from '@abp/core';
+import { Form, Tabs } from 'ant-design-vue';
 
 import { useFeaturesApi } from '../../api/useFeaturesApi';
 import FeatureGroup from './FeatureGroup.vue';
@@ -18,6 +19,7 @@ import {
   processAllFeatures,
   updateVisibility,
 } from './useFeatureTree';
+const { toastSuccess } = useNotifications();
 
 const TabPane = Tabs.TabPane;
 
@@ -46,7 +48,7 @@ const getModalTitle = computed(() => {
 
 const { getApi, updateApi } = useFeaturesApi();
 
-const [Modal, modalApi] = useVbenModal({
+const [Modal, modalApi] = useVbenModal<ModalState>({
   centered: true,
   class: 'w-1/2',
   async onConfirm() {
@@ -57,8 +59,9 @@ const [Modal, modalApi] = useVbenModal({
     if (isOpen) {
       formModel.value = { groups: [] };
       await onGet();
-      if (formModel.value?.groups.length > 0) {
-        activeTabKey.value = formModel.value.groups[0]?.name!;
+      const firstGroup = formModel.value?.groups[0];
+      if (firstGroup) {
+        activeTabKey.value = firstGroup.name;
       }
     }
   },
@@ -103,7 +106,7 @@ function getFeatureInput(groups: FeatureGroupDto[]): UpdateFeaturesDto {
 async function onGet() {
   try {
     modalApi.setState({ loading: true });
-    const state = modalApi.getData<ModalState>();
+    const state = getModalData(modalApi);
     const { groups } = await getApi({
       providerKey: state.providerKey,
       providerName: state.providerName,
@@ -115,6 +118,10 @@ async function onGet() {
   } finally {
     modalApi.setState({ loading: false });
   }
+}
+
+function handleFeatureValueUpdate(value: any, feature: any) {
+  feature.value = value;
 }
 
 function handleFeatureChange(feature: any, groupIndex: number) {
@@ -131,7 +138,7 @@ async function onSubmit() {
   try {
     modalApi.setState({ submitting: true });
     const model = toValue(formModel);
-    const state = modalApi.getData<ModalState>();
+    const state = getModalData(modalApi);
     const input = getFeatureInput(model.groups);
     await updateApi(
       {
@@ -140,7 +147,7 @@ async function onSubmit() {
       },
       input,
     );
-    message.success($t('AbpUi.SavedSuccessfully'));
+    toastSuccess($t('AbpUi.SavedSuccessfully'));
     await onGet();
   } finally {
     modalApi.setState({ submitting: false });
@@ -162,6 +169,7 @@ async function onSubmit() {
             :group-index="gi"
             :base-indent-size="8"
             @change="handleFeatureChange"
+            @update:value="handleFeatureValueUpdate"
           />
         </TabPane>
       </Tabs>

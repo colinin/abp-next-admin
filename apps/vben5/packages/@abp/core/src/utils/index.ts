@@ -3,6 +3,7 @@ export * from './date';
 export * from './file';
 export * from './is';
 export * from './mitt';
+export * from './modal';
 export * from './regex';
 export * from './string';
 export * from './table';

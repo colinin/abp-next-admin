@@ -1,6 +1,8 @@
 import dayjs from 'dayjs';
-import timezone from 'dayjs/plugin/timezone';
-import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone.js';
+import utc from 'dayjs/plugin/utc.js';
+
+import { getErrorMessage } from './error';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -20,6 +22,9 @@ type Format =
   | (string & {});
 
 export function formatDate(time?: FormatDate, format: Format = 'YYYY-MM-DD') {
+  if (time === undefined || time === null || time === '') {
+    return '';
+  }
   try {
     const date = dayjs.isDayjs(time) ? time : dayjs(time);
     if (!date.isValid()) {
@@ -27,7 +32,7 @@ export function formatDate(time?: FormatDate, format: Format = 'YYYY-MM-DD') {
     }
     return date.tz().format(format);
   } catch (error) {
-    console.error(`Error formatting date: ${error}`);
+    console.error(`Error formatting date: ${getErrorMessage(error)}`);
     return String(time ?? '');
   }
 }

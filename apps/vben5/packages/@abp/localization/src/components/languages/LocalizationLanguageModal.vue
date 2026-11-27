@@ -3,21 +3,24 @@ import type { FormInstance } from 'ant-design-vue';
 
 import type { LanguageDto } from '../../types/languages';
 
-import { defineEmits, defineOptions, ref, toValue, useTemplateRef } from 'vue';
+import { ref, toValue, useTemplateRef } from 'vue';
 
 import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { Form, Input, message } from 'ant-design-vue';
+import { getModalData, useNotifications } from '@abp/core';
+import { Form, Input } from 'ant-design-vue';
 
 import { useLanguagesApi } from '../../api/useLanguagesApi';
-
 defineOptions({
   name: 'LocalizationLanguageModal',
 });
+
 const emits = defineEmits<{
   (event: 'change', data: LanguageDto): void;
 }>();
+
+const { toastSuccess } = useNotifications();
 
 const FormItem = Form.Item;
 
@@ -27,7 +30,7 @@ const form = useTemplateRef<FormInstance>('form');
 const formModel = ref<LanguageDto>({ ...defaultModel });
 
 const { cancel, createApi, getApi, updateApi } = useLanguagesApi();
-const [Modal, modalApi] = useVbenModal({
+const [Modal, modalApi] = useVbenModal<LanguageDto>({
   class: 'w-1/2',
   draggable: true,
   fullscreenButton: false,
@@ -44,7 +47,7 @@ const [Modal, modalApi] = useVbenModal({
       modalApi.setState({
         title: $t('LocalizationManagement.Language:AddNew'),
       });
-      const { cultureName } = modalApi.getData<LanguageDto>();
+      const { cultureName } = getModalData(modalApi);
       cultureName && (await onGet(cultureName));
     }
   },
@@ -71,7 +74,7 @@ async function onSubmit() {
       ? updateApi(input.cultureName, input)
       : createApi(input);
     const dto = await api;
-    message.success($t('AbpUi.SavedSuccessfully'));
+    toastSuccess($t('AbpUi.SavedSuccessfully'));
     emits('change', dto);
     modalApi.close();
   } finally {

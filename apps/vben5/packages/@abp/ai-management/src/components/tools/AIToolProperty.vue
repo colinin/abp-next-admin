@@ -17,8 +17,7 @@ const props = defineProps<{
   property: AIToolPropertyDescriptorDto;
 }>();
 const emit = defineEmits<{
-  (event: 'change', data: Record<string, any>): void;
-  (event: 'update:value', data: Record<string, any>): void;
+  (event: 'change' | 'update:value', data: Record<string, any>): void;
 }>();
 const onValueChange = (value?: any) => {
   const prop = props.model;
@@ -36,6 +35,7 @@ const onPropChange = (propertyInfo: PropertyInfo) => {
 const onPropDelete = (propertyInfo: PropertyInfo) => {
   const prop = props.model;
   prop[props.property.name] ??= {};
+  // oxlint-disable-next-line typescript/no-dynamic-delete
   delete prop[props.property.name][propertyInfo.key];
   emit('change', prop);
   emit('update:value', prop);
@@ -45,14 +45,14 @@ const onPropDelete = (propertyInfo: PropertyInfo) => {
 <template>
   <InputNumber
     v-if="property.valueType === 'Number'"
-    class="w-full"
+    class="!w-full"
     :min="0"
     :value="model[property.name]"
     @change="onValueChange($event)"
   />
   <Input
     v-if="property.valueType === 'String'"
-    class="w-full"
+    class="!w-full"
     :min="0"
     :value="model[property.name]"
     @change="onValueChange($event.target.value)"
@@ -66,7 +66,7 @@ const onPropDelete = (propertyInfo: PropertyInfo) => {
   </Checkbox>
   <Select
     v-else-if="property.valueType === 'Select'"
-    class="w-full"
+    class="!w-full"
     :options="property.options"
     :field-names="{ label: 'name', value: 'value' }"
     :value="model[property.name]"

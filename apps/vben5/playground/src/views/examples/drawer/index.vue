@@ -1,9 +1,11 @@
 <script lang="ts" setup>
 import type { DrawerPlacement, DrawerState } from '@vben/common-ui';
 
+import type { ExplicitDrawerData } from './typed-data-contract';
+
 import { Page, useVbenDrawer } from '@vben/common-ui';
 
-import { Button, Card } from 'ant-design-vue';
+import { Button, Card } from 'antdv-next';
 
 import DocButton from '../doc-button.vue';
 import AutoHeightDemo from './auto-height-demo.vue';
@@ -12,6 +14,10 @@ import DynamicDemo from './dynamic-demo.vue';
 import FormDrawerDemo from './form-drawer-demo.vue';
 import inContentDemo from './in-content-demo.vue';
 import SharedDataDemo from './shared-data-demo.vue';
+import TypedDataAutoDemo from './typed-data-auto-demo.vue';
+import { useFactoryDrawer } from './typed-data-contract';
+import TypedDataExplicitDemo from './typed-data-explicit-demo.vue';
+import TypedDataFactoryDemo from './typed-data-factory-demo.vue';
 
 defineOptions({ name: 'DrawerExample' });
 const [BaseDrawer, baseDrawerApi] = useVbenDrawer({
@@ -42,6 +48,19 @@ const [FormDrawer, formDrawerApi] = useVbenDrawer({
   connectedComponent: FormDrawerDemo,
 });
 
+const [TypedDataAutoDrawer, typedDataAutoDrawerApi] = useVbenDrawer({
+  connectedComponent: TypedDataAutoDemo,
+});
+
+const [TypedDataExplicitDrawer, typedDataExplicitDrawerApi] =
+  useVbenDrawer<ExplicitDrawerData>({
+    connectedComponent: TypedDataExplicitDemo,
+  });
+
+const [TypedDataFactoryDrawer, typedDataFactoryDrawerApi] = useFactoryDrawer({
+  connectedComponent: TypedDataFactoryDemo,
+});
+
 function openBaseDrawer(placement: DrawerPlacement = 'right') {
   baseDrawerApi.setState({ placement }).open();
 }
@@ -60,7 +79,7 @@ function openInContentDrawer(placement: DrawerPlacement = 'right') {
 }
 
 function openMaxContentDrawer() {
-  // 这里只是用来演示方便。实际上自己使用的时候可以直接将这些配置卸载Drawer的属性里
+  // 这里只是用来演示方便。实际上自己使用的时候可以直接将这些配置写在Drawer的属性里
   inContentDrawerApi.setState({ class: 'w-full', placement: 'right' }).open();
 }
 
@@ -93,6 +112,33 @@ function openFormDrawer() {
     })
     .open();
 }
+
+function openTypedDataAutoDrawer() {
+  typedDataAutoDrawerApi
+    .setData({
+      message: '外部无需声明泛型，由 connected component 自动推导。',
+      method: '自动推导',
+    })
+    .open();
+}
+
+function openTypedDataExplicitDrawer() {
+  typedDataExplicitDrawerApi
+    .setData({
+      message: '父子组件显式引用同一个数据类型。',
+      method: '显式泛型',
+    })
+    .open();
+}
+
+function openTypedDataFactoryDrawer() {
+  typedDataFactoryDrawerApi
+    .setData({
+      message: '父子组件复用预绑定的 typed composable。',
+      method: '契约工厂',
+    })
+    .open();
+}
 </script>
 
 <template>
@@ -110,6 +156,9 @@ function openFormDrawer() {
     <DynamicDrawer />
     <SharedDataDrawer />
     <FormDrawer />
+    <TypedDataAutoDrawer />
+    <TypedDataExplicitDrawer />
+    <TypedDataFactoryDrawer />
 
     <Card class="mb-4" title="基本使用">
       <p class="mb-3">一个基础的抽屉示例</p>
@@ -189,6 +238,31 @@ function openFormDrawer() {
       <p class="mb-3">打开抽屉并设置表单schema以及数据</p>
       <Button type="primary" @click="openFormDrawer">
         打开抽屉并设置表单schema以及数据
+      </Button>
+    </Card>
+
+    <Card class="mb-4" title="共享数据：自动推导">
+      <p class="mb-3">
+        子组件 expose API，父组件从 connected component 推导类型
+      </p>
+      <Button type="primary" @click="openTypedDataAutoDrawer">
+        打开自动推导示例
+      </Button>
+    </Card>
+
+    <Card class="mb-4" title="共享数据：显式泛型">
+      <p class="mb-3">无法自动推导时，父子组件显式引用同一个数据类型</p>
+      <Button type="primary" @click="openTypedDataExplicitDrawer">
+        打开显式泛型示例
+      </Button>
+    </Card>
+
+    <Card class="mb-4" title="共享数据：契约工厂">
+      <p class="mb-3">
+        通过 createVbenDrawer 预绑定类型并复用 typed composable
+      </p>
+      <Button type="primary" @click="openTypedDataFactoryDrawer">
+        打开契约工厂示例
       </Button>
     </Card>
   </Page>

@@ -4,22 +4,25 @@ import type { FormInstance } from 'ant-design-vue';
 
 import type { FeatureGroupDefinitionDto } from '../../../types/groups';
 
-import { defineEmits, defineOptions, ref, toValue, useTemplateRef } from 'vue';
+import { ref, toValue, useTemplateRef } from 'vue';
 
 import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
+import { getModalData, useNotifications } from '@abp/core';
 import { LocalizableInput, PropertyTable } from '@abp/ui';
-import { Form, Input, message, Tabs } from 'ant-design-vue';
+import { Form, Input, Tabs } from 'ant-design-vue';
 
 import { useFeatureGroupDefinitionsApi } from '../../../api/useFeatureGroupDefinitionsApi';
-
 defineOptions({
   name: 'FeatureGroupDefinitionModal',
 });
+
 const emits = defineEmits<{
   (event: 'change', data: FeatureGroupDefinitionDto): void;
 }>();
+
+const { toastSuccess } = useNotifications();
 
 const FormItem = Form.Item;
 const TabPane = Tabs.TabPane;
@@ -35,7 +38,7 @@ const formModel = ref<FeatureGroupDefinitionDto>({ ...defaultModel });
 
 const { cancel, createApi, getApi, updateApi } =
   useFeatureGroupDefinitionsApi();
-const [Modal, modalApi] = useVbenModal({
+const [Modal, modalApi] = useVbenModal<FeatureGroupDefinitionDto>({
   class: 'w-1/2',
   draggable: true,
   fullscreenButton: false,
@@ -53,7 +56,7 @@ const [Modal, modalApi] = useVbenModal({
     modalApi.setState({ submitting: true });
     api
       .then((res) => {
-        message.success($t('AbpUi.SavedSuccessfully'));
+        toastSuccess($t('AbpUi.SavedSuccessfully'));
         emits('change', res);
         modalApi.close();
       })
@@ -72,7 +75,7 @@ const [Modal, modalApi] = useVbenModal({
       });
       try {
         modalApi.setState({ loading: true });
-        const { name } = modalApi.getData<FeatureGroupDefinitionDto>();
+        const { name } = getModalData(modalApi);
         name && (await onGet(name));
       } finally {
         modalApi.setState({ loading: false });
@@ -96,7 +99,7 @@ function onPropChange(prop: PropertyInfo) {
 }
 function onPropDelete(prop: PropertyInfo) {
   formModel.value.extraProperties ??= {};
-  delete formModel.value.extraProperties[prop.key];
+  Reflect.deleteProperty(formModel.value.extraProperties, prop.key);
 }
 </script>
 

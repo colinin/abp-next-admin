@@ -6,9 +6,11 @@ import { defineAsyncComponent, ref } from 'vue';
 import { useVbenDrawer } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { message, Modal } from 'ant-design-vue';
+import { getModalData, useNotifications } from '@abp/core';
+import { Modal } from 'ant-design-vue';
 
 import { useUserSessionsApi } from '../../api/useUserSessionsApi';
+const { toastSuccess } = useNotifications();
 
 const UserSessionTable = defineAsyncComponent(
   () => import('../sessions/UserSessionTable.vue'),
@@ -18,7 +20,7 @@ const sessions = ref<IdentitySessionDto[]>([]);
 
 const { cancel, getSessionsApi, revokeSessionApi } = useUserSessionsApi();
 
-const [Drawer, drawerApi] = useVbenDrawer({
+const [Drawer, drawerApi] = useVbenDrawer<IdentityUserDto>({
   class: 'w-[800px]',
   onCancel() {
     drawerApi.close();
@@ -33,7 +35,7 @@ const [Drawer, drawerApi] = useVbenDrawer({
 async function onRefresh() {
   try {
     drawerApi.setState({ loading: true });
-    const dto = drawerApi.getData<IdentityUserDto>();
+    const dto = getModalData(drawerApi);
     const { items } = await getSessionsApi({ userId: dto.id });
     sessions.value = items;
   } finally {
@@ -50,7 +52,7 @@ async function onRevoke(session: IdentitySessionDto) {
     },
     onOk: async () => {
       await revokeSessionApi(session.sessionId);
-      message.success($t('AbpIdentity.SuccessfullyRevoked'));
+      toastSuccess($t('AbpIdentity.SuccessfullyRevoked'));
       await onRefresh();
     },
     title: $t('AbpUi.AreYouSure'),

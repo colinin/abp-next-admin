@@ -9,6 +9,7 @@ import { ref, toValue, useTemplateRef } from 'vue';
 import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
+import { getModalData } from '@abp/core';
 import { Form, Input, Select, Textarea } from 'ant-design-vue';
 
 import { useTenantsApi } from '../../api/useTenantsApi';
@@ -34,7 +35,7 @@ const formModel = ref<TenantConnectionString>({
 
 const { checkConnectionString } = useTenantsApi();
 
-const [Modal, modalApi] = useVbenModal({
+const [Modal, modalApi] = useVbenModal<TenantConnectionStringDto>({
   async onConfirm() {
     await form.value?.validate();
     onSubmit();
@@ -44,7 +45,7 @@ const [Modal, modalApi] = useVbenModal({
     let title = $t('AbpSaas.ConnectionStrings');
     if (isOpen) {
       form.value?.resetFields();
-      const dto = modalApi.getData<TenantConnectionStringDto>();
+      const dto = getModalData(modalApi);
       formModel.value = {
         provider: formModel.value.provider,
         ...dto,

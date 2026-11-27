@@ -25,6 +25,7 @@ async function generateAccessible(
   const { router } = options;
 
   options.routes = cloneDeep(options.routes);
+
   // 生成路由
   const accessibleRoutes = await generateRoutes(mode, options);
 
@@ -101,8 +102,10 @@ async function generateRoutes(
         generateRoutesByFrontend(routes, roles || [], forbiddenComponent),
         generateRoutesByBackend(options),
       ]);
-
-      resultRoutes = [...frontend_resultRoutes, ...backend_resultRoutes];
+      resultRoutes = mergeRoutesByName(
+        backend_resultRoutes,
+        frontend_resultRoutes,
+      );
       break;
     }
   }
@@ -112,7 +115,7 @@ async function generateRoutes(
    * 1. 对未添加redirect的路由添加redirect
    * 2. 将懒加载的组件名称修改为当前路由的名称（如果启用了keep-alive的话）
    */
-  resultRoutes = mapTree(resultRoutes, (route) => {
+  resultRoutes = mapTree(resultRoutes, (route, parent) => {
     // 重新包装component，使用与路由名称相同的name以支持keep-alive的条件缓存。
     if (
       route.meta?.keepAlive &&
@@ -141,16 +144,93 @@ async function generateRoutes(
     }
     const firstChild = route.children[0];
 
-    // 如果子路由不是以/开头，则直接返回,这种情况需要计算全部父级的path才能得出正确的path，这里不做处理
-    if (!firstChild?.path || !firstChild.path.startsWith('/')) {
+    if (!firstChild?.path || firstChild.path.startsWith('/')) {
       return route;
     }
 
-    route.redirect = firstChild.path;
+    // fork 定制：如果第一个子路由是动态路由（如 :id），说明当前路由本身是一个
+    // “列表+详情”页面（渲染自身组件），不应自动重定向到未填充的动态参数，
+    // 否则地址栏会出现字面量 ":id" 或匹配失败导致 404。
+    // 详见对上游重构 commit f00a8812 的修复。
+    if (firstChild.path.startsWith(':')) {
+      return route;
+    }
+
+    // 拼接子路由的重定向绝对路径。
+    // - 当 parent.redirect 为字符串时，它已经是累计好的绝对路径，直接替换最后一段
+    //   即可正确支持任意层级的深层嵌套（如 /demos/nested/menu2/menu2-1）。
+    // - fork 定制：后端菜单可能传入对象形式的 redirect（如 { name }），无法 split，
+    //   此时回退到使用 parent.path 拼接（这类 parent 为顶级路由，path 为绝对路径）。
+    if (parent && parent.redirect && isString(parent.redirect)) {
+      const parentSplit = parent.redirect.split('/');
+      parentSplit.splice(-1, 2, route.path, firstChild.path);
+      const redirectPath = parentSplit.join('/');
+      route.redirect = redirectPath;
+    } else if (parent && parent.redirect) {
+      route.redirect = `${parent.path}/${route.path}/${firstChild.path}`;
+    } else {
+      route.redirect = `${route.path}/${firstChild.path}`;
+    }
+
     return route;
   });
 
   return resultRoutes;
+}
+
+/**
+ * 根据 name 合并前后端路由
+ * @param baseRoutes 后端路由
+ * @param extraRoutes 前端路由
+ */
+function mergeRoutesByName(
+  baseRoutes: RouteRecordRaw[],
+  extraRoutes: RouteRecordRaw[],
+): RouteRecordRaw[] {
+  const result: RouteRecordRaw[] = [];
+  const routeMap = new Map<string, RouteRecordRaw>();
+
+  for (const route of baseRoutes) {
+    const clone = { ...route };
+    result.push(clone);
+    if (clone.name && isString(clone.name)) {
+      routeMap.set(clone.name, clone);
+    }
+  }
+
+  for (const route of extraRoutes) {
+    if (route.name && isString(route.name) && routeMap.has(route.name)) {
+      const existing = routeMap.get(route.name);
+      if (!existing) {
+        continue;
+      }
+      const existingChildren = existing.children ?? [];
+      const routeChildren = route.children ?? [];
+
+      const merged = {
+        ...route,
+        ...existing, // keep backend as base
+        meta: {
+          ...route.meta,
+          ...existing.meta, // backend meta wins on conflicts
+        },
+      } as RouteRecordRaw;
+
+      if (existingChildren.length > 0 || routeChildren.length > 0) {
+        merged.children = mergeRoutesByName(existingChildren, routeChildren);
+      }
+
+      Object.assign(existing, merged);
+    } else {
+      const clone = { ...route };
+      result.push(clone);
+      if (clone.name && isString(clone.name)) {
+        routeMap.set(clone.name, clone);
+      }
+    }
+  }
+
+  return result;
 }
 
 export { generateAccessible };

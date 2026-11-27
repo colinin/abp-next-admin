@@ -6,13 +6,14 @@ import { ref } from 'vue';
 import { useVbenModal } from '@vben/common-ui';
 
 import { MarkdownViewer } from '@abp/components/vditor';
+import { getModalData } from '@abp/core';
 
 const notification = ref<Notification>();
 
-const [Modal, modalApi] = useVbenModal({
+const [Modal, modalApi] = useVbenModal<Notification>({
   onOpenChange(isOpen) {
     if (isOpen) {
-      notification.value = modalApi.getData<Notification>();
+      notification.value = getModalData(modalApi);
     }
   },
   showConfirmButton: false,

@@ -55,6 +55,13 @@ const externalRoutes: RouteRecordRaw[] = mergeRouteModules(externalRouteFiles); 
 
 ### 二级路由
 
+::: tip
+
+- 只有顶级路由的 `path` 需要以 `/` 开头；写在 `children` 中的子路由请使用相对路径片段，例如 `about`、`menu1`。
+- 当父级路由未显式配置 `redirect` 时，框架会自动补全到第一个子路由的重定向；这依赖子路由使用相对路径。
+
+:::
+
 ::: details 二级路由示例代码
 
 ```ts
@@ -75,11 +82,10 @@ const routes: RouteRecordRaw[] = [
     },
     name: 'VbenProject',
     path: '/vben-admin',
-    redirect: '/vben-admin/about',
     children: [
       {
         name: 'VbenAbout',
-        path: '/vben-admin/about',
+        path: 'about',
         component: () => import('#/views/_core/about/index.vue'),
         meta: {
           badgeType: 'dot',
@@ -101,6 +107,7 @@ export default routes;
 
 ::: tip
 
+- 多级路由同样遵循“顶级绝对路径、子级相对路径”的组织方式，避免在 `children` 中重复写完整路径。
 - 如果没有特殊情况，父级路由的 `redirect` 属性，不需要指定，默认会指向第一个子路由。
 
 :::
@@ -122,7 +129,6 @@ const routes: RouteRecordRaw[] = [
     },
     name: 'Demos',
     path: '/demos',
-    redirect: '/demos/access',
     children: [
       // 嵌套菜单
       {
@@ -131,12 +137,11 @@ const routes: RouteRecordRaw[] = [
           title: $t('demos.nested.title'),
         },
         name: 'NestedDemos',
-        path: '/demos/nested',
-        redirect: '/demos/nested/menu1',
+        path: 'nested',
         children: [
           {
             name: 'Menu1Demo',
-            path: '/demos/nested/menu1',
+            path: 'menu1',
             component: () => import('#/views/demos/nested/menu-1.vue'),
             meta: {
               icon: 'ic:round-menu',
@@ -146,17 +151,16 @@ const routes: RouteRecordRaw[] = [
           },
           {
             name: 'Menu2Demo',
-            path: '/demos/nested/menu2',
+            path: 'menu2',
             meta: {
               icon: 'ic:round-menu',
               keepAlive: true,
               title: $t('demos.nested.menu2'),
             },
-            redirect: '/demos/nested/menu2/menu2-1',
             children: [
               {
                 name: 'Menu21Demo',
-                path: '/demos/nested/menu2/menu2-1',
+                path: 'menu2-1',
                 component: () => import('#/views/demos/nested/menu-2-1.vue'),
                 meta: {
                   icon: 'ic:round-menu',
@@ -168,12 +172,11 @@ const routes: RouteRecordRaw[] = [
           },
           {
             name: 'Menu3Demo',
-            path: '/demos/nested/menu3',
+            path: 'menu3',
             meta: {
               icon: 'ic:round-menu',
               title: $t('demos.nested.menu3'),
             },
-            redirect: '/demos/nested/menu3/menu3-1',
             children: [
               {
                 name: 'Menu31Demo',
@@ -192,11 +195,10 @@ const routes: RouteRecordRaw[] = [
                   icon: 'ic:round-menu',
                   title: $t('demos.nested.menu3_2'),
                 },
-                redirect: '/demos/nested/menu3/menu3-2/menu3-2-1',
                 children: [
                   {
                     name: 'Menu321Demo',
-                    path: '/demos/nested/menu3/menu3-2/menu3-2-1',
+                    path: 'menu3-2-1',
                     component: () =>
                       import('#/views/demos/nested/menu-3-2-1.vue'),
                     meta: {
@@ -243,11 +245,10 @@ const routes: RouteRecordRaw[] = [
     },
     name: 'Home',
     path: '/home',
-    redirect: '/home/index',
     children: [
       {
         name: 'HomeIndex',
-        path: '/home/index',
+        path: 'index',
         component: () => import('#/views/home/index.vue'),
         meta: {
           icon: 'mdi:home',
@@ -284,11 +285,11 @@ export default routes;
 ```ts {5-8}
 const routes = [
   {
-    name: 'HomeIndex',
-    path: '/home/index',
+    name: 'Home',
+    path: '/home',
     meta: {
       icon: 'mdi:home',
-      title: $t('page.home.index'),
+      title: $t('page.home.title'),
     },
   },
 ];
@@ -306,6 +307,11 @@ interface RouteMeta {
    * 当前激活的菜单，有时候不想激活现有菜单，需要激活父级菜单时使用
    */
   activePath?: string;
+  /**
+   * 是否使用 activePath 对应的路由层级生成面包屑
+   * @default false
+   */
+  breadcrumbUseActivePath?: boolean;
   /**
    * 是否固定标签页
    * @default false
@@ -519,6 +525,13 @@ interface RouteMeta {
 - 默认值：`''`
 
 用于配置当前激活的菜单，有时候页面没有显示在菜单内，需要激活父级菜单时使用。
+
+### breadcrumbUseActivePath
+
+- 类型：`boolean`
+- 默认值：`false`
+
+设置为 `true` 时，面包屑会使用 `activePath` 对应的路由层级补充当前路由的匹配记录。适用于详情页等未嵌套在目标菜单路由下，但仍需要展示完整面包屑层级的页面。
 
 ### affixTab
 

@@ -7,9 +7,11 @@ import { useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 import { downloadFileFromUrl } from '@vben/utils';
 
-import { Button, Empty, message, Spin } from 'ant-design-vue';
+import { useNotifications } from '@abp/core';
+import { Button, Empty, Spin } from 'ant-design-vue';
 
 import { useBlobsApi } from '../../api/useBlobsApi';
+const { toastError, toastWarning } = useNotifications();
 
 type FileType = 'excel' | 'image' | 'pdf' | 'ppt' | 'text' | 'word';
 
@@ -91,10 +93,12 @@ const MAX_FILE_SIZE = 50 * 1024 * 1024;
 
 // 判断文件类型
 function getFileType(): FileType | undefined {
-  const fileName = blob.value!.name.toLocaleLowerCase();
-  for (const [type, extensions] of Object.entries(allowFiles)) {
-    if (extensions.some((ext) => fileName.endsWith(ext))) {
-      return type as FileType;
+  if (blob.value) {
+    const fileName = blob.value.name.toLocaleLowerCase();
+    for (const [type, extensions] of Object.entries(allowFiles)) {
+      if (extensions.some((ext) => fileName.endsWith(ext))) {
+        return type as FileType;
+      }
     }
   }
   return undefined;
@@ -117,7 +121,7 @@ function isFileSizeValid(content: Blob): boolean {
 }
 
 function onError(error?: string) {
-  message.error(`${$t('BlobManagement.Blobs:PreviewError')}: ${error}`);
+  toastError(`${$t('BlobManagement.Blobs:PreviewError')}: ${error}`);
 }
 
 // 清理资源
@@ -132,7 +136,7 @@ function cleanup() {
   errorMessage.value = '';
 }
 
-const [Modal, modalApi] = useVbenModal({
+const [Modal, modalApi] = useVbenModal<BlobDto>({
   showCancelButton: false,
   showConfirmButton: false,
   fullscreen: true,
@@ -160,7 +164,7 @@ async function onInit() {
     cleanup();
 
     // 获取数据
-    blob.value = modalApi.getData<BlobDto>();
+    blob.value = modalApi.getData();
     if (!blob.value) {
       errorMessage.value = $t('BlobManagement.Blobs:NoData');
       return;
@@ -193,7 +197,7 @@ async function onInit() {
   } catch (error) {
     console.error('Preview error:', error);
     errorMessage.value = $t('BlobManagement.Blobs:PreviewError');
-    message.error(errorMessage.value);
+    toastError(errorMessage.value);
   } finally {
     isLoading.value = false;
     modalApi.unlock();
@@ -211,11 +215,11 @@ async function processFileContent(content: Blob) {
         blobText.value = `${blobText.value.slice(0, Math.max(0, maxLength))}\n\n... ${$t(
           'BlobManagement.Blobs:TextTruncated',
         )}`;
-        message.warning($t('BlobManagement.Blobs:TextTooLarge'));
+        toastWarning($t('BlobManagement.Blobs:TextTooLarge'));
       }
     } catch (error) {
       console.error('Read text error:', error);
-      throw new Error('Failed to read text file');
+      throw new Error('Failed to read text file', { cause: error });
     }
   }
 }

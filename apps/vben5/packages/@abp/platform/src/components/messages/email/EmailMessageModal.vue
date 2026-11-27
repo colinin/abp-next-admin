@@ -5,7 +5,7 @@ import { useVbenForm, useVbenModal } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
 import { Tinymce } from '@abp/components/tinymce';
-import { toDate } from '@abp/core';
+import { getModalData, toDate } from '@abp/core';
 
 import { useEmailMessagesApi } from '../../../api/useEmailMessagesApi';
 
@@ -56,7 +56,7 @@ const [Form, formApi] = useVbenForm({
   showDefaultActions: false,
 });
 
-const [Modal, modalApi] = useVbenModal({
+const [Modal, modalApi] = useVbenModal<EmailMessageDto>({
   class: 'w-[800px]',
   onOpenChange(isOpen) {
     if (isOpen) {
@@ -68,7 +68,7 @@ const [Modal, modalApi] = useVbenModal({
 });
 
 async function onInit() {
-  const { id } = modalApi.getData<EmailMessageDto>();
+  const { id } = getModalData(modalApi);
   const dto = await getApi(id);
   await formApi.setValues({
     subject: dto.subject,
